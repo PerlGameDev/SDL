@@ -1,0 +1,28 @@
+README
+
+The files in this directory are the test scripts used
+to both verify that nothing major is broken each release
+and to demonstrate how the SDLperl API can be used.
+
+Many of these scripts have been submitted by people who
+use SDLperl, and further submissions are more than welcome.
+Still, while these examples demonstrate how to use the
+API, they should not be taken as the best way to use it.
+There is more than one way to do it.  Given the variety
+of styles presented in these scripts, there is probably
+something for everyone.
+
+Descriptions 
+
+checkkeys.pl 		prints keys pressed to stdout
+graywin.pl		creates colored rectangles where you click
+loopwave.pl		plays a wav file using audio callback in perl!
+testconsole.pl		creates a simple console interface
+testfonttool.pl		displays a series of bitmapped and true type fonts
+testgfxprim.pl		demonstrates some basic drawing primitives
+testgfxroto.pl		rotates and caches an image (wait a few seconds)
+testjoystick.pl		tests joystick movements
+testshell.pl		experimental perl shell support 
+testsprite.pl		displays a wave of smilie faces
+testtimer.pl		displays multiple, contemporary, timer callbacks in perl
+

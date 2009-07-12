@@ -1,0 +1,113 @@
+#!/usr/bin/env perl
+#
+# Font.pm
+#
+# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+#
+# ------------------------------------------------------------------------------
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ------------------------------------------------------------------------------
+#
+# Please feel free to send questions, suggestions or improvements to:
+#
+#	David J. Goehrig
+#	dgoehrig@cpan.org
+#
+
+package SDL::Tool::Font;
+
+use SDL;
+use SDL::Font;
+use SDL::TTFont;
+
+sub new {
+	my $proto = shift;
+	my $class = ref($proto) || $proto;
+	$self = {};
+	my %option = @_;
+
+	verify (%option, qw/ -sfont -ttfont -size -fg -bg -foreground -background
+			  	-normal -bold -italic -underline / ) if $SDL::DEBUG;
+
+	if ($option{-sfont}) {
+		$$self{-font} = new SDL::Font $option{-sfont};
+	} elsif ($option{-ttfont} || $option{-t}) {
+		$option{-size} ||= 12;
+		$$self{-font} = new SDL::TTFont 
+					-name => $option{-ttfont} || $option{-t},
+					-size => $option{-size} || $option{-s},
+					-fg => $option{-foreground} || $option{-fg} ,
+					-bg => $option{-background} || $option{-bg};
+		for (qw/ normal bold italic underline / ) {
+			if ($option{"-$_"}) {
+				&{"SDL::TTFont::$_"}($$self{-font});
+			}
+		}
+	} else {
+		die "SDL::Tool::Font requires either a -sfont or -ttfont";	
+	}
+	bless $self,$class;
+	$self;
+}
+
+sub DESTROY {
+
+}
+
+sub print {
+	my ($self,$surface,$x,$y,@text) = @_;
+	die "Tool::Font::print requires a SDL::Surface\n"
+		unless ($SDL::DEBUG && $surface->isa('SDL::Surface'));
+	if ($$self{-font}->isa('SDL::Font')) {
+		$$self{-font}->use();
+		SDL::SFont::PutString( $$surface, $x, $y, join('',@text));
+	} else {
+		$$self{-font}->print($surface,$x,$y,@text);
+	}
+}
+
+1;
+
+__END__;
+
+=pod
+
+=head1 NAME
+
+SDL::Tool::Font - a perl extension
+
+=head1 DESCRIPTION
+
+L<SDL::Tool::Font> provides a unified interface for applying
+True Type and SFont fonts to various surfaces.
+
+=head1 METHODS
+
+=head2 print ( surface, x, y, text ... )
+
+C<SDL::Tool::Font::print> print the given text on the supplied surface
+with the upper left hand corner starting at the specified coordinates.
+
+=head1 AUTHOR
+
+David J. Goehrig
+
+=head1 SEE ALSO
+
+L<perl> L<SDL::Font> L<SDL::TTFont> L<SDL::Surface>
+
+=cut

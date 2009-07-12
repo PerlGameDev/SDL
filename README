@@ -1,0 +1,72 @@
+README for SDL_Perl-2.2.0
+
+What's New in 2.2.0:
+
+SDL_Perl-2.2.0 adds support for a few new modules, fixes a few more
+bugs, and improves the error handling of the object layer.  Additional
+support for SDL_sound, SDL_svg, and SDL_vnc has been added.  In the 
+OO layer, all constructors now die when they fail to construct an object
+with a valid underlying datastructure pointer.
+
+Prerequisites:
+
+SDL Perl recommends installing the following libraries available
+from http://www.libsdl.org/ prior to installing:
+
+	SDL-1.2.8
+	smpeg-0.4.5
+	SDL_image-1.2.4
+	SDL_mixer-1.2.6
+	SDL_sound-1.0.1
+	SDL_net-1.2.5
+	SDL_gfx-2.0.13
+	SDL_ttf-2.0.7
+	SDL_svg-1.1.9
+	SDL_vnc-1.0.0
+
+Additionally the following Perl modules should be installed:
+
+	Module-Build-0.22
+	Test-Simple-0.62
+
+Installation:
+
+	perl Build.PL
+	./Build
+	./Build test
+	./Build install
+
+The build process will use the new Module::Build facility
+to autodetect and build SDL Perl for your platform.  If
+the build fails please forward bugs to sdl-devel@perl.org.
+
+Documentation:
+
+Each module now includes its own documentation, and 
+is accessible through perldoc.  Additional tutorials,
+code, and tips can be found at the website:
+
+	http://sdl.perl.org
+
+Online documentation and tutorials are available through
+perldoc module.  
+
+Contributing:
+
+Anyone wishing to contribute modules, sprite engines, documentation,
+and anything else that others might find useful, please join
+the mailing list:
+
+	sdl-devel@perl.org
+
+This is a mailing list for those interested in SDLperl development,
+both as an applications developer, and as a core contributor.
+
+I am always more than happy to take patches, bug reports, and
+helpful suggestions.  It is feedback, both good and poor, that
+keeps projects like this going.
+
+Enjoy,
+
+David J. Goehrig <dgoehrig@cpan.org>
+

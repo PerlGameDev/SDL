@@ -1,0 +1,37 @@
+README
+
+These scripts are intended to demonstrate how 
+the SDLperl OpenGL API can be used.  
+
+Due to the high level nature of the perl language,
+much of the OpenGL API's complexity has been
+reduced to a lowest common denominator, that is 
+to say, real numbers.
+
+Given the overhead of perl itself, hardware accleration
+is pretty much mandatory for good performance.  That
+said, perl and good hardware acceleration go hand in
+hand like fine wine and delicious cheese.
+
+Descriptions:
+
+test1.pl	Basic Triangle and Square
+test2.pl	3D Cube example
+test3.pl	Bezier Curve example
+test4.pl	Bezier Surface (wireframe & solid)
+test5.pl	Nurbs Surfaces, Curves, and Trims
+
+The tutorial directory contains SDL_perl specific 
+adaptations of Jeff Molofee's OpenGL tutorial examples.
+The original tutorials and accompanying C programs
+can be found at http://nehe.gamedev.net
+
+tutorial/lesson02.pl	Basic Triangle and Square
+tutorial/lesson03.pl	Color Triangle and Square
+tutorial/lesson04.pl	Rotating Triangle and Square
+tutorial/lesson05.pl	Rotating Pyramid and Cube
+tutorial/lesson06.pl	Rotating Textured Cube
+tutorial/lesson07.pl	Lighting and Filters Cube
+tutorial/lesson08.pl	Blending (aka transperancy) Cube
+
+
