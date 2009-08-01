@@ -6,7 +6,7 @@
 # basic testing of SDL::App
 
 BEGIN {
-	unshift @INC, 'blib/lib','blib/arch';
+	unshift @INC, 'blib/lib','blib/arch', 'blib/arch/auto/src', 'blib/arch/auto/src/SDL', 'blib/arch/auto/src/SDL/SFont',;
 }
 
 use strict;
