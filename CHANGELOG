@@ -1,0 +1,469 @@
+Revision history for Perl extension SDL_perl.
+
+
+* Oct 4 2004	David J. Goehrig <dgoehrig@cpan.org>
+	- Patched Cygwin.pm
+	- Fixed SDL::Rect documentation
+	- Fixed Freebsd build module package designation
+	- Fixed compile and link argument splitting in make/lib/Build.pm
+	- Added Module::Build to MEAT.yml
+
+* Sep 23 2004	David J. Goehrig <dgoehrig@cpan.org>
+	- added SDL::Config tests for SDL_gfx support to test/testgfxroto.pl
+		test/testgfxprim.pl and SDL::Tool::Graphic.pm
+	- removed exists test form SDL::Config::has()
+	- added SDL::PushEvent
+	- added SDL::SetEventType
+	- renamed SDL::OpenGL::glReadPixel(s)
+	- added error message for SDL::OpenGL::glLightModel
+	- cleaned up some formatting issues in OpenGL.xs
+	- fixed bug in SDL::Cdrom (referencing a scalar as a hashref) 
+	- added some more documentation to SDL::Color
+	- added SDL::Event::push (Andy Bakun)
+	- fixed documentation and usage of SDL::Event::set
+	- added SDL::Event::type([type]) setting parameter
+	- updated Pod::ToDemo recommends in Build.PL
+	- added chromatic's OpenGL version checks
+	- added GL_ALL_CLIENT_ATTRIB_BITS (in addition to GL_CLIENT_ATTRIB_BITS)
+	- added chromatic's SDL::Build::Cygwin.pm and SDL::Build::Win32.pm
+	- applied chromatic's patches to SDL::Tutorial, etc. for updated Pod::ToDemo
+
+
+* Sep 21 2004	David J. Goehrig <dgoehrig@cpan.org>
+	- added thread check to SDL::Constants.pm (prevent unsafe SelfLoader)
+	- applied Andy Bakun <sdlperl@thwartedefforts.org>'s patches
+		to SDL::CreateRGBSurfaceFrom, SDL::SurfaceCopy, and
+		SDL::FreeSurface
+	- applied GLint* to typemap patch
+	- applied glRenderMode patch
+	- applied gluPickMatrix patch
+	- fixed SDL::Surface::blit typo bug
+	- applied glGet patch by Luke (enumerating them all!)
+	- fixed typo bug in make/lib/SDL/Build/Darwin.pm
+		
+
+* Feb 23 2004	David J. Goehrig <dgoehrig@cpan.org>
+	- fixed OpenGL exporting & bootstrapping
+	- added ifdefs in OpenGL for NURBS and GLUTesslator
+	- updated the test scripts to use SDL::Config 
+	- added OpenGL test
+	- modified SDL::Config->has to use grep instead
+	- fixed SDL::Cdrom::status
+	- added tests for SDL::Video and SDL::MPEG
+	- fixed gluPerspective in test1.pl & test2.pl
+	- moved SDL::OpenGL::Cube code into test2.pl
+	- released SDL_Perl-2.1.0
+
+* Feb 7 2004	David J. Goehrig <dgoehrig@cpan.org>
+	- added more SMPEG support
+	- added SDL::Video.pm and SDL::MPEG
+
+* Feb 6 2004	David J. Goehrig <dgoehrig@cpan.org>
+	- removed old build stuff
+	- added SDL::GetAppState
+	- added SDL::GetMouseState and SDL::GetRelativeMouseState
+	- added SDL Perl logo files
+	- Finalized 2.0.5 release
+
+* Feb 6 2004	chromatic
+	- added SDL::Tutorial
+	- added SDL::Tutorial::Animation
+	- added SDL::Tutorial::Drawing
+	- added SDL::Tutorial::Images
+
+* Feb 5 2004	David J. Goehrig <dgoehrig@cpan.org>
+	- port chromatic's Module::Build changes to 2.0.4
+	- moved SDL_TEXTWIDTH to SDL.pm (where EXPORTS BELONG in SDL.pm)
+	- applied chromatic's test directory change to testfonttool.pl
+	- fixed near/far in OpenGL.xs
+	- fixed checkkeys.pl to work with new event structure
+	- fixed testjoystick.pl to use new constants
+	- fixed USE_THREADS issue in build system
+	- fixed typo-bugs in SDL::Tool::Graphic.pm
+	- Updated MANIFEST
+	- fixed SFont support added SDL::SFont.pm
+	- removed SDL::Mixer and SDL::Event constants checks, no export
+
+* Dec 21 2003	chromatic
+	- added glDeleteLists
+	- added glReadPixels
+	- added glReadPixel
+
+* Sept 2 2003	David J. Goehrig <dave@sdlperl.org>
+	- fixed SDL::Music and SDL::Sound usage in SDL::Mixer
+
+* Aug 28 2003	Stephane Desneux <sdx@desneux.com>
+	- added SDL_VIDEOEXPOSE constant in SDL::Constants
+
+* Aug 26 2003	Stephane Desneux <sdx@desneux.com>
+	- modified Makefile.linux to remove debug unless $ENV{DEBUG} is defined
+	- added scripts/GL/gl.h header (OpenGL 1.4 header from Linux NVidia driver)
+	- modified gl_const.pl to generate SDL::OpenGL::Constants.pm using scripts/GL/gl.h
+	  OpenGL constants now uses Exporter and SelfLoader
+	- modified sdl_const.pl to generate SDL::Constants 
+	  SDL constants now uses Exporter and SelfLoader
+	- modified SDL.pm to export constants from SDL::Constants
+	- modified SDL/OpenGL.pm to export constants from SDL::OpenGL::Constants 
+	- changed all function names in OpenGL.xs (xxx replaced by glxxx or gluxxx)
+	  changed export in SDL/OpenGL.pm accordingly
+	- removed warning in SDL::Surface::new()
+
+* Aug 21 2003	David J. Goehrig <dave@sdlperl.org>
+	- applied Thomas Tongue's MacOS X support patches
+
+* Aug 20 2003	David J. Goehrig <dave@sdlperl.org>
+	- fixed SDL::Event bug
+
+* Aug 17 2003	David J. Goehrig <dave@sdlperl.org>
+	- applied Tels' call list patches
+	- fixed some general boneheadedness with use strict
+	- got tests really working
+	- applied Russell's SDL::Tool::Graphic::grayScale patch
+	- added glLightModel
+
+* Aug 16 2003	David J. Goehrig <dave@sdlperl.org>
+	- applied morgoth.666's patch for glGetdv & others
+	- released 2.0 last week :)
+
+* May 23 2003	David J. Goehrig <dave@sdlperl.org>
+	- applied Ryan Hanlon's patch for SDL::TTFont::width
+
+* May 22 2003	David J. Goehrig <dave@sdlperl.org>
+	- fixed typemap
+	- changed SDL::Cdrom to use scalar refs
+	- changed SDL::Console to use scalar refs
+	- changed SDL::Event to use scalar refs
+	- changed SDL::Cursor to use scalar refs
+	- changed SDL::Font to use scalar refs
+	- changed SDL::Music to use scalar refs
+	- changed SDL::Palette to use scalar refs
+	- changed SDL::Sound to use scalar refs
+
+* May 20 2003	David J. Goehrig <dave@sdlperl.org>
+	- added more OpenGL constants
+	- added OpenGL name & Feedback functions
+	- ported documentation from the website to distro
+
+* Mar 13 2003	David J. Goehrig <dave@sdlperl.org>
+	- cleaned up OpenGL constants exportation
+	- fixed glColor alpha
+	- fixed all tests & the causes of failure
+	- fixed TTFont.pm color bug
+	- fixed SDL::Tool::Graphic
+
+* Mar 11 2003	David J. Goehrig <dave@sdlperl.org>
+	- changed USE_THREAD support because perl5.8 usually builds with it
+	- added SDL::Constants & SDL::OpenGL::Constants
+	- removed constant functions from XS code (going easier on the linker)
+	- changed version to SDL_perl-2.0-beta1 Way Too much is Broken release
+	- Moved Opt/* to regular & fixing as found broken
+	- 27% of tests now fail!
+
+* Feb 25 2003	David J. Goehrig <dave@sdlperl.org>
+	- resized the testmenu.pl script
+
+* Jan 6 2003	Wayne Keenan  <tripixuk@yahoo.co.uk>
+	- fixed testjoystick.pl
+
+* Jan 4 2003	David J. Goehrig <dave@sdlperl.org>
+	- Added test suite, Thanks Tels
+	- Added SDL::SurfaceCopy finally
+	- Added SDL::Surface::new -surface && -copy constructors
+	- Changed SDL::Tool::Graphic::* to return a new SDL::Surface object 
+	- Added SDL::Event::resize_w && SDL::Event::resize_h
+
+* Jan 3 2003	David J. Goehrig <dave@sdlperl.org>
+	- SDL_perl-1.20.0 release
+	- fixed default pitch value in SDL::Surface
+	- fixed test/OpenGL/tutorials/*, removed nasty -flags options
+
+* Jan 2 2003	David J. Goehrig <dave@sdlperl.org>
+	- Changed SDL::SurfacePixel to work as documented returns SDL_Color*
+	- Changed SDL::Surface::pixel to return SDL::Color object
+	- Changed SDL::SetColorKey to take SDL_Color*
+	- Changed SDL::Surface::set_color_key to take SDL_Color*,SDL::Color, && (x,y)
+	- Added test/testcolor.pl
+	- Fixed SDL::Opt::Surface::pixel to return SDL::Opt::Color objects
+	- Fixed test/testsprite.pl (must call display_format before set_color_key)
+	- removed use strict from test/testmenu.pl
+	- Added SDL::INIT_TIMER
+
+* Jan 1 2003	David J. Goehrig <dave@sdlperl.org>
+	- Added a lot of documentation stubs
+	- Added SDL_PREALLOC support
+	- Added SDL_VIDEORESIZE event type
+	- Moved SDL_* SDL_Surface flags EXPORT to SDL::Surface
+	- Added SDL::App::resize & -resizeable tag
+	- Updated README
+	- Added SDL::Opt::Surface, SDL::Opt::Rect, SDL::Opt::Color
+
+* Dec 30 2002	David J. Goehrig <dave@sdlperl.org>
+	- Cleaned SDL::App a little more
+	- Patch release SDL_perl-1.19.2
+
+* Dec 29 2002	Tels <http://www.bloodgate.com>
+	- Patched SDL::Font includes
+	- Optimized SDL::Rect
+
+* Dec 28 2002	Tels <http://www.bloodgate.com>
+	- Removed miscelaneous typos
+	- Rewrote utility function SDL::in
+
+* Dec 25 2002	Tels <http://www.bloodgate.com>
+	- Patched SDL::Timer documentation
+	- Patched SDL::Event documentation
+	- Patched SDL::Cdrom documentation
+	- Patched mail address in Readme
+
+* Dec 20 2002   Michael Lamertz <mike@perl-ronin.de>
+	 - Fixed wrong spelling of XS call to SDL::App::grab_input function
+
+* Oct 14 2002	David J. Goehrig <dave@sdlperl.org>
+	- Altered usage message printing behavior for Guillaume
+	- Added Guillaume Cottenceau's <gc@mandrakesoft.com>
+	64 bit support patch.
+	- Patch release SDL_perl-1.19.1
+
+* Oct 13 2002	David J. Goehrig <dave@sdlperl.org>
+	- Added ConvertRGB and ConvertRGBA functions, useful
+	for creating OpenGL textures from arbitrary images.
+	- Updated documentation for SDL::Cursor
+
+* Oct 11 2002	David J. Goehrig <dave@sdlperl.org>
+	- Added library disable configure options for linux
+	- Released SDL_perl-1.19.0
+
+* Sept 28 2002	David J. Goehrig <dave@sdlperl.org>
+	- Fixed some prototypes (OpenGL happier on Debian)
+
+* Sept 5 2002	David J. Goehrig <dave@sdlperl.org>
+	- Optimizaiton in SDL::App::loop, 
+	now syncs app only if action called
+	- Added test/testmenu.pl (precursor to a menu class)
+
+* Sept 4 2002	Russell Valentine <russ_allegro@yahoo.com>
+	- Added SDL::GraphicTool and testgraphictool.pl
+
+* Aug 31 2002   David J. Goehrig <dave@sdlperl.org>
+	- Removed redundant variable in SDL::Mixer::fade_in_music
+	Thanks to Peter BARABAS <z0d@artifact.hu> for finding it
+
+* Aug 30 2002   David J. Goehrig <dave@sdlperl.org>
+	- Altered examples to use 16 bit color
+	- Fixed OpenGL/tutorial gluPerspective bugs
+
+* Jun 14 2002	David J. Goehrig <dave@sdlperl.org>
+	- Finished color table and convolution support
+	- Added more GLUtesselator support
+
+* Jun 10 2002	David J. Goehrig <dave@sdlperl.org>
+	- Added configure script, gnuish build environemnt
+
+* Jun 8 2002	David J. Goehrig <dave@sdlperl.org>
+	- Applied Wayne Keenan's win32 build patches
+
+* Jun 5 2002	David J. Goehrig <dave@sdlperl.org>
+	- Simply defines GL_ALL_CLIENT_ATTRIB_BITS 0xffffffff
+	- SDL::TTFont added font metric query methods
+
+* Jun  4 2002	David J. Goehrig <dave@sdlperl.org>
+	- Fixed GL_ALL_CLIENT_BITS Mesa bug again... 
+	It appears to have disappeared after 1.17.2,
+	Thanks Seemant Kulleen & Chris Moeller for
+	pointing it out.
+
+* May 28 2002	David J. Goehrig <dave@sdlperl.org>
+	- Added tutorials 7 & 8 to test/OpenGL/tutorial
+
+* May 27 2002	David J. Goehrig <dave@sdlperl.org>
+	- Fixed SDL::OpenGL::TexCoordPointer
+
+* May 26 2002	David J. Goehrig <dave@sdlperl.org>
+	- SDL_perl-1.18
+
+* May 25 2002	David J. Goehrig <dave@sdlperl.org>
+	- Fixed include paths under linux
+	- Added SDL::Shell.pm and test/testshell.pl
+
+* May 24 2002	David J. Goehrig <dave@sdlperl.org>
+	- Fixed more OpenGL GLU tesselator code
+	- Added HAVE_SDL_MIXER around callbacks
+
+* May 23 2002	Benedikt Meurer <bmeurer@fwdn.de>
+	- Added FreeBSD support
+
+* May 21 2002	David J. Goehrig <dave@sdlperl.org>
+	- Fixed typo in SDL::App:iconify
+
+* May 3 2002	David J. Goehrig <dave@sdlperl.org>
+	- Added still more OpenGL support (errors and textures)
+	- Ported old OpenGL tutorials 2-6
+	- Fixed more bugs, improved SDL::SurfacePixels
+	- Added support for glu* and GLU_* exportation
+	- Added OpenGLU Nurbs support
+	- Added Nurbs example test/OpenGL/test5.pl
+	- Added more OpenGL projection and color code
+
+* May 1 2002	David J. Goehrig <dave@sdlperl.org>
+	- Fixed -Wall (added prototypes, fixed typos, etc)
+	- Improved Makefile, added GLU version detection
+	- Added OpenGL 1.2 dependent feature detection
+	- Added one and two dimension evaluators for OpenGL
+	- Added OpenGL test3.pl and test4.pl
+
+* Apr 30 2002	Wayne Keenan <wayne@metaverse.fsnet.co.uk>
+	- updated Makefile.win32
+
+* Apr 29 2002	Guillaume Cottenceau <gc@mandrakesoft.com>
+	- updated Makefile.linux
+
+* Apr 27 2002	David J. Goehrig <dave@sdlperl.org>
+	- SDL_perl-1.17 release made
+	- updated MANIFEST, etc.
+
+* Apr 26 2002	David J. Goehrig <dave@sdlperl.org>
+	- Added more OpenGL support 
+
+* Apr 23 2002	David J. Goehrig <dave@sdlperl.org>
+	- fixed SFont and SDL_Console support
+	- Added SDL::FontTool
+	- Added test/testfonttool.pl 
+
+* Apr 19 2002	David J. Goehrig <dave@sdlperl.org>
+	- Added proper SDL_mixer callback support
+	- Broke out linux makefile 
+	- Begun OpenGL support
+	- fixed test/testgfxprim.pl screen update bug
+	- fixed test/testgfxroto.pl alpha blits 
+	- Added test/logo.png
+
+* Apr 16 2002	Wayne Keenan <wayne@metaverse.fsnet.co.uk>
+	- Added SDL_Console support
+	- Added test/testconsole.pl
+	- Added SDL_gfx support
+	- Added test/testgfxroto.pl and test/testgfxprim.pl
+	- Updated Makefile
+
+* Apr 11 2002	David J. Goehrig <dave@sdlperl.org>
+	- Fixed SDL::ColorB typo
+	- Altered SDL::FillRect and SDL::Pixel to use SDL_Color* sources
+	- Documented SDL::Surface, SDL::Color
+	- Added automagic Surface, Color, and Rect support throughout OO layer
+	- Fixed testsprite.pl, graywin.pl to use above classes
+	- Brokeout Win32 Makefile.PL 
+	- Fixed SMPEG a little bit 
+
+* Apr 11 2002	Wayne Keenan <wayne@metaverse.fsnet.co.uk>
+	- Added SMPEG support
+	- Added test/testsprite.pl
+
+* Apr 10 2002	Wayne Keenan <wayne@metaverse.fsnet.co.uk>
+	- Added Win32 threading support in callbacks
+	- Added SDL_GetKeyState
+
+* Apr 8 2002	Wayne Keenan <wayne@metaverse.fsnet.co.uk>
+	- Added joystick hat constants
+	- Added joystick hat constants to test/testjoystick.pl
+
+* Apr 5 2002	David J. Goehrig <dave@sdlperl.org>
+	- Fixed SDL_perl.spec according to most of Guillaume's suggestions
+	- Expanded the build_rpms script to upload to sdlperl.org
+	- Added SDL::Timer.pm for timer objects
+	- Added test/testtimer.pl 
+
+* Apr 4 2002	David J. Goehrig <dave@sdlperl.org>
+	- Added SDL_perl.spec for RPM/SRPM builds
+	- Fixed typo in SDL_perl.xs
+
+* Apr 4 2002	Wayne Keenan  <wayne@metaverse.fsnet.co.uk>
+	- Fixed Makefile.PL for Win32 builds
+
+* Apr 4 2002	Russell Valentine <russ_allegro@yahoo.com>
+	- Added test/testjoystick.pl
+
+* Apr 3 2002	David J. Goehrig <dave@sdlperl.org>
+	- Fixed SDL::TTFont support
+	- Fixed SDL::Color support
+	- Applied Wayne's changes for Win32 support
+	- Moved XS code to SDL_perl.xs
+	- Created SDL_perl.pm
+	- Altered SDL.pm to use SDL_perl.pm
+
+* Apr 1 2002	David J. Goehrig <dave@sdlperl.org>
+	- Added SDL::Color
+	- Added SDL::TTFont
+	- Added SDL::App::loop
+	- More Documentation
+
+* Mar 31 2002	David J. Goehrig <dave@sdlperl.org>
+	- Upgraded SFont to version 1.5 <http://www.linux-games.com/sfont>
+	- Removed old examples and began porting SDL test programs to perl
+	- Updated key state modifier code
+	- Added audio processing callbacks and driver interrogation
+
+* Mar 14 2002	David J. Goehrig <dave@sdlperl.org>
+
+	- Added YUV Overlay support
+	- Added more WM support (toggle fullscreen,grab input,iconify window)
+	- Added Resize Event support
+	- Added Joystick Events support
+	- Added audio status query support
+	- Removed TrackListing	
+
+* Mar  9 2002	David J. Goehrig <dave@sdlperl.org>
+
+	- Generated sdlpl compatability layer ( known to be buggy )
+	- Bug fixes in OO modules, frozen-bubble now runs under 1.14
+	- Added patches directory to contain fixes for other people's programs 
+	- Added some Set/GetClipRect support
+	- More Documentation 
+	- Began SDL_ttf support
+	- Began SDL_net support
+
+* Feb 28 2002	David J. Goehrig <dave@sdlperl.org>
+
+	- Fixed-up OO modules to use new API
+	- Added AddTimer and RemoveTimer Support
+	- Added Joystick Support
+	- Added full Init/Quit support for subsystems
+	- Began Documentation Rewrite
+	- Began 1.12 compatability layer
+
+* Feb 26 2002	David J. Goehrig <dave@sdlperl.org>
+
+	- Altered API / Simplified namespace 
+	- Removed SDL_Image, SDL_Mixer, and OpenGL dependencies
+	- Added extension autodetection to config process
+
+* Jan 28 2002	Guillaume Cottenceau <gc@mandrakesoft.com>
+
+	- Fixed a deallocation bug in Sound.pm 
+
+* Jan 22 2002	Guillaume Cottenceau <gc@mandrakesoft.com>
+
+	- Fixed a deallocation bug in Music.pm
+
+* Dec 18 2000	David J. Goehrig 
+
+	- Removed clipping fuctions 
+	- Updated Readme
+	- Moved more to sourceforge
+
+* Aug  5 2000	Wayne Keenan
+
+	- Open GL support
+	- OpenGL Glut like Application framework
+	- more video flags 
+	- creating Surface from pre-allocated memory 
+	- BMP screen dump
+	- added state dumpers as an debugging aid
+	- bug fixes
+
+* May 26 2000	David J. Goehrig
+
+	- Added SFont support.
+
+* May 22 2000	David J. Goehrig
+
+	- Finished the first release
+

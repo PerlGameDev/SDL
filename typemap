@@ -1,0 +1,64 @@
+TYPEMAP
+const Uint16 *		T_PTR
+Uint8			T_U_CHAR
+Uint8 *			T_PTR
+Uint8 **		T_PTR
+Uint16			T_UV
+Uint16 *		T_PTR
+Uint32			T_UV
+Uint32 *		T_PTR
+SDLKey			T_UV
+Sint16			T_IV
+Sint16 *		T_PTR
+Sint32			T_IV
+Sint32 *		T_PTR
+SDL_Event *		T_PTR
+SDL_Surface *		T_PTR
+SDL_SysWMmsg *		T_PTR
+SDL_CD *		T_PTR
+SDL_CDtrack *		T_PTR
+SDL_TimerCallback	T_PTR
+SDL_Rect *		T_PTR
+SDL_Color *		T_PTR
+SDL_Palette *		T_PTR
+SDL_PixelFormat *	T_PTR
+SDL_Cursor *		T_PTR
+SDL_AudioSpec *		T_PTR
+SDL_AudioCVT *		T_PTR
+Mix_Fading		T_UV
+Mix_Chunk *		T_PTR
+Mix_Music *		T_PTR
+SDL_GLattr              T_IV
+int *			T_PTR
+void *			T_PTR
+SDL_TimerID		T_PTR
+SDL_NewTimerCallback	T_PTR
+SDL_Joystick *		T_PTR
+SDLNet_SocketSet	T_PTR
+TCPsocket		T_PTR
+UDPsocket		T_PTR
+UDPpacket *		T_PTR
+UDPpacket **		T_PTR
+IPaddress*		T_PTR
+SDLNet_GenericSocket	T_PTR
+TTF_Font *		T_PTR
+SDL_Overlay *		T_PTR
+SMPEG_Info *		T_PTR
+SMPEG *			T_PTR
+SMPEGstatus		T_IV
+SDL_mutex *		T_PTR
+GLbitfield		T_IV
+GLenum			T_IV
+ConsoleInformation * 	T_PTR
+GLboolean		T_U_CHAR
+GLUnurbsObj *		T_PTR
+GLUtesselator *		T_PTR
+GLuint			T_UV
+GLint*			T_PTR
+float *			T_PTR
+float			T_NV
+GLfloat			T_NV
+Sound_DecoderInfo *	T_PTR
+const Sound_DecoderInfo *	T_PTR
+Sound_Sample *		T_PTR
+Sound_AudioInfo *	T_PTR

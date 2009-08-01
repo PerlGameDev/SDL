@@ -1,0 +1,12 @@
+BUGS and Outstanding Issues 
+
+
+Using SDL::TTFont::width function with UTF-8 encoded strings returns 
+the width of the characters that make up the UTF-8 format and not what 
+they represent.  The function for this appears to exist in SDL.xs: 
+
+AV* TTFSizeUTF8 ( font, text )
+
+However, this function crashes immediately when called with a valid 
+font and [utf-8 encoded] string.
+
