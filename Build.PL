@@ -35,7 +35,7 @@ my %subsystems =
 	SDL => {
 		file      => {
 			from  => 'src/SDL.xs',
-			to    => 'SDL/SDL_perl.xs',
+			to    => 'SDL.xs',
 		},
 		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
 		                  png jpeg smpeg )],
@@ -43,14 +43,14 @@ my %subsystems =
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',
-			to   => 'SDL/OpenGL/OpenGL.xs', 
+			to   => 'SDL/OpenGL.xs', 
 		},
 		libraries => [qw( SDL GL GLU )],
 	},
 	SFont => {
 		file	=> {
 			from => 'src/SFont.xs',
-			to   =>	'SDL/SFont/SFont.xs',
+			to   =>	'SDL/SFont.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
 	},	
