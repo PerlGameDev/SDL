@@ -1,68 +1,12 @@
-README for SDL_Perl-2.1.2
+README for SDL_Perl-2.2
 
-What's New in 2.1.2:
+First step is to make SDL perl pass all tests in 
+t/.
 
-SDL_Perl-2.1.2 is a bug patch release that fixed a number of memory
-leaks in blitting code, handles glGet queries, and some Build fixes.
-For full details check the CHANGELOG file.
+I will add these as a issue.
 
-Prerequisites:
+more to come ...
+this might be moved to CPAN when I get access
 
-SDL Perl recommends installing the following libraries available
-from http://www.libsdl.org/ prior to installing:
-
-	SDL-1.2.6
-	smpeg-0.4.4
-	SDL_image-1.2.2
-	SDL_gfx-2.0.3
-	SDL_mixer-1.2.5
-	SDL_net-1.2.4
-	SDL_ttf-2.0.5
-
-Additionally the following Perl modules should be installed:
-
-	Module-Build-0.22
-	Test-Simple-0.47
-
-Installation:
-
-	perl Build.PL
-	./Build
-	./Build test
-	./Build install
-
-The build process will use the new Module::Build facility
-to autodetect and build SDL Perl for your platform.  If
-the build fails please forward bugs to sdl-devel@perl.org.
-
-Documentation:
-
-Each module now includes its own documentation, and 
-is accessible through perldoc.  Additional tutorials,
-code, and tips can be found at the website:
-
-	http://sdl.perl.org
-
-Online documentation and tutorials are available through
-perldoc module.  
-
-Contributing:
-
-Anyone wishing to contribute modules, sprite engines, documentation,
-and anything else that others might find useful, please join
-the mailing list:
-
-	sdl-devel@perl.org
-
-This is a mailing list for those interested in SDLperl development,
-both as an applications developer, and as a core contributor.
-
-I am always more than happy to take patches, bug reports, and
-helpful suggestions.  It is feedback, both good and poor, that
-keeps projects like this going.
-
-Enjoy,
-
-David J. Goehrig <dgoehrig@cpan.org>
-23 September 2004
-
+kthakore <thakore.kartik@gmail.com>
+1 August 2009
