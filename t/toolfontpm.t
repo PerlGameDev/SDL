@@ -6,7 +6,7 @@
 # basic testing of SDL::Tool::Font
 
 BEGIN {
-	unshift @INC, 'blib/lib','blib/arch';
+	unshift @INC, 'blib/lib','blib/arch', 'blib/arch/auto/src/SDL/SFont/';
 }
 
 use strict;

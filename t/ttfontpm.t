@@ -2,11 +2,11 @@
 #
 # Copyright (C) 2003 Tels
 # Copyright (C) 2004 David J. Goehrig
-#
+# Copyright (C) 2009 Kartik Thakore
 # basic testing of SDL::TTFont
 
 BEGIN {
-	unshift @INC, 'blib/lib','blib/arch';
+	unshift @INC, 'blib/lib','blib/arch', 'blib/arch/auto/src/SDL/SFont';
 }
 
 use strict;
