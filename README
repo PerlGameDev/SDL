@@ -5,8 +5,15 @@ t/.
 
 I will add these as a issue.
 
-more to come ...
-this might be moved to CPAN when I get access
+Simple Run:
+perl Build.PL
+perl Build 
+perl Build test
+perl Build install
+
+There are more test scripts in test/
+
+Disclaimer: This might be moved to CPAN when I get access
 
 kthakore <thakore.kartik@gmail.com>
 1 August 2009
