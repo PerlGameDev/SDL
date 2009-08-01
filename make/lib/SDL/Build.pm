@@ -19,10 +19,10 @@ sub process_xs
 	my ($self, $file) = @_;
 
 	my $properties                   = $self->{properties};
+
 	my $file_args                    = $self->notes( 'file_flags' )->{$file};
 	my @old_values                   = @$properties{ keys %$file_args };
 	@$properties{ keys %$file_args } = values %$file_args;
-
 	$self->SUPER::process_xs( $file );
 	@$properties{ keys %$file_args } = @old_values;
 }

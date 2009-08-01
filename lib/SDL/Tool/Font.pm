@@ -46,7 +46,7 @@ sub DESTROY {
 sub print {
 	my ($self,$surface,$x,$y,@text) = @_;
 	die "Tool::Font::print requires a SDL::Surface\n"
-		unless ($SDL::DEBUG && $surface->isa('SDL::Surface'));
+		unless ($surface->isa('SDL::Surface'));
 	if ($$self{-font}->isa('SDL::Font')) {
 		$$self{-font}->use();
 		SDL::SFont::PutString( $$surface, $x, $y, join('',@text));

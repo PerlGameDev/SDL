@@ -23,7 +23,7 @@
 #define GL_ALL_CLIENT_ATTRIB_BITS 0xFFFFFFF
 #endif /* GL_ALL_CLIENT_BITS */  
 
-#include "../defines.h"
+#include "defines.h"
 
 SV* sdl_perl_nurbs_error_hook;
 void

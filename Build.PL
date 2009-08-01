@@ -35,7 +35,7 @@ my %subsystems =
 	SDL => {
 		file      => {
 			from  => 'src/SDL.xs',
-			to    => 'src/SDL_perl.xs',
+			to    => 'SDL/SDL_perl.xs',
 		},
 		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
 		                  png jpeg smpeg )],
@@ -43,14 +43,14 @@ my %subsystems =
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',
-			to   => 'src/SDL/OpenGL.xs', 
+			to   => 'SDL/OpenGL/OpenGL.xs', 
 		},
 		libraries => [qw( SDL GL GLU )],
 	},
 	SFont => {
 		file	=> {
 			from => 'src/SFont.xs',
-			to   =>	'src/SDL/SFont.xs',
+			to   =>	'SDL/SFont/SFont.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
 	},	
@@ -121,7 +121,6 @@ my $links         = $arch->build_links( \%libraries, $build_systems );
 # mangle the compilable files into a format Module::Build can understand
 my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
 	     keys %subsystems;
-
 my $build   = SDL::Build->new(
 	dist_name            => 'SDL_Perl', 
 	license		     => 'lgpl',
@@ -135,6 +134,7 @@ my $build   = SDL::Build->new(
 	{
 		'Pod::ToDemo'  => '0.20',
 	},
+	c_source	     => 'src',
 	xs_files             => \%xs,
 	dist_author	     => 'David J. Goehrig <DGOEHRIG@cpan.org>',
 );

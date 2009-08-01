@@ -23,8 +23,8 @@
 #define HAVE_TLS_CONTEXT
 #endif
 
-#include "../defines.h"
-#include "../SFont.h"
+#include "defines.h"
+#include "SFont.h"
 
 #ifdef HAVE_SDL_IMAGE
 #include <SDL_image.h>
