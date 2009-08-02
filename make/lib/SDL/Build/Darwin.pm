@@ -32,4 +32,13 @@ sub fetch_includes
 	);
 }
 
+sub build_defines
+{
+	my $self = shift;
+	my $defines = $self->SUPER::build_defines(@_);
+
+	push @{$defines->{SDL}}, "-Ddarwin", "-DMACOSX";
+
+	return $defines;
+}
 1;
