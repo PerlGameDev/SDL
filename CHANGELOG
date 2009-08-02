@@ -1,6 +1,10 @@
 Revision history for Perl extension SDL_perl.
 
 
+* Mar 3 2006	Tels 77 Tests
+	- Color.pm: add rgb(), and make new($r,$g,$b) work for speed
+	- add ColorRGB() to src/SDL.xs
+
 * Oct 4 2004	David J. Goehrig <dgoehrig@cpan.org>
 	- Patched Cygwin.pm
 	- Fixed SDL::Rect documentation

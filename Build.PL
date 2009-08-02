@@ -10,6 +10,7 @@ use lib  'make/lib';
 
 use SDL::Build;
 use YAML;
+use YAML::Node;
 
 my $sdl_compile_flags = `sdl-config --cflags`;
 my $sdl_link_flags    = `sdl-config --libs`;
