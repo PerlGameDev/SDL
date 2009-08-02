@@ -65,3 +65,4 @@ Sound_DecoderInfo *	T_PTR
 const Sound_DecoderInfo *	T_PTR
 Sound_Sample *		T_PTR
 Sound_AudioInfo *	T_PTR
+Font				T_IV

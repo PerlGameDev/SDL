@@ -14,6 +14,7 @@
 
 #include <gl.h>
 #include <glu.h>
+#include <GL/glx.h>
 
 #ifdef USE_THREADS
 #define HAVE_TLS_CONTEXT
@@ -2788,6 +2789,16 @@ gluSphere ( quad, radius, slices, stacks )
 	CODE:
 		gluSphere ( quad, radius, slices, stacks );
 
+
+
+void 
+glXUseXFont ( font, first, count, list_base )
+	Font font
+	int  first
+	int  count
+	int  list_base
+	CODE:
+		glXUseXFont ( font, first, count, list_base );
 
 #endif
 

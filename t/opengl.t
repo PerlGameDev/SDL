@@ -15,7 +15,7 @@ use SDL::Config;
 use Test::More;
 
 if ( SDL::Config->has('GL') && SDL::Config->has('GLU') ) {
-		plan ( tests => 3 );
+		plan ( tests => 4 );
 } else {
 	plan ( skip_all => 'OpenGL support not compiled' );
 }
@@ -74,3 +74,5 @@ can_ok('main',qw/
 	gluDisk
 	gluPartialDisk
 	gluSphere /);
+
+can_ok('main',qw/glXUseXFont/);
