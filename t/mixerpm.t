@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2003 Tels
 # Copyright (C) 2004 David J. Goehrig
-#
+# Copyright (C) 2009 Kartik Thakore
 # basic testing of SDL::Mixer
 
 BEGIN {
@@ -58,6 +58,7 @@ can_ok ('SDL::Mixer', qw/
 	music_paused
 	playing
 	playing_music
+	mix_volume_chunk
 	/);
 
 # these are exported by default, so main:: should know them:

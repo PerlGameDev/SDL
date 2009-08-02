@@ -1,8 +1,9 @@
 #	Mixer.pm
 #
 #	a SDL module for manipulating the SDL_mixer lib.
-#
+#	
 #	Copyright (C) 2000,2002 David J. Goehrig
+#	Copyright (C) 2009 Kartik Thakore
 
 package SDL::Mixer;
 use strict;
@@ -123,6 +124,7 @@ sub music_volume ($$) {
 	return SDL::MixVolumeMusic($volume);
 }
 
+
 sub halt_channel ($$) {
 	my ($self,$channel) = @_;
 	return SDL::MixHaltChannel($channel);
@@ -200,6 +202,11 @@ sub music_paused (){
 sub playing ($$) {
 	my ($self,$channel) = @_;
 	return SDL::MixPlaying($channel);
+}
+
+sub mix_volume_chunk($$$) {
+	my ($self, $chunk, $volume) = @_;
+	return SDL::MixVolumeChunk($chunk, $volume);
 }
 
 sub playing_music () {
