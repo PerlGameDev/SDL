@@ -54,6 +54,7 @@ GLboolean		T_U_CHAR
 GLUnurbsObj *		T_PTR
 GLUtesselator *		T_PTR
 GLuint			T_UV
+GLint			T_IV
 GLint*			T_PTR
 float *			T_PTR
 float			T_NV
