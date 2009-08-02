@@ -3,6 +3,6 @@ _build/
 Build
 blib
 lib/SDL/Config.pm
-src/SDL/
-src/SDL_perl.c
-src/SDL_perl.xs
+SDL/
+SDL_perl.c
+SDL_perl.xs
