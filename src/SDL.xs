@@ -2323,7 +2323,7 @@ JoyAxisEventValue ( e )
         OUTPUT:
                 RETVAL
 
-Uint8
+Sint16
 JoyButtonEventWhich ( e )
         SDL_Event *e
         CODE:
