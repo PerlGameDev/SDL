@@ -15,7 +15,7 @@ use SDL::Config;
 use Test::More;
 
 if ( SDL::Config->has('GL') && SDL::Config->has('GLU') ) {
-		plan ( tests => 3 );
+		plan ( tests => 4 );
 } else {
 	plan ( skip_all => 'OpenGL support not compiled' );
 }
@@ -36,6 +36,7 @@ can_ok('main', qw/
 	glFrontFace
 	glFrustum 
 	glGet
+	glGetString
 	glLight
 	glLoadIdentity
 	glMap1
@@ -64,4 +65,14 @@ can_ok('main',qw/
 	gluNurbsCurve
 	gluNurbsProperty
 	gluNurbsSurface
-	gluPwlCurve /);
+	gluPwlCurve
+	gluNewQuadric
+	gluDeleteQuadric
+	gluQuadricNormals
+	gluQuadricTexture
+	gluCylinder
+	gluDisk
+	gluPartialDisk
+	gluSphere /);
+
+can_ok('main',qw/glXUseXFont/);

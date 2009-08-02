@@ -14,6 +14,7 @@
 
 #include <gl.h>
 #include <glu.h>
+#include <GL/glx.h>
 
 #ifdef USE_THREADS
 #define HAVE_TLS_CONTEXT
@@ -709,6 +710,12 @@ glGet ( param )
             croak("Unknown glGet parameter!");
         }
 
+const char * glGetString ( name )
+	GLenum name
+	CODE:
+		RETVAL = (const char *)glGetString (name);
+	OUTPUT:
+		RETVAL
 
 Uint32
 glIsEnabled ( cap )
@@ -1226,16 +1233,24 @@ glCallListsString ( string )
 		glCallLists(len,GL_BYTE,str);
 
 void
-glRasterPos ( x, y, z, ... )
+glRasterPos ( x, y, ... )
 	double x
 	double y
-	double z
 	CODE:
-		if ( items == 4 ) {
-			double w = SvNV(ST(3));
-			glRasterPos4d(x,y,z,w);
-		} else {
-			glRasterPos3d(x,y,z);
+		if (items == 2)
+		{
+			glRasterPos2d (x,y);
+		}
+		else if (items == 3)
+		{
+			double z = SvNV (ST(2));
+			glRasterPos3d (x,y,z);
+		}
+		else if (items == 4)
+		{
+			double z = SvNV (ST(2));
+			double w = SvNV (ST(3));
+			glRasterPos4d (x,y,z,w);
 		}
 
 void
@@ -2703,6 +2718,88 @@ gluTessVertex ( tessobj, coords, vd )
 		gluTessVertex(tessobj,(GLdouble*)coords,vd);
 	
 #endif
+
+GLUquadric *
+gluNewQuadric ()
+	CODE:
+		RETVAL = gluNewQuadric ();
+	OUTPUT:
+		RETVAL
+
+void
+gluDeleteQuadric (quad)
+	GLUquadric	*quad
+	CODE:
+		gluDeleteQuadric(quad);
+
+void
+gluQuadricNormals ( quad, normal )
+	GLUquadric *quad
+	GLenum	normal
+	CODE:
+		gluQuadricNormals(quad, normal);
+
+
+void
+gluQuadricTexture ( quad, texture )
+	GLUquadric *quad
+	GLboolean  texture
+	CODE:
+		gluQuadricTexture ( quad, texture );
+
+void
+gluCylinder ( quad, base, top, height, slices, stacks )
+	GLUquadric *quad
+	GLdouble  base
+	GLdouble  top
+	GLdouble  height
+	GLint  slices
+	GLint  stacks
+	CODE:
+		gluCylinder ( quad, base, top, height, slices, stacks );
+
+void
+gluDisk ( quad, inner, outer, slices, loops )
+	GLUquadric *quad
+	GLdouble inner
+	GLdouble outer
+	GLint slices
+	GLint loops
+	CODE:
+		gluDisk ( quad, inner, outer, slices, loops );	
+	
+void
+gluPartialDisk ( quad, inner, outer, slices, loops, start, sweep )
+	GLUquadric *quad
+	GLdouble inner
+	GLdouble outer
+	GLint slices
+	GLint loops
+	GLdouble start
+	GLdouble sweep
+	
+	CODE:
+		gluPartialDisk ( quad, inner, outer, slices, loops, start, sweep );
+
+void
+gluSphere ( quad, radius, slices, stacks )
+	GLUquadric *quad
+	GLdouble radius
+	GLint  slices
+	GLint  stacks
+	CODE:
+		gluSphere ( quad, radius, slices, stacks );
+
+
+
+void 
+glXUseXFont ( font, first, count, list_base )
+	Font font
+	int  first
+	int  count
+	int  list_base
+	CODE:
+		glXUseXFont ( font, first, count, list_base );
 
 #endif
 
