@@ -80,8 +80,8 @@ sub new {
 	} else {
 		$SDL::App::USING_OPENGL = 0;
 	}
-
-	my $self = \SDL::SetVideoMode($w,$h,$d,$f)
+	my $self = SDL::SetVideoMode($w,$h,$d,$f);
+		$$self
 		or die SDL::GetError();
 	
 	if ($ic and -e $ic) {
@@ -100,7 +100,7 @@ sub resize ($$$) {
 	my $flags = SDL::SurfaceFlags($$self);
 	if ( $flags & SDL::SDL_RESIZABLE()) {
 		my $bpp = SDL::SurfaceBitsPerPixel($$self);
-		$self = \SDL::SetVideoMode($w,$h,$bpp,$flags);
+		$$self = SDL::SetVideoMode($w,$h,$bpp,$flags);
 	}
 }
 
