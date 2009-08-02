@@ -202,10 +202,10 @@ sub game_loop
 		$surfMidWidth*.25,$surfMidHeight*.10,255,255,0,255);
 
 	# pie slices
-	SDL::GFXFilledpieRGBA($surf,$surfMidWidth,$surfMidHeight, $surfMidWidth*.1,
+	SDL::GFXFilledPieRGBA($surf,$surfMidWidth,$surfMidHeight, $surfMidWidth*.1,
 		0,90,0,0,255,255);
 
-	SDL::GFXFilledpieRGBA($surf,$surfMidWidth,$surfMidHeight, $surfMidWidth*.1,
+	SDL::GFXFilledPieRGBA($surf,$surfMidWidth,$surfMidHeight, $surfMidWidth*.1,
 		180,270,0,0,255,255);
 
 	# polygons

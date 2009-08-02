@@ -15,17 +15,20 @@ sub fetch_includes
 	'/usr/local/include/gl'    => '/usr/local/lib',
 	'/usr/include/GL'          => '/usr/lib', 
 	'/usr/include/gl'          => '/usr/lib', 
-
-	'/System/Library/Frameworks/SDL_mixer.framework/Headers'     => '../../lib',
-	'/System/Library/Frameworks/SDL_image.framework/Headers'     => '../../lib',
-	'/System/Library/Frameworks/SDL_ttf.framework/Headers'       => '../../lib',
-	'/System/Library/Frameworks/libogg.framework/Headers'        => '../../lib',
-	'/System/Library/Frameworks/libvorbis.framework/Headers'     => '../../lib',
-	'/System/Library/Frameworks/libvorbisfile.framework/Headers' => '../../lib',
-	'/System/Library/Frameworks/libvorbisenc.framework/Headers'  => '../../lib',
-	'../../include'                                              => '../../lib',
-	'/System/Library/Frameworks/OpenGL.framework/Headers'        =>
-		'/System/Library/Frameworks/OpenGL.framework/Libraries',
+	
+	'/Library/Frameworks/SDL.framework/Headers'	      => '../../lib',
+	'/Library/Frameworks/SDL_mixer.framework/Headers'     => '../../lib',
+	'/Library/Frameworks/SDL_image.framework/Headers'     => '../../lib',
+	'/Library/Frameworks/SDL_net.framework/Headers'       => '../../lib',
+	'/Library/Frameworks/SDL_ttf.framework/Headers'       => '../../lib',
+	'/Library/Frameworks/SDL_gfx.framework/Headers'       => '../../lib',
+	'/Library/Frameworks/libogg.framework/Headers'        => '../../lib',
+	'/Library/Frameworks/libvorbis.framework/Headers'     => '../../lib',
+	'/Frameworks/libvorbisfile.framework/Headers'	      => '../../lib',
+	'/Library/Frameworks/libvorbisenc.framework/Headers'  => '../../lib',
+	'../../include'                                       => '../../lib',
+	'/System/Library/Frameworks/OpenGL.framework/Headers' =>
+ 		'/System/Library/Frameworks/OpenGL.framework/Libraries',
 	);
 }
 
