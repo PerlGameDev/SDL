@@ -122,6 +122,7 @@ my $links         = $arch->build_links( \%libraries, $build_systems );
 my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
 	     keys %subsystems;
 my $build   = SDL::Build->new(
+	module_name          => 'SDL',
 	dist_name            => 'SDL_Perl', 
 	license		     => 'lgpl',
 	dist_version_from    => 'lib/SDL.pm',
