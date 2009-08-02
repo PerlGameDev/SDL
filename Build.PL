@@ -35,7 +35,7 @@ my %subsystems =
 	SDL => {
 		file      => {
 			from  => 'src/SDL.xs',
-			to    => 'SDL.xs',
+			to    => './SDL.xs',
 		},
 		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
 		                  png jpeg smpeg )],
