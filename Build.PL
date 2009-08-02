@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2003 chromatic 
 # Copyright (C) 2004 David J. Goehrig
-#
+# Copyright (C) 2009 Kartik Thakore
 
 use strict;
 
