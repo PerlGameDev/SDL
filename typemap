@@ -59,6 +59,8 @@ GLint*			T_PTR
 float *			T_PTR
 float			T_NV
 GLfloat			T_NV
+GLUquadric *		T_PTR
+GLdouble			T_NV
 Sound_DecoderInfo *	T_PTR
 const Sound_DecoderInfo *	T_PTR
 Sound_Sample *		T_PTR

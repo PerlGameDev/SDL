@@ -36,6 +36,7 @@ can_ok('main', qw/
 	glFrontFace
 	glFrustum 
 	glGet
+	glGetString
 	glLight
 	glLoadIdentity
 	glMap1
@@ -64,4 +65,12 @@ can_ok('main',qw/
 	gluNurbsCurve
 	gluNurbsProperty
 	gluNurbsSurface
-	gluPwlCurve /);
+	gluPwlCurve
+	gluNewQuadric
+	gluDeleteQuadric
+	gluQuadricNormals
+	gluQuadricTexture
+	gluCylinder
+	gluDisk
+	gluPartialDisk
+	gluSphere /);

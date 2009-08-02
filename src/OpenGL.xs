@@ -708,6 +708,12 @@ glGet ( param )
             croak("Unknown glGet parameter!");
         }
 
+const char * glGetString ( name )
+	GLenum name
+	CODE:
+		RETVAL = (const char *)glGetString (name);
+	OUTPUT:
+		RETVAL
 
 Uint32
 glIsEnabled ( cap )
@@ -2701,7 +2707,77 @@ gluTessVertex ( tessobj, coords, vd )
 	CODE:
 		gluTessVertex(tessobj,(GLdouble*)coords,vd);
 	
-#endif
+
+
+GLUquadric *
+gluNewQuadric ()
+	CODE:
+		RETVAL = gluNewQuadric ();
+	OUTPUT:
+		RETVAL
+
+void
+gluDeleteQuadric (quad)
+	GLUquadric	*quad
+	CODE:
+		gluDeleteQuadric(quad);
+
+void
+gluQuadricNormals ( quad, normal )
+	GLUquadric *quad
+	GLenum	normal
+	CODE:
+		gluQuadricNormals(quad, normal);
+
+
+void
+gluQuadricTexture ( quad, texture )
+	GLUquadric *quad
+	GLboolean  texture
+	CODE:
+		gluQuadricTexture ( quad, texture );
+
+void
+gluCylinder ( quad, base, top, height, slices, stacks )
+	GLUquadric *quad
+	GLdouble  base
+	GLdouble  top
+	GLdouble  height
+	GLint  slices
+	GLint  stacks
+	CODE:
+		gluCylinder ( quad, base, top, height, slices, stacks );
+void
+gluDisk ( quad, inner, outer, slices, loops )
+	GLUquadric *quad
+	GLdouble inner
+	GLdouble outer
+	GLint slices
+	GLint loops
+	CODE:
+		gluDisk ( quad, inner, outer, slices, loops );	
+	
+void
+gluPartialDisk ( quad, inner, outer, slices, loops, start, sweep )
+	GLUquadric *quad
+	GLdouble inner
+	GLdouble outer
+	GLint slices
+	GLint loops
+	GLdouble start
+	GLdouble sweep
+	
+	CODE:
+		gluPartialDisk ( quad, inner, outer, slices, loops, start, sweep );
+
+void
+gluSphere ( quad, radius, slices, stacks )
+	GLUquadric *quad
+	GLdouble radius
+	GLint  slices
+	GLint  stacks
+	CODE:
+		gluSphere ( quad, radius, slices, stacks );
 
 #endif
 
