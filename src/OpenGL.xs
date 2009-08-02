@@ -1231,16 +1231,24 @@ glCallListsString ( string )
 		glCallLists(len,GL_BYTE,str);
 
 void
-glRasterPos ( x, y, z, ... )
+glRasterPos ( x, y, ... )
 	double x
 	double y
-	double z
 	CODE:
-		if ( items == 4 ) {
-			double w = SvNV(ST(3));
-			glRasterPos4d(x,y,z,w);
-		} else {
-			glRasterPos3d(x,y,z);
+		if (items == 2)
+		{
+			glRasterPos2d (x,y);
+		}
+		else if (items == 3)
+		{
+			double z = SvNV (ST(2));
+			glRasterPos3d (x,y,z);
+		}
+		else if (items == 4)
+		{
+			double z = SvNV (ST(2));
+			double w = SvNV (ST(3));
+			glRasterPos4d (x,y,z,w);
 		}
 
 void
