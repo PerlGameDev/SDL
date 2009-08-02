@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
-
+* Aug 2 2009    Kartik Thakore
+	- Added patches
+	- Verified and Tested patches
+	- Clean bugs
 
 * Mar 3 2006	Tels 77 Tests
 	- Color.pm: add rgb(), and make new($r,$g,$b) work for speed
