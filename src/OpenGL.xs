@@ -669,6 +669,7 @@ glGet ( param )
         case GL_MAX_ATTRIB_STACK_DEPTH:
         case GL_POLYGON_SMOOTH_HINT:
         case GL_ACCUM_GREEN_BITS:
+		case GL_MAX_TEXTURE_UNITS_ARB:
         {
             GLint ret[1];
             int i;
