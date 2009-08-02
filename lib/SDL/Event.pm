@@ -3,7 +3,7 @@
 #	A package for handling SDL_Event *
 #
 #	Copyright (C) 2000,2001,2002 David J. Goehrig
-#
+#	Copyright (C) 2009 Kartik Thakore
 #	see the file COPYING for terms of use
 #
 
@@ -222,7 +222,11 @@ available.
 
 =head2 pump()
 
+Pumps the event loop, gathering events from the input devices.
+
 =head2 poll()
+
+Polls for currently pending events
 
 =head2 wait()
 
