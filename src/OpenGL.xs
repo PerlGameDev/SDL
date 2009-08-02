@@ -2707,7 +2707,7 @@ gluTessVertex ( tessobj, coords, vd )
 	CODE:
 		gluTessVertex(tessobj,(GLdouble*)coords,vd);
 	
-
+#endif
 
 GLUquadric *
 gluNewQuadric ()
@@ -2747,6 +2747,7 @@ gluCylinder ( quad, base, top, height, slices, stacks )
 	GLint  stacks
 	CODE:
 		gluCylinder ( quad, base, top, height, slices, stacks );
+
 void
 gluDisk ( quad, inner, outer, slices, loops )
 	GLUquadric *quad
@@ -2778,6 +2779,7 @@ gluSphere ( quad, radius, slices, stacks )
 	GLint  stacks
 	CODE:
 		gluSphere ( quad, radius, slices, stacks );
+
 
 #endif
 

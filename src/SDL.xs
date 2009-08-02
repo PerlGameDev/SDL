@@ -2467,7 +2467,7 @@ NetFreeIPaddress ( ip )
 	CODE:
 		safefree(ip);
 
-char*
+const char*
 NetResolveIP ( address )
 	IPaddress *address
 	CODE:
