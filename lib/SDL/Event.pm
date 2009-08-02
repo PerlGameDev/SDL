@@ -42,6 +42,12 @@ sub poll {
 	return SDL::PollEvent($$self);
 }
 
+sub peep($$$$)
+{
+	my ($event, $numEvents, $action, $mask) = @_;
+	return SDL::PeepEvents($$event, $numEvents, $action, $mask);
+}
+
 sub push {
 	my $self = shift;
 	return SDL::PushEvent($$self);
@@ -227,6 +233,19 @@ Pumps the event loop, gathering events from the input devices.
 =head2 poll()
 
 Polls for currently pending events
+
+=head2 peep()
+
+Checks the event queue for messages and optionally returns them.
+
+If action is SDL_ADDEVENT, up to numevents events will be added to the back of the event queue.
+
+If action is SDL_PEEKEVENT, up to numevents events at the front of the event queue, matching mask, will be returned and will not be removed from the queue.
+
+If action is SDL_GETEVENT, up to numevents events at the front of the event queue, matching mask, will be returned and will be removed from the queue.
+
+The mask parameter is a bitwise OR of SDL_EVENTMASK(event_type), for all event types you are interested in
+
 
 =head2 wait()
 

@@ -22,6 +22,7 @@ can_ok ('SDL::Event', qw/
 	type 
 	pump 
 	poll 
+	peep
 	wait 
 	set 
 	set_unicode 
@@ -42,7 +43,8 @@ can_ok ('SDL::Event', qw/
 	button 
 	button_state 
 	button_x 
-	button_y /);
+	button_y 
+	/);
 
 
 

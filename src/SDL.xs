@@ -3,7 +3,7 @@
 // SDL Perl by David J. Goehrig <dgoehrig@cpan.org>
 //
 // Copyright (C) 2000,2001,2002,2003,2004 David J. Goehrig 
-//
+// Copyright (C) 2009 Kartik Thakore
 // This software is under the GNU Library General Public License (LGPL)
 // see the file COPYING for terms of use
 
@@ -526,6 +526,19 @@ FreeEvent ( e )
 	SDL_Event *e
 	CODE:
 		safefree(e);
+
+
+int
+PeepEvents( e, numevents, action, mask)
+	SDL_Event *e
+	int numevents
+	SDL_eventaction action
+	Uint32 mask
+	CODE:
+		RETVAL = SDL_PeepEvents( e, numevents, action, mask);
+	OUTPUT:
+		RETVAL
+
 
 int
 PollEvent ( e )
