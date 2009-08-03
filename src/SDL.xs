@@ -535,7 +535,7 @@ PeepEvents( e, numevents, action, mask)
 	SDL_eventaction action
 	Uint32 mask
 	CODE:
-		RETVAL = SDL_PeepEvents( e, numevents, action, mask);
+		RETVAL = (int)SDL_PeepEvents( e, numevents, action, mask);
 	OUTPUT:
 		RETVAL
 

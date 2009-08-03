@@ -80,8 +80,8 @@ sub new {
 	} else {
 		$SDL::App::USING_OPENGL = 0;
 	}
-	my $self = SDL::SetVideoMode($w,$h,$d,$f);
-		$$self
+	my $self = \SDL::SetVideoMode($w,$h,$d,$f);
+		$$self	
 		or die SDL::GetError();
 	
 	if ($ic and -e $ic) {
