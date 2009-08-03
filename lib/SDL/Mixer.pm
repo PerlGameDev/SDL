@@ -124,6 +124,11 @@ sub music_volume ($$) {
 	return SDL::MixVolumeMusic($volume);
 }
 
+sub mix_set_panning($$$$) {
+         my ($self,$channel,$left,$right) = @_;
+         return SDL::MixSetPanning($channel,$left,$right);
+ }
+
 
 sub halt_channel ($$) {
 	my ($self,$channel) = @_;
@@ -388,8 +393,17 @@ Return true when the channel is currently playing.
 
 Return true when the music is currently playing.
 
+=head2 sub mix_set_panning(channel,left,right) 
+ 
+Set panning for mixer, Use MIX_CHANNEL_POST to process the postmix stream
+ 
+Volume for the left channel, range is 0(silence) to 255(loud)
+ 
+Volume for the right channel, range is 0(silence) to 255(loud)
+
 =head1 AUTHORS 
 
+Kartik Thakore 
 David J. Goehrig, basic doc added by Tels <http://bloodgate.com>.
 
 =head1 SEE ALSO

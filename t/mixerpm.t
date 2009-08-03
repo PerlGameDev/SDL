@@ -59,6 +59,7 @@ can_ok ('SDL::Mixer', qw/
 	playing
 	playing_music
 	mix_volume_chunk
+	mix_set_panning
 	/);
 
 # these are exported by default, so main:: should know them:

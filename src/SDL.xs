@@ -1938,6 +1938,17 @@ MixPlayChannel ( channel, chunk, loops )
 		RETVAL
 
 int
+MixSetPanning ( channel, left, right )
+        int channel
+        Uint8 left
+        Uint8 right
+        CODE:
+                RETVAL = Mix_SetPanning(channel,left, right);
+        OUTPUT:
+                RETVAL
+
+
+int
 MixPlayChannelTimed ( channel, chunk, loops, ticks )
 	int channel
 	Mix_Chunk *chunk
