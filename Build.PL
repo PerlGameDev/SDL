@@ -43,7 +43,7 @@ my $sdl_link_flags    = `sdl-config --libs`;
 if ($? >> 8)
 {
 	croak "SDL doesn't appear to be installed.\n" .
-		"Please check that sdl-config is in your path and try again.\n";
+	"Please check that sdl-config is in your path and try again.\n";
 }
 
 chomp( $sdl_compile_flags );
@@ -64,7 +64,7 @@ my %subsystems =
 			to    => 'src/SDL_perl.xs',
 		},
 		libraries => [qw( SDL SDL_image SDL_mixer SDL_sound SDL_net SDL_ttf 
-				SDL_gfx SDL_svg png jpeg smpeg )],
+		SDL_gfx SDL_svg png jpeg smpeg )],
 	},
 	OpenGL => {
 		file      => {
@@ -153,13 +153,10 @@ $arch->write_sdl_config( $build_systems );
 my $defines	= $arch->build_defines( \%libraries, $build_systems );
 my $includes	= $arch->build_includes( \%libraries, $build_systems );
 my $links	= $arch->build_links( \%libraries, $build_systems );
-my $c_sources	= $arch->build_c_sources( \%libraries, $build_systems );
-my $c_source	= $arch->build_c_source( \%libraries, $build_systems );
-my $install_base = $arch->build_install_base( \%libraries, $build_systems );
 
 # mangle the compilable files into a format Module::Build can understand
 my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
-	     keys %subsystems;
+keys %subsystems;
 
 my $build   = SDL::Build->new(
 	dist_name            => 'SDL_Perl', 
@@ -174,14 +171,18 @@ my $build   = SDL::Build->new(
 	{
 		'Pod::ToDemo'  => '0.20',
 	},
-	c_source => $c_source,
-	c_sources => $c_sources,
+	c_source => 'src',
 	xs_files             => \%xs,
 	dist_author	     => 'David J. Goehrig <DGOEHRIG@cpan.org>',
-	install_base => $install_base
 );
 
-# and here's where the real (and ugly) magic works... see SDL::Build
+if($arch eq 'Darwin')
+{
+	$build->{c_source} = $arch->build_c_source( \%libraries, $build_systems );
+	$build->{c_sources} = $arch->build_c_sources( \%libraries, $build_systems );
+	$build->{install_base} = $arch->build_install_base( \%libraries, $build_systems );
+
+}
 $build->set_flags(
 	\%subsystems,
 	$build_systems,

@@ -4,31 +4,70 @@ my $sdl_config;
 $sdl_config = {
                 'OpenGL' => {
                               'GL' => [
-                                        '/System/Library/Frameworks/OpenGL.framework/Headers',
-                                        '/System/Library/Frameworks/OpenGL.framework/Libraries'
+                                        '/usr/include/GL',
+                                        '/usr/lib'
                                       ],
-                              'SDL' => 0,
+                              'SDL' => [
+                                         '/usr/include/SDL',
+                                         '/usr/lib'
+                                       ],
                               'GLU' => [
-                                         '/System/Library/Frameworks/OpenGL.framework/Headers',
-                                         '/System/Library/Frameworks/OpenGL.framework/Libraries'
+                                         '/usr/include/GL',
+                                         '/usr/lib'
                                        ]
                             },
                 'SDL' => {
-                           'png' => 0,
-                           'SDL' => 0,
-                           'SDL_ttf' => 0,
+                           'png' => [
+                                      '/usr/include',
+                                      '/usr/lib'
+                                    ],
+                           'SDL' => [
+                                      '/usr/include/SDL',
+                                      '/usr/lib'
+                                    ],
+                           'SDL_ttf' => [
+                                          '/usr/include/SDL',
+                                          '/usr/lib'
+                                        ],
                            'SDL_svg' => 0,
-                           'SDL_net' => 0,
-                           'SDL_image' => 0,
-                           'jpeg' => 0,
-                           'SDL_gfx' => 0,
-                           'smpeg' => 0,
-                           'SDL_sound' => 0,
-                           'SDL_mixer' => 0
+                           'SDL_net' => [
+                                          '/usr/include/SDL',
+                                          '/usr/lib'
+                                        ],
+                           'SDL_image' => [
+                                            '/usr/include/SDL',
+                                            '/usr/lib'
+                                          ],
+                           'jpeg' => [
+                                       '/usr/include',
+                                       '/usr/lib'
+                                     ],
+                           'SDL_gfx' => [
+                                          '/usr/include/SDL',
+                                          '/usr/lib'
+                                        ],
+                           'smpeg' => [
+                                        '/usr/include/smpeg',
+                                        '/usr/lib'
+                                      ],
+                           'SDL_sound' => [
+                                            '/usr/include/SDL',
+                                            '/usr/lib'
+                                          ],
+                           'SDL_mixer' => [
+                                            '/usr/include/SDL',
+                                            '/usr/lib'
+                                          ]
                          },
                 'SFont' => {
-                             'SDL_image' => 0,
-                             'SDL' => 0
+                             'SDL_image' => [
+                                              '/usr/include/SDL',
+                                              '/usr/lib'
+                                            ],
+                             'SDL' => [
+                                        '/usr/include/SDL',
+                                        '/usr/lib'
+                                      ]
                            }
               };
 

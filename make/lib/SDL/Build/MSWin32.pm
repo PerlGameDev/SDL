@@ -107,15 +107,10 @@ sub gl_vendor
 	my ( $self, $vendor ) = @_;
 
 	return 'ms_gl' unless defined $vendor;
-
 	return 'mesa_gl' if $vendor eq 'MESA';
 	return 'ms_gl'   if $vendor eq 'MS';
-
-<<<<<<< HEAD
-	die "Unrecognized GL vendor '$vendor'\n";
-=======
 	croak "Unrecognized GL vendor '$vendor'\n";
->>>>>>> sdlperl-2.1.3
+
 }
 
 sub ms_gl_subsystems
