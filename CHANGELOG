@@ -1,14 +1,27 @@
 Revision history for Perl extension SDL_perl.
-* Aug 2 2009    Kartik Thakore
-	- Added patches
-	- Verified and Tested patches
-	- Clean bugs
 
-* Mar 3 2006	Tels 77 Tests
-	- Color.pm: add rgb(), and make new($r,$g,$b) work for speed
-	- add ColorRGB() to src/SDL.xs
+* Jul 8 2006	David J. Goehrig <dgoehrig@cpan.org>
+	- finished embedding data in example scripts
+	- fixed Mac OS X file associations
 
-* Oct 4 2004	David J. Goehrig <dgoehrig@cpan.org>
+* Mar 15 2006	David J. Goehrig <dgoehrig@cpan.org>
+	- fixed OpenGL examples to work under MacOS X using the SDL Perl.app bundle
+	
+* Oct 12 2005	David J. Goehrig <dgoehrig@cpan.org>
+	- Fixed bug where SDL::App frees underlying Surface via DESTROY
+	- Added SDL_svg support
+	- cleaned up SDL_gfx support in SDL.xs
+	- cleaned up smpeg support in SDL.xs
+	- Added more SDL_sound support
+	- Added basic SDL_RWops support (TODO - perl callback for user defined)
+
+* Oct 6 2005	David J. Goehrig <dgoehrig@cpan.org>
+	- Changed constructors to die upon invalid initialization
+
+* Oct 5 2005	David J. Goehrig <dgoehrig@cpan.org>
+	- Updated the copyright notices as per the LGPL guidelines
+
+* Oct 4 2005	David J. Goehrig <dgoehrig@cpan.org>
 	- Patched Cygwin.pm
 	- Fixed SDL::Rect documentation
 	- Fixed Freebsd build module package designation

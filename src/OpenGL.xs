@@ -1,6 +1,31 @@
-// SDL::OpenGL
 //
-// Copyright (C) 2002,2003,2004 David J. Goehrig
+// OpenGL.xs
+//
+// Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+//
+// ------------------------------------------------------------------------------
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+//
+// ------------------------------------------------------------------------------
+//
+// Please feel free to send questions, suggestions or improvements to:
+//
+//	David J. Goehrig
+//	dgoehrig@cpan.org
+//
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -14,7 +39,6 @@
 
 #include <gl.h>
 #include <glu.h>
-#include <GL/glx.h>
 
 #ifdef USE_THREADS
 #define HAVE_TLS_CONTEXT
@@ -24,7 +48,7 @@
 #define GL_ALL_CLIENT_ATTRIB_BITS 0xFFFFFFF
 #endif /* GL_ALL_CLIENT_BITS */  
 
-#include "defines.h"
+#include "../defines.h"
 
 SV* sdl_perl_nurbs_error_hook;
 void
@@ -670,7 +694,6 @@ glGet ( param )
         case GL_MAX_ATTRIB_STACK_DEPTH:
         case GL_POLYGON_SMOOTH_HINT:
         case GL_ACCUM_GREEN_BITS:
-		case GL_MAX_TEXTURE_UNITS_ARB:
         {
             GLint ret[1];
             int i;
@@ -710,12 +733,6 @@ glGet ( param )
             croak("Unknown glGet parameter!");
         }
 
-const char * glGetString ( name )
-	GLenum name
-	CODE:
-		RETVAL = (const char *)glGetString (name);
-	OUTPUT:
-		RETVAL
 
 Uint32
 glIsEnabled ( cap )
@@ -1233,24 +1250,16 @@ glCallListsString ( string )
 		glCallLists(len,GL_BYTE,str);
 
 void
-glRasterPos ( x, y, ... )
+glRasterPos ( x, y, z, ... )
 	double x
 	double y
+	double z
 	CODE:
-		if (items == 2)
-		{
-			glRasterPos2d (x,y);
-		}
-		else if (items == 3)
-		{
-			double z = SvNV (ST(2));
-			glRasterPos3d (x,y,z);
-		}
-		else if (items == 4)
-		{
-			double z = SvNV (ST(2));
-			double w = SvNV (ST(3));
-			glRasterPos4d (x,y,z,w);
+		if ( items == 4 ) {
+			double w = SvNV(ST(3));
+			glRasterPos4d(x,y,z,w);
+		} else {
+			glRasterPos3d(x,y,z);
 		}
 
 void
@@ -1734,9 +1743,9 @@ AV*
 glGenTextures ( n )
 	Uint32 n;
 	CODE:
-		Uint32 i;
-		Uint32 *names;
-		names = (Uint32*)safemalloc(sizeof(Uint32)*n);
+		GLsizei i;
+		GLuint* names;
+		names = (GLuint*)safemalloc(sizeof(GLuint)*n);
 		RETVAL = newAV();
 		glGenTextures(n,names);
 		for ( i = 0; i < n; i++ ) {
@@ -1764,9 +1773,9 @@ glBindTexture ( target, texture )
 void
 glDeleteTextures ( ... )
 	CODE:
-		Uint32 *textures;
+		GLuint* textures;
 		int i;
-		textures = (Uint32*)safemalloc(sizeof(Uint32) * items);
+		textures = (GLuint*)safemalloc(sizeof(GLuint) * items);
 		if ( textures ) {
 	 		for ( i = 0; i < items; i++ ) {
 				textures[i] = SvIV(ST(i));	
@@ -1778,11 +1787,11 @@ glDeleteTextures ( ... )
 AV*
 glAreTexturesResident ( ... )
 	CODE:
-		Uint32 *textures;
+		GLuint* textures;
 		GLboolean *homes;
 		int i;
 		RETVAL = newAV();
-		textures = (Uint32*)safemalloc(sizeof(Uint32) * items);
+		textures = (GLuint*)safemalloc(sizeof(GLuint) * items);
 		homes = (GLboolean*)safemalloc(sizeof(GLboolean) * items);
 		if ( textures ) {
 	 		for ( i = 0; i < items; i++ ) {
@@ -2718,88 +2727,6 @@ gluTessVertex ( tessobj, coords, vd )
 		gluTessVertex(tessobj,(GLdouble*)coords,vd);
 	
 #endif
-
-GLUquadric *
-gluNewQuadric ()
-	CODE:
-		RETVAL = gluNewQuadric ();
-	OUTPUT:
-		RETVAL
-
-void
-gluDeleteQuadric (quad)
-	GLUquadric	*quad
-	CODE:
-		gluDeleteQuadric(quad);
-
-void
-gluQuadricNormals ( quad, normal )
-	GLUquadric *quad
-	GLenum	normal
-	CODE:
-		gluQuadricNormals(quad, normal);
-
-
-void
-gluQuadricTexture ( quad, texture )
-	GLUquadric *quad
-	GLboolean  texture
-	CODE:
-		gluQuadricTexture ( quad, texture );
-
-void
-gluCylinder ( quad, base, top, height, slices, stacks )
-	GLUquadric *quad
-	GLdouble  base
-	GLdouble  top
-	GLdouble  height
-	GLint  slices
-	GLint  stacks
-	CODE:
-		gluCylinder ( quad, base, top, height, slices, stacks );
-
-void
-gluDisk ( quad, inner, outer, slices, loops )
-	GLUquadric *quad
-	GLdouble inner
-	GLdouble outer
-	GLint slices
-	GLint loops
-	CODE:
-		gluDisk ( quad, inner, outer, slices, loops );	
-	
-void
-gluPartialDisk ( quad, inner, outer, slices, loops, start, sweep )
-	GLUquadric *quad
-	GLdouble inner
-	GLdouble outer
-	GLint slices
-	GLint loops
-	GLdouble start
-	GLdouble sweep
-	
-	CODE:
-		gluPartialDisk ( quad, inner, outer, slices, loops, start, sweep );
-
-void
-gluSphere ( quad, radius, slices, stacks )
-	GLUquadric *quad
-	GLdouble radius
-	GLint  slices
-	GLint  stacks
-	CODE:
-		gluSphere ( quad, radius, slices, stacks );
-
-
-
-void 
-glXUseXFont ( font, first, count, list_base )
-	Font font
-	int  first
-	int  count
-	int  list_base
-	CODE:
-		glXUseXFont ( font, first, count, list_base );
 
 #endif
 

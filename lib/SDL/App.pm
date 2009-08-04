@@ -1,10 +1,33 @@
-#	App.pm
+#!/usr/bin/env perl
 #
-#	The application object, sort of like a surface
+# App.pm
 #
-#	Copyright (C) 2000,2002,2003,2004 David J. Goehrig
-#	Copyright (C) 2009 Kartik Thakore
+# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
 #
+# ------------------------------------------------------------------------------
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ------------------------------------------------------------------------------
+#
+# Please feel free to send questions, suggestions or improvements to:
+#
+#	David J. Goehrig
+#	dgoehrig@cpan.org
+#
+
 package SDL::App;
 
 use strict;
@@ -14,6 +37,10 @@ use SDL;
 use SDL::Event;
 use SDL::Surface;
 use SDL::Rect;
+
+sub DESTROY {
+
+}
 
 our @ISA = qw(SDL::Surface);
 
@@ -29,13 +56,10 @@ sub new {
 				-red_accum_size -ras -blue_accum_size -bas 
 				-green_accum_sizee -gas -alpha_accum_size -aas
 				-double_buffer -db -buffer_size -bs -stencil_size -st
-				-asyncblit -init
+				-asyncblit
 		/ ) if ($SDL::DEBUG);
 
-        # SDL_INIT_VIDEO() is 0, so check defined instead of truth.
-	my $init = defined $options{-init} ? $options{-init} : SDL_INIT_EVERYTHING();
-
-	SDL::Init($init);
+	SDL::Init(SDL::SDL_INIT_EVERYTHING());
 	
 	my $t = $options{-title} 	|| $options{-t} 	|| $0;
 	my $it = $options{-icon_title} 	|| $options{-it} 	|| $t;
@@ -64,26 +88,26 @@ sub new {
 	$f |= SDL::SDL_DOUBLEBUF() if ($db); 
 	$f |= SDL::SDL_ASYNCBLIT() if ($async);
 
-	if ($f & SDL_OPENGL()) { 
+	if ($f & SDL::SDL_OPENGL()) { 
 		$SDL::App::USING_OPENGL = 1;
-		SDL::GLSetAttribute(SDL_GL_RED_SIZE(),$r) if ($r);	
-		SDL::GLSetAttribute(SDL_GL_GREEN_SIZE(),$g) if ($g);	
-		SDL::GLSetAttribute(SDL_GL_BLUE_SIZE(),$b) if ($b);	
-		SDL::GLSetAttribute(SDL_GL_ALPHA_SIZE(),$a) if ($a);	
+		SDL::GLSetAttribute(SDL::SDL_GL_RED_SIZE(),$r) if ($r);	
+		SDL::GLSetAttribute(SDL::SDL_GL_GREEN_SIZE(),$g) if ($g);	
+		SDL::GLSetAttribute(SDL::SDL_GL_BLUE_SIZE(),$b) if ($b);	
+		SDL::GLSetAttribute(SDL::SDL_GL_ALPHA_SIZE(),$a) if ($a);	
 
-		SDL::GLSetAttribute(SDL_GL_RED_ACCUM_SIZE(),$ras) if ($ras);	
-		SDL::GLSetAttribute(SDL_GL_GREEN_ACCUM_SIZE(),$gas) if ($gas);	
-		SDL::GLSetAttribute(SDL_GL_BLUE_ACCUM_SIZE(),$bas) if ($bas);	
-		SDL::GLSetAttribute(SDL_GL_ALPHA_ACCUM_SIZE(),$aas) if ($aas);	
+		SDL::GLSetAttribute(SDL::SDL_GL_RED_ACCUM_SIZE(),$ras) if ($ras);	
+		SDL::GLSetAttribute(SDL::SDL_GL_GREEN_ACCUM_SIZE(),$gas) if ($gas);	
+		SDL::GLSetAttribute(SDL::SDL_GL_BLUE_ACCUM_SIZE(),$bas) if ($bas);	
+		SDL::GLSetAttribute(SDL::SDL_GL_ALPHA_ACCUM_SIZE(),$aas) if ($aas);	
 		
-		SDL::GLSetAttribute(SDL_GL_DOUBLEBUFFER(),$db) if ($db);
-		SDL::GLSetAttribute(SDL_GL_BUFFER_SIZE(),$bs) if ($bs);
-		SDL::GLSetAttribute(SDL_GL_DEPTH_SIZE(),$d);
+		SDL::GLSetAttribute(SDL::SDL_GL_DOUBLEBUFFER(),$db) if ($db);
+		SDL::GLSetAttribute(SDL::SDL_GL_BUFFER_SIZE(),$bs) if ($bs);
+		SDL::GLSetAttribute(SDL::SDL_GL_DEPTH_SIZE(),$d);
 	} else {
 		$SDL::App::USING_OPENGL = 0;
 	}
-	my $self = \SDL::SetVideoMode($w,$h,$d,$f);
-		$$self	
+
+	my $self = \SDL::SetVideoMode($w,$h,$d,$f)
 		or croak SDL::GetError();
 	
 	if ($ic and -e $ic) {
@@ -102,7 +126,7 @@ sub resize ($$$) {
 	my $flags = SDL::SurfaceFlags($$self);
 	if ( $flags & SDL::SDL_RESIZABLE()) {
 		my $bpp = SDL::SurfaceBitsPerPixel($$self);
-		$$self = SDL::SetVideoMode($w,$h,$bpp,$flags);
+		$self = \SDL::SetVideoMode($w,$h,$bpp,$flags);
 	}
 }
 

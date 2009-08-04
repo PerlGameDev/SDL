@@ -1,6 +1,31 @@
+#!/usr/bin/env perl
 #
-# Copyright (C) 2004 chromatic
-# Copyright (C) 2004 David J. Goehrig
+# Build.pm
+#
+# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+#
+# ------------------------------------------------------------------------------
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ------------------------------------------------------------------------------
+#
+# Please feel free to send questions, suggestions or improvements to:
+#
+#	David J. Goehrig
+#	dgoehrig@cpan.org
 #
 
 package SDL::Build;
@@ -19,14 +44,15 @@ use Config;
 sub process_xs
 {
 	my ($self, $file) = @_;
-
 	my $properties                   = $self->{properties};
 
 	my $file_args                    = $self->notes( 'file_flags' )->{$file};
+
 	my @old_values                   = @$properties{ keys %$file_args };
 	@$properties{ keys %$file_args } = values %$file_args;
 	$self->SUPER::process_xs( $file );
 	@$properties{ keys %$file_args } = @old_values;
+
 }
 
 # every platform has slightly different library and header paths
@@ -147,7 +173,7 @@ sub set_flags
 				@{ $includes->{$subsystem} },
 				split(' ',$sdl_compile),
 				@{ $defines->{$subsystem} },
-				( defined $Config{usethreads} ? ('-DUSE_THREADS', '-fPIC') : '-fPIC' ),
+				( defined $Config{usethreads} ? ('-DUSE_THREADS', '-fPIC') : ('-fPIC' )),
 			],
 			extra_linker_flags => 
 			[
@@ -198,6 +224,46 @@ sub write_sdl_config
 
 	open my $file, '>', $path or croak "Cannot write to '$path': $!\n";
 	print $file $text;
+}
+
+# Subclass  Darwin to build Objective-C addons
+
+sub filter_support {
+	my $self = shift;
+	print STDERR "[SDL::Build] generic filter\n";
+	return ();
+}
+
+sub process_support_files {
+	my $self = shift;
+	my $p = $self->{properties};
+	return unless $p->{c_source};
+	return unless $p->{c_sources};
+
+	push @{$p->{include_dirs}}, $p->{c_source};
+	unless ( $p->{extra_compiler_flags} && $p->{extra_compiler_flags} =~ /DARCHNAME/) {
+		$p->{extra_compiler_flags} .=  " -DARCHNAME=" . $self->{config}{archname};
+	}
+	print STDERR "[SDL::Build] extra compiler flags" . $p->{extra_compiler_flags} . "\n";
+
+	foreach my $file (map($p->{c_source} . "/$_", @{$p->{c_sources}})) {
+		push @{$p->{objects}}, $self->compile_c($file);
+	}
+}
+
+# Override to create a MacOS Bundle
+sub build_bundle
+{
+	return;
+}
+
+# Override Install method for darwin
+sub ACTION_install {
+  my ($self) = @_;
+  require ExtUtils::Install;
+  $self->depends_on('build');
+  $self->get_arch($^O)->build_bundle();
+  ExtUtils::Install::install($self->install_map, 1, 0, $self->{args}{uninst}||0);
 }
 
 1;

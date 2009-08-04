@@ -1,9 +1,36 @@
+#!/usr/bin/env perl
 #
-#	Palette.pm
+# Palette.pm
 #
-#	a module for manipulating SDL_Palette *
+# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
 #
-#	Copyright (C) 2000,2002 David J. Goehrig
+# ------------------------------------------------------------------------------
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ------------------------------------------------------------------------------
+#
+# Please feel free to send questions, suggestions or improvements to:
+#
+#	David J. Goehrig
+#	dgoehrig@cpan.org
+#
+
+# NB: there is no palette destructor because most of the time the 
+# palette will be owned by a surface, so any palettes you create 
+# with new, won't be destroyed until the program ends!
 
 package SDL::Palette;
 use strict;
@@ -23,6 +50,7 @@ sub new {
 		$image = shift;
 		$self = \$image->palette(); 
 	} else { 
+	die SDL::GetError() unless $$self;
 		$self = \SDL::NewPalette(256); 
 	}
 	bless $self, $class;

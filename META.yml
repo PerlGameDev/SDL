@@ -1,6 +1,6 @@
 ---
 name: SDL_Perl
-version: 2.1.3
+version: 2.2.0
 author:
   - David J. Goehrig <DGOEHRIG@cpan.org>
 abstract: Simple DirectMedia Layer for Perl
@@ -11,7 +11,7 @@ build_requires:
 provides:
   SDL:
     file: lib/SDL.pm
-    version: 2.1.3
+    version: 2.2.0
   SDL::App:
     file: lib/SDL/App.pm
   SDL::Cdrom:
@@ -46,8 +46,6 @@ provides:
     file: lib/SDL/Sound.pm
   SDL::Surface:
     file: lib/SDL/Surface.pm
-  SDL::TTFont:
-    file: lib/SDL/TTFont.pm
   SDL::Timer:
     file: lib/SDL/Timer.pm
   SDL::Tool::Font:
@@ -58,12 +56,14 @@ provides:
     file: lib/SDL/Tutorial.pm
   SDL::Tutorial::Animation:
     file: lib/SDL/Tutorial/Animation.pm
-  SDL::Tutorial::Drawing:
-    file: lib/SDL/Tutorial/Drawing.pm
   SDL::Tutorial::Images:
     file: lib/SDL/Tutorial/Images.pm
+  SDL::Tutorial:Drawing:
+    file: lib/SDL/Tutorial/Drawing.pm
   SDL::Video:
     file: lib/SDL/Video.pm
+  SDL:TTFont:
+    file: lib/SDL/TTFont.pm
   SDL_perl:
     file: lib/SDL_perl.pm
   Walker:

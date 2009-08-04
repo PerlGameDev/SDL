@@ -1,8 +1,33 @@
-#! perl -w
+#!/usr/bin/env perl
 #
-# Copyright (C) 2003 chromatic 
-# Copyright (C) 2004 David J. Goehrig
-# Copyright (C) 2009 Kartik Thakore
+# Build.PL
+#
+# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+#
+# ------------------------------------------------------------------------------
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ------------------------------------------------------------------------------
+#
+# Please feel free to send questions, suggestions or improvements to:
+#
+#	David J. Goehrig
+#	dgoehrig@cpan.org
+#
+
 
 use strict;
 use warnings;
@@ -11,7 +36,6 @@ use lib  'make/lib';
 
 use SDL::Build;
 use YAML;
-use YAML::Node;
 
 my $sdl_compile_flags = `sdl-config --cflags`;
 my $sdl_link_flags    = `sdl-config --libs`;
@@ -37,22 +61,22 @@ my %subsystems =
 	SDL => {
 		file      => {
 			from  => 'src/SDL.xs',
-			to    => './SDL_perl.xs',
+			to    => 'src/SDL_perl.xs',
 		},
-		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
-		                  png jpeg smpeg )],
+		libraries => [qw( SDL SDL_image SDL_mixer SDL_sound SDL_net SDL_ttf 
+				SDL_gfx SDL_svg png jpeg smpeg )],
 	},
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',
-			to   => 'SDL/OpenGL.xs', 
+			to   => 'src/SDL/OpenGL.xs', 
 		},
 		libraries => [qw( SDL GL GLU )],
 	},
 	SFont => {
 		file	=> {
 			from => 'src/SFont.xs',
-			to   =>	'SDL/SFont.xs',
+			to   =>	'src/SDL/SFont.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
 	},	
@@ -71,6 +95,10 @@ my %libraries = (
 		define => 'HAVE_SDL_MIXER',   
 		header => 'SDL_mixer.h'
 	},
+	SDL_sound => {
+		define => 'HAVE_SDL_SOUND',
+		header => 'SDL_sound.h'
+	},
 	SDL_net     => {
 		define => 'HAVE_SDL_NET',     
 		header => 'SDL_net.h'
@@ -82,6 +110,10 @@ my %libraries = (
 	SDL_gfx     => {
 		define => 'HAVE_SDL_GFX',     
 		header => 'SDL_gfxPrimitives.h'
+	},
+	SDL_svg => {
+		define => 'HAVE_SDL_SVG',
+		header => 'SDL_svg.h'
 	},
 	png         => {
 		define    => 'HAVE_PNG',
@@ -109,6 +141,8 @@ my %libraries = (
 # see build/lib/SDL/Build/*pm
 my $arch          = SDL::Build->get_arch( $^O );
 
+print "[Build.PL] arch $arch\n";
+
 # see which subsystems can be built -- do we have headers for them?
 my $build_systems = $arch->find_subsystems( \%subsystems, \%libraries );
 
@@ -116,15 +150,18 @@ my $build_systems = $arch->find_subsystems( \%subsystems, \%libraries );
 $arch->write_sdl_config( $build_systems );
 
 # and fetch all of the information needed to compile
-my $defines       = $arch->build_defines( \%libraries, $build_systems );
-my $includes      = $arch->build_includes( \%libraries, $build_systems );
-my $links         = $arch->build_links( \%libraries, $build_systems );
+my $defines	= $arch->build_defines( \%libraries, $build_systems );
+my $includes	= $arch->build_includes( \%libraries, $build_systems );
+my $links	= $arch->build_links( \%libraries, $build_systems );
+my $c_sources	= $arch->build_c_sources( \%libraries, $build_systems );
+my $c_source	= $arch->build_c_source( \%libraries, $build_systems );
+my $install_base = $arch->build_install_base( \%libraries, $build_systems );
 
 # mangle the compilable files into a format Module::Build can understand
 my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
 	     keys %subsystems;
+
 my $build   = SDL::Build->new(
-	module_name          => 'SDL',
 	dist_name            => 'SDL_Perl', 
 	license		     => 'lgpl',
 	dist_version_from    => 'lib/SDL.pm',
@@ -137,9 +174,11 @@ my $build   = SDL::Build->new(
 	{
 		'Pod::ToDemo'  => '0.20',
 	},
-	c_source	     => 'src',
+	c_source => $c_source,
+	c_sources => $c_sources,
 	xs_files             => \%xs,
 	dist_author	     => 'David J. Goehrig <DGOEHRIG@cpan.org>',
+	install_base => $install_base
 );
 
 # and here's where the real (and ugly) magic works... see SDL::Build

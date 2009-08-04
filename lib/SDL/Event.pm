@@ -1,13 +1,35 @@
-#	Event.pm
+#!/usr/bin/env perl
 #
-#	A package for handling SDL_Event *
+# Event.pm
 #
-#	Copyright (C) 2000,2001,2002 David J. Goehrig
-#	Copyright (C) 2009 Kartik Thakore
-#	see the file COPYING for terms of use
+# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+#
+# ------------------------------------------------------------------------------
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ------------------------------------------------------------------------------
+#
+# Please feel free to send questions, suggestions or improvements to:
+#
+#	David J. Goehrig
+#	dgoehrig@cpan.org
 #
 
 package SDL::Event;
+
 use strict;
 use warnings;
 use Carp;
@@ -43,12 +65,6 @@ sub pump {
 sub poll {
 	my $self = shift;
 	return SDL::PollEvent($$self);
-}
-
-sub peep($$$$)
-{
-	my ($event, $numEvents, $action, $mask) = @_;
-	return SDL::PeepEvents($$event, $numEvents, $action, $mask);
 }
 
 sub push {
@@ -231,24 +247,7 @@ available.
 
 =head2 pump()
 
-Pumps the event loop, gathering events from the input devices.
-
 =head2 poll()
-
-Polls for currently pending events
-
-=head2 peep()
-
-Checks the event queue for messages and optionally returns them.
-
-If action is SDL_ADDEVENT, up to numevents events will be added to the back of the event queue.
-
-If action is SDL_PEEKEVENT, up to numevents events at the front of the event queue, matching mask, will be returned and will not be removed from the queue.
-
-If action is SDL_GETEVENT, up to numevents events at the front of the event queue, matching mask, will be returned and will be removed from the queue.
-
-The mask parameter is a bitwise OR of SDL_EVENTMASK(event_type), for all event types you are interested in
-
 
 =head2 wait()
 

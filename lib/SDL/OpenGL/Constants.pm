@@ -1,22 +1,35 @@
-# SDL::OpenGL::Constants
+#!/usr/bin/env perl
 #
-# This is an autogenerate file, don't bother editing
+# Constants.pm
 #
-# Copyright (C) 2003 David J. Goehrig <dave@sdlperl.org>
+# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+#
+# ------------------------------------------------------------------------------
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ------------------------------------------------------------------------------
+#
+# Please feel free to send questions, suggestions or improvements to:
+#
+#	David J. Goehrig
+#	dgoehrig@cpan.org
+#
 
 package SDL::OpenGL::Constants;
 
-require Exporter;
-
-use SelfLoader;
-#$SelfLoader::DEBUG=1;
-
-use vars qw(
-	@EXPORT
-	@ISA
-);
-
-@ISA=qw(Exporter);
 @EXPORT=qw(
 	GLU_AUTO_LOAD_MATRIX
 	GLU_CULLING
@@ -1585,7 +1598,11 @@ use vars qw(
 	GL_ZOOM_Y
 );
 
-__DATA__
+for (@EXPORT) {
+	*{"SDL::" . $_} = *{$_};
+	*{"main::" . $_} = *{$_};
+}
+
 sub GLU_AUTO_LOAD_MATRIX {100200}
 sub GLU_CULLING {100201}
 sub GLU_DISPLAY_MODE {100204}
@@ -3151,3 +3168,5 @@ sub GL_YCRYCB_422_NVX {0x600B}
 sub GL_ZERO {0}
 sub GL_ZOOM_X {0x0D16}
 sub GL_ZOOM_Y {0x0D17}
+
+1;

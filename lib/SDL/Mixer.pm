@@ -1,11 +1,35 @@
-#	Mixer.pm
+#!/usr/bin/env perl
 #
-#	a SDL module for manipulating the SDL_mixer lib.
-#	
-#	Copyright (C) 2000,2002 David J. Goehrig
-#	Copyright (C) 2009 Kartik Thakore
+# Mixer.pm
+#
+# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+#
+# ------------------------------------------------------------------------------
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ------------------------------------------------------------------------------
+#
+# Please feel free to send questions, suggestions or improvements to:
+#
+#	David J. Goehrig
+#	dgoehrig@cpan.org
+#
 
 package SDL::Mixer;
+
 use strict;
 use warnings;
 use Carp;
@@ -127,12 +151,6 @@ sub music_volume ($$) {
 	return SDL::MixVolumeMusic($volume);
 }
 
-sub mix_set_panning($$$$) {
-         my ($self,$channel,$left,$right) = @_;
-         return SDL::MixSetPanning($channel,$left,$right);
- }
-
-
 sub halt_channel ($$) {
 	my ($self,$channel) = @_;
 	return SDL::MixHaltChannel($channel);
@@ -210,11 +228,6 @@ sub music_paused (){
 sub playing ($$) {
 	my ($self,$channel) = @_;
 	return SDL::MixPlaying($channel);
-}
-
-sub mix_volume_chunk($$$) {
-	my ($self, $chunk, $volume) = @_;
-	return SDL::MixVolumeChunk($chunk, $volume);
 }
 
 sub playing_music () {
@@ -396,17 +409,8 @@ Return true when the channel is currently playing.
 
 Return true when the music is currently playing.
 
-=head2 sub mix_set_panning(channel,left,right) 
- 
-Set panning for mixer, Use MIX_CHANNEL_POST to process the postmix stream
- 
-Volume for the left channel, range is 0(silence) to 255(loud)
- 
-Volume for the right channel, range is 0(silence) to 255(loud)
-
 =head1 AUTHORS 
 
-Kartik Thakore 
 David J. Goehrig, basic doc added by Tels <http://bloodgate.com>.
 
 =head1 SEE ALSO

@@ -1,5 +1,10 @@
 TODO for SDL_perl
 
 	o Add SDL_EventFilter support
+	o fix OpenGL build without glu.h
+	o fix openFile: support on Mac (SDL patch)
+	o add Windows application bundle support
+	o add Linux application bundle support
+	o add embedded media module
 
 

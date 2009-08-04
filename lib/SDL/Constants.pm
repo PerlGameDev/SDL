@@ -1,32 +1,35 @@
-# SDL::Constants
+#!/usr/bin/env perl
 #
-# This is an automatically generated file, don't bother editing
+# Constants.pm
 #
-# Copyright (C) 2003,2004 David J. Goehrig <dgoehrig@cpan.org>
+# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+#
+# ------------------------------------------------------------------------------
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ------------------------------------------------------------------------------
+#
+# Please feel free to send questions, suggestions or improvements to:
+#
+#	David J. Goehrig
+#	dgoehrig@cpan.org
 #
 
 package SDL::Constants;
 
-require Exporter;
-
-BEGIN {
-#supposedly this crap isn't thread safe
-#SelfLoader screws up and we can't be certain to read all DATA
-#if this isn't loaded prior to creating new threads.
-
-  if (! $threads::threads) {
-
-    use SelfLoader;
-    #$SelfLoader::DEBUG=1;
-  }
-};
-
-use vars qw(
-	@EXPORT
-	@ISA
-);
-
-@ISA=qw(Exporter);
 @EXPORT=qw(
 	AUDIO_S16
 	AUDIO_S16MSB
@@ -60,7 +63,6 @@ use vars qw(
 	MIX_FADING_OUT
 	MIX_MAX_VOLUME
 	MIX_NO_FADING
-	MIX_CHANNEL_POST
 	SDLK_0
 	SDLK_1
 	SDLK_2
@@ -294,10 +296,20 @@ use vars qw(
 	UTF8_BLENDED
 	UTF8_SHADED
 	UTF8_SOLID
+	SDL_SVG_FLAG_DIRECT
+	SDL_SVG_FLAG_COMPOSITE
+	SDL_SAMPLEFLAG_NONE
+	SDL_SAMPLEFLAG_CANSEEK
+	SDL_SAMPLEFLAG_EOF
+	SDL_SAMPLEFLAG_ERROR
+	SDL_SAMPLEFLAG_EAGAIN
 );
 
+for (@EXPORT) {
+	*{"SDL::" . $_} = *{$_};
+	*{"main::" . $_} = *{$_};
+}
 
-__DATA__
 sub AUDIO_S16 {32784}
 sub AUDIO_S16MSB {36880}
 sub AUDIO_S8 {32776}
@@ -330,7 +342,6 @@ sub MIX_FADING_IN {2}
 sub MIX_FADING_OUT {1}
 sub MIX_MAX_VOLUME {128}
 sub MIX_NO_FADING {0}
-sub MIX_CHANNEL_POST {2}
 sub SDLK_0 {48}
 sub SDLK_1 {49}
 sub SDLK_2 {50}
@@ -564,4 +575,12 @@ sub UNICODE_SOLID {64}
 sub UTF8_BLENDED {32}
 sub UTF8_SHADED {16}
 sub UTF8_SOLID {8}
+sub SDL_SVG_FLAG_DIRECT {0}
+sub SDL_SVG_FLAG_COMPOSITE {1}
+sub SDL_SAMPLEFLAG_NONE {0}
+sub SDL_SAMPLEFLAG_CANSEEK {1}
+sub SDL_SAMPLEFLAG_EOF {1<<29}
+sub SDL_SAMPLEFLAG_ERROR {1<<30}
+sub SDL_SAMPLEFLAG_EAGAIN {1<<31}
 
+1;

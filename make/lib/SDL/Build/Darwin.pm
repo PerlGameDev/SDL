@@ -1,3 +1,33 @@
+#!/usr/bin/env perl
+#
+# Darwin.pm
+#
+# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+#
+# ------------------------------------------------------------------------------
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+# 
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+#
+# ------------------------------------------------------------------------------
+#
+# Please feel free to send questions, suggestions or improvements to:
+#
+#	David J. Goehrig
+#	dgoehrig@cpan.org
+#
+
 package SDL::Build::Darwin;
 
 use base 'SDL::Build';
@@ -15,30 +45,51 @@ sub fetch_includes
 	'/usr/local/include/gl'    => '/usr/local/lib',
 	'/usr/include/GL'          => '/usr/lib', 
 	'/usr/include/gl'          => '/usr/lib', 
-	
-	'/Library/Frameworks/SDL.framework/Headers'	      => '../../lib',
-	'/Library/Frameworks/SDL_mixer.framework/Headers'     => '../../lib',
-	'/Library/Frameworks/SDL_image.framework/Headers'     => '../../lib',
-	'/Library/Frameworks/SDL_net.framework/Headers'       => '../../lib',
-	'/Library/Frameworks/SDL_ttf.framework/Headers'       => '../../lib',
-	'/Library/Frameworks/SDL_gfx.framework/Headers'       => '../../lib',
-	'/Library/Frameworks/libogg.framework/Headers'        => '../../lib',
-	'/Library/Frameworks/libvorbis.framework/Headers'     => '../../lib',
-	'/Frameworks/libvorbisfile.framework/Headers'	      => '../../lib',
-	'/Library/Frameworks/libvorbisenc.framework/Headers'  => '../../lib',
-	'../../include'                                       => '../../lib',
-	'/System/Library/Frameworks/OpenGL.framework/Headers' =>
- 		'/System/Library/Frameworks/OpenGL.framework/Libraries',
+
+	'/System/Library/Frameworks/SDL_mixer.framework/Headers'     => '../../lib',
+	'/System/Library/Frameworks/SDL_image.framework/Headers'     => '../../lib',
+	'/System/Library/Frameworks/SDL_ttf.framework/Headers'       => '../../lib',
+	'/System/Library/Frameworks/libogg.framework/Headers'        => '../../lib',
+	'/System/Library/Frameworks/libvorbis.framework/Headers'     => '../../lib',
+	'/System/Library/Frameworks/libvorbisfile.framework/Headers' => '../../lib',
+	'/System/Library/Frameworks/libvorbisenc.framework/Headers'  => '../../lib',
+	'../../include'                                              => '../../lib',
+	'/System/Library/Frameworks/OpenGL.framework/Headers'        =>
+		'/System/Library/Frameworks/OpenGL.framework/Libraries',
 	);
 }
 
-sub build_defines
+sub build_c_sources 
 {
-	my $self = shift;
-	my $defines = $self->SUPER::build_defines(@_);
-
-	push @{$defines->{SDL}}, "-Ddarwin", "-DMACOSX";
-
-	return $defines;
+	return [qw/ 
+		launcher.m
+	/];
 }
+
+sub build_c_source
+{
+	return 'MacOSX';
+}
+
+sub build_install_base
+{
+	return "SDL Perl.app/Contents/Resources";	
+}
+
+sub build_bundle
+{
+	$bundle_contents="SDL Perl.app/Contents";
+	system "mkdir -p \"$bundle_contents\"";
+	mkdir "$bundle_contents/MacOS",0755;
+	$libs = `sdl-config --libs`;
+	chomp($libs);
+	$libs =~ s/-lSDLmain//g;
+	system "gcc $libs -framework Cocoa `perl -MExtUtils::Embed -e ldopts` MacOSX/launcher.o -o \"$bundle_contents/MacOS/SDL Perl\"";
+
+	mkdir "$bundle_contents/Resources",0755;
+	system "echo \"APPL????\" > \"$bundle_contents/PkgInfo\"";
+	system "cp MacOSX/Info.plist \"$bundle_contents/\"";
+	system "cp \"MacOSX/SDL Perl.icns\" \"$bundle_contents/Resources\"";
+}
+
 1;

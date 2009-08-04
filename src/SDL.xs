@@ -1,11 +1,31 @@
+//
 // SDL.xs
 //
-// SDL Perl by David J. Goehrig <dgoehrig@cpan.org>
+// Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
 //
-// Copyright (C) 2000,2001,2002,2003,2004 David J. Goehrig 
-// Copyright (C) 2009 Kartik Thakore
-// This software is under the GNU Library General Public License (LGPL)
-// see the file COPYING for terms of use
+// ------------------------------------------------------------------------------
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+// 
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+// 
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+//
+// ------------------------------------------------------------------------------
+//
+// Please feel free to send questions, suggestions or improvements to:
+//
+//	David J. Goehrig
+//	dgoehrig@cpan.org
+//
 
 #include "EXTERN.h"
 #include "perl.h"
@@ -17,6 +37,14 @@
 
 #include <SDL.h>
 
+#ifdef HAVE_GL
+#include <gl.h>
+#endif
+
+#ifdef HAVE_GLU
+#include <glu.h>
+#endif
+
 #ifdef HAVE_SDL_IMAGE
 #include <SDL_image.h>
 #endif 
@@ -26,12 +54,8 @@
 void (*mix_music_finished_cv)();
 #endif
 
-#ifdef HAVE_GL
-#include <gl.h>
-#endif
-
-#ifdef HAVE_GLU
-#include <glu.h>
+#ifdef HAVE_SDL_SOUND
+#include <SDL_sound.h>
 #endif
 
 #ifdef HAVE_SDL_NET
@@ -65,37 +89,15 @@ static int sdl_perl_use_smpeg_audio = 0;
 #include <SDL_imageFilter.h>
 #endif
 
+#ifdef HAVE_SDL_SVG
+#include <SDL_svg.h>
+#endif
+
 #ifdef USE_THREADS
 #define HAVE_TLS_CONTEXT
 #endif
 
 #include "defines.h"
-
-#ifdef MACOSX
-#include <CoreServices/CoreServices.h>
-void CPSEnableForegroundOperation(ProcessSerialNumber* psn);
-void NSApplicationLoad();
-void SDL_macosx_init(void) {
-    Boolean sameProc;
-    ProcessSerialNumber myProc, frProc;
-    if (GetFrontProcess(&frProc) == noErr)
-        if (GetCurrentProcess(&myProc) == noErr)
-            if (SameProcess(&frProc, &myProc, &sameProc) == noErr && sameProc == 0) {
-                /*
-                NSLog(@"creating bad autorelease pool");
-                [[NSAutoreleasePool alloc] init];
-                */
-                NSApplicationLoad();
-                CPSEnableForegroundOperation(&myProc);
-            }
-}
-void SDL_macosx_quit(void) {
-}
-#endif // MACOSX
-
-
-
-
 
 Uint32 
 sdl_perl_timer_callback ( Uint32 interval, void* param )
@@ -206,13 +208,15 @@ sdl_perl_music_finished_callback ( void )
 
 #endif
 
+#define INIT_NS_APPLICATION
+#define QUIT_NS_APPLICATION
+
+
 void
 sdl_perl_atexit (void)
 {
+	QUIT_NS_APPLICATION	
 	SDL_Quit();
-#ifdef MACOSX    
-        SDL_macosx_quit();
-#endif
 }
 
 void boot_SDL();
@@ -238,9 +242,7 @@ int
 Init ( flags )
 	Uint32 flags
 	CODE:
-#ifdef MACOSX    
-	        SDL_macosx_init();
-#endif
+		INIT_NS_APPLICATION
 		RETVAL = SDL_Init(flags);
 #ifdef HAVE_TLS_CONTEXT
 		Perl_call_atexit(PERL_GET_CONTEXT, (void*)sdl_perl_atexit,0);
@@ -267,11 +269,8 @@ QuitSubSystem ( flags )
 void
 Quit ()
 	CODE:
+		QUIT_NS_APPLICATION
 		SDL_Quit();
-#ifdef MACOSX
-	        SDL_macosx_quit();
-#endif
-
 
 int
 WasInit ( flags )
@@ -334,6 +333,103 @@ RemoveTimer ( id )
 	SDL_TimerID id
 	CODE:
 		RETVAL = SDL_RemoveTimer(id);
+	OUTPUT:
+		RETVAL
+
+SDL_RWops*
+RWFromFile ( file, mode )
+	char* file
+	char * mode
+	CODE:
+		RETVAL = SDL_RWFromFile(file,mode);
+	OUTPUT:
+		RETVAL
+
+SDL_RWops*
+RWFromFP ( fp, autoclose )
+	FILE* fp
+	int autoclose
+	CODE:
+		RETVAL = SDL_RWFromFP(fp,autoclose);
+	OUTPUT:
+		RETVAL
+
+SDL_RWops*
+RWFromMem ( mem, size )
+	char* mem
+	int size
+	CODE:
+		RETVAL = SDL_RWFromMem((void*)mem,size);
+	OUTPUT:
+		RETVAL
+
+SDL_RWops*
+RWFromConstMem ( mem, size )
+	const char* mem
+	int size
+	CODE:
+		RETVAL = SDL_RWFromConstMem((const void*)mem,size);
+	OUTPUT:
+		RETVAL
+
+SDL_RWops*
+AllocRW ()
+	CODE:
+		RETVAL = SDL_AllocRW();
+	OUTPUT:
+		RETVAL
+
+void
+FreeRW ( rw )
+	SDL_RWops* rw
+	CODE:
+		SDL_FreeRW(rw);
+
+int
+RWseek ( rw, off, whence )
+	SDL_RWops* rw
+	int off
+	int whence
+	CODE:
+		RETVAL = SDL_RWseek(rw,off,whence);
+	OUTPUT:
+		RETVAL
+
+int
+RWtell ( rw )
+	SDL_RWops* rw
+	CODE:
+		RETVAL = SDL_RWtell(rw);
+	OUTPUT:
+		RETVAL
+
+int
+RWread ( rw, mem, size, n )
+	SDL_RWops* rw
+	char* mem
+	int size
+	int n
+	CODE:
+		RETVAL = SDL_RWread(rw,mem,size,n);
+	OUTPUT:
+		RETVAL
+
+int
+RWwrite ( rw, mem, size, n )
+	SDL_RWops* rw
+	char* mem
+	int size
+	int n
+	CODE:
+		RETVAL = SDL_RWwrite(rw,mem,size,n);
+	OUTPUT:
+		RETVAL
+
+int
+RWclose ( rw )
+	SDL_RWops* rw
+	CODE:
+		RETVAL = SDL_RWclose(rw);
 	OUTPUT:
 		RETVAL
 
@@ -526,19 +622,6 @@ FreeEvent ( e )
 	SDL_Event *e
 	CODE:
 		safefree(e);
-
-
-int
-PeepEvents( e, numevents, action, mask)
-	SDL_Event *e
-	int numevents
-	SDL_eventaction action
-	Uint32 mask
-	CODE:
-		RETVAL = (int)SDL_PeepEvents( e, numevents, action, mask);
-	OUTPUT:
-		RETVAL
-
 
 int
 PollEvent ( e )
@@ -1219,20 +1302,6 @@ ColorB ( color, ... )
 		RETVAL = color->b;
 	OUTPUT:
 		RETVAL
-
-void
-ColorRGB ( color, ... )
-	SDL_Color *color
-	PPCODE:
-		if (items > 1 ) {
-			color->r = SvIV(ST(1)); 
-			color->g = SvIV(ST(2)); 
-			color->b = SvIV(ST(3)); 
-		}
-		mXPUSHi( color->r );
-		mXPUSHi( color->g );
-		mXPUSHi( color->b );
-		XSRETURN(3);
 
 void
 FreeColor ( color )
@@ -1938,17 +2007,6 @@ MixPlayChannel ( channel, chunk, loops )
 		RETVAL
 
 int
-MixSetPanning ( channel, left, right )
-        int channel
-        Uint8 left
-        Uint8 right
-        CODE:
-                RETVAL = Mix_SetPanning(channel,left, right);
-        OUTPUT:
-                RETVAL
-
-
-int
 MixPlayChannelTimed ( channel, chunk, loops, ticks )
 	int channel
 	Mix_Chunk *chunk
@@ -2361,7 +2419,7 @@ JoyAxisEventValue ( e )
         OUTPUT:
                 RETVAL
 
-Sint16
+Uint8
 JoyButtonEventWhich ( e )
         SDL_Event *e
         CODE:
@@ -2516,7 +2574,7 @@ NetResolveIP ( address )
 int
 NetResolveHost ( address, host, port )
 	IPaddress *address
-	char *host
+	const char *host
 	Uint16 port
 	CODE:
 		RETVAL = SDLNet_ResolveHost(address,host,port);
@@ -3313,13 +3371,13 @@ NewSMPEGInfo()
 
 void
 FreeSMPEGInfo ( info )
-	SMPEG_Info *info;
+	SMPEG_Info *info
 	CODE:	
 		safefree(info);
 
 int
 SMPEGInfoHasAudio ( info )
-	SMPEG_Info* info;
+	SMPEG_Info* info
 	CODE:
 		RETVAL = info->has_audio;
 	OUTPUT:
@@ -3327,7 +3385,7 @@ SMPEGInfoHasAudio ( info )
 
 int
 SMPEGInfoHasVideo ( info )
-	SMPEG_Info* info;
+	SMPEG_Info* info
 	CODE:
 		RETVAL = info->has_video;
 	OUTPUT:
@@ -3335,7 +3393,7 @@ SMPEGInfoHasVideo ( info )
 
 int
 SMPEGInfoWidth ( info )
-	SMPEG_Info* info;
+	SMPEG_Info* info
 	CODE:
 		RETVAL = info->width;
 	OUTPUT:
@@ -3343,7 +3401,7 @@ SMPEGInfoWidth ( info )
 
 int
 SMPEGInfoHeight ( info )
-	SMPEG_Info* info;
+	SMPEG_Info* info
 	CODE:
 		RETVAL = info->height;
 	OUTPUT:
@@ -3351,7 +3409,7 @@ SMPEGInfoHeight ( info )
 
 int
 SMPEGInfoCurrentFrame ( info )
-	SMPEG_Info* info;
+	SMPEG_Info* info
 	CODE:
 		RETVAL = info->current_frame;
 	OUTPUT:
@@ -3359,7 +3417,7 @@ SMPEGInfoCurrentFrame ( info )
 
 double
 SMPEGInfoCurrentFPS ( info )
-	SMPEG_Info* info;
+	SMPEG_Info* info
 	CODE:
 		RETVAL = info->current_fps;
 	OUTPUT:
@@ -3367,7 +3425,7 @@ SMPEGInfoCurrentFPS ( info )
 
 int
 SMPEGInfoCurrentAudioFrame ( info )
-	SMPEG_Info* info;
+	SMPEG_Info* info
 	CODE:
 		RETVAL = info->audio_current_frame;
 	OUTPUT:
@@ -3375,7 +3433,7 @@ SMPEGInfoCurrentAudioFrame ( info )
 
 int
 SMPEGInfoCurrentOffset ( info )
-	SMPEG_Info* info;
+	SMPEG_Info* info
 	CODE:
 		RETVAL = info->current_offset;
 	OUTPUT:
@@ -3383,7 +3441,7 @@ SMPEGInfoCurrentOffset ( info )
 
 int
 SMPEGInfoTotalSize ( info )
-	SMPEG_Info* info;
+	SMPEG_Info* info
 	CODE:
 		RETVAL = info->total_size;
 	OUTPUT:
@@ -3391,7 +3449,7 @@ SMPEGInfoTotalSize ( info )
 
 double
 SMPEGInfoCurrentTime ( info )
-	SMPEG_Info* info;
+	SMPEG_Info* info
 	CODE:
 		RETVAL = info->current_time;
 	OUTPUT:
@@ -3399,7 +3457,7 @@ SMPEGInfoCurrentTime ( info )
 
 double
 SMPEGInfoTotalTime ( info )
-	SMPEG_Info* info;
+	SMPEG_Info* info
 	CODE:
 		RETVAL = info->total_time;
 	OUTPUT:
@@ -3407,7 +3465,7 @@ SMPEGInfoTotalTime ( info )
 
 char *
 SMPEGError ( mpeg )
-	SMPEG* mpeg ;
+	SMPEG* mpeg
 	CODE:	
 		RETVAL = SMPEG_error(mpeg);
 	OUTPUT:
@@ -3415,8 +3473,8 @@ SMPEGError ( mpeg )
 
 SMPEG*
 NewSMPEG ( filename, info, use_audio )
-	char* filename;
-	SMPEG_Info* info;
+	char* filename
+	SMPEG_Info* info
 	int use_audio
 	CODE:	
 #ifdef HAVE_SDL_MIXER
@@ -3429,14 +3487,14 @@ NewSMPEG ( filename, info, use_audio )
 
 void
 FreeSMPEG ( mpeg )
-	SMPEG* mpeg;
+	SMPEG* mpeg
 	CODE:
 		SMPEG_delete(mpeg);
 
 void
 SMPEGEnableAudio ( mpeg , flag )
-	SMPEG* mpeg ;
-	int flag;
+	SMPEG* mpeg
+	int flag
 	CODE:	
 		SMPEG_enableaudio(mpeg,flag);
 #ifdef HAVE_SDL_MIXER
@@ -3445,44 +3503,44 @@ SMPEGEnableAudio ( mpeg , flag )
 
 void
 SMPEGEnableVideo ( mpeg , flag )
-	SMPEG* mpeg ;
-	int flag;
+	SMPEG* mpeg
+	int flag
 	CODE:	
 		SMPEG_enablevideo(mpeg,flag);
 
 void
 SMPEGSetVolume ( mpeg , volume )
-	SMPEG* mpeg ;
-	int volume;
+	SMPEG* mpeg
+	int volume
 	CODE:	
 		SMPEG_setvolume(mpeg,volume);
 
 void
 SMPEGSetDisplay ( mpeg, dest, surfLock )
-	SMPEG* mpeg;
-	SDL_Surface* dest;
-	SDL_mutex*  surfLock;     
+	SMPEG* mpeg
+	SDL_Surface* dest
+	SDL_mutex*  surfLock
 	CODE:
 		SMPEG_setdisplay(mpeg,dest,surfLock,NULL);
 
 void
 SMPEGScaleXY ( mpeg, w, h)
-	SMPEG* mpeg;
-	int w;
-	int h;
+	SMPEG* mpeg
+	int w
+	int h
 	CODE:
 		SMPEG_scaleXY(mpeg,w,h);
 
 void
 SMPEGScale ( mpeg, scale )
-	SMPEG* mpeg;
+	SMPEG* mpeg
 	int scale
 	CODE:
 		SMPEG_scale(mpeg,scale);
 
 void
 SMPEGPlay ( mpeg )
-	SMPEG* mpeg;
+	SMPEG* mpeg
 	CODE:
                 SDL_AudioSpec audiofmt;
                 Uint16 format;
@@ -3503,7 +3561,7 @@ SMPEGPlay ( mpeg )
 
 SMPEGstatus
 SMPEGStatus ( mpeg )
-	SMPEG* mpeg;
+	SMPEG* mpeg
 	CODE:
 		RETVAL = SMPEG_status(mpeg);
 	OUTPUT:
@@ -3511,20 +3569,20 @@ SMPEGStatus ( mpeg )
 
 void
 SMPEGPause ( mpeg )
-	SMPEG* mpeg;
+	SMPEG* mpeg
 	CODE:
 		SMPEG_pause(mpeg);
 
 void
 SMPEGLoop ( mpeg, repeat )
-	SMPEG* mpeg;
+	SMPEG* mpeg
 	int repeat
 	CODE:
 		SMPEG_loop(mpeg,repeat);
 
 void
 SMPEGStop ( mpeg )
-	SMPEG* mpeg;
+	SMPEG* mpeg
 	CODE:
 		SMPEG_stop(mpeg);
 #ifdef HAVE_SDL_MIXER
@@ -3533,41 +3591,41 @@ SMPEGStop ( mpeg )
 
 void
 SMPEGRewind ( mpeg )
-	SMPEG* mpeg;
+	SMPEG* mpeg
 	CODE:
 		SMPEG_rewind(mpeg);
 
 void
 SMPEGSeek ( mpeg, bytes )
-	SMPEG* mpeg;
-	int bytes;
+	SMPEG* mpeg
+	int bytes
 	CODE:
 		SMPEG_seek(mpeg,bytes);
 
 void
 SMPEGSkip ( mpeg, seconds )
-	SMPEG* mpeg;
-	float seconds;
+	SMPEG* mpeg
+	float seconds
 	CODE:
 		SMPEG_skip(mpeg,seconds);
 
 void
 SMPEGSetDisplayRegion ( mpeg, rect )
-	SMPEG* mpeg;
-	SDL_Rect* rect;
+	SMPEG* mpeg
+	SDL_Rect* rect
 	CODE:
 		SMPEG_setdisplayregion(mpeg,rect->x,rect->y,rect->w,rect->h);
 
 void
 SMPEGRenderFrame ( mpeg, frame )
-	SMPEG* mpeg;
-	int frame;
+	SMPEG* mpeg
+	int frame
 	CODE:
 		SMPEG_renderFrame(mpeg,frame);
 
 SMPEG_Info *
 SMPEGGetInfo ( mpeg )
-	SMPEG* mpeg;
+	SMPEG* mpeg
 	CODE:
 		RETVAL = (SMPEG_Info *) safemalloc (sizeof(SMPEG_Info));
 		SMPEG_getinfo(mpeg,RETVAL);
@@ -3581,555 +3639,654 @@ SMPEGGetInfo ( mpeg )
 
 SDL_Surface *
 GFXRotoZoom ( src, angle, zoom, smooth)
-     SDL_Surface * src;
-     double angle;
-     double zoom;
-     int smooth;
-     CODE:
-                 RETVAL = rotozoomSurface( src, angle, zoom, smooth);
-     OUTPUT:
-                 RETVAL
+	SDL_Surface * src
+	double angle
+	double zoom
+	int smooth
+	CODE:
+		RETVAL = rotozoomSurface( src, angle, zoom, smooth);
+	OUTPUT:
+		RETVAL
 
 SDL_Surface *
 GFXZoom ( src, zoomx, zoomy, smooth)
-     SDL_Surface *src;
-     double zoomx;
-     double zoomy;
-     int smooth;
-     CODE:
-                 RETVAL = zoomSurface( src, zoomx, zoomy, smooth);
-     OUTPUT:
-                 RETVAL
-
+	SDL_Surface *src
+	double zoomx
+	double zoomy
+	int smooth
+	CODE:
+		RETVAL = zoomSurface( src, zoomx, zoomy, smooth);
+	OUTPUT:
+		RETVAL
 
 int
 GFXPixelColor ( dst, x, y, color )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Uint32 color;
-CODE:
-     RETVAL = pixelColor( dst, x, y, color);
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Uint32 color
+	CODE:
+		RETVAL = pixelColor( dst, x, y, color);
+	OUTPUT:
+		RETVAL
 
 int
 GFXPixelRGBA ( dst, x, y, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = pixelRGBA( dst, x, y, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = pixelRGBA( dst, x, y, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXHlineColor ( dst, x1, x2, y, color )
-    SDL_Surface* dst;
-    Sint16 x1;
-    Sint16 x2;
-    Sint16 y;
-    Uint32 color;
-CODE:
-     RETVAL = hlineColor( dst, x1, x2, y, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x1
+	Sint16 x2
+	Sint16 y
+	Uint32 color
+	CODE:
+		RETVAL = hlineColor( dst, x1, x2, y, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXHlineRGBA ( dst, x1, x2, y, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x1;
-    Sint16 x2;
-    Sint16 y;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = hlineRGBA( dst, x1, x2, y, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x1
+	Sint16 x2
+	Sint16 y
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = hlineRGBA( dst, x1, x2, y, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXVlineColor ( dst, x, y1, y2, color )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y1;
-    Sint16 y2;
-    Uint32 color;
-CODE:
-     RETVAL = vlineColor( dst, x, y1, y2, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y1
+	Sint16 y2
+	Uint32 color
+	CODE:
+		RETVAL = vlineColor( dst, x, y1, y2, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXVlineRGBA ( dst, x, y1, y2, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y1;
-    Sint16 y2;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = vlineRGBA( dst, x, y1, y2, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y1
+	Sint16 y2
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = vlineRGBA( dst, x, y1, y2, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXRectangleColor ( dst, x1, y1, x2, y2, color )
-    SDL_Surface* dst;
-    Sint16 x1;
-    Sint16 y1;
-    Sint16 x2;
-    Sint16 y2;
-    Uint32 color;
-CODE:
-     RETVAL = rectangleColor( dst, x1, y1, x2, y2, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x1
+	Sint16 y1
+	Sint16 x2
+	Sint16 y2
+	Uint32 color
+	CODE:
+		RETVAL = rectangleColor( dst, x1, y1, x2, y2, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXRectangleRGBA ( dst, x1, y1, x2, y2, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x1;
-    Sint16 y1;
-    Sint16 x2;
-    Sint16 y2;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = rectangleRGBA( dst, x1, y1, x2, y2, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x1
+	Sint16 y1
+	Sint16 x2
+	Sint16 y2
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = rectangleRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXBoxColor ( dst, x1, y1, x2, y2, color )
-    SDL_Surface* dst;
-    Sint16 x1;
-    Sint16 y1;
-    Sint16 x2;
-    Sint16 y2;
-    Uint32 color;
-CODE:
-     RETVAL = boxColor( dst, x1, y1, x2, y2, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x1
+	Sint16 y1
+	Sint16 x2
+	Sint16 y2
+	Uint32 color
+	CODE:
+		RETVAL = boxColor( dst, x1, y1, x2, y2, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXBoxRGBA ( dst, x1, y1, x2, y2, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x1;
-    Sint16 y1;
-    Sint16 x2;
-    Sint16 y2;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = boxRGBA( dst, x1, y1, x2, y2, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst;
+	Sint16 x1
+	Sint16 y1
+	Sint16 x2
+	Sint16 y2
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = boxRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXLineColor ( dst, x1, y1, x2, y2, color )
-    SDL_Surface* dst;
-    Sint16 x1;
-    Sint16 y1;
-    Sint16 x2;
-    Sint16 y2;
-    Uint32 color;
-CODE:
-     RETVAL = lineColor( dst, x1, y1, x2, y2, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x1
+	Sint16 y1
+	Sint16 x2
+	Sint16 y2
+	Uint32 color
+	CODE:
+		RETVAL = lineColor( dst, x1, y1, x2, y2, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXLineRGBA ( dst, x1, y1, x2, y2, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x1;
-    Sint16 y1;
-    Sint16 x2;
-    Sint16 y2;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = lineRGBA( dst, x1, y1, x2, y2, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x1
+	Sint16 y1
+	Sint16 x2
+	Sint16 y2
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = lineRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXAalineColor ( dst, x1, y1, x2, y2, color )
-    SDL_Surface* dst;
-    Sint16 x1;
-    Sint16 y1;
-    Sint16 x2;
-    Sint16 y2;
-    Uint32 color;
-CODE:
-     RETVAL = aalineColor( dst, x1, y1, x2, y2, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x1
+	Sint16 y1
+	Sint16 x2
+	Sint16 y2
+	Uint32 color
+	CODE:
+		RETVAL = aalineColor( dst, x1, y1, x2, y2, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXAalineRGBA ( dst, x1, y1, x2, y2, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x1;
-    Sint16 y1;
-    Sint16 x2;
-    Sint16 y2;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = aalineRGBA( dst, x1, y1, x2, y2, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x1
+	Sint16 y1
+	Sint16 x2
+	Sint16 y2
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = aalineRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXCircleColor ( dst, x, y, r, color )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 r;
-    Uint32 color;
-CODE:
-     RETVAL = circleColor( dst, x, y, r, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 r
+	Uint32 color
+	CODE:
+		RETVAL = circleColor( dst, x, y, r, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXCircleRGBA ( dst, x, y, rad, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 rad;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = circleRGBA( dst, x, y, rad, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 rad
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = circleRGBA( dst, x, y, rad, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXAacircleColor ( dst, x, y, r, color )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 r;
-    Uint32 color;
-CODE:
-     RETVAL = aacircleColor( dst, x, y, r, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 r
+	Uint32 color
+	CODE:
+		RETVAL = aacircleColor( dst, x, y, r, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXAacircleRGBA ( dst, x, y, rad, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 rad;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = aacircleRGBA( dst, x, y, rad, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 rad
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = aacircleRGBA( dst, x, y, rad, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXFilledCircleColor ( dst, x, y, r, color )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 r;
-    Uint32 color;
-CODE:
-     RETVAL = filledCircleColor( dst, x, y, r, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 r
+	Uint32 color
+	CODE:
+		RETVAL = filledCircleColor( dst, x, y, r, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXFilledCircleRGBA ( dst, x, y, rad, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 rad;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = filledCircleRGBA( dst, x, y, rad, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 rad
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = filledCircleRGBA( dst, x, y, rad, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXEllipseColor ( dst, x, y, rx, ry, color )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 rx;
-    Sint16 ry;
-    Uint32 color;
-CODE:
-     RETVAL = ellipseColor( dst, x, y, rx, ry, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 rx
+	Sint16 ry
+	Uint32 color
+	CODE:
+		RETVAL = ellipseColor( dst, x, y, rx, ry, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXEllipseRGBA ( dst, x, y, rx, ry, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 rx;
-    Sint16 ry;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = ellipseRGBA( dst, x, y, rx, ry, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 	rx
+	Sint16 ry
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = ellipseRGBA( dst, x, y, rx, ry, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXAaellipseColor ( dst, xc, yc, rx, ry, color )
-    SDL_Surface* dst;
-    Sint16 xc;
-    Sint16 yc;
-    Sint16 rx;
-    Sint16 ry;
-    Uint32 color;
-CODE:
-     RETVAL = aaellipseColor( dst, xc, yc, rx, ry, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 xc
+	Sint16 yc
+	Sint16 rx
+	Sint16 ry
+	Uint32 color
+	CODE:
+		RETVAL = aaellipseColor( dst, xc, yc, rx, ry, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXAaellipseRGBA ( dst, x, y, rx, ry, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 rx;
-    Sint16 ry;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = aaellipseRGBA( dst, x, y, rx, ry, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 rx
+	Sint16 ry
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = aaellipseRGBA( dst, x, y, rx, ry, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXFilledEllipseColor ( dst, x, y, rx, ry, color )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 rx;
-    Sint16 ry;
-    Uint32 color;
-CODE:
-     RETVAL = filledEllipseColor( dst, x, y, rx, ry, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 rx
+	Sint16 ry
+	Uint32 color
+	CODE:
+		RETVAL = filledEllipseColor( dst, x, y, rx, ry, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXFilledEllipseRGBA ( dst, x, y, rx, ry, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 rx;
-    Sint16 ry;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = filledEllipseRGBA( dst, x, y, rx, ry, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 rx
+	Sint16 ry
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = filledEllipseRGBA( dst, x, y, rx, ry, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXFilledPieColor ( dst, x, y, rad, start, end, color )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 rad;
-    Sint16 start;
-    Sint16 end;
-    Uint32 color;
-CODE:
-     RETVAL = filledPieColor( dst, x, y, rad, start, end, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 rad
+	Sint16 start
+	Sint16 end
+	Uint32 color
+	CODE:
+		RETVAL = filledPieColor( dst, x, y, rad, start, end, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXFilledPieRGBA ( dst, x, y, rad, start, end, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    Sint16 rad;
-    Sint16 start;
-    Sint16 end;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = filledPieRGBA( dst, x, y, rad, start, end, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	Sint16 rad
+	Sint16 start
+	Sint16 end
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = filledPieRGBA( dst, x, y, rad, start, end, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXPolygonColor ( dst, vx, vy, n, color )
-    SDL_Surface* dst;
-    Sint16* vx;
-    Sint16* vy;
-    int n;
-    Uint32 color;
-CODE:
-     RETVAL = polygonColor( dst, vx, vy, n, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16* vx
+	Sint16* vy
+	int n
+	Uint32 color;
+	CODE:
+		RETVAL = polygonColor( dst, vx, vy, n, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXPolygonRGBA ( dst, vx, vy, n, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16* vx;
-    Sint16* vy;
-    int n;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = polygonRGBA( dst, vx, vy, n, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16* vx
+	Sint16* vy
+	int n
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = polygonRGBA( dst, vx, vy, n, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXAapolygonColor ( dst, vx, vy, n, color )
-    SDL_Surface* dst;
-    Sint16* vx;
-    Sint16* vy;
-    int n;
-    Uint32 color;
-CODE:
-     RETVAL = aapolygonColor( dst, vx, vy, n, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16* vx
+	Sint16* vy
+	int n
+	Uint32 color
+	CODE:
+		RETVAL = aapolygonColor( dst, vx, vy, n, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXAapolygonRGBA ( dst, vx, vy, n, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16* vx;
-    Sint16* vy;
-    int n;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = aapolygonRGBA( dst, vx, vy, n, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16* vx
+	Sint16* vy
+	int n
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = aapolygonRGBA( dst, vx, vy, n, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXFilledPolygonColor ( dst, vx, vy, n, color )
-    SDL_Surface* dst;
-    Sint16* vx;
-    Sint16* vy;
-    int n;
-    int color;
-CODE:
-     RETVAL = filledPolygonColor( dst, vx, vy, n, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16* vx
+	Sint16* vy
+	int n
+	int color
+	CODE:
+		RETVAL = filledPolygonColor( dst, vx, vy, n, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXFilledPolygonRGBA ( dst, vx, vy, n, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16* vx;
-    Sint16* vy;
-    int n;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = filledPolygonRGBA( dst, vx, vy, n, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16* vx
+	Sint16* vy
+	int n
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = filledPolygonRGBA( dst, vx, vy, n, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXCharacterColor ( dst, x, y, c, color )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    char c;
-    Uint32 color;
-CODE:
-     RETVAL = characterColor( dst, x, y, c, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	char c
+	Uint32 color
+	CODE:
+		RETVAL = characterColor( dst, x, y, c, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXCharacterRGBA ( dst, x, y, c, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    char c;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = characterRGBA( dst, x, y, c, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	char c
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = characterRGBA( dst, x, y, c, r, g, b, a );
+	OUTPUT:
+		RETVAL
 
 int
 GFXStringColor ( dst, x, y, c, color )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    char* c;
-    Uint32 color;
-CODE:
-     RETVAL = stringColor( dst, x, y, c, color );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	char* c
+	Uint32 color
+	CODE:
+		RETVAL = stringColor( dst, x, y, c, color );
+	OUTPUT:
+		RETVAL
 
 int
 GFXStringRGBA ( dst, x, y, c, r, g, b, a )
-    SDL_Surface* dst;
-    Sint16 x;
-    Sint16 y;
-    char* c;
-    Uint8 r;
-    Uint8 g;
-    Uint8 b;
-    Uint8 a;
-CODE:
-     RETVAL = stringRGBA( dst, x, y, c, r, g, b, a );
-OUTPUT:
-     RETVAL
+	SDL_Surface* dst
+	Sint16 x
+	Sint16 y
+	char* c
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		RETVAL = stringRGBA( dst, x, y, c, r, g, b, a );
+	OUTPUT:
+		RETVAL
+
+#endif
+
+
+#ifdef HAVE_SDL_SVG
+
+SDL_svg_context *
+SVG_Load ( filename )
+	char* filename
+	CODE:
+		RETVAL = SVG_Load(filename);
+	OUTPUT:
+		RETVAL
+
+SDL_svg_context *
+SVG_LoadBuffer ( data, len )
+	char* data
+	int len
+	CODE:
+		RETVAL = SVG_LoadBuffer(data,len);
+	OUTPUT:
+		RETVAL
+
+int
+SVG_SetOffset ( source, xoff, yoff )
+	SDL_svg_context* source
+	double xoff
+	double yoff
+	CODE:
+		RETVAL = SVG_SetOffset(source,xoff,yoff);
+	OUTPUT:
+		RETVAL
+
+int
+SVG_SetScale ( source, xscale, yscale )
+	SDL_svg_context* source
+	double xscale
+	double yscale
+	CODE:
+		RETVAL = SVG_SetScale(source,xscale,yscale);
+	OUTPUT:
+		RETVAL
+
+int
+SVG_RenderToSurface ( source, x, y, dest )
+	SDL_svg_context* source
+	int x
+	int y
+	SDL_Surface* dest;
+	CODE:
+		RETVAL = SVG_RenderToSurface(source,x,y,dest);
+	OUTPUT:
+		RETVAL
+
+void
+SVG_Free ( source )
+	SDL_svg_context* source
+	CODE:
+		SVG_Free(source);	
+
+void
+SVG_Set_Flags ( source, flags )
+	SDL_svg_context* source
+	Uint32 flags
+	CODE:
+		SVG_Set_Flags(source,flags);
+
+float
+SVG_Width ( source )
+	SDL_svg_context* source
+	CODE:
+		RETVAL = SVG_Width(source);
+	OUTPUT:
+		RETVAL
+
+float
+SVG_HEIGHT ( source )
+	SDL_svg_context* source
+	CODE:
+		RETVAL = SVG_Height(source);
+	OUTPUT:
+		RETVAL
+
+void
+SVG_SetClipping ( source, minx, miny, maxx, maxy )
+	SDL_svg_context* source
+	int minx
+	int miny
+	int maxx
+	int maxy
+	CODE:
+		SVG_SetClipping(source,minx,miny,maxx,maxy);
+
+int
+SVG_Version ( )
+	CODE:
+		RETVAL = SVG_Version();
+	OUTPUT:
+		RETVAL
+
 
 #endif
 
@@ -4163,14 +4320,14 @@ AV*
 SoundDecoderInfoExtensions ( decoderinfo )
 	Sound_DecoderInfo* decoderinfo
 	CODE:
-		char **ext;
+		const char **ext;
 		for ( ext = decoderinfo->extensions; *ext != NULL; ext++ ){
-			av_push(RETVAL,sv_2mortal(newSVpv(*ext,0)));
+			av_push(RETVAL,newSVpv(*ext,0));
 		}
 	OUTPUT:
 		RETVAL
 
-char*
+const char*
 SoundDecoderInfoDescription ( decoderinfo )
 	Sound_DecoderInfo* decoderinfo
 	CODE:
@@ -4178,7 +4335,7 @@ SoundDecoderInfoDescription ( decoderinfo )
 	OUTPUT:
 		RETVAL
 
-char*
+const char*
 SoundDecoderInfoAuthor ( decoderinfo )
 	Sound_DecoderInfo* decoderinfo
 	CODE:
@@ -4186,7 +4343,7 @@ SoundDecoderInfoAuthor ( decoderinfo )
 	OUTPUT:
 		RETVAL
 
-char*
+const char*
 SoundDecoderInfoUrl ( decoderinfo )
 	Sound_DecoderInfo* decoderinfo
 	CODE:
@@ -4230,7 +4387,7 @@ Uint32
 SoundSampleBufferSize ( sample )
 	Sound_Sample* sample
 	CODE:
-		RETVAL = sample->buffer;
+		RETVAL = sample->buffer_size;
 	OUTPUT:
 		RETVAL
 
@@ -4242,7 +4399,134 @@ SoundSampleFlags ( sample )
 	OUTPUT:
 		RETVAL
 
+int
+Sound_Init ( )
+	CODE:
+		RETVAL = Sound_Init();
+	OUTPUT:
+		RETVAL
 
+int
+Sound_Quit ( )
+	CODE:
+		RETVAL = Sound_Quit();
+	OUTPUT:
+		RETVAL
+
+AV*
+Sound_AvailableDecoders ( )
+	CODE:
+		RETVAL = newAV();
+		const Sound_DecoderInfo** sdi;
+		sdi = Sound_AvailableDecoders();
+		if (sdi != NULL)  {
+			for (;*sdi != NULL; ++sdi) {
+				av_push(RETVAL,sv_2mortal(newSViv(PTR2IV(*sdi))));
+			}
+		}
+	OUTPUT:
+		RETVAL
+
+const char*
+Sound_GetError ( )
+	CODE:
+		RETVAL = Sound_GetError();
+	OUTPUT:
+		RETVAL
+
+void
+Sound_ClearError ( )
+	CODE:
+		Sound_ClearError();
+
+Sound_Sample*
+Sound_NewSample ( rw, ext, desired, buffsize )
+	SDL_RWops* rw
+	const char* ext
+	Sound_AudioInfo* desired
+	Uint32 buffsize
+	CODE:
+		RETVAL = Sound_NewSample(rw,ext,desired,buffsize);
+	OUTPUT:
+		RETVAL
+
+Sound_Sample*
+Sound_NewSampleFromMem ( data, size, ext, desired, buffsize )
+	const Uint8 *data
+	Uint32 size
+	const char* ext
+	Sound_AudioInfo* desired
+	Uint32 buffsize
+	CODE:
+		RETVAL = Sound_NewSampleFromMem(data,size,ext,desired,buffsize);
+	OUTPUT:
+		RETVAL
+
+Sound_Sample*
+Sound_NewSampleFromFile ( fname, desired, buffsize )
+	const char* fname
+	Sound_AudioInfo* desired
+	Uint32 buffsize
+	CODE:
+		RETVAL = Sound_NewSampleFromFile(fname,desired,buffsize);
+	OUTPUT:
+		RETVAL
+
+void
+Sound_FreeSample ( sample )
+	Sound_Sample* sample
+	CODE:
+		Sound_FreeSample(sample);
+
+Sint32
+Sound_GetDuration ( sample )
+	Sound_Sample* sample
+	CODE:
+		RETVAL = Sound_GetDuration(sample);
+	OUTPUT:
+		RETVAL
+
+int
+Sound_SetBufferSize ( sample, size )
+	Sound_Sample* sample
+	Uint32 size
+	CODE:
+		RETVAL = Sound_SetBufferSize(sample,size);
+	OUTPUT:
+		RETVAL
+
+Uint32
+Sound_Decode ( sample )
+	Sound_Sample* sample
+	CODE:
+		RETVAL = Sound_Decode(sample);
+	OUTPUT:
+		RETVAL
+
+Uint32
+Sound_DecodeAll ( sample ) 
+	Sound_Sample* sample
+	CODE:
+		RETVAL = Sound_DecodeAll(sample);
+	OUTPUT:
+		RETVAL
+
+int
+Sound_Rewind ( sample )
+	Sound_Sample* sample
+	CODE:
+		RETVAL = Sound_Rewind(sample);
+	OUTPUT:
+		RETVAL
+
+int
+Sound_Seek ( sample, ms )
+	Sound_Sample* sample
+	Uint32 ms
+	CODE:
+		RETVAL = Sound_Seek(sample,ms);
+	OUTPUT:
+		RETVAL
 
 #endif
 
