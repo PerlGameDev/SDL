@@ -1,0 +1,4579 @@
+diff -r SDL_perl/Build.PL sdlperl/Build.PL
+1c1
+< #! perl -w
+---
+> #!/usr/bin/env perl
+3,5c3,30
+< # Copyright (C) 2003 chromatic 
+< # Copyright (C) 2004 David J. Goehrig
+< # Copyright (C) 2009 Kartik Thakore
+---
+> # Build.PL
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+13d37
+< use YAML::Node;
+39c63
+< 			to    => './SDL_perl.xs',
+---
+> 			to    => 'src/SDL_perl.xs',
+41,42c65,66
+< 		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
+< 		                  png jpeg smpeg )],
+---
+> 		libraries => [qw( SDL SDL_image SDL_mixer SDL_sound SDL_net SDL_ttf 
+> 				SDL_gfx SDL_svg png jpeg smpeg )],
+47c71
+< 			to   => 'SDL/OpenGL.xs', 
+---
+> 			to   => 'src/SDL/OpenGL.xs', 
+54c78
+< 			to   =>	'SDL/SFont.xs',
+---
+> 			to   =>	'src/SDL/SFont.xs',
+72a97,100
+> 	SDL_sound => {
+> 		define => 'HAVE_SDL_SOUND',
+> 		header => 'SDL_sound.h'
+> 	},
+84a113,116
+> 	SDL_svg => {
+> 		define => 'HAVE_SDL_SVG',
+> 		header => 'SDL_svg.h'
+> 	},
+110a143,144
+> print "[Build.PL] arch $arch\n";
+> 
+118,120c152,157
+< my $defines       = $arch->build_defines( \%libraries, $build_systems );
+< my $includes      = $arch->build_includes( \%libraries, $build_systems );
+< my $links         = $arch->build_links( \%libraries, $build_systems );
+---
+> my $defines	= $arch->build_defines( \%libraries, $build_systems );
+> my $includes	= $arch->build_includes( \%libraries, $build_systems );
+> my $links	= $arch->build_links( \%libraries, $build_systems );
+> my $c_sources	= $arch->build_c_sources( \%libraries, $build_systems );
+> my $c_source	= $arch->build_c_source( \%libraries, $build_systems );
+> my $install_base = $arch->build_install_base( \%libraries, $build_systems );
+124a162
+> 
+126d163
+< 	module_name          => 'SDL',
+139c176,177
+< 	c_source	     => 'src',
+---
+> 	c_source => $c_source,
+> 	c_sources => $c_sources,
+141a180
+> 	install_base => $install_base
+diff -r SDL_perl/CHANGELOG sdlperl/CHANGELOG
+2,9d1
+< * Aug 2 2009    Kartik Thakore
+< 	- Added patches
+< 	- Verified and Tested patches
+< 	- Clean bugs
+< 
+< * Mar 3 2006	Tels 77 Tests
+< 	- Color.pm: add rgb(), and make new($r,$g,$b) work for speed
+< 	- add ColorRGB() to src/SDL.xs
+11c3,24
+< * Oct 4 2004	David J. Goehrig <dgoehrig@cpan.org>
+---
+> * Jul 8 2006	David J. Goehrig <dgoehrig@cpan.org>
+> 	- finished embedding data in example scripts
+> 	- fixed Mac OS X file associations
+> 
+> * Mar 15 2006	David J. Goehrig <dgoehrig@cpan.org>
+> 	- fixed OpenGL examples to work under MacOS X using the SDL Perl.app bundle
+> 	
+> * Oct 12 2005	David J. Goehrig <dgoehrig@cpan.org>
+> 	- Fixed bug where SDL::App frees underlying Surface via DESTROY
+> 	- Added SDL_svg support
+> 	- cleaned up SDL_gfx support in SDL.xs
+> 	- cleaned up smpeg support in SDL.xs
+> 	- Added more SDL_sound support
+> 	- Added basic SDL_RWops support (TODO - perl callback for user defined)
+> 
+> * Oct 6 2005	David J. Goehrig <dgoehrig@cpan.org>
+> 	- Changed constructors to die upon invalid initialization
+> 
+> * Oct 5 2005	David J. Goehrig <dgoehrig@cpan.org>
+> 	- Updated the copyright notices as per the LGPL guidelines
+> 
+> * Oct 4 2005	David J. Goehrig <dgoehrig@cpan.org>
+diff -r SDL_perl/META.yml sdlperl/META.yml
+3c3
+< version: 2.1.3
+---
+> version: 2.2.0
+14c14
+<     version: 2.1.3
+---
+>     version: 2.2.0
+49,50d48
+<   SDL::TTFont:
+<     file: lib/SDL/TTFont.pm
+61,62d58
+<   SDL::Tutorial::Drawing:
+<     file: lib/SDL/Tutorial/Drawing.pm
+64a61,62
+>   SDL::Tutorial:Drawing:
+>     file: lib/SDL/Tutorial/Drawing.pm
+66a65,66
+>   SDL:TTFont:
+>     file: lib/SDL/TTFont.pm
+Only in sdlperl/: MacOSX
+diff -r SDL_perl/README sdlperl/README
+1c1
+< README for SDL_Perl-2.2
+---
+> README for SDL_Perl-2.2.0
+3,4c3
+< First step is to make SDL perl pass all tests in 
+< t/.
+---
+> What's New in 2.2.0:
+6c5,9
+< I will add these as a issue.
+---
+> SDL_Perl-2.2.0 adds support for a few new modules, fixes a few more
+> bugs, and improves the error handling of the object layer.  Additional
+> support for SDL_sound, SDL_svg, and SDL_vnc has been added.  In the 
+> OO layer, all constructors now die when they fail to construct an object
+> with a valid underlying datastructure pointer.
+8,12c11
+< Simple Run:
+< perl Build.PL
+< perl Build 
+< perl Build test
+< perl Build install
+---
+> Prerequisites:
+14c13,14
+< There are more test scripts in test/
+---
+> SDL Perl recommends installing the following libraries available
+> from http://www.libsdl.org/ prior to installing:
+16c16,71
+< Disclaimer: This might be moved to CPAN when I get access
+---
+> 	SDL-1.2.8
+> 	smpeg-0.4.5
+> 	SDL_image-1.2.4
+> 	SDL_mixer-1.2.6
+> 	SDL_sound-1.0.1
+> 	SDL_net-1.2.5
+> 	SDL_gfx-2.0.13
+> 	SDL_ttf-2.0.7
+> 	SDL_svg-1.1.9
+> 	SDL_vnc-1.0.0
+> 
+> Additionally the following Perl modules should be installed:
+> 
+> 	Module-Build-0.22
+> 	Test-Simple-0.62
+> 
+> Installation:
+> 
+> 	perl Build.PL
+> 	./Build
+> 	./Build test
+> 	./Build install
+> 
+> The build process will use the new Module::Build facility
+> to autodetect and build SDL Perl for your platform.  If
+> the build fails please forward bugs to sdl-devel@perl.org.
+> 
+> Documentation:
+> 
+> Each module now includes its own documentation, and 
+> is accessible through perldoc.  Additional tutorials,
+> code, and tips can be found at the website:
+> 
+> 	http://sdl.perl.org
+> 
+> Online documentation and tutorials are available through
+> perldoc module.  
+> 
+> Contributing:
+> 
+> Anyone wishing to contribute modules, sprite engines, documentation,
+> and anything else that others might find useful, please join
+> the mailing list:
+> 
+> 	sdl-devel@perl.org
+> 
+> This is a mailing list for those interested in SDLperl development,
+> both as an applications developer, and as a core contributor.
+> 
+> I am always more than happy to take patches, bug reports, and
+> helpful suggestions.  It is feedback, both good and poor, that
+> keeps projects like this going.
+> 
+> Enjoy,
+> 
+> David J. Goehrig <dgoehrig@cpan.org>
+18,19d72
+< kthakore <thakore.kartik@gmail.com>
+< 1 August 2009
+diff -r SDL_perl/TODO sdlperl/TODO
+3a4,8
+> 	o fix OpenGL build without glu.h
+> 	o fix openFile: support on Mac (SDL patch)
+> 	o add Windows application bundle support
+> 	o add Linux application bundle support
+> 	o add embedded media module
+Only in sdlperl/: _build
+Only in sdlperl/: blib
+diff -r SDL_perl/lib/SDL/App.pm sdlperl/lib/SDL/App.pm
+1c1
+< #	App.pm
+---
+> #!/usr/bin/env perl
+3c3
+< #	The application object, sort of like a surface
+---
+> # App.pm
+5,6c5
+< #	Copyright (C) 2000,2002,2003,2004 David J. Goehrig
+< #	Copyright (C) 2009 Kartik Thakore
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+7a7,30
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+17a41,44
+> sub DESTROY {
+> 
+> }
+> 
+30c57
+< 				-asyncblit -init
+---
+> 				-asyncblit
+33,36c60
+<         # SDL_INIT_VIDEO() is 0, so check defined instead of truth.
+< 	my $init = defined $options{-init} ? $options{-init} : SDL_INIT_EVERYTHING();
+< 
+< 	SDL::Init($init);
+---
+> 	SDL::Init(SDL::SDL_INIT_EVERYTHING());
+65c89
+< 	if ($f & SDL_OPENGL()) { 
+---
+> 	if ($f & SDL::SDL_OPENGL()) { 
+67,75c91,99
+< 		SDL::GLSetAttribute(SDL_GL_RED_SIZE(),$r) if ($r);	
+< 		SDL::GLSetAttribute(SDL_GL_GREEN_SIZE(),$g) if ($g);	
+< 		SDL::GLSetAttribute(SDL_GL_BLUE_SIZE(),$b) if ($b);	
+< 		SDL::GLSetAttribute(SDL_GL_ALPHA_SIZE(),$a) if ($a);	
+< 
+< 		SDL::GLSetAttribute(SDL_GL_RED_ACCUM_SIZE(),$ras) if ($ras);	
+< 		SDL::GLSetAttribute(SDL_GL_GREEN_ACCUM_SIZE(),$gas) if ($gas);	
+< 		SDL::GLSetAttribute(SDL_GL_BLUE_ACCUM_SIZE(),$bas) if ($bas);	
+< 		SDL::GLSetAttribute(SDL_GL_ALPHA_ACCUM_SIZE(),$aas) if ($aas);	
+---
+> 		SDL::GLSetAttribute(SDL::SDL_GL_RED_SIZE(),$r) if ($r);	
+> 		SDL::GLSetAttribute(SDL::SDL_GL_GREEN_SIZE(),$g) if ($g);	
+> 		SDL::GLSetAttribute(SDL::SDL_GL_BLUE_SIZE(),$b) if ($b);	
+> 		SDL::GLSetAttribute(SDL::SDL_GL_ALPHA_SIZE(),$a) if ($a);	
+> 
+> 		SDL::GLSetAttribute(SDL::SDL_GL_RED_ACCUM_SIZE(),$ras) if ($ras);	
+> 		SDL::GLSetAttribute(SDL::SDL_GL_GREEN_ACCUM_SIZE(),$gas) if ($gas);	
+> 		SDL::GLSetAttribute(SDL::SDL_GL_BLUE_ACCUM_SIZE(),$bas) if ($bas);	
+> 		SDL::GLSetAttribute(SDL::SDL_GL_ALPHA_ACCUM_SIZE(),$aas) if ($aas);	
+77,79c101,103
+< 		SDL::GLSetAttribute(SDL_GL_DOUBLEBUFFER(),$db) if ($db);
+< 		SDL::GLSetAttribute(SDL_GL_BUFFER_SIZE(),$bs) if ($bs);
+< 		SDL::GLSetAttribute(SDL_GL_DEPTH_SIZE(),$d);
+---
+> 		SDL::GLSetAttribute(SDL::SDL_GL_DOUBLEBUFFER(),$db) if ($db);
+> 		SDL::GLSetAttribute(SDL::SDL_GL_BUFFER_SIZE(),$bs) if ($bs);
+> 		SDL::GLSetAttribute(SDL::SDL_GL_DEPTH_SIZE(),$d);
+83,84c107,108
+< 	my $self = \SDL::SetVideoMode($w,$h,$d,$f);
+< 		$$self	
+---
+> 
+> 	my $self = \SDL::SetVideoMode($w,$h,$d,$f)
+103c127
+< 		$$self = SDL::SetVideoMode($w,$h,$bpp,$flags);
+---
+> 		$self = \SDL::SetVideoMode($w,$h,$bpp,$flags);
+diff -r SDL_perl/lib/SDL/Cdrom.pm sdlperl/lib/SDL/Cdrom.pm
+1c1
+< #	Cdrom.pm
+---
+> #!/usr/bin/env perl
+3c3
+< #	a SDL cdrom manipluation module
+---
+> # Cdrom.pm
+5c5,28
+< #	Copyright (C) 2000,2002 David J. Goehrig
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+diff -r SDL_perl/lib/SDL/Color.pm sdlperl/lib/SDL/Color.pm
+1c1
+< #	Color.pm
+---
+> #!/usr/bin/env perl
+3c3,28
+< #	A package for manipulating SDL_Color *
+---
+> # Color.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+5d29
+< #	Copyright (C) 2002,2003,2004 David J. Goehrig
+15,18d38
+< 
+< 	# called like SDL::Color->new($red,$green,$blue);
+< 	return bless \SDL::NewColor(@_), $class if (@_ == 3);
+< 
+19a40
+> 
+39c60,61
+< 	bless $self, $class;
+---
+> 	bless $self,$class;
+> 	return $self;
+61,65d82
+< sub rgb {
+< 	my $self = shift;
+< 	SDL::ColorRGB($$self,@_);
+< }
+< 
+72,78c89,95
+< $SDL::Color::black = SDL::Color->new(0,0,0);
+< $SDL::Color::white = SDL::Color->new(255,255,255);
+< $SDL::Color::red = SDL::Color->new(255,0,0);
+< $SDL::Color::blue = SDL::Color->new(0,0,255);
+< $SDL::Color::green = SDL::Color->new(0,255,0);
+< $SDL::Color::purple = SDL::Color->new(255,0,255);
+< $SDL::Color::yellow = SDL::Color->new(255,255,0);
+---
+> $SDL::Color::black = new SDL::Color -r => 0, -g => 0, -b => 0;
+> $SDL::Color::white = new SDL::Color -r => 255, -g => 255, -b => 255;
+> $SDL::Color::red = new SDL::Color -r => 255, -g => 0, -b => 0;
+> $SDL::Color::blue = new SDL::Color -r => 0, -g => 0, -b => 255;
+> $SDL::Color::green = new SDL::Color -r => 0, -g => 255, -b => 0;
+> $SDL::Color::purple = new SDL::Color -r => 255, -g => 0, -b => 255;
+> $SDL::Color::yellow = new SDL::Color -r => 255, -g => 255, -b => 0;
+92,93d108
+<   $color = SDL::Color->new($red,$green,$blue);		# fastest
+< 
+101c116
+< representations.
+---
+> representations, with the same interface as L<SDL::Color>.  
+108,112d122
+< =head2 new ($r, $g, $b)
+< 
+< C<SDL::Color::new> with three color values will construct both a SDL_Color
+< structure, and the associated object with the specified values.
+< 
+130,136d139
+< =head2 rgb ( $red, $green, $blue )
+< 
+< C<SDL::Color::rgb> is an accessor method for the red, green, and blue components
+< in one go. It will return a list of three values.
+< 
+< The color value can be set by passing a byte value (0-255) for each color component.
+< 
+146,147d148
+< Additions by Tels 2006.
+< 
+150c151
+< L<perl> and L<SDL::Surface>.
+---
+> L<perl> L<SDL::Surface> 
+Only in sdlperl/lib/SDL: Config.pm
+diff -r SDL_perl/lib/SDL/Constants.pm sdlperl/lib/SDL/Constants.pm
+1c1
+< # SDL::Constants
+---
+> #!/usr/bin/env perl
+3c3
+< # This is an automatically generated file, don't bother editing
+---
+> # Constants.pm
+5c5,28
+< # Copyright (C) 2003,2004 David J. Goehrig <dgoehrig@cpan.org>
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+10,29d32
+< require Exporter;
+< 
+< BEGIN {
+< #supposedly this crap isn't thread safe
+< #SelfLoader screws up and we can't be certain to read all DATA
+< #if this isn't loaded prior to creating new threads.
+< 
+<   if (! $threads::threads) {
+< 
+<     use SelfLoader;
+<     #$SelfLoader::DEBUG=1;
+<   }
+< };
+< 
+< use vars qw(
+< 	@EXPORT
+< 	@ISA
+< );
+< 
+< @ISA=qw(Exporter);
+63d65
+< 	MIX_CHANNEL_POST
+296a299,305
+> 	SDL_SVG_FLAG_DIRECT
+> 	SDL_SVG_FLAG_COMPOSITE
+> 	SDL_SAMPLEFLAG_NONE
+> 	SDL_SAMPLEFLAG_CANSEEK
+> 	SDL_SAMPLEFLAG_EOF
+> 	SDL_SAMPLEFLAG_ERROR
+> 	SDL_SAMPLEFLAG_EAGAIN
+298a308,311
+> for (@EXPORT) {
+> 	*{"SDL::" . $_} = *{$_};
+> 	*{"main::" . $_} = *{$_};
+> }
+300d312
+< __DATA__
+333d344
+< sub MIX_CHANNEL_POST {2}
+566a578,584
+> sub SDL_SVG_FLAG_DIRECT {0}
+> sub SDL_SVG_FLAG_COMPOSITE {1}
+> sub SDL_SAMPLEFLAG_NONE {0}
+> sub SDL_SAMPLEFLAG_CANSEEK {1}
+> sub SDL_SAMPLEFLAG_EOF {1<<29}
+> sub SDL_SAMPLEFLAG_ERROR {1<<30}
+> sub SDL_SAMPLEFLAG_EAGAIN {1<<31}
+567a586
+> 1;
+diff -r SDL_perl/lib/SDL/Cursor.pm sdlperl/lib/SDL/Cursor.pm
+0a1,2
+> #!/usr/bin/env perl
+> #
+3c5,28
+< #	Copyright (C) 2000,2002 David J. Goehrig
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+17a43
+> 	die SDL::GetError() unless $$self;
+diff -r SDL_perl/lib/SDL/Event.pm sdlperl/lib/SDL/Event.pm
+1c1
+< #	Event.pm
+---
+> #!/usr/bin/env perl
+3c3
+< #	A package for handling SDL_Event *
+---
+> # Event.pm
+5,7c5,28
+< #	Copyright (C) 2000,2001,2002 David J. Goehrig
+< #	Copyright (C) 2009 Kartik Thakore
+< #	see the file COPYING for terms of use
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+10a32
+> 
+45,50d66
+< sub peep($$$$)
+< {
+< 	my ($event, $numEvents, $action, $mask) = @_;
+< 	return SDL::PeepEvents($$event, $numEvents, $action, $mask);
+< }
+< 
+231,232d246
+< Pumps the event loop, gathering events from the input devices.
+< 
+235,249d248
+< Polls for currently pending events
+< 
+< =head2 peep()
+< 
+< Checks the event queue for messages and optionally returns them.
+< 
+< If action is SDL_ADDEVENT, up to numevents events will be added to the back of the event queue.
+< 
+< If action is SDL_PEEKEVENT, up to numevents events at the front of the event queue, matching mask, will be returned and will not be removed from the queue.
+< 
+< If action is SDL_GETEVENT, up to numevents events at the front of the event queue, matching mask, will be returned and will be removed from the queue.
+< 
+< The mask parameter is a bitwise OR of SDL_EVENTMASK(event_type), for all event types you are interested in
+< 
+< 
+diff -r SDL_perl/lib/SDL/Font.pm sdlperl/lib/SDL/Font.pm
+1c1
+< #	Font.pm
+---
+> #!/usr/bin/env perl
+3c3
+< #	a SDL perl extension for SFont support
+---
+> # Font.pm
+5c5,28
+< #	Copyright (C) David J. Goehrig 2000,2002
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+8a32
+> 
+diff -r SDL_perl/lib/SDL/MPEG.pm sdlperl/lib/SDL/MPEG.pm
+0a1
+> #!/usr/bin/env perl
+2c3
+< #	MPEG.pm
+---
+> # MPEG.pm
+4c5,28
+< #	A package for manipulating MPEG video 
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+6d29
+< #	Copyright (C) 2004 David J. Goehrig
+diff -r SDL_perl/lib/SDL/Mixer.pm sdlperl/lib/SDL/Mixer.pm
+1c1,28
+< #	Mixer.pm
+---
+> #!/usr/bin/env perl
+> #
+> # Mixer.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+3,6d29
+< #	a SDL module for manipulating the SDL_mixer lib.
+< #	
+< #	Copyright (C) 2000,2002 David J. Goehrig
+< #	Copyright (C) 2009 Kartik Thakore
+8a32
+> 
+127,132d150
+< sub mix_set_panning($$$$) {
+<          my ($self,$channel,$left,$right) = @_;
+<          return SDL::MixSetPanning($channel,$left,$right);
+<  }
+< 
+< 
+212,216d229
+< sub mix_volume_chunk($$$) {
+< 	my ($self, $chunk, $volume) = @_;
+< 	return SDL::MixVolumeChunk($chunk, $volume);
+< }
+< 
+396,403d408
+< =head2 sub mix_set_panning(channel,left,right) 
+<  
+< Set panning for mixer, Use MIX_CHANNEL_POST to process the postmix stream
+<  
+< Volume for the left channel, range is 0(silence) to 255(loud)
+<  
+< Volume for the right channel, range is 0(silence) to 255(loud)
+< 
+406d410
+< Kartik Thakore 
+diff -r SDL_perl/lib/SDL/Music.pm sdlperl/lib/SDL/Music.pm
+1c1
+< #	Music.pm
+---
+> #!/usr/bin/env perl
+3c3,28
+< #	a SDL_mixer data module
+---
+> # Music.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+5d29
+< #	Copyright (C) 2000,2002 David J. Goehrig
+7a32
+> 
+15a41
+> 	die SDL::GetError() unless $$self;
+diff -r SDL_perl/lib/SDL/OpenGL/Constants.pm sdlperl/lib/SDL/OpenGL/Constants.pm
+1c1
+< # SDL::OpenGL::Constants
+---
+> #!/usr/bin/env perl
+3c3,28
+< # This is an autogenerate file, don't bother editing
+---
+> # Constants.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+5d29
+< # Copyright (C) 2003 David J. Goehrig <dave@sdlperl.org>
+9,19d32
+< require Exporter;
+< 
+< use SelfLoader;
+< #$SelfLoader::DEBUG=1;
+< 
+< use vars qw(
+< 	@EXPORT
+< 	@ISA
+< );
+< 
+< @ISA=qw(Exporter);
+1588c1601,1605
+< __DATA__
+---
+> for (@EXPORT) {
+> 	*{"SDL::" . $_} = *{$_};
+> 	*{"main::" . $_} = *{$_};
+> }
+> 
+3153a3171,3172
+> 
+> 1;
+diff -r SDL_perl/lib/SDL/OpenGL.pm sdlperl/lib/SDL/OpenGL.pm
+1c1
+< # SDL::OpenGL.pm
+---
+> #!/usr/bin/env perl
+3c3
+< #	A simplified OpenGL wrapper
+---
+> # OpenGL.pm
+5c5,28
+< # Copyright (C) 2002, 2003, 2004 David J. Goehrig
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+19d41
+< use SDL::OpenGL::Constants;
+28,32c50
+< # export all GL constants
+< for (@SDL::OpenGL::Constants::EXPORT) {
+< 	push @EXPORT, $_;
+< }
+< 
+---
+> use SDL::OpenGL::Constants;
+diff -r SDL_perl/lib/SDL/Palette.pm sdlperl/lib/SDL/Palette.pm
+0a1
+> #!/usr/bin/env perl
+2c3
+< #	Palette.pm
+---
+> # Palette.pm
+4c5
+< #	a module for manipulating SDL_Palette *
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+6c7,33
+< #	Copyright (C) 2000,2002 David J. Goehrig
+---
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+> # NB: there is no palette destructor because most of the time the 
+> # palette will be owned by a surface, so any palettes you create 
+> # with new, won't be destroyed until the program ends!
+25a53
+> 	die SDL::GetError() unless $$self;
+diff -r SDL_perl/lib/SDL/Rect.pm sdlperl/lib/SDL/Rect.pm
+0a1
+> #!/usr/bin/env perl
+2c3
+< #	Rect.pm
+---
+> # Rect.pm
+4c5,28
+< #	A package for manipulating SDL_Rect *
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+6d29
+< #	Copyright (C) 2003 David J. Goehrig
+8a32
+> 
+24a49
+> 	die SDL::GetError() unless $$self;
+diff -r SDL_perl/lib/SDL/SFont.pm sdlperl/lib/SDL/SFont.pm
+1c1
+< # SDL::OpenGL.pm
+---
+> #!/usr/bin/env perl
+3c3,28
+< #	SFont bitmat font support
+---
+> # SFont.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+5d29
+< #	Copyright (C) 2004 David J. Goehrig
+diff -r SDL_perl/lib/SDL/Sound.pm sdlperl/lib/SDL/Sound.pm
+0a1
+> #!/usr/bin/env perl
+2c3
+< #	Sound.pm
+---
+> # Sound.pm
+4c5,28
+< #	a SDL_mixer data module
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+6d29
+< #	Copyright (C) 2000,2002 David J. Goehrig
+15a39
+> 	die SDL::GetError() unless $$self;
+diff -r SDL_perl/lib/SDL/Surface.pm sdlperl/lib/SDL/Surface.pm
+0a1,12
+> #!/usr/bin/env perl
+> #
+> # Surface.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+2c14,25
+< #	Surface.pm
+---
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+4c27,28
+< #	A package for manipulating SDL_Surface *
+---
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+6d29
+< #	Copyright (C) 2003 David J. Goehrig
+50,51c73
+< 	die "SDL::Surface::new failed. ", SDL::GetError()
+< 		unless ( $$self);
+---
+> 	die SDL::GetError() unless $$self;
+diff -r SDL_perl/lib/SDL/TTFont.pm sdlperl/lib/SDL/TTFont.pm
+1c1
+< #	TTFont.pm
+---
+> #!/usr/bin/env perl
+3c3
+< #	a SDL perl extension for SDL_ttf support
+---
+> # TTFont.pm
+5c5,28
+< #	Copyright (C) David J. Goehrig 2002
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+24c47
+< 	$self->{-mode} = $options{-mode} 	|| $options{-m}	 || TEXT_SHADED();
+---
+> 	$self->{-mode} = $options{-mode} 	|| $options{-m}	 || SDL::TEXT_SHADED();
+89c112
+< 	SDL::TTFSetFontStyle($$self{-font},TTF_STYLE_NORMAL());
+---
+> 	SDL::TTFSetFontStyle($$self{-font},SDL::TTF_STYLE_NORMAL());
+94c117
+< 	SDL::TTFSetFontStyle($$self{-font},TTF_STYLE_BOLD());
+---
+> 	SDL::TTFSetFontStyle($$self{-font},SDL::TTF_STYLE_BOLD());
+99c122
+< 	SDL::TTFSetFontStyle($$self{-font},TTF_STYLE_ITALIC());
+---
+> 	SDL::TTFSetFontStyle($$self{-font},SDL::TTF_STYLE_ITALIC());
+105c128
+< 	SDL::TTFSetFontStyle($$self{-font},TTF_STYLE_UNDERLINE());
+---
+> 	SDL::TTFSetFontStyle($$self{-font},SDL::TTF_STYLE_UNDERLINE());
+110c133
+< 	$$self{-mode} = TEXT_SHADED();
+---
+> 	$$self{-mode} = SDL::TEXT_SHADED();
+115c138
+< 	$$self{-mode} = TEXT_SOLID();
+---
+> 	$$self{-mode} = SDL::TEXT_SOLID();
+120c143
+< 	$$self{-mode} = TEXT_BLENDED();
+---
+> 	$$self{-mode} = SDL::TEXT_BLENDED();
+125c148
+< 	$$self{-mode} = UTF8_SHADED();
+---
+> 	$$self{-mode} = SDL::UTF8_SHADED();
+130c153
+< 	$$self{-mode} = UTF8_SOLID();
+---
+> 	$$self{-mode} = SDL::UTF8_SOLID();
+135c158
+< 	$$self{-mode} = UTF8_BLENDED();
+---
+> 	$$self{-mode} = SDL::UTF8_BLENDED();
+140c163
+< 	$$self{-mode} = UNICODE_SHADED();
+---
+> 	$$self{-mode} = SDL::UNICODE_SHADED();
+145c168
+< 	$$self{-mode} = UNICODE_SOLID();
+---
+> 	$$self{-mode} = SDL::UNICODE_SOLID();
+150c173
+< 	$$self{-mode} = UNICODE_BLENDED();
+---
+> 	$$self{-mode} = SDL::UNICODE_BLENDED();
+diff -r SDL_perl/lib/SDL/Timer.pm sdlperl/lib/SDL/Timer.pm
+1c1
+< #	Timer.pm
+---
+> #!/usr/bin/env perl
+3c3,28
+< #	A package for manipulating SDL_Timer *
+---
+> # Timer.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+5d29
+< #	Copyright (C) 2002 David J. Goehrig
+7a32
+> 
+diff -r SDL_perl/lib/SDL/Tool/Font.pm sdlperl/lib/SDL/Tool/Font.pm
+0a1
+> #!/usr/bin/env perl
+2c3,28
+< #	SDL::Tool::Font -	format agnostic font tool
+---
+> # Font.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+4d29
+< #	Copyright (C) 2002 David J. Goehrig
+49c74
+< 		unless ($surface->isa('SDL::Surface'));
+---
+> 		unless ($SDL::DEBUG && $surface->isa('SDL::Surface'));
+diff -r SDL_perl/lib/SDL/Tool/Graphic.pm sdlperl/lib/SDL/Tool/Graphic.pm
+0a1
+> #!/usr/bin/env perl
+2c3,28
+< #	SDL::GraphicTool   -	zooming and rotating graphic tool
+---
+> # Graphic.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+4,5d29
+< #	Copyright (C) 2002 Russell E. Valentine
+< #	Copyright (C) 2002 David J. Goehrig
+Only in sdlperl/lib/SDL/Tutorial: .svn
+diff -r SDL_perl/lib/SDL/Tutorial/Animation.pm sdlperl/lib/SDL/Tutorial/Animation.pm
+0a1,30
+> #!/usr/bin/env perl
+> #
+> # Animation.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+3c33,34
+< use Pod::ToDemo <<'END_HERE';
+---
+> use strict;
+> use SDL;
+diff -r SDL_perl/lib/SDL/Tutorial/Drawing.pm sdlperl/lib/SDL/Tutorial/Drawing.pm
+1c1,29
+< package SDL::Tutorial::Drawing;
+---
+> #!/usr/bin/env perl
+> #
+> # Drawing.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+3c31,34
+< use Pod::ToDemo <<'END_HERE';
+---
+> package SDL::Tutorial:Drawing;
+> 
+> use strict;
+> use SDL;
+diff -r SDL_perl/lib/SDL/Tutorial/Images.pm sdlperl/lib/SDL/Tutorial/Images.pm
+0a1,30
+> #!/usr/bin/env perl
+> #
+> # Images.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+3a34
+> use SDL;
+diff -r SDL_perl/lib/SDL/Tutorial.pm sdlperl/lib/SDL/Tutorial.pm
+0a1,30
+> #!/usr/bin/env perl
+> #
+> # Tutorial.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+3c33,34
+< use Pod::ToDemo <<'END_HERE';
+---
+> use strict;
+> use SDL;
+diff -r SDL_perl/lib/SDL/Video.pm sdlperl/lib/SDL/Video.pm
+0a1
+> #!/usr/bin/env perl
+2c3
+< #	Video.pm
+---
+> # Video.pm
+4c5,28
+< #	A package for manipulating MPEG video 
+---
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+6d29
+< #	Copyright (C) 2004 David J. Goehrig
+26a50
+> 	die SDL::GetError() unless $$self;
+diff -r SDL_perl/lib/SDL.pm sdlperl/lib/SDL.pm
+0a1
+> #!/usr/bin/env perl
+2c3,28
+< # Copyright (C) 2004 David J. Goehrig
+---
+> # SDL.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+19,22d44
+< 	# reexport all SDL constants
+< 	for (@SDL::Constants::EXPORT) {
+< 		push @EXPORT,$_;
+< 	}
+26c48
+< $VERSION = '2.1.3';
+---
+> $VERSION = '2.2.1';
+76d97
+< 
+diff -r SDL_perl/lib/SDL_perl.pm sdlperl/lib/SDL_perl.pm
+0a1,12
+> #!/usr/bin/env perl
+> #
+> # SDL_perl.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+2c14,28
+< # Copyright (C) 2004 David J. Goehrig
+---
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+diff -r SDL_perl/make/lib/SDL/Build/Cygwin.pm sdlperl/make/lib/SDL/Build/Cygwin.pm
+0a1,30
+> #!/usr/bin/env perl
+> #
+> # Cygwin.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+diff -r SDL_perl/make/lib/SDL/Build/Darwin.pm sdlperl/make/lib/SDL/Build/Darwin.pm
+0a1,30
+> #!/usr/bin/env perl
+> #
+> # Darwin.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+18,31c48,58
+< 	
+< 	'/Library/Frameworks/SDL.framework/Headers'	      => '../../lib',
+< 	'/Library/Frameworks/SDL_mixer.framework/Headers'     => '../../lib',
+< 	'/Library/Frameworks/SDL_image.framework/Headers'     => '../../lib',
+< 	'/Library/Frameworks/SDL_net.framework/Headers'       => '../../lib',
+< 	'/Library/Frameworks/SDL_ttf.framework/Headers'       => '../../lib',
+< 	'/Library/Frameworks/SDL_gfx.framework/Headers'       => '../../lib',
+< 	'/Library/Frameworks/libogg.framework/Headers'        => '../../lib',
+< 	'/Library/Frameworks/libvorbis.framework/Headers'     => '../../lib',
+< 	'/Frameworks/libvorbisfile.framework/Headers'	      => '../../lib',
+< 	'/Library/Frameworks/libvorbisenc.framework/Headers'  => '../../lib',
+< 	'../../include'                                       => '../../lib',
+< 	'/System/Library/Frameworks/OpenGL.framework/Headers' =>
+<  		'/System/Library/Frameworks/OpenGL.framework/Libraries',
+---
+> 
+> 	'/System/Library/Frameworks/SDL_mixer.framework/Headers'     => '../../lib',
+> 	'/System/Library/Frameworks/SDL_image.framework/Headers'     => '../../lib',
+> 	'/System/Library/Frameworks/SDL_ttf.framework/Headers'       => '../../lib',
+> 	'/System/Library/Frameworks/libogg.framework/Headers'        => '../../lib',
+> 	'/System/Library/Frameworks/libvorbis.framework/Headers'     => '../../lib',
+> 	'/System/Library/Frameworks/libvorbisfile.framework/Headers' => '../../lib',
+> 	'/System/Library/Frameworks/libvorbisenc.framework/Headers'  => '../../lib',
+> 	'../../include'                                              => '../../lib',
+> 	'/System/Library/Frameworks/OpenGL.framework/Headers'        =>
+> 		'/System/Library/Frameworks/OpenGL.framework/Libraries',
+35c62
+< sub build_defines
+---
+> sub build_c_sources 
+37,38c64,67
+< 	my $self = shift;
+< 	my $defines = $self->SUPER::build_defines(@_);
+---
+> 	return [qw/ 
+> 		launcher.m
+> 	/];
+> }
+40c69,72
+< 	push @{$defines->{SDL}}, "-Ddarwin", "-DMACOSX";
+---
+> sub build_c_source
+> {
+> 	return 'MacOSX';
+> }
+42c74,76
+< 	return $defines;
+---
+> sub build_install_base
+> {
+> 	return "SDL Perl.app/Contents/Resources";	
+43a78,94
+> 
+> sub build_bundle
+> {
+> 	$bundle_contents="SDL Perl.app/Contents";
+> 	system "mkdir -p \"$bundle_contents\"";
+> 	mkdir "$bundle_contents/MacOS",0755;
+> 	$libs = `sdl-config --libs`;
+> 	chomp($libs);
+> 	$libs =~ s/-lSDLmain//g;
+> 	system "gcc $libs -framework Cocoa `perl -MExtUtils::Embed -e ldopts` MacOSX/launcher.o -o \"$bundle_contents/MacOS/SDL Perl\"";
+> 
+> 	mkdir "$bundle_contents/Resources",0755;
+> 	system "echo \"APPL????\" > \"$bundle_contents/PkgInfo\"";
+> 	system "cp MacOSX/Info.plist \"$bundle_contents/\"";
+> 	system "cp \"MacOSX/SDL Perl.icns\" \"$bundle_contents/Resources\"";
+> }
+> 
+diff -r SDL_perl/make/lib/SDL/Build/Freebsd.pm sdlperl/make/lib/SDL/Build/Freebsd.pm
+0a1,30
+> #!/usr/bin/env perl
+> #
+> # Freebsd.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+diff -r SDL_perl/make/lib/SDL/Build/Linux.pm sdlperl/make/lib/SDL/Build/Linux.pm
+0a1,30
+> #!/usr/bin/env perl
+> #
+> # Linux.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+diff -r SDL_perl/make/lib/SDL/Build/MSWin32.pm sdlperl/make/lib/SDL/Build/MSWin32.pm
+0a1,30
+> #!/usr/bin/env perl
+> #
+> # MSWin32.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+diff -r SDL_perl/make/lib/SDL/Build/Netbsd.pm sdlperl/make/lib/SDL/Build/Netbsd.pm
+0a1,30
+> #!/usr/bin/env perl
+> #
+> # Netbsd.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+> #
+> 
+3c33
+< use base 'SDL::Build';
+---
+> use strict;
+diff -r SDL_perl/make/lib/SDL/Build.pm sdlperl/make/lib/SDL/Build.pm
+0a1
+> #!/usr/bin/env perl
+2,3c3,28
+< # Copyright (C) 2004 chromatic
+< # Copyright (C) 2004 David J. Goehrig
+---
+> # Build.pm
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig@cpan.org
+22d46
+< 
+25a50
+> 
+29a55
+> 
+148c174
+< 				( defined $Config{usethreads} ? ('-DUSE_THREADS', '-fPIC') : '-fPIC' ),
+---
+> 				( defined $Config{usethreads} ? ('-DUSE_THREADS', '-fPIC') : ('-fPIC' )),
+200a227,266
+> # Subclass  Darwin to build Objective-C addons
+> 
+> sub filter_support {
+> 	my $self = shift;
+> 	print STDERR "[SDL::Build] generic filter\n";
+> 	return ();
+> }
+> 
+> sub process_support_files {
+> 	my $self = shift;
+> 	my $p = $self->{properties};
+> 	return unless $p->{c_source};
+> 	return unless $p->{c_sources};
+> 
+> 	push @{$p->{include_dirs}}, $p->{c_source};
+> 	unless ( $p->{extra_compiler_flags} && $p->{extra_compiler_flags} =~ /DARCHNAME/) {
+> 		$p->{extra_compiler_flags} .=  " -DARCHNAME=" . $self->{config}{archname};
+> 	}
+> 	print STDERR "[SDL::Build] extra compiler flags" . $p->{extra_compiler_flags} . "\n";
+> 
+> 	foreach my $file (map($p->{c_source} . "/$_", @{$p->{c_sources}})) {
+> 		push @{$p->{objects}}, $self->compile_c($file);
+> 	}
+> }
+> 
+> # Override to create a MacOS Bundle
+> sub build_bundle
+> {
+> 	return;
+> }
+> 
+> # Override Install method for darwin
+> sub ACTION_install {
+>   my ($self) = @_;
+>   require ExtUtils::Install;
+>   $self->depends_on('build');
+>   $self->get_arch($^O)->build_bundle();
+>   ExtUtils::Install::install($self->install_map, 1, 0, $self->{args}{uninst}||0);
+> }
+> 
+Only in sdlperl/: pod2htmd.tmp
+Only in sdlperl/: pod2htmi.tmp
+diff -r SDL_perl/src/OpenGL.xs sdlperl/src/OpenGL.xs
+1d0
+< // SDL::OpenGL
+3c2,28
+< // Copyright (C) 2002,2003,2004 David J. Goehrig
+---
+> // OpenGL.xs
+> //
+> // Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> //
+> // ------------------------------------------------------------------------------
+> //
+> // This library is free software; you can redistribute it and/or
+> // modify it under the terms of the GNU Lesser General Public
+> // License as published by the Free Software Foundation; either
+> // version 2.1 of the License, or (at your option) any later version.
+> // 
+> // This library is distributed in the hope that it will be useful,
+> // but WITHOUT ANY WARRANTY; without even the implied warranty of
+> // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> // Lesser General Public License for more details.
+> // 
+> // You should have received a copy of the GNU Lesser General Public
+> // License along with this library; if not, write to the Free Software
+> // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> //
+> // ------------------------------------------------------------------------------
+> //
+> // Please feel free to send questions, suggestions or improvements to:
+> //
+> //	David J. Goehrig
+> //	dgoehrig@cpan.org
+> //
+17d41
+< #include <GL/glx.h>
+27c51
+< #include "defines.h"
+---
+> #include "../defines.h"
+673d696
+< 		case GL_MAX_TEXTURE_UNITS_ARB:
+713,718d735
+< const char * glGetString ( name )
+< 	GLenum name
+< 	CODE:
+< 		RETVAL = (const char *)glGetString (name);
+< 	OUTPUT:
+< 		RETVAL
+1236c1253
+< glRasterPos ( x, y, ... )
+---
+> glRasterPos ( x, y, z, ... )
+1238a1256
+> 	double z
+1240,1253c1258,1262
+< 		if (items == 2)
+< 		{
+< 			glRasterPos2d (x,y);
+< 		}
+< 		else if (items == 3)
+< 		{
+< 			double z = SvNV (ST(2));
+< 			glRasterPos3d (x,y,z);
+< 		}
+< 		else if (items == 4)
+< 		{
+< 			double z = SvNV (ST(2));
+< 			double w = SvNV (ST(3));
+< 			glRasterPos4d (x,y,z,w);
+---
+> 		if ( items == 4 ) {
+> 			double w = SvNV(ST(3));
+> 			glRasterPos4d(x,y,z,w);
+> 		} else {
+> 			glRasterPos3d(x,y,z);
+1737,1739c1746,1748
+< 		Uint32 i;
+< 		Uint32 *names;
+< 		names = (Uint32*)safemalloc(sizeof(Uint32)*n);
+---
+> 		GLsizei i;
+> 		GLuint* names;
+> 		names = (GLuint*)safemalloc(sizeof(GLuint)*n);
+1767c1776
+< 		Uint32 *textures;
+---
+> 		GLuint* textures;
+1769c1778
+< 		textures = (Uint32*)safemalloc(sizeof(Uint32) * items);
+---
+> 		textures = (GLuint*)safemalloc(sizeof(GLuint) * items);
+1781c1790
+< 		Uint32 *textures;
+---
+> 		GLuint* textures;
+1785c1794
+< 		textures = (Uint32*)safemalloc(sizeof(Uint32) * items);
+---
+> 		textures = (GLuint*)safemalloc(sizeof(GLuint) * items);
+2722,2803d2730
+< GLUquadric *
+< gluNewQuadric ()
+< 	CODE:
+< 		RETVAL = gluNewQuadric ();
+< 	OUTPUT:
+< 		RETVAL
+< 
+< void
+< gluDeleteQuadric (quad)
+< 	GLUquadric	*quad
+< 	CODE:
+< 		gluDeleteQuadric(quad);
+< 
+< void
+< gluQuadricNormals ( quad, normal )
+< 	GLUquadric *quad
+< 	GLenum	normal
+< 	CODE:
+< 		gluQuadricNormals(quad, normal);
+< 
+< 
+< void
+< gluQuadricTexture ( quad, texture )
+< 	GLUquadric *quad
+< 	GLboolean  texture
+< 	CODE:
+< 		gluQuadricTexture ( quad, texture );
+< 
+< void
+< gluCylinder ( quad, base, top, height, slices, stacks )
+< 	GLUquadric *quad
+< 	GLdouble  base
+< 	GLdouble  top
+< 	GLdouble  height
+< 	GLint  slices
+< 	GLint  stacks
+< 	CODE:
+< 		gluCylinder ( quad, base, top, height, slices, stacks );
+< 
+< void
+< gluDisk ( quad, inner, outer, slices, loops )
+< 	GLUquadric *quad
+< 	GLdouble inner
+< 	GLdouble outer
+< 	GLint slices
+< 	GLint loops
+< 	CODE:
+< 		gluDisk ( quad, inner, outer, slices, loops );	
+< 	
+< void
+< gluPartialDisk ( quad, inner, outer, slices, loops, start, sweep )
+< 	GLUquadric *quad
+< 	GLdouble inner
+< 	GLdouble outer
+< 	GLint slices
+< 	GLint loops
+< 	GLdouble start
+< 	GLdouble sweep
+< 	
+< 	CODE:
+< 		gluPartialDisk ( quad, inner, outer, slices, loops, start, sweep );
+< 
+< void
+< gluSphere ( quad, radius, slices, stacks )
+< 	GLUquadric *quad
+< 	GLdouble radius
+< 	GLint  slices
+< 	GLint  stacks
+< 	CODE:
+< 		gluSphere ( quad, radius, slices, stacks );
+< 
+< 
+< 
+< void 
+< glXUseXFont ( font, first, count, list_base )
+< 	Font font
+< 	int  first
+< 	int  count
+< 	int  list_base
+< 	CODE:
+< 		glXUseXFont ( font, first, count, list_base );
+< 
+Only in sdlperl/src: SDL
+diff -r SDL_perl/src/SDL.xs sdlperl/src/SDL.xs
+0a1
+> //
+3c4,27
+< // SDL Perl by David J. Goehrig <dgoehrig@cpan.org>
+---
+> // Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> //
+> // ------------------------------------------------------------------------------
+> //
+> // This library is free software; you can redistribute it and/or
+> // modify it under the terms of the GNU Lesser General Public
+> // License as published by the Free Software Foundation; either
+> // version 2.1 of the License, or (at your option) any later version.
+> // 
+> // This library is distributed in the hope that it will be useful,
+> // but WITHOUT ANY WARRANTY; without even the implied warranty of
+> // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> // Lesser General Public License for more details.
+> // 
+> // You should have received a copy of the GNU Lesser General Public
+> // License along with this library; if not, write to the Free Software
+> // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> //
+> // ------------------------------------------------------------------------------
+> //
+> // Please feel free to send questions, suggestions or improvements to:
+> //
+> //	David J. Goehrig
+> //	dgoehrig@cpan.org
+5,8d28
+< // Copyright (C) 2000,2001,2002,2003,2004 David J. Goehrig 
+< // Copyright (C) 2009 Kartik Thakore
+< // This software is under the GNU Library General Public License (LGPL)
+< // see the file COPYING for terms of use
+19a40,47
+> #ifdef HAVE_GL
+> #include <gl.h>
+> #endif
+> 
+> #ifdef HAVE_GLU
+> #include <glu.h>
+> #endif
+> 
+29,34c57,58
+< #ifdef HAVE_GL
+< #include <gl.h>
+< #endif
+< 
+< #ifdef HAVE_GLU
+< #include <glu.h>
+---
+> #ifdef HAVE_SDL_SOUND
+> #include <SDL_sound.h>
+67a92,95
+> #ifdef HAVE_SDL_SVG
+> #include <SDL_svg.h>
+> #endif
+> 
+74,99d101
+< #ifdef MACOSX
+< #include <CoreServices/CoreServices.h>
+< void CPSEnableForegroundOperation(ProcessSerialNumber* psn);
+< void NSApplicationLoad();
+< void SDL_macosx_init(void) {
+<     Boolean sameProc;
+<     ProcessSerialNumber myProc, frProc;
+<     if (GetFrontProcess(&frProc) == noErr)
+<         if (GetCurrentProcess(&myProc) == noErr)
+<             if (SameProcess(&frProc, &myProc, &sameProc) == noErr && sameProc == 0) {
+<                 /*
+<                 NSLog(@"creating bad autorelease pool");
+<                 [[NSAutoreleasePool alloc] init];
+<                 */
+<                 NSApplicationLoad();
+<                 CPSEnableForegroundOperation(&myProc);
+<             }
+< }
+< void SDL_macosx_quit(void) {
+< }
+< #endif // MACOSX
+< 
+< 
+< 
+< 
+< 
+208a211,214
+> #define INIT_NS_APPLICATION
+> #define QUIT_NS_APPLICATION
+> 
+> 
+211a218
+> 	QUIT_NS_APPLICATION	
+213,215d219
+< #ifdef MACOSX    
+<         SDL_macosx_quit();
+< #endif
+241,243c245
+< #ifdef MACOSX    
+< 	        SDL_macosx_init();
+< #endif
+---
+> 		INIT_NS_APPLICATION
+269a272
+> 		QUIT_NS_APPLICATION
+271,274d273
+< #ifdef MACOSX
+< 	        SDL_macosx_quit();
+< #endif
+< 
+339a339,435
+> SDL_RWops*
+> RWFromFile ( file, mode )
+> 	char* file
+> 	char * mode
+> 	CODE:
+> 		RETVAL = SDL_RWFromFile(file,mode);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> SDL_RWops*
+> RWFromFP ( fp, autoclose )
+> 	FILE* fp
+> 	int autoclose
+> 	CODE:
+> 		RETVAL = SDL_RWFromFP(fp,autoclose);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> SDL_RWops*
+> RWFromMem ( mem, size )
+> 	char* mem
+> 	int size
+> 	CODE:
+> 		RETVAL = SDL_RWFromMem((void*)mem,size);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> SDL_RWops*
+> RWFromConstMem ( mem, size )
+> 	const char* mem
+> 	int size
+> 	CODE:
+> 		RETVAL = SDL_RWFromConstMem((const void*)mem,size);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> SDL_RWops*
+> AllocRW ()
+> 	CODE:
+> 		RETVAL = SDL_AllocRW();
+> 	OUTPUT:
+> 		RETVAL
+> 
+> void
+> FreeRW ( rw )
+> 	SDL_RWops* rw
+> 	CODE:
+> 		SDL_FreeRW(rw);
+> 
+> int
+> RWseek ( rw, off, whence )
+> 	SDL_RWops* rw
+> 	int off
+> 	int whence
+> 	CODE:
+> 		RETVAL = SDL_RWseek(rw,off,whence);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> int
+> RWtell ( rw )
+> 	SDL_RWops* rw
+> 	CODE:
+> 		RETVAL = SDL_RWtell(rw);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> int
+> RWread ( rw, mem, size, n )
+> 	SDL_RWops* rw
+> 	char* mem
+> 	int size
+> 	int n
+> 	CODE:
+> 		RETVAL = SDL_RWread(rw,mem,size,n);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> int
+> RWwrite ( rw, mem, size, n )
+> 	SDL_RWops* rw
+> 	char* mem
+> 	int size
+> 	int n
+> 	CODE:
+> 		RETVAL = SDL_RWwrite(rw,mem,size,n);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> int
+> RWclose ( rw )
+> 	SDL_RWops* rw
+> 	CODE:
+> 		RETVAL = SDL_RWclose(rw);
+> 	OUTPUT:
+> 		RETVAL
+> 
+530,542d625
+< 
+< int
+< PeepEvents( e, numevents, action, mask)
+< 	SDL_Event *e
+< 	int numevents
+< 	SDL_eventaction action
+< 	Uint32 mask
+< 	CODE:
+< 		RETVAL = (int)SDL_PeepEvents( e, numevents, action, mask);
+< 	OUTPUT:
+< 		RETVAL
+< 
+< 
+1224,1237d1306
+< ColorRGB ( color, ... )
+< 	SDL_Color *color
+< 	PPCODE:
+< 		if (items > 1 ) {
+< 			color->r = SvIV(ST(1)); 
+< 			color->g = SvIV(ST(2)); 
+< 			color->b = SvIV(ST(3)); 
+< 		}
+< 		mXPUSHi( color->r );
+< 		mXPUSHi( color->g );
+< 		mXPUSHi( color->b );
+< 		XSRETURN(3);
+< 
+< void
+1941,1951d2009
+< MixSetPanning ( channel, left, right )
+<         int channel
+<         Uint8 left
+<         Uint8 right
+<         CODE:
+<                 RETVAL = Mix_SetPanning(channel,left, right);
+<         OUTPUT:
+<                 RETVAL
+< 
+< 
+< int
+2364c2422
+< Sint16
+---
+> Uint8
+2519c2577
+< 	char *host
+---
+> 	const char *host
+3316c3374
+< 	SMPEG_Info *info;
+---
+> 	SMPEG_Info *info
+3322c3380
+< 	SMPEG_Info* info;
+---
+> 	SMPEG_Info* info
+3330c3388
+< 	SMPEG_Info* info;
+---
+> 	SMPEG_Info* info
+3338c3396
+< 	SMPEG_Info* info;
+---
+> 	SMPEG_Info* info
+3346c3404
+< 	SMPEG_Info* info;
+---
+> 	SMPEG_Info* info
+3354c3412
+< 	SMPEG_Info* info;
+---
+> 	SMPEG_Info* info
+3362c3420
+< 	SMPEG_Info* info;
+---
+> 	SMPEG_Info* info
+3370c3428
+< 	SMPEG_Info* info;
+---
+> 	SMPEG_Info* info
+3378c3436
+< 	SMPEG_Info* info;
+---
+> 	SMPEG_Info* info
+3386c3444
+< 	SMPEG_Info* info;
+---
+> 	SMPEG_Info* info
+3394c3452
+< 	SMPEG_Info* info;
+---
+> 	SMPEG_Info* info
+3402c3460
+< 	SMPEG_Info* info;
+---
+> 	SMPEG_Info* info
+3410c3468
+< 	SMPEG* mpeg ;
+---
+> 	SMPEG* mpeg
+3418,3419c3476,3477
+< 	char* filename;
+< 	SMPEG_Info* info;
+---
+> 	char* filename
+> 	SMPEG_Info* info
+3432c3490
+< 	SMPEG* mpeg;
+---
+> 	SMPEG* mpeg
+3438,3439c3496,3497
+< 	SMPEG* mpeg ;
+< 	int flag;
+---
+> 	SMPEG* mpeg
+> 	int flag
+3448,3449c3506,3507
+< 	SMPEG* mpeg ;
+< 	int flag;
+---
+> 	SMPEG* mpeg
+> 	int flag
+3455,3456c3513,3514
+< 	SMPEG* mpeg ;
+< 	int volume;
+---
+> 	SMPEG* mpeg
+> 	int volume
+3462,3464c3520,3522
+< 	SMPEG* mpeg;
+< 	SDL_Surface* dest;
+< 	SDL_mutex*  surfLock;     
+---
+> 	SMPEG* mpeg
+> 	SDL_Surface* dest
+> 	SDL_mutex*  surfLock
+3470,3472c3528,3530
+< 	SMPEG* mpeg;
+< 	int w;
+< 	int h;
+---
+> 	SMPEG* mpeg
+> 	int w
+> 	int h
+3478c3536
+< 	SMPEG* mpeg;
+---
+> 	SMPEG* mpeg
+3485c3543
+< 	SMPEG* mpeg;
+---
+> 	SMPEG* mpeg
+3506c3564
+< 	SMPEG* mpeg;
+---
+> 	SMPEG* mpeg
+3514c3572
+< 	SMPEG* mpeg;
+---
+> 	SMPEG* mpeg
+3520c3578
+< 	SMPEG* mpeg;
+---
+> 	SMPEG* mpeg
+3527c3585
+< 	SMPEG* mpeg;
+---
+> 	SMPEG* mpeg
+3536c3594
+< 	SMPEG* mpeg;
+---
+> 	SMPEG* mpeg
+3542,3543c3600,3601
+< 	SMPEG* mpeg;
+< 	int bytes;
+---
+> 	SMPEG* mpeg
+> 	int bytes
+3549,3550c3607,3608
+< 	SMPEG* mpeg;
+< 	float seconds;
+---
+> 	SMPEG* mpeg
+> 	float seconds
+3556,3557c3614,3615
+< 	SMPEG* mpeg;
+< 	SDL_Rect* rect;
+---
+> 	SMPEG* mpeg
+> 	SDL_Rect* rect
+3563,3564c3621,3622
+< 	SMPEG* mpeg;
+< 	int frame;
+---
+> 	SMPEG* mpeg
+> 	int frame
+3570c3628
+< 	SMPEG* mpeg;
+---
+> 	SMPEG* mpeg
+3584,3591c3642,3649
+<      SDL_Surface * src;
+<      double angle;
+<      double zoom;
+<      int smooth;
+<      CODE:
+<                  RETVAL = rotozoomSurface( src, angle, zoom, smooth);
+<      OUTPUT:
+<                  RETVAL
+---
+> 	SDL_Surface * src
+> 	double angle
+> 	double zoom
+> 	int smooth
+> 	CODE:
+> 		RETVAL = rotozoomSurface( src, angle, zoom, smooth);
+> 	OUTPUT:
+> 		RETVAL
+3595,3603c3653,3660
+<      SDL_Surface *src;
+<      double zoomx;
+<      double zoomy;
+<      int smooth;
+<      CODE:
+<                  RETVAL = zoomSurface( src, zoomx, zoomy, smooth);
+<      OUTPUT:
+<                  RETVAL
+< 
+---
+> 	SDL_Surface *src
+> 	double zoomx
+> 	double zoomy
+> 	int smooth
+> 	CODE:
+> 		RETVAL = zoomSurface( src, zoomx, zoomy, smooth);
+> 	OUTPUT:
+> 		RETVAL
+3607,3614c3664,3671
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Uint32 color;
+< CODE:
+<      RETVAL = pixelColor( dst, x, y, color);
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = pixelColor( dst, x, y, color);
+> 	OUTPUT:
+> 		RETVAL
+3618,3628c3675,3685
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = pixelRGBA( dst, x, y, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = pixelRGBA( dst, x, y, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3632,3640c3689,3697
+<     SDL_Surface* dst;
+<     Sint16 x1;
+<     Sint16 x2;
+<     Sint16 y;
+<     Uint32 color;
+< CODE:
+<      RETVAL = hlineColor( dst, x1, x2, y, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x1
+> 	Sint16 x2
+> 	Sint16 y
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = hlineColor( dst, x1, x2, y, color );
+> 	OUTPUT:
+> 		RETVAL
+3644,3655c3701,3712
+<     SDL_Surface* dst;
+<     Sint16 x1;
+<     Sint16 x2;
+<     Sint16 y;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = hlineRGBA( dst, x1, x2, y, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x1
+> 	Sint16 x2
+> 	Sint16 y
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = hlineRGBA( dst, x1, x2, y, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3659,3667c3716,3724
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y1;
+<     Sint16 y2;
+<     Uint32 color;
+< CODE:
+<      RETVAL = vlineColor( dst, x, y1, y2, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y1
+> 	Sint16 y2
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = vlineColor( dst, x, y1, y2, color );
+> 	OUTPUT:
+> 		RETVAL
+3671,3682c3728,3739
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y1;
+<     Sint16 y2;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = vlineRGBA( dst, x, y1, y2, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y1
+> 	Sint16 y2
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = vlineRGBA( dst, x, y1, y2, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3686,3695c3743,3752
+<     SDL_Surface* dst;
+<     Sint16 x1;
+<     Sint16 y1;
+<     Sint16 x2;
+<     Sint16 y2;
+<     Uint32 color;
+< CODE:
+<      RETVAL = rectangleColor( dst, x1, y1, x2, y2, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x1
+> 	Sint16 y1
+> 	Sint16 x2
+> 	Sint16 y2
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = rectangleColor( dst, x1, y1, x2, y2, color );
+> 	OUTPUT:
+> 		RETVAL
+3699,3711c3756,3768
+<     SDL_Surface* dst;
+<     Sint16 x1;
+<     Sint16 y1;
+<     Sint16 x2;
+<     Sint16 y2;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = rectangleRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x1
+> 	Sint16 y1
+> 	Sint16 x2
+> 	Sint16 y2
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = rectangleRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3715,3724c3772,3781
+<     SDL_Surface* dst;
+<     Sint16 x1;
+<     Sint16 y1;
+<     Sint16 x2;
+<     Sint16 y2;
+<     Uint32 color;
+< CODE:
+<      RETVAL = boxColor( dst, x1, y1, x2, y2, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x1
+> 	Sint16 y1
+> 	Sint16 x2
+> 	Sint16 y2
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = boxColor( dst, x1, y1, x2, y2, color );
+> 	OUTPUT:
+> 		RETVAL
+3728,3740c3785,3797
+<     SDL_Surface* dst;
+<     Sint16 x1;
+<     Sint16 y1;
+<     Sint16 x2;
+<     Sint16 y2;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = boxRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst;
+> 	Sint16 x1
+> 	Sint16 y1
+> 	Sint16 x2
+> 	Sint16 y2
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = boxRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3744,3753c3801,3810
+<     SDL_Surface* dst;
+<     Sint16 x1;
+<     Sint16 y1;
+<     Sint16 x2;
+<     Sint16 y2;
+<     Uint32 color;
+< CODE:
+<      RETVAL = lineColor( dst, x1, y1, x2, y2, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x1
+> 	Sint16 y1
+> 	Sint16 x2
+> 	Sint16 y2
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = lineColor( dst, x1, y1, x2, y2, color );
+> 	OUTPUT:
+> 		RETVAL
+3757,3769c3814,3826
+<     SDL_Surface* dst;
+<     Sint16 x1;
+<     Sint16 y1;
+<     Sint16 x2;
+<     Sint16 y2;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = lineRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x1
+> 	Sint16 y1
+> 	Sint16 x2
+> 	Sint16 y2
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = lineRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3773,3782c3830,3839
+<     SDL_Surface* dst;
+<     Sint16 x1;
+<     Sint16 y1;
+<     Sint16 x2;
+<     Sint16 y2;
+<     Uint32 color;
+< CODE:
+<      RETVAL = aalineColor( dst, x1, y1, x2, y2, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x1
+> 	Sint16 y1
+> 	Sint16 x2
+> 	Sint16 y2
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = aalineColor( dst, x1, y1, x2, y2, color );
+> 	OUTPUT:
+> 		RETVAL
+3786,3798c3843,3855
+<     SDL_Surface* dst;
+<     Sint16 x1;
+<     Sint16 y1;
+<     Sint16 x2;
+<     Sint16 y2;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = aalineRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x1
+> 	Sint16 y1
+> 	Sint16 x2
+> 	Sint16 y2
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = aalineRGBA( dst, x1, y1, x2, y2, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3802,3810c3859,3867
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 r;
+<     Uint32 color;
+< CODE:
+<      RETVAL = circleColor( dst, x, y, r, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 r
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = circleColor( dst, x, y, r, color );
+> 	OUTPUT:
+> 		RETVAL
+3814,3825c3871,3882
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 rad;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = circleRGBA( dst, x, y, rad, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 rad
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = circleRGBA( dst, x, y, rad, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3829,3837c3886,3894
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 r;
+<     Uint32 color;
+< CODE:
+<      RETVAL = aacircleColor( dst, x, y, r, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 r
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = aacircleColor( dst, x, y, r, color );
+> 	OUTPUT:
+> 		RETVAL
+3841,3852c3898,3909
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 rad;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = aacircleRGBA( dst, x, y, rad, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 rad
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = aacircleRGBA( dst, x, y, rad, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3856,3864c3913,3921
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 r;
+<     Uint32 color;
+< CODE:
+<      RETVAL = filledCircleColor( dst, x, y, r, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 r
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = filledCircleColor( dst, x, y, r, color );
+> 	OUTPUT:
+> 		RETVAL
+3868,3879c3925,3936
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 rad;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = filledCircleRGBA( dst, x, y, rad, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 rad
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = filledCircleRGBA( dst, x, y, rad, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3883,3892c3940,3949
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 rx;
+<     Sint16 ry;
+<     Uint32 color;
+< CODE:
+<      RETVAL = ellipseColor( dst, x, y, rx, ry, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 rx
+> 	Sint16 ry
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = ellipseColor( dst, x, y, rx, ry, color );
+> 	OUTPUT:
+> 		RETVAL
+3896,3908c3953,3965
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 rx;
+<     Sint16 ry;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = ellipseRGBA( dst, x, y, rx, ry, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 	rx
+> 	Sint16 ry
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = ellipseRGBA( dst, x, y, rx, ry, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3912,3921c3969,3978
+<     SDL_Surface* dst;
+<     Sint16 xc;
+<     Sint16 yc;
+<     Sint16 rx;
+<     Sint16 ry;
+<     Uint32 color;
+< CODE:
+<      RETVAL = aaellipseColor( dst, xc, yc, rx, ry, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 xc
+> 	Sint16 yc
+> 	Sint16 rx
+> 	Sint16 ry
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = aaellipseColor( dst, xc, yc, rx, ry, color );
+> 	OUTPUT:
+> 		RETVAL
+3925,3937c3982,3994
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 rx;
+<     Sint16 ry;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = aaellipseRGBA( dst, x, y, rx, ry, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 rx
+> 	Sint16 ry
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = aaellipseRGBA( dst, x, y, rx, ry, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3941,3950c3998,4007
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 rx;
+<     Sint16 ry;
+<     Uint32 color;
+< CODE:
+<      RETVAL = filledEllipseColor( dst, x, y, rx, ry, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 rx
+> 	Sint16 ry
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = filledEllipseColor( dst, x, y, rx, ry, color );
+> 	OUTPUT:
+> 		RETVAL
+3954,3966c4011,4023
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 rx;
+<     Sint16 ry;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = filledEllipseRGBA( dst, x, y, rx, ry, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 rx
+> 	Sint16 ry
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = filledEllipseRGBA( dst, x, y, rx, ry, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+3970,3980c4027,4037
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 rad;
+<     Sint16 start;
+<     Sint16 end;
+<     Uint32 color;
+< CODE:
+<      RETVAL = filledPieColor( dst, x, y, rad, start, end, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 rad
+> 	Sint16 start
+> 	Sint16 end
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = filledPieColor( dst, x, y, rad, start, end, color );
+> 	OUTPUT:
+> 		RETVAL
+3984,3997c4041,4054
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     Sint16 rad;
+<     Sint16 start;
+<     Sint16 end;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = filledPieRGBA( dst, x, y, rad, start, end, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	Sint16 rad
+> 	Sint16 start
+> 	Sint16 end
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = filledPieRGBA( dst, x, y, rad, start, end, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+4001,4009c4058,4066
+<     SDL_Surface* dst;
+<     Sint16* vx;
+<     Sint16* vy;
+<     int n;
+<     Uint32 color;
+< CODE:
+<      RETVAL = polygonColor( dst, vx, vy, n, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16* vx
+> 	Sint16* vy
+> 	int n
+> 	Uint32 color;
+> 	CODE:
+> 		RETVAL = polygonColor( dst, vx, vy, n, color );
+> 	OUTPUT:
+> 		RETVAL
+4013,4024c4070,4081
+<     SDL_Surface* dst;
+<     Sint16* vx;
+<     Sint16* vy;
+<     int n;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = polygonRGBA( dst, vx, vy, n, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16* vx
+> 	Sint16* vy
+> 	int n
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = polygonRGBA( dst, vx, vy, n, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+4028,4036c4085,4093
+<     SDL_Surface* dst;
+<     Sint16* vx;
+<     Sint16* vy;
+<     int n;
+<     Uint32 color;
+< CODE:
+<      RETVAL = aapolygonColor( dst, vx, vy, n, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16* vx
+> 	Sint16* vy
+> 	int n
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = aapolygonColor( dst, vx, vy, n, color );
+> 	OUTPUT:
+> 		RETVAL
+4040,4051c4097,4108
+<     SDL_Surface* dst;
+<     Sint16* vx;
+<     Sint16* vy;
+<     int n;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = aapolygonRGBA( dst, vx, vy, n, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16* vx
+> 	Sint16* vy
+> 	int n
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = aapolygonRGBA( dst, vx, vy, n, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+4055,4063c4112,4120
+<     SDL_Surface* dst;
+<     Sint16* vx;
+<     Sint16* vy;
+<     int n;
+<     int color;
+< CODE:
+<      RETVAL = filledPolygonColor( dst, vx, vy, n, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16* vx
+> 	Sint16* vy
+> 	int n
+> 	int color
+> 	CODE:
+> 		RETVAL = filledPolygonColor( dst, vx, vy, n, color );
+> 	OUTPUT:
+> 		RETVAL
+4067,4078c4124,4135
+<     SDL_Surface* dst;
+<     Sint16* vx;
+<     Sint16* vy;
+<     int n;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = filledPolygonRGBA( dst, vx, vy, n, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16* vx
+> 	Sint16* vy
+> 	int n
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = filledPolygonRGBA( dst, vx, vy, n, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+4082,4090c4139,4147
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     char c;
+<     Uint32 color;
+< CODE:
+<      RETVAL = characterColor( dst, x, y, c, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	char c
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = characterColor( dst, x, y, c, color );
+> 	OUTPUT:
+> 		RETVAL
+4094,4105c4151,4162
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     char c;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = characterRGBA( dst, x, y, c, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	char c
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = characterRGBA( dst, x, y, c, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+4109,4117c4166,4174
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     char* c;
+<     Uint32 color;
+< CODE:
+<      RETVAL = stringColor( dst, x, y, c, color );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	char* c
+> 	Uint32 color
+> 	CODE:
+> 		RETVAL = stringColor( dst, x, y, c, color );
+> 	OUTPUT:
+> 		RETVAL
+4121,4132c4178,4289
+<     SDL_Surface* dst;
+<     Sint16 x;
+<     Sint16 y;
+<     char* c;
+<     Uint8 r;
+<     Uint8 g;
+<     Uint8 b;
+<     Uint8 a;
+< CODE:
+<      RETVAL = stringRGBA( dst, x, y, c, r, g, b, a );
+< OUTPUT:
+<      RETVAL
+---
+> 	SDL_Surface* dst
+> 	Sint16 x
+> 	Sint16 y
+> 	char* c
+> 	Uint8 r
+> 	Uint8 g
+> 	Uint8 b
+> 	Uint8 a
+> 	CODE:
+> 		RETVAL = stringRGBA( dst, x, y, c, r, g, b, a );
+> 	OUTPUT:
+> 		RETVAL
+> 
+> #endif
+> 
+> 
+> #ifdef HAVE_SDL_SVG
+> 
+> SDL_svg_context *
+> SVG_Load ( filename )
+> 	char* filename
+> 	CODE:
+> 		RETVAL = SVG_Load(filename);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> SDL_svg_context *
+> SVG_LoadBuffer ( data, len )
+> 	char* data
+> 	int len
+> 	CODE:
+> 		RETVAL = SVG_LoadBuffer(data,len);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> int
+> SVG_SetOffset ( source, xoff, yoff )
+> 	SDL_svg_context* source
+> 	double xoff
+> 	double yoff
+> 	CODE:
+> 		RETVAL = SVG_SetOffset(source,xoff,yoff);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> int
+> SVG_SetScale ( source, xscale, yscale )
+> 	SDL_svg_context* source
+> 	double xscale
+> 	double yscale
+> 	CODE:
+> 		RETVAL = SVG_SetScale(source,xscale,yscale);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> int
+> SVG_RenderToSurface ( source, x, y, dest )
+> 	SDL_svg_context* source
+> 	int x
+> 	int y
+> 	SDL_Surface* dest;
+> 	CODE:
+> 		RETVAL = SVG_RenderToSurface(source,x,y,dest);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> void
+> SVG_Free ( source )
+> 	SDL_svg_context* source
+> 	CODE:
+> 		SVG_Free(source);	
+> 
+> void
+> SVG_Set_Flags ( source, flags )
+> 	SDL_svg_context* source
+> 	Uint32 flags
+> 	CODE:
+> 		SVG_Set_Flags(source,flags);
+> 
+> float
+> SVG_Width ( source )
+> 	SDL_svg_context* source
+> 	CODE:
+> 		RETVAL = SVG_Width(source);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> float
+> SVG_HEIGHT ( source )
+> 	SDL_svg_context* source
+> 	CODE:
+> 		RETVAL = SVG_Height(source);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> void
+> SVG_SetClipping ( source, minx, miny, maxx, maxy )
+> 	SDL_svg_context* source
+> 	int minx
+> 	int miny
+> 	int maxx
+> 	int maxy
+> 	CODE:
+> 		SVG_SetClipping(source,minx,miny,maxx,maxy);
+> 
+> int
+> SVG_Version ( )
+> 	CODE:
+> 		RETVAL = SVG_Version();
+> 	OUTPUT:
+> 		RETVAL
+> 
+4166c4323
+< 		char **ext;
+---
+> 		const char **ext;
+4168c4325
+< 			av_push(RETVAL,sv_2mortal(newSVpv(*ext,0)));
+---
+> 			av_push(RETVAL,newSVpv(*ext,0));
+4173c4330
+< char*
+---
+> const char*
+4181c4338
+< char*
+---
+> const char*
+4189c4346
+< char*
+---
+> const char*
+4233c4390
+< 		RETVAL = sample->buffer;
+---
+> 		RETVAL = sample->buffer_size;
+4244a4402,4451
+> int
+> Sound_Init ( )
+> 	CODE:
+> 		RETVAL = Sound_Init();
+> 	OUTPUT:
+> 		RETVAL
+> 
+> int
+> Sound_Quit ( )
+> 	CODE:
+> 		RETVAL = Sound_Quit();
+> 	OUTPUT:
+> 		RETVAL
+> 
+> AV*
+> Sound_AvailableDecoders ( )
+> 	CODE:
+> 		RETVAL = newAV();
+> 		const Sound_DecoderInfo** sdi;
+> 		sdi = Sound_AvailableDecoders();
+> 		if (sdi != NULL)  {
+> 			for (;*sdi != NULL; ++sdi) {
+> 				av_push(RETVAL,sv_2mortal(newSViv(PTR2IV(*sdi))));
+> 			}
+> 		}
+> 	OUTPUT:
+> 		RETVAL
+> 
+> const char*
+> Sound_GetError ( )
+> 	CODE:
+> 		RETVAL = Sound_GetError();
+> 	OUTPUT:
+> 		RETVAL
+> 
+> void
+> Sound_ClearError ( )
+> 	CODE:
+> 		Sound_ClearError();
+> 
+> Sound_Sample*
+> Sound_NewSample ( rw, ext, desired, buffsize )
+> 	SDL_RWops* rw
+> 	const char* ext
+> 	Sound_AudioInfo* desired
+> 	Uint32 buffsize
+> 	CODE:
+> 		RETVAL = Sound_NewSample(rw,ext,desired,buffsize);
+> 	OUTPUT:
+> 		RETVAL
+4245a4453,4529
+> Sound_Sample*
+> Sound_NewSampleFromMem ( data, size, ext, desired, buffsize )
+> 	const Uint8 *data
+> 	Uint32 size
+> 	const char* ext
+> 	Sound_AudioInfo* desired
+> 	Uint32 buffsize
+> 	CODE:
+> 		RETVAL = Sound_NewSampleFromMem(data,size,ext,desired,buffsize);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> Sound_Sample*
+> Sound_NewSampleFromFile ( fname, desired, buffsize )
+> 	const char* fname
+> 	Sound_AudioInfo* desired
+> 	Uint32 buffsize
+> 	CODE:
+> 		RETVAL = Sound_NewSampleFromFile(fname,desired,buffsize);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> void
+> Sound_FreeSample ( sample )
+> 	Sound_Sample* sample
+> 	CODE:
+> 		Sound_FreeSample(sample);
+> 
+> Sint32
+> Sound_GetDuration ( sample )
+> 	Sound_Sample* sample
+> 	CODE:
+> 		RETVAL = Sound_GetDuration(sample);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> int
+> Sound_SetBufferSize ( sample, size )
+> 	Sound_Sample* sample
+> 	Uint32 size
+> 	CODE:
+> 		RETVAL = Sound_SetBufferSize(sample,size);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> Uint32
+> Sound_Decode ( sample )
+> 	Sound_Sample* sample
+> 	CODE:
+> 		RETVAL = Sound_Decode(sample);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> Uint32
+> Sound_DecodeAll ( sample ) 
+> 	Sound_Sample* sample
+> 	CODE:
+> 		RETVAL = Sound_DecodeAll(sample);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> int
+> Sound_Rewind ( sample )
+> 	Sound_Sample* sample
+> 	CODE:
+> 		RETVAL = Sound_Rewind(sample);
+> 	OUTPUT:
+> 		RETVAL
+> 
+> int
+> Sound_Seek ( sample, ms )
+> 	Sound_Sample* sample
+> 	Uint32 ms
+> 	CODE:
+> 		RETVAL = Sound_Seek(sample,ms);
+> 	OUTPUT:
+> 		RETVAL
+Only in sdlperl/src: SDL_perl.bs
+Only in sdlperl/src: SDL_perl.c
+Only in sdlperl/src: SDL_perl.o
+Only in sdlperl/src: SDL_perl.xs
+diff -r SDL_perl/src/SFont.h sdlperl/src/SFont.h
+1,9c1,29
+< /************************************************************************ 
+< *    SFONT - SDL Font Library by Karl Bartel <karlb@gmx.net>		*
+< *                                                                       *
+< *  All functions are explained below. There are two versions of each    *
+< *  funtction. The first is the normal one, the function with the        *
+< *  2 at the end can be used when you want to handle more than one font  *
+< *  in your program.                                                     *
+< *                                                                       *
+< ************************************************************************/
+---
+> //
+> // SFont.h
+> //
+> // Original SFont code Copyright (C) Karl Bartel 
+> // Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> //
+> // ------------------------------------------------------------------------------
+> //
+> // This library is free software; you can redistribute it and/or
+> // modify it under the terms of the GNU Lesser General Public
+> // License as published by the Free Software Foundation; either
+> // version 2.1 of the License, or (at your option) any later version.
+> // 
+> // This library is distributed in the hope that it will be useful,
+> // but WITHOUT ANY WARRANTY; without even the implied warranty of
+> // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> // Lesser General Public License for more details.
+> // 
+> // You should have received a copy of the GNU Lesser General Public
+> // License along with this library; if not, write to the Free Software
+> // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> //
+> // ------------------------------------------------------------------------------
+> //
+> // Please feel free to send questions, suggestions or improvements to:
+> //
+> //	David J. Goehrig
+> //	dgoehrig@cpan.org
+> //
+diff -r SDL_perl/src/SFont.xs sdlperl/src/SFont.xs
+1d0
+< // SDL::SFont
+3c2
+< // SFont bitmap font support
+---
+> // SFont.xs
+5c4,5
+< // SFont library code by Karl Bartel <karlb@gmx.net>       
+---
+> // Original SFont code Copyright (C) Karl Bartel 
+> // Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+7c7,28
+< // SFont.xs Copyright (C) 2004 David J. Goehrig
+---
+> // ------------------------------------------------------------------------------
+> //
+> // This library is free software; you can redistribute it and/or
+> // modify it under the terms of the GNU Lesser General Public
+> // License as published by the Free Software Foundation; either
+> // version 2.1 of the License, or (at your option) any later version.
+> // 
+> // This library is distributed in the hope that it will be useful,
+> // but WITHOUT ANY WARRANTY; without even the implied warranty of
+> // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> // Lesser General Public License for more details.
+> // 
+> // You should have received a copy of the GNU Lesser General Public
+> // License along with this library; if not, write to the Free Software
+> // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> //
+> // ------------------------------------------------------------------------------
+> //
+> // Please feel free to send questions, suggestions or improvements to:
+> //
+> //	David J. Goehrig
+> //	dgoehrig@cpan.org
+26,27c47,48
+< #include "defines.h"
+< #include "SFont.h"
+---
+> #include "../defines.h"
+> #include "../SFont.h"
+diff -r SDL_perl/src/defines.h sdlperl/src/defines.h
+2c2
+< // Copyright (C) 2004 David J. Goehrig
+---
+> // defines.h
+3a4,27
+> // Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
+> //
+> // ------------------------------------------------------------------------------
+> //
+> // This library is free software; you can redistribute it and/or
+> // modify it under the terms of the GNU Lesser General Public
+> // License as published by the Free Software Foundation; either
+> // version 2.1 of the License, or (at your option) any later version.
+> // 
+> // This library is distributed in the hope that it will be useful,
+> // but WITHOUT ANY WARRANTY; without even the implied warranty of
+> // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> // Lesser General Public License for more details.
+> // 
+> // You should have received a copy of the GNU Lesser General Public
+> // License along with this library; if not, write to the Free Software
+> // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> //
+> // ------------------------------------------------------------------------------
+> //
+> // Please feel free to send questions, suggestions or improvements to:
+> //
+> //	David J. Goehrig
+> //	dgoehrig@cpan.org
+Only in sdlperl/src: support
+diff -r SDL_perl/t/apppm.t sdlperl/t/apppm.t
+5c5,29
+< # Copyright (C) 2009 Kartik Thakore
+---
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+9c33
+< 	unshift @INC, 'blib/lib','blib/arch', 'blib/arch/auto/', 'blib/arch/auto/SDL/SFont';
+---
+> 	unshift @INC, 'blib/lib','blib/arch';
+diff -r SDL_perl/t/cdrompm.t sdlperl/t/cdrompm.t
+5a6,29
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+diff -r SDL_perl/t/colorpm.t sdlperl/t/colorpm.t
+3c3
+< # Copyright (C) 2003,2006 Tels
+---
+> # Copyright (C) 2003 Tels
+5a6,31
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+16c42
+< plan ( tests => 15 );
+---
+> plan ( tests => 10 );
+25d50
+< 	rgb 
+36,37d60
+< is (join(":", $color->rgb()), '0:0:0', 'r, g and b are 0');
+< 
+44,51d66
+< is (join(":", $color->rgb()), '255:255:255', 'r, g and b are 255');
+< is (join(":", $color->rgb(128,0,80)), '128:0:80', 'r, g and b are set');
+< is (join(":", $color->rgb()), '128:0:80', 'r, g and b still set');
+< 
+< # test the new new($r,$g,$b) calling style
+< $color = SDL::Color->new( 255,70,128);
+< is (join(":", $color->rgb()), '255:70:128', 'r, g and b are set via new($r,$g,$b)');
+< 
+diff -r SDL_perl/t/cursorpm.t sdlperl/t/cursorpm.t
+5a6,31
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+diff -r SDL_perl/t/eventpm.t sdlperl/t/eventpm.t
+5a6,31
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+25d50
+< 	peep
+46,47c71
+< 	button_y 
+< 	/);
+---
+> 	button_y /);
+diff -r SDL_perl/t/fontpm.t sdlperl/t/fontpm.t
+5c5,31
+< # Copyright (C) 2009 Kartik Thakore
+---
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+9c35
+< 	unshift @INC, 'blib/lib','blib/arch', 'blib/arch/auto/src/SDL/SFont';
+---
+> 	unshift @INC, 'blib/lib','blib/arch';
+diff -r SDL_perl/t/mixerpm.t sdlperl/t/mixerpm.t
+5c5,31
+< # Copyright (C) 2009 Kartik Thakore
+---
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+61,62d86
+< 	mix_volume_chunk
+< 	mix_set_panning
+diff -r SDL_perl/t/mpegpm.t sdlperl/t/mpegpm.t
+5a6,31
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+diff -r SDL_perl/t/musicpm.t sdlperl/t/musicpm.t
+5a6,31
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+diff -r SDL_perl/t/opengl.t sdlperl/t/opengl.t
+5c5,31
+< # Copyright (C) 2009 Kartik Thakore
+---
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+9c35
+< 	unshift @INC, 'blib/lib','blib/arch', 'blib/arch/auto/src/SDL/OpenGL';
+---
+> 	unshift @INC, 'blib/lib','blib/arch';
+18c44
+< 		plan ( tests => 4 );
+---
+> 		plan ( tests => 3 );
+39d64
+< 	glGetString
+68,78c93
+< 	gluPwlCurve
+< 	gluNewQuadric
+< 	gluDeleteQuadric
+< 	gluQuadricNormals
+< 	gluQuadricTexture
+< 	gluCylinder
+< 	gluDisk
+< 	gluPartialDisk
+< 	gluSphere /);
+< 
+< can_ok('main',qw/glXUseXFont/);
+---
+> 	gluPwlCurve /);
+diff -r SDL_perl/t/palettepm.t sdlperl/t/palettepm.t
+5a6,31
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+diff -r SDL_perl/t/rectpm.t sdlperl/t/rectpm.t
+5a6,31
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+diff -r SDL_perl/t/sdlpm.t sdlperl/t/sdlpm.t
+5a6,31
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+diff -r SDL_perl/t/soundpm.t sdlperl/t/soundpm.t
+5a6,31
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+diff -r SDL_perl/t/surfacepm.t sdlperl/t/surfacepm.t
+5c5,31
+< # Copyright (C) 2009 Kartik Thakore
+---
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+9c35
+< 	unshift @INC, 'blib/lib','blib/arch', 'blib/arch/auto/src/SDL/SFont',;
+---
+> 	unshift @INC, 'blib/lib','blib/arch';
+61a88,113
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+diff -r SDL_perl/t/timerpm.t sdlperl/t/timerpm.t
+5a6,31
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+diff -r SDL_perl/t/toolfontpm.t sdlperl/t/toolfontpm.t
+5a6,31
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+9c35
+< 	unshift @INC, 'blib/lib','blib/arch', 'blib/arch/auto/src/SDL/SFont/';
+---
+> 	unshift @INC, 'blib/lib','blib/arch';
+diff -r SDL_perl/t/toolgraphicpm.t sdlperl/t/toolgraphicpm.t
+5c5,31
+< # Copyright (C) 2009 Kartik Thakore
+---
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+9c35
+< 	unshift @INC, 'blib/lib','blib/arch', 'blib/arch/auto/src/SDL/SFont/';
+---
+> 	unshift @INC, 'blib/lib','blib/arch';
+diff -r SDL_perl/t/ttfontpm.t sdlperl/t/ttfontpm.t
+5c5,31
+< # Copyright (C) 2009 Kartik Thakore
+---
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+9c35
+< 	unshift @INC, 'blib/lib','blib/arch', 'blib/arch/auto/src/SDL/SFont';
+---
+> 	unshift @INC, 'blib/lib','blib/arch';
+diff -r SDL_perl/t/videopm.t sdlperl/t/videopm.t
+5c5,31
+< # Copyright (C) 2009 Kartik Thakore
+---
+> #
+> # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # This library is free software; you can redistribute it and/or
+> # modify it under the terms of the GNU Lesser General Public
+> # License as published by the Free Software Foundation; either
+> # version 2.1 of the License, or (at your option) any later version.
+> # 
+> # This library is distributed in the hope that it will be useful,
+> # but WITHOUT ANY WARRANTY; without even the implied warranty of
+> # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+> # Lesser General Public License for more details.
+> # 
+> # You should have received a copy of the GNU Lesser General Public
+> # License along with this library; if not, write to the Free Software
+> # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+> #
+> # ------------------------------------------------------------------------------
+> #
+> # Please feel free to send questions, suggestions or improvements to:
+> #
+> #	David J. Goehrig
+> #	dgoehrig\@cpan.org
+> #
+> #
+9c35
+< 	unshift @INC, 'blib/lib','blib/arch', 'blib/arch/auto/src/SDL/SFont';
+---
+> 	unshift @INC, 'blib/lib','blib/arch';
+diff -r SDL_perl/typemap sdlperl/typemap
+4a5
+> const Uint8*		T_PTR
+16d16
+< SDL_eventaction 	T_PTR
+57a58
+> GLuint*			T_PTR
+63,64d63
+< GLUquadric *		T_PTR
+< GLdouble			T_NV
+69c68,69
+< Font				T_IV
+---
+> SDL_RWops*		T_PTR
+> SDL_svg_context*	T_PTR
