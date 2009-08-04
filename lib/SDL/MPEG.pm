@@ -31,6 +31,8 @@
 package SDL::MPEG;
 
 use strict;
+use warnings;
+use Carp;
 use SDL;
 
 sub new {
@@ -42,7 +44,7 @@ sub new {
 
 	my $self;
 	if ( $options{-from} ) {
-		die "SDL::MPEG::new -from requires a SDL::Video object\n"
+		croak "SDL::MPEG::new -from requires a SDL::Video object\n"
 			unless $options{-from}->isa('SDL::Video');
 
 		$self = \SDL::SMPEGGetInfo(${$options{-from}});

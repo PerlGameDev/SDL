@@ -31,6 +31,9 @@
 package SDL;
 
 use strict;
+use warnings;
+use Carp;
+
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 require Exporter;
@@ -63,7 +66,7 @@ sub in {
 sub verify (\%@) {
 	my ($options,@valid_options) = @_;
 	for (keys %$options) {
-		die "Invalid option $_\n" unless in ($_, @valid_options);
+		croak "Invalid option $_\n" unless in ($_, @valid_options);
 	}
 }
 

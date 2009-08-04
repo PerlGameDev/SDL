@@ -30,6 +30,8 @@
 
 package SDL::Cursor;
 use strict;
+use warnings;
+use Carp;
 
 sub new {
 	my $proto = shift;
@@ -38,9 +40,10 @@ sub new {
 
 	verify (%options, qw/ -data -mask -x -y /) if $SDL::DEBUG;
 
+	
 	my $self = \SDL::NewCursor($options{-data},$options{-mask},
 				$options{-x},$options{-y});
-	die SDL::GetError() unless $$self;
+	croak SDL::GetError() unless $$self;
 	bless $self, $class;
 	$self;
 }

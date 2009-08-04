@@ -30,6 +30,10 @@
 
 package SDL::OpenGL;
 
+use strict;
+use warnings;
+use Carp;
+
 require Exporter;
 require DynaLoader;
 use vars qw(
@@ -39,6 +43,7 @@ use vars qw(
 @ISA=qw(Exporter DynaLoader);
 
 use SDL;
+
 
 bootstrap SDL::OpenGL;
 for ( keys %SDL::OpenGL:: ) {

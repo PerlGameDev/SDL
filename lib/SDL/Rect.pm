@@ -31,6 +31,8 @@
 package SDL::Rect;
 
 use strict;
+use warnings;
+use Carp;
 use SDL;
 
 sub new {
@@ -46,7 +48,7 @@ sub new {
 	my $h = $options{-height}	|| $options{-h}		|| 0;
 	
 	my $self = \SDL::NewRect($x,$y,$w,$h);
-	die SDL::GetError() unless $$self;
+	croak SDL::GetError() unless $$self;
 	bless $self,$class;
 	return $self;
 }

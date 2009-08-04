@@ -31,6 +31,8 @@
 package SDL::Font;
 
 use strict;
+use warnings;
+use Carp;
 use SDL;
 use SDL::SFont;
 use SDL::Surface;

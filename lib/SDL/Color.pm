@@ -31,6 +31,8 @@
 package SDL::Color;
 
 use strict;
+use warnings;
+use Carp;
 use SDL;
 
 sub new {
@@ -45,7 +47,7 @@ sub new {
 	if ($options{-color}) {
 		$self = \$options{-color};	
 	} elsif ($options{-pixel} && $options{-surface}) {
-		die "SDL::Color::new requires an SDL::Surface"
+		croak "SDL::Color::new requires an SDL::Surface"
 			unless !$SDL::DEBUG || $options{-surface}->isa("SDL::Surface");
 		$self = \SDL::NewColor(SDL::GetRGB(${$options{-surface}}, $options{-pixel}));
 	} else {
@@ -55,7 +57,7 @@ sub new {
 		push @color, $options{-blue}	|| $options{-b} || 0;
 		$self = \SDL::NewColor(@color);
 	} 
-	die "Could not create color, ", SDL::GetError(), "\n"
+	croak "Could not create color, ", SDL::GetError(), "\n"
 		unless ($$self);
 	bless $self,$class;
 	return $self;
@@ -81,7 +83,7 @@ sub b {
 }
 
 sub pixel {
-	die "SDL::Color::pixel requires an SDL::Surface"
+	croak "SDL::Color::pixel requires an SDL::Surface"
 		unless !$SDL::DEBUG || $_[1]->isa("SDL::Surface");
 	SDL::MapRGB(${$_[1]},$_[0]->r(),$_[0]->g(),$_[0]->b());
 }

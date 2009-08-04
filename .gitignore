@@ -1,0 +1,9 @@
+_build/
+*.o
+Build
+blib
+lib/SDL/Config.pm
+SDL/
+SDL_perl.c
+SDL_perl.xs
+stage

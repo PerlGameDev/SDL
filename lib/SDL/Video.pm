@@ -31,6 +31,8 @@
 package SDL::Video;
 
 use strict;
+use warnings;
+use Carp;
 use SDL;
 use SDL::Surface;
 use SDL::MPEG;
@@ -47,7 +49,7 @@ sub new {
 	my $info = new SDL::MPEG();
 	
 	my $self = \SDL::NewSMPEG($n,$$info,$a);
-	die SDL::GetError() unless $$self;
+	croak SDL::GetError() unless $$self;
 	bless $self,$class;
 	$self->audio(1);
 	$self->video(1);
@@ -75,7 +77,7 @@ sub volume {
 }
 
 sub display {
-	die "SDL::Video::Display requires a SDL::Surface\n" unless $_[1]->isa('SDL::Surface');
+	croak "SDL::Video::Display requires a SDL::Surface\n" unless $_[1]->isa('SDL::Surface');
 	SDL::SMPEGSetDisplay( ${$_[0]}, ${$_[1]}, 0);
 }
 
@@ -114,7 +116,7 @@ sub loop {
 }
 
 sub region {
-	die "SDL::Video::region requires a SDL::Rect\n" unless $_[1]->isa('SDL::Rect');
+	croak "SDL::Video::region requires a SDL::Rect\n" unless $_[1]->isa('SDL::Rect');
 	SDL::SMPEGDisplayRegion(${$_[0]},${$_[1]});
 }
 

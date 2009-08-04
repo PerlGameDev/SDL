@@ -30,6 +30,9 @@
 
 package SDL::Tool::Graphic;
 
+use strict;
+use warnings;
+use Carp;
 use SDL;
 use SDL::Config;
 require SDL::Surface;
@@ -37,7 +40,7 @@ require SDL::Surface;
 sub new {
 	my $proto = shift;
 	my $class = ref($proto) || $proto;
-	$self = {};
+	my $self = {};
 	bless $self, $class;
 	$self;
 }
@@ -50,7 +53,7 @@ sub DESTROY {
 
 sub zoom {
 	my ( $self, $surface, $zoomx, $zoomy, $smooth) = @_;
-	die "SDL::Tool::Graphic::zoom requires an SDL::Surface\n"
+	croak "SDL::Tool::Graphic::zoom requires an SDL::Surface\n"
 		unless ( ref($surface) && $surface->isa('SDL::Surface'));
 	my $tmp = $$surface;
 	$$surface = SDL::GFXZoom($$surface, $zoomx, $zoomy, $smooth);
@@ -60,7 +63,7 @@ sub zoom {
 
 sub rotoZoom {
 	my ( $self, $surface, $angle, $zoom, $smooth) = @_;
-	die "SDL::Tool::Graphic::rotoZoom requires an SDL::Surface\n"
+	croak "SDL::Tool::Graphic::rotoZoom requires an SDL::Surface\n"
 		unless ( ref($surface) && $surface->isa('SDL::Surface'));
 	my $tmp = $$surface;
 	$$surface = SDL::GFXRotoZoom($$surface, $angle, $zoom, $smooth);
@@ -70,8 +73,9 @@ sub rotoZoom {
 
 sub grayScale {
 	my ( $self, $surface ) = @_;
+	my $workingSurface;
 	if($surface->isa('SDL::Surface')) {
-		$workingSurface = $$surface;
+		 $workingSurface = $$surface;
 	} else {
 		$workingSurface = $surface;
 	}
@@ -95,6 +99,9 @@ sub grayScale {
  
 sub invertColor {
 	my ( $self, $surface ) = @_;
+	#Added because of strict if we needed global
+    #do $workingSurface init outside subs.
+	my $workingSurface;
 	if($surface->isa('SDL::Surface')) {
 		$workingSurface = $$surface;
 	} else {
@@ -117,7 +124,7 @@ sub invertColor {
 	}
 }
 
-die "SDL::Tool::Graphic requires SDL_gfx support\n"
+croak "SDL::Tool::Graphic requires SDL_gfx support\n"
 	unless SDL::Config->has('SDL_gfx');
  
 

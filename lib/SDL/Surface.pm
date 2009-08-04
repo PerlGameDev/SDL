@@ -31,6 +31,8 @@
 package SDL::Surface;
 
 use strict;
+use warnings;
+use Carp;
 use SDL;
 use SDL::SFont;
 use SDL::Color;
@@ -70,7 +72,8 @@ sub new {
 			$self = \SDL::CreateRGBSurface($f,$w,$h,$d,$r,$g,$b,$a);
 		}
 	}
-	die SDL::GetError() unless $$self;
+	croak "SDL::Surface::new failed. ", SDL::GetError()
+		unless ( $$self);
 	bless $self,$class;
 	return $self;
 }
@@ -152,7 +155,7 @@ sub pixels {
 }
 
 sub pixel {
-	die "SDL::Surface::pixel requires a SDL::Color"
+	croak "SDL::Surface::pixel requires a SDL::Color"
 		if $_[3] && $SDL::DEBUG && !$_[3]->isa("SDL::Color");
 	$_[3] ?
 		new SDL::Color -color => SDL::SurfacePixel(${$_[0]},$_[1],$_[2],${$_[3]}) :
@@ -160,9 +163,9 @@ sub pixel {
 }
 
 sub fill {
-	die "SDL::Surface::fill requires a SDL::Rect object"
+	croak "SDL::Surface::fill requires a SDL::Rect object"
 		unless !$SDL::DEBUG || $_[1] == 0 || $_[1]->isa('SDL::Rect');
-	die "SDL::Surface::fill requires a SDL::Color object"
+	croak "SDL::Surface::fill requires a SDL::Color object"
 		unless !$SDL::DEBUG || $_[2]->isa('SDL::Color');
 	if ($_[1] == 0 ) {
 		SDL::FillRect(${$_[0]},0,${$_[2]});
@@ -187,7 +190,7 @@ sub update {
 	my $self = shift;;
 	if ($SDL::DEBUG) {
 		for (@_) { 
-			die "SDL::Surface::update requires SDL::Rect objects"
+			croak "SDL::Surface::update requires SDL::Rect objects"
 				unless $_->isa('SDL::Rect');
 		}
 	}
@@ -200,10 +203,10 @@ sub flip {
 
 sub blit {
 	if ($SDL::DEBUG) {
-		die "SDL::Surface::blit requires SDL::Rect objects"
+		croak "SDL::Surface::blit requires SDL::Rect objects"
 			unless ($_[1] == 0 || $_[1]->isa('SDL::Rect'))
 			&& ($_[3] == 0 || $_[3]->isa('SDL::Rect'));
-		die "SDL::Surface::blit requires SDL::Surface objects"
+		croak "SDL::Surface::blit requires SDL::Surface objects"
 			unless $_[2]->isa('SDL::Surface'); 
 	}
 	SDL::BlitSurface(map { $_ != 0 ? ${$_} : $_ } @_);
@@ -213,14 +216,14 @@ sub set_colors {
 	my $self = shift;
 	my $start = shift;
 	for (@_) {
-		die "SDL::Surface::set_colors requires SDL::Color objects"
+		croak "SDL::Surface::set_colors requires SDL::Color objects"
 			unless !$SDL::DEBUG || $_->isa('SDL::Color');
 	}
 	return SDL::SetColors($$self, $start, map { ${$_} } @_);
 }
 
 sub set_color_key {
-	die "SDL::Surface::set_color_key requires a SDL::Color object"
+	croak "SDL::Surface::set_color_key requires a SDL::Color object"
 		unless !$SDL::DEBUG || (ref($_[2]) && $_[2]->isa('SDL::Color'));
 	SDL::SetColorKey(${$_[0]},$_[1],${$_[2]});
 }

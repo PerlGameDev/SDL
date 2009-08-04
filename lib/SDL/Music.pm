@@ -31,6 +31,8 @@
 package SDL::Music;
 
 use strict;
+use warnings;
+use Carp;
 use SDL;
 
 sub new {
@@ -38,7 +40,7 @@ sub new {
 	my $class = ref($proto) || $proto;
 	my $filename = shift;
 	my $self = \SDL::MixLoadMusic($filename);
-	die SDL::GetError() unless $$self;
+	croak SDL::GetError() unless $$self;
 	bless $self,$class;
 	return $self;
 }

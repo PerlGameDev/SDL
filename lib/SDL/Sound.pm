@@ -30,13 +30,14 @@
 
 package SDL::Sound;
 use strict;
-
+use warnings;
+use Carp;
 sub new {
 	my $proto = shift;	
 	my $class = ref($proto) || $proto;
 	my $filename = shift;
 	my $self = \SDL::MixLoadWAV($filename);
-	die SDL::GetError() unless $$self;
+	croak SDL::GetError() unless $$self;
 	bless $self,$class;
 	return $self;
 }

@@ -1,0 +1,19 @@
+README 
+
+I couldn't get the scripts to work at all, so I added const.pl and uses this
+to generate the scripts. const.pl is also responsible for making the constant
+exporting backwards-compatible to SDL_perl 1.x.
+
+Tels 2003/03/21
+
+This directory contains a set of scripts for generating the
+SDL::Constants and SDL::OpenGL::Constants modules.  They
+work by using the C preprocessor and gcc to extract defined
+values and enumerated field's numerical values and create
+constant subroutines that are exported into the main namespace.
+
+To add a new constant, simply add the name of the constant
+to the *_words.txt file and run the applicable script.  
+This will overwrite the lib/SDL/* file in question.
+
+Dave				Tue Mar 11 21:58:03 EST 2003

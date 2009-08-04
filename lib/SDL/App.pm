@@ -31,13 +31,14 @@
 package SDL::App;
 
 use strict;
+use warnings;
+use Carp;
 use SDL;
 use SDL::Event;
 use SDL::Surface;
 use SDL::Rect;
 
 our @ISA = qw(SDL::Surface);
-
 sub DESTROY {
 
 }
@@ -106,7 +107,7 @@ sub new {
 	}
 
 	my $self = \SDL::SetVideoMode($w,$h,$d,$f)
-		or die SDL::GetError();
+		or croak SDL::GetError();
 	
 	if ($ic and -e $ic) {
 	   my $icon = new SDL::Surface -name => $ic;
@@ -200,7 +201,7 @@ sub attribute ($$;$) {
 		SDL::GLSetAttribute($mode,$value);
 	}
 	my $returns = SDL::GLGetAttribute($mode);	
-	die "SDL::App::attribute failed to get GL attribute" if ($$returns[0] < 0);
+	croak "SDL::App::attribute failed to get GL attribute" if ($$returns[0] < 0);
 	$$returns[1];	
 }
 
@@ -355,11 +356,12 @@ or OpenGL buffer if applicable.  This is prefered to calling flip on the applica
 
 C<SDL::App::attribute> allows one to set and get GL attributes.  By passing a value
 in addition to the attribute selector, the value will be set.  C<SDL:::App::attribute>
-always returns the current value of the given attribute, or dies on failure.
+always returns the current value of the given attribute, or croaks on failure.
 
 =head1 AUTHOR
 
 David J. Goehrig
+Kartik Thakore
 
 =head1 SEE ALSO
 

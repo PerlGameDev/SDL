@@ -30,6 +30,10 @@
 
 package SDL::Tool::Font;
 
+use strict;
+use warnings;
+use Carp;
+
 use SDL;
 use SDL::Font;
 use SDL::TTFont;
@@ -37,7 +41,7 @@ use SDL::TTFont;
 sub new {
 	my $proto = shift;
 	my $class = ref($proto) || $proto;
-	$self = {};
+	my $self = {};
 	my %option = @_;
 
 	verify (%option, qw/ -sfont -ttfont -size -fg -bg -foreground -background
@@ -58,7 +62,7 @@ sub new {
 			}
 		}
 	} else {
-		die "SDL::Tool::Font requires either a -sfont or -ttfont";	
+		croak "SDL::Tool::Font requires either a -sfont or -ttfont";	
 	}
 	bless $self,$class;
 	$self;
@@ -70,7 +74,7 @@ sub DESTROY {
 
 sub print {
 	my ($self,$surface,$x,$y,@text) = @_;
-	die "Tool::Font::print requires a SDL::Surface\n"
+	croak "Tool::Font::print requires a SDL::Surface\n"
 		unless ($SDL::DEBUG && $surface->isa('SDL::Surface'));
 	if ($$self{-font}->isa('SDL::Font')) {
 		$$self{-font}->use();
