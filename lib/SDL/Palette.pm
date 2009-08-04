@@ -7,6 +7,8 @@
 
 package SDL::Palette;
 use strict;
+use warnings;
+use Carp;
 
 # NB: there is no palette destructor because most of the time the 
 # palette will be owned by a surface, so any palettes you create 

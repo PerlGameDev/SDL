@@ -8,6 +8,8 @@
 package SDL::Video;
 
 use strict;
+use warnings;
+use Carp;
 use SDL;
 use SDL::Surface;
 use SDL::MPEG;
@@ -19,7 +21,7 @@ sub new {
 
 	verify (%options, qw/ -name -audio / ) if $SDL::DEBUG;
 
-	my $n = $options{-name} || die "SDL::Video must supply a filename to SDL::Video::new\n";
+	my $n = $options{-name} || croak "SDL::Video must supply a filename to SDL::Video::new\n";
 	my $a = $options{'-audio'} ? 1 : 0;
 	my $info = new SDL::MPEG();
 	
@@ -51,7 +53,7 @@ sub volume {
 }
 
 sub display {
-	die "SDL::Video::Display requires a SDL::Surface\n" unless $_[1]->isa('SDL::Surface');
+	croak "SDL::Video::Display requires a SDL::Surface\n" unless $_[1]->isa('SDL::Surface');
 	SDL::SMPEGSetDisplay( ${$_[0]}, ${$_[1]}, 0);
 }
 
@@ -90,7 +92,7 @@ sub loop {
 }
 
 sub region {
-	die "SDL::Video::region requires a SDL::Rect\n" unless $_[1]->isa('SDL::Rect');
+	croak "SDL::Video::region requires a SDL::Rect\n" unless $_[1]->isa('SDL::Rect');
 	SDL::SMPEGDisplayRegion(${$_[0]},${$_[1]});
 }
 

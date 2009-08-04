@@ -6,6 +6,8 @@
 package SDL::Build;
 
 use strict;
+use warnings;
+use Carp;
 use base 'Module::Build';
 
 use File::Spec;
@@ -35,7 +37,7 @@ sub get_arch
 		'SDL', 'Build', ucfirst( $os ) . '.pm' );
 	my $module        = 'SDL::Build::' . ucfirst( $os );
 
-	require $modpath or die "No module for $os platform\n";
+	require $modpath or croak "No module for $os platform\n";
 
 	return $module;
 }
@@ -52,7 +54,7 @@ sub find_subsystems
 		for my $library (@{ $subsystem->{libraries} })
 		{
 			my $lib = $libraries->{$library}
-				or die "Unknown library '$library' for '$name'\n";
+				or croak "Unknown library '$library' for '$name'\n";
 
 			my ($inc_dir, $link_dir)   =
 				$self->find_header( $lib->{header}, \%includes_libs );
@@ -194,7 +196,7 @@ sub write_sdl_config
 
 	$text =~ s/^\t//gm;
 
-	open my $file, '>', $path or die "Cannot write to '$path': $!\n";
+	open my $file, '>', $path or croak "Cannot write to '$path': $!\n";
 	print $file $text;
 }
 

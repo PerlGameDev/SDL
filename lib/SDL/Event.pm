@@ -9,6 +9,9 @@
 
 package SDL::Event;
 use strict;
+use warnings;
+use Carp;
+
 use SDL;
 
 sub new {

@@ -8,6 +8,8 @@
 package SDL::TTFont;
 
 use strict;
+use warnings;
+use Carp;
 use SDL;
 use SDL::Surface;
 
@@ -27,15 +29,15 @@ sub new {
 	$self->{-fg} = $options{-foreground} 	|| $options{-fg} || $SDL::Color::black;
 	$self->{-bg} = $options{-background}	|| $options{-bg} || $SDL::Color::white;
 
-	die "SDL::TTFont::new requires a -name\n"
+	croak "SDL::TTFont::new requires a -name\n"
 		unless ($$self{-name});
 
-	die "SDL::TTFont::new requires a -size\n"
+	croak "SDL::TTFont::new requires a -size\n"
 		unless ($$self{-size});
 
 	$self->{-font} = SDL::TTFOpenFont($self->{-name},$self->{-size});
 
-	die "Could not open font $$self{-name}, ", SDL::GetError(), "\n"
+	croak "Could not open font $$self{-name}, ", SDL::GetError(), "\n"
 		unless ($self->{-font});
 
 	bless $self,$class;
@@ -51,7 +53,7 @@ sub DESTROY {
 sub print {
 	my ($self,$surface,$x,$y,@text) = @_;
 
-	die "Print requies an SDL::Surface"
+	croak "Print requies an SDL::Surface"
 		unless( ref($surface) && $surface->isa("SDL::Surface") );
 
 	SDL::FreeSurface($self->{-surface}) if ($$self{-surface});
@@ -59,7 +61,7 @@ sub print {
 	$$self{-surface} = SDL::TTFPutString($$self{-font},$$self{-mode},
 		$$surface,$x,$y,${$$self{-fg}},${$$self{-bg}},join("",@text));
 
-	die "Could not print \"", join("",@text), "\" to surface, ",
+	croak "Could not print \"", join("",@text), "\" to surface, ",
 		SDL::GetError(), "\n" unless ($$self{-surface});
 }
 
@@ -150,7 +152,7 @@ sub unicode_blended {
 	$$self{-mode} = UNICODE_BLENDED();
 }
 
-die "Could not initialize True Type Fonts\n"
+croak "Could not initialize True Type Fonts\n"
 	if ( SDL::TTFInit() < 0);
 
 1;

@@ -7,6 +7,10 @@
 
 package SDL::OpenGL;
 
+use strict;
+use warnings;
+use Carp;
+
 require Exporter;
 require DynaLoader;
 use vars qw(
@@ -17,6 +21,7 @@ use vars qw(
 
 use SDL;
 use SDL::OpenGL::Constants;
+
 
 bootstrap SDL::OpenGL;
 for ( keys %SDL::OpenGL:: ) {

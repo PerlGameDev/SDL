@@ -5,6 +5,8 @@
 
 package SDL::Cursor;
 use strict;
+use warnings;
+use Carp;
 
 sub new {
 	my $proto = shift;

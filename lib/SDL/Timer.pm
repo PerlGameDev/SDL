@@ -6,6 +6,8 @@
 
 package SDL::Timer;
 use strict;
+use warnings;
+use Carp;
 use SDL;
 
 sub new {
@@ -17,7 +19,7 @@ sub new {
 
 	verify(%options,qw/ -delay -times -d -t /);
 
-	die "SDL::Timer::new no delay specified\n"
+	croak "SDL::Timer::new no delay specified\n"
 		unless ($options{-delay});
 	$$self{-delay} = $options{-delay} || $options{-d} || 0;
 	$$self{-times} = $options{-times} || $options{-t} || 0;
@@ -27,7 +29,7 @@ sub new {
 		$$self{-routine} = sub { &$func; $$self{-delay}};
 	}
 	$$self{-timer} = SDL::NewTimer($$self{-delay},$$self{-routine});
-	die "Could not create timer, ", SDL::GetError(), "\n"
+	croak "Could not create timer, ", SDL::GetError(), "\n"
 		unless ($self->{-timer});
 	bless $self,$class;
 	return $self;

@@ -1,13 +1,14 @@
 package SDL::Build::MSWin32;
 
 use strict;
-
+use warnings;
+usr Carp;
 use base 'SDL::Build';
 use File::Spec::Functions;
 
 sub fetch_includes
 {
-	die "Environment variable INCLUDE is empty\n" unless $ENV{INCLUDE};
+	croak "Environment variable INCLUDE is empty\n" unless $ENV{INCLUDE};
 
 	return map { $_ => 1 } grep { $_ } split( ';', $ENV{INCLUDE} );
 }
@@ -16,7 +17,8 @@ sub find_header
 {
 	for my $key (qw( LIBS PATH ))
 	{
-		die "Environment variable $key is empty\n" unless $ENV{$key};
+		carp "Environment variable $key is empty\n" unless $ENV{$key};
+		carp "This will probably fail the compile \nSet $key manually or try building anyway\n"  unless $ENV{$key}; 
 	}
 
 	my ( $self, $header, $includes ) = @_;
@@ -78,7 +80,7 @@ sub gl_vendor
 	return 'mesa_gl' if $vendor eq 'MESA';
 	return 'ms_gl'   if $vendor eq 'MS';
 
-	die "Unrecognized GL vendor '$vendor'\n";
+	croak "Unrecognized GL vendor '$vendor'\n";
 }
 
 sub ms_gl_subsystems

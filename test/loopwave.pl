@@ -1,13 +1,14 @@
 #!/usr/bin/env perl
 
 use SDL;
+use Carp;
 
-die "Could not initialize SDL: ", SDL::GetError()
+croak "Could not initialize SDL: ", SDL::GetError()
 	if ( 0 > SDL::Init(SDL_INIT_AUDIO()));
 
 $ARGV[0] ||= 'data/sample.wav';
 
-die "usage: $0 [wavefile]\n"
+croak "usage: $0 [wavefile]\n"
 	if ( in $ARGV[0], qw/ -h --help -? /);
 
 my ($wav_spec,$wav_buffer,$wav_len,$wav_pos) = (0,0,0,0);
@@ -47,9 +48,9 @@ $wave = SDL::LoadWAV($ARGV[0],$spec);
 
 ($wav_spec,$wav_buffer,$wav_len) = @$wave;
 
-die "Could not load wav file $ARGV[0], ", SDL::GetError(), "\n" unless ( $wav_len );
+croak "Could not load wav file $ARGV[0], ", SDL::GetError(), "\n" unless ( $wav_len );
 
-die "Could not open audio ", SDL::GetError()
+croak "Could not open audio ", SDL::GetError()
 	if (0 > SDL::OpenAudio($wav_spec,$fillerup));
 
 SDL::PauseAudio(0);

@@ -7,6 +7,8 @@
 
 package SDL::Rect;
 use strict;
+use warnings;
+use Carp;
 use SDL;
 
 sub new {

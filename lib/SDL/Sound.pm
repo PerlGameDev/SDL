@@ -7,7 +7,8 @@
 
 package SDL::Sound;
 use strict;
-
+use warnings;
+use Carp;
 sub new {
 	my $proto = shift;	
 	my $class = ref($proto) || $proto;

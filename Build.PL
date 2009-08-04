@@ -5,7 +5,8 @@
 # Copyright (C) 2009 Kartik Thakore
 
 use strict;
-
+use warnings;
+use Carp;
 use lib  'make/lib';
 
 use SDL::Build;
@@ -17,7 +18,7 @@ my $sdl_link_flags    = `sdl-config --libs`;
 
 if ($? >> 8)
 {
-	die "SDL doesn't appear to be installed.\n" .
+	croak "SDL doesn't appear to be installed.\n" .
 		"Please check that sdl-config is in your path and try again.\n";
 }
 

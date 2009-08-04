@@ -7,6 +7,8 @@
 
 package SDL::Cdrom;
 use strict;
+use warnings;
+use Carp;
 
 BEGIN {
 	use Exporter();
@@ -21,7 +23,7 @@ sub new {
 	my $self;
 	my $number = shift;
 	$self = \SDL::CDOpen($number);
-	die SDL::GetError() if ( SDL::CD_ERROR() eq SDL::CDStatus($$self));
+	croak SDL::GetError() if ( SDL::CD_ERROR() eq SDL::CDStatus($$self));
 	bless $self,$class;
 	return $self;
 }
