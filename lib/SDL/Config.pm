@@ -29,7 +29,6 @@ $sdl_config = {
                                           '/usr/include/SDL',
                                           '/usr/lib'
                                         ],
-                           'SDL_svg' => 0,
                            'SDL_net' => [
                                           '/usr/include/SDL',
                                           '/usr/lib'
@@ -38,22 +37,18 @@ $sdl_config = {
                                             '/usr/include/SDL',
                                             '/usr/lib'
                                           ],
-                           'jpeg' => [
-                                       '/usr/include',
-                                       '/usr/lib'
-                                     ],
                            'SDL_gfx' => [
                                           '/usr/include/SDL',
                                           '/usr/lib'
                                         ],
+                           'jpeg' => [
+                                       '/usr/include',
+                                       '/usr/lib'
+                                     ],
                            'smpeg' => [
                                         '/usr/include/smpeg',
                                         '/usr/lib'
                                       ],
-                           'SDL_sound' => [
-                                            '/usr/include/SDL',
-                                            '/usr/lib'
-                                          ],
                            'SDL_mixer' => [
                                             '/usr/include/SDL',
                                             '/usr/lib'

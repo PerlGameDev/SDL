@@ -97,7 +97,7 @@ static int sdl_perl_use_smpeg_audio = 0;
 #define HAVE_TLS_CONTEXT
 #endif
 
-#include "defines.h"
+#include "src/defines.h"
 
 Uint32 
 sdl_perl_timer_callback ( Uint32 interval, void* param )

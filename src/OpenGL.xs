@@ -37,8 +37,8 @@
 
 #include <SDL.h>
 
-#include <gl.h>
-#include <glu.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #ifdef USE_THREADS
 #define HAVE_TLS_CONTEXT
@@ -48,7 +48,7 @@
 #define GL_ALL_CLIENT_ATTRIB_BITS 0xFFFFFFF
 #endif /* GL_ALL_CLIENT_BITS */  
 
-#include "../defines.h"
+#include "../src/defines.h"
 
 SV* sdl_perl_nurbs_error_hook;
 void
