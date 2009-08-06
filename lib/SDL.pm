@@ -48,7 +48,7 @@ BEGIN {
 };
 
 
-$VERSION = '2.2.1';
+$VERSION = '2.2.0';
 
 print "$VERSION" if (defined($ARGV[0]) && ($ARGV[0] eq '--SDLperl'));
 
