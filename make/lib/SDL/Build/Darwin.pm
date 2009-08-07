@@ -45,6 +45,8 @@ sub fetch_includes
 	'/usr/local/include/gl'    => '/usr/local/lib',
 	'/usr/include/GL'          => '/usr/lib', 
 	'/usr/include/gl'          => '/usr/lib', 
+	'/opt/local/include/SDL'   => '/opt/local/lib',		# Mac Ports
+	'/opt/local/include'   => '/opt/local/lib',		# Mac Ports
 
 	'/System/Library/Frameworks/SDL_mixer.framework/Headers'     => '../../lib',
 	'/System/Library/Frameworks/SDL_image.framework/Headers'     => '../../lib',

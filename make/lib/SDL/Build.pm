@@ -158,27 +158,24 @@ sub set_flags
 {
 	my ($self, $subsystems, $build, $defines, $includes, $links,
 	    $sdl_compile, $sdl_link) = @_;
-
 	my %file_flags;
-
 	while (my ($subsystem, $buildable) = each %$build)
 	{
 		my $sub_file     = $subsystems->{$subsystem}{file}{to};
 		my $sub_includes = join(' ', @{ $includes->{$subsystem} } );
-
 		$file_flags{ $sub_file } = 
 		{
 			extra_compiler_flags =>
 			[
 				@{ $includes->{$subsystem} },
-				split(' ',$sdl_compile),
+				(split(' ',$sdl_compile)),
 				@{ $defines->{$subsystem} },
 				( defined $Config{usethreads} ? ('-DUSE_THREADS', '-fPIC') : ('-fPIC' )),
 			],
 			extra_linker_flags => 
 			[
 				@{ $links->{$subsystem}{paths} },
-				split(' ',$sdl_link),
+				(split(' ',$sdl_link)),
 				@{ $links->{$subsystem}{libs} },
 			],
 		},

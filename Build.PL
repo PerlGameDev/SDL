@@ -9,6 +9,7 @@ use warnings;
 use Carp;
 use lib  'make/lib';
 
+use Data::Dumper;
 use SDL::Build;
 use YAML;
 use YAML::Node;
