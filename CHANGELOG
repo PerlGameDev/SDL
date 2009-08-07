@@ -1,5 +1,13 @@
 Revision history for Perl extension SDL_perl.
 
+* Aug 7 2009	David J. Goehrig <dgoehrig@cpan.org>
+	- fixed Darwin build breakage
+	- added support for Mac Ports policies
+	- updated the name of the bundle
+	- added Darwin action ./Build bundle to create SDLPerl.app
+	- fixed SDLPerl.app compilation
+	- added .spl file type for SDLPerl applications!
+
 * Aug 5 2009    Kartik Thakore   <thakore.kartik@gmail.com>
 	- fixed build after Module::Build breakage
 	- fixed openGL header problems

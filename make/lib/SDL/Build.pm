@@ -249,9 +249,11 @@ sub process_support_files {
 }
 
 # Override to create a MacOS Bundle
-sub build_bundle
+sub ACTION_bundle
 {
-	return;
+	my ($self) = @_;
+	$self->depends_on('build');
+	$self->get_arch($^O)->build_bundle();
 }
 
 # Override Install method for darwin
@@ -259,7 +261,6 @@ sub ACTION_install {
   my ($self) = @_;
   require ExtUtils::Install;
   $self->depends_on('build');
-  $self->get_arch($^O)->build_bundle();
   ExtUtils::Install::install($self->install_map, 1, 0, $self->{args}{uninst}||0);
 }
 

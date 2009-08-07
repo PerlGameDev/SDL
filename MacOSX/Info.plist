@@ -3,16 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>SDL Perl</string>
+	<string>SDLPerl</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>sdlpl</string>
+				<string>spl</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>SDL Perl.icns</string>
+			<string>SDLPerl.icns</string>
 			<key>CFBundleTypeName</key>
 			<string>SDL Perl Script</string>
 			<key>CFBundleTypeRole</key>
@@ -20,15 +20,15 @@
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>SDL Perl</string>
+	<string>SDLPerl</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Multimedia for Perl</string>
 	<key>CFBundleIconFile</key>
-	<string>SDL Perl.icns</string>
+	<string>SDLPerl.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>org.perl.sdl</string>
 	<key>CFBundleName</key>
-	<string>SDL Perl</string>
+	<string>SDLPerl</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

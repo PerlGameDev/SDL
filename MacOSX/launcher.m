@@ -186,6 +186,7 @@ main( int argc, char** argv)
 	[NSApp setMainMenu: [[NSMenu alloc] init]];
 	
 	sdlplmain = [[SDLPerlMain alloc] init];
+	[sdlplmain retain];
 	[NSApp setDelegate: sdlplmain];
 
 	[NSApp run];

@@ -37,8 +37,14 @@
 
 #include <SDL.h>
 
+#ifdef PERL_DARWIN
+#include <gl.h>
+#include <glu.h>
+#else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
+
 
 #ifdef USE_THREADS
 #define HAVE_TLS_CONTEXT

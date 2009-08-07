@@ -56,8 +56,7 @@ sub fetch_includes
 	'/System/Library/Frameworks/libvorbisfile.framework/Headers' => '../../lib',
 	'/System/Library/Frameworks/libvorbisenc.framework/Headers'  => '../../lib',
 	'../../include'                                              => '../../lib',
-	'/System/Library/Frameworks/OpenGL.framework/Headers'        =>
-		'/System/Library/Frameworks/OpenGL.framework/Libraries',
+	'/System/Library/Frameworks/OpenGL.framework/Headers'        => '/System/Library/Frameworks/OpenGL.framework/Libraries',
 	);
 }
 
@@ -75,23 +74,29 @@ sub build_c_source
 
 sub build_install_base
 {
-	return "SDL Perl.app/Contents/Resources";	
+	return "SDLPerl.app/Contents/Resources";	
 }
 
 sub build_bundle
 {
-	$bundle_contents="SDL Perl.app/Contents";
+	$bundle_contents="SDLPerl.app/Contents";
 	system "mkdir -p \"$bundle_contents\"";
 	mkdir "$bundle_contents/MacOS",0755;
-	$libs = `sdl-config --libs`;
+	$cflags = `sdl-config --cflags`;
+	chomp($cflags);
+	$cflags .= ' ' . `perl -MExtUtils::Embed -e ccopts`;
+	chomp($cflags);
+	$libs = `sdl-config  --libs`;
+	chomp($libs);
+	$libs .= ' ' . `perl -MExtUtils::Embed -e ldopts`;
 	chomp($libs);
 	$libs =~ s/-lSDLmain//g;
-	system "gcc $libs -framework Cocoa `perl -MExtUtils::Embed -e ldopts` MacOSX/launcher.o -o \"$bundle_contents/MacOS/SDL Perl\"";
-
+	print STDERR "gcc $cflags MacOSX/launcher.m $libs -framework Cocoa -o \"$bundle_contents/MacOS/SDLPerl\"";
+	print STDERR `gcc $cflags MacOSX/launcher.m $libs -framework Cocoa -o \"$bundle_contents/MacOS/SDLPerl\"`;
 	mkdir "$bundle_contents/Resources",0755;
 	system "echo \"APPL????\" > \"$bundle_contents/PkgInfo\"";
 	system "cp MacOSX/Info.plist \"$bundle_contents/\"";
-	system "cp \"MacOSX/SDL Perl.icns\" \"$bundle_contents/Resources\"";
+	system "cp \"MacOSX/SDLPerl.icns\" \"$bundle_contents/Resources\"";
 }
 
 1;
