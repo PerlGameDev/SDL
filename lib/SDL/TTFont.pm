@@ -69,8 +69,8 @@ sub new {
 
 sub DESTROY {
 	my $self = shift;
-	SDL::FreeSurface($self->{-surface});
-	SDL::TTFCloseFont($self->{-font});
+	SDL::FreeSurface($self->{-surface}) if (defined ($self->{-surface}));
+	SDL::TTFCloseFont($self->{-font}) if (defined ($self->{-font}));
 }
 
 sub print {
