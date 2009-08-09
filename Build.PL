@@ -13,19 +13,10 @@ use Data::Dumper;
 use SDL::Build;
 use YAML;
 use YAML::Node;
+use inc::Utility qw(sdl_libs sdl_c_flags);
 
-my $sdl_compile_flags = `sdl-config --cflags`;
-my $sdl_link_flags    = `sdl-config --libs`;
-
-if ($? >> 8)
-{
-	croak "SDL doesn't appear to be installed.\n" .
-		"Please check that sdl-config is in your path and try again.\n";
-}
-
-chomp( $sdl_compile_flags );
-chomp( $sdl_link_flags );
-
+my $sdl_compile_flags = sdl_c_flags();
+my $sdl_link_flags    = sdl_libs();
 # subsystem to build
 #	file
 #		location of source file => location of build file to get name right
