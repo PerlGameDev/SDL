@@ -223,6 +223,8 @@ sub write_sdl_config
 	print $file $text;
 }
 
+
+
 # Subclass  Darwin to build Objective-C addons
 
 sub filter_support {
@@ -246,6 +248,24 @@ sub process_support_files {
 	foreach my $file (map($p->{c_source} . "/$_", @{$p->{c_sources}})) {
 		push @{$p->{objects}}, $self->compile_c($file);
 	}
+}
+
+# get link flags with a given a sdl_dir
+sub alt_link_flags
+{
+	my($self) = @_;
+	my $sdl_dir = shift;
+
+	return '-L"'.$sdl_dir.'\lib"';
+}
+
+# get compile flags with a given a sdl_dir
+sub alt_compile_flags
+{
+	 my($self) = @_;
+	 my $sdl_dir = shift;
+
+	 return '-L"'.$sdl_dir.'\include\SDL"';	
 }
 
 # Override to create a MacOS Bundle

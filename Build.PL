@@ -11,12 +11,12 @@ use lib  'make/lib';
 
 use Data::Dumper;
 use SDL::Build;
+use SDL::Utility;
 use YAML;
 use YAML::Node;
-use inc::Utility qw(sdl_libs sdl_c_flags);
 
-my $sdl_compile_flags = sdl_c_flags();
-my $sdl_link_flags    = sdl_libs();
+my $sdl_compile_flags = SDL::Utility->sdl_c_flags();
+my $sdl_link_flags    = SDL::Utility->sdl_libs();
 # subsystem to build
 #	file
 #		location of source file => location of build file to get name right
