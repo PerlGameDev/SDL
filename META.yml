@@ -2,9 +2,11 @@
 name: SDL_Perl
 version: 2.2.0
 author:
-  - David J. Goehrig <DGOEHRIG@cpan.org>
+  - 'David J. Goehrig <DGOEHRIG@cpan.org>'
 abstract: Simple DirectMedia Layer for Perl
 license: lgpl
+resources:
+  license: http://opensource.org/licenses/lgpl-license.php
 build_requires:
   Module::Build: 0.22
   Test::Simple: 0.47
@@ -46,6 +48,8 @@ provides:
     file: lib/SDL/Sound.pm
   SDL::Surface:
     file: lib/SDL/Surface.pm
+  SDL::TTFont:
+    file: lib/SDL/TTFont.pm
   SDL::Timer:
     file: lib/SDL/Timer.pm
   SDL::Tool::Font:
@@ -62,12 +66,11 @@ provides:
     file: lib/SDL/Tutorial/Drawing.pm
   SDL::Video:
     file: lib/SDL/Video.pm
-  SDL:TTFont:
-    file: lib/SDL/TTFont.pm
   SDL_perl:
     file: lib/SDL_perl.pm
   Walker:
     file: lib/SDL/Tutorial/Images.pm
-  main:
-    file: lib/SDL/Tutorial/Images.pm
-generated_by: Module::Build version 0.2611
+generated_by: Module::Build version 0.33
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
