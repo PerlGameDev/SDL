@@ -1,6 +1,6 @@
-README for SDL_Perl-2.2.0
+README for SDL_Perl-2.2.1
 
-What's New in 2.2.0:
+What's New in 2.2.1:
 
 SDL_Perl-2.2.0 adds support for a few new modules, fixes a few more
 bugs, and improves the error handling of the object layer.  Additional
@@ -37,8 +37,17 @@ Installation:
 	./Build bundle	# MacOS X only!
 	./Build install
 
+Installation with Windows + MinGW:
+
+	set SDL_INST_DIR=Absolute/Path/to/SDLdir
+	perl Build.PL
+	./Build
+	./Build test
+	./Build install
+
+
 The build process will use the new Module::Build facility
-to autodetect and build SDL Perl for your platform.  If
+to auto detect and build SDL Perl for your platform.  If
 the build fails please forward bugs to sdl-devel@perl.org.
 
 For MacOS X users there is a new experimental bundle, 
