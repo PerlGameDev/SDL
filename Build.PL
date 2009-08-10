@@ -144,6 +144,5 @@ $build->set_flags(
 	$sdl_compile_flags,
 	$sdl_link_flags,
 );
-
 # now we're ready to go!
 $build->create_build_script();

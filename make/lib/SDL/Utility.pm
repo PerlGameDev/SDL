@@ -19,8 +19,8 @@ use SDL::Build;
 sub sdl_con_found
 {
 	`sdl-config --libs`;
-	return 0 if ($? >> 8);
-	return 1;
+	return 1 unless ($? >> 8) and return 0;
+	
 }
 
 #This should check if the folder actually has the SDL files
@@ -34,7 +34,8 @@ sub sdl_libs
 	if(sdl_con_found)
 	{
 		local $_ = `sdl-config --libs`;
-		return chomp($_);
+		chomp($_);
+		return $_;
 	}	
 	elsif( check_sdl_dir() )
 	{
@@ -53,7 +54,8 @@ sub sdl_c_flags
         if(sdl_con_found)
         {
                	local $_  = `sdl-config --cflags`;
-		return chomp($_);
+		chomp($_);
+		return $_;
         }
 	elsif ( check_sdl_dir() )
 	{
