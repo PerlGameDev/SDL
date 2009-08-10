@@ -34,11 +34,19 @@ Installation:
 	perl Build.PL
 	./Build
 	./Build test
+	./Build bundle	# MacOS X only!
 	./Build install
 
 The build process will use the new Module::Build facility
 to autodetect and build SDL Perl for your platform.  If
 the build fails please forward bugs to sdl-devel@perl.org.
+
+For MacOS X users there is a new experimental bundle, 
+that is called SDLPerl.app.  You can use this bundle
+to run perl scripts with a .spl extension, you know,
+SDL Perl files.  We will work on brining this style 
+launcher and an integrated development environment to
+all platforms shortly.
 
 Documentation:
 
