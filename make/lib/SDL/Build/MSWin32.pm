@@ -32,7 +32,7 @@ package SDL::Build::MSWin32;
 
 use strict;
 use warnings;
-usr Carp;
+use Carp;
 use base 'SDL::Build';
 use File::Spec::Functions;
 
