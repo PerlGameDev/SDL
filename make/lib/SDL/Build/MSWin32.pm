@@ -39,9 +39,8 @@ use File::Spec::Functions;
 sub fetch_includes
 {	
 
-	warn "Environment variable INCLUDE is empty\n" unless $ENV{INCLUDE} 
-		and
-	return map { $_ => 1 } grep { $_ } split( ';', $ENV{INCLUDE} );
+	warn "Environment variable INCLUDE is empty\n" unless $ENV{INCLUDE}; 
+	return map { $_ => 1 } grep { $_ } split( ';', $ENV{INCLUDE} ) if $ENV{INCLUDE};
 	return '-I.';
 }
 
@@ -171,7 +170,7 @@ sub alt_compile_flags
 	my $self = shift;
 	my $sdl_dir = shift;
 
-	return $self->SUPER::alt_compile_flages($sdl_dir).' -D_GNU_SOURCE=1 -Dmain=SDL_main';
+	return $self->SUPER::alt_compile_flags($sdl_dir).' -D_GNU_SOURCE=1 -Dmain=SDL_main';
 }
 
 1;
