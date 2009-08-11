@@ -3105,6 +3105,7 @@ TTFCloseFont ( font )
 	TTF_Font *font
 	CODE:
 		TTF_CloseFont(font);
+		font=NULL; //to be safe http://sdl.beuc.net/sdl.wiki/SDL_ttf_copy_Functions_Management_TTF_CloseFont
 
 SDL_Surface*
 TTFPutString ( font, mode, surface, x, y, fg, bg, text )
