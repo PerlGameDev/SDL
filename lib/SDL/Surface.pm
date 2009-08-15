@@ -209,7 +209,8 @@ sub blit {
 		croak "SDL::Surface::blit requires SDL::Surface objects"
 			unless $_[2]->isa('SDL::Surface'); 
 	}
-	SDL::BlitSurface(map { $_ != 0 ? ${$_} : $_ } @_);
+	
+	SDL::BlitSurface(map { (defined($_) && $_ != 0)? ${$_} : croak "SDL::blit() Parameters need to be defined" } @_) if defined(@_);
 }
 
 sub set_colors {
