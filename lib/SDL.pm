@@ -60,7 +60,8 @@ sub NULL {
 
 sub in {
 	my ($k,@t) = @_;
-	(scalar grep { defined $_ && $_ eq $k } @t) <=> 0;
+	return 0 unless defined $k;
+	return $k ~~ @t;
 } 
 
 sub verify (\%@) {
