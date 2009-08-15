@@ -64,6 +64,7 @@ scripts/sdl_const.pl
 scripts/sdl_words.txt
 scripts/OpenGL/Constants.pm
 scripts/SDL/Constants.pm
+t/manifest.t
 t/apppm.t
 t/cdrompm.t
 t/colorpm.t
