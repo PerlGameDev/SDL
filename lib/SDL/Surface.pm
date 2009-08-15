@@ -210,7 +210,7 @@ sub blit {
 			unless $_[2]->isa('SDL::Surface'); 
 	}
 	
-	SDL::BlitSurface(map { (defined($_) && $_ != 0)? ${$_} : croak "SDL::blit() Parameters need to be defined" } @_) if defined(@_);
+	SDL::BlitSurface(map { (defined($_) && $_ != 0)? ${$_} : $_ } @_) if defined(@_);
 }
 
 sub set_colors {
