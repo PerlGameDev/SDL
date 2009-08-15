@@ -1,5 +1,10 @@
 Revision history for Perl extension SDL_perl.
 
+* Aug 15 2009   Kartik Thakore   <thakore.kartik@gmail.com>
+	- fixed undef access to blit in Surface
+	- made sdl font strict acceptable
+	- added cygwin build fix
+
 * Aug 7 2009	David J. Goehrig <dgoehrig@cpan.org>
 	- fixed Darwin build breakage
 	- added support for Mac Ports policies
