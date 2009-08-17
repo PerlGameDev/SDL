@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* Aug 17 2009   Gabor Szabo <szabgab@gmail.com>
+	- Small fixes in the tutorials
+
 * Aug 15 2009   Kartik Thakore   <thakore.kartik@gmail.com>
 	- fixed undef access to blit in Surface
 	- made sdl font strict acceptable
