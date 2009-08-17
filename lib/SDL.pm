@@ -61,7 +61,10 @@ sub NULL {
 sub in {
 	my ($k,@t) = @_;
 	return 0 unless defined $k;
-	return $k ~~ @t;
+	my $r = ($k ~~ @t);
+	return 0 if $r eq '';
+	return $r;
+
 } 
 
 sub verify (\%@) {
