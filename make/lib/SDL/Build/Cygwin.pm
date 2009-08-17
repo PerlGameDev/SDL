@@ -29,7 +29,8 @@
 #
 
 package SDL::Build::Cygwin;
-
+use Data::Dumper;
+use Carp;
 use base 'SDL::Build';
 
 sub opengl_headers
@@ -58,17 +59,36 @@ sub fetch_includes
 	);
 }
 
-sub build_links
+#Todo: his needs to be fixed hash references are a mess
+#sub build_links
+#{
+	
+#	my $self  = shift;
+#	my $links = $self->SUPER::build_links(@_);
+#	
+#	for my $subsystem (values %$links)
+#	{
+#		push @{ $subsystem{ libs } }, '-lpthreads';
+#	}
+
+#		return \%links;
+#}
+
+
+sub alt_link_flags
 {
-	my $self  = shift;
-	my $links = $self->SUPER::build_links();
+	my $self = shift;
+	my $sdl_dir = shift;
 
-	for my $subsystem (values %$links)
-	{
-		push @{ $subsystem{ libs } }, '-lpthreads';
-	}
+	return $self->SUPER::alt_link_flags($sdl_dir).' -mwindows -lSDLmain -lSDL.dll';
+}
 
-	return $links;
+sub alt_compile_flags
+{
+	my $self = shift;
+	my $sdl_dir = shift;
+
+	return $self->SUPER::alt_compile_flags($sdl_dir).' -D_GNU_SOURCE=1 -Dmain=SDL_main';
 }
 
 1;

@@ -58,7 +58,9 @@ sub new {
 					-bg => $option{-background} || $option{-bg};
 		for (qw/ normal bold italic underline / ) {
 			if ($option{"-$_"}) {
-				&{"SDL::TTFont::$_"}($$self{-font});
+				
+				SDL::TTFont->can($_)->($$self{-font});
+				#&{$sub}($$self{-font});
 			}
 		}
 	} else {

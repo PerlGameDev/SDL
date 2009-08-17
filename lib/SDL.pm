@@ -48,7 +48,7 @@ BEGIN {
 };
 
 
-$VERSION = '2.2.0';
+$VERSION = '2.2.1';
 
 print "$VERSION" if (defined($ARGV[0]) && ($ARGV[0] eq '--SDLperl'));
 
@@ -60,7 +60,8 @@ sub NULL {
 
 sub in {
 	my ($k,@t) = @_;
-	(scalar grep { defined $_ && $_ eq $k } @t) <=> 0;
+	return 0 unless defined $k;
+	return $k ~~ @t;
 } 
 
 sub verify (\%@) {

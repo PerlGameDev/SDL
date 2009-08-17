@@ -32,15 +32,16 @@ package SDL::Build::MSWin32;
 
 use strict;
 use warnings;
-usr Carp;
+use Carp;
 use base 'SDL::Build';
 use File::Spec::Functions;
 
 sub fetch_includes
-{
-	croak "Environment variable INCLUDE is empty\n" unless $ENV{INCLUDE};
+{	
 
-	return map { $_ => 1 } grep { $_ } split( ';', $ENV{INCLUDE} );
+	warn "Environment variable INCLUDE is empty\n" unless $ENV{INCLUDE}; 
+	return map { $_ => 1 } grep { $_ } split( ';', $ENV{INCLUDE} ) if $ENV{INCLUDE};
+	return '-I.';
 }
 
 sub find_header
@@ -146,6 +147,30 @@ sub link_c
 
 	local $self->{properties}{module_name} = $rib;
 	$self->SUPER::link_c( @_ );
+}
+
+sub sdl_libs
+{
+	my $self = shift;
+	my $sdl_inst_dir = shift;
+
+
+}
+
+sub alt_link_flags
+{
+	my $self = shift;
+	my $sdl_dir = shift;
+
+	return $self->SUPER::alt_link_flags($sdl_dir).' -lmingw32 -mwindows -lSDLmain -lSDL.dll';
+}
+
+sub alt_compile_flags
+{
+	my $self = shift;
+	my $sdl_dir = shift;
+
+	return $self->SUPER::alt_compile_flags($sdl_dir).' -D_GNU_SOURCE=1 -Dmain=SDL_main';
 }
 
 1;
