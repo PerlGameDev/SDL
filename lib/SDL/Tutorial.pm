@@ -31,6 +31,8 @@
 package SDL::Tutorial;
 
 use strict;
+use warnings;
+
 use SDL;
 use SDL::App;
 
@@ -47,7 +49,6 @@ my $app = SDL::App->new(
 
 # your code here; remove the next line
 sleep 2;
-END_HERE
 
 1;
 
@@ -63,7 +64,7 @@ SDL::Tutorial - introduction to Perl SDL
 	$ perldoc SDL::Tutorial
 
 	# to create a bare-bones SDL app based on this tutorial
-	$ perl -MSDL::Tutorial=basic_app.pl -e 1
+	$ perl -MSDL::Tutorial -e 1
 
 =head1 SDL BASICS
 

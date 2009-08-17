@@ -31,6 +31,8 @@
 package SDL::Tutorial::Animation;
 
 use strict;
+use warnings;
+
 use SDL;
 use SDL::App;
 use SDL::Rect;
@@ -127,7 +129,6 @@ sub draw_undraw_rect
 	$app->update( $args{old_rect} );
 	$app->update( $args{rect} );
 }
-END_HERE
 
 1;
 __END__

@@ -28,9 +28,11 @@
 #	dgoehrig@cpan.org
 #
 
-package SDL::Tutorial:Drawing;
+package SDL::Tutorial::Drawing;
 
 use strict;
+use warnings;
+
 use SDL;
 use SDL::App;
 use SDL::Rect;
@@ -67,7 +69,6 @@ $app->update( $rect );
 
 # your code here; remove the next line
 sleep 2;
-END_HERE
 
 1;
 __END__
