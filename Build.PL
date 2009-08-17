@@ -124,7 +124,7 @@ my $build   = SDL::Build->new(
 	{
 		'Test::Simple' => '0.47',
 		'Module::Build' => '0.22',
-		'YAML'	=> '1.07'
+		'YAML'	=> '0.68'
 	},
 	build_recommends     =>
 	{
