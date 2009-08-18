@@ -44,7 +44,6 @@ use vars qw(
 
 use SDL;
 
-
 bootstrap SDL::OpenGL;
 for ( keys %SDL::OpenGL:: ) {
 	if (/^gl/) {
@@ -53,6 +52,15 @@ for ( keys %SDL::OpenGL:: ) {
 }
 
 use SDL::OpenGL::Constants;
+
+sub import {
+	  my $self = shift;
+	   
+	    $self->export_to_level(1, @_);
+      SDL::OpenGL::Constants->export_to_level(1);
+      }
+
+
 
 1;
 

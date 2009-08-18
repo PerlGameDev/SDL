@@ -1598,10 +1598,7 @@ package SDL::OpenGL::Constants;
 	GL_ZOOM_Y
 );
 
-for (@EXPORT) {
-	*{"SDL::" . $_} = *{$_};
-	*{"main::" . $_} = *{$_};
-}
+@ISA = qw(Exporter);
 
 sub GLU_AUTO_LOAD_MATRIX {100200}
 sub GLU_CULLING {100201}
