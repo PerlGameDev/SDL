@@ -2,11 +2,11 @@ README for SDL_Perl-2.2.1
 
 What's New in 2.2.1:
 
-SDL_Perl-2.2.0 adds support for a few new modules, fixes a few more
-bugs, and improves the error handling of the object layer.  Additional
-support for SDL_sound, SDL_svg, and SDL_vnc has been added.  In the 
-OO layer, all constructors now die when they fail to construct an object
-with a valid underlying datastructure pointer.
+SDL_Perl-2.2.1
+Adds critical bug fixes in the following areas:
+-SDL and Constants
+-SFont and TTFont 
+-SDL::Tutorial
 
 Prerequisites:
 
