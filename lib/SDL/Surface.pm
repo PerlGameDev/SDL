@@ -203,14 +203,16 @@ sub flip {
 
 sub blit {
 	if ($SDL::DEBUG) {
-		croak "SDL::Surface::blit does not accept undef use SDL::NULL" if ( !defined($_[1]) || !defined($_[3]) );
+		carp "/n SDL::Surface::blit accepting undef is depreceated use SDL::NULL" if ( !defined($_[1]) || !defined($_[3]) );
 		croak "SDL::Surface::blit requires SDL::Rect objects"
 			unless ($_[1] == 0 || $_[1]->isa('SDL::Rect'))
 			&& ($_[3] == 0 || $_[3]->isa('SDL::Rect'));
 		croak "SDL::Surface::blit requires SDL::Surface objects"
 			unless $_[2]->isa('SDL::Surface'); 
 	}
-	
+		
+		$_[1] = 0 unless defined $_[1];
+		$_[3] = 0 unless defined $_[3];
 	SDL::BlitSurface(map { (defined($_) && $_ != 0)? ${$_} : $_ } @_) if defined(@_);
 }
 
