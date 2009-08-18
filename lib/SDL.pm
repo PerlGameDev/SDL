@@ -47,6 +47,13 @@ BEGIN {
 	@EXPORT = qw( in verify &NULL );
 };
 
+# Give our caller SDL::Constant's stuff as well as ours.
+sub import {
+  my $self = shift;
+
+  $self->export_to_level(1, @_);
+  SDL::Constants->export_to_level(1);
+}
 
 $VERSION = '2.2.1';
 

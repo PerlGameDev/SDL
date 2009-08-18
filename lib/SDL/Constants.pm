@@ -305,10 +305,7 @@ package SDL::Constants;
 	SDL_SAMPLEFLAG_EAGAIN
 );
 
-for (@EXPORT) {
-	*{"SDL::" . $_} = *{$_};
-	*{"main::" . $_} = *{$_};
-}
+@ISA = qw(Exporter);
 
 sub AUDIO_S16 {32784}
 sub AUDIO_S16MSB {36880}
