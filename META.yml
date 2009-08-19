@@ -10,6 +10,7 @@ resources:
 build_requires:
   Module::Build: 0.22
   Test::Simple: 0.47
+  YAML: 0.68
 configure_requires:
   Module::Build: 0.34
 provides:
@@ -62,10 +63,10 @@ provides:
     file: lib/SDL/Tutorial.pm
   SDL::Tutorial::Animation:
     file: lib/SDL/Tutorial/Animation.pm
+  SDL::Tutorial::Drawing:
+    file: lib/SDL/Tutorial/Drawing.pm
   SDL::Tutorial::Images:
     file: lib/SDL/Tutorial/Images.pm
-  SDL::Tutorial:Drawing:
-    file: lib/SDL/Tutorial/Drawing.pm
   SDL::Video:
     file: lib/SDL/Video.pm
   SDL_perl:

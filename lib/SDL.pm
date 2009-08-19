@@ -68,7 +68,7 @@ sub NULL {
 sub in {
 	my ($k,@t) = @_;
 	return 0 unless defined $k;
-	my $r = ($k ~~ @t);
+	my $r = ((scalar grep { defined $_ && $_ eq $k } @t) <=> 0);
 	return 0 if $r eq '';
 	return $r;
 
