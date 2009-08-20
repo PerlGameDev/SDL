@@ -112,6 +112,7 @@ my $defines       = $arch->build_defines( \%libraries, $build_systems );
 my $includes      = $arch->build_includes( \%libraries, $build_systems );
 my $links         = $arch->build_links( \%libraries, $build_systems );
 
+croak Dumper $includes;
 # mangle the compilable files into a format Module::Build can understand
 my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
 	     keys %subsystems;
@@ -124,7 +125,8 @@ my $build   = SDL::Build->new(
 	{
 		'Test::Simple' => '0.47',
 		'Module::Build' => '0.22',
-		'YAML'	=> '0.68'
+		'YAML'	=> '0.68',
+		'ExtUtils::CBuilder' => '0.26'
 	},
 	build_recommends     =>
 	{
