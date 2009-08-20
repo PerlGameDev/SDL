@@ -18,6 +18,8 @@ use SDL::Build;
 #
 sub sdl_con_found
 {
+	return 0 if($^O eq 'MSWin32');
+
 	`sdl-config --libs`;
 	return 1 unless ($? >> 8) and return 0;
 	
