@@ -132,6 +132,10 @@ my $build   = SDL::Build->new(
 	},
 	c_source	     => 'src',
 	xs_files             => \%xs,
+	meta_add	     =>	     
+	{
+		no_index =>  { file => [ <make/lib/SDL/*.pm>, <make/lib/SDL/Build/*.pm> ] },
+	},
 	dist_author	     => 'David J. Goehrig <DGOEHRIG@cpan.org>',
 );
 

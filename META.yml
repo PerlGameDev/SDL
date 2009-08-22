@@ -77,3 +77,14 @@ generated_by: Module::Build version 0.34
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
+no_index:
+  file:
+    - make/lib/SDL/Build.pm
+    - make/lib/SDL/Utility.pm
+    - make/lib/SDL/Build/Cygwin.pm
+    - make/lib/SDL/Build/Darwin.pm
+    - make/lib/SDL/Build/Freebsd.pm
+    - make/lib/SDL/Build/Linux.pm
+    - make/lib/SDL/Build/MSWin32.pm
+    - make/lib/SDL/Build/Netbsd.pm
+    - make/lib/SDL/Build/Solaris.pm
