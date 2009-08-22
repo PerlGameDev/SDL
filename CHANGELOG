@@ -1,5 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
+* Aug 22 2009 Kartik Thakore <thakore.kartik@gmail.com>
+	-Added no index 
+	-Added james's openbsd.pm
+
 * Aug 18 2009  Kartik Thakore   <thakore.kartik@gmail.com>
 	-Fixed constants with help from arodland
 	-Added warning instead of die for frozenbubble's sake
