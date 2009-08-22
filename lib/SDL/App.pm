@@ -55,10 +55,16 @@ sub new {
 				-red_accum_size -ras -blue_accum_size -bas 
 				-green_accum_sizee -gas -alpha_accum_size -aas
 				-double_buffer -db -buffer_size -bs -stencil_size -st
-				-asyncblit
+				-asyncblit -init
 		/ ) if ($SDL::DEBUG);
 
-	SDL::Init(SDL::SDL_INIT_EVERYTHING());
+	 # SDL_INIT_VIDEO() is 0, so check defined instead of truth.
+	 my $init = defined $options{-init} ? $options{-init} :
+	SDL_INIT_EVERYTHING();
+	
+	 SDL::Init($init);
+
+	#SDL::Init(SDL::SDL_INIT_EVERYTHING());
 	
 	my $t = $options{-title} 	|| $options{-t} 	|| $0;
 	my $it = $options{-icon_title} 	|| $options{-it} 	|| $t;
