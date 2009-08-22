@@ -15,6 +15,8 @@ use SDL::Utility;
 use YAML;
 use YAML::Node;
 
+croak 'Windows support is currently broken. If you are interested in helping please contact us at sdl-devel\@perl.org.' if ($^O eq 'MSWin32' || $^O eq 'MSWin64' || $^O eq 'cygwin' );
+
 my $sdl_compile_flags = SDL::Utility->sdl_c_flags();
 my $sdl_link_flags    = SDL::Utility->sdl_libs();
 # subsystem to build
