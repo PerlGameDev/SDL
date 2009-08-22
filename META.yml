@@ -87,4 +87,5 @@ no_index:
     - make/lib/SDL/Build/Linux.pm
     - make/lib/SDL/Build/MSWin32.pm
     - make/lib/SDL/Build/Netbsd.pm
+    - make/lib/SDL/Build/Openbsd.pm
     - make/lib/SDL/Build/Solaris.pm
