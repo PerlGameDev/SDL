@@ -16,7 +16,7 @@ configure_requires:
 provides:
   SDL:
     file: lib/SDL.pm
-    version: v2.2.1
+    version: v2.2.1.8
   SDL::App:
     file: lib/SDL/App.pm
   SDL::Cdrom:
