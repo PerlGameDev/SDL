@@ -36,13 +36,14 @@ BEGIN {
 }
 
 use strict;
+use SDL;
 use SDL::Config;
 
 use Test::More;
 
 if ( SDL::Config->has('SDL_image') 
 	&& SDL::Config->has('SDL_ttf') ) {
-	plan ( tests => 2 );
+	plan ( tests => 3 );
 } else {
 	plan ( skip_all => 
 		( SDL::Config->has('SDL_image') 
@@ -59,4 +60,12 @@ can_ok ('SDL::Tool::Font', qw/
 	new 
 	print
 	/);
+my $font = new SDL::Tool::Font
+		-normal => 1,
+		-ttfont => 'test/data/aircut3.ttf',
+		-size => 20,
+		-fg => $SDL::Color::black,
+	 	-bg => $SDL::Color::black;
+
+ok( SDL::TTFSizeUTF8( $font, "Test"), "Test for SDL::TTFSizeUTF8." );
 
