@@ -54,8 +54,7 @@ sub import {
   $self->export_to_level(1, @_);
   SDL::Constants->export_to_level(1);
 }
-
-$VERSION = '2.2.1.8';
+$VERSION = '2.2.2';
 
 print "$VERSION" if (defined($ARGV[0]) && ($ARGV[0] eq '--SDLperl'));
 
