@@ -2982,6 +2982,8 @@ TTFSizeText ( font, text )
 		TTF_SizeText(font,text,&w,&h);
 		av_push(RETVAL,newSViv(w));
 		av_push(RETVAL,newSViv(h));
+		sv_2mortal((SV*)RETVAL);
+	
 	OUTPUT:
 		RETVAL
 
@@ -3011,6 +3013,8 @@ TTFSizeUNICODE ( font, text )
 		TTF_SizeUNICODE(font,text,&w,&h);
 		av_push(RETVAL,newSViv(w));
 		av_push(RETVAL,newSViv(h));
+		sv_2mortal((SV*)RETVAL);
+
 	OUTPUT:
 		RETVAL
 
