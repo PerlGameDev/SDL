@@ -38,7 +38,6 @@ BEGIN {
 use strict;
 use SDL;
 use SDL::Config;
-
 use Test::More;
 
 if ( SDL::Config->has('SDL_image') 

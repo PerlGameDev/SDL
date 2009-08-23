@@ -2993,8 +2993,11 @@ TTFSizeUTF8 ( font, text )
 		int w,h;
 		RETVAL = newAV();
 		TTF_SizeUTF8(font,text,&w,&h);
-		av_push(RETVAL,newSViv(w));
-		av_push(RETVAL,newSViv(h));
+			av_push(RETVAL,newSViv(w));
+			av_push(RETVAL,newSViv(h));
+		
+		sv_2mortal((SV*)RETVAL);
+		
 	OUTPUT:
 		RETVAL
 
