@@ -1323,6 +1323,21 @@ ColorB ( color, ... )
 	OUTPUT:
 		RETVAL
 
+
+void
+ColorRGB ( color, ... )
+ SDL_Color *color
+ PPCODE:
+ if (items > 1 ) {
+ color->r = SvIV(ST(1));
+ color->g = SvIV(ST(2));
+ color->b = SvIV(ST(3));
+ }
+ mXPUSHi( color->r );
+ mXPUSHi( color->g );
+ mXPUSHi( color->b );
+ XSRETURN(3);
+
 void
 FreeColor ( color )
 	SDL_Color *color

@@ -38,8 +38,10 @@ use SDL;
 sub new {
 	my $proto = shift;
 	my $class = ref($proto) || $proto;
-	my $self;
+	return bless \SDL::NewColor(@_), $class if (@_ == 3);
 
+	my $self;
+	
 	my (%options) = @_;
 
 	verify (%options, qw/ -color -surface -pixel -r -g -b /) if $SDL::DEBUG;
@@ -80,6 +82,11 @@ sub g {
 sub b {
 	my $self = shift;
 	SDL::ColorB($$self,@_);
+}
+
+sub rgb {
+ my $self = shift;
+ SDL::ColorRGB($$self,@_);
 }
 
 sub pixel {

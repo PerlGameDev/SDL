@@ -2734,5 +2734,60 @@ gluTessVertex ( tessobj, coords, vd )
 	
 #endif
 
+GLUquadric *
+gluNewQuadric ()
+	CODE:
+		RETVAL = gluNewQuadric ();
+	OUTPUT:
+		RETVAL
+
+void
+gluDeleteQuadric (quad)
+	GLUquadric	*quad
+
+void
+gluQuadricNormals ( quad, normal )
+	GLUquadric *quad
+	GLenum	normal
+
+void
+gluQuadricTexture ( quad, texture )
+	GLUquadric *quad
+	GLboolean  texture
+
+void
+gluCylinder ( quad, base, top, height, slices, stacks )
+	GLUquadric *quad
+	GLdouble  base
+	GLdouble  top
+	GLdouble  height
+	GLint  slices
+	GLint  stacks
+
+void
+gluDisk ( quad, inner, outer, slices, loops )
+	GLUquadric *quad
+	GLdouble inner
+	GLdouble outer
+	GLint slices
+	GLint loops
+
+void
+gluPartialDisk ( quad, inner, outer, slices, loops, start, sweep )
+	GLUquadric *quad
+	GLdouble inner
+	GLdouble outer
+	GLint slices
+	GLint loops
+	GLdouble start
+	GLdouble sweep
+
+void
+gluSphere ( quad, radius, slices, stacks )
+	GLUquadric *quad
+	GLdouble radius
+	GLint  slices
+	GLint  stacks
+
 #endif
 

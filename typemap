@@ -52,6 +52,8 @@ GLbitfield		T_IV
 GLenum			T_IV
 ConsoleInformation * 	T_PTR
 GLboolean		T_U_CHAR
+GLUquadric *		T_PTR
+GLdouble		T_NV
 GLUnurbsObj *		T_PTR
 GLUtesselator *		T_PTR
 GLuint			T_UV
