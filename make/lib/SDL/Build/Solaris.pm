@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 #
-# Linux.pm
+# Solaris.pm
 #
 # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
 #
@@ -28,7 +28,7 @@
 #	dgoehrig@cpan.org
 #
 
-package SDL::Build::Linux;
+package SDL::Build::Solaris;
 
 use base 'SDL::Build';
 
