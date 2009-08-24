@@ -185,8 +185,7 @@ sub loop ($$) {
 	my $event = new SDL::Event;
 	while ( $event->wait() ) {
 		if ( ref($$href{$event->type()}) eq "CODE" ) {
-			&{$$href{$event->type()}}($event);
-			$self->sync();
+			&{$$href{$event->type()}}($event);			
 		}
 	}
 }
