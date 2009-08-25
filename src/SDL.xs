@@ -2979,10 +2979,19 @@ TTFSizeText ( font, text )
 	CODE:
 		int w,h;
 		RETVAL = newAV();
-		TTF_SizeText(font,text,&w,&h);
-		av_push(RETVAL,newSViv(w));
-		av_push(RETVAL,newSViv(h));
-		sv_2mortal((SV*)RETVAL);
+		if(TTF_SizeText(font,text,&w,&h))
+		{
+			av_push(RETVAL,newSViv(w));
+			av_push(RETVAL,newSViv(h));
+			sv_2mortal((SV*)RETVAL);
+		}
+		else
+		{
+			 printf("TTF error at TTFSizeText: %s \n", TTF_GetError()); 
+			 Perl_croak (aTHX_ "TTF error \n");	
+	
+		}
+		
 	
 	OUTPUT:
 		RETVAL
@@ -2994,11 +3003,18 @@ TTFSizeUTF8 ( font, text )
 	CODE:
 		int w,h;
 		RETVAL = newAV();
-		TTF_SizeUTF8(font,text,&w,&h);
+		if(TTF_SizeUTF8(font,text,&w,&h))
+		{
 			av_push(RETVAL,newSViv(w));
 			av_push(RETVAL,newSViv(h));
-		
-		sv_2mortal((SV*)RETVAL);
+			sv_2mortal((SV*)RETVAL);
+
+		}
+		else
+		{
+			printf("TTF error at TTFSizeUTF8 with : %s \n", TTF_GetError());
+			Perl_croak (aTHX_ "TTF error \n");
+		}
 		
 	OUTPUT:
 		RETVAL
@@ -3010,10 +3026,18 @@ TTFSizeUNICODE ( font, text )
 	CODE:
 		int w,h;
 		RETVAL = newAV();
-		TTF_SizeUNICODE(font,text,&w,&h);
-		av_push(RETVAL,newSViv(w));
-		av_push(RETVAL,newSViv(h));
-		sv_2mortal((SV*)RETVAL);
+		if(TTF_SizeUNICODE(font,text,&w,&h))
+		{
+			av_push(RETVAL,newSViv(w));
+			av_push(RETVAL,newSViv(h));
+			sv_2mortal((SV*)RETVAL);
+
+		}
+		else
+		{
+			printf("TTF error at TTFSizeUNICODE : %s \n", TTF_GetError()); 
+			Perl_croak (aTHX_ "TTF error \n");
+		}
 
 	OUTPUT:
 		RETVAL

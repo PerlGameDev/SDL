@@ -42,7 +42,7 @@ use Test::More;
 
 if ( SDL::Config->has('SDL_image') 
 	&& SDL::Config->has('SDL_ttf') ) {
-	plan ( tests => 3 );
+	plan ( tests => 6 );
 } else {
 	plan ( skip_all => 
 		( SDL::Config->has('SDL_image') 
@@ -66,5 +66,15 @@ my $font = new SDL::Tool::Font
 		-fg => $SDL::Color::black,
 	 	-bg => $SDL::Color::black;
 
-ok( SDL::TTFSizeUTF8( $font, "Test"), "Test for SDL::TTFSizeUTF8." );
+use utf8;
+
+my $string = "Test";
+my $aref = SDL::TTFSizeText( $font, $string);
+ok( defined($$aref[0]), "Testi width for SDL::TTFSizeText." );
+ok( defined($$aref[1]), "Test height for SDL::TTFSizeText." );
+
+utf8::encode($string);
+my $bref =  SDL::TTFSizeUTF8( $font, $string);
+ok( defined($$bref[0]), "Test for width SDL::TTFSizeUTF8." );
+ok( defined($$bref[1]), "Test for height SDL::TTFSizeUTF8." );
 
