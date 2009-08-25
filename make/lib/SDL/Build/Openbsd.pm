@@ -18,4 +18,15 @@ sub fetch_includes
 	);
 }
 
+sub build_links
+{
+
+   my $self  = shift;
+   my $links = $self->SUPER::build_links(@_);
+   push @{ $links->{SDL}->{libs} }, '-lpthread';
+
+   return $links;
+}
+
+
 1;
