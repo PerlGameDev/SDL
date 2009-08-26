@@ -30,6 +30,7 @@
 
 package SDL::Build::MSWin32;
 use Data::Dumper;
+use Config;
 use Carp;
 use base 'SDL::Build';
 
@@ -40,38 +41,57 @@ sub opengl_headers
 
 sub fetch_includes
 {
+	my ($sdlinc, $sdllib);
+        if(defined($ENV{SDL_INST_DIR})) {
+          $sdlinc = $ENV{SDL_INST_DIR}.'/include';
+          $sdllib = $ENV{SDL_INST_DIR}.'/lib';
+        }
+        else {
+          $sdlinc = $Config{incpath};
+          $sdllib = $Config{libpth};
+        }
 	return (
-
-	$ENV{SDL_INST_DIR}.'/include'              => $ENV{SDL_INST_DIR}.'/lib',
-	$ENV{SDL_INST_DIR}.'/include/gl'           => $ENV{SDL_INST_DIR}.'/lib',
-	$ENV{SDL_INST_DIR}.'/include/GL'           => $ENV{SDL_INST_DIR}.'/lib',
-	$ENV{SDL_INST_DIR}.'/include/SDL'          => $ENV{SDL_INST_DIR}.'/lib',
-	$ENV{SDL_INST_DIR}.'/include/smpeg'        => $ENV{SDL_INST_DIR}.'/lib',
+	$sdlinc              => $sdllib,
+	$sdlinc.'/gl'        => $sdllib,
+	$sdlinc.'/GL'        => $sdllib,
+	$sdlinc.'/SDL'       => $sdllib,
+	$sdlinc.'/smpeg'     => $sdllib,
 	);
 }
 
-#Todo: his needs to be fixed hash references are a mess
-#sub build_links
-#{
-	
-#	my $self  = shift;
-#	my $links = $self->SUPER::build_links(@_);
-#	
-#	for my $subsystem (values %$links)
-#	{
-#		push @{ $subsystem{ libs } }, '-lpthreads';
-#	}
+# we need to override build_links method because on Windows we need to replace 
+# some library names - see %replace hash below
+sub build_links
+{
+	my ($self, $libraries, $build_systems) = @_;
 
-#		return \%links;
-#}
+	my %links;
+	my %replace = (
+                GL    => opengl32, 
+                GLU   => glu32,
+        );
 
+	while (my ($subsystem, $buildable) = each %$build_systems)
+	{
+		my %sub_links;
+		for my $build (grep { $buildable->{ $_ } } keys %$buildable)
+		{
+			$sub_links{ $buildable->{ $build }[1] }++;
+			my $newbuild = $replace{$build} || $build;
+			push @{ $links{ $subsystem }{libs} }, "-l$newbuild";
+		}
+
+		$links{ $subsystem }{paths} = [ map { "-L$_" } keys %sub_links ];
+	}
+	return \%links;
+}
 
 sub alt_link_flags
 {
 	my $self = shift;
 	my $sdl_dir = shift;
 
-	return $self->SUPER::alt_link_flags($sdl_dir).' -mwindows -lSDLmain -lSDL.dll';
+	return $self->SUPER::alt_link_flags($sdl_dir).' -mwindows -lSDLmain -lSDL';
 }
 
 sub alt_compile_flags

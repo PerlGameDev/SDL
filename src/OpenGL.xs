@@ -42,6 +42,19 @@
 #include <glu.h>
 #else
 #include <GL/gl.h>
+
+#if defined(__WIN32__) && defined(__MINGW32__)
+/* 
+this is a sort of dirty hack - MS Windows supports just OpenGL 1.1 and all 1.2+
+related stuff was moved from GL/gl.h to GL/glext.h; however this separation
+was done not properly and even if we are OK with OpenGL 1.1 there are some
+constants missing in GL/gl.h thus we need also GL/glext.h
+*/
+#include <GL/glext.h>
+#undef GL_VERSION_1_3
+#undef GL_VERSION_1_2
+#endif
+
 #include <GL/glu.h>
 #endif
 
@@ -54,7 +67,7 @@
 #define GL_ALL_CLIENT_ATTRIB_BITS 0xFFFFFFF
 #endif /* GL_ALL_CLIENT_BITS */  
 
-#include "../src/defines.h"
+#include "../../src/defines.h"
 
 SV* sdl_perl_nurbs_error_hook;
 void
@@ -875,6 +888,8 @@ glDrawElements ( mode, count, type, indices )
 	CODE:
 		glDrawElements( mode, count, type, indices);
 
+#ifdef GL_VERSION_1_2
+
 void
 glDrawRangeElements ( mode, start, end, count, type, indices )
 	GLenum mode
@@ -885,6 +900,8 @@ glDrawRangeElements ( mode, start, end, count, type, indices )
 	char *indices
 	CODE:
 		glDrawRangeElements(mode,start,end,count,type,indices);
+
+#endif // GL_VERSION_1_2
 
 void
 glDrawArrays ( mode, first, count )
@@ -2424,8 +2441,10 @@ gluNurbsCallback ( obj, which, cb )
 				gluNurbsCallback(obj,GLU_ERROR,(GLvoid*)sdl_perl_nurbs_error_callback);
 				break;
 #ifdef GLU_NURBS_BEGIN
+#ifdef GLU_VERSION_1_3
 			case GLU_NURBS_BEGIN:
 			case GLU_NURBS_BEGIN_DATA:
+
 				gluNurbsCallbackData(obj,(void*)cb);
 				gluNurbsCallback(obj,GLU_NURBS_BEGIN_DATA,
 					(GLvoid*)sdl_perl_nurbs_being_callback);	
@@ -2460,10 +2479,13 @@ gluNurbsCallback ( obj, which, cb )
 				gluNurbsCallback(obj,GLU_NURBS_END_DATA,
 					(GLvoid*)sdl_perl_nurbs_end_callback);	
 				break;
-#endif
+#endif // GLU_VERSION_1_3
+#endif // GLU_NURBS_BEGIN
 			default:
 				Perl_croak(aTHX_ "SDL::OpenGL::NurbsCallback - invalid type");
 		}
+
+#ifdef GLU_VERSION_1_3
 
 void
 gluNurbsCallbackData ( obj, cb )
@@ -2471,6 +2493,8 @@ gluNurbsCallbackData ( obj, cb )
 	SV *cb
 	CODE:
 		gluNurbsCallbackData(obj,(void*)cb);
+
+#endif
 
 void
 gluBeginSurface ( obj )

@@ -44,8 +44,8 @@
 #define HAVE_TLS_CONTEXT
 #endif
 
-#include "../src/defines.h"
-#include "../src/SFont.h"
+#include "../../src/defines.h"
+#include "../../src/SFont.h"
 
 #ifdef HAVE_SDL_IMAGE
 #include <SDL_image.h>

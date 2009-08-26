@@ -15,7 +15,12 @@ use SDL::Utility;
 use YAML;
 use YAML::Node;
 
-croak 'Windows support is currently broken. If you are interested in helping please contact us at sdl-devel\@perl.org.' if ($^O =~ /MSWin*|cygwin/ );
+print STDERR <<BROKENWIN if ($^O =~ /MSWin.*|cygwin/ );
+******************************** !!!WARNING!!! ******************************** 
+Windows support is currently broken - you can continue, but you've been warned! 
+If you are interested in helping please contact us at sdl-devel\@perl.org.
+*******************************************************************************
+BROKENWIN
 
 my $sdl_compile_flags = SDL::Utility->sdl_c_flags();
 my $sdl_link_flags    = SDL::Utility->sdl_libs();
@@ -31,7 +36,7 @@ my %subsystems =
 	SDL => {
 		file      => {
 			from  => 'src/SDL.xs',
-			to    => './SDL_perl.xs',
+			to    => 'lib/SDL_perl.xs',
 		},
 		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
 		                  png jpeg smpeg )],
@@ -39,14 +44,14 @@ my %subsystems =
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',
-			to   => 'SDL/OpenGL.xs', 
+			to   => 'lib/SDL/OpenGL.xs', 
 		},
 		libraries => [qw( SDL GL GLU )],
 	},
 	SFont => {
 		file	=> {
 			from => 'src/SFont.xs',
-			to   =>	'SDL/SFont.xs',
+			to   =>	'lib/SDL/SFont.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
 	},	
