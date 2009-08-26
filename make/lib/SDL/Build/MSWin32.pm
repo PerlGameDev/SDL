@@ -34,6 +34,13 @@ use Config;
 use Carp;
 use base 'SDL::Build';
 
+sub process_xs
+{
+	my ($self, $file) = @_;
+	$file =~ s/\\/\//g; #replace \ for / (Win32 needs this);
+	$self->SUPER::process_xs($file);
+}
+
 sub opengl_headers
 {
 	return GL => 'SDL_opengl.h';
