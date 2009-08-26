@@ -17,7 +17,7 @@ use YAML::Node;
 
 print STDERR <<BROKENWIN if ($^O =~ /MSWin.*|cygwin/ );
 ******************************** !!!WARNING!!! ******************************** 
-Windows support is currently broken - you can continue, but you've been warned! 
+Windows support is currently experimental - you can continue, but you've been warned! 
 If you are interested in helping please contact us at sdl-devel\@perl.org.
 *******************************************************************************
 BROKENWIN

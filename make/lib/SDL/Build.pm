@@ -44,7 +44,10 @@ use Config;
 sub process_xs
 {
 	my ($self, $file) = @_;
-		
+	
+	#TODO: call this in MSWin32::process_xs
+	$file =~ s/\\/\//g if( $^O =~ /MSWin.*/ );
+
 	my $properties                   = $self->{properties};
 	my $file_args                    = $self->notes( 'file_flags' )->{$file};
 	my @old_values                   = @$properties{ keys %$file_args };
