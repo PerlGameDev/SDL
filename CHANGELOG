@@ -1,5 +1,12 @@
 Revision history for Perl extension SDL_perl.
-
+* Aug 27 2009 Kartik Thakore <thakore.kartik@gmail.com>
+	-Made App loop() faster https://rt.cpan.org/Public/Bug/Display.html?id=16988
+	-Patched support for add support for gluquadric* sub https://rt.cpan.org/Public/Bug/Display.html?id=25598
+	-Made App init slimer https://rt.cpan.org/Public/Bug/Display.html?id=16987
+	-Added faster SDL::Color alternative https://rt.cpan.org/Public/Bug/Display.html?id=17975
+	-Added better error reporting for TTFont errors
+	-Added win32 support https://rt.cpan.org/Ticket/Display.html?id=49003
+	
 * Aug 22 2009 Kartik Thakore <thakore.kartik@gmail.com>
 	-Added no index 
 	-Added james's openbsd.pm
