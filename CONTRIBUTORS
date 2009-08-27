@@ -2,6 +2,10 @@ Contributors
 
 The following people have dedicated blood sweat and tears to making SDL Perl possible.
 
+kmx <kmx@cpan.org>
+Kartik Thakore <thakore.kartik@gmail.com>
+Gabor Szabo <szabgab@gmail.com>
+James Wright <jwright@cpan.org>
 David J. Goehrig <dgoehrig@cpan.org>
 Wayne Keenan <wayne@metaverse.fsnet.co.uk>
 Guillaue Cottenceau <gc@mandrakesoft.com>
@@ -17,9 +21,7 @@ Ryan Hanlon
 morgoth.666
 Thomas Tongue
 Luke
-Kartik Thakore <thakore.kartik@gmail.com>
-Gabor Szabo <szabgab@gmail.com>
-James Wright <jwright@cpan.org>
+
 
 If you would like to contribute to SDL Perl, please post a message on the mailing list:
 

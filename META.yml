@@ -8,6 +8,7 @@ license: lgpl
 resources:
   license: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
 build_requires:
+  Alien::SDL: 0.01
   Module::Build: 0.22
   Test::Simple: 0.47
   YAML: 0.68

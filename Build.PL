@@ -131,11 +131,12 @@ my $build   = SDL::Build->new(
 	{
 		'Test::Simple' => '0.47',
 		'Module::Build' => '0.22',
-		'YAML'	=> '0.68'
+		'YAML'	=> '0.68',
+		'Alien::SDL'    => '0.01'
 	},
 	build_recommends     =>
 	{
-		'Pod::ToDemo'  => '0.20',
+		'Pod::ToDemo'  => '0.20'		
 	},
 	c_source	     => 'src',
 	xs_files             => \%xs,
@@ -145,6 +146,7 @@ my $build   = SDL::Build->new(
 	},
 	dist_author	     => 'David J. Goehrig <DGOEHRIG@cpan.org>',
 );
+
 
 # and here's where the real (and ugly) magic works... see SDL::Build
 $build->set_flags(
