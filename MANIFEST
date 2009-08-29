@@ -42,7 +42,6 @@ make/lib/SDL/Build/MSWin32.pm
 make/lib/SDL/Build/Netbsd.pm
 make/lib/SDL/Build.pm
 make/lib/SDL/Utility.pm
-make/lib/ExtUtils/CBuilder/Platform/Windows.pm
 MacOSX/Info.plist
 MacOSX/launcher.h
 MacOSX/launcher.m
