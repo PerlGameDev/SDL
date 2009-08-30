@@ -86,8 +86,12 @@ can_ok ('SDL::Mixer', qw/
 	playing_music
 	/);
 
+
+if ( SDL::Init(SDL_INIT_AUDIO) < 0) {
+	        plan( skip_all => "Cannot initialize audio!!" );
+	}
+
 # these are exported by default, so main:: should know them:
-SDL::Init(SDL_INIT_AUDIO);
 my $mixer = SDL::Mixer->new();
-isa_ok($mixer, 'SDL::Mixer');
+isa_ok($mixer, 'SDL::Mixer', 'Checking if mixer can be build');
 

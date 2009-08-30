@@ -51,7 +51,11 @@ can_ok ('SDL::Timer', qw/
 
 my $fired = 0;
 
-SDL::Init(SDL_INIT_TIMER);
+if (SDL::Init(SDL_INIT_TIMER) < 0 )
+{
+	 plan( skip_all => "Cannot initialize timer!!" );
+
+}
 
 my $timer = new SDL::Timer 
 	sub { $fired++ }, -delay => 30, -times => 1;
