@@ -149,15 +149,13 @@ sets and fetches the y (topmost) position.
 
 =head3 width
 
-sets and fetched the width of the rectangle (in pixels).
+sets and fetches the width of the rectangle (in pixels).
 
 =head3 h
 
 =head3 height 
 
-sets and fetched the height of the rectangle (in pixels).
-
-=back
+sets and fetches the height of the rectangle (in pixels).
 
 =head1 AUTHOR
 
