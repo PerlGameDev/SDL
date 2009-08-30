@@ -1,12 +1,16 @@
-README for SDL_Perl-2.2.1
+README for SDL_Perl-2.2.2
 
-What's New in 2.2.1:
+What's New in 2.2.2:
 
-SDL_Perl-2.2.1
-Adds critical bug fixes in the following areas:
--SDL and Constants
--SFont and TTFont 
--SDL::Tutorial
+SDL_Perl-2.2.2
+
+	-Made App loop() faster https://rt.cpan.org/Public/Bug/Display.html?id=16988
+	-Patched support for add support for gluquadric* sub https://rt.cpan.org/Public/Bug/Display.html?id=25598
+	-Made App init slimer https://rt.cpan.org/Public/Bug/Display.html?id=16987
+	-Added faster SDL::Color alternative https://rt.cpan.org/Public/Bug/Display.html?id=17975
+	-Added better error reporting for TTFont errors
+	-Added win32 support https://rt.cpan.org/Ticket/Display.html?id=49003
+	
 
 Prerequisites:
 
