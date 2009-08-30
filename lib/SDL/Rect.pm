@@ -40,10 +40,10 @@ sub new {
 	my $class = ref($proto) || $proto;
 	my %options = @_;
 
-	verify (%options, qw/ -x -y -width -height -w -h / ) if $SDL::DEBUG;
+	verify (%options, qw/ -x -y -top -left -width -height -w -h / ) if $SDL::DEBUG;
 
-	my $x = $options{-x} 		|| 0;
-	my $y = $options{-y} 		|| 0;
+	my $x = $options{-x} 		|| $options{-left}  || 0;
+	my $y = $options{-y} 		|| $options{-top}   || 0;
 	my $w = $options{-width}	|| $options{-w}		|| 0;
 	my $h = $options{-height}	|| $options{-h}		|| 0;
 	
@@ -57,9 +57,23 @@ sub DESTROY {
 	SDL::FreeRect(${$_[0]});
 }
 
+# TODO: mangle with the symbol table to create an alias
+# to sub x. We could call x from inside the sub but that
+# would be another call and rects are a time-critical object.
+sub left {
+	my $self = shift;
+	SDL::RectX($$self,@_);
+}
+
 sub x {
 	my $self = shift;
 	SDL::RectX($$self,@_);
+}
+
+### TODO: see 'left' above
+sub top {
+	my $self = shift;
+	SDL::RectY($$self,@_);
 }
 
 sub y {
@@ -67,9 +81,21 @@ sub y {
 	SDL::RectY($$self,@_);
 }
 
+### TODO: see 'left' above
+sub w {
+	my $self = shift;
+	SDL::RectW($$self,@_);
+}
+
 sub width {
 	my $self = shift;
 	SDL::RectW($$self,@_);
+}
+
+### TODO: see 'left' above
+sub h {
+	my $self = shift;
+	SDL::RectH($$self,@_);
 }
 
 sub height {
