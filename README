@@ -18,18 +18,23 @@ SDL Perl recommends installing the following libraries available
 from http://www.libsdl.org/ prior to installing:
 
 	SDL-1.2.8
-	smpeg-0.4.5
-	SDL_image-1.2.4
-	SDL_mixer-1.2.6
-	SDL_sound-1.0.1
-	SDL_net-1.2.5
-	SDL_gfx-2.0.13
-	SDL_ttf-2.0.7
-	SDL_svg-1.1.9
-	SDL_vnc-1.0.0
+	
+	Recommended:
+	SDL_image
+	SDL_mixer
+	SDL_ttf
+	smpeg
+
+	Optional Libraries:
+	*SDL_gfx
+	*SDL_sound
+	*SDL_net
+	*SDL_svg
+	*SDL_vnc
 
 Additionally the following Perl modules should be installed:
-
+	
+	Alien-SDL-0.2
 	Module-Build-0.22
 	Test-Simple-0.62
 
@@ -41,9 +46,8 @@ Installation:
 	./Build bundle	# MacOS X only!
 	./Build install
 
-Installation with Windows + MinGW:
+Installation with Windows (Strawberry) :
 
-	set SDL_INST_DIR=Absolute/Path/to/SDLdir
 	perl Build.PL
 	./Build
 	./Build test
@@ -90,4 +94,4 @@ keeps projects like this going.
 Enjoy,
 
 David J. Goehrig <dgoehrig@cpan.org>
-
+Kartik Thakore <kthakore@cpan.org>
