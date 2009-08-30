@@ -7,3 +7,4 @@ SDL/
 SDL_perl.c
 SDL_perl.xs
 stage
+META.yml
