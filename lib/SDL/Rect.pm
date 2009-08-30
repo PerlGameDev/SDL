@@ -32,7 +32,6 @@ package SDL::Rect;
 
 use strict;
 use warnings;
-use Carp;
 use SDL;
 
 sub new {
@@ -48,7 +47,10 @@ sub new {
 	my $h = $options{-height}	|| $options{-h}		|| 0;
 	
 	my $self = \SDL::NewRect($x,$y,$w,$h);
-	croak SDL::GetError() unless $$self;
+	unless ($$self) {
+	    require Carp;
+	    Carp::croak SDL::GetError();
+	}
 	bless $self,$class;
 	return $self;
 }
@@ -70,7 +72,7 @@ sub x {
 	SDL::RectX($$self,@_);
 }
 
-### TODO: see 'left' above
+### TODO: see 'left' above (this is an 'alias' to sub y)
 sub top {
 	my $self = shift;
 	SDL::RectY($$self,@_);
@@ -81,7 +83,7 @@ sub y {
 	SDL::RectY($$self,@_);
 }
 
-### TODO: see 'left' above
+### TODO: see 'left' above (this is an 'alias' to sub width)
 sub w {
 	my $self = shift;
 	SDL::RectW($$self,@_);
@@ -92,7 +94,7 @@ sub width {
 	SDL::RectW($$self,@_);
 }
 
-### TODO: see 'left' above
+### TODO: see 'left' above (this is an 'alias' to sub height)
 sub h {
 	my $self = shift;
 	SDL::RectH($$self,@_);
