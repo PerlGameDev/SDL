@@ -81,46 +81,53 @@ sub height {
 
 __END__;
 
-=pod
-
-
 =head1 NAME
 
-SDL::Rect - a SDL perl extension
+SDL::Rect - raw object for storing rectangular coordinates
 
 =head1 SYNOPSIS
 
-  $rect = new SDL::Rect ( -height => 4, -width => 40 );
+  my $rect = SDL::Rect->new( -height => 4, -width => 40 );
+  
+  $rect->x(12);  # same as $rect->left(12)
+  $rect->y(9);   # same as $rect->top(9)
 
 =head1 DESCRIPTION
 
 C<SDL::Rect::new> creates a SDL_Rect structure which is
-used for specifying regions for filling, blitting, and updating.
+used for specifying regions of pixels for filling, blitting, and updating.
 These objects make it easy to cut and backfill.
-By default, x, y, h, w are 0.
+
+By default, x, y, height and width are all set to 0.
 
 =head2 METHODS 
 
 The four fields of a rectangle can be set simply
 by passing a value to the applicable method.  These are:
 
-=over 4
+=head3 x
 
-=item *
+=head3 left
 
-C<SDL::Rect::x>	sets and fetches the x position.
+sets and fetches the x (lefmost) position of the rectangle.
 
-=item *
+=head3 y
 
-C<SDL::Rect::y>	sets and fetches the y position.
+=head3 top
 
-=item *
+sets and fetches the y (topmost) position.
 
-C<SDL::Rect::width> sets and fetched the width.
+=head3 w
 
-=item *
+=head3 width
 
-C<SDL::Rect::height> sets and fetched the height.
+sets and fetched the width of the rectangle (in pixels).
+
+=head3 h
+
+=head3 height 
+
+sets and fetched the height of the rectangle (in pixels).
 
 =back
 
@@ -131,7 +138,3 @@ David J. Goehrig
 =head1 SEE ALSO
 
 perl(1) SDL::Surface(3)
-
-
-=cut
-
