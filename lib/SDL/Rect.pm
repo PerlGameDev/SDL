@@ -32,7 +32,6 @@ package SDL::Rect;
 
 use strict;
 use warnings;
-use Carp;
 use SDL;
 
 sub new {
@@ -40,15 +39,18 @@ sub new {
 	my $class = ref($proto) || $proto;
 	my %options = @_;
 
-	verify (%options, qw/ -x -y -width -height -w -h / ) if $SDL::DEBUG;
+	verify (%options, qw/ -x -y -top -left -width -height -w -h / ) if $SDL::DEBUG;
 
-	my $x = $options{-x} 		|| 0;
-	my $y = $options{-y} 		|| 0;
+	my $x = $options{-x} 		|| $options{-left}  || 0;
+	my $y = $options{-y} 		|| $options{-top}   || 0;
 	my $w = $options{-width}	|| $options{-w}		|| 0;
 	my $h = $options{-height}	|| $options{-h}		|| 0;
 	
 	my $self = \SDL::NewRect($x,$y,$w,$h);
-	croak SDL::GetError() unless $$self;
+	unless ($$self) {
+	    require Carp;
+	    Carp::croak SDL::GetError();
+	}
 	bless $self,$class;
 	return $self;
 }
@@ -57,9 +59,23 @@ sub DESTROY {
 	SDL::FreeRect(${$_[0]});
 }
 
+# TODO: mangle with the symbol table to create an alias
+# to sub x. We could call x from inside the sub but that
+# would be another call and rects are a time-critical object.
+sub left {
+	my $self = shift;
+	SDL::RectX($$self,@_);
+}
+
 sub x {
 	my $self = shift;
 	SDL::RectX($$self,@_);
+}
+
+### TODO: see 'left' above (this is an 'alias' to sub y)
+sub top {
+	my $self = shift;
+	SDL::RectY($$self,@_);
 }
 
 sub y {
@@ -67,9 +83,21 @@ sub y {
 	SDL::RectY($$self,@_);
 }
 
+### TODO: see 'left' above (this is an 'alias' to sub width)
+sub w {
+	my $self = shift;
+	SDL::RectW($$self,@_);
+}
+
 sub width {
 	my $self = shift;
 	SDL::RectW($$self,@_);
+}
+
+### TODO: see 'left' above (this is an 'alias' to sub height)
+sub h {
+	my $self = shift;
+	SDL::RectH($$self,@_);
 }
 
 sub height {
@@ -81,48 +109,53 @@ sub height {
 
 __END__;
 
-=pod
-
-
 =head1 NAME
 
-SDL::Rect - a SDL perl extension
+SDL::Rect - raw object for storing rectangular coordinates
 
 =head1 SYNOPSIS
 
-  $rect = new SDL::Rect ( -height => 4, -width => 40 );
+  my $rect = SDL::Rect->new( -height => 4, -width => 40 );
+  
+  $rect->x(12);  # same as $rect->left(12)
+  $rect->y(9);   # same as $rect->top(9)
 
 =head1 DESCRIPTION
 
 C<SDL::Rect::new> creates a SDL_Rect structure which is
-used for specifying regions for filling, blitting, and updating.
+used for specifying regions of pixels for filling, blitting, and updating.
 These objects make it easy to cut and backfill.
-By default, x, y, h, w are 0.
+
+By default, x, y, height and width are all set to 0.
 
 =head2 METHODS 
 
 The four fields of a rectangle can be set simply
 by passing a value to the applicable method.  These are:
 
-=over 4
+=head3 x
 
-=item *
+=head3 left
 
-C<SDL::Rect::x>	sets and fetches the x position.
+sets and fetches the x (lefmost) position of the rectangle.
 
-=item *
+=head3 y
 
-C<SDL::Rect::y>	sets and fetches the y position.
+=head3 top
 
-=item *
+sets and fetches the y (topmost) position.
 
-C<SDL::Rect::width> sets and fetched the width.
+=head3 w
 
-=item *
+=head3 width
 
-C<SDL::Rect::height> sets and fetched the height.
+sets and fetches the width of the rectangle (in pixels).
 
-=back
+=head3 h
+
+=head3 height 
+
+sets and fetches the height of the rectangle (in pixels).
 
 =head1 AUTHOR
 
@@ -131,7 +164,3 @@ David J. Goehrig
 =head1 SEE ALSO
 
 perl(1) SDL::Surface(3)
-
-
-=cut
-
