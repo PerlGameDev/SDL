@@ -163,10 +163,6 @@ sub pixel {
 }
 
 sub fill {
-	croak "SDL::Surface::fill requires a SDL::Rect object"
-		unless !$SDL::DEBUG || $_[1] == 0 || $_[1]->isa('SDL::Rect');
-	croak "SDL::Surface::fill requires a SDL::Color object"
-		unless !$SDL::DEBUG || $_[2]->isa('SDL::Color');
 	if ($_[1] == 0 ) {
 		SDL::FillRect(${$_[0]},0,${$_[2]});
 	} else {

@@ -46,11 +46,11 @@ use Test::More;
 sub surface_leak()
 {
 	use SDL;
-	use SDL::Surface;
+	use SDL::App;
 	use SDL::Rect;
 	use SDL::Color;
 
-	my $window = SDL::Surface->new(
+	my $window = SDL::App->new(
 		-width => 640,
 		-height => 480,
 		-depth => 16,

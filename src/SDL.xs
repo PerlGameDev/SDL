@@ -1414,10 +1414,11 @@ void
 UpdateRects ( surface, ... )
 	SDL_Surface *surface
 	CODE:
-		SDL_Rect *rects, *temp;
+		SDL_Rect *rects, *oldrects, *temp;
 		int num_rects,i;
 		if ( items < 2 ) return;
-		num_rects = items - 1;	
+		num_rects = items - 1;
+		oldrects = rects;	
 		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
 		for(i=0;i<num_rects;i++) {
 			temp = (SDL_Rect *)SvIV(ST(i+1));
@@ -1428,6 +1429,7 @@ UpdateRects ( surface, ... )
 		} 
 		SDL_UpdateRects(surface,num_rects,rects);
 		safefree(rects);
+		safefree(oldrects);
 
 int
 Flip ( surface )
