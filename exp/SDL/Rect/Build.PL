@@ -16,7 +16,7 @@ Module::Build->new
 	{
 		'Pod::ToDemo'  => '0.20'		
 	},
-	xs_files             => {'Rect.xs' => './Rect.xs'},
+	xs_files             => {'Rect.xs' => 'lib/SDL/Rect.xs'},
 	extra_compiler_flags => scalar `sdl-config --cflags`,
 	extra_linker_flags  =>  scalar `sdl-config --libs`,
 	dist_author	     => 'Kartik Thakore <KTHAKORE@cpan.org>',

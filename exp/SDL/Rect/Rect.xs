@@ -10,7 +10,8 @@
 
 
 
-MODULE = Rect 	PACKAGE = Rect
+MODULE = SDL 	PACKAGE = Rect
+PROTOTYPES: DISABLE
 
 
 SDL_Rect *
@@ -64,7 +65,7 @@ RectH ( rect, ... )
 	OUTPUT:
 		RETVAL
 
-MODULE = Rect  PACKAGE = SDL_RectPtr  PREFIX = Rect_
+MODULE = SDL  PACKAGE = SDL_RectPtr  PREFIX = Rect_
 
 void
 Rect_DESTROY(rect)
