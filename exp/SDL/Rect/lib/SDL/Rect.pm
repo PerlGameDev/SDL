@@ -7,7 +7,7 @@ use strict;
     require Exporter;
     require DynaLoader;
     @ISA = qw(Exporter DynaLoader);
-    @EXPORT = qw(RectX RectY RectW RectH);
+    @EXPORT = qw( NewRect RectX RectY RectW RectH);
     
    
 
@@ -30,10 +30,6 @@ See Also   :
 
 #################### subroutine header end ####################
 
-sub new
-{
-	return NewRect();
-}
 
 
 #################### main pod documentation begin ###################
