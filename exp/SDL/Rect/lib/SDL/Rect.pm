@@ -2,12 +2,11 @@ package SDL::Rect;
 use strict;
 
 
-    use vars qw($VERSION @ISA @EXPORT);
+    use vars qw($VERSION @ISA);
     $VERSION     = '0.01';
-    require Exporter;
     require DynaLoader;
-    @ISA = qw(Exporter DynaLoader);
-    @EXPORT = qw(NewRect RectX RectY RectW RectH);
+    @ISA = qw(DynaLoader);
+    
     
    
 
@@ -30,7 +29,14 @@ See Also   :
 
 #################### subroutine header end ####################
 
+sub new
+{
+	my $self = shift;
+	my ($x, $y, $w, $h) = @_;
+	$self = \SDL::Rect::NewRect($x, $y, $w, $h);
 
+	return $self;
+}
 
 #################### main pod documentation begin ###################
 ## Below is the stub of documentation for your module. 
@@ -93,8 +99,7 @@ perl(1).
 
 #################### main pod documentation end ###################
 
-bootstrap SDL::Rect $VERSION;
-
+bootstrap SDL::Rect; 
 1;
 # The preceding line will help the module return a true value
 
