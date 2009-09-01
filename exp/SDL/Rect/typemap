@@ -1,0 +1,10 @@
+TYPEMAP
+Uint16                  T_UV                                                                        
+Uint16 *                T_PTR                                                                       
+Uint32                  T_UV                                                                        
+Uint32 *                T_PTR                                                                       
+Sint16                  T_IV                                                                        
+Sint16 *                T_PTR                                                                       
+Sint32                  T_IV                                                                        
+Sint32 *                T_PTR 
+SDL_Rect *		T_PTROBJ

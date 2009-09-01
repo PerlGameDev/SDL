@@ -1,0 +1,6 @@
+_build/
+*.o
+Build
+blib
+lib/SDL/Rect.c
+META.yml
