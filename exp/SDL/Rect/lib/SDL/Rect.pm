@@ -7,7 +7,7 @@ use strict;
     require Exporter;
     require DynaLoader;
     @ISA = qw(Exporter DynaLoader);
-    @EXPORT = qw( NewRect RectX RectY RectW RectH);
+    @EXPORT = qw(NewRect RectX RectY RectW RectH);
     
    
 
