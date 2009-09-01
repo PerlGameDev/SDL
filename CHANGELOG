@@ -1,4 +1,10 @@
 Revision history for Perl extension SDL_perl.
+
+* Sept 1 2009 Kartik Thankore <thakore.kartik@gmail.com>
+	- Made Alien::SDL 0.3 dependency
+	- Updated MANIFEST
+* Aug 31 2009 Kartik Thakore <thakore.kartik@gmail.com>
+	- Fixed broken mixer test on FreeBSD
 * Aug 27 2009 Kartik Thakore <thakore.kartik@gmail.com>
 	-Made App loop() faster https://rt.cpan.org/Public/Bug/Display.html?id=16988
 	-Patched support for add support for gluquadric* sub https://rt.cpan.org/Public/Bug/Display.html?id=25598

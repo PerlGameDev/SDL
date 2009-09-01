@@ -81,6 +81,7 @@ t/rectpm.t
 t/sdlpm.t
 t/soundpm.t
 t/surfacepm.t
+t/surfaceML.t
 t/timerpm.t
 t/toolfontpm.t
 t/toolgraphicpm.t
