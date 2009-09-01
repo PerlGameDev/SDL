@@ -97,7 +97,7 @@ perl(1).
 
 #################### main pod documentation end ###################
 
-bootstrap Rect $VERSION;
+bootstrap SDL::Rect $VERSION;
 
 1;
 # The preceding line will help the module return a true value
