@@ -5,3 +5,4 @@ blib
 lib/SDL/Rect.c
 META.yml
 Rect.c
+stage
