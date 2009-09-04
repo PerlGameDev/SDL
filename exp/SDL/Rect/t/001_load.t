@@ -10,10 +10,10 @@ BEGIN { use_ok( 'SDL::Rect' ); }
 my $object = SDL::Rect->new();
 isa_ok ($object, 'SDL::Rect');
 
-$object->SetRect(0,1,0,2);
-is($object->RectX, 0 , "Rect X works: x=".$object->RectX );
-is($object->RectY, 1,  "Rect X works: x=".$object->RectY );
-is($object->RectW, 0,  "Rect X works: x=".$object->RectW );
-is($object->RectH, 2,  "Rect X works: x=".$object->RectH );
+$object->SetRect(0,1,2,2);
+is($object->RectX, 0 , "RectX checks: x=".$object->RectX );
+is($object->RectY, 1,  "RectY checks: y=".$object->RectY );
+is($object->RectW, 2,  "RectW checks: w=".$object->RectW );
+is($object->RectH, 2,  "RectH checks: h=".$object->RectH );
 
  
