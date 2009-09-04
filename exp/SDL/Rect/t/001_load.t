@@ -7,7 +7,7 @@ use Test::More tests => 2;
 
 BEGIN { use_ok( 'SDL::Rect' ); }
 
-my $object = SDL::Rect->new(0,0,0,0);
+my $object = SDL::Rect->new();
 isa_ok ($object, 'SDL::Rect');
 
 

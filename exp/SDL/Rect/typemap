@@ -7,4 +7,4 @@ Sint16                  T_IV
 Sint16 *                T_PTR                                                                       
 Sint32                  T_IV                                                                        
 Sint32 *                T_PTR 
-SDL_Rect *		T_PTROBJ
+SDL_Rect *		O_OBJECT	
