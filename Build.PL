@@ -41,6 +41,14 @@ my %subsystems =
 		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
 		                  png jpeg smpeg )],
 	},
+	Rect => {
+		file      => {
+			from  => 'src/Rect.xs',
+			to    => 'lib/SDL/Rect.xs',
+		},
+		libraries => [qw( SDL  )],
+	},
+	
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',

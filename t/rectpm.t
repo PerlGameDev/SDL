@@ -58,7 +58,7 @@ can_ok ('SDL::Rect', qw/
 my $rect = SDL::Rect->new();
 
 # creating with defaults
-is (ref($rect),'SDL::Rect','new went ok');
+isa_ok ($rect,'SDL::Rect');
 is ($rect->x(), 0, 'x is 0');
 is ($rect->y(), 0, 'y is 0');
 is ($rect->top(), 0, 'top is 0');

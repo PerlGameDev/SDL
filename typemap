@@ -19,7 +19,7 @@ SDL_SysWMmsg *		T_PTR
 SDL_CD *		T_PTR
 SDL_CDtrack *		T_PTR
 SDL_TimerCallback	T_PTR
-SDL_Rect *		T_PTR
+SDL_Rect *		O_OBJECT
 SDL_Color *		T_PTR
 SDL_Palette *		T_PTR
 SDL_PixelFormat *	T_PTR
@@ -69,3 +69,23 @@ Sound_Sample *		T_PTR
 Sound_AudioInfo *	T_PTR
 SDL_RWops*		T_PTR
 SDL_svg_context*	T_PTR
+
+OUTPUT
+
+# The Perl object is blessed into 'CLASS', which should be a
+# char* having the name of the package for the blessing.
+O_OBJECT
+	sv_setref_pv( $arg, CLASS, (void*)$var );
+
+
+INPUT
+
+O_OBJECT
+	if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
+		$var = ($type)SvIV((SV*)SvRV( $arg ));
+	else{
+		warn( \"${Package}::$func_name() -- $var is not a blessed SV reference\" );
+		XSRETURN_UNDEF;
+	}
+
+
