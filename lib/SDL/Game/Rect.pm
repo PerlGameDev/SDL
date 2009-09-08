@@ -2,25 +2,24 @@ package SDL::Game::Rect;
 use strict;
 use warnings;
 
-use Class::XSAccessor::Array
- accessors => {
-      x      => 0,
-      left   => 0,
-      y      => 1,
-      top    => 1,
-      width  => 2,
-      w      => 2,
-      height => 3,
-      h      => 3,
- };
-
+use base 'SDL::Rect';
 
 our $VERSION = '0.01';
 
 sub new {
     my $class = shift;
-    my ($x, $y, $w, $h) = (@_);
-    return bless [$x || 0, $y || 0, $w || 0, $h || 0], ref($class) || $class;
+    my $x = shift || 0;
+    my $y = shift || 0;
+    my $w = shift || 0;
+    my $h = shift || 0;
+
+    my $self = \SDL::NewRect($x, $y, $w, $h);
+    unless ($$self) {
+        require Carp;
+        Carp::croak SDL::GetError();
+    }
+    bless $self, $class;
+    return $self;
 }
 
 #############################
@@ -29,60 +28,60 @@ sub new {
 sub bottom {
     my ($self, $val) = (@_);
     if (defined $val) {
-        $self->[1] = $val - $self->[3]; # y = val - height
+        $self->top($val - $self->height); # y = val - height
     }
-    return $self->[1] + $self->[3]; # y + height
+    return $self->top + $self->height; # y + height
 }
 
 sub right {
     my ($self, $val) = (@_);
     if (defined $val) {
-        $self->[0] = $val - $self->[2]; # x = val - width
+        $self->left($val - $self->width); # x = val - width
     }
-    return $self->[0] + $self->[2]; # x + width
+    return $self->left + $self->width; # x + width
 }
 
 sub centerx {
     my ($self, $val) = (@_);
     if (defined $val) {
-        $self->[0] = $val - ($self->[2] >> 1); # x = val - (width/2)
+        $self->left($val - ($self->width >> 1)); # x = val - (width/2)
     }
-    return $self->[0] + ($self->[2] >> 1); # x + (width/2)
+    return $self->left + ($self->width >> 1); # x + (width/2)
 }
 
 sub centery {
     my ($self, $val) = (@_);
     if (defined $val) {
-        $self->[1] = $val - ($self->[3] >> 1); # y = val - (height/2)
+        $self->top($val - ($self->height >> 1)); # y = val - (height/2)
     }
-    return $self->[1] + ($self->[3] >> 1); # y + (height/2)
+    return $self->top + ($self->height >> 1); # y + (height/2)
 }
 
 sub size {
     my ($self, $w, $h) = (@_);
     
-    return ($self->[2], $self->[3])  # (width, height)
+    return ($self->width, $self->height)  # (width, height)
         unless (defined $w or defined $h);
         
     if (defined $w) {
-        $self->[2] = $w; # width
+        $self->width($w); # width
     }
     if (defined $h) {
-        $self->[3] = $h; # height
+        $self->height($h); # height
     }
 }
 
 sub topleft {
     my ($self, $y, $x) = (@_);
     
-    return ($self->[1], $self->[0]) # (top, left)
+    return ($self->top, $self->left) # (top, left)
         unless (defined $y or defined $x);
 
     if (defined $x) {
-        $self->[0] = $x; # left
+        $self->left($x); # left
     }
     if (defined $y) {
-        $self->[1] = $y; # top
+        $self->top($y); # top
     }
     return;
 }
@@ -90,14 +89,14 @@ sub topleft {
 sub midleft {
     my ($self, $centery, $x) = (@_);
     
-    return ($self->[1] + ($self->[3] >> 1), $self->[0]) # (centery, left)
+    return ($self->top + ($self->height >> 1), $self->left) # (centery, left)
         unless (defined $centery or defined $x);
     
     if (defined $x) {
-        $self->[0] = $x; # left
+        $self->left($x); # left
     }
     if (defined $centery) {
-        $self->[1] = $centery - ($self->[3] >> 1); # y = centery - (height/2)
+        $self->top($centery - ($self->height >> 1)); # y = centery - (height/2)
     }
     return;
 }
@@ -105,14 +104,14 @@ sub midleft {
 sub bottomleft {
     my ($self, $bottom, $x) = (@_);
     
-    return ($self->[1] + $self->[3], $self->[0]) # (bottom, left)
+    return ($self->top + $self->height, $self->left) # (bottom, left)
         unless (defined $bottom or defined $x);
 
     if (defined $x) {
-        $self->[0] = $x; # left
+        $self->left($x); # left
     }
     if (defined $bottom) {
-        $self->[1] = $bottom - $self->[3]; # y = bottom - height
+        $self->top($bottom - $self->height); # y = bottom - height
     }
     return;
 }
@@ -120,14 +119,14 @@ sub bottomleft {
 sub center {
     my ($self, $centerx, $centery) = (@_);
     
-    return ($self->[0] + ($self->[2] >> 1), $self->[1] + ($self->[3] >> 1))
+    return ($self->left + ($self->width >> 1), $self->top + ($self->height >> 1))
         unless (defined $centerx or defined $centery);
 
     if (defined $centerx) {
-        $self->[0] = $centerx - ($self->[2] >> 1); # x = centerx - (width/2)        
+        $self->left($centerx - ($self->width >> 1)); # x = centerx - (width/2)        
     }
     if (defined $centery) {
-        $self->[1] = $centery - ($self->[3] >> 1); # y = centery - (height/2)
+        $self->top($centery - ($self->height >> 1)); # y = centery - (height/2)
     }
     return;
 }
@@ -135,14 +134,14 @@ sub center {
 sub topright {
     my ($self, $y, $right) = (@_);
     
-    return ($self->[1], $self->[0] + $self->[2]) # (top, right)
+    return ($self->top, $self->left + $self->width) # (top, right)
         unless (defined $y or defined $right);
 
     if (defined $right) {
-        $self->[0] = $right - $self->[2]; # x = right - width
+        $self->left($right - $self->width); # x = right - width
     }
     if (defined $y) {
-        $self->[1] = $y; # top
+        $self->top($y); # top
     }
     return;
 }
@@ -150,14 +149,14 @@ sub topright {
 sub midright {
     my ($self, $centery, $right) = (@_);
     
-    return ($self->[1] + ($self->[3] >> 1), $self->[0] + $self->[2]) # (centery, right)
+    return ($self->top + ($self->height >> 1), $self->left + $self->width) # (centery, right)
         unless (defined $centery or defined $right);
     
     if (defined $right) {
-        $self->[0] = $right - $self->[2]; # x = right - width
+        $self->left($right - $self->width); # x = right - width
     }
     if (defined $centery) {
-        $self->[1] = $centery - ($self->[3] >> 1); # y = centery - (height/2)
+        $self->top($centery - ($self->height >> 1)); # y = centery - (height/2)
     }
     return;
 }
@@ -165,14 +164,14 @@ sub midright {
 sub bottomright {
     my ($self, $bottom, $right) = (@_);
     
-    return ($self->[1] + $self->[3], $self->[0] + $self->[2]) # (bottom, right)
+    return ($self->top + $self->height, $self->left + $self->width) # (bottom, right)
         unless (defined $bottom or defined $right);
 
     if (defined $right) {
-        $self->[0] = $right - $self->[2]; # x = right - width
+        $self->left($right - $self->width); # x = right - width
     }
     if (defined $bottom) {
-        $self->[1] = $bottom - $self->[3]; # y = bottom - height
+        $self->top($bottom - $self->height); # y = bottom - height
     }
     return;
 }
@@ -180,14 +179,14 @@ sub bottomright {
 sub midtop {
     my ($self, $centerx, $y) = (@_);
     
-    return ($self->[0] + ($self->[2] >> 1), $self->[1]) # (centerx, top)
+    return ($self->left + ($self->width >> 1), $self->top) # (centerx, top)
         unless (defined $centerx or defined $y);
     
     if (defined $y) {
-        $self->[1] = $y; # top
+        $self->top($y); # top
     }
     if (defined $centerx) {
-        $self->[0] = $centerx - ($self->[2] >> 1); # x = centerx - (width/2)
+        $self->left($centerx - ($self->width >> 1)); # x = centerx - (width/2)
     }
     return;
 }
@@ -195,14 +194,14 @@ sub midtop {
 sub midbottom {
     my ($self, $centerx, $bottom) = (@_);
     
-    return ($self->[0] + ($self->[2] >> 1), $self->[1] + $self->[3]) # (centerx, bottom)
+    return ($self->left + ($self->width >> 1), $self->top + $self->height) # (centerx, bottom)
         unless (defined $centerx or defined $bottom);
     
     if (defined $bottom) {
-        $self->[1] = $bottom - $self->[3]; # y = bottom - height
+        $self->top($bottom - $self->height); # y = bottom - height
     }
     if (defined $centerx) {
-        $self->[0] = $centerx - ($self->[2] >> 1); # x = centerx - (width/2)
+        $self->left($centerx - ($self->width >> 1)); # x = centerx - (width/2)
     }
     return;    
 }
