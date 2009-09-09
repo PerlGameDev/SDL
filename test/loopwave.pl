@@ -1,10 +1,11 @@
 #!/usr/bin/env perl
 
 use SDL;
+use SDL::Event;
 use Carp;
 
 croak "Could not initialize SDL: ", SDL::GetError()
-	if ( 0 > SDL::Init(SDL_INIT_AUDIO()));
+	if ( 0 > SDL::Init(SDL_INIT_AUDIO));
 
 $ARGV[0] ||= 'data/sample.wav';
 
@@ -57,7 +58,7 @@ SDL::PauseAudio(0);
 
 print "Using audio driver: ", SDL::AudioDriverName(), "\n";
 	
-while (! $done && ( SDL::GetAudioStatus() == SDL_AUDIO_PLAYING())) {
+while (! $done && ( SDL::GetAudioStatus() == SDL_AUDIO_PLAYING)) {
 	SDL::Delay(1000);
 }
 
