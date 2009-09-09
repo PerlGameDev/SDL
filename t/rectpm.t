@@ -55,7 +55,7 @@ can_ok ('SDL::Rect', qw/
 	left
 	 /);
 
-my $rect = SDL::Rect->new();
+my $rect = SDL::Rect->new(0,0,0,0);
 
 # creating with defaults
 isa_ok ($rect,'SDL::Rect');

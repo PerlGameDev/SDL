@@ -10,17 +10,21 @@
 
 
 
-MODULE = SDL::Rect 	PACKAGE = SDL::Rect
+MODULE = SDL::Rect 	PACKAGE = SDL::Rect    PREFIX = rect_
 
 SDL_Rect *
-new (CLASS)
+rect_new (CLASS, x, y, w, h)
 	char* CLASS
+	Sint16 x
+        Sint16 y
+        Uint16 w
+        Uint16 h
 	CODE:
 		RETVAL = (SDL_Rect *) safemalloc (sizeof(SDL_Rect));
-		RETVAL->x = 0;
-		RETVAL->y = 0;
-		RETVAL->w = 0;
-		RETVAL->h = 0;
+		RETVAL->x = x;
+		RETVAL->y = y;
+		RETVAL->w = w;
+		RETVAL->h = h;
 	OUTPUT:
 		RETVAL
 
@@ -76,7 +80,7 @@ RectH ( rect, ... )
 
 
 void
-DESTROY(self)
+rect_DESTROY(self)
 	SDL_Rect *self
 	CODE:
 	 	printf("RectPtr::DESTROY\n");
