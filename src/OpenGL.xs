@@ -67,6 +67,8 @@ constants missing in GL/gl.h thus we need also GL/glext.h
 #define GL_ALL_CLIENT_ATTRIB_BITS 0xFFFFFFF
 #endif /* GL_ALL_CLIENT_BITS */  
 
+#define GL_HAS_NURBS
+
 #include "../../src/defines.h"
 
 SV* sdl_perl_nurbs_error_hook;
