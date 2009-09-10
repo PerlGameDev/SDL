@@ -44,50 +44,50 @@ sub WatchJoystick($){
 	  {
 		while($event->poll())
 		  {
-			if($event->type() eq SDL::JOYAXISMOTION())
+			if($event->type() eq SDL_JOYAXISMOTION)
 			  {
 				print "Joystick ".SDL::JoyAxisEventWhich($$event).
 				  " axis ".SDL::JoyAxisEventAxis($$event).
 					" value: ".SDL::JoyAxisEventValue($$event)."\n";
 			  } 
-			elsif($event->type() eq SDL::JOYHATMOTION())
+			elsif($event->type() eq SDL_JOYHATMOTION)
 			  {
 				print "Joystick ".SDL::JoyHatEventWhich($$event).
 				  " hat ".SDL::JoyHatEventHat($$event);
-				if(SDL::JoyHatEventValue($$event) == SDL::HAT_CENTERED() )
+				if(SDL::JoyHatEventValue($$event) == SDL_HAT_CENTERED() )
 				  {
 					print " centered";
-				  } elsif(SDL::JoyHatEventValue($$event) == SDL::HAT_UP() ) { 
+				  } elsif(SDL::JoyHatEventValue($$event) == SDL_HAT_UP() ) { 
 					print " up";
-				  } elsif(SDL::JoyHatEventValue($$event) == SDL::HAT_RIGHT() ) {
+				  } elsif(SDL::JoyHatEventValue($$event) == SDL_HAT_RIGHT() ) {
 					print " right";
-				  } elsif(SDL::JoyHatEventValue($$event) == SDL::HAT_DOWN() ) {
+				  } elsif(SDL::JoyHatEventValue($$event) == SDL_HAT_DOWN() ) {
 					print " down";
-				  } elsif(SDL::JoyHatEventValue($$event) == SDL::HAT_LEFT()) {
+				  } elsif(SDL::JoyHatEventValue($$event) == SDL_HAT_LEFT()) {
 					print " left";
-				  } elsif(SDL::JoyHatEventValue($$event) == SDL::HAT_RIGHTUP() ) { 
+				  } elsif(SDL::JoyHatEventValue($$event) == SDL_HAT_RIGHTUP() ) { 
 					print " right & up";
-				  } elsif(SDL::JoyHatEventValue($$event) == SDL::HAT_RIGHTDOWN() ) {
+				  } elsif(SDL::JoyHatEventValue($$event) == SDL_HAT_RIGHTDOWN() ) {
 					print " right & down";
-				  } elsif(SDL::JoyHatEventValue($$event) == SDL::HAT_LEFTDOWN() ) {
+				  } elsif(SDL::JoyHatEventValue($$event) == SDL_HAT_LEFTDOWN() ) {
 					print " left & down";
-				  } elsif(SDL::JoyHatEventValue($$event) == SDL::HAT_LEFTUP()) {
+				  } elsif(SDL::JoyHatEventValue($$event) == SDL_HAT_LEFTUP()) {
 					print " left & up";
 				  }
 				print "\n";
-			  } elsif($event->type() eq SDL::JOYBALLMOTION()){
+			  } elsif($event->type() eq SDL_JOYBALLMOTION){
 				print "Joystick ".SDL::JoyBallEventWhich($$event).
 				  " ball ".SDL::JoyBallEventBall($$event).
 				      " delta: (".SDL::JoyBallEventXrel($$event).
 				      ",".SDL::JoyBallEventYrel($$event)."\n";
-			} elsif($event->type() eq SDL::JOYBUTTONDOWN()){
+			} elsif($event->type() eq SDL_JOYBUTTONDOWN){
 				print "Joystick ".SDL::JoyButtonEventWhich($$event).
 				      " button ".SDL::JoyButtonEventButton($$event)." down\n";
-			} elsif($event->type() eq SDL::JOYBUTTONUP()){
+			} elsif($event->type() eq SDL_JOYBUTTONUP){
 				print "Joystick ".SDL::JoyButtonEventWhich($$event).
 				      " button ".SDL::JoyButtonEventButton($$event)." up\n";
-			} elsif($event->type() eq SDL_QUIT() or 
-			        ($event->type() eq SDL_KEYDOWN() and 
+			} elsif($event->type() eq SDL_QUIT or 
+			        ($event->type() eq SDL_KEYDOWN and 
 				 $event->key_sym() == SDLK_ESCAPE)){
 				$done = 1;
 			}
@@ -101,7 +101,7 @@ sub WatchJoystick($){
 										  -height => 32,
 										  -x => $i*34,
 										  -y => $screenHeight-34); 
-				if(SDL::JoystickGetButton($joystick, $i) eq SDL::PRESSED())
+				if(SDL::JoystickGetButton($joystick, $i) eq SDL_PRESSED)
 				  {
 					$app->fill($rect, $colorWhite); 
 				  } else {
