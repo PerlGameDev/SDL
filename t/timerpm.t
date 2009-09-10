@@ -41,6 +41,11 @@ use SDL::Config;
 
 use Test::More;
 
+if (SDL::Init(SDL_INIT_TIMER) < 0 )
+{
+	 plan( skip_all => "Cannot initialize timer!!" );
+
+}
 plan ( tests => 4 );
 
 use_ok( 'SDL::Timer' ); 
@@ -51,7 +56,6 @@ can_ok ('SDL::Timer', qw/
 
 my $fired = 0;
 
-SDL::Init(SDL_INIT_TIMER);
 
 my $timer = new SDL::Timer 
 	sub { $fired++ }, -delay => 30, -times => 1;

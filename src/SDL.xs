@@ -1205,63 +1205,6 @@ VideoInfo ()
 	OUTPUT:
 		RETVAL
 
-SDL_Rect *
-NewRect ( x, y, w, h )
-	Sint16 x
-	Sint16 y
-	Uint16 w
-	Uint16 h
-	CODE:
-		RETVAL = (SDL_Rect *) safemalloc (sizeof(SDL_Rect));
-		RETVAL->x = x;
-		RETVAL->y = y;
-		RETVAL->w = w;
-		RETVAL->h = h;
-	OUTPUT:
-		RETVAL
-
-void
-FreeRect ( rect )
-	SDL_Rect *rect
-	CODE:
-		safefree(rect);
-
-Sint16
-RectX ( rect, ... )
-	SDL_Rect *rect
-	CODE:
-		if (items > 1 ) rect->x = SvIV(ST(1)); 
-		RETVAL = rect->x;
-	OUTPUT:
-		RETVAL
-
-Sint16
-RectY ( rect, ... )
-	SDL_Rect *rect
-	CODE:
-		if (items > 1 ) rect->y = SvIV(ST(1)); 
-		RETVAL = rect->y;
-	OUTPUT:
-		RETVAL
-
-Uint16
-RectW ( rect, ... )
-	SDL_Rect *rect
-	CODE:
-		if (items > 1 ) rect->w = SvIV(ST(1)); 
-		RETVAL = rect->w;
-	OUTPUT:
-		RETVAL
-
-Uint16
-RectH ( rect, ... )
-	SDL_Rect *rect
-	CODE:
-		if (items > 1 ) rect->h = SvIV(ST(1)); 
-		RETVAL = rect->h;
-	OUTPUT:
-		RETVAL
-
 AV*
 ListModes ( format, flags )
 	Uint32 flags
@@ -1414,10 +1357,11 @@ void
 UpdateRects ( surface, ... )
 	SDL_Surface *surface
 	CODE:
-		SDL_Rect *rects, *temp;
+		SDL_Rect *rects, *oldrects, *temp;
 		int num_rects,i;
 		if ( items < 2 ) return;
-		num_rects = items - 1;	
+		num_rects = items - 1;
+		oldrects = rects;	
 		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
 		for(i=0;i<num_rects;i++) {
 			temp = (SDL_Rect *)SvIV(ST(i+1));
@@ -1428,6 +1372,7 @@ UpdateRects ( surface, ... )
 		} 
 		SDL_UpdateRects(surface,num_rects,rects);
 		safefree(rects);
+		safefree(oldrects);
 
 int
 Flip ( surface )
@@ -2541,14 +2486,12 @@ SetClipRect ( surface, rect )
 	CODE:
 		SDL_SetClipRect(surface,rect);
 	
-SDL_Rect*
-GetClipRect ( surface )
+void
+GetClipRect ( surface, rect )
 	SDL_Surface *surface
+	SDL_Rect *rect;
 	CODE:
-		RETVAL = (SDL_Rect*) safemalloc(sizeof(SDL_Rect));
-		SDL_GetClipRect(surface,RETVAL);
-	OUTPUT:
-		RETVAL
+	 	SDL_GetClipRect(surface, rect);
 
 
 #ifdef HAVE_SDL_NET

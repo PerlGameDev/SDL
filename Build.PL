@@ -41,6 +41,14 @@ my %subsystems =
 		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
 		                  png jpeg smpeg )],
 	},
+	Rect => {
+		file      => {
+			from  => 'src/Rect.xs',
+			to    => 'lib/SDL/Rect.xs',
+		},
+		libraries => [qw( SDL  )],
+	},
+	
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',
@@ -132,7 +140,7 @@ my $build   = SDL::Build->new(
 		'Test::Simple' => '0.47',
 		'Module::Build' => '0.22',
 		'YAML'	=> '0.68',
-		'Alien::SDL'    => '0.02',
+		'Alien::SDL'    => '0.03',
 		'ExtUtils::CBuilder' => '0.260301'
 	},
 	build_recommends     =>

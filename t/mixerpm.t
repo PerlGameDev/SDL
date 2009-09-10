@@ -43,7 +43,11 @@ use Test::More;
 
 if ( SDL::Config->has('SDL_mixer') ) {
 	plan ( tests => 3 );
-} else {
+} 
+elsif ( SDL::Init(SDL_INIT_AUDIO) < 0) {
+		        plan( skip_all => "Cannot initialize audio!!" );
+				}			
+else {
 	plan ( skip_all => 'SDL_mixer support not compiled' );
 }
 
@@ -86,8 +90,8 @@ can_ok ('SDL::Mixer', qw/
 	playing_music
 	/);
 
+
 # these are exported by default, so main:: should know them:
-SDL::Init(SDL_INIT_AUDIO);
 my $mixer = SDL::Mixer->new();
-isa_ok($mixer, 'SDL::Mixer');
+isa_ok($mixer, 'SDL::Mixer', 'Checking if mixer can be build');
 
