@@ -108,6 +108,7 @@ the C<SDL::Init> subroutine.  This routine takes a mode flag constructed through
 the bitwise OR product of the following functions:  
 
 =over 4
+
 =item *
 INIT_AUDIO()
 
