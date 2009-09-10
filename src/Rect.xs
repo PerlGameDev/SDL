@@ -43,7 +43,7 @@ SetRect(rect, x, y, w, h)
 		
 
 Sint16
-RectX ( rect, ... )
+rect_RectX ( rect, ... )
 	SDL_Rect *rect
 	CODE:
 		if (items > 1 ) rect->x = SvIV(ST(1)); 
@@ -52,7 +52,7 @@ RectX ( rect, ... )
 		RETVAL
 
 Sint16
-RectY ( rect, ... )
+rect_RectY ( rect, ... )
 	SDL_Rect *rect
 	CODE:
 		if (items > 1 ) rect->y = SvIV(ST(1)); 
@@ -61,7 +61,7 @@ RectY ( rect, ... )
 		RETVAL
 
 Uint16
-RectW ( rect, ... )
+rect_RectW ( rect, ... )
 	SDL_Rect *rect
 	CODE:
 		if (items > 1 ) rect->w = SvIV(ST(1)); 
@@ -70,7 +70,7 @@ RectW ( rect, ... )
 		RETVAL
 
 Uint16
-RectH ( rect, ... )
+rect_RectH ( rect, ... )
 	SDL_Rect *rect
 	CODE:
 		if (items > 1 ) rect->h = SvIV(ST(1)); 
