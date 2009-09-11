@@ -1,6 +1,11 @@
 Revision history for Perl extension SDL_perl.
 
-* Sept 1 2009 Kartik Thankore <thakore.kartik@gmail.com>
+* Sept 11 2009 Kartik Thakore <thakore.kartik@gmail.com>
+	- Moved Debian patches upstream
+	- http://packages.debian.org/changelogs/pool/main/s/sdlperl/current/changelog
+	- credit goes to Ryan Niebur and Daniel Burr
+
+* Sept 1 2009 Kartik Thakore <thakore.kartik@gmail.com>
 	- Made Alien::SDL 0.3 dependency
 	- Updated MANIFEST
 * Aug 31 2009 Kartik Thakore <thakore.kartik@gmail.com>
