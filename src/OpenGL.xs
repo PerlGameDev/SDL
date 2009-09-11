@@ -67,6 +67,8 @@ constants missing in GL/gl.h thus we need also GL/glext.h
 #define GL_ALL_CLIENT_ATTRIB_BITS 0xFFFFFFF
 #endif /* GL_ALL_CLIENT_BITS */  
 
+#define GL_HAS_NURBS
+
 #include "../../src/defines.h"
 
 SV* sdl_perl_nurbs_error_hook;
@@ -958,7 +960,7 @@ glLoadMatrix (  ... )
 		int i;
 		double mat[16];
 		for ( i = 0; i < 16; i++ ) {
-			mat[i] = (i < items  && SvNOK(ST(i)) ? SvNV(ST(i)) : 0.0 );
+			mat[i] = i < items ? SvNV(ST(i)) : 0.0;
 		}
 		glLoadMatrixd(mat);
 
@@ -968,7 +970,7 @@ glMultMatrix ( ... )
 		int i;
 		double mat[16];
 		for ( i = 0; i < 16; i++ ) {
-			mat[i] = (i < items  && SvNOK(ST(i)) ? SvNV(ST(i)) : 0.0 );
+			mat[i] = i < items ? SvNV(ST(i)) : 0.0;
 		}
 		glMultMatrixd(mat);
 
@@ -1052,7 +1054,7 @@ glClipPlane ( plane, ... )
 		double v[4];
 		int i;
 		for (i = 0; i < 4; i++ ) {
-			v[i] = (i+1 < items && SvNOK(ST(i+1))) ? SvNV(ST(i+1)) : 0.0;
+			v[i] = i+1 < items ? SvNV(ST(i+1)) : 0.0;
 		}
 		glClipPlane(plane,v);
 	
@@ -1091,13 +1093,13 @@ glLight ( light, name, ... )
 		if ( items == 6 ) {
 			float v[4];	
 			for ( i = 0; i < 4; i++ ) {
-				v[i] = (SvNOK(ST(i+2))) ? SvNV(ST(i+2)) : 0.0;
+				v[i] = SvNV(ST(i+2));
 			}
 			glLightfv(light,name,v);	
 		} else if ( items == 5 ) {
 			float v[3];
 			for ( i = 0; i < 3; i++ ) {
-				v[i] = (SvNOK(ST(i+2))) ? SvNV(ST(i+2)) : 0.0;
+				v[i] = SvNV(ST(i+2));
 			}
 			glLightfv(light,name,v);	
 		} else if ( items == 3 ) {
@@ -1136,13 +1138,13 @@ glMaterial ( face, name, ... )
 		if ( items == 6 ) {
 			float v[4];
 			for ( i = 0; i < 4; i++ ) {
-				v[i] = (SvNOK(ST(i+2))) ? SvNV(ST(i+2)) : 0.0;
+				v[i] = SvNV(ST(i+2));
 			}
 			glMaterialfv(face,name,v);
 		} else if ( items == 5 ) {
 			float v[3];
-			for ( i = 0; i < 4; i++ ) {
-				v[i] = (SvNOK(ST(i+2))) ? SvNV(ST(i+2)) : 0.0;
+			for ( i = 0; i < 3; i++ ) {
+				v[i] = SvNV(ST(i+2));
 			}
 			glMaterialfv(face,name,v);
 		} else if ( items == 3 ) {	
