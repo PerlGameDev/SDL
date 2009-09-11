@@ -1034,11 +1034,12 @@ If the rectangle is NULL, the entire surface will be painted.
 
 =head1 AUTHOR
 
-David J. Goehrig
+David J. Goehrig 2.1.3
+Kartik Thakore 2.2.0 +
 
 =head1 CONTRIBUTORS
 
-David J. Goehrig, Wayne Keenan, Guillaume Cottenceau
+David J. Goehrig, Wayne Keenan, Guillaume Cottenceau, Kartik Thakore
 
 =head1 SEE ALSO
 
