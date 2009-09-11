@@ -225,7 +225,7 @@ void SFont_InternalInput( SDL_Surface *Dest, SFont_FontInfo *Font, int x, int y,
 		if ((ch=='\b')&&(strlen(text)>0))
 		    text[strlen(text)-1]='\0';
 		else if (ch!='\b')
-		    sprintf(text,"%s%c",text,ch);
+		    sprintf(text+strlen(text),"%c",ch);
 	        if (SFont_TextWidth2(Font,text)>PixelWidth) text[strlen(text)-1]='\0';
 		SDL_BlitSurface( Back, NULL, Dest, &rect);
 		SFont_PutString2(Dest, Font, x, y, text);

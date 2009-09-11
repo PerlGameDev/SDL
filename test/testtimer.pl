@@ -2,10 +2,11 @@
 
 use SDL;
 use SDL::Timer;
+use SDL::Event;
 
 die "usage: $0\n" if in($ARGV[0], qw/ -? -h --help/);
 
-SDL::Init(SDL_INIT_EVERYTHING());
+SDL::Init(SDL_INIT_TIMER);
 
 print STDERR "Waiting 4 seconds\n";
 SDL::Delay(4000);
