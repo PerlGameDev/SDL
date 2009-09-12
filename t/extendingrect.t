@@ -2,14 +2,24 @@ package MyRect;
 use base 'SDL::Rect';
 
 sub new {
-    my $class = shift;
-    my $self = {};
-    bless $self, $class;
+	my $class = shift;
+	my $x = shift || 0;
+	my $y = shift || 0;
+	my $w = shift || 0;
+	my $h = shift || 0;
+	my $self = SDL::Rect->new($x, $y, $w, $h);
+	unless ($$self) {
+		require Carp;
+		Carp::croak SDL::GetError();
+	}
+	bless $self, $class;
+	return $self;
+
 }
 
 sub foo {
-    my $self = shift;
-    return $self->x;
+	my $self = shift;
+	return $self->x;
 }
 
 package main;
