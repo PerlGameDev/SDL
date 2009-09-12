@@ -36,6 +36,7 @@ logo/sdl_perl_logo_small.png
 make/lib/SDL/Build/Cygwin.pm
 make/lib/SDL/Build/Darwin.pm
 make/lib/SDL/Build/Freebsd.pm
+make/lib/SDL/Build/Gnukfreebsd.pm
 make/lib/SDL/Build/Linux.pm
 make/lib/SDL/Build/Solaris.pm
 make/lib/SDL/Build/MSWin32.pm

@@ -54,7 +54,8 @@ sub import {
   $self->export_to_level(1, @_);
   SDL::Constants->export_to_level(1);
 }
-$VERSION = '2.2.2.13';
+
+$VERSION = '2.2.2.15';
 
 print "$VERSION" if (defined($ARGV[0]) && ($ARGV[0] eq '--SDLperl'));
 
@@ -1034,11 +1035,12 @@ If the rectangle is NULL, the entire surface will be painted.
 
 =head1 AUTHOR
 
-David J. Goehrig
+David J. Goehrig 2.1.3
+Kartik Thakore 2.2.0 +
 
 =head1 CONTRIBUTORS
 
-David J. Goehrig, Wayne Keenan, Guillaume Cottenceau
+David J. Goehrig, Wayne Keenan, Guillaume Cottenceau, Kartik Thakore
 
 =head1 SEE ALSO
 
