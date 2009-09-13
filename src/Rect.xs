@@ -83,7 +83,7 @@ void
 rect_DESTROY(self)
 	SDL_Rect *self
 	CODE:
-	 	printf("RectPtr::DESTROY\n");
+
 		safefree( (char *)self );
 
 

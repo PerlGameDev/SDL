@@ -17,6 +17,8 @@ use SDL::Surface;
 use SDL::Color;
 use SDL::Rect;
 
+#use base "../";
+
 use vars qw/ $app $app_rect $background $event $sprite $sprite_rect $videoflags /;
 
 ## User tweakable settings (via cmd-line)
@@ -70,9 +72,9 @@ sub  init_game_context
 		       -flags => $videoflags,
 			);
 
-  $app_rect= new SDL::Rect(
-			   -height => $settings{screen_height}, 
-			   -width  => $settings{screen_width},
+  $app_rect= SDL::Rect->new(0,0,
+			   $settings{screen_height}, 
+			   $settings{screen_width}
 			  );
 
   $background = $SDL::Color::black;
@@ -86,11 +88,7 @@ sub  init_game_context
   $sprite->set_color_key(SDL_SRCCOLORKEY,$sprite->pixel(0,0));	# sets the transparent color to that at (0,0)
 
 
-  $sprite_rect = new SDL::Rect(-x     => 0, 
-			       -y     => 0,
-			       -width => $sprite->width,
-			       -height=> $sprite->height,
-			      );
+  $sprite_rect = SDL::Rect->new(0, 0, $sprite->width, $sprite->height);
   
   $event = new SDL::Event();
 }
@@ -135,11 +133,7 @@ sub put_sprite
 {
   my ($x,$y) = @_;
 
-  my $dest_rect = new SDL::Rect(-x => $x,
-			       -y => $y,
-			       -width  => $sprite->width,
-			       -height => $sprite->height,
-			      );
+  my $dest_rect = SDL::Rect->new($x, $y, $sprite->width, $sprite->height);
   $sprite->blit($sprite_rect, $app, $dest_rect);  
 }
 

@@ -7,7 +7,7 @@ sub new {
 	my $y = shift || 0;
 	my $w = shift || 0;
 	my $h = shift || 0;
-	my $self = SDL::Rect->new($x, $y, $w, $h);
+	my $self = $class->SUPER::new($x, $y, $w, $h);
 	unless ($$self) {
 		require Carp;
 		Carp::croak SDL::GetError();
