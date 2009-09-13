@@ -3,17 +3,12 @@ use base 'SDL::Rect';
 
 sub new {
 	my $class = shift;
-	my $x = shift || 0;
-	my $y = shift || 0;
-	my $w = shift || 0;
-	my $h = shift || 0;
-	my $self = $class->SUPER::new($x, $y, $w, $h);
-	unless ($$self) {
+	my $self = $class->SUPER::new(@_);
+	unless (ref $self) {
 		require Carp;
 		Carp::croak SDL::GetError();
 	}
-	bless $self, $class;
-	return $self;
+	return bless $self => $class;;
 
 }
 
@@ -25,7 +20,7 @@ sub foo {
 package main;
 use Test::More tests => 6;
 
-my $rect = MyRect->new;
+my $rect = MyRect->new(0,0,0,0);
 
 isa_ok($rect, 'SDL::Rect');
 isa_ok($rect, 'MyRect');
