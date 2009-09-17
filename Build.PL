@@ -132,7 +132,7 @@ my $build   = SDL::Build->new(
 		'Test::Simple' => '0.47',
 		'Module::Build' => '0.22',
 		'YAML'	=> '0.68',
-		'Alien::SDL'    => '>=0.03, !=0.04',
+		'Alien::SDL'    => '0.05',
 		'ExtUtils::CBuilder' => '0.260301'
 	},
 	build_recommends     =>
