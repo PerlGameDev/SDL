@@ -279,6 +279,18 @@ This function will release an opened CD.
 
 =head2 PumpEvents 
 
+Pumps the event loop, gathering events from the input devices.
+
+PumpEvents gathers all the pending input information from devices and places
+it on the event queue.
+Without calls to PumpEvents no events would ever be placed on the queue.
+Often the need for calls to PumpEvents is hidden from the user 
+since L</ PollEvent> and WaitEvent implicitly call PumpEvents. 
+However, if you are not polling or waiting for events (e.g. you are filtering them), 
+then you must call PumpEvents to force an event queue update.
+
+Note: You can only call this function in the thread that set the video mode. 
+
 =head2 NewEvent 
 
 =head2 FreeEvent
