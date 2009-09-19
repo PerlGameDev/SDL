@@ -1,0 +1,263 @@
+=head1 NAME
+
+Lunar Lander - a small tutorial on Perl SDL
+
+=head1 INTRODUCTION
+
+This is a quick introduction to Perl and SDL (Simple DirectMedia
+Layer, a cross-platform multimedia programming library). We'll write
+a small game-- Lunar Lander-- in 100 lines of code, or less.
+
+=head2 PREPARATION
+
+You'll need SDL_Perl.
+
+If you are using Debian or Ubuntu, it's probably easier to install
+the module via apt-get:
+
+    apt-get install libsdl-perl
+
+or for the bleeding edge with tons of bug fixes.
+   
+   perl -MCPAN -e "install SDL"
+
+If you are using other Linux distro, look for the corresponding
+package. If you can't find it you'll have to compile it (and deal
+with all the dependencies) yourself.
+
+The point is that it is strongly recommend that you start with a
+packaged module from your distribution. Avoid compiling SDL_Perl
+if you can.
+
+=head2 FIRST VERSION
+
+We'll start with a text version of the game.
+
+"What?", you may ask. "I thought it was a SDL tutorial".
+
+Yes, it is -- thank you for reminding me. But we'll leave the SDL part for
+later. We must build the game logic first!
+
+One of the traps of game programming is focusing too much on the interface.
+If we start with a simpler simulation, we can worry with the presentation
+later.
+
+So, here's the initial code:
+
+    #!/usr/bin/perl
+
+    use strict;
+    use warnings;
+
+    my $height   = 1000; # m
+    my $velocity = 0;    # m/s
+    my $gravity  = 1;    # m/s^2
+
+    my $t = 0;
+
+    while ( $height > 0 ) {
+        print "at $t s height = $height m, velocity = $velocity m/s\n";
+
+        $height   = $height - $velocity;
+        $velocity = $velocity + $gravity;
+        $t        = $t + 1;
+    }
+
+    if ( $velocity > 10 ) {
+        print "CRASH!!!\n";
+    } else {
+        print "You landed on the surface safely! :-D\n";
+    }
+
+Run the code and you'll see something like this:
+
+    at 0 s height = 1000 m, velocity = 0 m/s
+    at 1 s height = 1000 m, velocity = 1 m/s
+    at 2 s height = 999 m, velocity = 2 m/s
+    at 3 s height = 997 m, velocity = 3 m/s
+    at 4 s height = 994 m, velocity = 4 m/s
+    at 5 s height = 990 m, velocity = 5 m/s
+    ...
+    at 43 s height = 97 m, velocity = 43 m/s
+    at 44 s height = 54 m, velocity = 44 m/s
+    at 45 s height = 10 m, velocity = 45 m/s
+
+    CRASH!!!
+
+"What happened? How do I control the ship???"
+
+=head2 CONTROLLING THE SHIP
+
+The problem with our first spaceship is that it had no controls!
+
+So, let's fix this problem, making the spaceship scriptable. (We 
+could write some code to handle keyboard and joysticks now, but 
+an scriptable spaceship will be easier to start. Remember, focus
+on the game logic!)
+
+So, create add this simple script to the end of your file:
+
+    __DATA__
+    at 41s, accelerate 10 m/s^2 up
+    at 43s, 10 m/s^2
+    at 45s, 10
+    at 47s, 10
+    at 49s, 10
+
+The script is straightforward: it simply states a time when we
+will push the spaceship up with a given acceleration. It accepts
+free text: any two numbers you type will work.
+
+We can parse the script using this regular expression:
+
+    my $script_re = qr/(\d+) \D+ (\d+)/x;
+
+And we can build a hash of ( time => acceleration ) with:
+
+    my %up = map { $_ =~ $script_re } <DATA>;
+
+So the middle section of the program will become:
+
+    my $script_re = qr/(\d+) \D+ (\d+)/x;
+    my %up = map { $_ =~ $script_re } <DATA>;
+
+    while ( $height > 0 ) {
+        print "at $t s height = $height m, velocity = $velocity m/s\n";
+
+        if ( $up{$t} ) {
+            my $a = $up{$t};
+            print "(accellerating $a m/s^2)\n";
+            $velocity = $velocity - $a;
+        }
+
+        $height   = $height - $velocity;
+        $velocity = $velocity + $gravity;
+        $t        = $t + 1;
+    }
+
+That's it!
+
+Try to run the program, and the ship should land safely:
+
+    ./lunar.pl autopilot.txt 
+    at 0 s height = 1000 m, velocity = 0 m/s
+    at 1 s height = 1000 m, velocity = 1 m/s
+    at 2 s height = 999 m, velocity = 2 m/s
+    at 3 s height = 997 m, velocity = 3 m/s
+    at 4 s height = 994 m, velocity = 4 m/s
+    at 5 s height = 990 m, velocity = 5 m/s
+    ...
+    at 54 s height = 19 m, velocity = 4 m/s
+    at 55 s height = 15 m, velocity = 5 m/s
+    at 56 s height = 10 m, velocity = 6 m/s
+    at 57 s height = 4 m, velocity = 7 m/s
+
+    You landed on the surface safely! :-D
+
+Cool, but...
+
+=head2 HOW ABOUT THE GRAPHICS?
+
+Okay, okay... now that we have a working prototype, we can work on
+the graphics. But, first of all, we'll need...
+
+=head3 THE GRAPHICS
+
+Yes, the graphics.
+
+We won't use anything fancy here, just two images: a large one, for
+the background, and a smaller one for the spaceship.
+
+Create the images using the Gimp, or use the images provided by
+this tutorial; Save these images in a subdirectory called "images":
+("C<images/background.jpg>" and "C<images/ship.png>").
+
+=head2 USING SDL
+
+First step: use the required libraries:
+
+    use SDL; #needed to get all constants
+    use SDL::App;
+    use SDL::Surface;
+    use SDL::Rect;
+
+Second step: initialize C<SDL::App>:
+
+    my $app = SDL::App->new(
+        -title  => "Lunar Lander",
+        -width  => 800,
+        -height => 600,
+        -depth  => 32,
+    );
+
+Third step: load the images and create the necessary "rectangles":
+
+    my $background = SDL::Surface->new( -name => 'images/background.jpg', );
+    my $ship       = SDL::Surface->new( -name => 'images/ship.png', );
+
+    my $background_rect = SDL::Rect->new(
+        -height => $background->height(),
+        -width  => $background->width(),
+    );
+
+    my $ship_rect = SDL::Rect->new(
+        -height => $ship->height(),
+        -width  => $ship->width(),
+    );
+
+Fourth step: create a sub to draw the spaceship and background:
+
+    sub draw {
+        my ( $x, $y ) = @_; # spaceship position
+
+        # fix $y for screen resolution
+        $y = 450 * ( 1000 - $y ) / 1000;
+
+        # background
+        $background->blit( $background_rect, $app, $background_rect );
+
+        # ship
+        my $ship_dest_rect = SDL::Rect->new(
+            -height => $ship->height(),
+            -width  => $ship->width(),
+            -x      => $x,
+            -y      => $y,
+        );
+
+        $ship->blit( $ship_rect, $app, $ship_dest_rect );
+
+        $app->update($background_rect);
+    }
+
+Note that this sub first combines all the bitmaps, using a blit
+("Block Image Transfer") operation -- which is quite fast, but does
+not update the display.
+
+The combined image is displayed in the last line. This process of
+combining first, and displaying later, avoids that annoying fading
+between cycles ("flickering").
+
+Finally, add the following lines to the end of the main loop, so that
+we call the C<draw()> function with the correct spaceship
+coordinates:
+
+    while ( $height > 0 ) {
+
+        # ...
+
+        draw( 100, $height );
+        $app->delay(10);
+    }
+
+That's it!
+
+Run the program and watch the spaceship landing safely on the surface
+of the moon.
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Nelson Ferraz, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+

@@ -29,6 +29,7 @@ lib/SDL/TTFont.pm
 lib/SDL/Tutorial/Animation.pm
 lib/SDL/Tutorial/Drawing.pm
 lib/SDL/Tutorial/Images.pm
+lib/SDL/Tutorial/LunarLandar.pm
 lib/SDL/Tutorial.pm
 lib/SDL/Video.pm
 logo/sdl_perl_logo_large.png
