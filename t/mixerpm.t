@@ -2,7 +2,6 @@
 #
 # Copyright (C) 2003 Tels
 # Copyright (C) 2004 David J. Goehrig
-#
 # Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
 #
 # ------------------------------------------------------------------------------
@@ -31,18 +30,34 @@
 #
 # basic testing of SDL::Mixer
 
+use strict;
+use SDL;
+use SDL::Config;
+use Test::More;
+
 BEGIN {
 	unshift @INC, 'blib/lib','blib/arch';
 }
 
-use strict;
-use SDL;
-use SDL::Config;
+sub check_fail_mixer
+{	
+	my $ret = 0;
+	eval
+	{
+      		$ret = SDL::Init(SDL_INIT_AUDIO);
+	};
+	return 1 if ($@ or $ret == -1);
+	return 0;
+}
 
-use Test::More;
+if( check_fail_mixer() )
+{
+	 plan( skip_all => "Cannot initialize Audio for Mixer!!" );
+}
+
 
 if ( SDL::Config->has('SDL_mixer') ) {
-	plan ( tests => 2 );
+	plan ( tests => 3 );
 }			
 else {
 	plan ( skip_all => 'SDL_mixer support not compiled' );
@@ -89,6 +104,6 @@ can_ok ('SDL::Mixer', qw/
 
 
 # these are exported by default, so main:: should know them:
-#my $mixer = SDL::Mixer->new();
-#isa_ok($mixer, 'SDL::Mixer', 'Checking if mixer can be build');
+my $mixer = SDL::Mixer->new();
+isa_ok($mixer, 'SDL::Mixer', 'Checking if mixer can be build');
 

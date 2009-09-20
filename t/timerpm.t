@@ -46,9 +46,8 @@ sub check_fail_timer
 	eval
 	{
       		$ret = SDL::Init(SDL_INIT_TIMER);
-		die "as";
 	};
-	return 1 if (@_ or $ret == -1);
+	return 1 if ($@ or $ret == -1);
 	return 0;
 }
 
