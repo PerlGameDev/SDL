@@ -206,6 +206,78 @@ sub midbottom {
     return;    
 }
 
+###############################
+## methods                   ##
+###############################
+
+sub duplicate {
+}
+
+sub copy {
+    my $self = shift;
+    return $self->new(
+        -top    => $self->top,
+        -left   => $self->left,
+        -width  => $self->width,
+        -height => $self->height,
+    );
+}
+
+sub move {
+    my ($self, $x, $y) = (@_);
+    if (not defined $x or not defined $y) {
+        require Carp;
+        Carp::croak "must receive x and y positions as argument";
+    }
+    return $self->new(
+        -top    => $self->top + $y,
+        -left   => $self->left + $x,
+        -width  => $self->width,
+        -height => $self->height,
+    );
+}
+
+sub move_ip {
+    my ($self, $x, $y) = (@_);
+    if (not defined $x or not defined $y) {
+        require Carp;
+        Carp::croak "must receive x and y positions as argument";
+    }
+    $self->x($self->x + $x);
+    $self->y($self->y + $y);
+    
+    return;
+}
+
+sub inflate {
+    my ($self, $x, $y) = (@_);
+    if (not defined $x or not defined $y) {
+        require Carp;
+        Carp::croak "must receive x and y positions as argument";
+    }
+    
+    return $self->new(
+        -left   => $self->left   - ($x / 2),
+        -top    => $self->top    - ($y / 2),
+        -width  => $self->width  + $x,
+        -height => $self->height + $y,
+    );
+}
+
+sub inflate_ip {
+    my ($self, $x, $y) = (@_);
+    if (not defined $x or not defined $y) {
+        require Carp;
+        Carp::croak "must receive x and y positions as argument";
+    }
+    
+    $self->x( $self->x - ($x / 2) );
+    $self->y( $self->y - ($y / 2) );
+    
+    $self->w( $self->w + $x );
+    $self->h( $self->h + $y );
+}
+
 
 42;
 __END__
