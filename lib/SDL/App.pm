@@ -221,17 +221,35 @@ __END__;
 SDL::App - a SDL perl extension
 
 =head1 SYNOPSIS
+		
+	use SDL;
+	use SDL::Event; 
+	use SDL::App; 
+	 
+	my $app = new SDL::App ( 
+	-title => 'Application Title', 
+	-width => 640, 
+	-height => 480, 
+	-depth => 32 ); 
 
-	my $app = new SDL::App (
-		-title => 'Application Title',
-		-width => 640, 
-		-height => 480,
-		-depth => 32 );
+This is the manual way of doing things	
+
+	my $event = new SDL::Event;             # create a new event 
+
+	$event->pump();
+	$event->poll();
+
+	while ($event->wait()) { 
+	  my $type = $event->type();      # get event type 
+	  print $type; 
+	  exit if $type == SDL_QUIT; 
+	  }
+An alternative to the manual Event processing is the L<SDL::App::loop> .
 
 =head1 DESCRIPTION
 
 L<SDL::App> controls the root window of the of your SDL based application.
-It extends the L<SDL_Surface> class, and provides an interface to the window
+It extends the L<SDL::Surface> class, and provides an interface to the window
 manager oriented functions.
 
 =head1 METHODS
