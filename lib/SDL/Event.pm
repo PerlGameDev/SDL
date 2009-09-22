@@ -205,6 +205,8 @@ SDL::Event - a SDL perl extension
 
  use SDL::Event;
  my $event = new SDL::Event;             # create a new event
+ $event->pump(); 		   	 # pump all events from SDL Event Queue
+ $event->poll();			 # Get the top one from the queue
  while ($event->wait()) {
  	my $type = $event->type();      # get event type
  	# ... handle event
