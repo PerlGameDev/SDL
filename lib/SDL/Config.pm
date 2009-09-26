@@ -2,6 +2,12 @@ package SDL::Config;
 
 my $sdl_config; 
 $sdl_config = {
+                'Rect' => {
+                            'SDL' => [
+                                       '/usr/include/SDL',
+                                       '/usr/lib'
+                                     ]
+                          },
                 'OpenGL' => {
                               'GL' => [
                                         '/usr/include/GL',

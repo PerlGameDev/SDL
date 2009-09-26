@@ -1,0 +1,9 @@
+MANIFEST
+README
+LICENSE
+Todo
+Changes
+Build.PL
+Makefile.PL
+lib/SDL/Rect.pm
+t/001_load.t

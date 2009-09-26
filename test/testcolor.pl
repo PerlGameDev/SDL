@@ -25,8 +25,7 @@ my %colors = (
 
 
 $x = 0; $y = 0;
-$rect = new SDL::Rect -x => $x, -y => $y, 
-	-w => $app->width / scalar(keys %colors), -h => $app->height();
+$rect = SDL::Rect->new( $x,  $y, $app->width / scalar(keys %colors), $app->height());
 
 print "Sorted colors:\n";
 
