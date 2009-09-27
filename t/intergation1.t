@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 #
-# Copyright (C) 2009 Kartik Thakore
+# Copyright (C) 2003 Tels
+# Copyright (C) 2004 David J. Goehrig
 #
 # ------------------------------------------------------------------------------
 #
@@ -22,59 +23,55 @@
 #
 # Please feel free to send questions, suggestions or improvements to:
 #
-#	Kartik Thakore
-#	kthakore\@cpan.org
+#	David J. Goehrig
+#	dgoehrig\@cpan.org
 #
 #
-# Memory leaks testing
+# basic testing of SDL::App
 
 BEGIN {
-	unshift @INC, 'blib/lib', 'blib/arch';
+	unshift @INC, 'blib/lib','blib/arch';
 }
 
 use strict;
-
+use SDL;
+use SDL::Config;
+use SDL::Rect;
+use SDL::Color;
 use Test::More;
 
-# Don't run tests for installs
- unless ( $ENV{AUTOMATED_TESTING} or $ENV{RELEASE_TESTING} ) {
-         plan( skip_all => "Author tests not required for installation" );
-         }
+plan ( tests => 2 );
 
+use_ok( 'SDL::App' ); 
+  
+can_ok ('SDL::App', qw/
+	new 
+	resize 
+	title 
+	delay
+	ticks 
+	error 
+	warp 
+	fullscreen 
+	iconify 
+	grab_input 
+	loop
+	sync 
+	attribute /);
 
-# This is stolen for Gabor's examples in padre's SDL plugin
-sub surface_leak()
-{
-	use SDL;
-	use SDL::App;
-	use SDL::Rect;
-	use SDL::Color;
+my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
 
-	my $window = SDL::App->new(
-		-width => 640,
-		-height => 480,
-		-depth => 16,
-		-title => 'SDL Demo',
-		-init => SDL_INIT_VIDEO
-
-	);
-
-	my $rect = SDL::Rect->new(0,0, 10, 20);
+	my $rect = SDL::Rect->new( 0,0, 10, 20);
 
 	my $blue = SDL::Color->new(
 		-r => 0x00,
 		-g => 0x00,
 		-b => 0xff,
 	);
-	$window->fill($rect, $blue);
-	$window->update($rect);
-
-}
-
-eval 'use Test::Valgrind';
-plan skip_all => 'Test::Valgrind is required to test your distribution with valgrind' if $@;
-
-surface_leak();
+	$app->fill($rect, $blue);
+	$app->update($rect);
 
 
+	 $app->sync;
+	  sleep(1);
 
