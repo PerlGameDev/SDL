@@ -1,5 +1,8 @@
 use Test::More tests => 87;
 use strict;
+use SDL;
+use SDL::App;
+use SDL::Color;
 
 use_ok( 'SDL::Game::Rect' ); 
   
@@ -17,8 +20,26 @@ can_ok ('SDL::Game::Rect', qw/
 	centery
 	 /);
 
+my $app = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
+
 my $rect = SDL::Game::Rect->new();
 
+sub draw
+{
+	
+	
+	my $blue = SDL::Color->new(
+		-r => 0x00,
+		-g => 0x00,
+		-b => 0xff,
+	);
+
+	
+	$_[0]->fill($_[1],$blue);
+	$_[0]->update($_[1]);
+	$_[0]->sync;
+	sleep(1);
+}
 isa_ok ($rect, 'SDL::Game::Rect','new went ok');
 
 foreach my $attr (qw(x y top    left  width   height 
@@ -33,15 +54,21 @@ is ($rect->x, 15, 'x and left point to the same place');
 is ($rect->x(12), 12, 'x is now 12');
 is ($rect->left, 12, 'left is an alias to x');
 
+draw($app, $rect);
+
 is ($rect->top(132), 132, 'top is now 132');
 is ($rect->y, 132, 'y and top point to the same place');
 is ($rect->y(123), 123, 'y is now 123');
 is ($rect->top, 123, 'top is an alias to y');
 
+draw($app, $rect);
+
 is ($rect->w(54), 54, 'w is now 54');
 is ($rect->width, 54, 'w and width point to the same place');
 is ($rect->width(45), 45, 'w is now 45');
 is ($rect->w, 45, 'w is an alias to width');
+
+draw($app, $rect);
 
 is ($rect->h(76), 76, 'h is now 76');
 is ($rect->height, 76, 'h and height point to the same place');
