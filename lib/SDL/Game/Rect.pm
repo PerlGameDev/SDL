@@ -1,7 +1,7 @@
 package SDL::Game::Rect;
 use strict;
 use warnings;
-
+use Carp;
 use base 'SDL::Rect';
 
 our $VERSION = '0.01';
@@ -15,8 +15,8 @@ sub new {
 
     my $self = $class->SUPER::new($x, $y, $w, $h);
     unless ($$self) {
-        require Carp;
-        Carp::croak SDL::GetError();
+        #require Carp;
+        croak SDL::GetError();
     }
     bless $self, $class;
     return $self;
@@ -226,8 +226,8 @@ sub copy {
 sub move {
     my ($self, $x, $y) = (@_);
     if (not defined $x or not defined $y) {
-        require Carp;
-        Carp::croak "must receive x and y positions as argument";
+        #require Carp;
+        croak "must receive x and y positions as argument";
     }
     return $self->new(
         -top    => $self->top + $y,
@@ -240,8 +240,8 @@ sub move {
 sub move_ip {
     my ($self, $x, $y) = (@_);
     if (not defined $x or not defined $y) {
-        require Carp;
-        Carp::croak "must receive x and y positions as argument";
+        #require Carp;
+        croak "must receive x and y positions as argument";
     }
     $self->x($self->x + $x);
     $self->y($self->y + $y);
@@ -252,8 +252,8 @@ sub move_ip {
 sub inflate {
     my ($self, $x, $y) = (@_);
     if (not defined $x or not defined $y) {
-        require Carp;
-        Carp::croak "must receive x and y positions as argument";
+        #require Carp;
+        croak "must receive x and y positions as argument";
     }
     
     return $self->new(
@@ -267,8 +267,8 @@ sub inflate {
 sub inflate_ip {
     my ($self, $x, $y) = (@_);
     if (not defined $x or not defined $y) {
-        require Carp;
-        Carp::croak "must receive x and y positions as argument";
+        #require Carp;
+        croak "must receive x and y positions as argument";
     }
     
     $self->x( $self->x - ($x / 2) );
