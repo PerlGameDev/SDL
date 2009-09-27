@@ -1557,8 +1557,11 @@ ConvertRGBA ( surface )
 int
 BlitSurface ( src, src_rect, dest, dest_rect )
 	SDL_Surface *src
-	SDL_Rect *src_rect
+
 	SDL_Surface *dest
+
+	SDL_Rect *src_rect
+
 	SDL_Rect *dest_rect
 	CODE:
 		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
@@ -1568,8 +1571,11 @@ BlitSurface ( src, src_rect, dest, dest_rect )
 int
 FillRect ( dest, dest_rect, color )
 	SDL_Surface *dest
-	SDL_Rect *dest_rect
+	
 	SDL_Color *color
+	
+	SDL_Rect *dest_rect
+
 	CODE:
 		Uint32 pixel = SDL_MapRGB(dest->format,color->r,color->g,color->b);
 		RETVAL = SDL_FillRect(dest,dest_rect,pixel);
