@@ -34,29 +34,62 @@ use base 'SDL::Build';
 
 sub fetch_includes
 {
-	return (
-	'/usr/local/include/SDL'   => '/usr/local/lib',
-	'/usr/local/include'       => '/usr/local/lib',
-	'/usr/local/include/smpeg' => '/usr/local/lib',
-	'/usr/include/SDL'         => '/usr/lib',
-	'/usr/include'             => '/usr/lib',
-	'/usr/include/smpeg'       => '/usr/lib',
-	'/usr/local/include/GL'    => '/usr/local/lib',
-	'/usr/local/include/gl'    => '/usr/local/lib',
-	'/usr/include/GL'          => '/usr/lib', 
-	'/usr/include/gl'          => '/usr/lib', 
-	'/opt/local/include/SDL'   => '/opt/local/lib',		# Mac Ports
-	'/opt/local/include'   => '/opt/local/lib',		# Mac Ports
+	use Config;
 
-	'/System/Library/Frameworks/SDL_mixer.framework/Headers'     => '../../lib',
-	'/System/Library/Frameworks/SDL_image.framework/Headers'     => '../../lib',
-	'/System/Library/Frameworks/SDL_ttf.framework/Headers'       => '../../lib',
-	'/System/Library/Frameworks/libogg.framework/Headers'        => '../../lib',
-	'/System/Library/Frameworks/libvorbis.framework/Headers'     => '../../lib',
-	'/System/Library/Frameworks/libvorbisfile.framework/Headers' => '../../lib',
-	'/System/Library/Frameworks/libvorbisenc.framework/Headers'  => '../../lib',
-	'../../include'                                              => '../../lib',
-	'/System/Library/Frameworks/OpenGL.framework/Headers'        => '/System/Library/Frameworks/OpenGL.framework/Libraries',
+	my (@include_path, @lib_path);
+
+	{
+		my %seen;
+		foreach (
+			($Config{ccflags} =~ /-I(\S+)/g),
+			($Config{cppflags} =~ /-I(\S+)/g),
+		) {
+			foreach my $sdl_lib_dir ($_, "$_/SDL") {
+				next unless -f "$sdl_lib_dir/SDL.h";
+				push @include_path, $sdl_lib_dir unless $seen{$sdl_lib_dir}++;
+			}
+		}
+	}
+
+	{
+		my %seen;
+		foreach (
+			($Config{libpth} =~ /(\S+)/g),
+			($Config{libsdirs} =~ /(\S+)/g),
+			($Config{libspath} =~ /(\S+)/g),
+			($Config{lddlflags} =~ /-I(\S+)/g),
+			($Config{ldflags} =~ /-I(\S+)/g),
+		) {
+			next unless -f "$_/libSDL.a";
+			push @lib_path, $_ unless $seen{$_}++;
+		}
+	}
+
+	die "Can't find an SDL library" unless @include_path and @lib_path;
+	warn "Found SDL headers in $include_path[0] and library in $lib_path[0]";
+
+	return (
+		$include_path[0] => $lib_path[0],
+
+		# Local libraries.
+		'/usr/local/include/smpeg' => '/usr/local/lib',
+		'/usr/local/include/GL'    => '/usr/local/lib',
+		'/usr/local/include/gl'    => '/usr/local/lib',
+
+		# System libraries.
+		'/usr/include/smpeg'       => '/usr/lib',
+		'/usr/include/GL'          => '/usr/lib', 
+		'/usr/include/gl'          => '/usr/lib', 
+
+		# System-wide frameworks.
+		'/System/Library/Frameworks/libogg.framework/Headers'        => '../../lib',
+		'/System/Library/Frameworks/libvorbis.framework/Headers'     => '../../lib',
+		'/System/Library/Frameworks/libvorbisfile.framework/Headers' => '../../lib',
+		'/System/Library/Frameworks/libvorbisenc.framework/Headers'  => '../../lib',
+		'/System/Library/Frameworks/OpenGL.framework/Headers'        => '/System/Library/Frameworks/OpenGL.framework/Libraries',
+
+		# System libraries.
+		'/System/Library/Frameworks/OpenGL.framework/Headers'        => '/System/Library/Frameworks/OpenGL.framework/Libraries',
 	);
 }
 
