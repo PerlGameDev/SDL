@@ -133,11 +133,6 @@ my $build   = SDL::Build->new(
 		'Module::Build' => '0.22',
 		'YAML'	=> '0.68'
 	},
-	configure_requires =>
-	{
-		'Alien::SDL'    => '0.07',
-		'ExtUtils::CBuilder' => '0.260301'
-	},
 	build_recommends     =>
 	{
 		'Pod::ToDemo'  => '0.20'		
@@ -146,11 +141,24 @@ my $build   = SDL::Build->new(
 	xs_files             => \%xs,
 	meta_add	     =>	     
 	{
+	configure_requires =>
+	{
+		'Alien::SDL'    => '0.06',
+		'ExtUtils::CBuilder' => '0.260301'
+	},
+
 		no_index =>  { file => [ <make/lib/SDL/*.pm>, <make/lib/SDL/Build/*.pm>, <make/lib/ExtUtils/CBuilder/*>, <make/lib/ExtUtils/*>, <make/lib/ExtUtils/CBuilder/Platform/Windows.pm> ] },
 	},
 	dist_author	     => 'David J. Goehrig <DGOEHRIG@cpan.org>',
 );
 
+if($arch eq 'Darwin')
+{
+	$build->{c_source} = $arch->build_c_source( \%libraries, $build_systems );
+	$build->{c_sources} = $arch->build_c_sources( \%libraries, $build_systems );
+	$build->{install_base} = $arch->build_install_base( \%libraries, $build_systems );
+
+}
 
 # and here's where the real (and ugly) magic works... see SDL::Build
 $build->set_flags(
