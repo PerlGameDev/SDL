@@ -278,6 +278,51 @@ sub inflate_ip {
     $self->h( $self->h + $y );
 }
 
+sub _get_clamp_coordinates {
+    my ($self_pos, $self_len, $rect_pos, $rect_len) = (@_);
+
+    if ($self_len >= $rect_len) {
+        return $rect_pos + ($rect_len / 2) - ($self_len / 2);
+    }
+    elsif ($self_pos < $rect_pos) {
+        return $rect_pos;
+    }
+    elsif ( ($self_pos + $self_len) > ($rect_pos + $rect_len) ) {
+        return $rect_pos + $rect_len - $self_len;
+    }
+    else {
+        return $self_pos;
+    }
+}
+
+sub clamp {
+    my ($self, $rect) = (@_);
+    
+    unless ($rect->isa('SDL::Rect')) {
+        croak "must receive an SDL::Rect-based object";
+    }
+
+    my $x = _get_clamp_coordinates($self->x, $self->w, $rect->x, $rect->w);
+    my $y = _get_clamp_coordinates($self->y, $self->h, $rect->y, $rect->h);
+    
+    return $self->new($x, $y, $self->w, $self->h);
+}
+
+sub clamp_ip {
+    my ($self, $rect) = (@_);
+    
+    unless ($rect->isa('SDL::Rect')) {
+        croak "must receive an SDL::Rect-based object";
+    }
+
+    my $x = _get_clamp_coordinates($self->x, $self->w, $rect->x, $rect->w);
+    my $y = _get_clamp_coordinates($self->y, $self->h, $rect->y, $rect->h);
+    
+    $self->x($x);
+    $self->y($y);
+    
+    return;
+}
 
 42;
 __END__
