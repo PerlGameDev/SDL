@@ -127,11 +127,14 @@ my $build   = SDL::Build->new(
 	dist_name            => 'SDL_Perl', 
 	license		     => 'lgpl',
 	dist_version_from    => 'lib/SDL.pm',
-	build_requires       =>
+	requires	      =>
 	{
+		'Module::Build' => '0.27',
+		'Alien::SDL' => '0.7',
 		'Test::Simple' => '0.47',
-		'Module::Build' => '0.22',
-		'YAML'	=> '0.68'
+		'YAML'	=> '0.68',
+		'ExtUtils::CBuilder' => '0.260301'
+
 	},
 	build_recommends     =>
 	{
@@ -141,12 +144,6 @@ my $build   = SDL::Build->new(
 	xs_files             => \%xs,
 	meta_add	     =>	     
 	{
-	configure_requires =>
-	{
-		'Alien::SDL'    => '0.06',
-		'ExtUtils::CBuilder' => '0.260301'
-	},
-
 		no_index =>  { file => [ <make/lib/SDL/*.pm>, <make/lib/SDL/Build/*.pm>, <make/lib/ExtUtils/CBuilder/*>, <make/lib/ExtUtils/*>, <make/lib/ExtUtils/CBuilder/Platform/Windows.pm> ] },
 	},
 	dist_author	     => 'David J. Goehrig <DGOEHRIG@cpan.org>',

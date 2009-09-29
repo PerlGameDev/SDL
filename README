@@ -1,97 +1,52 @@
-README for SDL_Perl-2.2.2
+NAME
+    SDL_perl - Simple DirectMedia Layer for Perl
 
-What's New in 2.2.2:
+SYNOPSIS
+      use SDL;
 
-SDL_Perl-2.2.2
+DESCRIPTION
+    SDL_perl is a package of perl modules that provides both functional and
+    object orient interfaces to the Simple DirectMedia Layer for Perl 5.
+    This package does take some liberties with the SDL API, and attempts to
+    adhere to the spirit of both the SDL and Perl. This document describes
+    the low-level functional SDL_perl API. For the object oriented
+    programming interface please see the documentation provided on a per
+    class basis.
 
-	-Made App loop() faster https://rt.cpan.org/Public/Bug/Display.html?id=16988
-	-Patched support for add support for gluquadric* sub https://rt.cpan.org/Public/Bug/Display.html?id=25598
-	-Made App init slimer https://rt.cpan.org/Public/Bug/Display.html?id=16987
-	-Added faster SDL::Color alternative https://rt.cpan.org/Public/Bug/Display.html?id=17975
-	-Added better error reporting for TTFont errors
-	-Added win32 support https://rt.cpan.org/Ticket/Display.html?id=49003
-	
+The SDL Perl 2009 Development Team
+  Documentation
+            Nick: magnet
 
-Prerequisites:
+  Perl Development
+            Nick: Garu
+            Name: Breno G. de Oliveira
+            
+        Nick: Dngor
+            Name: Rocco Caputo
 
-SDL Perl recommends installing the following libraries available
-from http://www.libsdl.org/ prior to installing:
+            Nick: nferraz
+            Name: Nelson Ferraz
 
-	SDL-1.2.8
-	
-	Recommended:
-	SDL_image
-	SDL_mixer
-	SDL_ttf
-	smpeg
+  Maintainance
+            Nick: kthakore
 
-	Optional Libraries:
-	*SDL_gfx
-	*SDL_sound
-	*SDL_net
-	*SDL_svg
-	*SDL_vnc
+            Name: Kartik Thakore
 
-Additionally the following Perl modules should be installed:
-	
-	Alien-SDL-0.2
-	Module-Build-0.22
-	Test-Simple-0.62
+MacOSX Experimental Usage
+    Please get libsdl packages from Fink
 
-Installation:
+            perl Build.PL
+            perl Build test
+            perl Build Bundle
+            perl Build install
 
-	perl Build.PL
-	./Build
-	./Build test
-	./Build bundle	# MacOS X only!
-	./Build install
+  Running SDL Perl Scripts in MacOSX
+    First set the PERL5LIB environment variable to the dependencies of your
+    script
 
-Installation with Windows (Strawberry) :
+            %export PERL5LIB=$PERL5LIB:./lib
 
-	perl Build.PL
-	./Build
-	./Build test
-	./Build install
+    Use the SDLPerl executable made in the bundle and call your scripts
 
+            %SDLPerl.app/Contents/MacOS/SDLPerl yourScript.pl
 
-The build process will use the new Module::Build facility
-to auto detect and build SDL Perl for your platform.  If
-the build fails please forward bugs to sdl-devel@perl.org.
-
-For MacOS X users there is a new experimental bundle, 
-that is called SDLPerl.app.  You can use this bundle
-to run perl scripts with a .spl extension, you know,
-SDL Perl files.  We will work on brining this style 
-launcher and an integrated development environment to
-all platforms shortly.
-
-Documentation:
-
-Each module now includes its own documentation, and 
-is accessible through perldoc.  Additional tutorials,
-code, and tips can be found at the website:
-
-	http://sdl.perl.org
-
-Online documentation and tutorials are available through
-perldoc module.  
-
-Contributing:
-
-Anyone wishing to contribute modules, sprite engines, documentation,
-and anything else that others might find useful, please join
-the mailing list:
-
-	sdl-devel@perl.org
-
-This is a mailing list for those interested in SDLperl development,
-both as an applications developer, and as a core contributor.
-
-I am always more than happy to take patches, bug reports, and
-helpful suggestions.  It is feedback, both good and poor, that
-keeps projects like this going.
-
-Enjoy,
-
-David J. Goehrig <dgoehrig@cpan.org>
-Kartik Thakore <kthakore@cpan.org>
