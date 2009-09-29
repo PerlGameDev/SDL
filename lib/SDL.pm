@@ -54,7 +54,7 @@ sub import {
   $self->export_to_level(1, @_);
   SDL::Constants->export_to_level(1);
 }
-$VERSION = '2.2.3';
+$VERSION = '2.2.3.1';
 
 print "$VERSION" if (defined($ARGV[0]) && ($ARGV[0] eq '--SDLperl'));
 
@@ -121,7 +121,6 @@ per class basis.
 =head2 Maintainance 
 	
 	Nick: kthakore
-
 	Name: Kartik Thakore
 
 =head1 MacOSX Experimental Usage
@@ -130,7 +129,7 @@ Please get libsdl packages from Fink
 	
 	perl Build.PL
 	perl Build test
-	perl Build Bundle
+	perl Build bundle
 	perl Build install
 
 =head2 Running SDL Perl Scripts in MacOSX
