@@ -1,5 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
+* v2.2.3 Sept 29 2009 Kartik Thakore <thakore.kartik@gmail.com>
+	- More Docs
+	- Experimental Mac version
+
 * Sept 11 2009 Kartik Thakore <thakore.kartik@gmail.com>
 	- Moved Debian patches upstream
 	- http://packages.debian.org/changelogs/pool/main/s/sdlperl/current/changelog

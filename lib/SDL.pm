@@ -3,7 +3,7 @@
 # SDL.pm
 #
 # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
-#
+# Copyright (C) 2009 Kartik Thakore   <kthakore@cpan.org>
 # ------------------------------------------------------------------------------
 #
 # This library is free software; you can redistribute it and/or
@@ -24,8 +24,8 @@
 #
 # Please feel free to send questions, suggestions or improvements to:
 #
-#	David J. Goehrig
-#	dgoehrig@cpan.org
+#	Kartik Thakore
+#	kthakore@cpan.org
 #
 
 package SDL;
@@ -54,7 +54,7 @@ sub import {
   $self->export_to_level(1, @_);
   SDL::Constants->export_to_level(1);
 }
-$VERSION = '2.2.2.17';
+$VERSION = '2.2.3';
 
 print "$VERSION" if (defined($ARGV[0]) && ($ARGV[0] eq '--SDLperl'));
 
@@ -100,6 +100,50 @@ liberties with the SDL API, and attempts to adhere to the spirit of both the SDL
 and Perl.  This document describes the low-level functional SDL_perl API.  For the
 object oriented programming interface please see the documentation provided on a
 per class basis.
+
+=head1 The SDL Perl 2009 Development Team
+
+=head2 Documentation
+
+	Nick: magnet
+
+=head2 Perl Development
+
+	Nick: Garu
+	Name: Breno G. de Oliveira
+	
+	Nick: Dngor
+	Name: Rocco Caputo
+
+	Nick: nferraz
+	Name: Nelson Ferraz
+
+=head2 Maintainance 
+	
+	Nick: kthakore
+
+	Name: Kartik Thakore
+
+=head1 MacOSX Experimental Usage
+
+Please get libsdl packages from Fink
+	
+	perl Build.PL
+	perl Build test
+	perl Build Bundle
+	perl Build install
+
+=head2 Running SDL Perl Scripts in MacOSX
+
+First set the PERL5LIB environment variable to the dependencies of your script
+	
+	%export PERL5LIB=$PERL5LIB:./lib
+
+Use the SDLPerl executable made in the bundle and call your scripts
+
+	%SDLPerl.app/Contents/MacOS/SDLPerl yourScript.pl
+
+=head1 Functions exported by SDL.pm
 
 =head2 Init(flags) 
 
