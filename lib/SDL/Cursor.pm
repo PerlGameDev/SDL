@@ -69,6 +69,7 @@ sub get () {
 
 sub show ($;$) {
 	my ($self,$toggle) = @_;
+	$toggle = 0 unless defined $toggle;
 	SDL::ShowCursor($toggle);
 }
 
