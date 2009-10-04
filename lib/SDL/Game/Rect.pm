@@ -590,7 +590,6 @@ sub contains {
     return $contained;
 }
 
-
 sub collidepoint {
     my ($self, $x, $y) = (@_);
 
@@ -606,6 +605,33 @@ sub collidepoint {
 
     return $inside;
 }
+
+sub _do_rects_intersect {
+    my ($rect_A, $rect_B) = (@_);
+    
+    return (
+               ($rect_A->x >= $rect_B->x && $rect_A->x < $rect_B->x + $rect_B->w)  
+            || ($rect_B->x >= $rect_A->x && $rect_B->x < $rect_A->x + $rect_A->w)
+           ) 
+           &&
+           (
+               ($rect_A->y >= $rect_B->y && $rect_A->y < $rect_B->y + $rect_B->h)
+            || ($rect_B->y >= $rect_A->y && $rect_B->y < $rect_A->y + $rect_A->h)
+           )
+           ;
+}
+
+
+sub colliderect {
+    my ($self, $rect) = (@_);
+
+    unless ($rect->isa('SDL::Rect')) {
+        croak "must receive an SDL::Rect-based object";
+    }
+    
+    return _do_rects_intersect($self, $rect);
+}
+
 
 42;
 __END__
