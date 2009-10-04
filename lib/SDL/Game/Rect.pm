@@ -572,6 +572,23 @@ sub normalize {
     return;
 }
 
+sub contains {
+    my ($self, $rect) = (@_);
+    
+    unless ($rect->isa('SDL::Rect')) {
+        croak "must receive an SDL::Rect-based object";
+    }
+    
+    my $contained = ($self->x <= $rect->x) 
+                 && ($self->y <= $rect->y) 
+                 && ($self->x + $self->w >= $rect->x + $rect->w) 
+                 && ($self->y + $self->h >= $rect->y + $rect->h) 
+                 && ($self->x + $self->w > $rect->x) 
+                 && ($self->y + $self->h > $rect->y)
+                 ;
+                 
+    return $contained;
+}
 
 42;
 __END__
