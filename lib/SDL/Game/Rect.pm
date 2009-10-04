@@ -590,6 +590,23 @@ sub contains {
     return $contained;
 }
 
+
+sub collidepoint {
+    my ($self, $x, $y) = (@_);
+
+    unless (defined $x and defined $y) {
+        croak "must receive (x,y) as arguments";
+    }
+    
+    my $inside = $x >= $self->x 
+              && $x < $self->x + $self->w 
+              && $y >= $self->y 
+              && $y < $self->y + $self->h
+              ;
+
+    return $inside;
+}
+
 42;
 __END__
 
