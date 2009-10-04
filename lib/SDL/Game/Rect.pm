@@ -488,8 +488,9 @@ sub _test_unionall {
 sub unionall {
     my ($self, $rects) = (@_);
     
-    croak "must receive an array reference of SDL::Rect-based objects"
-        unless defined $rects and ref $rects eq 'ARRAY';
+    unless (defined $rects and ref $rects eq 'ARRAY') {
+        croak "must receive an array reference of SDL::Rect-based objects";
+    }
 
     my ($x, $y, $w, $h) = _test_unionall($self, $rects);
     
@@ -499,8 +500,9 @@ sub unionall {
 sub unionall_ip {
     my ($self, $rects) = (@_);
     
-    croak "must receive an array reference of SDL::Rect-based objects"
-        unless defined $rects and ref $rects eq 'ARRAY';
+    unless (defined $rects and ref $rects eq 'ARRAY') {
+        croak "must receive an array reference of SDL::Rect-based objects";
+    }
 
     my ($x, $y, $w, $h) = _test_unionall($self, $rects);
     
@@ -631,6 +633,22 @@ sub colliderect {
     
     return _do_rects_intersect($self, $rect);
 }
+
+sub collidelist {
+    my ($self, $rects) = (@_);
+
+    unless (defined $rects and ref $rects eq 'ARRAY') {
+        croak "must receive an array reference of SDL::Rect-based objects";
+    }
+
+    for(my $i = 0; $i < @{$rects}; $i++) {
+        if ( _do_rects_intersect($self, $rects->[$i]) ) {
+            return $i;
+        }
+    }
+    return;
+}
+
 
 
 42;
