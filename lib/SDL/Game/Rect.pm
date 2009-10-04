@@ -665,6 +665,24 @@ sub collidelistall {
     return \@collisions;
 }
 
+sub collidehash {
+    my ($self, $rects) = (@_);
+
+    unless (defined $rects and ref $rects eq 'HASH') {
+        croak "must receive an hash reference of SDL::Rect-based objects";
+    }
+    
+    while ( my ($key, $value) = each %{$rects} ) {
+        unless ($value->isa('SDL::Rect')) {
+            croak "hash element of key '$key' is not an SDL::Rect-based object";
+        }
+        
+        if ( _do_rects_intersect($self, $value) ) {
+            return ($key, $value);
+        }
+    }
+    return (undef, undef);
+}
 
 42;
 __END__
