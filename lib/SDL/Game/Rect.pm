@@ -324,6 +324,93 @@ sub clamp_ip {
     return;
 }
 
+sub _get_intersection_coordinates {
+    my ($self, $rect) = (@_);
+    my ($x, $y, $w, $h);
+    
+INTERSECTION: 
+    {
+        ### Left
+        if (($self->x >= $rect->x) && ($self->x < ($rect->x + $rect->w))) {
+            $x = $self->x;
+        }
+        elsif (($rect->x >= $self->x) && ($rect->x < ($self->x + $self->w))) {
+            $x = $rect->x;
+        }
+        else {
+            last INTERSECTION;
+        }
+
+        ## Right
+        if ((($self->x + $self->w) > $rect->x) && (($self->x + $self->w) <= ($rect->x + $rect->w))) {
+            $w = ($self->x + $self->w) - $x;
+        }
+        elsif ((($rect->x + $rect->w) > $self->x) && (($rect->x + $rect->w) <= ($self->x + $self->w))) {
+            $w = ($rect->x + $rect->w) - $x;
+        }
+        else {
+            last INTERSECTION;
+        }
+
+        ## Top
+        if (($self->y >= $rect->y) && ($self->y < ($rect->y + $rect->h))) {
+            $y = $self->y;
+        }
+        elsif (($rect->y >= $self->y) && ($rect->y < ($self->y + $self->h))) {
+            $y = $rect->y;
+        }
+        else {
+            last INTERSECTION;
+        }
+
+        ## Bottom
+        if ((($self->y + $self->h) > $rect->y) && (($self->y + $self->h) <= ($rect->y + $rect->h))) {
+            $h = ($self->y + $self->h) - $y;
+        }
+        elsif ((($rect->y + $rect->h) > $self->y) && (($rect->y + $rect->h) <= ($self->y + $self->h))) {
+            $h = ($rect->y + $rect->h) - $y;
+        }
+        else {
+            last INTERSECTION;
+        }
+
+        return ($x, $y, $w, $h);
+    }
+    
+    # if we got here, the two rects do not intersect
+    return ($self->x, $self->y, 0, 0);
+
+}
+
+sub clip {
+    my ($self, $rect) = (@_);
+    
+    unless ($rect->isa('SDL::Rect')) {
+        croak "must receive an SDL::Rect-based object";
+    }
+
+    my ($x, $y, $w, $h) = _get_intersection_coordinates($self, $rect);
+    
+    return $self->new($x, $y, $w, $h);
+}
+
+sub clip_ip {
+    my ($self, $rect) = (@_);
+    
+    unless ($rect->isa('SDL::Rect')) {
+        croak "must receive an SDL::Rect-based object";
+    }
+
+    my ($x, $y, $w, $h) = _get_intersection_coordinates($self, $rect);
+    
+    $self->x($x);
+    $self->y($y);
+    $self->w($w);
+    $self->h($h);
+    
+    return;
+}
+
 42;
 __END__
 
@@ -443,11 +530,11 @@ Same as C<<clamp>> above, but moves the current Rect in place and returns nothin
 
 =head3 clip($rect)
 
-Returns a new Rect with the intersection between the two Rect objects, that is, returns a new Rect cropped to be completely inside the Rect object passed as an argument. If the two rectangles do not overlap to begin with, a Rect with 0 size is returned.
+Returns a new Rect with the intersection between the two Rect objects, that is, returns a new Rect cropped to be completely inside the Rect object passed as an argument. If the two rectangles do not overlap to begin with, a Rect with 0 size is returned, in the original Rect's (x,y) coordinates.
 
 =head3 clip_ip($rect)
 
-Same as C<<clip>> above, but crops the current Rect in place and returns nothing. As the original method, the Rect becomes zero-sized if the two rectangles do not overlap to begin with.
+Same as C<<clip>> above, but crops the current Rect in place and returns nothing. As the original method, the Rect becomes zero-sized if the two rectangles do not overlap to begin with, retaining its (x, y) coordinates.
 
 =head3 union($rect)
 
