@@ -411,6 +411,60 @@ sub clip_ip {
     return;
 }
 
+=head3 union($rect)
+
+Returns a new rectangle that completely covers the area of the current Rect and the one passed as an argument. There may be area inside the new Rect that is not covered by the originals.
+
+=cut
+
+sub _test_union {
+    my ($self, $rect) = (@_);
+    my ($x, $y, $w, $h);
+
+    $x = $self->x < $rect->x ? $self->x : $rect->x;  # MIN
+    $y = $self->y < $rect->y ? $self->y : $rect->y;  # MIN
+    
+    $w = ($self->x + $self->w) > ($rect->x + $rect->w)
+       ? ($self->x + $self->w) - $x
+       : ($rect->x + $rect->w) - $x
+       ;  # MAX
+       
+    $h = ($self->y + $self->h) > ($rect->y + $rect->h)
+       ? ($self->y + $self->h) - $y
+       : ($rect->y + $rect->h) - $y
+       ;  # MAX
+
+    return ($x, $y, $w, $h);
+}
+
+sub union {
+    my ($self, $rect) = (@_);
+    
+    unless ($rect->isa('SDL::Rect')) {
+        croak "must receive an SDL::Rect-based object";
+    }
+    
+    my ($x, $y, $w, $h) = _test_union($self, $rect);
+    return $self->new($x, $y, $w, $h);
+}
+
+sub union_ip {
+    my ($self, $rect) = (@_);
+    
+    unless ($rect->isa('SDL::Rect')) {
+        croak "must receive an SDL::Rect-based object";
+    }
+    
+    my ($x, $y, $w, $h) = _test_union($self, $rect);
+    
+    $self->x($x);
+    $self->y($y);
+    $self->w($w);
+    $self->y($h);
+    
+    return;
+}
+
 42;
 __END__
 
