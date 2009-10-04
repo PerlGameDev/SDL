@@ -210,7 +210,9 @@ sub midbottom {
 ## methods                   ##
 ###############################
 
-sub duplicate {
+{
+    no strict 'refs';
+    *{'duplicate'} = *{copy};
 }
 
 sub copy {
