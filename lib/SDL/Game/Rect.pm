@@ -649,6 +649,21 @@ sub collidelist {
     return;
 }
 
+sub collidelistall {
+    my ($self, $rects) = (@_);
+
+    unless (defined $rects and ref $rects eq 'ARRAY') {
+        croak "must receive an array reference of SDL::Rect-based objects";
+    }
+
+    my @collisions = ();
+    for(my $i = 0; $i < @{$rects}; $i++) {
+        if ( _do_rects_intersect($self, $rects->[$i]) ) {
+            push @collisions, $i;
+        }
+    }
+    return \@collisions;
+}
 
 
 42;
