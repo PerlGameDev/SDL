@@ -411,11 +411,6 @@ sub clip_ip {
     return;
 }
 
-=head3 union($rect)
-
-Returns a new rectangle that completely covers the area of the current Rect and the one passed as an argument. There may be area inside the new Rect that is not covered by the originals.
-
-=cut
 
 sub _test_union {
     my ($self, $rect) = (@_);
@@ -464,6 +459,59 @@ sub union_ip {
     
     return;
 }
+
+sub _test_unionall {
+    my ($self, $rects) = (@_);
+    
+    # initial values for union rect
+    my $left   = $self->x;
+    my $top    = $self->y;
+    my $right  = $self->x + $self->w;
+    my $bottom = $self->y + $self->h;
+    
+    foreach my $rect (@{$rects}) {
+        unless ($rect->isa('SDL::Rect')) {
+            # TODO: better error message, maybe saying which item 
+            # is the bad one (by list position)
+            croak "must receive an array reference of SDL::Rect-based objects";
+        }
+
+        $left   = $rect->x if $rect->x < $left; # MIN
+        $top    = $rect->y if $rect->y < $top; # MIN
+        $right  = ($rect->x + $rect->w) if ($rect->x + $rect->w) > $right;  # MAX
+        $bottom = ($rect->y + $rect->h) if ($rect->y + $rect->h) > $bottom; # MAX 
+    }
+    
+    return ($left, $top, $right - $left, $bottom - $top);
+}
+
+sub unionall {
+    my ($self, $rects) = (@_);
+    
+    croak "must receive an array reference of SDL::Rect-based objects"
+        unless defined $rects and ref $rects eq 'ARRAY';
+
+    my ($x, $y, $w, $h) = _test_unionall($self, $rects);
+    
+    return $self->new($x, $y, $w, $h);
+}
+
+sub unionall_ip {
+    my ($self, $rects) = (@_);
+    
+    croak "must receive an array reference of SDL::Rect-based objects"
+        unless defined $rects and ref $rects eq 'ARRAY';
+
+    my ($x, $y, $w, $h) = _test_unionall($self, $rects);
+    
+    $self->x($x);
+    $self->y($y);
+    $self->w($w);
+    $self->h($h);
+    
+    return;
+}
+
 
 42;
 __END__
