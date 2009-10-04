@@ -512,6 +512,51 @@ sub unionall_ip {
     return;
 }
 
+sub _check_fit {
+    my ($self, $rect) = (@_);
+    
+    my $x_ratio = $self->w / $rect->w;
+    my $y_ratio = $self->h / $rect->h;
+    my $max_ratio = ($x_ratio > $y_ratio) ? $x_ratio : $y_ratio;
+
+    my $w = int ($self->w / $max_ratio);
+    my $h = int ($self->h / $max_ratio);
+
+    my $x = $rect->x + int (($rect->w - $w) / 2);
+    my $y = $rect->y + int (($rect->h - $h) / 2);
+    
+    return ($x, $y, $w, $h);
+}
+
+sub fit {
+    my ($self, $rect) = (@_);
+    
+    unless ($rect->isa('SDL::Rect')) {
+        croak "must receive an SDL::Rect-based object";
+    }
+
+    my ($x, $y, $w, $h) = _check_fit($self, $rect);
+    
+    return $self->new ($x, $y, $w, $h);
+}
+
+sub fit_ip {
+    my ($self, $rect) = (@_);
+    
+    unless ($rect->isa('SDL::Rect')) {
+        croak "must receive an SDL::Rect-based object";
+    }
+
+    my ($x, $y, $w, $h) = _check_fit($self, $rect);
+    
+    $self->x($x);
+    $self->y($y);
+    $self->w($w);
+    $self->h($h);
+    
+    return;
+}
+
 
 42;
 __END__
