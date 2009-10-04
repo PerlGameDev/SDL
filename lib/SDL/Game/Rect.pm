@@ -557,6 +557,21 @@ sub fit_ip {
     return;
 }
 
+sub normalize {
+    my $self = shift;
+    
+    if ($self->w < 0) {
+        $self->x($self->x + $self->w);
+        $self->w(-$self->w);
+    }
+    
+    if ($self->h < 0) {
+        $self->y( $self->y + $self->h);
+        $self->h(-$self->h);
+    }
+    return;
+}
+
 
 42;
 __END__
