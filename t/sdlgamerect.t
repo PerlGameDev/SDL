@@ -18,9 +18,8 @@ can_ok ('SDL::Game::Rect', qw/
 	centery
 	 /);
 
-my $app = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
 
-my $rect = SDL::Game::Rect->new( 0, 10, 0, 0);
+my $rect = SDL::Game::Rect->new( 0, 0, 0, 0);
 
 isa_ok ($rect, 'SDL::Game::Rect','new went ok');
 
