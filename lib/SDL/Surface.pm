@@ -526,12 +526,12 @@ C<SDL::Surface::display_format> converts the surface to the same format as the
 current screen.
 
 =head2 rgb ()
-C<SDL::Surface::rgb> converts the surface to a 24 bit rgb format regardless of the 
-initial format.
+
+C<SDL::Surface::rgb> converts the surface to a 24 bit rgb format regardless of the initial format.
 
 =head2 rgba ()
-C<SDL::Surface::rgba> converts the surface to a 32 bit rgba format regarless of the
-initial format.
+
+C<SDL::Surface::rgba> converts the surface to a 32 bit rgba format regarless of the initial format.
 
 =head2 print (x,y,text...)
 
