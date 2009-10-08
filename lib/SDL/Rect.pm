@@ -22,45 +22,45 @@ bootstrap SDL::Rect;
 # would be another call and rects are a time-critical object.
 sub left {
 	my $self = shift;
-	RectX($self,@_);
+	return RectX($self,@_);
 }
 
 sub x {
 	my $self = shift;
-	RectX($self,@_);
+	return RectX($self,@_);
 }
 
 ### TODO: see 'left' above (this is an 'alias' to sub y)
 sub top {
 	my $self = shift;
-	RectY($self,@_);
+	return RectY($self,@_);
 }
 
 sub y {
 	my $self = shift;
-	RectY($self,@_);
+	return RectY($self,@_);
 }
 
 ### TODO: see 'left' above (this is an 'alias' to sub width)
 sub w {
 	my $self = shift;
-	RectW($self,@_);
+	return RectW($self,@_);
 }
 
 sub width {
 	my $self = shift;
-	RectW($self,@_);
+	return RectW($self,@_);
 }
 
 ### TODO: see 'left' above (this is an 'alias' to sub height)
 sub h {
 	my $self = shift;
-	RectH($self,@_);
+	return RectH($self,@_);
 }
 
 sub height {
 	my $self = shift;
-	RectH($self,@_);
+	return RectH($self,@_);
 }
 
 

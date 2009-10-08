@@ -36,7 +36,7 @@ BEGIN {
 use strict;
 use SDL;
 use SDL::Config;
-#use SDL::Rect;
+use SDL::Rect;
 use SDL::Game::Rect;
 use SDL::Color;
 use Test::More;
@@ -62,7 +62,7 @@ can_ok ('SDL::App', qw/
 
 my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
 
-	my $rect = SDL::Game::Rect->new( 0,0, 10, 20);
+	my $rect = SDL::Rect->new( 0,0, 10, 20);
 
 	my $blue = SDL::Color->new(
 		-r => 0x00,
@@ -78,11 +78,19 @@ my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init 
 
 
 	my $grect = SDL::Game::Rect->new(10, 10, 30, 5);
+	foreach(0..20)
+	{
+		print $_;
+	$rect->x($_);	
+ 	$grect->x($_);	
 	$app->fill($rect, $blue);
 	$app->fill($grect, $col);
+
+
 	$app->update($rect);
 	$app->update($grect);
+	$app->sync;
+	}
 
-	 $app->sync;
 	  sleep(1);
 
