@@ -62,7 +62,7 @@ can_ok ('SDL::App', qw/
 
 my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
 
-	my $rect = SDL::Rect->new( 0,0, 10, 20);
+	my $rect = SDL::Rect->new( 0,0, $app->width, $app->height);
 
 	my $blue = SDL::Color->new(
 		-r => 0x00,
@@ -73,16 +73,18 @@ my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init 
 	my $col = SDL::Color->new( 
 		-r => 0xf0,
 		-g => 0x00,
-		-b => 0xff,
+		-b => 0x33,
 	);
 
 
-	my $grect = SDL::Game::Rect->new(10, 10, 30, 5);
-	foreach(0..20)
+	my $grect = SDL::Game::Rect->new(10, 10, 30, 35);
+	foreach(0..80)
 	{
-		print $_;
-	$rect->x($_);	
- 	$grect->x($_);	
+
+	
+ 	$grect->x($_ );	
+	$grect->centery($_ * 3); 
+	$grect->size( ($_ / 40) * $_, ($_/38) * $_ );
 	$app->fill($rect, $blue);
 	$app->fill($grect, $col);
 
