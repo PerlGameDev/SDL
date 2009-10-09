@@ -8,10 +8,9 @@ use SDL;
 use SDL::Mixer;
 use SDL::Sound;
 
-SDL::Init(SDL_INIT_AUDIO);
-
 my $filename = shift || 'data/sample.wav';
 
+# we want a frequency that is higher than the default
 my $mixer = SDL::Mixer->new(
     -frequency => 44100,
 );
