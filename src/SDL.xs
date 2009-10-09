@@ -1205,63 +1205,6 @@ VideoInfo ()
 	OUTPUT:
 		RETVAL
 
-SDL_Rect *
-NewRect ( x, y, w, h )
-	Sint16 x
-	Sint16 y
-	Uint16 w
-	Uint16 h
-	CODE:
-		RETVAL = (SDL_Rect *) safemalloc (sizeof(SDL_Rect));
-		RETVAL->x = x;
-		RETVAL->y = y;
-		RETVAL->w = w;
-		RETVAL->h = h;
-	OUTPUT:
-		RETVAL
-
-void
-FreeRect ( rect )
-	SDL_Rect *rect
-	CODE:
-		safefree(rect);
-
-Sint16
-RectX ( rect, ... )
-	SDL_Rect *rect
-	CODE:
-		if (items > 1 ) rect->x = SvIV(ST(1)); 
-		RETVAL = rect->x;
-	OUTPUT:
-		RETVAL
-
-Sint16
-RectY ( rect, ... )
-	SDL_Rect *rect
-	CODE:
-		if (items > 1 ) rect->y = SvIV(ST(1)); 
-		RETVAL = rect->y;
-	OUTPUT:
-		RETVAL
-
-Uint16
-RectW ( rect, ... )
-	SDL_Rect *rect
-	CODE:
-		if (items > 1 ) rect->w = SvIV(ST(1)); 
-		RETVAL = rect->w;
-	OUTPUT:
-		RETVAL
-
-Uint16
-RectH ( rect, ... )
-	SDL_Rect *rect
-	CODE:
-		if (items > 1 ) rect->h = SvIV(ST(1)); 
-		RETVAL = rect->h;
-	OUTPUT:
-		RETVAL
-
 AV*
 ListModes ( format, flags )
 	Uint32 flags
@@ -1614,8 +1557,11 @@ ConvertRGBA ( surface )
 int
 BlitSurface ( src, src_rect, dest, dest_rect )
 	SDL_Surface *src
-	SDL_Rect *src_rect
+
 	SDL_Surface *dest
+
+	SDL_Rect *src_rect
+
 	SDL_Rect *dest_rect
 	CODE:
 		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
@@ -1625,8 +1571,11 @@ BlitSurface ( src, src_rect, dest, dest_rect )
 int
 FillRect ( dest, dest_rect, color )
 	SDL_Surface *dest
-	SDL_Rect *dest_rect
+	
 	SDL_Color *color
+	
+	SDL_Rect *dest_rect
+
 	CODE:
 		Uint32 pixel = SDL_MapRGB(dest->format,color->r,color->g,color->b);
 		RETVAL = SDL_FillRect(dest,dest_rect,pixel);
@@ -2543,14 +2492,12 @@ SetClipRect ( surface, rect )
 	CODE:
 		SDL_SetClipRect(surface,rect);
 	
-SDL_Rect*
-GetClipRect ( surface )
+void
+GetClipRect ( surface, rect )
 	SDL_Surface *surface
+	SDL_Rect *rect;
 	CODE:
-		RETVAL = (SDL_Rect*) safemalloc(sizeof(SDL_Rect));
-		SDL_GetClipRect(surface,RETVAL);
-	OUTPUT:
-		RETVAL
+	 	SDL_GetClipRect(surface, rect);
 
 
 #ifdef HAVE_SDL_NET

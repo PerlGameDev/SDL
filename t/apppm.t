@@ -34,6 +34,7 @@ BEGIN {
 }
 
 use strict;
+use SDL;
 use SDL::Config;
 
 use Test::More;
@@ -56,3 +57,9 @@ can_ok ('SDL::App', qw/
 	loop
 	sync 
 	attribute /);
+
+my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
+
+	 $app->sync;
+	  sleep(1);
+

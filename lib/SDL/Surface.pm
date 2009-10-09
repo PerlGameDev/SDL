@@ -37,7 +37,7 @@ use SDL;
 use SDL::SFont;
 use SDL::Color;
 use SDL::Rect;
-
+use Data::Dumper;
 sub new {
 	my $proto = shift;	
 	my $class = ref($proto) || $proto;
@@ -166,7 +166,7 @@ sub fill {
 	if ($_[1] == 0 ) {
 		SDL::FillRect(${$_[0]},0,${$_[2]});
 	} else {
-		SDL::FillRect(${$_[0]},${$_[1]},${$_[2]});
+		SDL::FillRect(${$_[0]},$_[1],${$_[2]});
 	}
 }
 
@@ -208,7 +208,7 @@ sub blit {
 		croak "SDL::Surface::blit requires SDL::Surface objects"
 			unless $_[2]->isa('SDL::Surface'); 
 	}
-		SDL::BlitSurface(map { (defined($_) && $_ != 0)? ${$_} : $_ } @_) if defined(@_);
+		SDL::BlitSurface( $_[0], $_[1], ${$_[2]}, $_[3]);
 }
 
 sub set_colors {
@@ -526,12 +526,12 @@ C<SDL::Surface::display_format> converts the surface to the same format as the
 current screen.
 
 =head2 rgb ()
-C<SDL::Surface::rgb> converts the surface to a 24 bit rgb format regardless of the 
-initial format.
+
+C<SDL::Surface::rgb> converts the surface to a 24 bit rgb format regardless of the initial format.
 
 =head2 rgba ()
-C<SDL::Surface::rgba> converts the surface to a 32 bit rgba format regarless of the
-initial format.
+
+C<SDL::Surface::rgba> converts the surface to a 32 bit rgba format regarless of the initial format.
 
 =head2 print (x,y,text...)
 
