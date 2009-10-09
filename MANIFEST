@@ -135,5 +135,6 @@ test/testjoystick.pl
 test/testmenu.pl
 test/testsprite.pl
 test/testtimer.pl
+test/wave.pl
 TODO
 typemap
