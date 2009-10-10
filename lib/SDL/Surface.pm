@@ -241,6 +241,14 @@ sub display_format {
 	$self;
 }
 
+sub display_format_alpha {
+	my $self = shift;
+	my $tmp = SDL::DisplayFormatAlpha($$self);
+	SDL::FreeSurface ($$self);
+	$$self = $tmp;
+	$self;
+}
+
 sub rgb {
 	my $self = shift;
 	my $tmp = SDL::ConvertRGB($$self);
@@ -526,6 +534,11 @@ C<alpha> takes a value from 0x00 to 0xff.
 
 C<SDL::Surface::display_format> converts the surface to the same format as the
 current screen.
+
+=head2 display_format_alpha ()
+
+C<SDL::Surface::display_format_alpha> converts the surface to the same format as the
+current screen, plus an alpha channel.
 
 =head2 rgb ()
 
