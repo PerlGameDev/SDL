@@ -208,7 +208,9 @@ sub blit {
 		croak "SDL::Surface::blit requires SDL::Surface objects"
 			unless $_[2]->isa('SDL::Surface'); 
 	}
-		SDL::BlitSurface( $_[0], $_[1], ${$_[2]}, $_[3]);
+	#BlitSurface ( src, src_rect, dest, dest_rect )
+
+		SDL::BlitSurface( ${$_[0]}, $_[1], ${$_[2]}, $_[3]);
 }
 
 sub set_colors {
