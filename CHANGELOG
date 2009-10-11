@@ -4,6 +4,7 @@ Revision history for Perl extension SDL_perl.
   - Fix bug with TTFSizeText, it actually returns 0 on success [acme]
   - Add display_format_alpha [acme]
   - Add an example that plays a .WAV sound sample [acme]
+  - Add left/right panning to the mixer [acme]
 
 * v2.2.3.1 Sept 29 2009 Kartik Thakore <thakore.kartik@gmail.com>
 	- Critical Build.PL fix for META.yml 

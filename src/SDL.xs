@@ -2201,6 +2201,15 @@ MixPlayingMusic()
 	OUTPUT:
 		RETVAL
 
+int
+MixSetPanning ( channel, left, right )
+	int channel
+	int left
+	int right
+	CODE:
+		RETVAL = Mix_SetPanning(channel, left, right);
+	OUTPUT:
+		RETVAL
 
 void
 MixCloseAudio ()

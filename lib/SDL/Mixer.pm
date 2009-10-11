@@ -234,6 +234,11 @@ sub playing_music () {
 	return SDL::MixPlayingMusic();
 }
 
+sub set_panning {
+  my($self, $channel, $left, $right) = @_;
+	return SDL::MixSetPanning($channel, $left, $right);
+}
+
 1;
 
 __END__;
@@ -408,6 +413,12 @@ Return true when the channel is currently playing.
 =head2 playing_music ()
 
 Return true when the music is currently playing.
+
+=head1 set_panning($channel, $left, $right)
+
+Sets the volume for the left or right channels. To do true panning:
+
+  $mixer->set_panning($channel, $left, 254 - $left);
 
 =head1 AUTHORS 
 
