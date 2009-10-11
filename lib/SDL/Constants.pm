@@ -31,7 +31,7 @@
 package SDL::Constants;
 use strict;
 use warnings;
-
+use base 'Exporter';
 
 our @EXPORT=qw(
 	AUDIO_S16
@@ -307,8 +307,6 @@ our @EXPORT=qw(
 	SDL_SAMPLEFLAG_ERROR
 	SDL_SAMPLEFLAG_EAGAIN
 );
-
-@ISA = qw(Exporter);
 
 sub AUDIO_S16 {32784}
 sub AUDIO_S16MSB {36880}
