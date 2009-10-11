@@ -2930,15 +2930,14 @@ TTFSizeText ( font, text )
 		RETVAL = newAV();
 		if(TTF_SizeText(font,text,&w,&h))
 		{
-			av_push(RETVAL,newSViv(w));
-			av_push(RETVAL,newSViv(h));
-			sv_2mortal((SV*)RETVAL);
+			printf("TTF error at TTFSizeText: %s \n", TTF_GetError());
+			Perl_croak (aTHX_ "TTF error \n");
 		}
 		else
 		{
-			 printf("TTF error at TTFSizeText: %s \n", TTF_GetError()); 
-			 Perl_croak (aTHX_ "TTF error \n");	
-	
+			av_push(RETVAL,newSViv(w));
+			av_push(RETVAL,newSViv(h));
+			sv_2mortal((SV*)RETVAL);
 		}
 		
 	
