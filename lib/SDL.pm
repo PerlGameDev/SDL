@@ -118,6 +118,9 @@ per class basis.
 	Nick: nferraz
 	Name: Nelson Ferraz
 
+	Nice: acme
+	Name: Leon Brocard
+
 =head2 Maintainance 
 	
 	Nick: kthakore
