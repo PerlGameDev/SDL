@@ -29,8 +29,11 @@
 #
 
 package SDL::Constants;
+use strict;
+use warnings;
 
-@EXPORT=qw(
+
+our @EXPORT=qw(
 	AUDIO_S16
 	AUDIO_S16MSB
 	AUDIO_S8
