@@ -151,30 +151,30 @@ Use the SDLPerl executable made in the bundle and call your scripts
 
 As with the C language API, SDL_perl initializes the SDL environment through
 the C<SDL::Init> subroutine.  This routine takes a mode flag constructed through
-the bitwise OR product of the following functions:  
+the bitwise OR product of the following constants:
 
 =over 4
 
 =item *
-INIT_AUDIO()
+INIT_AUDIO
 
 =item *
-INIT_VIDEO()
+INIT_VIDEO
 
 =item *
-INIT_CDROM()
+INIT_CDROM
 
 =item *
-INIT_EVERYTHING()
+INIT_EVERYTHING
 
 =item *
-INIT_NOPARACHUTE() 
+INIT_NOPARACHUTE
 
 =item *
-INIT_JOYSTICK()
+INIT_JOYSTICK
 
 =item *
-INIT_TIMER()
+INIT_TIMER
 
 =back
 
