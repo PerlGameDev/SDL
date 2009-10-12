@@ -308,277 +308,308 @@ our @EXPORT=qw(
 	SDL_SAMPLEFLAG_EAGAIN
 );
 
-sub AUDIO_S16 {32784}
-sub AUDIO_S16MSB {36880}
-sub AUDIO_S8 {32776}
-sub AUDIO_U16 {16}
-sub AUDIO_U16MSB {4112}
-sub AUDIO_U8 {8}
-sub CD_ERROR {-1}
-sub CD_PAUSED {3}
-sub CD_PLAYING {2}
-sub CD_STOPPED {1}
-sub CD_TRAYEMPTY {0}
-sub INADDR_ANY {0}
-sub INADDR_NONE {-1}
-sub KMOD_ALT {768}
-sub KMOD_CAPS {8192}
-sub KMOD_CTRL {192}
-sub KMOD_LALT {256}
-sub KMOD_LCTRL {64}
-sub KMOD_LSHIFT {1}
-sub KMOD_NONE {0}
-sub KMOD_NUM {4096}
-sub KMOD_RALT {512}
-sub KMOD_RCTRL {128}
-sub KMOD_RSHIFT {2}
-sub KMOD_SHIFT {3}
-sub MIX_DEFAULT_CHANNELS {2}
-sub MIX_DEFAULT_FORMAT {32784}
-sub MIX_DEFAULT_FREQUENCY {22050}
-sub MIX_FADING_IN {2}
-sub MIX_FADING_OUT {1}
-sub MIX_MAX_VOLUME {128}
-sub MIX_NO_FADING {0}
-sub SDLK_0 {48}
-sub SDLK_1 {49}
-sub SDLK_2 {50}
-sub SDLK_3 {51}
-sub SDLK_4 {52}
-sub SDLK_5 {53}
-sub SDLK_6 {54}
-sub SDLK_7 {55}
-sub SDLK_8 {56}
-sub SDLK_9 {57}
-sub SDLK_AMPERSAND {38}
-sub SDLK_ASTERISK {42}
-sub SDLK_AT {64}
-sub SDLK_BACKQUOTE {96}
-sub SDLK_BACKSLASH {92}
-sub SDLK_BACKSPACE {8}
-sub SDLK_BREAK {318}
-sub SDLK_CAPSLOCK {301}
-sub SDLK_CARET {94}
-sub SDLK_CLEAR {12}
-sub SDLK_COLON {58}
-sub SDLK_COMMA {44}
-sub SDLK_DELETE {127}
-sub SDLK_DOLLAR {36}
-sub SDLK_DOWN {274}
-sub SDLK_END {279}
-sub SDLK_EQUALS {61}
-sub SDLK_ESCAPE {27}
-sub SDLK_EURO {321}
-sub SDLK_EXCLAIM {33}
-sub SDLK_F1 {282}
-sub SDLK_F10 {291}
-sub SDLK_F11 {292}
-sub SDLK_F12 {293}
-sub SDLK_F13 {294}
-sub SDLK_F14 {295}
-sub SDLK_F15 {296}
-sub SDLK_F2 {283}
-sub SDLK_F3 {284}
-sub SDLK_F4 {285}
-sub SDLK_F5 {286}
-sub SDLK_F6 {287}
-sub SDLK_F7 {288}
-sub SDLK_F8 {289}
-sub SDLK_F9 {290}
-sub SDLK_GREATER {62}
-sub SDLK_HASH {35}
-sub SDLK_HELP {315}
-sub SDLK_HOME {278}
-sub SDLK_INSERT {277}
-sub SDLK_KP0 {256}
-sub SDLK_KP1 {257}
-sub SDLK_KP2 {258}
-sub SDLK_KP3 {259}
-sub SDLK_KP4 {260}
-sub SDLK_KP5 {261}
-sub SDLK_KP6 {262}
-sub SDLK_KP7 {263}
-sub SDLK_KP8 {264}
-sub SDLK_KP9 {265}
-sub SDLK_KP_DIVIDE {267}
-sub SDLK_KP_ENTER {271}
-sub SDLK_KP_EQUALS {272}
-sub SDLK_KP_MINUS {269}
-sub SDLK_KP_MULTIPLY {268}
-sub SDLK_KP_PERIOD {266}
-sub SDLK_KP_PLUS {270}
-sub SDLK_LALT {308}
-sub SDLK_LCTRL {306}
-sub SDLK_LEFT {276}
-sub SDLK_LEFTBRACKET {91}
-sub SDLK_LEFTPAREN {40}
-sub SDLK_LESS {60}
-sub SDLK_LMETA {310}
-sub SDLK_LSHIFT {304}
-sub SDLK_LSUPER {311}
-sub SDLK_MENU {319}
-sub SDLK_MINUS {45}
-sub SDLK_MODE {313}
-sub SDLK_NUMLOCK {300}
-sub SDLK_PAGEDOWN {281}
-sub SDLK_PAGEUP {280}
-sub SDLK_PAUSE {19}
-sub SDLK_PERIOD {46}
-sub SDLK_PLUS {43}
-sub SDLK_POWER {320}
-sub SDLK_PRINT {316}
-sub SDLK_QUESTION {63}
-sub SDLK_QUOTE {39}
-sub SDLK_QUOTEDBL {34}
-sub SDLK_RALT {307}
-sub SDLK_RCTRL {305}
-sub SDLK_RETURN {13}
-sub SDLK_RIGHT {275}
-sub SDLK_RIGHTBRACKET {93}
-sub SDLK_RIGHTPAREN {41}
-sub SDLK_RMETA {309}
-sub SDLK_RSHIFT {303}
-sub SDLK_RSUPER {312}
-sub SDLK_SCROLLOCK {302}
-sub SDLK_SEMICOLON {59}
-sub SDLK_SLASH {47}
-sub SDLK_SPACE {32}
-sub SDLK_SYSREQ {317}
-sub SDLK_TAB {9}
-sub SDLK_UNDERSCORE {95}
-sub SDLK_UP {273}
-sub SDLK_a {97}
-sub SDLK_b {98}
-sub SDLK_c {99}
-sub SDLK_d {100}
-sub SDLK_e {101}
-sub SDLK_f {102}
-sub SDLK_g {103}
-sub SDLK_h {104}
-sub SDLK_i {105}
-sub SDLK_j {106}
-sub SDLK_k {107}
-sub SDLK_l {108}
-sub SDLK_m {109}
-sub SDLK_n {110}
-sub SDLK_o {111}
-sub SDLK_p {112}
-sub SDLK_q {113}
-sub SDLK_r {114}
-sub SDLK_s {115}
-sub SDLK_t {116}
-sub SDLK_u {117}
-sub SDLK_v {118}
-sub SDLK_w {119}
-sub SDLK_x {120}
-sub SDLK_y {121}
-sub SDLK_z {122}
-sub SDL_ACTIVEEVENT {1}
-sub SDL_ANYFORMAT {268435456}
-sub SDL_APPACTIVE {4}
-sub SDL_APPINPUTFOCUS {2}
-sub SDL_APPMOUSEFOCUS {1}
-sub SDL_ASYNCBLIT {4}
-sub SDL_AUDIO_PAUSED {2}
-sub SDL_AUDIO_PLAYING {1}
-sub SDL_AUDIO_STOPPED {0}
-sub SDL_BUTTON_LEFT {1}
-sub SDL_BUTTON_MIDDLE {2}
-sub SDL_BUTTON_RIGHT {4}
-sub SDL_BUTTON_WHEELUP {8}
-sub SDL_BUTTON_WHEELDOWN {16}
-sub SDL_DOUBLEBUF {1073741824}
-sub SDL_ENABLE {1}
-sub SDL_FULLSCREEN {-2147483648}
-sub SDL_GL_ACCUM_ALPHA_SIZE {11}
-sub SDL_GL_ACCUM_BLUE_SIZE {10}
-sub SDL_GL_ACCUM_GREEN_SIZE {9}
-sub SDL_GL_ACCUM_RED_SIZE {8}
-sub SDL_GL_ALPHA_SIZE {3}
-sub SDL_GL_BLUE_SIZE {2}
-sub SDL_GL_BUFFER_SIZE {4}
-sub SDL_GL_DEPTH_SIZE {6}
-sub SDL_GL_DOUBLEBUFFER {5}
-sub SDL_GL_GREEN_SIZE {1}
-sub SDL_GL_RED_SIZE {0}
-sub SDL_GL_STENCIL_SIZE {7}
-sub SDL_GRAB_OFF {0}
-sub SDL_GRAB_ON {1}
-sub SDL_GRAB_QUERY {-1}
-sub SDL_HAT_CENTERED {0}
-sub SDL_HAT_DOWN {4}
-sub SDL_HAT_LEFT {8}
-sub SDL_HAT_LEFTDOWN {12}
-sub SDL_HAT_LEFTUP {9}
-sub SDL_HAT_RIGHT {2}
-sub SDL_HAT_RIGHTDOWN {6}
-sub SDL_HAT_RIGHTUP {3}
-sub SDL_HAT_UP {1}
-sub SDL_HWACCEL {256}
-sub SDL_HWPALETTE {536870912}
-sub SDL_HWSURFACE {1}
-sub SDL_IGNORE {0}
-sub SDL_INIT_AUDIO {16}
-sub SDL_INIT_CDROM {256}
-sub SDL_INIT_EVERYTHING {65535}
-sub SDL_INIT_JOYSTICK {512}
-sub SDL_INIT_NOPARACHUTE {1048576}
-sub SDL_INIT_TIMER {1}
-sub SDL_INIT_VIDEO {32}
-sub SDL_IYUV_OVERLAY {1448433993}
-sub SDL_JOYAXISMOTION {7}
-sub SDL_JOYBALLMOTION {8}
-sub SDL_JOYBUTTONDOWN {10}
-sub SDL_JOYBUTTONUP {11}
-sub SDL_JOYHATMOTION {9}
-sub SDL_KEYDOWN {2}
-sub SDL_KEYUP {3}
-sub SDL_MIX_MAXVOLUME {128}
-sub SDL_MOUSEBUTTONDOWN {5}
-sub SDL_MOUSEBUTTONUP {6}
-sub SDL_MOUSEMOTION {4}
-sub SDL_OPENGL {2}
-sub SDL_OPENGLBLIT {10}
-sub SDL_PREALLOC {16777216}
-sub SDL_PRESSED {1}
-sub SDL_QUERY {-1}
-sub SDL_QUIT {12}
-sub SDL_RELEASED {0}
-sub SDL_RESIZABLE {16}
-sub SDL_RLEACCEL {16384}
-sub SDL_RLEACCELOK {8192}
-sub SDL_SRCALPHA {65536}
-sub SDL_SRCCOLORKEY {4096}
-sub SDL_SWSURFACE {0}
-sub SDL_SYSWMEVENT {13}
-sub SDL_UYVY_OVERLAY {1498831189}
-sub SDL_VIDEOEXPOSE {17}
-sub SDL_VIDEORESIZE {16}
-sub SDL_YUY2_OVERLAY {844715353}
-sub SDL_YV12_OVERLAY {842094169}
-sub SDL_YVYU_OVERLAY {1431918169}
-sub SMPEG_ERROR {-1}
-sub SMPEG_PLAYING {1}
-sub SMPEG_STOPPED {0}
-sub TEXT_BLENDED {4}
-sub TEXT_SHADED {2}
-sub TEXT_SOLID {1}
-sub TTF_STYLE_BOLD {1}
-sub TTF_STYLE_ITALIC {2}
-sub TTF_STYLE_NORMAL {0}
-sub TTF_STYLE_UNDERLINE {4}
-sub UNICODE_BLENDED {256}
-sub UNICODE_SHADED {128}
-sub UNICODE_SOLID {64}
-sub UTF8_BLENDED {32}
-sub UTF8_SHADED {16}
-sub UTF8_SOLID {8}
-sub SDL_SVG_FLAG_DIRECT {0}
-sub SDL_SVG_FLAG_COMPOSITE {1}
-sub SDL_SAMPLEFLAG_NONE {0}
-sub SDL_SAMPLEFLAG_CANSEEK {1}
-sub SDL_SAMPLEFLAG_EOF {1<<29}
-sub SDL_SAMPLEFLAG_ERROR {1<<30}
-sub SDL_SAMPLEFLAG_EAGAIN {1<<31}
+use constant {
+    AUDIO_S16    => 32784,
+    AUDIO_S16MSB => 36880,
+    AUDIO_S8     => 32776,
+    AUDIO_U16    => 16,
+    AUDIO_U16MSB => 4112,
+    AUDIO_U8     => 8,
+    
+    CD_ERROR     => -1,
+    CD_PAUSED    => 3,
+    CD_PLAYING   => 2,
+    CD_STOPPED   => 1,
+    CD_TRAYEMPTY => 0,
+    
+    INADDR_ANY  => 0,
+    INADDR_NONE => -1,
+    
+    KMOD_ALT    => 768,
+    KMOD_CAPS   => 8192,
+    KMOD_CTRL   => 192,
+    KMOD_LALT   => 256,
+    KMOD_LCTRL  => 64,
+    KMOD_LSHIFT => 1,
+    KMOD_NONE   => 0,
+    KMOD_NUM    => 4096,
+    KMOD_RALT   => 512,
+    KMOD_RCTRL  => 128,
+    KMOD_RSHIFT => 2,
+    KMOD_SHIFT  => 3,
+    
+    MIX_DEFAULT_CHANNELS  => 2,
+    MIX_DEFAULT_FORMAT    => 32784,
+    MIX_DEFAULT_FREQUENCY => 22050,
+    MIX_FADING_IN         => 2,
+    MIX_FADING_OUT        => 1,
+    MIX_MAX_VOLUME        => 128,
+    MIX_NO_FADING         => 0,
+    
+    SDLK_0            => 48,
+    SDLK_1            => 49,
+    SDLK_2            => 50,
+    SDLK_3            => 51,
+    SDLK_4            => 52,
+    SDLK_5            => 53,
+    SDLK_6            => 54,
+    SDLK_7            => 55,
+    SDLK_8            => 56,
+    SDLK_9            => 57,
+    SDLK_AMPERSAND    => 38,
+    SDLK_ASTERISK     => 42,
+    SDLK_AT           => 64,
+    SDLK_BACKQUOTE    => 96,
+    SDLK_BACKSLASH    => 92,
+    SDLK_BACKSPACE    => 8,
+    SDLK_BREAK        => 318,
+    SDLK_CAPSLOCK     => 301,
+    SDLK_CARET        => 94,
+    SDLK_CLEAR        => 12,
+    SDLK_COLON        => 58,
+    SDLK_COMMA        => 44,
+    SDLK_DELETE       => 127,
+    SDLK_DOLLAR       => 36,
+    SDLK_DOWN         => 274,
+    SDLK_END          => 279,
+    SDLK_EQUALS       => 61,
+    SDLK_ESCAPE       => 27,
+    SDLK_EURO         => 321,
+    SDLK_EXCLAIM      => 33,
+    SDLK_F1           => 282,
+    SDLK_F10          => 291,
+    SDLK_F11          => 292,
+    SDLK_F12          => 293,
+    SDLK_F13          => 294,
+    SDLK_F14          => 295,
+    SDLK_F15          => 296,
+    SDLK_F2           => 283,
+    SDLK_F3           => 284,
+    SDLK_F4           => 285,
+    SDLK_F5           => 286,
+    SDLK_F6           => 287,
+    SDLK_F7           => 288,
+    SDLK_F8           => 289,
+    SDLK_F9           => 290,
+    SDLK_GREATER      => 62,
+    SDLK_HASH         => 35,
+    SDLK_HELP         => 315,
+    SDLK_HOME         => 278,
+    SDLK_INSERT       => 277,
+    SDLK_KP0          => 256,
+    SDLK_KP1          => 257,
+    SDLK_KP2          => 258,
+    SDLK_KP3          => 259,
+    SDLK_KP4          => 260,
+    SDLK_KP5          => 261,
+    SDLK_KP6          => 262,
+    SDLK_KP7          => 263,
+    SDLK_KP8          => 264,
+    SDLK_KP9          => 265,
+    SDLK_KP_DIVIDE    => 267,
+    SDLK_KP_ENTER     => 271,
+    SDLK_KP_EQUALS    => 272,
+    SDLK_KP_MINUS     => 269,
+    SDLK_KP_MULTIPLY  => 268,
+    SDLK_KP_PERIOD    => 266,
+    SDLK_KP_PLUS      => 270,
+    SDLK_LALT         => 308,
+    SDLK_LCTRL        => 306,
+    SDLK_LEFT         => 276,
+    SDLK_LEFTBRACKET  => 91,
+    SDLK_LEFTPAREN    => 40,
+    SDLK_LESS         => 60,
+    SDLK_LMETA        => 310,
+    SDLK_LSHIFT       => 304,
+    SDLK_LSUPER       => 311,
+    SDLK_MENU         => 319,
+    SDLK_MINUS        => 45,
+    SDLK_MODE         => 313,
+    SDLK_NUMLOCK      => 300,
+    SDLK_PAGEDOWN     => 281,
+    SDLK_PAGEUP       => 280,
+    SDLK_PAUSE        => 19,
+    SDLK_PERIOD       => 46,
+    SDLK_PLUS         => 43,
+    SDLK_POWER        => 320,
+    SDLK_PRINT        => 316,
+    SDLK_QUESTION     => 63,
+    SDLK_QUOTE        => 39,
+    SDLK_QUOTEDBL     => 34,
+    SDLK_RALT         => 307,
+    SDLK_RCTRL        => 305,
+    SDLK_RETURN       => 13,
+    SDLK_RIGHT        => 275,
+    SDLK_RIGHTBRACKET => 93,
+    SDLK_RIGHTPAREN   => 41,
+    SDLK_RMETA        => 309,
+    SDLK_RSHIFT       => 303,
+    SDLK_RSUPER       => 312,
+    SDLK_SCROLLOCK    => 302,
+    SDLK_SEMICOLON    => 59,
+    SDLK_SLASH        => 47,
+    SDLK_SPACE        => 32,
+    SDLK_SYSREQ       => 317,
+    SDLK_TAB          => 9,
+    SDLK_UNDERSCORE   => 95,
+    SDLK_UP           => 273,
+    SDLK_a            => 97,
+    SDLK_b            => 98,
+    SDLK_c            => 99,
+    SDLK_d            => 100,
+    SDLK_e            => 101,
+    SDLK_f            => 102,
+    SDLK_g            => 103,
+    SDLK_h            => 104,
+    SDLK_i            => 105,
+    SDLK_j            => 106,
+    SDLK_k            => 107,
+    SDLK_l            => 108,
+    SDLK_m            => 109,
+    SDLK_n            => 110,
+    SDLK_o            => 111,
+    SDLK_p            => 112,
+    SDLK_q            => 113,
+    SDLK_r            => 114,
+    SDLK_s            => 115,
+    SDLK_t            => 116,
+    SDLK_u            => 117,
+    SDLK_v            => 118,
+    SDLK_w            => 119,
+    SDLK_x            => 120,
+    SDLK_y            => 121,
+    SDLK_z            => 122,
+    
+    SDL_ACTIVEEVENT => 1,
+    SDL_ANYFORMAT => 268435456,
+    SDL_APPACTIVE => 4,
+    SDL_APPINPUTFOCUS => 2,
+    SDL_APPMOUSEFOCUS => 1,
+    SDL_ASYNCBLIT => 4,
+    
+    SDL_AUDIO_PAUSED  => 2,
+    SDL_AUDIO_PLAYING => 1,
+    SDL_AUDIO_STOPPED => 0,
+    
+    SDL_BUTTON_LEFT      => 1,
+    SDL_BUTTON_MIDDLE    => 2,
+    SDL_BUTTON_RIGHT     => 4,
+    SDL_BUTTON_WHEELUP   => 8,
+    SDL_BUTTON_WHEELDOWN => 16,
+    
+    SDL_DOUBLEBUF => 1073741824,
+    SDL_ENABLE => 1,
+    SDL_FULLSCREEN => -2147483648,
+    
+    SDL_GL_ACCUM_ALPHA_SIZE => 11,
+    SDL_GL_ACCUM_BLUE_SIZE  => 10,
+    SDL_GL_ACCUM_GREEN_SIZE => 9,
+    SDL_GL_ACCUM_RED_SIZE   => 8,
+    SDL_GL_ALPHA_SIZE       => 3,
+    SDL_GL_BLUE_SIZE        => 2,
+    SDL_GL_BUFFER_SIZE      => 4,
+    SDL_GL_DEPTH_SIZE       => 6,
+    SDL_GL_DOUBLEBUFFER     => 5,
+    SDL_GL_GREEN_SIZE       => 1,
+    SDL_GL_RED_SIZE         => 0,
+    SDL_GL_STENCIL_SIZE     => 7,
+    
+    SDL_GRAB_OFF   => 0,
+    SDL_GRAB_ON    => 1,
+    SDL_GRAB_QUERY => -1,
+    
+    SDL_HAT_CENTERED  => 0,
+    SDL_HAT_DOWN      => 4,
+    SDL_HAT_LEFT      => 8,
+    SDL_HAT_LEFTDOWN  => 12,
+    SDL_HAT_LEFTUP    => 9,
+    SDL_HAT_RIGHT     => 2,
+    SDL_HAT_RIGHTDOWN => 6,
+    SDL_HAT_RIGHTUP   => 3,
+    SDL_HAT_UP        => 1,
+    
+    SDL_HWACCEL   => 256,
+    SDL_HWPALETTE => 536870912,
+    SDL_HWSURFACE => 1,
+    
+    SDL_IGNORE => 0,
+    
+    SDL_INIT_AUDIO       => 16,
+    SDL_INIT_CDROM       => 256,
+    SDL_INIT_EVERYTHING  => 65535,
+    SDL_INIT_JOYSTICK    => 512,
+    SDL_INIT_NOPARACHUTE => 1048576,
+    SDL_INIT_TIMER       => 1,
+    SDL_INIT_VIDEO       => 32,
+    
+    SDL_IYUV_OVERLAY => 1448433993,
+    
+    SDL_JOYAXISMOTION => 7,
+    SDL_JOYBALLMOTION => 8,
+    SDL_JOYBUTTONDOWN => 10,
+    SDL_JOYBUTTONUP   => 11,
+    SDL_JOYHATMOTION  => 9,
+    
+    SDL_KEYDOWN => 2,
+    SDL_KEYUP   => 3,
+    
+    SDL_MIX_MAXVOLUME => 128,
+    
+    SDL_MOUSEBUTTONDOWN => 5,
+    SDL_MOUSEBUTTONUP   => 6,
+    SDL_MOUSEMOTION     => 4,
+    
+    SDL_OPENGL     => 2,
+    SDL_OPENGLBLIT => 10,
+    
+    SDL_PREALLOC => 16777216,
+    SDL_PRESSED => 1,
+    SDL_QUERY => -1,
+    SDL_QUIT => 12,
+    SDL_RELEASED => 0,
+    SDL_RESIZABLE => 16,
+    SDL_RLEACCEL => 16384,
+    SDL_RLEACCELOK => 8192,
+    SDL_SRCALPHA => 65536,
+    SDL_SRCCOLORKEY => 4096,
+    SDL_SWSURFACE => 0,
+    SDL_SYSWMEVENT => 13,
+    SDL_UYVY_OVERLAY => 1498831189,
+    SDL_VIDEOEXPOSE => 17,
+    SDL_VIDEORESIZE => 16,
+    SDL_YUY2_OVERLAY => 844715353,
+    SDL_YV12_OVERLAY => 842094169,
+    SDL_YVYU_OVERLAY => 1431918169,
+    
+    SMPEG_ERROR   => -1,
+    SMPEG_PLAYING => 1,
+    SMPEG_STOPPED => 0,
+    
+    TEXT_BLENDED => 4,
+    TEXT_SHADED  => 2,
+    TEXT_SOLID   => 1,
+    
+    TTF_STYLE_BOLD      => 1,
+    TTF_STYLE_ITALIC    => 2,
+    TTF_STYLE_NORMAL    => 0,
+    TTF_STYLE_UNDERLINE => 4,
+    
+    UNICODE_BLENDED => 256,
+    UNICODE_SHADED  => 128,
+    UNICODE_SOLID   => 64,
+    
+    UTF8_BLENDED => 32,
+    UTF8_SHADED  => 16,
+    UTF8_SOLID   => 8,
+    
+    SDL_SVG_FLAG_DIRECT    => 0,
+    SDL_SVG_FLAG_COMPOSITE => 1,
+    
+    SDL_SAMPLEFLAG_NONE    => 0,
+    SDL_SAMPLEFLAG_CANSEEK => 1,
+    SDL_SAMPLEFLAG_EOF     => 1<<29,
+    SDL_SAMPLEFLAG_ERROR   => 1<<30,
+    SDL_SAMPLEFLAG_EAGAIN  => 1<<31,
+};
 
 1;
