@@ -60,14 +60,11 @@ is( KMOD_SHIFT,    3,    'KMOD_SHIFT should be imported' );
 is( KMOD_SHIFT(),  3,    'KMOD_SHIFT() should also be available' );
 
 is( MIX_DEFAULT_CHANNELS, 2, 'MIX_DEFAULT_CHANNELS should be imported' );
-is( MIX_DEFAULT_CHANNELS(), 2,
-    'MIX_DEFAULT_CHANNELS() should also be available' );
+is( MIX_DEFAULT_CHANNELS(), 2,'MIX_DEFAULT_CHANNELS() should also be available' );
 is( MIX_DEFAULT_FORMAT, 32784, 'MIX_DEFAULT_FORMAT should be imported' );
-is( MIX_DEFAULT_FORMAT(), 32784,
-    'MIX_DEFAULT_FORMAT() should also be available' );
+is( MIX_DEFAULT_FORMAT(), 32784, 'MIX_DEFAULT_FORMAT() should also be available' );
 is( MIX_DEFAULT_FREQUENCY, 22050, 'MIX_DEFAULT_FREQUENCY should be imported' );
-is( MIX_DEFAULT_FREQUENCY(), 22050,
-    'MIX_DEFAULT_FREQUENCY() should also be available' );
+is( MIX_DEFAULT_FREQUENCY(), 22050, 'MIX_DEFAULT_FREQUENCY() should also be available' );
 is( MIX_FADING_IN,    2,   'MIX_FADING_IN should be imported' );
 is( MIX_FADING_IN(),  2,   'MIX_FADING_IN() should also be available' );
 is( MIX_FADING_OUT,   1,   'MIX_FADING_OUT should be imported' );
@@ -373,29 +370,23 @@ is( SDL_BUTTON_RIGHT(),   4,  'SDL_BUTTON_RIGHT() should also be available' );
 is( SDL_BUTTON_WHEELUP,   8,  'SDL_BUTTON_WHEELUP should be imported' );
 is( SDL_BUTTON_WHEELUP(), 8,  'SDL_BUTTON_WHEELUP() should also be available' );
 is( SDL_BUTTON_WHEELDOWN, 16, 'SDL_BUTTON_WHEELDOWN should be imported' );
-is( SDL_BUTTON_WHEELDOWN(), 16,
-    'SDL_BUTTON_WHEELDOWN() should also be available' );
+is( SDL_BUTTON_WHEELDOWN(), 16, 'SDL_BUTTON_WHEELDOWN() should also be available' );
 
 is( SDL_DOUBLEBUF,   1073741824,  'SDL_DOUBLEBUF should be imported' );
 is( SDL_DOUBLEBUF(), 1073741824,  'SDL_DOUBLEBUF() should also be available' );
 is( SDL_ENABLE,      1,           'SDL_ENABLE should be imported' );
 is( SDL_ENABLE(),    1,           'SDL_ENABLE() should also be available' );
 is( SDL_FULLSCREEN,  -2147483648, 'SDL_FULLSCREEN should be imported' );
-is( SDL_FULLSCREEN(), -2147483648,
-    'SDL_FULLSCREEN() should also be available' );
+is( SDL_FULLSCREEN(), -2147483648, 'SDL_FULLSCREEN() should also be available' );
 
 is( SDL_GL_ACCUM_ALPHA_SIZE, 11, 'SDL_GL_ACCUM_ALPHA_SIZE should be imported' );
-is( SDL_GL_ACCUM_ALPHA_SIZE(), 11,
-    'SDL_GL_ACCUM_ALPHA_SIZE() should also be available' );
+is( SDL_GL_ACCUM_ALPHA_SIZE(), 11, 'SDL_GL_ACCUM_ALPHA_SIZE() should also be available' );
 is( SDL_GL_ACCUM_BLUE_SIZE, 10, 'SDL_GL_ACCUM_BLUE_SIZE should be imported' );
-is( SDL_GL_ACCUM_BLUE_SIZE(), 10,
-    'SDL_GL_ACCUM_BLUE_SIZE() should also be available' );
+is( SDL_GL_ACCUM_BLUE_SIZE(), 10, 'SDL_GL_ACCUM_BLUE_SIZE() should also be available' );
 is( SDL_GL_ACCUM_GREEN_SIZE, 9, 'SDL_GL_ACCUM_GREEN_SIZE should be imported' );
-is( SDL_GL_ACCUM_GREEN_SIZE(), 9,
-    'SDL_GL_ACCUM_GREEN_SIZE() should also be available' );
+is( SDL_GL_ACCUM_GREEN_SIZE(), 9, 'SDL_GL_ACCUM_GREEN_SIZE() should also be available' );
 is( SDL_GL_ACCUM_RED_SIZE, 8, 'SDL_GL_ACCUM_RED_SIZE should be imported' );
-is( SDL_GL_ACCUM_RED_SIZE(), 8,
-    'SDL_GL_ACCUM_RED_SIZE() should also be available' );
+is( SDL_GL_ACCUM_RED_SIZE(), 8, 'SDL_GL_ACCUM_RED_SIZE() should also be available' );
 is( SDL_GL_ALPHA_SIZE,    3, 'SDL_GL_ALPHA_SIZE should be imported' );
 is( SDL_GL_ALPHA_SIZE(),  3, 'SDL_GL_ALPHA_SIZE() should also be available' );
 is( SDL_GL_BLUE_SIZE,     2, 'SDL_GL_BLUE_SIZE should be imported' );
@@ -405,15 +396,13 @@ is( SDL_GL_BUFFER_SIZE(), 4, 'SDL_GL_BUFFER_SIZE() should also be available' );
 is( SDL_GL_DEPTH_SIZE,    6, 'SDL_GL_DEPTH_SIZE should be imported' );
 is( SDL_GL_DEPTH_SIZE(),  6, 'SDL_GL_DEPTH_SIZE() should also be available' );
 is( SDL_GL_DOUBLEBUFFER,  5, 'SDL_GL_DOUBLEBUFFER should be imported' );
-is( SDL_GL_DOUBLEBUFFER(), 5,
-    'SDL_GL_DOUBLEBUFFER() should also be available' );
+is( SDL_GL_DOUBLEBUFFER(), 5, 'SDL_GL_DOUBLEBUFFER() should also be available' );
 is( SDL_GL_GREEN_SIZE,   1, 'SDL_GL_GREEN_SIZE should be imported' );
 is( SDL_GL_GREEN_SIZE(), 1, 'SDL_GL_GREEN_SIZE() should also be available' );
 is( SDL_GL_RED_SIZE,     0, 'SDL_GL_RED_SIZE should be imported' );
 is( SDL_GL_RED_SIZE(),   0, 'SDL_GL_RED_SIZE() should also be available' );
 is( SDL_GL_STENCIL_SIZE, 7, 'SDL_GL_STENCIL_SIZE should be imported' );
-is( SDL_GL_STENCIL_SIZE(), 7,
-    'SDL_GL_STENCIL_SIZE() should also be available' );
+is( SDL_GL_STENCIL_SIZE(), 7,'SDL_GL_STENCIL_SIZE() should also be available' );
 
 is( SDL_GRAB_OFF,     0,  'SDL_GRAB_OFF should be imported' );
 is( SDL_GRAB_OFF(),   0,  'SDL_GRAB_OFF() should also be available' );
@@ -456,21 +445,18 @@ is( SDL_INIT_AUDIO(),    16,    'SDL_INIT_AUDIO() should also be available' );
 is( SDL_INIT_CDROM,      256,   'SDL_INIT_CDROM should be imported' );
 is( SDL_INIT_CDROM(),    256,   'SDL_INIT_CDROM() should also be available' );
 is( SDL_INIT_EVERYTHING, 65535, 'SDL_INIT_EVERYTHING should be imported' );
-is( SDL_INIT_EVERYTHING(), 65535,
-    'SDL_INIT_EVERYTHING() should also be available' );
+is( SDL_INIT_EVERYTHING(), 65535, 'SDL_INIT_EVERYTHING() should also be available' );
 is( SDL_INIT_JOYSTICK,   512, 'SDL_INIT_JOYSTICK should be imported' );
 is( SDL_INIT_JOYSTICK(), 512, 'SDL_INIT_JOYSTICK() should also be available' );
 is( SDL_INIT_NOPARACHUTE, 1048576, 'SDL_INIT_NOPARACHUTE should be imported' );
-is( SDL_INIT_NOPARACHUTE(), 1048576,
-    'SDL_INIT_NOPARACHUTE() should also be available' );
+is( SDL_INIT_NOPARACHUTE(), 1048576, 'SDL_INIT_NOPARACHUTE() should also be available' );
 is( SDL_INIT_TIMER,   1,  'SDL_INIT_TIMER should be imported' );
 is( SDL_INIT_TIMER(), 1,  'SDL_INIT_TIMER() should also be available' );
 is( SDL_INIT_VIDEO,   32, 'SDL_INIT_VIDEO should be imported' );
 is( SDL_INIT_VIDEO(), 32, 'SDL_INIT_VIDEO() should also be available' );
 
 is( SDL_IYUV_OVERLAY, 1448433993, 'SDL_IYUV_OVERLAY should be imported' );
-is( SDL_IYUV_OVERLAY(), 1448433993,
-    'SDL_IYUV_OVERLAY() should also be available' );
+is( SDL_IYUV_OVERLAY(), 1448433993, 'SDL_IYUV_OVERLAY() should also be available' );
 
 is( SDL_JOYAXISMOTION,   7,  'SDL_JOYAXISMOTION should be imported' );
 is( SDL_JOYAXISMOTION(), 7,  'SDL_JOYAXISMOTION() should also be available' );
@@ -492,8 +478,7 @@ is( SDL_MIX_MAXVOLUME,   128, 'SDL_MIX_MAXVOLUME should be imported' );
 is( SDL_MIX_MAXVOLUME(), 128, 'SDL_MIX_MAXVOLUME() should also be available' );
 
 is( SDL_MOUSEBUTTONDOWN, 5, 'SDL_MOUSEBUTTONDOWN should be imported' );
-is( SDL_MOUSEBUTTONDOWN(), 5,
-    'SDL_MOUSEBUTTONDOWN() should also be available' );
+is( SDL_MOUSEBUTTONDOWN(), 5,'SDL_MOUSEBUTTONDOWN() should also be available' );
 is( SDL_MOUSEBUTTONUP,   6, 'SDL_MOUSEBUTTONUP should be imported' );
 is( SDL_MOUSEBUTTONUP(), 6, 'SDL_MOUSEBUTTONUP() should also be available' );
 is( SDL_MOUSEMOTION,     4, 'SDL_MOUSEMOTION should be imported' );
@@ -529,21 +514,17 @@ is( SDL_SWSURFACE(),   0,        'SDL_SWSURFACE() should also be available' );
 is( SDL_SYSWMEVENT,    13,       'SDL_SYSWMEVENT should be imported' );
 is( SDL_SYSWMEVENT(),  13,       'SDL_SYSWMEVENT() should also be available' );
 is( SDL_UYVY_OVERLAY, 1498831189, 'SDL_UYVY_OVERLAY should be imported' );
-is( SDL_UYVY_OVERLAY(), 1498831189,
-    'SDL_UYVY_OVERLAY() should also be available' );
+is( SDL_UYVY_OVERLAY(), 1498831189,'SDL_UYVY_OVERLAY() should also be available' );
 is( SDL_VIDEOEXPOSE,   17, 'SDL_VIDEOEXPOSE should be imported' );
 is( SDL_VIDEOEXPOSE(), 17, 'SDL_VIDEOEXPOSE() should also be available' );
 is( SDL_VIDEORESIZE,   16, 'SDL_VIDEORESIZE should be imported' );
 is( SDL_VIDEORESIZE(), 16, 'SDL_VIDEORESIZE() should also be available' );
 is( SDL_YUY2_OVERLAY, 844715353, 'SDL_YUY2_OVERLAY should be imported' );
-is( SDL_YUY2_OVERLAY(), 844715353,
-    'SDL_YUY2_OVERLAY() should also be available' );
+is( SDL_YUY2_OVERLAY(), 844715353,'SDL_YUY2_OVERLAY() should also be available' );
 is( SDL_YV12_OVERLAY, 842094169, 'SDL_YV12_OVERLAY should be imported' );
-is( SDL_YV12_OVERLAY(), 842094169,
-    'SDL_YV12_OVERLAY() should also be available' );
+is( SDL_YV12_OVERLAY(), 842094169,'SDL_YV12_OVERLAY() should also be available' );
 is( SDL_YVYU_OVERLAY, 1431918169, 'SDL_YVYU_OVERLAY should be imported' );
-is( SDL_YVYU_OVERLAY(), 1431918169,
-    'SDL_YVYU_OVERLAY() should also be available' );
+is( SDL_YVYU_OVERLAY(), 1431918169, 'SDL_YVYU_OVERLAY() should also be available' );
 
 is( SMPEG_ERROR,     -1, 'SMPEG_ERROR should be imported' );
 is( SMPEG_ERROR(),   -1, 'SMPEG_ERROR() should also be available' );
@@ -566,8 +547,7 @@ is( TTF_STYLE_ITALIC(),  2, 'TTF_STYLE_ITALIC() should also be available' );
 is( TTF_STYLE_NORMAL,    0, 'TTF_STYLE_NORMAL should be imported' );
 is( TTF_STYLE_NORMAL(),  0, 'TTF_STYLE_NORMAL() should also be available' );
 is( TTF_STYLE_UNDERLINE, 4, 'TTF_STYLE_UNDERLINE should be imported' );
-is( TTF_STYLE_UNDERLINE(), 4,
-    'TTF_STYLE_UNDERLINE() should also be available' );
+is( TTF_STYLE_UNDERLINE(), 4, 'TTF_STYLE_UNDERLINE() should also be available' );
 
 is( UNICODE_BLENDED,   256, 'UNICODE_BLENDED should be imported' );
 is( UNICODE_BLENDED(), 256, 'UNICODE_BLENDED() should also be available' );
@@ -584,26 +564,18 @@ is( UTF8_SOLID,     8,  'UTF8_SOLID should be imported' );
 is( UTF8_SOLID(),   8,  'UTF8_SOLID() should also be available' );
 
 is( SDL_SVG_FLAG_DIRECT, 0, 'SDL_SVG_FLAG_DIRECT should be imported' );
-is( SDL_SVG_FLAG_DIRECT(), 0,
-    'SDL_SVG_FLAG_DIRECT() should also be available' );
+is( SDL_SVG_FLAG_DIRECT(), 0, 'SDL_SVG_FLAG_DIRECT() should also be available' );
 is( SDL_SVG_FLAG_COMPOSITE, 1, 'SDL_SVG_FLAG_COMPOSITE should be imported' );
-is( SDL_SVG_FLAG_COMPOSITE(), 1,
-    'SDL_SVG_FLAG_COMPOSITE() should also be available' );
+is( SDL_SVG_FLAG_COMPOSITE(), 1, 'SDL_SVG_FLAG_COMPOSITE() should also be available' );
 
 is( SDL_SAMPLEFLAG_NONE, 0, 'SDL_SAMPLEFLAG_NONE should be imported' );
-is( SDL_SAMPLEFLAG_NONE(), 0,
-    'SDL_SAMPLEFLAG_NONE() should also be available' );
+is( SDL_SAMPLEFLAG_NONE(), 0,'SDL_SAMPLEFLAG_NONE() should also be available' );
 is( SDL_SAMPLEFLAG_CANSEEK, 1, 'SDL_SAMPLEFLAG_CANSEEK should be imported' );
-is( SDL_SAMPLEFLAG_CANSEEK(), 1,
-    'SDL_SAMPLEFLAG_CANSEEK() should also be available' );
+is( SDL_SAMPLEFLAG_CANSEEK(), 1, 'SDL_SAMPLEFLAG_CANSEEK() should also be available' );
 is( SDL_SAMPLEFLAG_EOF, 1 << 29, 'SDL_SAMPLEFLAG_EOF should be imported' );
-is( SDL_SAMPLEFLAG_EOF(), 1 << 29,
-    'SDL_SAMPLEFLAG_EOF() should also be available' );
+is( SDL_SAMPLEFLAG_EOF(), 1 << 29, 'SDL_SAMPLEFLAG_EOF() should also be available' );
 is( SDL_SAMPLEFLAG_ERROR, 1 << 30, 'SDL_SAMPLEFLAG_ERROR should be imported' );
-is( SDL_SAMPLEFLAG_ERROR(), 1 << 30,
-    'SDL_SAMPLEFLAG_ERROR() should also be available' );
-is( SDL_SAMPLEFLAG_EAGAIN, 1 << 31,
-    'SDL_SAMPLEFLAG_EAGAIN should be imported' );
-is( SDL_SAMPLEFLAG_EAGAIN(), 1 << 31,
-    'SDL_SAMPLEFLAG_EAGAIN() should also be available' );
+is( SDL_SAMPLEFLAG_ERROR(), 1 << 30,  'SDL_SAMPLEFLAG_ERROR() should also be available' );
+is( SDL_SAMPLEFLAG_EAGAIN, 1 << 31,   'SDL_SAMPLEFLAG_EAGAIN should be imported' );
+is( SDL_SAMPLEFLAG_EAGAIN(), 1 << 31, 'SDL_SAMPLEFLAG_EAGAIN() should also be available' );
 
