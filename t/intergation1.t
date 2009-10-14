@@ -65,15 +65,15 @@ my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init 
 	my $rect = SDL::Rect->new( 0,0, $app->width, $app->height);
 
 	my $blue = SDL::Color->new(
-		-r => 0x00,
-		-g => 0x00,
-		-b => 0xff,
+		0x00,
+		0x00,
+		0xff,
 	);
 
 	my $col = SDL::Color->new( 
-		-r => 0xf0,
-		-g => 0x00,
-		-b => 0x33,
+		0xf0,
+		0x00,
+		0x33,
 	);
 
 

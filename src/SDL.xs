@@ -1079,6 +1079,10 @@ SurfacePixels ( surface )
 	OUTPUT:
 		RETVAL
 
+=for comment
+
+Comment out for now as it does not compile
+
 SDL_Color*
 SurfacePixel ( surface, x, y, ... )
 	SDL_Surface *surface
@@ -1142,6 +1146,8 @@ SurfacePixel ( surface, x, y, ... )
 		}
 	OUTPUT:
 		RETVAL
+
+=cut
 
 int
 MUSTLOCK ( surface )
@@ -1225,68 +1231,6 @@ ListModes ( format, flags )
 	OUTPUT:
 		RETVAL
 
-
-SDL_Color *
-NewColor ( r, g, b )
-	Uint8 r
-	Uint8 g
-	Uint8 b
-	CODE:
-		RETVAL = (SDL_Color *) safemalloc(sizeof(SDL_Color));
-		RETVAL->r = r;
-		RETVAL->g = g;
-		RETVAL->b = b;
-	OUTPUT:
-		RETVAL
-
-Uint8
-ColorR ( color, ... )
-	SDL_Color *color
-	CODE:
-		if (items > 1 ) color->r = SvIV(ST(1)); 
-		RETVAL = color->r;
-	OUTPUT:
-		RETVAL
-
-Uint8
-ColorG ( color, ... )
-	SDL_Color *color
-	CODE:
-		if (items > 1 ) color->g = SvIV(ST(1)); 
-		RETVAL = color->g;
-	OUTPUT:
-		RETVAL
-
-Uint8
-ColorB ( color, ... )
-	SDL_Color *color
-	CODE:
-		if (items > 1 ) color->b = SvIV(ST(1)); 
-		RETVAL = color->b;
-	OUTPUT:
-		RETVAL
-
-
-void
-ColorRGB ( color, ... )
- SDL_Color *color
- PPCODE:
- if (items > 1 ) {
- color->r = SvIV(ST(1));
- color->g = SvIV(ST(2));
- color->b = SvIV(ST(3));
- }
- mXPUSHi( color->r );
- mXPUSHi( color->g );
- mXPUSHi( color->b );
- XSRETURN(3);
-
-void
-FreeColor ( color )
-	SDL_Color *color
-	CODE:
-		return; safefree(color);
-
 SDL_Palette *
 NewPalette ( number )
 	int number
@@ -1307,6 +1251,10 @@ PaletteNColors ( palette, ... )
 	OUTPUT:
 		RETVAL
 
+=for comment
+
+Comment out for now as it does not compile
+
 SDL_Color *
 PaletteColors ( palette, index, ... )
 	SDL_Palette *palette
@@ -1320,6 +1268,8 @@ PaletteColors ( palette, index, ... )
 		RETVAL = (SDL_Color *)(palette->colors + index);
 	OUTPUT:
 		RETVAL
+
+=cut
 
 int
 VideoModeOK ( width, height, bpp, flags )

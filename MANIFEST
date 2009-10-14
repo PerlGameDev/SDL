@@ -55,6 +55,7 @@ scripts/README
 scripts/SDL/Constants.pm
 scripts/sdl_const.pl
 scripts/sdl_words.txt
+src/Color.xs
 src/defines.h
 src/OpenGL.xs
 src/Rect.xs

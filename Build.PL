@@ -48,7 +48,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL  )],
 	},
-	
+	Color => {
+		file      => {
+			from  => 'src/Color.xs',
+			to    => 'lib/SDL/Color.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',

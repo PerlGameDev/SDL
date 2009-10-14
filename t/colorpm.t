@@ -1,66 +1,33 @@
-#!/usr/bin/perl -w
-#
-# Copyright (C) 2003 Tels
-# Copyright (C) 2004 David J. Goehrig
-#
-# Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
-#
-# ------------------------------------------------------------------------------
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-# 
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
-# 
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-#
-# ------------------------------------------------------------------------------
-#
-# Please feel free to send questions, suggestions or improvements to:
-#
-#	David J. Goehrig
-#	dgoehrig\@cpan.org
-#
-#
-# basic testing of SDL::Color
-
-BEGIN {
-	unshift @INC, 'blib/lib','blib/arch';
-}
-
+#!perl
 use strict;
+use warnings;
+use Test::More tests => 15;
+use_ok('SDL::Color');
 
-use Test::More;
+# check empty: black
+my $black = SDL::Color->new( 0, 0, 0 );
+isa_ok( $black, 'SDL::Color' );
+is( $black->r(), 0, 'black r is 0' );
+is( $black->g(), 0, 'black g is 0' );
+is( $black->b(), 0, 'black b is 0' );
 
-plan ( tests => 10 );
+# check full: white
+my $white = SDL::Color->new( 0xff, 0xff, 0xff );
+isa_ok( $white, 'SDL::Color' );
+is( $white->r(), 255, 'white r is 255' );
+is( $white->g(), 255, 'white g is 255' );
+is( $white->b(), 255, 'white b is 255' );
 
-use_ok( 'SDL::Color' ); 
-  
-can_ok ('SDL::Color', qw/
-	new 
-	r 
-	g 
-	b 
-	pixel /);
+# check setting a value
+my $orange = $white;
+$orange->r(254);
+$orange->g(153);
+$orange->b(0);
+is( $orange->r(), 254, 'orange_notcloned r is 254' );
+is( $orange->g(), 153, 'orange_notcloned g is 153' );
+is( $orange->b(), 0,   'orange_notcloned b is 0' );
 
-# some basic tests:
-
-my $color = SDL::Color->new();
-is (ref($color), 'SDL::Color', 'new was ok');
-is ($color->r(),0, 'r is 0');
-is ($color->g(),0, 'g is 0');
-is ($color->b(),0, 'b is 0');
-
-$color = SDL::Color->new( -r => 0xff, -g => 0xff, -b => 0xff);
-is (ref($color), 'SDL::Color', 'new was ok');
-is ($color->r(),255, 'r is 255');
-is ($color->g(),255, 'g is 255');
-is ($color->b(),255, 'b is 255');
-
+# check that copies also change
+is( $white->r(), 254, 'white (now orange) r is 254' );
+is( $white->g(), 153, 'white (now orange) g is 154' );
+is( $white->b(), 0,   'white (now orange) b is 0' );
