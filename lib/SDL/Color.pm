@@ -1,7 +1,6 @@
 package SDL::Color;
 use strict;
 use warnings;
-use Carp;
 require Exporter;
 require DynaLoader;
 our @ISA = qw(Exporter DynaLoader);
