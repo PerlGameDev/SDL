@@ -25,6 +25,27 @@ sub new {
 #############################
 ## extra accessors
 #############################
+
+sub left {
+    my $self = shift;
+    $self->x(@_);
+}
+
+sub top {
+    my $self = shift;
+    $self->y(@_);
+}
+
+sub width {
+    my $self = shift;
+    $self->w(@_);
+}
+
+sub height {
+    my $self = shift;
+    $self->h(@_);
+}
+
 sub bottom {
     my ($self, $val) = (@_);
     if (defined $val) {

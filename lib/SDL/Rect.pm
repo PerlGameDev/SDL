@@ -1,70 +1,80 @@
-=pod
-=cut
 package SDL::Rect;
 use strict;
 use warnings;
 require Exporter;
 require DynaLoader;
-
 our @ISA = qw(Exporter DynaLoader);
-# Items to export into callers namespace by default. Note: do not export
-# names by default without a very good reason. Use EXPORT_OK instead.
-# Do not simply export all your public functions/methods/constants.
 bootstrap SDL::Rect;
 
-=head1 Perl binding to C stuct Rect
-=cut
-
-# Preloaded methods go here.
-
-# TODO: mangle with the symbol table to create an alias
-# to sub x. We could call x from inside the sub but that
-# would be another call and rects are a time-critical object.
-sub left {
-	my $self = shift;
-	return RectX($self,@_);
-}
-
-sub x {
-	my $self = shift;
-	return RectX($self,@_);
-}
-
-### TODO: see 'left' above (this is an 'alias' to sub y)
-sub top {
-	my $self = shift;
-	return RectY($self,@_);
-}
-
-sub y {
-	my $self = shift;
-	return RectY($self,@_);
-}
-
-### TODO: see 'left' above (this is an 'alias' to sub width)
-sub w {
-	my $self = shift;
-	return RectW($self,@_);
-}
-
-sub width {
-	my $self = shift;
-	return RectW($self,@_);
-}
-
-### TODO: see 'left' above (this is an 'alias' to sub height)
-sub h {
-	my $self = shift;
-	return RectH($self,@_);
-}
-
-sub height {
-	my $self = shift;
-	return RectH($self,@_);
-}
-
-
-# Autoload methods go after __END__, and are processed by the autosplit program.
-
 1;
+
 __END__
+
+=pod
+
+=head1 NAME
+
+SDL::Rect - Defines a rectangular area
+
+=head1 SYNOPSIS
+
+  my $rect = SDL::Rect->new( 0, 0, 0, 0 );
+  $rect->x(1);
+  $rect->y(2);
+  $rect->w(3);
+  $rect->h(4);
+  my $x = $rect->x; # 1
+  my $y = $rect->y; # 2
+  my $w = $rect->w; # 3
+  my $h = $rect->h; # 4
+
+=head1 DESCRIPTION
+
+An C<SDL_Rect> defines a rectangular area of pixels.
+
+=head1 METHODS
+
+=head2 new ( $x, $y, $w, $h )
+
+The constructor creates a new rectangle with the specified x, y, w, h
+values:
+
+    my $rect = SDL::Rect->new( 0, 0, 0, 0 );
+
+=head2 x
+
+If passed a value, this method sets the x component of the rectangle;
+if not, it returns the x component of the rectangle:
+
+  my $x = $rect->x; # 255
+  $rect->x(128);
+
+=head2 y
+
+If passed a value, this method sets the y component of the rectangle;
+if not, it returns the y component of the rectangle:
+
+  my $y = $rect->y; # 255
+  $rect->y(128);
+
+=head2 w
+
+If passed a value, this method sets the w component of the rectangle;
+if not, it returns the w component of the rectangle:
+
+  my $w = $rect->w; # 255
+  $rect->w(128);
+
+=head2 h
+
+If passed a value, this method sets the h component of the rectangle;
+if not, it returns the h component of the rectangle:
+
+  my $h = $rect->h; # 255
+  $rect->h(128);
+
+=head1 SEE ALSO
+
+L<SDL::Surface>
+
+=cut

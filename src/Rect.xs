@@ -8,9 +8,18 @@
 
 #include <SDL.h>
 
-
-
 MODULE = SDL::Rect 	PACKAGE = SDL::Rect    PREFIX = rect_
+
+=for documentation
+
+SDL_Rect -- Defines a rectangular area
+
+  typedef struct{
+    Sint16 x, y;
+    Uint16 w, h;
+  } SDL_Rect;
+
+=cut
 
 SDL_Rect *
 rect_new (CLASS, x, y, w, h)
@@ -28,22 +37,8 @@ rect_new (CLASS, x, y, w, h)
 	OUTPUT:
 		RETVAL
 
-void
-SetRect(rect, x, y, w, h)
-	SDL_Rect *rect
-	Sint16 x	
-	Sint16 y
-	Uint16 w
-	Uint16 h
-	CODE:
-		rect->x = x;
-		rect->y = y;
-		rect->w = w;
-		rect->h = h;
-		
-
 Sint16
-rect_RectX ( rect, ... )
+rect_x ( rect, ... )
 	SDL_Rect *rect
 	CODE:
 		if (items > 1 ) rect->x = SvIV(ST(1)); 
@@ -52,7 +47,7 @@ rect_RectX ( rect, ... )
 		RETVAL
 
 Sint16
-rect_RectY ( rect, ... )
+rect_y ( rect, ... )
 	SDL_Rect *rect
 	CODE:
 		if (items > 1 ) rect->y = SvIV(ST(1)); 
@@ -61,7 +56,7 @@ rect_RectY ( rect, ... )
 		RETVAL
 
 Uint16
-rect_RectW ( rect, ... )
+rect_w ( rect, ... )
 	SDL_Rect *rect
 	CODE:
 		if (items > 1 ) rect->w = SvIV(ST(1)); 
@@ -70,7 +65,7 @@ rect_RectW ( rect, ... )
 		RETVAL
 
 Uint16
-rect_RectH ( rect, ... )
+rect_h ( rect, ... )
 	SDL_Rect *rect
 	CODE:
 		if (items > 1 ) rect->h = SvIV(ST(1)); 
@@ -83,7 +78,4 @@ void
 rect_DESTROY(self)
 	SDL_Rect *self
 	CODE:
-
 		safefree( (char *)self );
-
-

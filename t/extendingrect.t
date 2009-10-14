@@ -24,7 +24,7 @@ my $rect = MyRect->new(0,0,0,0);
 
 isa_ok($rect, 'SDL::Rect');
 isa_ok($rect, 'MyRect');
-can_ok($rect, qw(x y top left w h width height));
+can_ok($rect, qw(x y w h));
 can_ok($rect, qw(new foo));
 
 $rect->x(10);
