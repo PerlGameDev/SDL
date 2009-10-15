@@ -43,14 +43,14 @@ my %subsystems =
 	},
 	Rect => {
 		file      => {
-			from  => 'src/Rect.xs',
+			from  => 'src/Core/objects/Rect.xs',
 			to    => 'lib/SDL/Rect.xs',
 		},
 		libraries => [qw( SDL  )],
 	},
 	Color => {
 		file      => {
-			from  => 'src/Color.xs',
+			from  => 'src/Core/objects/Color.xs',
 			to    => 'lib/SDL/Color.xs',
 		},
 		libraries => [qw( SDL )],
