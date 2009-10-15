@@ -1240,14 +1240,14 @@ PaletteNColors ( palette, ... )
 		RETVAL
 
 SDL_Surface *
-SetVideoMode ( width, height, bpp, flags )
+SetVideoMode ( CLASS, width, height, bpp, flags )
+        char* CLASS
 	int width
 	int height
 	int bpp
 	Uint32 flags
 
 	CODE:
-		char* CLASS;
 		RETVAL = SDL_SetVideoMode(width,height,bpp,flags);
 	OUTPUT:
 		RETVAL

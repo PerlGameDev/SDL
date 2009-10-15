@@ -76,7 +76,6 @@ my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init 
 		0x33,
 	);
 
-
 	my $grect = SDL::Game::Rect->new(10, 10, 30, 35);
 	foreach(0..80)
 	{
@@ -88,10 +87,7 @@ my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init 
 	$app->fill_rect($rect, $blue);
 	$app->fill_rect($grect, $col);
 
-
-	$app->update_rects($rect);
-	$app->update_rects($grect);
-	$app->sync;
+        SDL::Surface::update_rect($app, 0, 0, 0, 0);
 	}
 
 	  sleep(1);
