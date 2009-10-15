@@ -858,22 +858,9 @@ GetKeyName ( sym )
 	OUTPUT:
 		RETVAL
 
-SDL_Surface *
-CreateRGBSurface (flags, width, height, depth, Rmask, Gmask, Bmask, Amask )
-	Uint32 flags
-	int width
-	int height
-	int depth
-	Uint32 Rmask
-	Uint32 Gmask
-	Uint32 Bmask
-	Uint32 Amask
-	CODE:
-		RETVAL = SDL_CreateRGBSurface ( flags, width, height,
-				depth, Rmask, Gmask, Bmask, Amask );
-	OUTPUT:	
-		RETVAL
+=for comment
 
+Comment out for now as it does not compile
 
 SDL_Surface *
 CreateRGBSurfaceFrom (pixels, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask )
@@ -1079,6 +1066,8 @@ SurfacePixels ( surface )
 	OUTPUT:
 		RETVAL
 
+=cut
+
 =for comment
 
 Comment out for now as it does not compile
@@ -1147,8 +1136,6 @@ SurfacePixel ( surface, x, y, ... )
 	OUTPUT:
 		RETVAL
 
-=cut
-
 int
 MUSTLOCK ( surface )
 	SDL_Surface *surface
@@ -1178,6 +1165,7 @@ GetVideoSurface ()
 	OUTPUT:
 		RETVAL
 
+=cut
 
 HV *
 VideoInfo ()
@@ -1251,6 +1239,28 @@ PaletteNColors ( palette, ... )
 	OUTPUT:
 		RETVAL
 
+SDL_Surface *
+SetVideoMode ( width, height, bpp, flags )
+	int width
+	int height
+	int bpp
+	Uint32 flags
+
+	CODE:
+		char* CLASS;
+		RETVAL = SDL_SetVideoMode(width,height,bpp,flags);
+	OUTPUT:
+		RETVAL
+
+int
+Flip ( surface )
+	SDL_Surface *surface
+	CODE:
+		RETVAL = SDL_Flip(surface);
+	OUTPUT:
+		RETVAL
+
+
 =for comment
 
 Comment out for now as it does not compile
@@ -1269,7 +1279,7 @@ PaletteColors ( palette, index, ... )
 	OUTPUT:
 		RETVAL
 
-=cut
+
 
 int
 VideoModeOK ( width, height, bpp, flags )
@@ -1311,7 +1321,7 @@ UpdateRects ( surface, ... )
 		int num_rects,i;
 		if ( items < 2 ) return;
 		num_rects = items - 1;
-			
+		SDL_UpdateRects(surface,num_rects,rects);			
 		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
 		for(i=0;i<num_rects;i++) {
 			temp = (SDL_Rect *)SvIV(ST(i+1));
@@ -1322,7 +1332,6 @@ UpdateRects ( surface, ... )
 		} 
 		SDL_UpdateRects(surface,num_rects,rects);
 		safefree(rects);
-		
 
 int
 Flip ( surface )
@@ -1517,6 +1526,8 @@ BlitSurface ( src, src_rect, dest, dest_rect )
 		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
 	OUTPUT:
 		RETVAL
+
+=cut
 
 int
 FillRect ( dest, dest_rect, color )
@@ -2949,6 +2960,8 @@ TTFSizeUNICODE ( font, text )
 	OUTPUT:
 		RETVAL
 
+=for comment
+
 SDL_Surface*
 TTFRenderTextSolid ( font, text, fg )
 	TTF_Font *font
@@ -3171,6 +3184,8 @@ TTFPutString ( font, mode, surface, x, y, fg, bg, text )
 		}
 	OUTPUT:
 		RETVAL
+
+=cut
 
 #endif
 
@@ -3611,6 +3626,8 @@ SMPEGGetInfo ( mpeg )
 
 #ifdef HAVE_SDL_GFX
 
+=cut
+
 SDL_Surface *
 GFXRotoZoom ( src, angle, zoom, smooth)
 	SDL_Surface * src
@@ -3632,6 +3649,8 @@ GFXZoom ( src, zoomx, zoomy, smooth)
 		RETVAL = zoomSurface( src, zoomx, zoomy, smooth);
 	OUTPUT:
 		RETVAL
+
+=cut
 
 int
 GFXPixelColor ( dst, x, y, color )

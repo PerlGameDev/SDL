@@ -55,6 +55,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	Surface => {
+		file      => {
+			from  => 'src/Surface.xs',
+			to    => 'lib/SDL/Surface.xs',
+		},
+		libraries => [qw( SDL SDL_image )],
+	},
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',

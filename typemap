@@ -14,7 +14,7 @@ Sint16 *		T_PTR
 Sint32			T_IV
 Sint32 *		T_PTR
 SDL_Event *		T_PTR
-SDL_Surface *		T_PTR
+SDL_Surface *		O_OBJECT
 SDL_SysWMmsg *		T_PTR
 SDL_CD *		T_PTR
 SDL_CDtrack *		T_PTR

@@ -272,6 +272,8 @@ PROTOTYPES : DISABLE
 
 #ifdef HAVE_SDL_IMAGE
 
+=for comment
+
 SDL_Surface *
 NewFont ( filename )
 	char *filename
@@ -280,6 +282,8 @@ NewFont ( filename )
 		SFont_InitFont(RETVAL);
 	OUTPUT:
 		RETVAL
+
+=cut
 
 void
 UseFont ( surface )

@@ -1,113 +1,33 @@
-#!/usr/bin/perl -w
-#
-# Copyright (C) 2003 Tels
-# Copyright (C) 2004 David J. Goehrig
-#
-# Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
-#
-# ------------------------------------------------------------------------------
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-# 
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
-# 
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-#
-# ------------------------------------------------------------------------------
-#
-# Please feel free to send questions, suggestions or improvements to:
-#
-#	David J. Goehrig
-#	dgoehrig\@cpan.org
-#
-#
-# basic testing of SDL::Surface
-
-BEGIN {
-	unshift @INC, 'blib/lib','blib/arch';
-}
-
+#!perl
 use strict;
+use warnings;
+use Test::More tests => 11;
+use_ok('SDL');
+use_ok('SDL::Color');
+use_ok('SDL::Rect');
+use_ok('SDL::Surface');
 
-use Test::More;
+my $surface
+    = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 640, 320, 0, 0, 0, 0, 0 );
+isa_ok( $surface, 'SDL::Surface' );
+is( $surface->w, 640, 'surface has width' );
+is( $surface->h, 320, 'surface has height' );
 
-plan ( tests => 3 );
+my $image = SDL::Surface->load('test/data/logo.png');
+is( $image->w, 608, 'image has width' );
+is( $image->h, 126, 'image has height' );
 
-use_ok( 'SDL::Surface' ); 
-  
-can_ok ('SDL::Surface', qw/
-	new
-	flags
-	palette
-	bpp
-	bytes_per_pixel
-	Rshift
-	Gshift
-	Bshift
-	Ashift
-	Rmask
-	Bmask
-	Gmask
-	Amask
-	color_key
-	alpha
-	width
-	height
-	pitch
-	pixels
-	pixel
-	fill
-	lockp
-	lock
-	unlock
-	update
-	flip
-	blit
-	set_colors
-	set_color_key
-	set_alpha
-	display_format
-	rgb
-	rgba
-	print
-	save_bmp
-	video_info /);
+$surface->fill_rect( SDL::Rect->new( 0, 0, 32, 32 ),
+    SDL::Color->new( 200, 200, 200 ) );
+ok( 1, 'Managed to fill_rect' );
 
-my $surface = SDL::Surface->new();
+my $rect = SDL::Rect->new( 0, 0, 64, 64 );
+$image->blit( $rect, $surface, $rect );
+ok( 1, 'Managed to blit' );
 
-isa_ok($surface,'SDL::Surface');
+#my $image_format = $surface->display;
+#$surface->update_rect( 0, 0, 32, 32 );
+#ok( 1, 'Managed to update_rect' );
+#$surface->update_rects( SDL::Rect->new( 0, 0, 32, 32 ) );
+#ok( 1, 'Managed to update_rects' );
 
-#
-# Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
-#
-# ------------------------------------------------------------------------------
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-# 
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
-# 
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-#
-# ------------------------------------------------------------------------------
-#
-# Please feel free to send questions, suggestions or improvements to:
-#
-#	David J. Goehrig
-#	dgoehrig\@cpan.org
-#
