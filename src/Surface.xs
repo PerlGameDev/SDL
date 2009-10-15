@@ -117,6 +117,14 @@ surface_display ( surface )
 		RETVAL
 
 Uint16
+surface_pitch( surface )
+	SDL_Surface *surface
+	CODE:
+		RETVAL = surface->pitch;
+	OUTPUT:
+		RETVAL
+
+Uint16
 surface_w ( surface )
 	SDL_Surface *surface
 	CODE:
@@ -131,6 +139,31 @@ surface_h ( surface )
 		RETVAL = surface->h;
 	OUTPUT:
 		RETVAL
+
+IV
+surface_get_pixels(surface)
+	SDL_Surface *surface
+	CODE:
+	RETVAL = PTR2IV(surface->pixels);
+	OUTPUT:
+	RETVAL
+
+void
+surface_set_pixels(surface, pixels)
+	SDL_Surface *surface
+
+	SV *pixels
+
+	PREINIT:
+	  STRLEN len;
+	  void *p;
+
+	CODE:
+	  p = SvPV(pixels, len);
+	  if (len > surface->pitch*surface->h)
+		len = surface->pitch*surface->h;
+	  memcpy(surface->pixels, p, len);
+
 
 void
 surface_DESTROY(surface)
