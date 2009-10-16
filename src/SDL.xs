@@ -1284,6 +1284,16 @@ MapRGB ( pixel_format, r, g, b )
 	OUTPUT:
 		RETVAL
 
+void
+UpdateRect ( surface, x, y, w ,h )
+	SDL_Surface *surface
+	int x
+	int y
+	int w
+	int h
+	CODE:
+		SDL_UpdateRect(surface,x,y,w,h);
+
 =for comment
 
 Comment out for now as it does not compile
@@ -1325,16 +1335,6 @@ SetVideoMode ( width, height, bpp, flags )
 		RETVAL = SDL_SetVideoMode(width,height,bpp,flags);
 	OUTPUT:
 		RETVAL
-
-void
-UpdateRect ( surface, x, y, w ,h )
-	SDL_Surface *surface
-	int x
-	int y
-	int w
-	int h
-	CODE:
-		SDL_UpdateRect(surface,x,y,w,h);
 
 void
 UpdateRects ( surface, ... )

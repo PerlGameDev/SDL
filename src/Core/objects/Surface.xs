@@ -55,16 +55,6 @@ surface_format ( surface )
 		RETVAL
 
 void
-surface_update_rect ( surface, x, y, w ,h )
-	SDL_Surface *surface
-	int x
-	int y
-	int w
-	int h
-	CODE:
-		SDL_UpdateRect(surface,x,y,w,h);
-
-void
 surface_update_rects ( surface, ... )
 	SDL_Surface *surface
 	CODE:

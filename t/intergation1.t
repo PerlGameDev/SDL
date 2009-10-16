@@ -78,7 +78,7 @@ can_ok ('SDL::App', qw/
 	SDL::FillRect( $app, $rect, $blue_pixel );
 	SDL::FillRect( $app, $grect, $col_pixel );
 
-        SDL::Surface::update_rect($app, 0, 0, 640, 480);
+        SDL::UpdateRect($app, 0, 0, 640, 480);
         SDL::Delay(10);
 	}
 
