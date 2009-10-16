@@ -31,7 +31,7 @@ is( $clip_rect->y, 0,   'clip_rect has y' );
 is( $clip_rect->w, 640, 'clip_rect has width' );
 is( $clip_rect->h, 320, 'clip_rect has height' );
 
-my $image = SDL::Surface->load('test/data/logo.png');
+my $image = SDL::IMG_Load('test/data/logo.png');
 is( $image->w, 608, 'image has width' );
 is( $image->h, 126, 'image has height' );
 

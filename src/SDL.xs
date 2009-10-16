@@ -858,6 +858,19 @@ GetKeyName ( sym )
 	OUTPUT:
 		RETVAL
 
+#ifdef HAVE_SDL_IMAGE
+
+SDL_Surface *
+IMG_Load ( filename )
+	char *filename
+	CODE:
+		char* CLASS = "SDL::Surface";
+		RETVAL = IMG_Load(filename);
+	OUTPUT:
+		RETVAL
+
+#endif
+
 =for comment
 
 Comment out for now as it does not compile
@@ -882,18 +895,6 @@ CreateRGBSurfaceFrom (pixels, width, height, depth, pitch, Rmask, Gmask, Bmask, 
 				depth, pitch, Rmask, Gmask, Bmask, Amask );
 	OUTPUT:	
 		RETVAL
-
-#ifdef HAVE_SDL_IMAGE
-
-SDL_Surface *
-IMGLoad ( fname )
-	char *fname
-	CODE:
-		RETVAL = IMG_Load(fname);
-	OUTPUT:
-		RETVAL
-
-#endif
 
 SDL_Surface*
 SurfaceCopy ( surface )

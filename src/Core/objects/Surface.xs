@@ -45,16 +45,6 @@ surface_new (CLASS, flags, width, height, depth, Rmask, Gmask, Bmask, Amask )
 	OUTPUT:
 		RETVAL
 
-
-SDL_Surface *
-surface_load (CLASS, filename )
-	char* CLASS
-	char* filename
-	CODE:
-		RETVAL = IMG_Load(filename);
-	OUTPUT:
-		RETVAL
-
 int
 surface_blit ( src, src_rect, dest, dest_rect )
 	SDL_Surface *src
