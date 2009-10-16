@@ -1273,6 +1273,17 @@ BlitSurface ( src, src_rect, dest, dest_rect )
 	OUTPUT:
 		RETVAL
 
+Uint32
+MapRGB ( pixel_format, r, g, b )
+	SDL_PixelFormat *pixel_format
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	CODE:
+		RETVAL = SDL_MapRGB(pixel_format,r,g,b);
+	OUTPUT:
+		RETVAL
+
 =for comment
 
 Comment out for now as it does not compile
@@ -1373,17 +1384,6 @@ SetColors ( surface, start, ... )
 		safefree(colors);
 all_done:
 	OUTPUT:	
-		RETVAL
-
-Uint32
-MapRGB ( surface, r, g, b )
-	SDL_Surface *surface
-	Uint8 r
-	Uint8 g
-	Uint8 b
-	CODE:
-		RETVAL = SDL_MapRGB(surface->format,r,g,b);
-	OUTPUT:
 		RETVAL
 
 Uint32

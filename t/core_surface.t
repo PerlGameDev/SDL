@@ -16,7 +16,7 @@ use SDL::App;
 use SDL::Rect;
 use SDL::Color;
 use SDL::PixelFormat;
-use Test::More tests => 34;
+use Test::More tests => 35;
 
 my $surface
     = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 640, 320, 8, 0, 0, 0, 0 );
@@ -37,30 +37,33 @@ is( $image->w, 608, 'image has width' );
 is( $image->h, 126, 'image has height' );
 
 my $pixel_format = $image->format;
-isa_ok($pixel_format, 'SDL::PixelFormat');
-is($pixel_format->BitsPerPixel, 24, '24 BitsPerPixel');
-is($pixel_format->BytesPerPixel, 3, '3 BytesPerPixel');
-is($pixel_format->Rloss, 0, '0 Rloss');
-is($pixel_format->Gloss, 0, '0 Gloss');
-is($pixel_format->Bloss, 0, '0 Bloss');
-is($pixel_format->Aloss, 8, '8 Aloss');
-is($pixel_format->Rshift, 0, '0 Rshift');
-is($pixel_format->Gshift, 8, '8 Gshift');
-is($pixel_format->Bshift, 16, '16 Bshift');
-is($pixel_format->Ashift, 0, '0 Ashift');
-is($pixel_format->Rmask, 255, '255 Rmask');
-is($pixel_format->Gmask, 65280, '65280 Gmask');
-is($pixel_format->Bmask, 16711680, '16711680 Bmask');
-is($pixel_format->Amask, 0, '0 Amask');
-is($pixel_format->colorkey, 0, '0 colorkey');
-is($pixel_format->alpha, 255, '255 alpha');
+isa_ok( $pixel_format, 'SDL::PixelFormat' );
+is( $pixel_format->BitsPerPixel,  24,       '24 BitsPerPixel' );
+is( $pixel_format->BytesPerPixel, 3,        '3 BytesPerPixel' );
+is( $pixel_format->Rloss,         0,        '0 Rloss' );
+is( $pixel_format->Gloss,         0,        '0 Gloss' );
+is( $pixel_format->Bloss,         0,        '0 Bloss' );
+is( $pixel_format->Aloss,         8,        '8 Aloss' );
+is( $pixel_format->Rshift,        0,        '0 Rshift' );
+is( $pixel_format->Gshift,        8,        '8 Gshift' );
+is( $pixel_format->Bshift,        16,       '16 Bshift' );
+is( $pixel_format->Ashift,        0,        '0 Ashift' );
+is( $pixel_format->Rmask,         255,      '255 Rmask' );
+is( $pixel_format->Gmask,         65280,    '65280 Gmask' );
+is( $pixel_format->Bmask,         16711680, '16711680 Bmask' );
+is( $pixel_format->Amask,         0,        '0 Amask' );
+is( $pixel_format->colorkey,      0,        '0 colorkey' );
+is( $pixel_format->alpha,         255,      '255 alpha' );
+
+my $pixel = SDL::MapRGB( $pixel_format, 255, 127, 0 );
+is( $pixel, 32767, '32767 pixel' );
 
 $surface->fill_rect( SDL::Rect->new( 0, 0, 32, 32 ),
     SDL::Color->new( 200, 200, 200 ) );
 ok( 1, 'Managed to fill_rect' );
 
 my $small_rect = SDL::Rect->new( 0, 0, 64, 64 );
-SDL::BlitSurface($image, $small_rect, $surface, $small_rect );
+SDL::BlitSurface( $image, $small_rect, $surface, $small_rect );
 ok( 1, 'Managed to blit' );
 
 #my $image_format = $surface->display;
