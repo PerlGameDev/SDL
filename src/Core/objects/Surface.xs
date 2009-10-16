@@ -54,26 +54,6 @@ surface_format ( surface )
 	OUTPUT:
 		RETVAL
 
-void
-surface_update_rects ( surface, ... )
-	SDL_Surface *surface
-	CODE:
-		SDL_Rect *rects, *temp;
-		int num_rects,i;
-		if ( items < 2 ) return;
-		num_rects = items - 1;
-			
-		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
-		for(i=0;i<num_rects;i++) {
-			temp = (SDL_Rect *)SvIV(ST(i+1));
-			rects[i].x = temp->x;
-			rects[i].y = temp->y;
-			rects[i].w = temp->w;
-			rects[i].h = temp->h;
-		} 
-		SDL_UpdateRects(surface,num_rects,rects);
-		safefree(rects);
-
 Uint16
 surface_pitch( surface )
 	SDL_Surface *surface

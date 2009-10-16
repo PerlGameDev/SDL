@@ -1312,6 +1312,21 @@ DisplayFormatAlpha ( surface )
 	OUTPUT:
 		RETVAL
 
+void
+UpdateRects ( surface, ... )
+	SDL_Surface *surface
+	CODE:
+		SDL_Rect *rects;
+		int num_rects,i;
+		if ( items < 2 ) return;
+		num_rects = items - 1;
+		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
+		for(i=0;i<num_rects;i++) {
+			rects[i] = *(SDL_Rect *)SvIV((SV*)SvRV( ST(i + 1) ));
+		}
+		SDL_UpdateRects(surface,num_rects,rects);
+		safefree(rects);
+
 =for comment
 
 Comment out for now as it does not compile
@@ -1353,26 +1368,6 @@ SetVideoMode ( width, height, bpp, flags )
 		RETVAL = SDL_SetVideoMode(width,height,bpp,flags);
 	OUTPUT:
 		RETVAL
-
-void
-UpdateRects ( surface, ... )
-	SDL_Surface *surface
-	CODE:
-		SDL_Rect *rects, *temp;
-		int num_rects,i;
-		if ( items < 2 ) return;
-		num_rects = items - 1;
-		SDL_UpdateRects(surface,num_rects,rects);			
-		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
-		for(i=0;i<num_rects;i++) {
-			temp = (SDL_Rect *)SvIV(ST(i+1));
-			rects[i].x = temp->x;
-			rects[i].y = temp->y;
-			rects[i].w = temp->w;
-			rects[i].h = temp->h;
-		} 
-		SDL_UpdateRects(surface,num_rects,rects);
-		safefree(rects);
 
 int
 Flip ( surface )

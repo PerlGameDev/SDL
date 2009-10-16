@@ -92,6 +92,7 @@ my $rect = SDL::Rect->new( 0, 0, $app->w, $app->h );
 my $blue_pixel = SDL::MapRGB( $app_pixel_format, 0x00, 0x00, 0xff );
 SDL::FillRect( $app, $rect, $blue_pixel );
 SDL::UpdateRect( $app, 0, 0, 0, 0 );
+SDL::UpdateRects( $app, $small_rect );
 
 diag( 'This is in surface : ' . SDL::Surface::get_pixels($app) );
 
