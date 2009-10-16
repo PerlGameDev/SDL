@@ -15,13 +15,21 @@ use SDL::Surface;
 use SDL::App;
 use SDL::Rect;
 use SDL::Color;
-use Test::More tests => 9;
+use Test::More tests => 15;
 
 my $surface
-    = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 640, 320, 0, 0, 0, 0, 0 );
+    = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 640, 320, 8, 0, 0, 0, 0 );
 isa_ok( $surface, 'SDL::Surface' );
-is( $surface->w, 640, 'surface has width' );
-is( $surface->h, 320, 'surface has height' );
+is( $surface->w,     640, 'surface has width' );
+is( $surface->h,     320, 'surface has height' );
+is( $surface->pitch, 640, 'surface has pitch' );
+my $clip_rect = SDL::Rect->new( 0, 0, 0, 0 );
+SDL::GetClipRect( $surface, $clip_rect );
+isa_ok( $clip_rect, 'SDL::Rect' );
+is( $clip_rect->x, 0,   'clip_rect has x' );
+is( $clip_rect->y, 0,   'clip_rect has y' );
+is( $clip_rect->w, 640, 'clip_rect has width' );
+is( $clip_rect->h, 320, 'clip_rect has height' );
 
 my $image = SDL::Surface->load('test/data/logo.png');
 is( $image->w, 608, 'image has width' );
