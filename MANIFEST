@@ -11,6 +11,7 @@ lib/SDL/Constants.pm
 lib/SDL/Cursor.pm
 lib/SDL/Event.pm
 lib/SDL/Font.pm
+lib/SDL/Game.pm
 lib/SDL/Game/Rect.pm
 lib/SDL/Mixer.pm
 lib/SDL/MPEG.pm
@@ -41,7 +42,7 @@ MacOSX/launcher.h
 MacOSX/launcher.m
 MacOSX/SDLPerl.icns
 make/lib/SDL/Utility.pm
-MANIFEST
+MANIFEST			This list of files
 MANIFEST.bak
 MANIFEST.SKIP
 META.yml
@@ -101,6 +102,7 @@ t/apppm.t
 t/cdrompm.t
 t/colorpm.t
 t/constantspm.t
+t/core_surface.t
 t/cursorpm.t
 t/eventpm.t
 t/extendingrect.t
