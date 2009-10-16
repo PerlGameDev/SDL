@@ -3,7 +3,8 @@ _build/
 Build
 blib
 lib/SDL/Config.pm
-SDL/
+lib/SDL/*.c
+lib/SDL/*.xs
 SDL_perl.c
 SDL_perl.xs
 stage
