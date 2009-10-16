@@ -1262,6 +1262,16 @@ Flip ( surface )
 	OUTPUT:
 		RETVAL
 
+int
+BlitSurface ( src, src_rect, dest, dest_rect )
+	SDL_Surface *src
+	SDL_Surface *dest
+	SDL_Rect *src_rect
+	SDL_Rect *dest_rect
+	CODE:
+		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
+	OUTPUT:
+		RETVAL
 
 =for comment
 
@@ -1512,20 +1522,6 @@ ConvertRGBA ( surface )
 		fmt.colorkey = 0;
 		fmt.alpha = 0;
 		RETVAL = SDL_ConvertSurface(surface,&fmt,surface->flags);
-	OUTPUT:
-		RETVAL
-
-int
-BlitSurface ( src, src_rect, dest, dest_rect )
-	SDL_Surface *src
-
-	SDL_Surface *dest
-
-	SDL_Rect *src_rect
-
-	SDL_Rect *dest_rect
-	CODE:
-		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
 	OUTPUT:
 		RETVAL
 

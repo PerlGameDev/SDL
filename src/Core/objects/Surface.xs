@@ -46,17 +46,6 @@ surface_new (CLASS, flags, width, height, depth, Rmask, Gmask, Bmask, Amask )
 		RETVAL
 
 int
-surface_blit ( src, src_rect, dest, dest_rect )
-	SDL_Surface *src
-	SDL_Surface *dest
-	SDL_Rect *src_rect
-	SDL_Rect *dest_rect
-	CODE:
-		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
-	OUTPUT:
-		RETVAL
-
-int
 surface_fill_rect ( dest, dest_rect, color )
 	SDL_Surface *dest
 	SDL_Color *color

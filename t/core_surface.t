@@ -40,7 +40,7 @@ $surface->fill_rect( SDL::Rect->new( 0, 0, 32, 32 ),
 ok( 1, 'Managed to fill_rect' );
 
 my $small_rect = SDL::Rect->new( 0, 0, 64, 64 );
-$image->blit( $small_rect, $surface, $small_rect );
+SDL::BlitSurface($image, $small_rect, $surface, $small_rect );
 ok( 1, 'Managed to blit' );
 
 #my $image_format = $surface->display;
