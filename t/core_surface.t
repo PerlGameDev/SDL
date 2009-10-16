@@ -36,7 +36,7 @@ my $rect = SDL::Rect->new(0,0, $app->w, $app->h);
 $app->fill_rect($rect,$blue);
 
 
-print 'This is in surface : '.SDL::Surface::get_pixels($app);
+diag('This is in surface : '.SDL::Surface::get_pixels($app));
 
 pass 'did this pass';
 
