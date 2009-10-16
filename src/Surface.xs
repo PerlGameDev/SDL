@@ -144,7 +144,7 @@ IV
 surface_get_pixels(surface)
 	SDL_Surface *surface
 	CODE:
-	  printf("Incomplete surface");
+	  if(!surface->pixels) croak("Incomplete surface");
 	  RETVAL = PTR2IV(surface->pixels);
 	OUTPUT:
 	  RETVAL
