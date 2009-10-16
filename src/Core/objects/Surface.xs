@@ -54,17 +54,6 @@ surface_format ( surface )
 	OUTPUT:
 		RETVAL
 
-int
-surface_fill_rect ( dest, dest_rect, color )
-	SDL_Surface *dest
-	SDL_Color *color
-	SDL_Rect *dest_rect
-	CODE:
-		Uint32 pixel = SDL_MapRGB(dest->format,color->r,color->g,color->b);
-		RETVAL = SDL_FillRect(dest,dest_rect,pixel);
-	OUTPUT:
-		RETVAL
-		
 void
 surface_update_rect ( surface, x, y, w ,h )
 	SDL_Surface *surface

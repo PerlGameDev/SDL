@@ -57,9 +57,7 @@ is( $pixel_format->alpha,         255,      '255 alpha' );
 
 my $pixel = SDL::MapRGB( $pixel_format, 255, 127, 0 );
 is( $pixel, 32767, '32767 pixel' );
-
-$surface->fill_rect( SDL::Rect->new( 0, 0, 32, 32 ),
-    SDL::Color->new( 200, 200, 200 ) );
+SDL::FillRect( $surface, SDL::Rect->new( 0, 0, 32, 32 ), $pixel );
 ok( 1, 'Managed to fill_rect' );
 
 my $small_rect = SDL::Rect->new( 0, 0, 64, 64 );
@@ -87,13 +85,16 @@ isa_ok( $image_format, 'SDL::Surface' );
 my $image_format_alpha = $image->display_alpha;
 isa_ok( $image_format_alpha, 'SDL::Surface' );
 
+my $app_pixel_format = $app->format;
+
 my $rect = SDL::Rect->new( 0, 0, $app->w, $app->h );
 
-my $blue = SDL::Color->new( 0x00, 0x00, 0xff, );
-
-$app->fill_rect( $rect, $blue );
+my $blue_pixel = SDL::MapRGB( $app_pixel_format, 0x00, 0x00, 0xff );
+SDL::FillRect( $app, $rect, $blue_pixel );
+SDL::Surface::update_rect( $app, 0, 0, 0, 0 );
 
 diag( 'This is in surface : ' . SDL::Surface::get_pixels($app) );
 
 pass 'did this pass';
 
+SDL::Delay(100);

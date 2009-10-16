@@ -1528,15 +1528,11 @@ ConvertRGBA ( surface )
 =cut
 
 int
-FillRect ( dest, dest_rect, color )
+FillRect ( dest, dest_rect, pixel )
 	SDL_Surface *dest
-	
-	SDL_Color *color
-	
 	SDL_Rect *dest_rect
-
+	Uint32 pixel
 	CODE:
-		Uint32 pixel = SDL_MapRGB(dest->format,color->r,color->g,color->b);
 		RETVAL = SDL_FillRect(dest,dest_rect,pixel);
 	OUTPUT:
 		RETVAL

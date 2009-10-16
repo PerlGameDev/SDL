@@ -60,32 +60,23 @@ can_ok ('SDL::App', qw/
 	sync 
 	attribute /);
 
-my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
+	my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
 
 	my $rect = SDL::Rect->new( 0,0, $app->w, $app->h);
 
-	my $blue = SDL::Color->new(
-		0x00,
-		0x00,
-		0xff,
-	);
-
-	my $col = SDL::Color->new( 
-		0xf0,
-		0x00,
-		0x33,
-	);
+	my $pixel_format = $app->format;
+	my $blue_pixel = SDL::MapRGB( $pixel_format, 0x00, 0x00, 0xff );
+	my $col_pixel = SDL::MapRGB( $pixel_format, 0xf0, 0x00, 0x33 );
 
 	my $grect = SDL::Game::Rect->new(10, 10, 30, 35);
 	foreach(0..80)
 	{
 
-	
  	$grect->x($_ );	
 	$grect->centery($_ * 3); 
 	$grect->size( ($_ / 40) * $_, ($_/38) * $_ );
-	$app->fill_rect($rect, $blue);
-	$app->fill_rect($grect, $col);
+	SDL::FillRect( $app, $rect, $blue_pixel );
+	SDL::FillRect( $app, $grect, $col_pixel );
 
         SDL::Surface::update_rect($app, 0, 0, 640, 480);
         SDL::Delay(10);
