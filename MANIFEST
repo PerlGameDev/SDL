@@ -119,7 +119,6 @@ t/sdlgamerect.t
 t/sdlpm.t
 t/soundpm.t
 t/surfaceML.t
-t/surfacepm.t
 t/timerpm.t
 t/toolfontpm.t
 t/toolgraphicpm.t
