@@ -111,8 +111,17 @@ SDL_Surface *
 surface_display ( surface )
 	SDL_Surface *surface
 	CODE:
-		char* CLASS = 'SDL::Surface\0';
+		char* CLASS = "SDL::Surface";
 		RETVAL = SDL_DisplayFormat(surface);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+surface_display_alpha ( surface )
+	SDL_Surface *surface
+	CODE:
+		char* CLASS = "SDL::Surface";
+		RETVAL = SDL_DisplayFormatAlpha(surface);
 	OUTPUT:
 		RETVAL
 
@@ -164,7 +173,6 @@ surface_set_pixels(surface, pixels)
 	  if (len > surface->pitch*surface->h)
 		len = surface->pitch*surface->h;
 	  memcpy(surface->pixels, p, len);
-
 
 void
 surface_DESTROY(surface)

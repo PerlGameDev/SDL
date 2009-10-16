@@ -15,7 +15,7 @@ use SDL::Surface;
 use SDL::App;
 use SDL::Rect;
 use SDL::Color;
-use Test::More tests => 15;
+use Test::More tests => 17;
 
 my $surface
     = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 640, 320, 8, 0, 0, 0, 0 );
@@ -57,6 +57,12 @@ my $app = SDL::App->new(
 );
 
 pass 'did this pass';
+
+my $image_format = $image->display;
+isa_ok( $image_format, 'SDL::Surface' );
+
+my $image_format_alpha = $image->display_alpha;
+isa_ok( $image_format_alpha, 'SDL::Surface' );
 
 my $rect = SDL::Rect->new( 0, 0, $app->w, $app->h );
 
