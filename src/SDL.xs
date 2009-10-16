@@ -1294,6 +1294,24 @@ UpdateRect ( surface, x, y, w ,h )
 	CODE:
 		SDL_UpdateRect(surface,x,y,w,h);
 
+SDL_Surface *
+DisplayFormat ( surface )
+	SDL_Surface *surface
+	CODE:
+		char* CLASS = "SDL::Surface";
+		RETVAL = SDL_DisplayFormat(surface);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+DisplayFormatAlpha ( surface )
+	SDL_Surface *surface
+	CODE:
+		char* CLASS = "SDL::Surface";
+		RETVAL = SDL_DisplayFormatAlpha(surface);
+	OUTPUT:
+		RETVAL
+
 =for comment
 
 Comment out for now as it does not compile
@@ -1454,22 +1472,6 @@ SetAlpha ( surface, flag, alpha )
 	Uint8 alpha
 	CODE:
 		RETVAL = SDL_SetAlpha(surface,flag,alpha);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface *
-DisplayFormat ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = SDL_DisplayFormat(surface);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface*
-DisplayFormatAlpha ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = SDL_DisplayFormatAlpha(surface);
 	OUTPUT:
 		RETVAL
 

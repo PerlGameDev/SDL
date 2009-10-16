@@ -79,10 +79,10 @@ my $app = SDL::App->new(
 
 pass 'did this pass';
 
-my $image_format = $image->display;
+my $image_format = SDL::DisplayFormat($image);
 isa_ok( $image_format, 'SDL::Surface' );
 
-my $image_format_alpha = $image->display_alpha;
+my $image_format_alpha = SDL::DisplayFormatAlpha($image);
 isa_ok( $image_format_alpha, 'SDL::Surface' );
 
 my $app_pixel_format = $app->format;

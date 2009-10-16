@@ -74,29 +74,6 @@ surface_update_rects ( surface, ... )
 		SDL_UpdateRects(surface,num_rects,rects);
 		safefree(rects);
 
-SDL_Surface *
-surface_display ( surface )
-	SDL_Surface *surface
-	CODE:
-		char* CLASS = "SDL::Surface";
-
-		SDL_Surface *new_surface = SDL_DisplayFormat(surface);
-		SDL_FreeSurface(surface);
-		RETVAL = new_surface;	
-	OUTPUT:
-		RETVAL
-
-SDL_Surface *
-surface_display_alpha ( surface )
-	SDL_Surface *surface
-	CODE:
-		char* CLASS = "SDL::Surface";
-		SDL_Surface *new_surface = SDL_DisplayFormatAlpha(surface);
-		SDL_FreeSurface(surface);
-		RETVAL = new_surface;
-	OUTPUT:
-		RETVAL
-
 Uint16
 surface_pitch( surface )
 	SDL_Surface *surface
