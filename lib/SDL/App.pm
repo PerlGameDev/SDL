@@ -112,7 +112,7 @@ sub new {
 		$SDL::App::USING_OPENGL = 0;
 	}
 
-	my $self = SDL::SetVideoMode('SDL::Surface',$w,$h,$d,$f)
+	my $self = SDL::SetVideoMode($w,$h,$d,$f)
 		or croak SDL::GetError();
 	
 	if ($ic and -e $ic) {
