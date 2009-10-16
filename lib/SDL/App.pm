@@ -195,7 +195,7 @@ sub sync ($) {
 	if ($SDL::App::USING_OPENGL) {
 		SDL::GLSwapBuffers()
 	} else {
-		$self->flip();
+		SDL::Flip($self);
 	}
 }
 
