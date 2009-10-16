@@ -19,6 +19,7 @@ lib/SDL/Music.pm
 lib/SDL/OpenGL.pm
 lib/SDL/OpenGL/Constants.pm
 lib/SDL/Palette.pm
+lib/SDL/PixelFormat.pm
 lib/SDL/Rect.pm
 lib/SDL/SFont.pm
 lib/SDL/Sound.pm

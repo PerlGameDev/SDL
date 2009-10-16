@@ -62,6 +62,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_image )],
 	},
+	PixelFormat => {
+		file      => {
+			from  => 'src/Core/objects/PixelFormat.xs',
+			to    => 'lib/SDL/PixelFormat.xs',
+		},
+		libraries => [qw( SDL SDL_image )],
+	},
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',
