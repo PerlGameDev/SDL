@@ -57,7 +57,7 @@ my %subsystems =
 	},
 	Surface => {
 		file      => {
-			from  => 'src/Surface.xs',
+			from  => 'src/Core/objects/Surface.xs',
 			to    => 'lib/SDL/Surface.xs',
 		},
 		libraries => [qw( SDL SDL_image )],

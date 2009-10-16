@@ -65,6 +65,7 @@ src/Core/MultiThread.xs
 src/Core/objects/Color.xs
 src/Core/objects/PixelFormat.xs
 src/Core/objects/Rect.xs
+src/Core/objects/Surface.xs
 src/Core/SDL.xs
 src/Core/Time.xs
 src/Core/Video.xs
@@ -91,7 +92,6 @@ src/SFont.xs
 src/support/darwin_support.h
 src/support/darwin_support.m
 src/support/win32.c
-src/Surface.xs
 src/TTF/Attributes.xs
 src/TTF/Management.xs
 src/TTF/objects/TTF_font.xs
