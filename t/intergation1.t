@@ -87,8 +87,9 @@ my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init 
 	$app->fill_rect($rect, $blue);
 	$app->fill_rect($grect, $col);
 
-        SDL::Surface::update_rect($app, 0, 0, 0, 0);
+        SDL::Surface::update_rect($app, 0, 0, 640, 480);
+        SDL::Delay(10);
 	}
 
-	  sleep(1);
+	  SDL::Delay(100);
 
