@@ -27,6 +27,7 @@ lib/SDL/Surface.pm
 lib/SDL/Timer.pm
 lib/SDL/Tool/Font.pm
 lib/SDL/Tool/Graphic.pm
+lib/SDL/TTF_Font.pm
 lib/SDL/TTFont.pm
 lib/SDL/Tutorial.pm
 lib/SDL/Tutorial/Animation.pm
@@ -105,6 +106,7 @@ t/colorpm.t
 t/constantspm.t
 t/core_rect.t
 t/core_surface.t
+t/core_ttf.t
 t/cursorpm.t
 t/eventpm.t
 t/extendingrect.t

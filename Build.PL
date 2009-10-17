@@ -69,6 +69,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_image )],
 	},
+	TTF_Font => {
+		file      => {
+			from  => 'src/TTF/objects/TTF_Font.xs',
+			to    => 'lib/SDL/TTF_Font.xs',
+		},
+		libraries => [qw( SDL SDL_ttf )],
+	},
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',
