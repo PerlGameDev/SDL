@@ -4,30 +4,11 @@ Lunar Lander - a small tutorial on Perl SDL
 
 =head1 INTRODUCTION
 
-This is a quick introduction to Perl and SDL (Simple DirectMedia
-Layer, a cross-platform multimedia programming library). We'll write
-a small game-- Lunar Lander-- in 100 lines of code, or less.
+This is a quick introduction to Games, Perl, and  SDL (Simple 
+DirectMedia Layer, a cross-platform multimedia programming 
+library). We'll write a small game -- Lunar Lander -- in 100 
+lines of code, or less.
 
-=head2 PREPARATION
-
-You'll need SDL_Perl.
-
-If you are using Debian or Ubuntu, it's probably easier to install
-the module via apt-get:
-
-    apt-get install libsdl-perl
-
-or for the bleeding edge with tons of bug fixes.
-   
-   perl -MCPAN -e "install SDL"
-
-If you are using other Linux distro, look for the corresponding
-package. If you can't find it you'll have to compile it (and deal
-with all the dependencies) yourself.
-
-The point is that it is strongly recommend that you start with a
-packaged module from your distribution. Avoid compiling SDL_Perl
-if you can.
 
 =head2 FIRST VERSION
 
