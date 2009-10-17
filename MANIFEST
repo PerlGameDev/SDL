@@ -103,6 +103,7 @@ t/apppm.t
 t/cdrompm.t
 t/colorpm.t
 t/constantspm.t
+t/core_rect.t
 t/core_surface.t
 t/cursorpm.t
 t/eventpm.t
@@ -115,7 +116,6 @@ t/mpegpm.t
 t/musicpm.t
 t/opengl.t
 t/palettepm.t
-t/rectpm.t
 t/sdlgamerect.t
 t/sdlpm.t
 t/soundpm.t
