@@ -55,18 +55,17 @@ sub surface_leak()
 		-height => 480,
 		-depth => 16,
 		-title => 'SDL Demo',
-		-init => SDL_INIT_VIDEO
 
 	);
 
-	my $rect = SDL::Rect->new(0,0, 10, 20);
+	my $rect = SDL::Rect->new( -height => 10, -width => 20);
 
-	my $blue = SDL::Color->new(
-		-r => 0x00,
-		-g => 0x00,
-		-b => 0xff,
-	);
-	$window->fill($rect, $blue);
+	#my $blue = SDL::Color->new(
+	#	-r => 0x00,
+#		-g => 0x00,
+#		-b => 0xff,
+#	);
+#	$window->fill($rect, $blue);
 	$window->update($rect);
 
 }

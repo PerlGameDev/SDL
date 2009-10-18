@@ -16,10 +16,11 @@ use YAML;
 use YAML::Node;
 
 print STDERR <<BROKENWIN if ($^O =~ /MSWin.*|cygwin/ );
-******************************** !!!WARNING!!! ******************************** 
-Windows support is currently experimental - you can continue, but you've been warned! 
-If you are interested in helping please contact us at sdl-devel\@perl.org.
-*******************************************************************************
+*************************** !!!WARNING!!! *****************************
+Windows support is currently experimental - you can continue, but 
+you've been warned! If you are interested in helping please contact us 
+at sdl-devel\@perl.org, or join us on #sdl in irc.perl.org
+***********************************************************************
 BROKENWIN
 
 my $sdl_compile_flags = SDL::Utility->sdl_c_flags();
@@ -41,14 +42,6 @@ my %subsystems =
 		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
 		                  png jpeg smpeg )],
 	},
-	Rect => {
-		file      => {
-			from  => 'src/Rect.xs',
-			to    => 'lib/SDL/Rect.xs',
-		},
-		libraries => [qw( SDL  )],
-	},
-	
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',
@@ -135,13 +128,15 @@ my $build   = SDL::Build->new(
 	dist_name            => 'SDL_Perl', 
 	license		     => 'lgpl',
 	dist_version_from    => 'lib/SDL.pm',
-	requires	      =>
+	configure_requires	      =>
 	{
-		'Module::Build' => '0.27',
-		'Alien::SDL' => '0.7',
-		'Test::Simple' => '0.47',
 		'YAML'	=> '0.68',
-		'ExtUtils::CBuilder' => '0.260301'
+		'ExtUtils::CBuilder' => '0.260301',
+		'Alien::SDL' => '0.7.1',
+	},
+	build_requires =>
+	{
+		'Test::Simple' => '0.47',
 
 	},
 	build_recommends     =>
@@ -154,7 +149,7 @@ my $build   = SDL::Build->new(
 	{
 		no_index =>  { file => [ <make/lib/SDL/*.pm>, <make/lib/SDL/Build/*.pm>, <make/lib/ExtUtils/CBuilder/*>, <make/lib/ExtUtils/*>, <make/lib/ExtUtils/CBuilder/Platform/Windows.pm> ] },
 	},
-	dist_author	     => 'David J. Goehrig <DGOEHRIG@cpan.org>',
+	dist_author	     => 'David J. Goehrig <DGOEHRIG@cpan.org>, Kartik Thakore <KTHAKORE@cpan.org>',
 );
 
 if($arch eq 'Darwin')

@@ -152,7 +152,6 @@ sub build_links
 
 		$links{ $subsystem }{paths} = [ map { "-L$_" } keys %sub_links ];
 	}
-
 	return \%links;
 }
 
