@@ -16,10 +16,11 @@ use YAML;
 use YAML::Node;
 
 print STDERR <<BROKENWIN if ($^O =~ /MSWin.*|cygwin/ );
-******************************** !!!WARNING!!! ******************************** 
-Windows support is currently experimental - you can continue, but you've been warned! 
-If you are interested in helping please contact us at sdl-devel\@perl.org.
-*******************************************************************************
+*************************** !!!WARNING!!! *****************************
+Windows support is currently experimental - you can continue, but 
+you've been warned! If you are interested in helping please contact us 
+at sdl-devel\@perl.org, or join us on #sdl in irc.perl.org
+***********************************************************************
 BROKENWIN
 
 my $sdl_compile_flags = SDL::Utility->sdl_c_flags();
