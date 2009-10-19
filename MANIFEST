@@ -11,7 +11,6 @@ lib/SDL/Constants.pm
 lib/SDL/Cursor.pm
 lib/SDL/Event.pm
 lib/SDL/Font.pm
-lib/SDL/Game.pm
 lib/SDL/Game/Rect.pm
 lib/SDL/Mixer.pm
 lib/SDL/MPEG.pm
@@ -86,7 +85,6 @@ src/Mixer/objects/music.xs
 src/Mixer/objects/musicType.xs
 src/Mixer/README
 src/Mixer/Samples.xs
-src/Net/README
 src/OpenGL.xs
 src/SDL.xs
 src/SFont.h
@@ -96,7 +94,7 @@ src/support/darwin_support.m
 src/support/win32.c
 src/TTF/Attributes.xs
 src/TTF/Management.xs
-src/TTF/objects/TTF_font.xs
+src/TTF/objects/TTF_Font.xs
 src/TTF/README
 src/TTF/Render.xs
 src/TTF/TTF.xs
