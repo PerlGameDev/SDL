@@ -8,15 +8,25 @@ sub new {
     my $class = shift;
     my $self = {
         'rect'      => SDL::Game::Rect->new(20, 20, 10, 10),
-        'speed'     => 4,
-        'direction' => 5,
+        'velocity'  => [2, 2], #vector of velocity
         'color' => SDL::Color->new(-r => 0x00, -g => 0xcc, -b => 0x00),
     };
     bless $self, $class;
 }
 
+
 sub update {
-    
+my $self = shift;
+#get current location
+ my ($x, $y) = [$self->{'rect'}->centerx, $self->{'rect'}->centery];
+ my $velocity_x = $self->{'velocity'}[0];
+ my $velocity_y = $self->{'velocity'}[1];
+ #calculate next location 
+ my $nx = $x*$velocity_x;
+ my $ny = $y*$velocity_y;
+ 
+ $self->{'rect'}->center($nx, $ny);
+
 }
 
 package main;
@@ -44,7 +54,7 @@ game_loop() while 1;
 
 sub game_loop()
 {
-    #get_event
+    #get_eventK 
     #update
     #draw
 }
