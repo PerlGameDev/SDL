@@ -66,7 +66,7 @@ sub draw_screen {
    $app->fill($player, $fg_color);
    $app->fill($ball->{'rect'}->rect, $fg_color);
 
-  
+  $app->update($back,$player,$ball);  
   $app->sync();
 }
 
