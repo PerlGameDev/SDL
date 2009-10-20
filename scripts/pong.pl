@@ -8,7 +8,7 @@ sub new {
     my $class = shift;
     my $self = {
         'rect'      => SDL::Game::Rect->new(20, 20, 10, 10),
-        'velocity'  => [1, 0], #vector of velocity
+        'velocity'  => [1, -1], #vector of velocity
         'color' => SDL::Color->new(-r => 0x00, -g => 0xcc, -b => 0x00),
     };
     bless $self, $class;
@@ -18,16 +18,18 @@ sub new {
 sub update {
 my $self = shift;
 #get current location
- my $x = $self->{'rect'}->center_x;
- my $y =  $self->{'rect'}->center_y;
+ my $x = $self->{'rect'}->x;
+ my $y =  $self->{'rect'}->y;
  my $velocity_x = $self->{'velocity'}[0];
  my $velocity_y = $self->{'velocity'}[1];
  #calculate next location 
  my $nx = $x + $velocity_x;
  my $ny = $y + $velocity_y;
  
- $self->{'rect'}->center_x($x+$nx);
- $self->{'rect'}->center_y($y+$ny);
+ $self->{'rect'}->x($nx);
+
+ $self->{'rect'}->y($ny);
+
 
 }
 
@@ -47,10 +49,11 @@ my $app = SDL::App->new(
 my $event = SDL::Event->new;
 my $ball = Ball->new;
 
-my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x30, -b => 0x00 );
-my $back = SDL::Rect->new( 0, 0, $app->width, $app->height);
-my $player = SDL::Rect->new( 100, 30, 20, 90);
-my $fg_color = SDL::Color->new( -r => 0xcc, -g => 0xcc, -b => 0xcc );
+my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00 );
+my $back = SDL::Rect->new( -x => 0, -y => 0, -w =>$app->width, -h =>$app->height);
+my $player = SDL::Rect->new( -x => 10, -y => 20, -w => 12, -h => 90);
+my $player2 = SDL::Rect->new( -x => ($app->width - 20), -y => 20, -w => 12, -h => 90);
+my $fg_color = SDL::Color->new( -r => 0x22, -g => 0xff, -b => 0x22 );
 
 
 sub update
@@ -64,10 +67,12 @@ sub draw_screen {
 
    $app->fill($back, $bg_color);
    $app->fill($player, $fg_color);
+   $app->fill($player2, $fg_color);
    $app->fill($ball->{'rect'}->rect, $fg_color);
-
-  $app->update($back,$player,$ball);  
-  $app->sync();
+   
+    SDL::UpdateRect( $app, $ball->{'rect'}->x, $ball->{'rect'}->y, $ball->{'rect'}->right, $ball->{'rect'}->bottom);  
+    #$app->update($player, $ball->{'rect'}->rect); fails in windows need redesign branch
+ 
 }
 
 
@@ -90,8 +95,10 @@ sub check_events
 {
     event_loop();
     # did ball collide with wall
-    $ball->{'velocity'}[0] *= -1 if($ball->{'rect'}->x >= $app->width);
-    $ball->{'velocity'}[0] *= -1 if ($ball->{'rect'}->x <= 0);
+    $ball->{'velocity'}[0] = -1 if($ball->{'rect'}->rect->x > ($app->width - 15 ));
+    $ball->{'velocity'}[0] = 1 if ($ball->{'rect'}->rect->x < 2);
+    $ball->{'velocity'}[1] = -1 if($ball->{'rect'}->rect->y > ($app->height - 15));
+    $ball->{'velocity'}[1] = 1 if ($ball->{'rect'}->rect->y < 2);
 }
 
 
@@ -102,7 +109,7 @@ sub game_loop
     check_events;
     update;
     draw_screen;
-    sleep(1);
+    $app->sync();
 }
 
 game_loop while 1;
