@@ -23,8 +23,8 @@ my $self = shift;
  my $velocity_x = $self->{'velocity'}[0];
  my $velocity_y = $self->{'velocity'}[1];
  #calculate next location 
- my $nx = $x*$velocity_x;
- my $ny = $y*$velocity_y;
+ my $nx = $x + $velocity_x;
+ my $ny = $y + $velocity_y;
  
  $self->{'rect'}->center_x($x+$nx);
  $self->{'rect'}->center_y($y+$ny);
