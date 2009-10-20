@@ -8,7 +8,7 @@ sub new {
     my $class = shift;
     my $self = {
         'rect'      => SDL::Game::Rect->new(20, 20, 10, 10),
-        'velocity'  => [2, 2], #vector of velocity
+        'velocity'  => [1, 0], #vector of velocity
         'color' => SDL::Color->new(-r => 0x00, -g => 0xcc, -b => 0x00),
     };
     bless $self, $class;
@@ -18,14 +18,16 @@ sub new {
 sub update {
 my $self = shift;
 #get current location
- my ($x, $y) = [$self->{'rect'}->centerx, $self->{'rect'}->centery];
+ my $x = $self->{'rect'}->center_x;
+ my $y =  $self->{'rect'}->center_y;
  my $velocity_x = $self->{'velocity'}[0];
  my $velocity_y = $self->{'velocity'}[1];
  #calculate next location 
  my $nx = $x*$velocity_x;
  my $ny = $y*$velocity_y;
  
- $self->{'rect'}->center($nx, $ny);
+ $self->{'rect'}->center_x($nx);
+ $self->{'rect'}->center_y($ny);
 
 }
 
@@ -45,56 +47,64 @@ my $app = SDL::App->new(
 my $event = SDL::Event->new;
 my $ball = Ball->new;
 
-my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00 );
+my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x30, -b => 0x00 );
 my $back = SDL::Rect->new( 0, 0, $app->width, $app->height);
 my $player = SDL::Rect->new( 100, 30, 20, 90);
 my $fg_color = SDL::Color->new( -r => 0xcc, -g => 0xcc, -b => 0xcc );
 
-game_loop() while 1;
 
-sub game_loop()
+sub update
 {
-    #get_eventK 
-    #update
-    #draw
+    $ball->update;
 }
+
+
+
+sub draw_screen {
+
+   $app->fill($back, $bg_color);
+   $app->fill($player, $fg_color);
+   #$app->fill($$ball->{'rect'}}, $fg_color);
+
+  
+  $app->sync();
+}
+
 
 sub event_loop {
     while ($event->poll) {
         my $type = $event->type;
         exit if $type == SDL_QUIT;
 
-        if ($type == SDL_KEYDOWN || defined $held_down_key) {
-				if($event->key_name eq 'down' || $held_down_key eq 'down')
-				{
-						$player->y($player->y + 2) ;	
-						$held_down_key = 'down' 						
-				}
-				if($event->key_name eq 'up' || $held_down_key eq 'up')
-				{
-						$player->y($player->y - 2) ;
-						$held_down_key = 'up' 							
-				}
-				
+        if ($type == SDL_KEYDOWN) {
+	$player->y($player->y + 2) if($event->key_name eq 'down');							
+	$player->y($player->y - 2) if($event->key_name eq 'up' );			
         }
-		if ($type == SDL_KEYUP)
-		{
-			$held_down_key = undef;
-		}
-		 draw_screen();
+	draw_screen();
     }
    
 
 }
 
-sub draw_screen {
-
-   $app->fill($back, $bg_color);
-   $app->fill($player, $fg_color);
-
-  
-  $app->sync();
+sub check_events
+{
+    event_loop();
+    # did ball collide with wall
+    $ball->{'velocity'}[0] *= -1 if($ball->{'rect'}->x >= $app->width);
+    $ball->{'velocity'}[0] *= -1 if ($ball->{'rect'}->x <= 0);
 }
+
+
+
+
+sub game_loop
+{
+    check_events;
+    update;
+    draw_screen;
+}
+
+game_loop while 1;
 
 __END__
 
