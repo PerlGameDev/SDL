@@ -136,8 +136,15 @@ sub check_events
         print "player Two scores: \n Score is now $score->[0] / $score->[1]  \n";
         $ball->reset;
     }
-    #$ball->{'velocity'}[0] = 1 
-    #$ball->{'velocity'}[0] = -1 
+    
+    $ball->{'velocity'}[0] = -1 if  ($ball->{'rect'}->rect->x > ($player2->x - 1) ) && 
+                                    ($ball->{'rect'}->rect->y > ($player2->y))     &&
+                                    ($ball->{'rect'}->rect->y < ($player2->y + $player2->height));
+                                    
+    $ball->{'velocity'}[0] = 1  if  ($ball->{'rect'}->rect->x < ($player->x + $player->width + 1)) && 
+                                    ($ball->{'rect'}->rect->y > ($player->y))             &&
+                                    ($ball->{'rect'}->rect->y < ($player->y + $player->height));
+    
     $ball->{'velocity'}[1] = -1 if($ball->{'rect'}->rect->y > ($app->height - 15));
     $ball->{'velocity'}[1] = 1 if ($ball->{'rect'}->rect->y < 2);
 }
@@ -266,4 +273,3 @@ Now let's rewrite the C<< event_loop >> subroutine to take advantage of our even
 =head2 Part 6 - Counting (and showing) the score
 
 #TODO
-
