@@ -118,8 +118,11 @@ per class basis.
 	Nick: nferraz
 	Name: Nelson Ferraz
 
-	Nice: acme
+	Nick: acme
 	Name: Leon Brocard
+	
+	Nick: FROGGS
+	Name: Tobias Leich
 
 =head2 Maintainance 
 	
