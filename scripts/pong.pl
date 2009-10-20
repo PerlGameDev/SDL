@@ -26,8 +26,8 @@ my $self = shift;
  my $nx = $x*$velocity_x;
  my $ny = $y*$velocity_y;
  
- $self->{'rect'}->center_x($nx);
- $self->{'rect'}->center_y($ny);
+ $self->{'rect'}->center_x($x+$nx);
+ $self->{'rect'}->center_y($y+$ny);
 
 }
 
@@ -64,7 +64,7 @@ sub draw_screen {
 
    $app->fill($back, $bg_color);
    $app->fill($player, $fg_color);
-   #$app->fill($$ball->{'rect'}}, $fg_color);
+   $app->fill($ball->{'rect'}->rect, $fg_color);
 
   
   $app->sync();
@@ -102,6 +102,7 @@ sub game_loop
     check_events;
     update;
     draw_screen;
+    sleep(1);
 }
 
 game_loop while 1;
