@@ -7,13 +7,20 @@ package Ball;
 sub new {
     my $class = shift;
     my $self = {
-        'rect'      => SDL::Game::Rect->new(20, 20, 10, 10),
+        'rect'      => SDL::Game::Rect->new(100, 100, 10, 10),
         'velocity'  => [1, -1], #vector of velocity
         'color' => SDL::Color->new(-r => 0x00, -g => 0xcc, -b => 0x00),
     };
     bless $self, $class;
 }
 
+sub reset
+{
+    my $self = shift;
+     $self->{'rect'}->x(100);
+     $self->{'rect'}->y(100);
+     $self->{'velocit'} = [1, -1];
+}
 
 sub update {
 my $self = shift;
@@ -51,14 +58,35 @@ my $ball = Ball->new;
 
 my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00 );
 my $back = SDL::Rect->new( -x => 0, -y => 0, -w =>$app->width, -h =>$app->height);
-my $player = SDL::Rect->new( -x => 10, -y => 20, -w => 12, -h => 90);
-my $player2 = SDL::Rect->new( -x => ($app->width - 20), -y => 20, -w => 12, -h => 90);
-my $fg_color = SDL::Color->new( -r => 0x22, -g => 0xff, -b => 0x22 );
 
+my $player = SDL::Rect->new( -x => 10, -y => 20, -w => 12, -h => 90);
+my $score = [ 0, 0 ];
+my $player2 = SDL::Rect->new( -x => ($app->width - 20), -y => 20, -w => 12, -h => 90);
+
+
+my $fg_color = SDL::Color->new( -r => 0x22, -g => 0xff, -b => 0x22 );
+my $held = undef;
+
+sub player_update
+{
+    my $pl = shift;
+    $pl->y($pl->y + 2) if($held eq 'down' && !($player->y + $player->height + 2) >  $app->height );
+    $pl->y($pl->y - 2) if($held eq 'up' && !($player->y - 2 ) >  0);
+}
 
 sub update
 {
     $ball->update;
+    if ($held)
+    {
+        
+    $player->y($player->y + 2) if($held eq 'down' && ($player->y + $player->height + 2) <  $app->height - 5) ;
+    $player->y($player->y - 2) if($held eq 'up' && ($player->y - 2 ) >  5 );
+    
+    $player2->y($player2->y + 2) if($held eq 's' && ($player2->y + $player2->height + 2) <  $app->height - 5);
+    $player2->y($player2->y - 2) if($held eq 'w' && ($player2->y - 2 ) >  5 );
+    
+    }
 }
 
 
@@ -76,16 +104,16 @@ sub draw_screen {
 }
 
 
-sub event_loop {
+
+sub event_loop {    
     while ($event->poll) {
         my $type = $event->type;
         exit if $type == SDL_QUIT;
+	
+	$held = $event->key_name if ($type == SDL_KEYDOWN);			
+        $held = undef if ($type == SDL_KEYUP) ;
+	
 
-        if ($type == SDL_KEYDOWN) {
-	$player->y($player->y + 2) if($event->key_name eq 'down');							
-	$player->y($player->y - 2) if($event->key_name eq 'up' );			
-        }
-	draw_screen();
     }
    
 
@@ -95,8 +123,21 @@ sub check_events
 {
     event_loop();
     # did ball collide with wall
-    $ball->{'velocity'}[0] = -1 if($ball->{'rect'}->rect->x > ($app->width - 15 ));
-    $ball->{'velocity'}[0] = 1 if ($ball->{'rect'}->rect->x < 2);
+    if($ball->{'rect'}->rect->x > ($app->width - 15 ))
+    {
+        $score->[0] = $score->[0] + 1;
+        print "player One scores: \n Score is now $score->[0] / $score->[1]  \n";
+        $ball->reset;
+    }
+    
+    if ( $ball->{'rect'}->rect->x < 2)
+    {
+        $score->[1] =  $score->[1] + 1;
+        print "player Two scores: \n Score is now $score->[0] / $score->[1]  \n";
+        $ball->reset;
+    }
+    #$ball->{'velocity'}[0] = 1 
+    #$ball->{'velocity'}[0] = -1 
     $ball->{'velocity'}[1] = -1 if($ball->{'rect'}->rect->y > ($app->height - 15));
     $ball->{'velocity'}[1] = 1 if ($ball->{'rect'}->rect->y < 2);
 }
@@ -225,3 +266,4 @@ Now let's rewrite the C<< event_loop >> subroutine to take advantage of our even
 =head2 Part 6 - Counting (and showing) the score
 
 #TODO
+
