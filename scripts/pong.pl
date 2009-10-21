@@ -57,10 +57,10 @@ sub update {
     $ball->update;
     if ($held) {
         
-    $player->y($player->y + 2) if($held eq 'down' && ($player->y + $player->height + 2) <  $app->height - 5) ;
+    $player->y($player->y + 2) if($held eq 'down' && ($player->bottom + 2) <  $app->height - 5) ;
     $player->y($player->y - 2) if($held eq 'up' && ($player->y - 2 ) >  5 );
     
-    $player2->y($player2->y + 2) if($held eq 's' && ($player2->y + $player2->height + 2) <  $app->height - 5);
+    $player2->y($player2->y + 2) if($held eq 's' && ($player2->bottom + 2) <  $app->height - 5);
     $player2->y($player2->y - 2) if($held eq 'w' && ($player2->y - 2 ) >  5 );
     
     }
