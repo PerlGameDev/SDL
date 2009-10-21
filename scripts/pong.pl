@@ -9,7 +9,6 @@ sub new {
     my $self = {
         'rect'      => SDL::Game::Rect->new(100, 100, 10, 10),
         'velocity'  => [1, -1], #vector of velocity
-        'color' => SDL::Color->new(-r => 0x00, -g => 0xcc, -b => 0x00),
     };
     bless $self, $class;
 }
