@@ -34,6 +34,8 @@ my $app = SDL::App->new(
 	-width  => 640,
 	-height => 480,
 	-depth  => 16,
+	-init => SDL_INIT_VIDEO,
+#	-flags => SDL_FULLSCREEN
 );
 my $event = SDL::Event->new;
 
@@ -75,7 +77,8 @@ sub event_loop {
         my $type = $event->type;
         exit if $type == SDL_QUIT;
 	
-        $held = $event->key_name if ($type == SDL_KEYDOWN);			
+	$held = $event->key_name if ($type == SDL_KEYDOWN);			
+	exit if $held eq 'escape';
         $held = undef if ($type == SDL_KEYUP) ;
     }
 }
