@@ -13,7 +13,7 @@ sub new {
 
 sub reset {
     my $self = shift;
-   
+
      $self->x($_[0]);
      $self->y($_[1]);
      $self->{'velocity'} = [int(rand(2))*2-1, int(rand(2))*2-1];
@@ -113,16 +113,16 @@ sub check_events {
         $ball->reset($app->width/2, $app->height/2);
     }
     
-    $ball->{'velocity'}[0] = -1 if  ($ball->rect->x > ($player2->x  - 1) ) &&  
-                                    ($ball->rect->y > ($player2->y))     &&
-                                    ($ball->rect->y < ($player2->y + $player2->height));
+    $ball->{'velocity'}[0] = -1 if  ($ball->x > ($player2->x  - 1) ) &&  
+                                    ($ball->y > ($player2->y))     &&
+                                    ($ball->y < ($player2->y + $player2->height));
                                     
-    $ball->{'velocity'}[0] = 1  if  ($ball->rect->x < ($player->x + $player->width + 1)) && 
-                                    ($ball->rect->y > ($player->y))             &&
-                                    ($ball->rect->y < ($player->y + $player->height));
+    $ball->{'velocity'}[0] = 1  if  ($ball->x < ($player->x + $player->width + 1)) && 
+                                    ($ball->y > ($player->y))             &&
+                                    ($ball->y < ($player->y + $player->height));
     
-    $ball->{'velocity'}[1] = -1 if($ball->rect->y > ($app->height - 15));
-    $ball->{'velocity'}[1] = 1 if ($ball->rect->y < 2);
+    $ball->{'velocity'}[1] = -1 if($ball->y > ($app->height - 15));
+    $ball->{'velocity'}[1] = 1 if ($ball->y < 2);
 }
 
 
