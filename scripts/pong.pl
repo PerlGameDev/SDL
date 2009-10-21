@@ -21,18 +21,7 @@ sub reset {
 
 sub update {
     my $self = shift;
-    #get current location
-    my $x = $self->x;
-    my $y =  $self->y;
-    my $velocity_x = $self->{'velocity'}[0];
-    my $velocity_y = $self->{'velocity'}[1];
-    #calculate next location 
-    my $nx = $x + $velocity_x;
-    my $ny = $y + $velocity_y;
-
-    $self->x($nx);
-
-    $self->y($ny);
+    $self->move( $self->{'velocity'}[0], $self->{'velocity'}[1] );
 }
 
 package main;
