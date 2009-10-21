@@ -88,7 +88,7 @@ my %subsystems =
 			from => 'src/SFont.xs',
 			to   =>	'lib/SDL/SFont.xs',
 		},
-		libraries => [qw( SDL SDL_image )],
+		libraries => [qw( SDL SDL_image SDL_ttf )],
 	},	
 );
 
