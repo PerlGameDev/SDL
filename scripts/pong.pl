@@ -17,8 +17,9 @@ sub new {
 sub reset
 {
     my $self = shift;
-     $self->{'rect'}->x(100);
-     $self->{'rect'}->y(100);
+   
+     $self->{'rect'}->x($_[0]);
+     $self->{'rect'}->y($_[1]);
      $self->{'velocity'} = [int(rand(2))*2-1, int(rand(2))*2-1];
 }
 
@@ -67,12 +68,6 @@ my $player2 = SDL::Rect->new( -x => ($app->width - 20), -y => 20, -w => 12, -h =
 my $fg_color = SDL::Color->new( -r => 0x22, -g => 0xff, -b => 0x22 );
 my $held = undef;
 
-sub player_update
-{
-    my $pl = shift;
-    $pl->y($pl->y + 2) if($held eq 'down' && !($player->y + $player->height + 2) >  $app->height );
-    $pl->y($pl->y - 2) if($held eq 'up' && !($player->y - 2 ) >  0);
-}
 
 sub update
 {
@@ -127,17 +122,17 @@ sub check_events
     {
         $score->[0] = $score->[0] + 1;
         print "player One scores: \n Score is now $score->[0] / $score->[1]  \n";
-        $ball->reset;
+        $ball->reset($app->width/2, $app->height/2);
     }
     
     if ( $ball->{'rect'}->rect->x < 2)
     {
         $score->[1] =  $score->[1] + 1;
         print "player Two scores: \n Score is now $score->[0] / $score->[1]  \n";
-        $ball->reset;
+        $ball->reset($app->width/2, $app->height/2);
     }
     
-    $ball->{'velocity'}[0] = -1 if  ($ball->{'rect'}->rect->x > ($player2->x - 1) ) && 
+    $ball->{'velocity'}[0] = -1 if  ($ball->{'rect'}->rect->x > ($player2->x  - 1) ) &&  
                                     ($ball->{'rect'}->rect->y > ($player2->y))     &&
                                     ($ball->{'rect'}->rect->y < ($player2->y + $player2->height));
                                     
