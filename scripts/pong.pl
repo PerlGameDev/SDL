@@ -33,9 +33,6 @@ my $app = SDL::App->new(
     -title  => 'Pong',
 	-width  => 640,
 	-height => 480,
-	-depth  => 16,
-	-init => SDL_INIT_VIDEO,
-#	-flags => SDL_FULLSCREEN
 );
 my $event = SDL::Event->new;
 
