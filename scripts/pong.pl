@@ -11,8 +11,7 @@ sub new {
     return $self;
 }
 
-sub reset
-{
+sub reset {
     my $self = shift;
    
      $self->x($_[0]);
@@ -21,21 +20,19 @@ sub reset
 }
 
 sub update {
-my $self = shift;
-#get current location
- my $x = $self->x;
- my $y =  $self->y;
- my $velocity_x = $self->{'velocity'}[0];
- my $velocity_y = $self->{'velocity'}[1];
- #calculate next location 
- my $nx = $x + $velocity_x;
- my $ny = $y + $velocity_y;
- 
- $self->x($nx);
+    my $self = shift;
+    #get current location
+    my $x = $self->x;
+    my $y =  $self->y;
+    my $velocity_x = $self->{'velocity'}[0];
+    my $velocity_y = $self->{'velocity'}[1];
+    #calculate next location 
+    my $nx = $x + $velocity_x;
+    my $ny = $y + $velocity_y;
 
- $self->y($ny);
+    $self->x($nx);
 
-
+    $self->y($ny);
 }
 
 package main;
@@ -66,8 +63,7 @@ my $fg_color = SDL::Color->new( -r => 0x22, -g => 0xff, -b => 0x22 );
 my $held = undef;
 
 
-sub update
-{
+sub update {
     $ball->update;
     if ($held)
     {
@@ -111,8 +107,7 @@ sub event_loop {
 
 }
 
-sub check_events
-{
+sub check_events {
     event_loop();
     # did ball collide with wall
     if($ball->rect->x > ($app->width - 15 ))
@@ -144,8 +139,7 @@ sub check_events
 
 
 
-sub game_loop
-{
+sub game_loop {
     check_events;
     update;
     draw_screen;
