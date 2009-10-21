@@ -2,40 +2,38 @@ use strict;
 use warnings;
 
 package Ball;
-#use SDL::Game::Rect;
+use base 'SDL::Game::Rect';
 
 sub new {
     my $class = shift;
-    my $self = {
-        'rect'      => SDL::Game::Rect->new(100, 100, 10, 10),
-        'velocity'  => [1, -1], #vector of velocity
-    };
-    bless $self, $class;
+    my $self = $class->SUPER::new(@_);
+    $self->{'velocity'} = [1, -1], #vector of velocity
+    return $self;
 }
 
 sub reset
 {
     my $self = shift;
    
-     $self->{'rect'}->x($_[0]);
-     $self->{'rect'}->y($_[1]);
+     $self->x($_[0]);
+     $self->y($_[1]);
      $self->{'velocity'} = [int(rand(2))*2-1, int(rand(2))*2-1];
 }
 
 sub update {
 my $self = shift;
 #get current location
- my $x = $self->{'rect'}->x;
- my $y =  $self->{'rect'}->y;
+ my $x = $self->x;
+ my $y =  $self->y;
  my $velocity_x = $self->{'velocity'}[0];
  my $velocity_y = $self->{'velocity'}[1];
  #calculate next location 
  my $nx = $x + $velocity_x;
  my $ny = $y + $velocity_y;
  
- $self->{'rect'}->x($nx);
+ $self->x($nx);
 
- $self->{'rect'}->y($ny);
+ $self->y($ny);
 
 
 }
@@ -54,7 +52,7 @@ my $app = SDL::App->new(
 );
 
 my $event = SDL::Event->new;
-my $ball = Ball->new;
+my $ball = Ball->new(100, 100, 10, 10);
 
 my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00 );
 my $back = SDL::Rect->new( -x => 0, -y => 0, -w =>$app->width, -h =>$app->height);
@@ -90,9 +88,9 @@ sub draw_screen {
    $app->fill($back, $bg_color);
    $app->fill($player, $fg_color);
    $app->fill($player2, $fg_color);
-   $app->fill($ball->{'rect'}->rect, $fg_color);
+   $app->fill($ball->rect, $fg_color);
    
-    SDL::UpdateRect( $app, $ball->{'rect'}->x, $ball->{'rect'}->y, $ball->{'rect'}->right, $ball->{'rect'}->bottom);  
+    SDL::UpdateRect( $app, $ball->x, $ball->y, $ball->right, $ball->bottom);  
     #$app->update($player, $ball->{'rect'}->rect); fails in windows need redesign branch
  
 }
@@ -117,30 +115,30 @@ sub check_events
 {
     event_loop();
     # did ball collide with wall
-    if($ball->{'rect'}->rect->x > ($app->width - 15 ))
+    if($ball->rect->x > ($app->width - 15 ))
     {
         $score->[0] = $score->[0] + 1;
         print "player One scores: \n Score is now $score->[0] / $score->[1]  \n";
         $ball->reset($app->width/2, $app->height/2);
     }
     
-    if ( $ball->{'rect'}->rect->x < 2)
+    if ( $ball->rect->x < 2)
     {
         $score->[1] =  $score->[1] + 1;
         print "player Two scores: \n Score is now $score->[0] / $score->[1]  \n";
         $ball->reset($app->width/2, $app->height/2);
     }
     
-    $ball->{'velocity'}[0] = -1 if  ($ball->{'rect'}->rect->x > ($player2->x  - 1) ) &&  
-                                    ($ball->{'rect'}->rect->y > ($player2->y))     &&
-                                    ($ball->{'rect'}->rect->y < ($player2->y + $player2->height));
+    $ball->{'velocity'}[0] = -1 if  ($ball->rect->x > ($player2->x  - 1) ) &&  
+                                    ($ball->rect->y > ($player2->y))     &&
+                                    ($ball->rect->y < ($player2->y + $player2->height));
                                     
-    $ball->{'velocity'}[0] = 1  if  ($ball->{'rect'}->rect->x < ($player->x + $player->width + 1)) && 
-                                    ($ball->{'rect'}->rect->y > ($player->y))             &&
-                                    ($ball->{'rect'}->rect->y < ($player->y + $player->height));
+    $ball->{'velocity'}[0] = 1  if  ($ball->rect->x < ($player->x + $player->width + 1)) && 
+                                    ($ball->rect->y > ($player->y))             &&
+                                    ($ball->rect->y < ($player->y + $player->height));
     
-    $ball->{'velocity'}[1] = -1 if($ball->{'rect'}->rect->y > ($app->height - 15));
-    $ball->{'velocity'}[1] = 1 if ($ball->{'rect'}->rect->y < 2);
+    $ball->{'velocity'}[1] = -1 if($ball->rect->y > ($app->height - 15));
+    $ball->{'velocity'}[1] = 1 if ($ball->rect->y < 2);
 }
 
 
