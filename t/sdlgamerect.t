@@ -1,4 +1,4 @@
-use Test::More tests => 94;
+use Test::More tests => 96;
 use strict;
 use SDL;
 
@@ -175,3 +175,8 @@ is($vanilla_rect->x, 10, 'vanilla rect should have same x value');
 is($vanilla_rect->y, 121, 'vanilla rect should have same y value');
 is($vanilla_rect->w, 45, 'vanilla rect should have same width value');
 is($vanilla_rect->h, 67, 'vanilla rect should have same height value');
+
+
+$rect->move(1, -1);
+is($rect->top, 120, 'relative ->move() call should work for y');
+is($rect->left, 11, 'relative ->move() call should work for x');
