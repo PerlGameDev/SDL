@@ -42,8 +42,8 @@ my $event = SDL::Event->new;
 my $score = [ 0, 0 ];
 
 my $ball    = Ball->new (100, 100, 10, 10);
-my $player  = SDL::Rect->new( -x => 10, -y => 20, -w => 12, -h => 90);
-my $player2 = SDL::Rect->new( -x => ($app->width - 20), -y => 20, -w => 12, -h => 90);
+my $player = SDL::Game::Rect->new(10, 20, 12, 90);
+my $player2 = SDL::Game::Rect->new($app->width - 20, 20, 12, 90);
 
 my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00 );
 my $fg_color = SDL::Color->new( -r => 0x22, -g => 0xff, -b => 0x22 );
@@ -70,8 +70,8 @@ sub update {
 sub draw_screen {
 
    $app->fill($back, $bg_color);
-   $app->fill($player, $fg_color);
-   $app->fill($player2, $fg_color);
+   $app->fill($player->rect, $fg_color);
+   $app->fill($player2->rect, $fg_color);
    $app->fill($ball->rect, $fg_color);
    
     SDL::UpdateRect( $app, $ball->x, $ball->y, $ball->right, $ball->bottom);  
