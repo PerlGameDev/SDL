@@ -36,26 +36,26 @@ my $app = SDL::App->new(
 	-height => 480,
 	-depth  => 16,
 );
-
 my $event = SDL::Event->new;
-my $ball = Ball->new(100, 100, 10, 10);
 
-my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00 );
-my $back = SDL::Rect->new( -x => 0, -y => 0, -w =>$app->width, -h =>$app->height);
-
-my $player = SDL::Rect->new( -x => 10, -y => 20, -w => 12, -h => 90);
+# game objects
 my $score = [ 0, 0 ];
+
+my $ball    = Ball->new (100, 100, 10, 10);
+my $player  = SDL::Rect->new( -x => 10, -y => 20, -w => 12, -h => 90);
 my $player2 = SDL::Rect->new( -x => ($app->width - 20), -y => 20, -w => 12, -h => 90);
 
-
+my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00 );
 my $fg_color = SDL::Color->new( -r => 0x22, -g => 0xff, -b => 0x22 );
+
+my $back = SDL::Rect->new( -x => 0, -y => 0, -w =>$app->width, -h =>$app->height);
+
 my $held = undef;
 
 
 sub update {
     $ball->update;
-    if ($held)
-    {
+    if ($held) {
         
     $player->y($player->y + 2) if($held eq 'down' && ($player->y + $player->height + 2) <  $app->height - 5) ;
     $player->y($player->y - 2) if($held eq 'up' && ($player->y - 2 ) >  5 );
@@ -65,7 +65,6 @@ sub update {
     
     }
 }
-
 
 
 sub draw_screen {
@@ -81,40 +80,32 @@ sub draw_screen {
 }
 
 
-
 sub event_loop {    
     while ($event->poll) {
         my $type = $event->type;
         exit if $type == SDL_QUIT;
 	
-	$held = $event->key_name if ($type == SDL_KEYDOWN);			
+        $held = $event->key_name if ($type == SDL_KEYDOWN);			
         $held = undef if ($type == SDL_KEYUP) ;
-	
-
     }
-   
-
 }
 
 sub check_events {
     event_loop();
     # did ball collide with wall
-    if($ball->rect->x > ($app->width - 15 ))
-    {
+    if($ball->rect->x > ($app->width - 15 )) {
         $score->[0] = $score->[0] + 1;
         print "player One scores: \n Score is now $score->[0] / $score->[1]  \n";
         $ball->reset($app->width/2, $app->height/2);
     }
     
-    if ( $ball->rect->x < 2)
-    {
+    if ( $ball->rect->x < 2) {
         $score->[1] =  $score->[1] + 1;
         print "player Two scores: \n Score is now $score->[0] / $score->[1]  \n";
         $ball->reset($app->width/2, $app->height/2);
     }
     
     $ball->{'velocity'}[0] = -1 if $ball->collide_rect($player2);
- 
     $ball->{'velocity'}[0] = 1 if $ball->collide_rect($player);
 
     $ball->{'velocity'}[1] = -1 if($ball->y > ($app->height - 15));
