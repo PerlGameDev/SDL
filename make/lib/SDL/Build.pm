@@ -197,6 +197,9 @@ sub find_header
 		next unless -e File::Spec->catfile( $inc_dir, $header );
 		return ($inc_dir, $includes->{$inc_dir});
 	}
+
+	print STDERR "Warning: header file '$header' not found.\n";
+	return;
 }
 
 sub write_sdl_config
