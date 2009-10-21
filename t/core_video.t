@@ -52,10 +52,8 @@ can_ok ('SDL::Video', qw/
 	GL_set_attribute
 	GL_swap_buffers
 	GL_attr
-	create_YUV_overlay
 	lock_YUV_overlay
 	unlock_YUV_overlay
 	display_YUV_overlay
-	free_YUV_overlay
 	/);
 

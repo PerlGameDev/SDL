@@ -43,7 +43,7 @@ UDPpacket **		T_PTR
 IPaddress*		T_PTR
 SDLNet_GenericSocket	T_PTR
 TTF_Font *		O_OBJECT
-SDL_Overlay *		T_PTR
+SDL_Overlay *		O_OBJECT	
 SMPEG_Info *		T_PTR
 SMPEG *			T_PTR
 SMPEGstatus		T_IV

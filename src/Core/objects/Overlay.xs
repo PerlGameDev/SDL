@@ -22,7 +22,26 @@ typedef struct{
   Uint8 **pixels;
   Uint32 hw_overlay:1;
 } SDL_Overlay;
-}
+
 
 =cut
+
+SDL_Overlay *
+overlay_new(CLASS, width, height, Uint32 format, display)
+	char* CLASS
+	int width
+	int height
+	Uint32 format
+	SDL_Surface *display;
+	CODE:
+		RETVAL = SDL_CreateYUVOverlay(width, height, format, display);
+	OUTPUT:
+		RETVAL
+
+void
+overlay_DESTROY(overlay)
+	SDL_Overlay *overlay
+	CODE:
+		SDL_FreeYUVOverlay(overlay);
+
 
