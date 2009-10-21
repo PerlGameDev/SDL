@@ -29,7 +29,6 @@ use SDL;
 use SDL::Game::Rect;
 use SDL::App;
 
-
 my $app = SDL::App->new(
     -title  => 'Pong',
 	-width  => 640,
@@ -39,44 +38,35 @@ my $app = SDL::App->new(
 my $event = SDL::Event->new;
 
 # game objects
-my $score = [ 0, 0 ];
-
 my $ball    = Ball->new (100, 100, 10, 10);
-my $player = SDL::Game::Rect->new(10, 20, 12, 90);
+my $player  = SDL::Game::Rect->new(10, 20, 12, 90);
 my $player2 = SDL::Game::Rect->new($app->width - 20, 20, 12, 90);
-
-my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00 );
-my $fg_color = SDL::Color->new( -r => 0x22, -g => 0xff, -b => 0x22 );
-
-my $back = SDL::Rect->new( -x => 0, -y => 0, -w =>$app->width, -h =>$app->height);
+my $back    = SDL::Rect->new( -x => 0, -y => 0, -w =>$app->width, -h =>$app->height);
 
 my $held = undef;
+my $score = [ 0, 0 ];
 
 
 sub update {
     $ball->update;
     if ($held) {
-        
-    $player->y($player->y + 2) if($held eq 'down' && ($player->bottom + 2) <  $app->height - 5) ;
-    $player->y($player->y - 2) if($held eq 'up' && ($player->y - 2 ) >  5 );
+        $player->y($player->y + 2) if($held eq 'down' && ($player->bottom + 2) <  $app->height - 5) ;
+        $player->y($player->y - 2) if($held eq 'up' && ($player->y - 2 ) >  5 );
     
-    $player2->y($player2->y + 2) if($held eq 's' && ($player2->bottom + 2) <  $app->height - 5);
-    $player2->y($player2->y - 2) if($held eq 'w' && ($player2->y - 2 ) >  5 );
-    
+        $player2->y($player2->y + 2) if($held eq 's' && ($player2->bottom + 2) <  $app->height - 5);
+        $player2->y($player2->y - 2) if($held eq 'w' && ($player2->y - 2 ) >  5 );
     }
 }
 
 
 sub draw_screen {
-
-   $app->fill($back, $bg_color);
-   $app->fill($player->rect, $fg_color);
-   $app->fill($player2->rect, $fg_color);
-   $app->fill($ball->rect, $fg_color);
+    $app->fill($back, $SDL::Color::black);
+    $app->fill($player->rect, $SDL::Color::green);
+    $app->fill($player2->rect, $SDL::Color::green);
+    $app->fill($ball->rect, $SDL::Color::green);
    
     SDL::UpdateRect( $app, $ball->x, $ball->y, $ball->right, $ball->bottom);  
     #$app->update($player, $ball->{'rect'}->rect); fails in windows need redesign branch
- 
 }
 
 
@@ -89,6 +79,7 @@ sub event_loop {
         $held = undef if ($type == SDL_KEYUP) ;
     }
 }
+
 
 sub check_events {
     event_loop();
@@ -113,8 +104,6 @@ sub check_events {
 }
 
 
-
-
 sub game_loop {
     check_events;
     update;
@@ -123,4 +112,3 @@ sub game_loop {
 }
 
 game_loop while 1;
-
