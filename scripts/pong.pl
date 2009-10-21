@@ -19,7 +19,7 @@ sub reset
     my $self = shift;
      $self->{'rect'}->x(100);
      $self->{'rect'}->y(100);
-     $self->{'velocit'} = [1, -1];
+     $self->{'velocity'} = [1, -1];
 }
 
 sub update {
