@@ -2787,17 +2787,6 @@ NetRead32 ( area )
 
 #endif 
 
-SDL_Overlay*
-CreateYUVOverlay ( width, height, format, display )
-	int width
-	int height
-	Uint32 format
-	SDL_Surface *display
-	CODE:
-		RETVAL = SDL_CreateYUVOverlay ( width, height, format, display );
-	OUTPUT:
-		RETVAL
-
 int
 LockYUVOverlay ( overlay )
 	SDL_Overlay *overlay
@@ -2820,12 +2809,6 @@ DisplayYUVOverlay ( overlay, dstrect )
 		RETVAL = SDL_DisplayYUVOverlay ( overlay, dstrect );
 	OUTPUT:
 		RETVAL
-
-void
-FreeYUVOverlay ( overlay )
-        SDL_Overlay *overlay
-        CODE:
-                SDL_FreeYUVOverlay ( overlay );
 
 Uint32
 OverlayFormat ( overlay, ... )

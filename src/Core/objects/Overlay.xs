@@ -27,7 +27,7 @@ typedef struct{
 =cut
 
 SDL_Overlay *
-overlay_new(CLASS, width, height, Uint32 format, display)
+overlay_new(CLASS, width, height, format, display)
 	char* CLASS
 	int width
 	int height

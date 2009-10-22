@@ -46,7 +46,7 @@ my %subsystems =
 			from  => 'src/Core/objects/Rect.xs',
 			to    => 'lib/SDL/Rect.xs',
 		},
-		libraries => [qw( SDL  )],
+		libraries => [qw( SDL )],
 	},
 	Color => {
 		file      => {
@@ -60,14 +60,21 @@ my %subsystems =
 			from  => 'src/Core/objects/Surface.xs',
 			to    => 'lib/SDL/Surface.xs',
 		},
-		libraries => [qw( SDL SDL_image )],
+		libraries => [qw( SDL )],
+	},
+	Overlay => {
+		file      => {
+			from  => 'src/Core/objects/Overlay.xs',
+			to    => 'lib/SDL/Overlay.xs',
+		},
+		libraries => [qw( SDL )],
 	},
 	PixelFormat => {
 		file      => {
 			from  => 'src/Core/objects/PixelFormat.xs',
 			to    => 'lib/SDL/PixelFormat.xs',
 		},
-		libraries => [qw( SDL SDL_image )],
+		libraries => [qw( SDL )],
 	},
 	TTF_Font => {
 		file      => {
@@ -88,7 +95,7 @@ my %subsystems =
 			from => 'src/SFont.xs',
 			to   =>	'lib/SDL/SFont.xs',
 		},
-		libraries => [qw( SDL SDL_image SDL_ttf )],
+		libraries => [qw( SDL SDL_ttf )],
 	},	
 );
 
