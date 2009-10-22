@@ -10,3 +10,67 @@ bootstrap SDL::Overlay;
 
 __END__
 
+=pod 
+
+=head1 NAME
+
+SDL::Overlay - YUV Video overlay
+
+=head1 SYNOPSIS
+
+First import the following modules to get access to constants and functions needed for overlay.
+
+   use SDL;
+   use SDL::Video;
+   use SDL::Overlay;
+
+Init the video susbsystem.
+
+   SDL::Init(SDL_INIT_VIDEO);
+
+Create a display to use.  
+
+   my $display = SDL::SetVideoMore(640, 480, 32, SDL_SWSURFACE);
+
+Create and attach the display to a new overlay
+   my $overlay = SDL::Overlay->new( 100, 100, SDL_YV12_OVERLAY, $display);
+   
+=head1 DESCRIPTION
+
+A C<SDL_Overlay> allows for video rendering on an C<SDL_Surface> which is a display.  
+
+The term 'overlay' is a misnomer since, unless the overlay is created in hardware, the contents for the display surface underneath the area where the overlay is shown will be overwritten when the overlay is displayed.
+
+=head1 METHODS
+
+=head2 new ( $width, $height, $YUV_flag, $display) 
+
+The constructor creates a SDL::Overlay of the specified width, height and format (see C<YUV_Flags> list below of available formats), for the provided display.
+
+Note the 'display' argument needs to actually be the surface created by C<SDL::Video::SetVideoMode> otherwise this function will segfault. 
+    
+   my $overlay = SDL::Overlay->new( $width, $height, $YUV_flag, $display );
+
+=head3 YUV_Flags
+
+More information on YUV formats can be found at L<http://www.fourcc.org/indexyuv.htm> . 
+
+=over 4
+
+=item *
+SDL_YV12_OVERLAY  0x32315659  /* Planar mode: Y + V + U */
+
+=item *
+SDL_IYUV_OVERLAY  0x56555949  /* Planar mode: Y + U + V */
+
+=item *
+SDL_YUY2_OVERLAY  0x32595559  /* Packed mode: Y0+U0+Y1+V0 */
+
+=item *
+SDL_UYVY_OVERLAY  0x59565955  /* Packed mode: U0+Y0+V0+Y1 */
+
+=item *
+SDL_YVYU_OVERLAY  0x55595659  /* Packed mode: Y0+V0+Y1+U0 */
+
+=back
+
