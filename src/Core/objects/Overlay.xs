@@ -38,6 +38,47 @@ overlay_new(CLASS, width, height, format, display)
 	OUTPUT:
 		RETVAL
 
+int
+overlay_w( overlay )
+	SDL_Overlay* overlay
+	CODE:
+		RETVAL = overlay->w;
+	OUTPUT:
+		RETVAL
+
+int
+overlay_h( overlay )
+	SDL_Overlay* overlay
+	CODE:
+		RETVAL = overlay->h;
+	OUTPUT:
+		RETVAL
+
+int
+overlay_planes( overlay )
+	SDL_Overlay* overlay
+	CODE:
+		RETVAL = overlay->planes;
+	OUTPUT:
+		RETVAL
+
+Uint32 
+overlay_hwoverlay( overlay )
+	SDL_Overlay* overlay
+	CODE:
+		RETVAL = overlay->hw_overlay;		
+	OUTPUT:
+		RETVAL
+
+Uint32
+overlay_format( overlay )
+	SDL_Overlay* overlay
+	CODE:
+		RETVAL = overlay->format;		
+	OUTPUT:
+		RETVAL
+
+
 void
 overlay_DESTROY(overlay)
 	SDL_Overlay *overlay
