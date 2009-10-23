@@ -1,0 +1,112 @@
+package SDL::VideoInfo;
+use strict;
+use warnings;
+require Exporter;
+require DynaLoader;
+our @ISA = qw(Exporter DynaLoader);
+bootstrap SDL::VideoInfo;
+
+1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+SDL::VideoInfo - Video Target Information 
+
+=head1 SYNOPSIS
+
+	my $video_info = SDL::Video::get_video_info();
+
+VideoInfo is only accessible C<SDL::Video::get_video_info>. This module only provides getters to the struct C<SDL_VideoInfo>.
+
+
+=head1 DESCRIPTION
+
+This object is a read-only structure and is returned by C<SDL::Video::get_video_info>. It contains information on either the best available mode if called before C<SDL::Video::set_video_mode> or the current video mode if called after C<SDL::Video::set_video_mode>. 
+
+=head1 METHODS
+
+
+=head2 hw_available
+
+	$video_info->hw_available() # 1 if Hardware Accelerated Surfaces available	
+
+Is it possible to create hardware surfaces ?
+
+=head2 wm_available
+
+	$video_info->wm_available() # 1 if Window Manager available	
+
+Is there a window manager available ?
+
+=head2 blit_hw
+	
+	$video_info->blit_hw() 
+
+Are hardware to hardware blits accelerated ?
+
+=head2 blit_hw_CC
+
+	$video_info->blit_hw_CC()	
+
+Are hardware to hardware colorkey blits accelerated ?
+
+=head2 blit_hw_A
+
+	$video_info->blit_hw_A()	
+
+Are hardware to hardware alpha blits accelerated ?
+
+=head2 blit_sw
+	
+	$video_info->blit_sw()
+
+Are software to hardware blits accelerated ?
+
+=head2 blit_sw_CC
+
+	$video_info->blit_sw_CC()
+	
+
+Are software to hardware colorkey blits accelerated ?
+
+=head2 blit_sw_A	
+
+	$video_info->blit_sw_A()
+
+Are software to hardware alpha blits accelerated ?
+
+=head2 blit_fill
+
+	$video_info->blit_fill()	
+
+Are color fills accelerated ?
+
+=head2 video_mem
+	
+	my $video_mem = $video_info->video_mem();
+
+Total amount of video memory in Kilobytes, should be accessed only if hw_available == 1, otherwise it is equal to 0
+
+=head2 vfmt
+
+	my $vd_pixel_format = $video_info->vfmt();
+		
+
+C<SDL::PixelFormat> of the video device
+
+=head2 current_w, current_h
+
+	$video_info->current_w();
+	$video_info->current_h();	
+
+Width and height of the current video mode, or of the desktop mode if C<SDL_GetVideoInfo> was called before C<SDL::Video::set_video_mode> (available since SDL 1.2.10)
+
+=head1 SEE ALSO
+
+L<SDL::Video>, L<SDL::PixelFormat>
+
+=cut

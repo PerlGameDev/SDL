@@ -23,6 +23,7 @@ SDL_Rect *		O_OBJECT
 SDL_Color *		O_OBJECT
 SDL_Palette *		T_PTR
 SDL_PixelFormat *	O_OBJECT
+SDL_VideoInfo *		O_OBJECT
 SDL_Cursor *		T_PTR
 SDL_AudioSpec *		T_PTR
 SDL_AudioCVT *		T_PTR

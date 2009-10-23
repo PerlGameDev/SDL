@@ -84,6 +84,14 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	VideoInfo => {
+		file      => {
+			from  => 'src/Core/objects/VideoInfo.xs',
+			to    => 'lib/SDL/VideoInfo.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+
 	TTF_Font => {
 		file      => {
 			from  => 'src/TTF/objects/TTF_Font.xs',

@@ -36,7 +36,9 @@ typedef struct{
 
 Uint32
 videoinfo_hw_available( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
 		RETVAL = videoinfo->hw_available;
 	OUTPUT:
@@ -44,7 +46,9 @@ videoinfo_hw_available( videoinfo )
 
 Uint32
 videoinfo_wm_available( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
 		RETVAL = videoinfo->wm_available;
 	OUTPUT:
@@ -52,7 +56,9 @@ videoinfo_wm_available( videoinfo )
 
 Uint32
 videoinfo_blit_hw( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
 		RETVAL = videoinfo->blit_hw;
 	OUTPUT:
@@ -60,7 +66,9 @@ videoinfo_blit_hw( videoinfo )
 
 Uint32
 videoinfo_blit_hw_CC( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
 		RETVAL = videoinfo->blit_hw_CC;
 	OUTPUT:
@@ -69,7 +77,9 @@ videoinfo_blit_hw_CC( videoinfo )
 
 Uint32
 videoinfo_blit_hw_A( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
 		RETVAL = videoinfo->blit_hw_A;
 	OUTPUT:
@@ -77,7 +87,9 @@ videoinfo_blit_hw_A( videoinfo )
 
 Uint32
 videoinfo_blit_sw( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
 		RETVAL = videoinfo->blit_sw;
 	OUTPUT:
@@ -85,7 +97,9 @@ videoinfo_blit_sw( videoinfo )
 
 Uint32
 videoinfo_blit_sw_CC( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
 		RETVAL = videoinfo->blit_sw_CC;
 	OUTPUT:
@@ -94,7 +108,9 @@ videoinfo_blit_sw_CC( videoinfo )
 
 Uint32
 videoinfo_blit_sw_A( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
 		RETVAL = videoinfo->blit_sw_A;
 	OUTPUT:
@@ -102,7 +118,9 @@ videoinfo_blit_sw_A( videoinfo )
 
 Uint32
 videoinfo_blit_fill( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
 		RETVAL = videoinfo->blit_fill;
 	OUTPUT:
@@ -110,7 +128,9 @@ videoinfo_blit_fill( videoinfo )
 
 Uint32
 videoinfo_video_mem( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
 		RETVAL = videoinfo->video_mem;
 	OUTPUT:
@@ -119,7 +139,13 @@ videoinfo_video_mem( videoinfo )
 
 SDL_PixelFormat *
 videoinfo_vfmt( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+
+	PREINIT:
+	
+		char* CLASS = "SDL::VideoFormat";	
+	
 	CODE:
 		RETVAL = videoinfo->vfmt;
 	OUTPUT:
@@ -127,17 +153,21 @@ videoinfo_vfmt( videoinfo )
 
 int
 videoinfo_current_w( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
-		RETVAL = videoinfor->current_w;
+		RETVAL = videoinfo->current_w;
 	OUTPUT:
 		RETVAL
 
 int
 videoinfo_current_h( videoinfo )
+
 	SDL_VideoInfo *videoinfo
+	
 	CODE:
-		RETVAL = videoinfor->current_h;
+		RETVAL = videoinfo->current_h;
 	OUTPUT:
 		RETVAL
 
