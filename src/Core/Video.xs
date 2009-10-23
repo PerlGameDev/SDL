@@ -30,34 +30,11 @@ video_get_video_surface()
 		RETVAL
 
 
-HV *
+SDL_VideoInfo*
 video_get_video_info()
+	PREINIT:
+		char* CLASS = "SDL::VideoInfo";
 	CODE:
-		HV *hv;
-		SDL_VideoInfo *info;
-		info = (SDL_VideoInfo *) safemalloc ( sizeof(SDL_VideoInfo));
-		memcpy(info,SDL_GetVideoInfo(),sizeof(SDL_VideoInfo));
-		hv = newHV();
-		hv_store(hv,"hw_available",strlen("hw_available"),
-			newSViv(info->hw_available),0);
-		hv_store(hv,"wm_available",strlen("wm_available"),
-			newSViv(info->wm_available),0);
-		hv_store(hv,"blit_hw",strlen("blit_hw"),
-			newSViv(info->blit_hw),0);
-		hv_store(hv,"blit_hw_CC",strlen("blit_hw_CC"),
-			newSViv(info->blit_hw_CC),0);
-		hv_store(hv,"blit_hw_A",strlen("blit_hw_A"),
-			newSViv(info->blit_hw_A),0);
-		hv_store(hv,"blit_sw",strlen("blit_sw"),
-			newSViv(info->blit_sw),0);
-		hv_store(hv,"blit_sw_CC",strlen("blit_sw_CC"),
-			newSViv(info->blit_sw_CC),0);
-		hv_store(hv,"blit_sw_A",strlen("blit_sw_A"),
-			newSViv(info->blit_sw_A),0);
-		hv_store(hv,"blit_fill",strlen("blit_fill"),
-			newSViv(info->blit_fill),0);
-		hv_store(hv,"video_mem",strlen("video_mem"),
-			newSViv(info->video_mem),0);
-		RETVAL = hv;
+		RETVAL = SDL_GetVideoInfo;
 		OUTPUT:
-		RETVAL
+	RETVAL

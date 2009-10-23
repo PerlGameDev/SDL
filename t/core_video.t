@@ -5,7 +5,7 @@ use SDL::Config;
 
 use Test::More;
 
-plan ( tests => 2 );
+plan ( tests => 4 );
 
 use_ok( 'SDL::Video' ); 
   
@@ -20,6 +20,8 @@ SDL::Init(SDL_INIT_VIDEO);
 my $display = SDL::SetVideoMode(640,480,32, SDL_SWSURFACE );
 
 isa_ok(SDL::Video::get_video_surface(), 'SDL::Surface', 'Checking if we get a surface ref back'); 
+
+isa_ok(SDL::Video::get_video_info(), 'SDL::VideoInfo', 'Checking if we get videoinfo ref back');
 
 =skip
 	video_driver_name
