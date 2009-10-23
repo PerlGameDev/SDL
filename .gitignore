@@ -8,4 +8,6 @@ lib/SDL/*.xs
 SDL_perl.c
 SDL_perl.xs
 stage
+MANIFEST
+!MANIFEST.skip
 META.yml

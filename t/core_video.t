@@ -1,8 +1,4 @@
 #!/usr/bin/perl -w
-BEGIN {
-	unshift @INC, 'blib/lib','blib/arch';
-}
-
 use strict;
 use SDL;
 use SDL::Config;
@@ -16,6 +12,16 @@ use_ok( 'SDL::Video' );
 can_ok ('SDL::Video', qw/
 	get_video_surface
 	get_video_info
+	/);
+
+#testing get_video_surface
+SDL::Init(SDL_INIT_VIDEO);                                                                          
+                                                                                                    
+my $display = SDL::SetVideoMode(640,480,32, SDL_SWSURFACE );
+
+isa_ok(SDL::Video::get_video_surface(), 'SDL::Surface', 'Checking if we get a surface ref back'); 
+
+=skip
 	video_driver_name
 	list_modes
 	video_mode_ok
