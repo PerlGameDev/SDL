@@ -13,6 +13,7 @@ can_ok ('SDL::Video', qw/
 	get_video_surface
 	get_video_info
 	video_driver_name
+	list_modes
 	/);
 
 #testing get_video_surface
@@ -35,7 +36,6 @@ pass '[video_driver_name] This is your driver name: '.$driver_name;
 pass "Are we still alive?";
 
 =skip
-	list_modes
 	video_mode_ok
 	set_video_mode
 	update_rect

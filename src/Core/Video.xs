@@ -53,3 +53,27 @@ video_video_driver_name( )
 			 XSRETURN_UNDEF;  	
 	OUTPUT:
 		RETVAL
+
+AV*
+list_modes ( format, flags )
+	Uint32 flags
+	SDL_PixelFormat *format
+	CODE:
+		SDL_Rect **mode;
+		RETVAL = newAV();
+		mode = SDL_ListModes(format,flags);
+		if (mode == (SDL_Rect**)-1 ) {
+			av_push(RETVAL,newSVpv("all",0));
+		} else if (! mode ) {
+			av_push(RETVAL,newSVpv("none",0));
+		} else {
+			for (;*mode;mode++) {
+				av_push(RETVAL,newSViv(PTR2IV(*mode)));
+			}
+		}
+	OUTPUT:
+		RETVAL
+
+
+
+
