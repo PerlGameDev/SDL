@@ -35,21 +35,21 @@ video_get_video_info()
 	PREINIT:
 		char* CLASS = "SDL::VideoInfo";
 	CODE:
-		RETVAL = SDL_GetVideoInfo;
+		RETVAL = (SDL_VideoInfo *) SDL_GetVideoInfo();
 
 	OUTPUT:
-	RETVAL
+		RETVAL
 
 char *
 video_video_driver_name( maxlen )
 	int maxlen
 	CODE:
-		char* buffer = safemalloc( sizeof(char) * maxlen); 
+		char* buffer = safemalloc(sizeof(char) * maxlen);
 		char* str = SvPV( newSVpvn( buffer , maxlen), maxlen );
 
-		RETVAL = SDL_VideoDriverName( str , maxlen);
-
-		sv_2mortal(buffer); 		
+		RETVAL = (char* )SDL_VideoDriverName( str , maxlen);
+		sv_2mortal(buffer);
+		sv_2mortal(str); 		
 		
 	OUTPUT:
 		RETVAL
