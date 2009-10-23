@@ -2,7 +2,7 @@
 use strict;
 use SDL;
 use SDL::Config;
-
+use Devel::Peek;
 use Test::More;
 
 plan ( tests => 6 );
@@ -24,7 +24,12 @@ isa_ok(SDL::Video::get_video_surface(), 'SDL::Surface', 'Checking if we get a su
 
 isa_ok(SDL::Video::get_video_info(), 'SDL::VideoInfo', 'Checking if we get videoinfo ref back');
 
-pass 'This is your driver name: '.SDL::Video::video_driver_name(10);
+my $driver_name = SDL::Video::video_driver_name();
+
+pass 'This is your driver name: '.$driver_name;
+
+#Dump( $driver_name);
+
 pass "Are we still alive?";
 
 =skip

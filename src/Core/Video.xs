@@ -40,16 +40,16 @@ video_get_video_info()
 	OUTPUT:
 		RETVAL
 
-char *
-video_video_driver_name( maxlen )
-	int maxlen
+SV *
+video_video_driver_name( )
+	
 	CODE:
-		char* buffer = safemalloc(sizeof(char) * maxlen);
-		char* str = SvPV( newSVpvn( buffer , maxlen), maxlen );
-
-		RETVAL = (char* )SDL_VideoDriverName( str , maxlen);
-		sv_2mortal(buffer);
-		sv_2mortal(str); 		
-		
+		char buffer[1024];
+		if ( SDL_VideoDriverName(buffer, 1024) != NULL ) 
+		{ 
+			RETVAL =  newSVpv(buffer, 0);
+		} 
+		else 
+			 XSRETURN_UNDEF;  	
 	OUTPUT:
 		RETVAL
