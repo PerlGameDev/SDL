@@ -12,6 +12,7 @@ use_ok( 'SDL::Video' );
 can_ok ('SDL::Video', qw/
 	get_video_surface
 	get_video_info
+	video_driver_name
 	/);
 
 #testing get_video_surface
@@ -24,7 +25,6 @@ isa_ok(SDL::Video::get_video_surface(), 'SDL::Surface', 'Checking if we get a su
 isa_ok(SDL::Video::get_video_info(), 'SDL::VideoInfo', 'Checking if we get videoinfo ref back');
 
 =skip
-	video_driver_name
 	list_modes
 	video_mode_ok
 	set_video_mode
