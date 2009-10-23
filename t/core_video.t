@@ -20,15 +20,17 @@ SDL::Init(SDL_INIT_VIDEO);
                                                                                                     
 my $display = SDL::SetVideoMode(640,480,32, SDL_SWSURFACE );
 
-isa_ok(SDL::Video::get_video_surface(), 'SDL::Surface', 'Checking if we get a surface ref back'); 
+diag('Testing SDL::Video');
 
-isa_ok(SDL::Video::get_video_info(), 'SDL::VideoInfo', 'Checking if we get videoinfo ref back');
+isa_ok(SDL::Video::get_video_surface(), 'SDL::Surface', '[get_video_surface] Checking if we get a surface ref back'); 
+
+isa_ok(SDL::Video::get_video_info(), 'SDL::VideoInfo', '[get_video_info] Checking if we get videoinfo ref back');
 
 my $driver_name = SDL::Video::video_driver_name();
 
-pass 'This is your driver name: '.$driver_name;
+pass '[video_driver_name] This is your driver name: '.$driver_name;
 
-#Dump( $driver_name);
+#Dump( SDL::Video::video_driver_name() );
 
 pass "Are we still alive?";
 
