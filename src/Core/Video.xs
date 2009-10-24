@@ -58,6 +58,7 @@ AV*
 list_modes ( format, flags )
 	Uint32 flags
 	SDL_PixelFormat *format
+
 	CODE:
 		SDL_Rect **mode;
 		RETVAL = newAV();

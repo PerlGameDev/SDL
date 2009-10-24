@@ -48,8 +48,9 @@ surface_new (CLASS, flags, width, height, depth, Rmask, Gmask, Bmask, Amask )
 SDL_PixelFormat *
 surface_format ( surface )
 	SDL_Surface *surface
-	CODE:
+	PREINIT:
 		char* CLASS = "SDL::PixelFormat";
+	CODE:
 		RETVAL = surface->format;
 	OUTPUT:
 		RETVAL

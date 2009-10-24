@@ -1,8 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
 use SDL;
+use SDL::Surface;
 use SDL::Config;
 use Devel::Peek;
+use Data::Dumper;
 use Test::More;
 
 plan ( tests => 6 );
@@ -31,7 +33,7 @@ my $driver_name = SDL::Video::video_driver_name();
 
 pass '[video_driver_name] This is your driver name: '.$driver_name;
 
-#Dump( SDL::Video::video_driver_name() );
+Dump SDL::Video::list_modes( $display->format , SDL_HWSURFACE  );
 
 pass "Are we still alive?";
 
