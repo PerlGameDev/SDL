@@ -76,5 +76,15 @@ list_modes ( format, flags )
 		RETVAL
 
 
+int
+video_video_mode_ok ( width, height, bpp, flags )
+	int width
+	int height
+	int bpp
+	Uint32 flags
+	CODE:
+		RETVAL = SDL_VideoModeOK(width,height,bpp,flags);
+	OUTPUT:
+		RETVAL
 
 
