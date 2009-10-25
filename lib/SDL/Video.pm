@@ -26,9 +26,152 @@ This module is not an object. Please read the
 
 =head1 METHODS
 
-=head2 get_video_surface
+=head2	get_video_surface
 
-=head2 get_video_info
+Returns a pointer to the current display surface 
+
+=head2	get_video_info
+
+Returns a pointer to information about the video hardware 
+
+=head2	video_driver_name
+
+Obtain the name of the video driver 
+
+=head2	list_modes
+
+Returns a pointer to an array of available screen dimensions for the given format and video flags 
+
+=head2	set_video_mode
+
+Checks to see if a particular video mode is supported. 
+
+=head2	video_mode_ok
+
+Sets up a video mode with the specified width, height and bits-per-pixel. 
+
+=head2	update_rect
+
+Makes sure the given area is updated on the given screen. 
+
+=head2	update_rects
+
+Makes sure the given list of rectangles is updated on the given screen. 
+
+=head2	flip
+
+Swaps screen buffers 
+
+=head2	set_colors
+
+Sets a portion of the colormap for the given 8-bit surface. 
+
+=head2	set_palette
+
+Sets the colors in the palette of an 8-bit surface. 
+
+=head2	set_gamma
+
+Sets the color gamma function for the display 
+
+=head2	get_gamma_ramp
+
+Gets the color gamma lookup tables for the display 
+
+=head2	set_gmmma_ramp
+
+Sets the color gamma lookup tables for the display 
+
+=head2	map_RGB
+
+Maps a RGB color value to a pixel format. 
+
+=head2	map_RGBA
+
+Maps a RGBA color value to a pixel format. 
+
+=head2	get_RGB
+
+Gets RGB values from a pixel in the specified pixel format. 
+
+=head2	get_RGBA
+
+Gets RGBA values from a pixel in the specified pixel format. 
+
+=head2	create_RGB_surface_from
+
+Creates an empty SDL::Surface from pixel data
+
+=head2	lock_surface
+
+Locks a surface for direct access. 
+
+=head2	unlock_surface
+
+Unlocks a previously locked surface. 
+
+=head2	convert_surface
+
+Converts a surface to the same format as another surface. 
+
+=head2	display_format
+
+Converts a surface to the display format 
+
+=head2	display_format_alpha
+
+Converts a surface to the display format 
+
+=head2	load_BMP
+
+
+=head2	save_BMP
+
+
+=head2	set_color_key
+
+
+=head2	set_alpha
+
+
+=head2	set_clip_rect
+
+
+=head2	get_clip_rect
+
+
+=head2	blit_surface
+
+
+=head2	fill_rect
+
+
+=head2	GL_load_library
+
+
+=head2	GL_get_proc_address
+
+
+=head2	GL_get_attribute
+
+
+=head2	GL_set_attribute
+
+
+=head2	GL_swap_buffers
+
+
+=head2	GL_attr
+
+
+=head2	lock_YUV_overlay
+
+
+=head2	unlock_YUV_overlay
+
+
+=head2	display_YUV_overlay
+
 
 
 =head1 SEE ALSO

@@ -58,8 +58,12 @@ SDL::Video::update_rects($display, SDL::Rect->new(0, 10, 20, 20));
 pass "Are we still alive?";
 
 =skip
-	video_mode_ok
+	get_video_surface
+	get_video_info
+	video_driver_name
+	list_modes
 	set_video_mode
+	video_mode_ok
 	update_rect
 	update_rects
 	flip
