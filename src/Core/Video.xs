@@ -87,4 +87,29 @@ video_video_mode_ok ( width, height, bpp, flags )
 	OUTPUT:
 		RETVAL
 
+void
+video_update_rect ( surface, x, y, w ,h )
+	SDL_Surface *surface
+	int x
+	int y
+	int w
+	int h
+	CODE:
+		SDL_UpdateRect(surface,x,y,w,h);
+
+void
+video_update_rects ( surface, ... )
+	SDL_Surface *surface
+	CODE:
+		SDL_Rect *rects;
+		int num_rects,i;
+		if ( items < 2 ) return;
+		num_rects = items - 1;
+		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
+		for(i=0;i<num_rects;i++) {
+			rects[i] = *(SDL_Rect *)SvIV((SV*)SvRV( ST(i + 1) ));
+		}
+		SDL_UpdateRects(surface,num_rects,rects);
+		safefree(rects);
+
 

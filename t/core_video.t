@@ -6,8 +6,9 @@ use SDL::Config;
 use Devel::Peek;
 use Data::Dumper;
 use Test::More;
+use SDL::Rect;
 
-plan ( tests => 7 );
+plan ( tests => 8 );
 
 use_ok( 'SDL::Video' ); 
   
@@ -17,6 +18,8 @@ can_ok ('SDL::Video', qw/
 	video_driver_name
 	list_modes
 	video_mode_ok
+	update_rect
+	update_rects
 	/);
 
 #testing get_video_surface
@@ -39,6 +42,10 @@ pass '[video_driver_name] This is your driver name: '.$driver_name;
 is( ref( SDL::Video::list_modes( $display->format , SDL_SWSURFACE )), 'ARRAY', '[list_modes] Returned an ARRAY! ');
 
 cmp_ok(SDL::Video::video_mode_ok( 100, 100, 16, SDL_SWSURFACE), '>=', 0, "[video_mode_ok] Checking if an integer was return");
+
+SDL::Video::update_rect($display, 0, 0, 0, 0);
+
+SDL::Video::update_rects($display, SDL::Rect->new(0, 10, 20, 20));
 
 pass "Are we still alive?";
 
