@@ -8,7 +8,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 8 );
+plan ( tests => 9 );
 
 use_ok( 'SDL::Video' ); 
   
@@ -17,6 +17,7 @@ can_ok ('SDL::Video', qw/
 	get_video_info
 	video_driver_name
 	list_modes
+	set_video_mode
 	video_mode_ok
 	update_rect
 	update_rects
@@ -43,8 +44,15 @@ is( ref( SDL::Video::list_modes( $display->format , SDL_SWSURFACE )), 'ARRAY', '
 
 cmp_ok(SDL::Video::video_mode_ok( 100, 100, 16, SDL_SWSURFACE), '>=', 0, "[video_mode_ok] Checking if an integer was return");
 
+isa_ok(SDL::Video::set_video_mode( 100, 100 ,16, SDL_SWSURFACE), 'SDL::Surface', '[set_video_more] Checking if we get a surface ref back'); 
+
+
+
+#TODO: Write to surface and check inf pixel in that area got updated.
+
 SDL::Video::update_rect($display, 0, 0, 0, 0);
 
+#TODO: Write to surface and check inf pixel in that area got updated.
 SDL::Video::update_rects($display, SDL::Rect->new(0, 10, 20, 20));
 
 pass "Are we still alive?";

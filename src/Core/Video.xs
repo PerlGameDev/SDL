@@ -87,6 +87,21 @@ video_video_mode_ok ( width, height, bpp, flags )
 	OUTPUT:
 		RETVAL
 
+
+SDL_Surface *
+video_set_video_mode ( width, height, bpp, flags )
+	int width
+	int height
+	int bpp
+	Uint32 flags
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = SDL_SetVideoMode(width,height,bpp,flags);
+	OUTPUT:
+		RETVAL
+
+
 void
 video_update_rect ( surface, x, y, w ,h )
 	SDL_Surface *surface
