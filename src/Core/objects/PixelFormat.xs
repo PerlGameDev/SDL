@@ -27,6 +27,17 @@ SDL_PixelFormat -- Stores surface format information
 
 =cut
 
+SDL_Palette*
+pixelformat_palette( pixelformat )
+	SDL_PixelFormat *pixelformat
+	PREINIT:
+		char* CLASS = "SDL::Palette";
+	CODE:
+		RETVAL = pixelformat->palette;
+	OUTPUT:
+		RETVAL
+
+
 Uint8
 pixelformat_BitsPerPixel( pixelformat )
 	SDL_PixelFormat *pixelformat

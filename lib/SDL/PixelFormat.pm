@@ -30,6 +30,11 @@ An C<SDL::PixelFormat > stores surface format information
 
 =head1 METHODS
 
+=head2  palette
+
+	$surface->format->palette;
+
+Returns the C<SDL_Palette> and L<SDL::Palette> of the format of the surface.
 
 =head2  BitsPerPixel 
 

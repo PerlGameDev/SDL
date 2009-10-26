@@ -46,7 +46,7 @@ palette_colors ( palette )
 
 
 SDL_Color *
-palette_colors_index ( palette, index )
+palette_color_index ( palette, index )
 	SDL_Palette *palette
 	int index
 	PREINIT:

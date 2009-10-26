@@ -41,9 +41,9 @@ use Test::More;
 
 plan ( tests => 2 );
 
-use_ok( 'SDL::Palette' ); 
+use_ok( 'SDL::Game::Palette' ); 
   
-can_ok ('SDL::Palette', qw/
+can_ok ('SDL::Game::Palette', qw/
 	new
 	size
 	red 
