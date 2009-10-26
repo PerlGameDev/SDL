@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 use SDL;
+use SDL::Color;
 use SDL::Surface;
 use SDL::Config;
 use Devel::Peek;
@@ -8,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 10 );
+plan ( tests => 13 );
 
 use_ok( 'SDL::Video' ); 
 
@@ -23,6 +24,7 @@ my @done =
 	update_rect
 	update_rects
 	flip
+	set_colors
 	/;
 can_ok ('SDL::Video', @done); 
 
@@ -50,7 +52,6 @@ cmp_ok(SDL::Video::video_mode_ok( 100, 100, 16, SDL_SWSURFACE), '>=', 0, "[video
 isa_ok(SDL::Video::set_video_mode( 100, 100 ,16, SDL_SWSURFACE), 'SDL::Surface', '[set_video_more] Checking if we get a surface ref back'); 
 
 
-
 #TODO: Write to surface and check inf pixel in that area got updated.
 
 SDL::Video::update_rect($display, 0, 0, 0, 0);
@@ -61,11 +62,16 @@ SDL::Video::update_rects($display, SDL::Rect->new(0, 10, 20, 20));
 my $value = SDL::Video::flip($display);
 is( ($value == 0)  ||  ($value == -1), 1,  '[flip] returns 0 or -1'  );
 
+$value = SDL::Video::set_colors($display, 0);
+is(  $value , 0,  '[set_colors] returns 0'  );
 
+$value = SDL::Video::set_colors($display, SDL::Color->new(255,0,0) );
+is( ($value == 0)  ||  ($value == 1) , 1,  '[set_colors] returns 1 or 0'  );
+
+#TODO: check actual color in palette with get_palette
 
 
 my @left = qw/
-	set_colors
 	set_palette
 	set_gamma
 	get_gamma_ramp
@@ -103,7 +109,10 @@ my $why = '[Percentage Completion] '.int( 100 * $#done / ($#done + $#left) ) ."\
 
 TODO:
 {
-	local $TODO = 'Implementation not completed';
-	pass $why."\nThe following functions:\n".join "\n", @left; 
+	local $TODO = $why;
+	pass "\nThe following functions:\n".join ",", @left; 
 }
+	diag  $why;
 
+
+pass 'Are we still alive? Checkign for segfaults';

@@ -136,3 +136,25 @@ video_flip ( surface )
 	OUTPUT:
 		RETVAL
 
+int
+video_set_colors ( surface, start, ... )
+	SDL_Surface *surface
+	int start
+	CODE:
+		SDL_Color *colors,*temp;
+		int i, length;
+		if ( items < 3 ) { RETVAL = 0;	goto all_done; }
+		length = items - 2;
+		colors = (SDL_Color *)safemalloc(sizeof(SDL_Color)*(length+1));
+		for ( i = 0; i < length ; i++ ) {
+			temp = (SDL_Color *)SvIV(ST(i+2));
+			colors[i].r = temp->r;
+			colors[i].g = temp->g;
+			colors[i].b = temp->b;
+		}
+		RETVAL = SDL_SetColors(surface, colors, start, length );
+	  	safefree(colors);
+
+	all_done:
+	OUTPUT:	
+		RETVAL
