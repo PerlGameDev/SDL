@@ -128,3 +128,11 @@ video_update_rects ( surface, ... )
 		safefree(rects);
 
 
+int
+video_flip ( surface )
+	SDL_Surface *surface
+	CODE:
+		RETVAL = SDL_Flip(surface);
+	OUTPUT:
+		RETVAL
+

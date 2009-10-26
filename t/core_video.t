@@ -8,7 +8,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 9 );
+plan ( tests => 10 );
 
 use_ok( 'SDL::Video' ); 
   
@@ -21,6 +21,7 @@ can_ok ('SDL::Video', qw/
 	video_mode_ok
 	update_rect
 	update_rects
+	flip
 	/);
 
 #testing get_video_surface
@@ -54,6 +55,8 @@ SDL::Video::update_rect($display, 0, 0, 0, 0);
 
 #TODO: Write to surface and check inf pixel in that area got updated.
 SDL::Video::update_rects($display, SDL::Rect->new(0, 10, 20, 20));
+
+is( (SDL::Video::flip($display) == 0 || -1), 1,  '[flip] returns 0 or -1'  );
 
 pass "Are we still alive?";
 
