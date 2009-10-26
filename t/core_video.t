@@ -11,8 +11,9 @@ use SDL::Rect;
 plan ( tests => 10 );
 
 use_ok( 'SDL::Video' ); 
-  
-can_ok ('SDL::Video', qw/
+
+my @done =
+	qw/ 
 	get_video_surface
 	get_video_info
 	video_driver_name
@@ -22,7 +23,8 @@ can_ok ('SDL::Video', qw/
 	update_rect
 	update_rects
 	flip
-	/);
+	/;
+can_ok ('SDL::Video', @done); 
 
 #testing get_video_surface
 SDL::Init(SDL_INIT_VIDEO);                                                                          
@@ -59,18 +61,10 @@ SDL::Video::update_rects($display, SDL::Rect->new(0, 10, 20, 20));
 my $value = SDL::Video::flip($display);
 is( ($value == 0)  ||  ($value == -1), 1,  '[flip] returns 0 or -1'  );
 
-pass "Are we still alive?";
 
-=skip
-	get_video_surface
-	get_video_info
-	video_driver_name
-	list_modes
-	set_video_mode
-	video_mode_ok
-	update_rect
-	update_rects
-	flip
+
+
+my @left = qw/
 	set_colors
 	set_palette
 	set_gamma
@@ -103,5 +97,13 @@ pass "Are we still alive?";
 	lock_YUV_overlay
 	unlock_YUV_overlay
 	display_YUV_overlay
-	/);
+	/;
+
+my $why = '[Percentage Completion] '.int( 100 * $#done / ($#done + $#left) ) ."\% implementation. $#done / ".($#done+$#left); 
+
+TODO:
+{
+	local $TODO = 'Implementation not completed';
+	pass $why."\nThe following functions:\n".join "\n", @left; 
+}
 
