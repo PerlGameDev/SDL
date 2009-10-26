@@ -26,7 +26,8 @@ is( ($h == 14) || ($h == 15), 1, '"Hello!" has width 14' );
 my $surface = SDL::TTF_RenderText_Blended( $ttf_font, 'Hello!',
     SDL::Color->new( 255, 0, 0 ) );
 isa_ok( $surface, 'SDL::Surface' );
-is( $surface->w, 27, 'Surface has width 27' );
-is( $surface->h, 14, 'Surface has width 14' );
+($w,$h) = ( $surface->w, $surface->h) ;
+is( ($w == 27) || ($w == 28), 1 ,'Surface has width 27' );
+is( ($h == 14) || ($h == 15), 1, 'Surface has width 14' );
 
 SDL::TTF_Quit();
