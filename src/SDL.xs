@@ -1322,22 +1322,6 @@ UpdateRects ( surface, ... )
 
 Comment out for now as it does not compile
 
-SDL_Color *
-PaletteColors ( palette, index, ... )
-	SDL_Palette *palette
-	int index
-	CODE:
-		if ( items > 2 ) {
-			palette->colors[index].r = SvUV(ST(2)); 
-			palette->colors[index].g = SvUV(ST(3)); 
-			palette->colors[index].b = SvUV(ST(4)); 
-		}
-		RETVAL = (SDL_Color *)(palette->colors + index);
-	OUTPUT:
-		RETVAL
-
-
-
 int
 VideoModeOK ( width, height, bpp, flags )
 	int width

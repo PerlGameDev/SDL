@@ -84,6 +84,14 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	Palette => {
+		file      => {
+			from  => 'src/Core/objects/Palette.xs',
+			to    => 'lib/SDL/Palette.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+
 	VideoInfo => {
 		file      => {
 			from  => 'src/Core/objects/VideoInfo.xs',
