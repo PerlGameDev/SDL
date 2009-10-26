@@ -21,7 +21,7 @@ SDL_CDtrack *		T_PTR
 SDL_TimerCallback	T_PTR
 SDL_Rect *		O_OBJECT
 SDL_Color *		O_OBJECT
-SDL_Palette *		T_PTR
+SDL_Palette *		O_OBJECT
 SDL_PixelFormat *	O_OBJECT
 SDL_VideoInfo *		O_OBJECT
 SDL_Cursor *		T_PTR

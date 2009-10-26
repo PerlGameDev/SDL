@@ -1210,6 +1210,7 @@ ListModes ( format, flags )
 		}
 	OUTPUT:
 		RETVAL
+=skip
 
 SDL_Palette *
 NewPalette ( number )
@@ -1221,6 +1222,7 @@ NewPalette ( number )
 		RETVAL->ncolors = number;
 	OUTPUT:
 		RETVAL
+=cut
 
 int
 PaletteNColors ( palette, ... )
