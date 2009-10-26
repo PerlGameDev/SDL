@@ -1,0 +1,179 @@
+------------------------------------------------------------------------------
+| SDL Perl
+| Install Information Doc
+-------------------------
+
+Well, there has to become a time when every project has a file dictating the 
+best known way to install a program.
+
+In this case, the time is now.
+
+Table of Contents:
+ 1 : System Requirements [ANAL1]
+ 2 : Grabbing the necessary version of SDL Perl, release [PROD2]
+ 3 : Same as above, but of the bleeding edge variety [EMO3]
+
+ANAL1: System Requirements
+
+For SDL Perl, you will, of course need a copy of libSDL. Which should be 
+available via your system's usual method of grabbing this. Generally a 
+package manager similar to Gentoo's Emerge, Fedora's yum, opensuse's YaST,
+Debian|Ubuntu's apt, etc., etc., will have libSDL as the package. I (Katrina 
+Payne) really have no idea the best method to get it working in the best 
+practice method on Windows.
+
+Anyways, oddly enough, SDL Perl's package on your system may not include all
+the files required for this to properly install. Go figure, huh?
+
+Additional libaries you need to make certain are on your systems:
+
+ * png
+ * jpeg
+ * smpeg
+ * OpenGL (GL)
+ * GLUT (GLU)
+ * SDL_image
+ * SDL_mixer
+ * SDL_net
+ * SDL_tiff
+ * SDL_gfx
+ * SDL_ttf
+
+Yeah, there are allegedly tests to make sure these are on your system, 
+however sometimes we are a little forgetful, and we miss them.
+
+PROD2: Grabbing the Necessary Version of SDL Perl, release
+
+This is kind of redundant at this point, as you more than likely have this 
+file, or most likely do not need this section. However, for the sake of 
+completeness, I am including this (perhaps this section should be the one with 
+the ANAL1 find index?).
+
+(skip to 0COOL if you have cpan set up on your system)
+
+Anyways go onto your shell, assuming it is bash, and not something silly like 
+tcsh, ksh, zsh or lispsh (in which case, you likely know what you are doing), 
+type the following (FOR GREAT JUSTICE!):
+
+ $ perl -MCPAN -e "shell"
+
+General convention states that prefixing a command with a '$' indicates you 
+are doing this command in Userland. Do _not_ type the dollar sign. If you 
+really do like typing dollar signs compulsively, we do have a donation button 
+that you make use of.
+
+You will be confronted with a large amount of options for how to properly set 
+this up. As far as I (Katrina) am (is) aware, generally the defaults should be 
+fine for most cases. In the odd cases they are not, well check the contacts 
+information for more details. In the CONTACTS file (eventually).
+
+0COOL
+
+In the very odd occurance that you have already done this in this shell in 
+some previous time in a spot that this user can see the required items for, 
+you would simply type:
+
+ $ cpan
+
+You will be presented with the CPAN prompt at this point. It is best if you
+type the following command to make certain you are aware of the options 
+involved in the matter as you are doing this, incase I (Katrina) screw up 
+this file, and you can let me (Katrina) know fully well, how much of a screw 
+up you think I made:
+
+ CPAN> help
+
+Yeah, CPAN> denotes we are now inside CPAN BTW. And know you know, and 
+knowing is half the battle.
+
+After this, you should prolly make certain your kit is up to date. This can 
+be done via:
+
+ CPAN> upgrade /.*/
+
+I am certain some of the other more established monks will prolly be 
+thwapping me with their canes (I am hoping for a high grade mahogany, made by 
+the trees on the planet Malkior 7, where the trees are over 400 feet high. 
+AND BREATHE FIRE! Built through the ancient blood rituals of the Malkior 
+People, these canes are nigh indestructable and can bend the fabric of the 
+universe--they are also a very fine material. Very impressive)
+
+Alright now that your kit is insanely up to date you would type:
+
+ CPAN> install SDLPerl
+
+Now you are ready to run and program SDLPerl applications.
+
+EMO3: Same as Above, but The Bleeding Edge.
+
+If you have already initially grab the git repo, jump do to [9CEREAL]
+
+Well, in this case you will need git install onto the computer. This project,
+at the time of writing this (20091022), uses github to manage its services. 
+You can grab your copy of the git repo via:
+
+ $ git clone git://github.com/kthakore/SDL_perl.git
+
+In case you did not read [PROD2], the '$' you have here indicates that this 
+stuff is typed into a shell prompt in somewhere in userland. You do not 
+actually need to type the '$' on the shell. Your shell provides the Big Money 
+for you!... unless you are using something odd like tcsh... or know how to 
+customised your prompt... or possibly 1006 other posibilities that have not 
+really occured to me (Katrina) at the time of writing this.
+
+9CEREAL
+
+When you want to update your clone--as they need to be fed. I mean, you would 
+not want to starve your clone. I mean, while I am not certain Geneva 
+conventions apply to clones as they technically are not human, you know, not 
+being created by God, and .'. not having souls (though you need to ask: do you 
+really want a soulless monster displeased at you? I mean, it can do what it 
+wants without worrying of eternal damnation). So to feed this monstrocity that
+you have raised on your computer (which work by a wizard's magic anyways), 
+you go into the directory that the git repo is in (in the git repo itself, not 
+the directory that you did the `git clone` in), and type the following:
+
+ $ git pull
+
+Now to build this, you type the arcane words (and no, it really does not 
+matter what sign the moon is in... but if it makes you feel better, you can 
+type this when the moon is in the sextan sign, just my own suggestion)
+
+ $ perl Build.PL
+ $ perl Build test && perl Build Bundle
+
+Okay.. the first one, will build the require tools you need to work with to
+install the wonder, that is the developmental version of SDL Perl.
+
+The next one goes:
+
+Okay, I am testing to make certain the system can handle me.
+
+If that goes well (and _only_ if), it goes, "wow! It likes me! IT REALLY 
+LIKES ME!"--after prancing around in front of the mirror and trying to do up 
+her Perl and XS coloured hair in a nice looking manner, and choose a pretty 
+dress to wear (she will try to be the best looking developmental perl libary 
+on the system. Oh~ all the _other_ developmental perl libraries will be so 
+jealous of her~).
+
+Then if there is an issue getting herself all pretty this command will have 
+her just stop there... your best bet is to give her comfort food. Of the 
+kind of reports on the SDL Perl tracker, as I am not really certain if SDL 
+Perl likes Hagan Daaz, but then I have not ask her, and well, you really are 
+not in the place to ask. After all, she will likely blame you or your system 
+for why she does not look pretty--programs that end up not compiling 
+properly tend to have self esteem issues. Sending something to the tracker 
+pretty much is a way of telling her you are interested... this usually helps 
+her to stop watching old reruns of Inu Yasha (yeah, SDL Perl is still kind of 
+young) and get back to feeling better.
+
+Anyways, if all goes well and she feels all pretty looking, she just skips 
+all the romance and moves into your system with perl Build install. Yush, 
+that is right, you type in:
+
+ # perl Build install
+
+Oh yeah, '#' is a form of notation that this command is to be typed in as the 
+avatar user... or a super user account.
+
+And... bob is your uncle.
