@@ -56,7 +56,8 @@ SDL::Video::update_rect($display, 0, 0, 0, 0);
 #TODO: Write to surface and check inf pixel in that area got updated.
 SDL::Video::update_rects($display, SDL::Rect->new(0, 10, 20, 20));
 
-is( (SDL::Video::flip($display) == 0 || -1), 1,  '[flip] returns 0 or -1'  );
+my $value = SDL::Video::flip($display);
+is( ($value == 0)  ||  ($value == -1), 1,  '[flip] returns 0 or -1'  );
 
 pass "Are we still alive?";
 

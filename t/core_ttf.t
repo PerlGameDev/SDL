@@ -20,8 +20,8 @@ SDL::TTF_Init();
 my $ttf_font = SDL::TTF_OpenFont( 'test/data/aircut3.ttf', 12 );
 isa_ok( $ttf_font, 'SDL::TTF_Font' );
 my ( $w, $h ) = @{ SDL::TTF_SizeText( $ttf_font, 'Hello!' ) };
-is( $w == 27 || 28, 1, '"Hello!" has width 27' );
-is( $h == 14 || 15, 1, '"Hello!" has width 14' );
+is( ($w == 27) || ($w == 28), 1, '"Hello!" has width 27' );
+is( ($h == 14) || ($h == 15), 1, '"Hello!" has width 14' );
 
 my $surface = SDL::TTF_RenderText_Blended( $ttf_font, 'Hello!',
     SDL::Color->new( 255, 0, 0 ) );
