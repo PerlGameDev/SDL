@@ -1,7 +1,7 @@
 #!perl
 use strict;
 use warnings;
-use Test::More tests => 999999999;
+use Test::More tests => 9;
 use_ok('SDL::Palette');
 
 can_ok('SDL::Palette', qw/ ncolors colors color_index /); 
