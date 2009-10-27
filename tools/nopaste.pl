@@ -10,7 +10,7 @@ use warnings;
 use WWW::Mechanize;
 use Getopt::Std;
 use Pod::Usage;
-
+use Data::Dumper;
 
 my $server  = 'scsys.co.uk';
 my $url     = "http://$server:8001/paste";
@@ -37,10 +37,7 @@ $mech->get( $url );
 $mech->submit_form(
     form_name => 'pasteForm',
     fields    => {
-        (defined $opt->{c} ?
-        (channel => $opt->{c}) :
-        (channel => '#sdl'  )
-        ),
+        channel => $opt->{c},
         nick    => $opt->{n},
         summary => $opt->{t},
         paste   => $text,
