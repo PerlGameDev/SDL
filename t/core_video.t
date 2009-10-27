@@ -133,4 +133,4 @@ TODO:
 	diag  $why;
 
 
-pass 'Are we still alive? Checkign for segfaults';
+pass 'Are we still alive? Checking for segfaults';
