@@ -34,6 +34,8 @@ use warnings;
 use base 'Exporter';
 
 our @EXPORT=qw(
+	SDL_LOGPAL
+	SDL_PHYSPAL
 	AUDIO_S16
 	AUDIO_S16MSB
 	AUDIO_S8
@@ -309,6 +311,8 @@ our @EXPORT=qw(
 );
 
 use constant {
+    SDL_LOGPAL   => 0x01,
+    SDL_PHYSPAL  => 0x02,
     AUDIO_S16    => 32784,
     AUDIO_S16MSB => 36880,
     AUDIO_S8     => 32776,
