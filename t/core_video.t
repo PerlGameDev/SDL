@@ -66,20 +66,28 @@ SDL::Video::update_rects($display, SDL::Rect->new(0, 10, 20, 20));
 my $value = SDL::Video::flip($display);
 is( ($value == 0)  ||  ($value == -1), 1,  '[flip] returns 0 or -1'  );
 
-$value = SDL::Video::set_colors($display, 0);
-is(  $value , 0,  '[set_colors] returns 0'  );
+$value = SDL::Video::set_colors($display, 0, SDL::Color->new(0,0,0));
+is(  $value , 0,  '[set_colors] returns 0 trying to write to 32 bit display'  );
 
 my @b_w_colors;
 
 for(my $i=0;$i<256;$i++){
 	$b_w_colors[$i] = SDL::Color->new($i,$i,$i);
       }
+my $hwdisplay = SDL::Video::set_video_mode(640,480,8, SDL_HWSURFACE );
+
+if(!$hwdisplay){
+	 plan skip_all => 'Couldn\'t set video mode: '. SDL::GetError();
+    }
+
+$value = SDL::Video::set_colors($hwdisplay, 0);
+is(  $value , 0,  '[set_colors] returns 0 trying to send empty colors to 8 bit surface'  );
 
 
-$value = SDL::Video::set_colors($display, 0, @b_w_colors);
-is( $value , 0,  '[set_colors] returns '.$value  );
 
-#TODO: check actual color in palette with get_palette
+$value = SDL::Video::set_colors($hwdisplay, 0, @b_w_colors);
+is( $value , 1,  '[set_colors] returns '.$value  );
+
 
 my @left = qw/
 	set_palette
