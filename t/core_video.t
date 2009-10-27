@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 13 );
+plan ( tests => 14 );
 
 use_ok( 'SDL::Video' ); 
 
@@ -31,7 +31,11 @@ can_ok ('SDL::Video', @done);
 #testing get_video_surface
 SDL::Init(SDL_INIT_VIDEO);                                                                          
                                                                                                     
-my $display = SDL::SetVideoMode(640,480,32, SDL_SWSURFACE );
+my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
+
+if(!$display){
+	 plan skip_all => 'Couldn\'t set video mode: '. SDL::GetError();
+    }
 
 #diag('Testing SDL::Video');
 
@@ -65,11 +69,17 @@ is( ($value == 0)  ||  ($value == -1), 1,  '[flip] returns 0 or -1'  );
 $value = SDL::Video::set_colors($display, 0);
 is(  $value , 0,  '[set_colors] returns 0'  );
 
-$value = SDL::Video::set_colors($display, SDL::Color->new(255,0,0) );
-is( ($value == 0)  ||  ($value == 1) , 1,  '[set_colors] returns 1 or 0'  );
+my @b_w_colors;
+
+for(my $i=0;$i<256;$i++){
+	$b_w_colors[$i] = SDL::Color->new($i,$i,$i);
+      }
+
+
+$value = SDL::Video::set_colors($display, 0, @b_w_colors);
+is( $value , 0,  '[set_colors] returns '.$value  );
 
 #TODO: check actual color in palette with get_palette
-
 
 my @left = qw/
 	set_palette

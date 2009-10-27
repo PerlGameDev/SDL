@@ -158,3 +158,5 @@ video_set_colors ( surface, start, ... )
 	all_done:
 	OUTPUT:	
 		RETVAL
+
+
