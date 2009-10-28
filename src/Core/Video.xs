@@ -201,10 +201,31 @@ video_set_gamma(r, g, b)
 		RETVAL
 	
 int
-video_set_gamma_ramp( ... )
+video_set_gamma_ramp( rt, gt, bt )
+	AV* rt;
+	AV* gt;
+	AV* bt;
 	CODE:
-		Uint16 *redtable, *greentable, *bluetable;
-		RETVAL = SDL_SetGammaRamp(NULL, NULL, NULL);
+		Uint16 *redtable, *greentable, *bluetable, *temp;
+		int srt = av_len(rt);
+		int sgt = av_len(gt);
+		int sbt = av_len(bt);
+		int i;
+		if( srt == -1 )
+		{
+			redtable = NULL;
+		}	
+		else
+		{
+			redtable = (Uint16 *)safemalloc(sizeof(Uint16)*(srt+1));
+			for ( i = 0; i < srt ; i++ ){ 
+			temp = (Uint16 *)ST(i);
+			redtable[i] = *temp;
+			}
+
+		}
+	
+			RETVAL = SDL_SetGammaRamp(redtable, NULL, NULL);
 	OUTPUT:
 		RETVAL 
 

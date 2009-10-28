@@ -76,7 +76,9 @@ $value = SDL::Video::set_palette($display, SDL_LOGPAL|SDL_PHYSPAL, 0);
 
 is(  $value , 0,  '[set_palette] returns 0 trying to write to 32 bit surface'  );
 
-SDL::Video::set_gamma_ramp( 0, 0, 0 ); pass '[set_gamma_ramp] ran';
+my @redtable = (0,0,0,0);
+
+SDL::Video::set_gamma_ramp( \@redtable , [0,1,2,3], [2,3,4,5]); pass '[set_gamma_ramp] ran';
 
 SDL::Video::set_gamma( 1.0, 1.0, 1.0 ); pass '[set_gamma] ran ';
 
