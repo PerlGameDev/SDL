@@ -3,14 +3,17 @@ use strict;
 use SDL;
 use Test::More;
 
-plan ( tests => 3 );
-
-use_ok( 'SDL' ); 
+plan ( tests => 4 );
 
 my @done =qw/ none /;
 
-#can_ok ('SDL', @done); 
 
+SKIP:
+{
+skip 'Not implemented', 2; 
+use_ok( 'SDL::WM' ); 
+can_ok ('SDL:WM', @done); 
+}
 
 my @left = qw/
 get_wminfo

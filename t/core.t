@@ -3,14 +3,15 @@ use strict;
 use SDL;
 use Test::More;
 
-plan ( tests => 3 );
-
-use_ok( 'SDL' ); 
-
+plan ( tests => 4 );
 my @done =qw/ none /;
 
-#can_ok ('SDL', @done); 
-
+SKIP:
+{
+	skip 'Not implemented', 2;
+use_ok( 'SDL' ); 
+can_ok ('SDL', @done); 
+}
 
 my @left = qw/
 	init
