@@ -243,14 +243,14 @@ MODULE = SDL_perl	PACKAGE = SDL
 PROTOTYPES : DISABLE
 
 char *
-GetError ()
+geterror ()
 	CODE:
 		RETVAL = SDL_GetError();
 	OUTPUT:
 		RETVAL
 
 int
-Init ( flags )
+init ( flags )
 	Uint32 flags
 	CODE:
 		INIT_NS_APPLICATION
@@ -264,7 +264,7 @@ Init ( flags )
 		RETVAL
 
 int
-InitSubSystem ( flags )
+init_subsystem ( flags )
 	Uint32 flags
 	CODE:
 		RETVAL = SDL_InitSubSystem(flags);
@@ -272,19 +272,19 @@ InitSubSystem ( flags )
 		RETVAL
 
 void
-QuitSubSystem ( flags )
+quit_subsystem ( flags )
 	Uint32 flags
 	CODE:
 		SDL_QuitSubSystem(flags);
 
 void
-Quit ()
+quit ()
 	CODE:
 		QUIT_NS_APPLICATION
 		SDL_Quit();
 
 int
-WasInit ( flags )
+was_init ( flags )
 	Uint32 flags
 	CODE:
 		RETVAL = SDL_WasInit(flags);
@@ -292,7 +292,7 @@ WasInit ( flags )
 		RETVAL
 
 void
-Delay ( ms )
+delay ( ms )
 	int ms
 	CODE:
 		SDL_Delay(ms);
