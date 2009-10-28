@@ -189,3 +189,22 @@ video_set_palette ( surface, flags, start, ... )
 	OUTPUT:	
 		RETVAL
 
+int
+video_set_gamma(r, g, b)
+	float r;
+	float g;
+	float b;
+	CODE:
+		RETVAL = SDL_SetGamma(r,g,b);
+
+	OUTPUT:	
+		RETVAL
+	
+int
+video_set_gamma_ramp( ... )
+	CODE:
+		Uint16 *redtable, *greentable, *bluetable;
+		RETVAL = SDL_SetGammaRamp(NULL, NULL, NULL);
+	OUTPUT:
+		RETVAL 
+

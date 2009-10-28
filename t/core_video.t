@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 17 );
+plan ( tests => 19 );
 
 use_ok( 'SDL::Video' ); 
 
@@ -26,6 +26,7 @@ my @done =
 	flip
 	set_colors
 	set_palette
+	set_gamma
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -71,11 +72,13 @@ is( ($value == 0)  ||  ($value == -1), 1,  '[flip] returns 0 or -1'  );
 $value = SDL::Video::set_colors($display, 0, SDL::Color->new(0,0,0));
 is(  $value , 0,  '[set_colors] returns 0 trying to write to 32 bit display'  );
 
-$value = SDL::Video::set_palette($display, SDL_LOGPAL|0x02, 0);
+$value = SDL::Video::set_palette($display, SDL_LOGPAL|SDL_PHYSPAL, 0);
 
 is(  $value , 0,  '[set_palette] returns 0 trying to write to 32 bit surface'  );
 
+SDL::Video::set_gamma_ramp( 0, 0, 0 ); pass '[set_gamma_ramp] ran';
 
+SDL::Video::set_gamma( 1.0, 1.0, 1.0 ); pass '[set_gamma] ran ';
 
 my @b_w_colors;
 
@@ -91,7 +94,7 @@ if(!$hwdisplay){
 $value = SDL::Video::set_colors($hwdisplay, 0);
 is(  $value , 0,  '[set_colors] returns 0 trying to send empty colors to 8 bit surface'  );
 
-$value = SDL::Video::set_palette($hwdisplay, SDL_LOGPAL|0x02, 0);
+$value = SDL::Video::set_palette($hwdisplay, SDL_LOGPAL|SDL_PHYSPAL, 0);
 
 is(  $value , 0,  '[set_palette] returns 0 trying to send empty colors to 8 bit surface'  );
 
@@ -99,7 +102,7 @@ is(  $value , 0,  '[set_palette] returns 0 trying to send empty colors to 8 bit 
 $value = SDL::Video::set_colors($hwdisplay, 0, @b_w_colors);
 is( $value , 1,  '[set_colors] returns '.$value  );
 
-$value = SDL::Video::set_palette($hwdisplay, SDL_LOGPAL|0x02, 0, @b_w_colors );
+$value = SDL::Video::set_palette($hwdisplay, SDL_LOGPAL|SDL_PHYSPAL, 0, @b_w_colors );
 
 is(  $value , 1,  '[set_palette] returns 1'  );
 
@@ -108,7 +111,6 @@ is(  $value , 1,  '[set_palette] returns 1'  );
 
 
 my @left = qw/
-	set_gamma
 	get_gamma_ramp
 	set_gmmma_ramp
 	map_RGB

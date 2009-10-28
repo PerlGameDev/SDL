@@ -70,6 +70,7 @@ Sound_Sample *		T_PTR
 Sound_AudioInfo *	T_PTR
 SDL_RWops*		T_PTR
 SDL_svg_context*	T_PTR
+int			T_IV
 
 OUTPUT
 
