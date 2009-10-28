@@ -8,6 +8,36 @@
 
 #include <SDL.h>
 
+
+static Uint16* av_to_uint16 (AV* av)
+{
+	int len = av_len(av);
+	if( len != -1)
+	{
+	int i;
+	Uint16* table = (Uint16 *)safemalloc(sizeof(Uint16)*(len));
+		//fprintf( stderr, "Expecting 1,2,5,6 \n Length is %d \n", len);
+	for ( i = 0; i < len+1 ; i++ ){ 
+		SV ** temp = av_fetch(av,i,0);
+	      if( temp != NULL)
+		{
+		table[i] =  (Uint16 *) SvIV(  *temp   )  ;
+		/* fprintf( stderr, "table[%d] = ", i);
+		 if (table[i] == NULL) { fprintf ( stderr, " NULL\n"); }
+		else{ fprintf(stderr, " %d \n", table[i]); } */
+		}
+		else { table[i] =0; }
+
+	}
+//		warn("Got %d %d %d %d \n", table[0], table[1], table[2], table[3] );
+
+	return table;
+	}
+	return NULL;
+}
+
+
+
 MODULE = SDL::Video 	PACKAGE = SDL::Video    PREFIX = video_
 
 =for documentation
@@ -199,6 +229,7 @@ video_set_gamma(r, g, b)
 
 	OUTPUT:	
 		RETVAL
+
 	
 int
 video_set_gamma_ramp( rt, gt, bt )
@@ -206,26 +237,16 @@ video_set_gamma_ramp( rt, gt, bt )
 	AV* gt;
 	AV* bt;
 	CODE:
-		Uint16 *redtable, *greentable, *bluetable, *temp;
-		int srt = av_len(rt);
-		int sgt = av_len(gt);
-		int sbt = av_len(bt);
-		int i;
-		if( srt == -1 )
-		{
-			redtable = NULL;
-		}	
-		else
-		{
-			redtable = (Uint16 *)safemalloc(sizeof(Uint16)*(srt+1));
-			for ( i = 0; i < srt ; i++ ){ 
-			temp = (Uint16 *)ST(i);
-			redtable[i] = *temp;
-			}
+		Uint16 *redtable, *greentable, *bluetable;
+		redtable = av_to_uint16(rt);
+		greentable = av_to_uint16(gt);
+		bluetable = av_to_uint16(bt);
+		RETVAL =  SDL_SetGammaRamp(redtable, greentable, bluetable);
+		if( redtable != NULL) { safefree(redtable); }
+		if( greentable != NULL) { safefree(greentable); }
+		if( bluetable != NULL) { safefree(bluetable); }	
 
-		}
-	
-			RETVAL = SDL_SetGammaRamp(redtable, NULL, NULL);
+
 	OUTPUT:
 		RETVAL 
 
