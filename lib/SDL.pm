@@ -253,11 +253,11 @@ SDL::Error doesn't returns any value.
 SDL::clear_error deletes all information about the last internal SDL error. Useful if the error has been handled by the program.
 it doesn't returns any value.
 
-=head2 loadobject()
+=head2 load_object()
 
 Need to be coded.
 
-=head2 loadfunction()
+=head2 load_function()
 
 Need to be coded.
 

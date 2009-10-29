@@ -240,7 +240,7 @@ See also L<SDL::App::loop>.
 
 =head2 new()
 
-Create a new event object.
+Create a new event object.It returns a SDL::Event.
 
 =head2 type()
 
@@ -249,11 +249,32 @@ available.
 
 =head2 pump()
 
-=head2 poll()
+SDL::Events::pump gathers all the pending input information from devices and places
+it on the event queue.
+Without calls to pump no events would ever be placed on the queue.
+Often the need for calls to pump is hidden from the user 
+since C</SDL::Events::poll> and C<SDL::Events::wait_event implicitly call pump. 
+However, if you are not polling or waiting for events (e.g. you are filtering them), 
+then you must call pump force an event queue update.
+pump doesn't return any value and doesn't take any parameters.
 
-=head2 wait()
+Note: You can only call this function in the thread that set the video mode. 
 
-Waits for an event end returns then. Always returns true.
+
+=head2 poll(event)
+
+Polls for currently pending events.
+If event is not undef, the next event is removed from the queue and returned as a C< SDL::Event>.
+As this function implicitly calls C<SDL::Events::pump>, you can only call this function in the thread that set the video mode. 
+it take a SDL::Event as first parameter.
+
+=head2 wait(event)
+
+Waits indefinitely for the next available event, returning undef if there was an error while waiting for events,
+a L< SDL::Event> otherwise.
+If event is not NULL, the next event is removed.
+As this function implicitly calls L<SDL::Events::pump>, you can only call this function in the thread that set the video mode. 
+WaitEvent take a SDL::Event as first parameter.
 
 =head2 set( type, state )
 
@@ -268,49 +289,80 @@ Toggle unicode on the event.
 Sets the delay and intervall of the key repeat rate (e.g. when a user
 holds down a key on the keyboard).
 
-=head2 active_gain()
+=head2 active_gain(event)
 
-=head2 active_state()
+active_gain return the active gain from the SDL::Event given as first parameter.
 
-=head2 key_state()
+=head2 active_state(event)
 
-=head2 key_sym()
+active_state return the active state from the SDL::Event given as first parameter.
 
-=head2 key_name()
+=head2 key_state(event)
 
-=head2 key_mod()
+key_state return the active key state from the SDL::Event given as first parameter.
 
-=head2 key_unicode()
 
-=head2 key_scancode()
+=head2 key_sym(key)
 
-=head2 motion_state()
+key_sym return the key pressed/released  information from the SDL::Event given as first parameter.
 
-=head2 motion_x()
+=head2 get_key_name(key)
+
+get_key_name get the name of an SDL virtual keysym. 
+it returns the key name.
+
+=head2 key_mod(event)
+
+key_mod return the mod keys pressed information from the SDL::Event given as first parameter.
+
+=head2 key_unicode(event)
+
+key_unicode return the unicode translated keys pressed/released information from the SDL::Event given as first parameter.
+
+=head2 key_scancode(event) * to move in SDL::Game::Keyboard
+
+key_scancode return the hardware specific keyboard scan code from the SDL::Event given as first parameter.
+
+=head2 motion_state(event) * to move in SDL::Game::Mouse
+
+motion_state return the state of the mouse button from the SDL::Event given as first parameter.
+
+=head2 motion_x(event) * to move in SDL::Game::Mouse
 
 Returns the motion of the mouse in X direction as an absolute value.
+It take a SDL::Event as first parameter.
 
-=head2 motion_y()
+=head2 motion_y(event) * to move in SDL::Game::Mouse
 
 Returns the motion of the mouse in Y direction as an absolute value.
+It take a SDL::Event as first parameter.
 
-=head2 motion_xrel()
+=head2 motion_xrel(event) * to move in SDL::Game::Mouse
 
 Returns the motion of the mouse in X direction as a relative value.
+It take a SDL::Event as first parameter.
 
-=head2 motion_yrel()
+=head2 motion_yrel(event) * to move in SDL::Game::Mouse
 
 Returns the motion of the mouse in Y direction as a relative value.
+It take a SDL::Event as first parameter.
 
-=head2 button_state()
+=head2 button_state(event) * to move in SDL::Game::Mouse
 
 Returns the state of the mouse buttons.
+It take a SDL::Event as first parameter.
 
-=head2 button_x()
+=head2 button_x(event) * to move in SDL::Game::Mouse
 
-=head2 button_y()
+Return the X position of the mouse at keypress.it take a SDL::Event as first parameter.
 
-=head2 button()
+=head2 button_y(event) * to move in SDL::Game::Mouse
+
+Return the Y position of the mouse at keypress.it take a SDL::Event as first parameter.
+
+=head2 button(event) * to move in SDL::Game::Mouse
+
+Return the mouse button index (SDL_BUTTON_LEFT, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT, SDL_BUTTON_WHEELUP, SDL_BUTTON_WHEELDOWN)
 
 =head1 AUTHOR
 

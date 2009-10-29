@@ -56,7 +56,7 @@ sub DESTROY {
 	SDL::CDClose($$self);
 }
 
-sub CD_NUM_DRIVES {
+sub cd_num_drives {
 	return SDL::CDNumDrives();
 }
 
@@ -155,7 +155,7 @@ SDL::Cdrom - a SDL perl extension for managing CD-ROM drives
 
 =item *
 
-C<CD_NUM_DRIVES>.
+C<cd_num_drives>.
 
 =back
 
@@ -169,7 +169,7 @@ whereas 0 is the first drive etc.
 
 =head1 METHODS
 
-=head2 CD_NUM_DRIVES()
+=head2 cd_num_drives()
 
 Returns the number of CD-ROM drives present.
 

@@ -726,7 +726,7 @@ KeyEventUnicode ( e )
 		RETVAL
 
 Uint8
-KeyEventScanCode ( e )
+key_scancode ( e )
 	SDL_Event *e
 	CODE:
 		RETVAL = e->key.keysym.scancode;
@@ -774,7 +774,7 @@ MouseMotionYrel ( e )
 		RETVAL
 
 Uint8
-MouseButtonState ( e )
+button_state ( e )
 	SDL_Event *e
 	CODE:
 		RETVAL = e->button.state;
@@ -782,7 +782,7 @@ MouseButtonState ( e )
 		RETVAL
 
 Uint8
-MouseButton ( e )
+button ( e )
 	SDL_Event *e
 	CODE:
 		RETVAL = e->button.button;
@@ -790,7 +790,7 @@ MouseButton ( e )
 		RETVAL
 
 Uint16
-MouseButtonX ( e )
+button_x ( e )
 	SDL_Event *e
 	CODE:
 		RETVAL = e->button.x;
@@ -798,7 +798,7 @@ MouseButtonX ( e )
 		RETVAL
 
 Uint16
-MouseButtonY ( e )
+button_y ( e )
 	SDL_Event *e
 	CODE:
 		RETVAL = e->button.y;
@@ -842,7 +842,7 @@ SetModState ( state )
 		SDL_SetModState(state);
 
 char *
-GetKeyName ( sym )
+get_key_name ( sym )
 	int sym
 	CODE:
 		RETVAL = SDL_GetKeyName(sym);
