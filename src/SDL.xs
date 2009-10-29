@@ -110,6 +110,16 @@ extern PerlInterpreter *parent_perl;
 
 #endif
 
+int
+force_directx()
+{
+#if defined WIN32 || WINDOWS 
+	fprintf( stderr, "SDL Gamma is unsupported in Windows for windib. Forcing directx. \n" );
+	SDL_putenv("SDL_VIDEODRIVER=directx");
+#endif
+	return 1;
+}
+
 Uint32 
 sdl_perl_timer_callback ( Uint32 interval, void* param )
 {
@@ -254,6 +264,7 @@ init ( flags )
 	Uint32 flags
 	CODE:
 		INIT_NS_APPLICATION
+		force_directx();
 		RETVAL = SDL_Init(flags);
 #ifdef HAVE_TLS_CONTEXT
 		Perl_call_atexit(PERL_GET_CONTEXT, (void*)sdl_perl_atexit,0);
