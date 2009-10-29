@@ -225,8 +225,12 @@ video_set_gamma(r, g, b)
 	float g;
 	float b;
 	CODE:
+		RETVAL = -1;
+#ifdef WINDOWS 
+		warn( "SDL_SetGamma is unsupported in Windows. ");
+#else
 		RETVAL = SDL_SetGamma(r,g,b);
-
+#endif	
 	OUTPUT:	
 		RETVAL
 
@@ -237,6 +241,11 @@ video_set_gamma_ramp( rt, gt, bt )
 	AV* gt;
 	AV* bt;
 	CODE:
+
+		RETVAL = -1;
+#ifdef WINDOWS 
+		warn( "SDL_SetGammaRamp is unsupported in Windows. " );
+#else
 		Uint16 *redtable, *greentable, *bluetable;
 		redtable = av_to_uint16(rt);
 		greentable = av_to_uint16(gt);
@@ -245,8 +254,7 @@ video_set_gamma_ramp( rt, gt, bt )
 		if( redtable != NULL) { safefree(redtable); }
 		if( greentable != NULL) { safefree(greentable); }
 		if( bluetable != NULL) { safefree(bluetable); }	
-
-
+#endif
 	OUTPUT:
 		RETVAL 
 
