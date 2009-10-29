@@ -113,7 +113,7 @@ sub new {
 	}
 
 	my $self = SDL::SetVideoMode($w,$h,$d,$f)
-		or croak SDL::GetError();
+		or croak SDL::geterror();
 	
 	if ($ic and -e $ic) {
 	   my $icon = new SDL::Surface -name => $ic;
@@ -157,7 +157,7 @@ sub ticks {
 }
 
 sub error {
-	return SDL::GetError();
+	return SDL::geterror();
 }
 
 sub warp ($$$) {
