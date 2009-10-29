@@ -99,4 +99,4 @@ diag( 'This is in surface : ' . SDL::Surface::get_pixels($app) );
 
 pass 'did this pass';
 
-SDL::Delay(100);
+SDL::delay(100);

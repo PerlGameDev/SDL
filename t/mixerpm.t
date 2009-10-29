@@ -44,7 +44,7 @@ sub check_fail_mixer
 	my $ret = 0;
 	eval
 	{
-      		$ret = SDL::Init(SDL_INIT_AUDIO);
+      		$ret = SDL::init(SDL_INIT_AUDIO);
 	};
 	return 1 if ($@ or $ret == -1);
 	return 0;

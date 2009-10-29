@@ -33,7 +33,7 @@ my @done =
 can_ok ('SDL::Video', @done); 
 
 #testing get_video_surface
-SDL::Init(SDL_INIT_VIDEO);                                                                          
+SDL::init(SDL_INIT_VIDEO);                                                                          
                                                                                                     
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 

@@ -10,7 +10,7 @@ use SDL;
 use SDL::Surface;
 use SDL::PixelFormat;
 
-SDL::Init(SDL_INIT_VIDEO);
+SDL::init(SDL_INIT_VIDEO);
 
 my $display = SDL::SetVideoMode(640,480,32, SDL_SWSURFACE );
 

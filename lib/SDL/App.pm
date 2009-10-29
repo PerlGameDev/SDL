@@ -62,7 +62,7 @@ sub new {
 	 my $init = defined $options{-init} ? $options{-init} :
 	SDL_INIT_EVERYTHING();
 	
-	 SDL::Init($init);
+	 SDL::init($init);
 
 	#SDL::Init(SDL::SDL_INIT_EVERYTHING());
 	
