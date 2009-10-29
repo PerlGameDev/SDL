@@ -110,6 +110,20 @@ extern PerlInterpreter *parent_perl;
 
 #endif
 
+void
+windows_force_driver ()
+{
+   const SDL_version *version =  SDL_Linked_Version();
+	if(version->patch == 14)
+	{
+		putenv("SDL_VIDEODRIVER=directx");
+	}
+	else
+	{
+		putenv("SDL_VIDEODRIVER=windib");
+	}
+}
+
 Uint32 
 sdl_perl_timer_callback ( Uint32 interval, void* param )
 {
@@ -254,6 +268,9 @@ init ( flags )
 	Uint32 flags
 	CODE:
 		INIT_NS_APPLICATION
+#if defined WINDOWS || WIN32
+		windows_force_driver();
+#endif
 		RETVAL = SDL_Init(flags);
 #ifdef HAVE_TLS_CONTEXT
 		Perl_call_atexit(PERL_GET_CONTEXT, (void*)sdl_perl_atexit,0);
