@@ -38,7 +38,7 @@ SDL::init(SDL_INIT_VIDEO);
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 
 if(!$display){
-	 plan skip_all => 'Couldn\'t set video mode: '. SDL::GetError();
+	 plan skip_all => 'Couldn\'t set video mode: '. SDL::geterror();
     }
 
 #diag('Testing SDL::Video');
@@ -90,7 +90,7 @@ for(my $i=0;$i<256;$i++){
 my $hwdisplay = SDL::Video::set_video_mode(640,480,8, SDL_HWSURFACE );
 
 if(!$hwdisplay){
-	 plan skip_all => 'Couldn\'t set video mode: '. SDL::GetError();
+	 plan skip_all => 'Couldn\'t set video mode: '. SDL::geterror();
     }
 
 $value = SDL::Video::set_colors($hwdisplay, 0);
