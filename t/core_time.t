@@ -3,16 +3,23 @@ use strict;
 use SDL;
 use Test::More;
 use Test::Trap;
+use Data::Dumper;
 
 plan ( tests => 4 );
 my @done =qw/ none /;
 
 SKIP:
 {
-	skip 'Not implemented', 2;
+skip 'Not implemented', 2;
 use_ok( 'SDL::Time' ); 
 can_ok ('SDL::Time', @done); 
 }
+
+my @timerInit = trap { SDL::init(SDL_INIT_TIMER) };
+
+#diag  $trap->leaveby;
+#diag  Dumper $trap->return;
+#diag @timerInit[0];
 
 my @left = qw/
 	add_timer
