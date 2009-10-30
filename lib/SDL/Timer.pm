@@ -54,7 +54,7 @@ sub new {
 		$$self{-routine} = sub { &$func; $$self{-delay}};
 	}
 	$$self{-timer} = SDL::NewTimer($$self{-delay},$$self{-routine});
-	croak "Could not create timer, ", SDL::geterror(), "\n"
+	croak "Could not create timer, ", SDL::get_error(), "\n"
 		unless ($self->{-timer});
 	bless $self,$class;
 	return $self;

@@ -16,7 +16,7 @@ sub new {
     my $self = $class->SUPER::new($x, $y, $w, $h);
     unless ($$self) {
         #require Carp;
-        croak SDL::GetError();
+        croak SDL::get_error();
     }
     bless $self, $class;
     return $self;

@@ -257,7 +257,7 @@ MODULE = SDL_perl	PACKAGE = SDL
 PROTOTYPES : DISABLE
 
 char *
-geterror ()
+get_error ()
 	CODE:
 		RETVAL = SDL_GetError();
 	OUTPUT:
