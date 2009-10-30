@@ -1,0 +1,85 @@
+=pod
+
+=head1 NAME
+
+SDL::PixelFormat - Stores surface format information
+
+=head1 SYNOPSIS
+
+	my $surface = SDL::Surface->new( ...
+	$surface->format; #this returns the PixelFormat object attached to this surface
+
+PixelFormat is only created in a C<SDL::Surface>. This module only provides getters to the surface's pixelformat. Later on we will provide setting capability.
+
+
+=head1 DESCRIPTION
+
+An C<SDL::PixelFormat > stores surface format information
+
+=head1 METHODS
+
+=head2  palette
+
+	$surface->format->palette;
+
+Returns the C<SDL_Palette> and L<SDL::Palette> of the format of the surface.
+
+=head2  BitsPerPixel 
+
+	$surface->format->BitsPerPixel;
+
+The number of bits used to represent each pixel in a surface. Usually 8, 16, 24 or 32. (1 to 7 are not allowed when creating a surface or open a video mode
+
+=head2 BytesPerPixel
+
+	$surface->format->BytesPerPixel;
+
+The number of bytes used to represent each pixel in a surface. Usually one to four.
+
+=head2 [RGBA]loss
+
+	$surface->format->Rloss; #red   loss
+	$surface->format->Bloss; #blue  loss
+	$surface->format->Gloss; #green loss	
+	$surface->format->Aloss; #alpha loss
+
+Precision loss of each color component (2[RGBA]loss)
+
+=head2 [RGBA]shift
+
+	$surface->format->Rshift; #red   shift
+	$surface->format->Bshift; #blue  shift
+	$surface->format->Gshift; #green shift	
+	$surface->format->Ashift; #alpha shift
+
+Binary left shift of each color component in the pixel value
+
+
+=head2 [RGBA]mask
+
+	$surface->format->Rmask; #red   mask
+	$surface->format->Bmask; #blue  mask
+	$surface->format->Gmask; #green mask	
+	$surface->format->Amask; #alpha mask
+
+Binary left shift of each color component in the pixel value
+
+=head2 colorkey
+	
+	$surface->format->colorkey;
+
+Pixel value of transparent pixels.	
+
+=head2 alpha
+	
+	$surface->format->alpha;
+	
+Overall surface alpha value
+
+
+
+=head1 SEE ALSO
+
+L<SDL::Surface>
+
+=cut

@@ -1,0 +1,42 @@
+=pod
+
+=head1 NAME
+
+SDL::Palette - a perl extension
+
+=head1 DESCRIPTION
+
+L<SDL::Palette> provides an interface to the SDL_Palette structures,
+and can be used to set the color values of an existing palette's indexes.
+
+=head1 METHODS
+
+=head2 blue ( index, [value] )
+
+Fetches and sets the blue component of the color at index.
+
+=head2 green ( index, [value] )
+
+Fetches and sets the green component of the color at index.
+
+=head2 red ( index, [value] )
+
+Fetches and sets the red component of the color at index.
+
+=head2 color ( index, [ r, g, b ] )
+
+Fetches and sets the RGB, returns an SDL_Color *.
+
+=head2 size
+
+Returns the size of the palette.
+
+=head1 AUTHOR
+
+David J. Goehrig
+
+=head1 SEE ALSO
+
+L<perl> L<SDL::Color> L<SDL::Surface>
+
+=cut

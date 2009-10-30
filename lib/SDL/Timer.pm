@@ -54,7 +54,7 @@ sub new {
 		$$self{-routine} = sub { &$func; $$self{-delay}};
 	}
 	$$self{-timer} = SDL::NewTimer($$self{-delay},$$self{-routine});
-	croak "Could not create timer, ", SDL::GetError(), "\n"
+	croak "Could not create timer, ", SDL::geterror(), "\n"
 		unless ($self->{-timer});
 	bless $self,$class;
 	return $self;
@@ -81,34 +81,3 @@ sub stop {
 }
 
 1;
-
-__END__;
-
-=pod
-
-
-=head1 NAME
-
-SDL::Timer - a SDL perl extension to handle timers
-
-=head1 SYNOPSIS
-
-  $timer = new SDL::Timer { print "tick"; 4000; } -delay => 4000;
-
-=head1 DESCRIPTION
-
-C<SDL::Timer> provides an abstract interface to the SDL::Timer
-callback code.  SDL::Timer::new requires a subroutine and a delay
-at which is the initial interval between the creation of the
-timer until the first call to the subroutine.  The subroutine
-must return a value which is the delay until the it is called again.
-
-=head1 AUTHOR
-
-David J. Goehrig
-
-=head1 SEE ALSO
-
-L<perl> L<SDL>
-
-=pod

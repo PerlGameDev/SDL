@@ -7,7 +7,3 @@ our @ISA = qw(Exporter DynaLoader);
 bootstrap SDL::Surface;
 
 1;
-
-__END__
-=head1
-There C<SDL_Surface>

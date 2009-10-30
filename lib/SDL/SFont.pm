@@ -52,27 +52,3 @@ sub SDL_TEXTWIDTH {
 bootstrap SDL::SFont;
 
 1;
-
-__END__;
-
-=pod
-
-
-
-=head1 NAME
-
-SDL::SFont - a perl extension
-
-=head1 DESCRIPTION
-
-
-
-=head1 AUTHOR
-
-David J. Goehrig
-
-=head1 SEE ALSO
-
-L<perl> L<SDL::App>
-
-=cut

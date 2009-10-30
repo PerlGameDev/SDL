@@ -1,0 +1,206 @@
+=head1 NAME
+
+SDL_perl - Simple DirectMedia Layer for Perl
+
+=head1 SYNOPSIS
+
+  use SDL;
+
+=head1 DESCRIPTION
+
+SDL_perl is a package of perl modules that provides both functional and object orient
+interfaces to the Simple DirectMedia Layer for Perl 5.  This package does take some
+liberties with the SDL API, and attempts to adhere to the spirit of both the SDL
+and Perl.  This document describes the low-level functional SDL_perl API.  For the
+object oriented programming interface please see the documentation provided on a
+per class basis.
+
+=head1 The SDL Perl 2009 Development Team
+
+=head2 Documentation
+
+	Nick: magnet
+
+=head2 Perl Development
+
+	Nick: Garu
+	Name: Breno G. de Oliveira
+	
+	Nick: Dngor
+	Name: Rocco Caputo
+
+	Nick: nferraz
+	Name: Nelson Ferraz
+
+	Nick: acme
+	Name: Leon Brocard
+	
+	Nick: FROGGS
+	Name: Tobias Leich
+
+=head2 Maintainance 
+	
+	Nick: kthakore
+	Name: Kartik Thakore
+
+=head1 MacOSX Experimental Usage
+
+Please get libsdl packages from Fink
+	
+	perl Build.PL
+	perl Build test
+	perl Build bundle
+	perl Build install
+
+=head2 Running SDL Perl Scripts in MacOSX
+
+First set the PERL5LIB environment variable to the dependencies of your script
+	
+	%export PERL5LIB=$PERL5LIB:./lib
+
+Use the SDLPerl executable made in the bundle and call your scripts
+
+	%SDLPerl.app/Contents/MacOS/SDLPerl yourScript.pl
+
+=head1 Functions exported by SDL.pm
+
+=head2 init(flags) 
+
+As with the C language API, SDL_perl initializes the SDL environment through
+the C<SDL::init> subroutine.  This routine takes a mode flag constructed through
+the bitwise OR product of the following constants:
+
+=over 4
+
+=item *
+INIT_AUDIO
+
+=item *
+INIT_VIDEO
+
+=item *
+INIT_CDROM
+
+=item *
+INIT_EVERYTHING
+
+=item *
+INIT_NOPARACHUTE
+
+=item *
+INIT_JOYSTICK
+
+=item *
+INIT_TIMER
+
+=back
+
+C<SDL::Init> returns 0 on success, or -1 on error.
+
+=head2 init_subsystem(flags)
+
+After SDL has been initialized with SDL::init you may initialize uninitialized subsystems with SDL::init_subsystem.
+The flags parameter is the same as that used in SDL::init. 
+
+SDL::init_subsystem returns 0 on success, or -1 on error.
+
+=head2 quit_subsystem(flags)
+
+SDL::quit_subsystem allows you to shut down a subsystem that has been previously initialized by SDL::init or SDL::init_subsystem.
+The flags tells SDL::quit_subSystem which subsystems to shut down, it uses the same values that are passed to SDL::init. 
+
+SDL::quit_subsystem doesn't returns any value.
+
+=head2 quit
+
+Shuts down all SDL subsystems, unloads the dynamically linked library and frees the allocated resources. This should always be called before you exit.
+
+SDL::quit doesn't returns any value.
+
+=head2 was_init(flags)
+
+SDL::was_init allows you to see which SDL subsytems have been initialized.
+flags is a bitwise OR'd combination of the subsystems you wish to check (see SDL::init for a list of subsystem flags). 
+If 'flags' is 0 or SDL_INIT_EVERYTHING, it returns a mask of all initialized subsystems (this does not include SDL_INIT_EVENTTHREAD or SDL_INIT_NOPARACHUTE).
+
+
+=head2 get_error()
+
+The last error message set by the SDL library can be retrieved using the subroutine
+C<SDL::get_error>, which returns a scalar containing the text of the message if any.
+
+=head2 set_error(error)  *need to be coded
+
+SDL::get_error sets the SDL error to a printf style formatted string. 
+it doesn't returns any values.
+
+=head2 error(code) * need to be coded
+
+Sets the SDL error message to one of several predefined strings specified by code. 
+
+code can be :
+
+=over 4
+
+		SDL_errorcode  	The corresponding error string
+
+		SDL_ENOMEM     	Out of memory
+		SDL_EFREAD	Error reading from datastream
+		SDL_EFWRITE	Error writing to datastream
+		SDL_EFSEEK	Error seeking in datastream
+		SDL_UNSUPPORTED	Unknown SDL error
+		SDL_LASTERROR	Unknown SDL error
+		any other value	Unknown SDL error
+
+
+		Note 1: SDL_LASTERROR marks the highest numbered predefined error.
+		Note 2: SDL also defines SDL_OutOfMemory() and SDL_Unsupported() for internal use
+		which are equivalent to SDL_Error(SDL_ENOMEM) and SDL_Error(SDL_UNSUPPORTED) respectively. 
+
+=back
+
+SDL::Error doesn't returns any value.
+
+
+=head2 clear_error() * need to be coded
+
+SDL::clear_error deletes all information about the last internal SDL error. Useful if the error has been handled by the program.
+it doesn't returns any value.
+
+=head2 load_object()
+
+Need to be coded.
+
+=head2 load_function()
+
+Need to be coded.
+
+=head2 unload_object()
+
+Need to be coded.
+
+=head2 VERSION()
+
+Need to be coded. 
+
+=head2 version()
+
+Need to be coded.
+
+=head2 linked_version
+
+Need to be coded.
+
+=head2 get_error()
+
+The last error message set by the SDL library can be retrieved using the subroutine
+C<SDL::get_error>, which returns a scalar containing the text of the message if any.
+
+=head2 delay(ms)
+
+This subroutine allows an application to delay further operations for atleast a
+number of milliseconds provided as the argument.  The actual delay may be longer
+than the specified depending on the underlying OS.
+
+
+

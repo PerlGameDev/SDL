@@ -65,32 +65,3 @@ sub use ($) {
 }
 
 1;
-
-__END__;
-
-=pod
-
-
-=head1 NAME
-
-SDL::Font - a SDL perl extension
-
-=head1 SYNOPSIS
-
-  $font = new Font "Font.png";
-  $font->use();
-	
-=head1 DESCRIPTION
-
-L<SDL::Font> provides an interface to loading and using SFont style 
-fonts with L<SDL::Surface> objects.  
-
-=head1 AUTHOR
-
-David J. Goehrig
-
-=head1 SEE ALSO
-
-L<perl> L<SDL::Surface>
-
-=cut

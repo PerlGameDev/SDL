@@ -1,0 +1,186 @@
+=pod
+
+=head1 NAME
+
+SDL::Mixer - a SDL perl extension
+
+=head1 SYNOPSIS
+
+  $mixer = new SDL::Mixer 	-frequency => MIX_DEFAULT_FREQUENCY,
+				-format => MIX_DEFAULT_FORMAT,
+				-channels => MIX_DEFAULT_CHANNELS,
+				-size => 4096;
+
+=head1 DESCRIPTION
+
+SDL::Mixer allows you access to the SDL mixer library, enablig sound and
+music volume setting, playing, pausing and resuming, as well as fading
+the sound and music in and out.
+
+=head1 METHODS
+  
+=head2 new()
+
+	$mixer = SDL::Mixer->new(	-frequency => MIX_DEFAULT_FREQUENCY,
+					-format    => MIX_DEFAULT_FORMAT,
+					-channels  => MIX_DEFAULT_CHANNELS,
+					-size      => 4096);
+
+Creates a new SDL::Mixer object. C<$size> is the buffer size in bytes.
+
+=head2 query_spec()
+
+	my $specs = SDL::Mixer::query_spec();
+
+Returns a hash reference, containing the following keys and their respective
+values:
+
+	-status
+	-frequency
+	-channels
+	-format
+
+=head2 reserve_channels
+
+	$mixer->reserve_channels(4);
+
+Reserve so many channels.
+
+=head2 allocate_channels()
+
+	$mixer->reserve_channels(2);
+
+Allocate so many channels.
+
+=head2 group_channel(channel,group)
+
+Group the channel number C<$channel> into group C<$group>.
+
+=head2 group_channels(from,to,group)
+
+Groups a range of channels
+
+=head2 group_available(group)
+
+Return true when the group is available.
+
+=head2 group_count(group)
+
+Returns the number of channels in the group
+
+=head2 group_oldest()
+
+
+=head2 group_newer()
+
+
+=head2 play_channel()
+
+
+=head2 play_music()
+
+Play C<$music> C<$loop> times.
+
+=head2 fade_in_channel(channel,chunk,loops,ms,ticks)
+
+Fades a channel in
+
+=head2 fade_in_music(music,loops,ms)
+
+Fades the music in over a number of ms, looping as it does
+
+=head2 channel_volume(channel,volume)
+
+Sets the volume for a single channel
+
+=head2 mucis_volume(volume)
+
+Set the volume for the music.
+
+=head2 halt_channel(channel)
+
+Stops a specific channel
+
+=head2 halt_group(group)
+
+Stops a group of channels
+
+=head2 halt_music()
+
+Stops the music
+
+=head2 channel_expire(channel,ticks)
+
+Ignores the channel after C<ticks> has expired
+
+=head2 fade_out_channel(channel,ms)
+
+Fade the channel number C<$channel> in C<$ms> ms out.
+
+=head2 fade_out_group(group,ms)
+	
+Fade the channel group C<$group> in C<$ms> ms out.
+
+=head2 fade_out_music(ms)
+	
+Fade the music in C<$ms> ms out.
+
+=head2 fading_music()
+
+Return true when the music is currently fading in or out.
+
+=head2 fading_channel()
+
+Return true when the channel number C<$channel> is currently fading in or out.
+
+=head2 pause( channel )
+
+Pause the channel C<$channel>.
+
+=head2 resume(channel)
+
+Resume the channel C<$channel>.
+
+=head2 paused()
+
+Return true when the channel is currently paused.
+
+=head2 pause_music()
+
+Pause the music play.
+
+=head2 resume_music()
+	
+Resume the music play.
+
+=head2 rewind_music()
+
+Resets the music file to the beginning
+
+=head2 music_paused()
+
+Return true when the music is currently paused.
+
+=head2 playing()
+
+Return true when the channel is currently playing.
+
+=head2 playing_music ()
+
+Return true when the music is currently playing.
+
+=head1 set_panning($channel, $left, $right)
+
+Sets the volume for the left or right channels. To do true panning:
+
+  $mixer->set_panning($channel, $left, 254 - $left);
+
+=head1 AUTHORS 
+
+David J. Goehrig, basic doc added by Tels <http://bloodgate.com>.
+
+=head1 SEE ALSO
+
+L<perl>, L<SDL::Music> and L<SDL::Sound>.
+
+=cut
