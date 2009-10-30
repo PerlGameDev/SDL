@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 19 );
+plan ( tests => 21 );
 
 use_ok( 'SDL::Video' ); 
 
@@ -116,7 +116,6 @@ is( SDL::Video::map_RGBA($hwdisplay->format, 10, 10 ,10, 10) > 0, 1, '[map_RGBA]
 
 my @left = qw/
 	get_gamma_ramp
-	map_RGBA
 	get_RGB
 	get_RGBA
 	create_RGB_surface_from
