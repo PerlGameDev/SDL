@@ -16,21 +16,15 @@ static Uint16* av_to_uint16 (AV* av)
 	{
 	int i;
 	Uint16* table = (Uint16 *)safemalloc(sizeof(Uint16)*(len));
-		//fprintf( stderr, "Expecting 1,2,5,6 \n Length is %d \n", len);
 	for ( i = 0; i < len+1 ; i++ ){ 
 		SV ** temp = av_fetch(av,i,0);
 	      if( temp != NULL)
 		{
-		table[i] =  (Uint16 *) SvIV(  *temp   )  ;
-		/* fprintf( stderr, "table[%d] = ", i);
-		 if (table[i] == NULL) { fprintf ( stderr, " NULL\n"); }
-		else{ fprintf(stderr, " %d \n", table[i]); } */
+			table[i] =  (Uint16 *) SvIV(  *temp   );
 		}
 		else { table[i] =0; }
 
 	}
-//		warn("Got %d %d %d %d \n", table[0], table[1], table[2], table[3] );
-
 	return table;
 	}
 	return NULL;
@@ -246,4 +240,29 @@ video_set_gamma_ramp( rt, gt, bt )
 		if( bluetable != NULL) { safefree(bluetable); }	
 	OUTPUT:
 		RETVAL 
+
+
+
+Uint32
+video_map_RGB ( pixel_format, r, g, b )
+	SDL_PixelFormat *pixel_format
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	CODE:
+		RETVAL = SDL_MapRGB(pixel_format,r,g,b);
+	OUTPUT:
+		RETVAL
+
+Uint32
+video_map_RGBA ( pixel_format, r, g, b, a )
+	SDL_PixelFormat *pixel_format
+	Uint8 r
+	Uint8 g
+	Uint8 b	
+	Uint8 a
+	CODE:
+		RETVAL = SDL_MapRGB(pixel_format,r,g,b);
+	OUTPUT:
+		RETVAL
 

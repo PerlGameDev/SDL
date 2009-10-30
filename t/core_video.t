@@ -28,6 +28,8 @@ my @done =
 	set_palette
 	set_gamma
 	set_gamma_ramp
+	map_RGB
+	map_RGBA
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -109,12 +111,11 @@ $value = SDL::Video::set_palette($hwdisplay, SDL_LOGPAL|SDL_PHYSPAL, 0, @b_w_col
 is(  $value , 1,  '[set_palette] returns 1'  );
 
 
-
-
+is( SDL::Video::map_RGB($hwdisplay->format, 10, 10 ,10) > 0, 1, '[map_RGB] maps correctly to 8-bit surface');
+is( SDL::Video::map_RGBA($hwdisplay->format, 10, 10 ,10, 10) > 0, 1, '[map_RGBA] maps correctly to 8-bit surface');
 
 my @left = qw/
 	get_gamma_ramp
-	map_RGB
 	map_RGBA
 	get_RGB
 	get_RGBA
