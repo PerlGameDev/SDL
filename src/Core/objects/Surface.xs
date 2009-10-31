@@ -45,6 +45,30 @@ surface_new (CLASS, flags, width, height, depth, Rmask, Gmask, Bmask, Amask )
 	OUTPUT:
 		RETVAL
 
+SDL_Surface *
+surface_new_from (CLASS, pixels, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask )
+	char *CLASS
+	char *pixels
+	int width
+	int height
+	int depth
+	int pitch
+	Uint32 Rmask
+	Uint32 Gmask
+	Uint32 Bmask
+	Uint32 Amask
+	CODE:
+		void* pixeldata;
+		int len = pitch * height;
+		Newx(pixeldata,len,Uint8);
+		Copy(pixels,pixeldata,len,Uint8);
+		RETVAL = SDL_CreateRGBSurfaceFrom ( pixeldata, width, height,
+				depth, pitch, Rmask, Gmask, Bmask, Amask );
+	OUTPUT:	
+		RETVAL
+
+
+
 SDL_PixelFormat *
 surface_format ( surface )
 	SDL_Surface *surface

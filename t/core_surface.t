@@ -21,6 +21,7 @@ use Test::More tests => 35;
 
 my $surface
     = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 640, 320, 8, 0, 0, 0, 0 );
+    #TODO: test SDL::Surface->new_from
 isa_ok( $surface, 'SDL::Surface' );
 is( $surface->w,     640, 'surface has width' );
 is( $surface->h,     320, 'surface has height' );

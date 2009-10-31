@@ -123,7 +123,6 @@ my @left = qw/
 	get_gamma_ramp
 	get_RGB
 	get_RGBA
-	create_RGB_surface_from
 	convert_surface
 	display_format
 	display_format_alpha
