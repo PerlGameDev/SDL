@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 22 );
+plan ( tests => 23);
 
 use_ok( 'SDL::Video' ); 
 
