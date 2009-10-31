@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 21 );
+plan ( tests => 22 );
 
 use_ok( 'SDL::Video' ); 
 
@@ -30,6 +30,8 @@ my @done =
 	set_gamma_ramp
 	map_RGB
 	map_RGBA
+	unlock_surface
+	lock_surface	
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -110,6 +112,9 @@ $value = SDL::Video::set_palette($hwdisplay, SDL_LOGPAL|SDL_PHYSPAL, 0, @b_w_col
 
 is(  $value , 1,  '[set_palette] returns 1'  );
 
+$value = SDL::Video::lock_surface($hwdisplay); pass '[lock_surface] ran returned: '.$value;
+
+SDL::Video::unlock_surface($hwdisplay); pass '[unlock_surface] ran';
 
 is( SDL::Video::map_RGB($hwdisplay->format, 10, 10 ,10) > 0, 1, '[map_RGB] maps correctly to 8-bit surface');
 is( SDL::Video::map_RGBA($hwdisplay->format, 10, 10 ,10, 10) > 0, 1, '[map_RGBA] maps correctly to 8-bit surface');
@@ -119,8 +124,6 @@ my @left = qw/
 	get_RGB
 	get_RGBA
 	create_RGB_surface_from
-	lock_surface
-	unlock_surface
 	convert_surface
 	display_format
 	display_format_alpha

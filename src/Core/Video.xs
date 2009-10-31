@@ -266,3 +266,17 @@ video_map_RGBA ( pixel_format, r, g, b, a )
 	OUTPUT:
 		RETVAL
 
+int
+video_lock_surface ( surface )
+	SDL_Surface *surface
+	CODE:
+		RETVAL = SDL_LockSurface(surface);
+	OUTPUT:
+		RETVAL
+
+void
+video_unlock_surface ( surface )
+	SDL_Surface *surface
+	CODE:
+		SDL_UnlockSurface(surface);
+
