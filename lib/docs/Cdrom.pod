@@ -1,7 +1,5 @@
 =pod
 
-
-
 =head1 NAME
 
 SDL::Cdrom - a SDL perl extension for managing CD-ROM drives
@@ -36,53 +34,61 @@ whereas 0 is the first drive etc.
 
 Returns the number of CD-ROM drives present.
 
-=head2 name()
+=head2 name(cd)
 
 Returns the system dependent name of the CD-ROM device.
+It takes a SDL::Cdrom as first parameter.
 
-=head2 status()
+=head2 status(cd)
 
 Return the status of the drive.
+It takes a SDL::Cdrom as first parameter.
 
-=head2 play()
+=head2 play(cd,start,length,fs,fl) 
 
-Play a track.
+Play a track from the SDL::Cdrom given as first parameter, second parameter is the frame to start, the third is the lenght to play.
+It returns 1 on succés 0 on error.
 
-=head2 pause()
+=head2 pause(cd)
 
-Pause the playing.
+Pause the playing of the SDL::Cdrom given as first parameter.
+It returns 1 on succés 0 on error.
 
-=head2 resume()
+=head2 resume(cd)
 
-Resume the playing.
+Resume the playing of the SDL::Cdrom given as first parameter.
+It returns 1 on succés 0 on error.
 
-=head2 stop()
+=head2 stop(cd)
 
-Stop the playing.
+Stop the playing of the SDL::Cdrom given as first parameter.
+It returns 1 on succés 0 on error.
 
-=head2 eject()
+=head2 eject(cd)
 
-Eject the medium in the drive.
+Eject the medium in the SDL::Cdrom given as first parameter.
+It returns 1 on succés 0 on error.
 
-=head2 id()
+=head2 id(cd)
 
-Return the ID of the drive.
+Return the ID of the drive given as first parameter.
 
-=head2 num_tracks()
+=head2 num_tracks(cd)
 
-Return the number of tracks on the medium.
+Return the number of tracks on the SDL::Cdrom given as first parameter.
 
-=head2 track()
+=head2 track(cd,number)
 
-Returns the track description
+Returns the track description of the track given as second parameter.
+the first parameter is a SDL:Cdrom.
 
-=head2 current()
+=head2 current(cd)
 
-Return the current played track number.
+Return the current played track number given as first parameter.
 
-=head2 current_frame()
+=head2 current_frame(cd)
 
-Return the current frame.
+Return the current frame given as first parameter.
 
 =head1 AUTHORS
 

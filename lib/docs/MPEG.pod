@@ -1,6 +1,5 @@
 =pod
 
-
 =head1 NAME
 
 SDL::MPEG - a SDL perl extension

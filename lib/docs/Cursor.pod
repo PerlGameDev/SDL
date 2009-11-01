@@ -1,7 +1,5 @@
 =pod
 
-
-
 =head1 NAME
 
 SDL::Cursor - a SDL perl extension
@@ -26,13 +24,16 @@ white.
 
 Creates a new cursor. The <C>-data</C> and <C>-mask</C> parameters should be both black and white pictures. The height and width of these surfaces should be a multiple of 8. The <C>-x</C> and <C>-y</C> are the coordinates of the cursor 'hot spot'.
 
-=head2 warp($x, $y)
+=head2 warp(cursor,x, y)
 
-Set the position of the cursor at the <C>$x</C>, <C>$y</C> coordinates in the application window.
+Set the position of the SDL::Cursor given as first parameter .
+the new postion is set to <C>x</C>, <C>y</C> coordinates in the application window.
+SDL::warp trigger a new mouse motion event.
+It doesn't returns anything.
 
-=head2 use()
+=head2 use(cursor)
 
-Set the cursor as the active cursor.
+Set the SDL::Cursor given as first parameter to the active cursor.
 
 =head2 get()
 

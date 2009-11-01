@@ -45,9 +45,9 @@ See also L<SDL::App::loop>.
 
 Create a new event object.It returns a SDL::Event.
 
-=head2 type()
+=head2 type(event)
 
-Returns the type of the event, see list of exported symbols for which are
+Returns the type of the SDL::Event given as first parameter, see list of exported symbols for which are
 available.
 
 =head2 pump()
