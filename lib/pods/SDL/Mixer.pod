@@ -173,7 +173,11 @@ Return true when the music is currently playing.
 
 Sets the volume for the left or right channels. To do true panning:
 
+=begin verbatim
+
   $mixer->set_panning($channel, $left, 254 - $left);
+
+=end
 
 =head1 AUTHORS 
 
