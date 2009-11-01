@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 23);
+plan ( tests => 24);
 
 use_ok( 'SDL::Video' ); 
 
@@ -32,6 +32,8 @@ my @done =
 	map_RGBA
 	unlock_surface
 	lock_surface	
+	convert_surface
+
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -119,11 +121,13 @@ SDL::Video::unlock_surface($hwdisplay); pass '[unlock_surface] ran';
 is( SDL::Video::map_RGB($hwdisplay->format, 10, 10 ,10) > 0, 1, '[map_RGB] maps correctly to 8-bit surface');
 is( SDL::Video::map_RGBA($hwdisplay->format, 10, 10 ,10, 10) > 0, 1, '[map_RGBA] maps correctly to 8-bit surface');
 
+isa_ok(SDL::Video::convert_surface( $display , $hwdisplay->format, SDL_SRCALPHA), 'SDL::Surface', '[convert_surface] Checking if we get a surface ref back'); 
+
+
 my @left = qw/
 	get_gamma_ramp
 	get_RGB
 	get_RGBA
-	convert_surface
 	display_format
 	display_format_alpha
 	load_BMP

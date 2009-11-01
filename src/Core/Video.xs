@@ -280,3 +280,15 @@ video_unlock_surface ( surface )
 	CODE:
 		SDL_UnlockSurface(surface);
 
+
+SDL_Surface *
+video_convert_surface( src, fmt, flags)
+	SDL_Surface* src
+	SDL_PixelFormat* fmt
+	Uint32	flags
+	PREINIT:
+		char *CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = SDL_ConvertSurface(src, fmt, flags);
+	OUTPUT:
+		RETVAL
