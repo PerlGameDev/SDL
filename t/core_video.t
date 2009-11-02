@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 28);
+plan ( tests => 30);
 
 use_ok( 'SDL::Video' ); 
 
@@ -37,6 +37,8 @@ my @done =
 	display_format_alpha
 	set_color_key
 	set_alpha
+	get_RGB
+	get_RGBA
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -137,12 +139,12 @@ is(  SDL::Video::set_alpha($display, SDL_SRCALPHA, 100 ),
    0,  '[set_alpha] Returns 0 on success' 
    ) ;
 
+is_deeply(SDL::Video::get_RGB($display->format, 0), [0,0,0], '[get_RGB] returns r,g,b');
 
+is_deeply(SDL::Video::get_RGBA($display->format, 0), [0,0,0,255], '[get_RGBA] returns r,g,b,a');
 
 my @left = qw/
 	get_gamma_ramp
-	get_RGB
-	get_RGBA
 	load_BMP
 	save_BMP
 	set_clip_rect

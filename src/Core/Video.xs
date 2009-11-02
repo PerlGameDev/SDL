@@ -336,4 +336,31 @@ video_set_alpha ( surface, flag, alpha )
 	OUTPUT:
 		RETVAL
 
+AV *
+get_RGB ( pixel_format, pixel )
+	SDL_PixelFormat *pixel_format
+	Uint32 pixel
+	CODE:
+		Uint8 r,g,b;
+		SDL_GetRGB(pixel,pixel_format,&r,&g,&b);
+		RETVAL = newAV();
+		av_push(RETVAL,newSViv(r));
+		av_push(RETVAL,newSViv(g));
+		av_push(RETVAL,newSViv(b));
+	OUTPUT:
+		RETVAL
 
+AV *
+get_RGBA ( pixel_format, pixel )
+	SDL_PixelFormat *pixel_format
+	Uint32 pixel
+	CODE:
+		Uint8 r,g,b,a;
+		SDL_GetRGBA(pixel,pixel_format,&r,&g,&b,&a);
+		RETVAL = newAV();
+		av_push(RETVAL,newSViv(r));
+		av_push(RETVAL,newSViv(g));
+		av_push(RETVAL,newSViv(b));
+		av_push(RETVAL,newSViv(a));
+	OUTPUT:
+		RETVAL

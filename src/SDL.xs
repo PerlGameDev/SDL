@@ -1194,20 +1194,6 @@ BlitSurface ( src, src_rect, dest, dest_rect )
 Comment out for now as it does not compile
 
 AV *
-GetRGB ( surface, pixel )
-	SDL_Surface *surface
-	Uint32 pixel
-	CODE:
-		Uint8 r,g,b;
-		SDL_GetRGB(pixel,surface->format,&r,&g,&b);
-		RETVAL = newAV();
-		av_push(RETVAL,newSViv(r));
-		av_push(RETVAL,newSViv(g));
-		av_push(RETVAL,newSViv(b));
-	OUTPUT:
-		RETVAL
-
-AV *
 GetRGBA ( surface, pixel )
 	SDL_Surface *surface
 	Uint32 pixel
