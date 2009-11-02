@@ -63,7 +63,7 @@ SDL::Video::fill_rect( $surface, SDL::Rect->new( 0, 0, 32, 32 ), $pixel );
 ok( 1, 'Managed to fill_rect' );
 
 my $small_rect = SDL::Rect->new( 0, 0, 64, 64 );
-SDL::BlitSurface( $image, $small_rect, $surface, $small_rect );
+SDL::Video::blit_surface( $image, $small_rect, $surface, $small_rect );
 ok( 1, 'Managed to blit' );
 
 #my $image_format = $surface->display;

@@ -1178,17 +1178,6 @@ PaletteNColors ( palette, ... )
 	OUTPUT:
 		RETVAL
 
-int
-BlitSurface ( src, src_rect, dest, dest_rect )
-	SDL_Surface *src
-	SDL_Surface *dest
-	SDL_Rect *src_rect
-	SDL_Rect *dest_rect
-	CODE:
-		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
-	OUTPUT:
-		RETVAL
-
 =for comment
 
 Comment out for now as it does not compile

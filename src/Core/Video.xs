@@ -393,3 +393,14 @@ fill_rect ( dest, dest_rect, pixel )
 		RETVAL = SDL_FillRect(dest,dest_rect,pixel);
 	OUTPUT:
 		RETVAL
+
+int
+blit_surface ( src, src_rect, dest, dest_rect )
+	SDL_Surface *src
+	SDL_Surface *dest
+	SDL_Rect *src_rect
+	SDL_Rect *dest_rect
+	CODE:
+		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
+	OUTPUT:
+		RETVAL
