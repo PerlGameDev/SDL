@@ -76,8 +76,8 @@ can_ok ('SDL::App', qw/
  	$grect->x($_ );	
 	$grect->centery($_ * 3); 
 	$grect->size( ($_ / 40) * $_, ($_/38) * $_ );
-	SDL::FillRect( $app, $rect, $blue_pixel );
-	SDL::FillRect( $app, $grect, $col_pixel );
+	SDL::Video::fill_rect( $app, $rect, $blue_pixel );
+	SDL::Video::fill_rect( $app, $grect, $col_pixel );
 
         SDL::Video::update_rect($app, 0, 0, 640, 480);
         SDL::delay(10);

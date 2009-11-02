@@ -1247,16 +1247,6 @@ ConvertRGBA ( surface )
 
 =cut
 
-int
-FillRect ( dest, dest_rect, pixel )
-	SDL_Surface *dest
-	SDL_Rect *dest_rect
-	Uint32 pixel
-	CODE:
-		RETVAL = SDL_FillRect(dest,dest_rect,pixel);
-	OUTPUT:
-		RETVAL
-
 Uint8
 GetAppState ()
 	CODE:

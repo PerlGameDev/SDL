@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 32);
+plan ( tests => 33);
 
 use_ok( 'SDL::Video' ); 
 
@@ -41,6 +41,7 @@ my @done =
 	get_RGBA
 	load_BMP
 	save_BMP
+	fill_rect
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -153,12 +154,15 @@ my $bmp_surface = SDL::Video::load_BMP($bmp);
 isa_ok($bmp_surface, 'SDL::Surface', '[load_BMP] returns an SDL::Surface');
 unlink($bmp) if -f $bmp;
 
+my $pixel = SDL::Video::map_RGB( $display->format, 255, 127, 0 );
+SDL::Video::fill_rect( $display, SDL::Rect->new( 0, 0, 32, 32 ), $pixel );
+ok( 1, '[fill_rect] filled rect' );
+
 my @left = qw/
 	get_gamma_ramp
 	set_clip_rect
 	get_clip_rect
 	blit_surface
-	fill_rect
 	GL_load_library
 	GL_get_proc_address
 	GL_get_attribute

@@ -383,3 +383,13 @@ save_BMP ( surface, filename )
 		RETVAL = SDL_SaveBMP(surface,filename);
 	OUTPUT:
 		RETVAL
+
+int
+fill_rect ( dest, dest_rect, pixel )
+	SDL_Surface *dest
+	SDL_Rect *dest_rect
+	Uint32 pixel
+	CODE:
+		RETVAL = SDL_FillRect(dest,dest_rect,pixel);
+	OUTPUT:
+		RETVAL
