@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 24);
+plan ( tests => 26);
 
 use_ok( 'SDL::Video' ); 
 
@@ -33,6 +33,8 @@ my @done =
 	unlock_surface
 	lock_surface	
 	convert_surface
+	display_format
+	display_format_alpha
 
 	/;
 
@@ -123,13 +125,13 @@ is( SDL::Video::map_RGBA($hwdisplay->format, 10, 10 ,10, 10) > 0, 1, '[map_RGBA]
 
 isa_ok(SDL::Video::convert_surface( $display , $hwdisplay->format, SDL_SRCALPHA), 'SDL::Surface', '[convert_surface] Checking if we get a surface ref back'); 
 
+isa_ok(SDL::Video::display_format( $display ), 'SDL::Surface', '[display_format] Returns a SDL::Surface');
+isa_ok(SDL::Video::display_format_alpha( $display ), 'SDL::Surface', '[display_format_alpha] Returns a SDL::Surface');
 
 my @left = qw/
 	get_gamma_ramp
 	get_RGB
 	get_RGBA
-	display_format
-	display_format_alpha
 	load_BMP
 	save_BMP
 	set_color_key

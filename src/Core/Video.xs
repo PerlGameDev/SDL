@@ -292,3 +292,23 @@ video_convert_surface( src, fmt, flags)
 		RETVAL = SDL_ConvertSurface(src, fmt, flags);
 	OUTPUT:
 		RETVAL
+
+
+SDL_Surface *
+video_display_format ( surface )
+	SDL_Surface *surface
+	CODE:
+		char* CLASS = "SDL::Surface";
+		RETVAL = SDL_DisplayFormat(surface);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+video_display_format_alpha ( surface )
+	SDL_Surface *surface
+	CODE:
+		char* CLASS = "SDL::Surface";
+		RETVAL = SDL_DisplayFormatAlpha(surface);
+	OUTPUT:
+		RETVAL
+
