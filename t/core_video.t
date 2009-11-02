@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 26);
+plan ( tests => 28);
 
 use_ok( 'SDL::Video' ); 
 
@@ -35,7 +35,8 @@ my @done =
 	convert_surface
 	display_format
 	display_format_alpha
-
+	set_color_key
+	set_alpha
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -128,14 +129,22 @@ isa_ok(SDL::Video::convert_surface( $display , $hwdisplay->format, SDL_SRCALPHA)
 isa_ok(SDL::Video::display_format( $display ), 'SDL::Surface', '[display_format] Returns a SDL::Surface');
 isa_ok(SDL::Video::display_format_alpha( $display ), 'SDL::Surface', '[display_format_alpha] Returns a SDL::Surface');
 
+is(  SDL::Video::set_color_key($display, SDL_SRCCOLORKEY, SDL::Color->new( 0, 10, 0 ) ),
+   0,  '[set_color_key] Returns 0 on success' 
+   ) ;
+
+is(  SDL::Video::set_alpha($display, SDL_SRCALPHA, 100 ),
+   0,  '[set_alpha] Returns 0 on success' 
+   ) ;
+
+
+
 my @left = qw/
 	get_gamma_ramp
 	get_RGB
 	get_RGBA
 	load_BMP
 	save_BMP
-	set_color_key
-	set_alpha
 	set_clip_rect
 	get_clip_rect
 	blit_surface

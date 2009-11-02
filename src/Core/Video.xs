@@ -297,8 +297,9 @@ video_convert_surface( src, fmt, flags)
 SDL_Surface *
 video_display_format ( surface )
 	SDL_Surface *surface
-	CODE:
+	PREINIT:
 		char* CLASS = "SDL::Surface";
+	CODE:
 		RETVAL = SDL_DisplayFormat(surface);
 	OUTPUT:
 		RETVAL
@@ -306,9 +307,33 @@ video_display_format ( surface )
 SDL_Surface *
 video_display_format_alpha ( surface )
 	SDL_Surface *surface
-	CODE:
+	PREINIT:
 		char* CLASS = "SDL::Surface";
+	CODE:
 		RETVAL = SDL_DisplayFormatAlpha(surface);
 	OUTPUT:
 		RETVAL
+
+
+int
+video_set_color_key ( surface, flag, key )
+	SDL_Surface *surface
+	Uint32 flag
+	SDL_Color *key
+	CODE:
+		Uint32 pixel = SDL_MapRGB(surface->format,key->r,key->g,key->b);
+		RETVAL = SDL_SetColorKey(surface,flag,pixel);
+	OUTPUT:
+		RETVAL
+
+int
+video_set_alpha ( surface, flag, alpha )
+	SDL_Surface *surface
+	Uint32 flag
+	Uint8 alpha
+	CODE:
+		RETVAL = SDL_SetAlpha(surface,flag,alpha);
+	OUTPUT:
+		RETVAL
+
 
