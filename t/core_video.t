@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 33);
+plan ( tests => 41);
 
 use_ok( 'SDL::Video' ); 
 
@@ -43,6 +43,8 @@ my @done =
 	save_BMP
 	fill_rect
 	blit_surface
+	set_clip_rect
+	get_clip_rect
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -159,10 +161,21 @@ my $pixel = SDL::Video::map_RGB( $display->format, 255, 127, 0 );
 SDL::Video::fill_rect( $display, SDL::Rect->new( 0, 0, 32, 32 ), $pixel );
 ok( 1, '[fill_rect] filled rect' );
 
+my $clip_rect = SDL::Rect->new(0, 0, 10, 20);
+SDL::Video::get_clip_rect($display, $clip_rect);
+is($clip_rect->x, 0, '[get_clip_rect] returns a rect with x 0');
+is($clip_rect->y, 0, '[get_clip_rect] returns a rect with y 0');
+is($clip_rect->w, 640, '[get_clip_rect] returns a rect with w 640');
+is($clip_rect->h, 480, '[get_clip_rect] returns a rect with h 480');
+SDL::Video::set_clip_rect($display, SDL::Rect->new(10, 20, 100, 200));
+SDL::Video::get_clip_rect($display, $clip_rect);
+is($clip_rect->x, 10, '[get_clip_rect] returns a rect with x 10');
+is($clip_rect->y, 20, '[get_clip_rect] returns a rect with y 20');
+is($clip_rect->w, 100, '[get_clip_rect] returns a rect with w 100');
+is($clip_rect->h, 200, '[get_clip_rect] returns a rect with h 200');
+
 my @left = qw/
 	get_gamma_ramp
-	set_clip_rect
-	get_clip_rect
 	GL_load_library
 	GL_get_proc_address
 	GL_get_attribute

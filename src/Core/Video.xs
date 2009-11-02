@@ -404,3 +404,17 @@ blit_surface ( src, src_rect, dest, dest_rect )
 		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
 	OUTPUT:
 		RETVAL
+
+void
+set_clip_rect ( surface, rect )
+	SDL_Surface *surface
+	SDL_Rect *rect
+	CODE:
+		SDL_SetClipRect(surface,rect);
+
+void
+get_clip_rect ( surface, rect )
+	SDL_Surface *surface
+	SDL_Rect *rect;
+	CODE:
+		SDL_GetClipRect(surface, rect);

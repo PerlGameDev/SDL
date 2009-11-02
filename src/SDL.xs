@@ -2148,21 +2148,6 @@ JoyBallEventYrel ( e )
         OUTPUT:
                 RETVAL
 
-void
-SetClipRect ( surface, rect )
-	SDL_Surface *surface
-	SDL_Rect *rect
-	CODE:
-		SDL_SetClipRect(surface,rect);
-	
-void
-GetClipRect ( surface, rect )
-	SDL_Surface *surface
-	SDL_Rect *rect;
-	CODE:
-	 	SDL_GetClipRect(surface, rect);
-
-
 #ifdef HAVE_SDL_NET
 
 int
