@@ -262,7 +262,7 @@ video_map_RGBA ( pixel_format, r, g, b, a )
 	Uint8 b	
 	Uint8 a
 	CODE:
-		RETVAL = SDL_MapRGB(pixel_format,r,g,b);
+		RETVAL = SDL_MapRGBA(pixel_format,r,g,b,a);
 	OUTPUT:
 		RETVAL
 
