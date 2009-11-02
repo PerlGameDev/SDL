@@ -364,3 +364,22 @@ get_RGBA ( pixel_format, pixel )
 		av_push(RETVAL,newSViv(a));
 	OUTPUT:
 		RETVAL
+
+SDL_Surface*
+load_BMP ( filename )
+	char *filename
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = SDL_LoadBMP(filename);
+	OUTPUT:
+		RETVAL
+
+int
+save_BMP ( surface, filename )
+	SDL_Surface *surface
+	char *filename
+	CODE:
+		RETVAL = SDL_SaveBMP(surface,filename);
+	OUTPUT:
+		RETVAL

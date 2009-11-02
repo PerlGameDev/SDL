@@ -9,7 +9,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 30);
+plan ( tests => 32);
 
 use_ok( 'SDL::Video' ); 
 
@@ -39,6 +39,8 @@ my @done =
 	set_alpha
 	get_RGB
 	get_RGBA
+	load_BMP
+	save_BMP
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -143,10 +145,16 @@ is_deeply(SDL::Video::get_RGB($display->format, 0), [0,0,0], '[get_RGB] returns 
 
 is_deeply(SDL::Video::get_RGBA($display->format, 0), [0,0,0,255], '[get_RGBA] returns r,g,b,a');
 
+my $bmp = 't/core_video.bmp';
+unlink($bmp) if -f $bmp;
+SDL::Video::save_BMP($display, $bmp);
+ok(-f $bmp, '[save_BMP] creates a file');
+my $bmp_surface = SDL::Video::load_BMP($bmp);
+isa_ok($bmp_surface, 'SDL::Surface', '[load_BMP] returns an SDL::Surface');
+unlink($bmp) if -f $bmp;
+
 my @left = qw/
 	get_gamma_ramp
-	load_BMP
-	save_BMP
 	set_clip_rect
 	get_clip_rect
 	blit_surface

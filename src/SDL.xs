@@ -1193,16 +1193,6 @@ BlitSurface ( src, src_rect, dest, dest_rect )
 
 Comment out for now as it does not compile
 
-
-int
-SaveBMP ( surface, filename )
-	SDL_Surface *surface
-	char *filename
-	CODE:
-		RETVAL = SDL_SaveBMP(surface,filename);
-	OUTPUT:
-		RETVAL	
-
 SDL_Surface*
 ConvertRGB ( surface )
 	SDL_Surface * surface
