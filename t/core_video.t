@@ -42,6 +42,7 @@ my @done =
 	load_BMP
 	save_BMP
 	fill_rect
+	blit_surface
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -162,7 +163,6 @@ my @left = qw/
 	get_gamma_ramp
 	set_clip_rect
 	get_clip_rect
-	blit_surface
 	GL_load_library
 	GL_get_proc_address
 	GL_get_attribute
