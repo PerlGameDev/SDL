@@ -4,12 +4,13 @@ use SDL;
 use SDL::Color;
 use SDL::Surface;
 use SDL::Config;
+use SDL::Overlay;
 use Devel::Peek;
 use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 41);
+plan ( tests => 44);
 
 use_ok( 'SDL::Video' ); 
 
@@ -45,6 +46,9 @@ my @done =
 	blit_surface
 	set_clip_rect
 	get_clip_rect
+	lock_YUV_overlay
+	unlock_YUV_overlay
+	display_YUV_overlay
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -104,6 +108,14 @@ my @b_w_colors;
 for(my $i=0;$i<256;$i++){
 	$b_w_colors[$i] = SDL::Color->new($i,$i,$i);
       }
+my $overlay =  SDL::Overlay->new(200 , 220, SDL_IYUV_OVERLAY, $display);  
+
+is( SDL::Video::lock_YUV_overlay($overlay), 0, '[lock_YUV_overlay] returns a 0 on success');
+SDL::Video::unlock_YUV_overlay($overlay); pass '[unlock_YUV_overlay] ran';
+my $display_at_rect = SDL::Rect->new(0, 0, 100, 100);
+is( SDL::Video::display_YUV_overlay( $overlay, $display_at_rect), 0 ,'[display_YUV_overlay] returns 0 on success'); 
+
+
 my $hwdisplay = SDL::Video::set_video_mode(640,480,8, SDL_HWSURFACE );
 
 if(!$hwdisplay){
@@ -182,9 +194,6 @@ my @left = qw/
 	GL_set_attribute
 	GL_swap_buffers
 	GL_attr
-	lock_YUV_overlay
-	unlock_YUV_overlay
-	display_YUV_overlay
 	/;
 
 my $why = '[Percentage Completion] '.int( 100 * $#done / ($#done + $#left) ) ."\% implementation. $#done / ".($#done+$#left); 

@@ -2482,30 +2482,6 @@ NetRead32 ( area )
 		RETVAL
 
 #endif 
-
-int
-LockYUVOverlay ( overlay )
-	SDL_Overlay *overlay
-	CODE:
-		RETVAL = SDL_LockYUVOverlay(overlay);
-	OUTPUT:
-		RETVAL
-
-void
-UnlockYUVOverlay ( overlay )
-        SDL_Overlay *overlay
-        CODE:
-                SDL_UnlockYUVOverlay(overlay);
-
-int
-DisplayYUVOverlay ( overlay, dstrect )
-	SDL_Overlay *overlay
-	SDL_Rect *dstrect
-	CODE:
-		RETVAL = SDL_DisplayYUVOverlay ( overlay, dstrect );
-	OUTPUT:
-		RETVAL
-
 Uint32
 OverlayFormat ( overlay, ... )
 	SDL_Overlay *overlay

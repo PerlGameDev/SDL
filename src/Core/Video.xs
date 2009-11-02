@@ -418,3 +418,30 @@ get_clip_rect ( surface, rect )
 	SDL_Rect *rect;
 	CODE:
 		SDL_GetClipRect(surface, rect);
+
+
+
+int
+video_lock_YUV_overlay ( overlay )
+	SDL_Overlay *overlay
+	CODE:
+		RETVAL = SDL_LockYUVOverlay(overlay);
+	OUTPUT:
+		RETVAL
+
+void
+video_unlock_YUV_overlay ( overlay )
+        SDL_Overlay *overlay
+        CODE:
+                SDL_UnlockYUVOverlay(overlay);
+
+int
+video_display_YUV_overlay ( overlay, dstrect )
+	SDL_Overlay *overlay
+	SDL_Rect *dstrect
+	CODE:
+		RETVAL = SDL_DisplayYUVOverlay ( overlay, dstrect );
+	OUTPUT:
+		RETVAL
+
+
