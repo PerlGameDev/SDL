@@ -39,6 +39,7 @@ use SDL::Config;
 use SDL::Rect;
 use SDL::Game::Rect;
 use SDL::Color;
+use SDL::Video;
 use Test::More;
 
 plan ( tests => 2 );
@@ -65,8 +66,8 @@ can_ok ('SDL::App', qw/
 	my $rect = SDL::Rect->new( 0,0, $app->w, $app->h);
 
 	my $pixel_format = $app->format;
-	my $blue_pixel = SDL::MapRGB( $pixel_format, 0x00, 0x00, 0xff );
-	my $col_pixel = SDL::MapRGB( $pixel_format, 0xf0, 0x00, 0x33 );
+	my $blue_pixel = SDL::Video::map_RGB( $pixel_format, 0x00, 0x00, 0xff );
+	my $col_pixel = SDL::Video::map_RGB( $pixel_format, 0xf0, 0x00, 0x33 );
 
 	my $grect = SDL::Game::Rect->new(10, 10, 30, 35);
 	foreach(0..80)
@@ -78,7 +79,7 @@ can_ok ('SDL::App', qw/
 	SDL::FillRect( $app, $rect, $blue_pixel );
 	SDL::FillRect( $app, $grect, $col_pixel );
 
-        SDL::UpdateRect($app, 0, 0, 640, 480);
+        SDL::Video::update_rect($app, 0, 0, 640, 480);
         SDL::delay(10);
 	}
 
