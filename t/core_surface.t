@@ -27,7 +27,7 @@ is( $surface->w,     640, 'surface has width' );
 is( $surface->h,     320, 'surface has height' );
 is( $surface->pitch, 640, 'surface has pitch' );
 my $clip_rect = SDL::Rect->new( 0, 0, 0, 0 );
-SDL::GetClipRect( $surface, $clip_rect );
+SDL::Video::get_clip_rect( $surface, $clip_rect );
 isa_ok( $clip_rect, 'SDL::Rect' );
 is( $clip_rect->x, 0,   'clip_rect has x' );
 is( $clip_rect->y, 0,   'clip_rect has y' );
