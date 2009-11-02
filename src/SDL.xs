@@ -1193,20 +1193,6 @@ BlitSurface ( src, src_rect, dest, dest_rect )
 
 Comment out for now as it does not compile
 
-AV *
-GetRGBA ( surface, pixel )
-	SDL_Surface *surface
-	Uint32 pixel
-	CODE:
-		Uint8 r,g,b,a;
-		SDL_GetRGBA(pixel,surface->format,&r,&g,&b,&a);
-		RETVAL = newAV();
-		av_push(RETVAL,newSViv(r));
-		av_push(RETVAL,newSViv(g));
-		av_push(RETVAL,newSViv(b));
-		av_push(RETVAL,newSViv(a));
-	OUTPUT:
-		RETVAL
 
 int
 SaveBMP ( surface, filename )
