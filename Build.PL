@@ -202,7 +202,7 @@ my $build   = SDL::Build->new(
 	build_requires =>
 	{
 		'Test::Simple' => '0.47',
-
+		'Test::Trap' => '0',
 	},
 	build_recommends     =>
 	{
