@@ -114,6 +114,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_ttf )],
 	},
+	Version => {
+		file      => {
+			from  => 'src/Core/objects/Version.xs',
+			to    => 'lib/SDL/Version.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	OpenGL => {
 		file      => {
 			from => 'src/OpenGL.xs',

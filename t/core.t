@@ -39,9 +39,6 @@ my @left = qw/
 	unload_fuction
 	unload_object
 	envvars
-	linked_version
-	version
-	Version
 	/;
 
 my $why = '[Percentage Completion] '.int( 100 * $#done / ($#done + $#left) ) ."\% implementation. $#done / ".($#done+$#left); 

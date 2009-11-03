@@ -308,6 +308,27 @@ was_init ( flags )
 	OUTPUT:
 		RETVAL
 
+SDL_version *
+version ()
+	PREINIT:
+		char * CLASS = "SDL::Version";
+		SDL_version *version;
+	CODE:
+	 	version = (SDL_version *) safemalloc (sizeof(SDL_version));
+		SDL_VERSION(version);
+		RETVAL = version;
+	OUTPUT:
+		RETVAL
+
+SDL_version *
+linked_version ()
+	PREINIT:
+		char * CLASS = "SDL::Version";
+	CODE:
+		RETVAL = (SDL_version *) SDL_Linked_Version();
+	OUTPUT:
+		RETVAL
+
 void
 delay ( ms )
 	int ms
