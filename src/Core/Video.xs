@@ -445,3 +445,46 @@ video_display_YUV_overlay ( overlay, dstrect )
 		RETVAL
 
 
+int
+video_GL_load_library ( path )
+	char *path
+	CODE:
+		RETVAL = SDL_GL_LoadLibrary(path);
+	OUTPUT:
+		RETVAL
+
+void*
+video_GL_get_proc_address ( proc )
+	char *proc
+	CODE:
+		RETVAL = SDL_GL_GetProcAddress(proc);
+	OUTPUT:
+		RETVAL
+
+int
+video_GL_set_attribute ( attr,  value )
+	int        attr
+	int        value
+	CODE:
+		RETVAL = SDL_GL_SetAttribute(attr, value);
+	OUTPUT:
+	        RETVAL
+
+AV *
+video_GL_get_attribute ( attr )
+	int        attr
+	CODE:
+		int value;
+		RETVAL = newAV();
+		av_push(RETVAL,newSViv(SDL_GL_GetAttribute(attr, &value)));
+		av_push(RETVAL,newSViv(value));
+	OUTPUT:
+	        RETVAL
+
+void
+video_GL_swap_buffers ()
+	CODE:
+		SDL_GL_SwapBuffers ();
+
+
+

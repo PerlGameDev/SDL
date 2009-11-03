@@ -1873,48 +1873,6 @@ MixCloseAudio ()
 #endif
 
 int
-GLLoadLibrary ( path )
-	char *path
-	CODE:
-		RETVAL = SDL_GL_LoadLibrary(path);
-	OUTPUT:
-		RETVAL
-
-void*
-GLGetProcAddress ( proc )
-	char *proc
-	CODE:
-		RETVAL = SDL_GL_GetProcAddress(proc);
-	OUTPUT:
-		RETVAL
-
-int
-GLSetAttribute ( attr,  value )
-	int        attr
-	int        value
-	CODE:
-		RETVAL = SDL_GL_SetAttribute(attr, value);
-	OUTPUT:
-	        RETVAL
-
-AV *
-GLGetAttribute ( attr )
-	int        attr
-	CODE:
-		int value;
-		RETVAL = newAV();
-		av_push(RETVAL,newSViv(SDL_GL_GetAttribute(attr, &value)));
-		av_push(RETVAL,newSViv(value));
-	OUTPUT:
-	        RETVAL
-
-void
-GLSwapBuffers ()
-	CODE:
-		SDL_GL_SwapBuffers ();
-
-
-int
 BigEndian ()
 	CODE:
 		RETVAL = (SDL_BYTEORDER == SDL_BIG_ENDIAN);

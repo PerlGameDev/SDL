@@ -10,7 +10,7 @@ use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 44);
+plan ( tests => 50);
 
 use_ok( 'SDL::Video' ); 
 
@@ -49,13 +49,41 @@ my @done =
 	lock_YUV_overlay
 	unlock_YUV_overlay
 	display_YUV_overlay
+	GL_load_library
+	GL_get_proc_address
+	GL_get_attribute
+	GL_set_attribute
+	GL_swap_buffers
 	/;
 
 can_ok ('SDL::Video', @done); 
 
 #testing get_video_surface
 SDL::init(SDL_INIT_VIDEO);                                                                          
-                                                                                                    
+
+#needs to be done before set_video_mode
+my $glVal = SDL::Video::GL_load_library('this/should/fail');
+
+is ($glVal, -1, '[GL_load_library] Failed appropraitly');
+
+TODO: {
+local $TODO = 'These should be tested with OS specific DLL or SO';
+is (SDL::Video::GL_load_library('t/realGL.so'), 0, '[GL_load_libary] returns 0 on success');
+# this gets set by GL_load_library => SDL_GL_LOADLIBARY. How do we get this from XS though?
+# below t/realGL.so needs to use SDL_GL_LOADLIBRARY
+isnt(SDL::Video::GL_get_proc_address('t/realGL.so'), NULL, '[GL_get_proc_address] returns not null on success');
+is (SDL::Video::GL_set_attribute( SDL_GL_DOUBLEBUFFER, 1) , 0 , '[GL_set_attribute] returns 0 on success');
+my $tdisplay = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
+my $value = -3;
+SDL::Video::GL_set_attribute( SDL_GL_DOUBLEBUFFER, $value); 
+is ($value  , 1 , '[GL_get_attribute] returns 1 on success as set above');
+
+SDL::Video::GL_swap_buffers(); pass ( '[GL_swap_buffers] should work because Double Buffering is turned on');
+
+
+};
+
+
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 
 if(!$display){
@@ -188,15 +216,9 @@ is($clip_rect->h, 200, '[get_clip_rect] returns a rect with h 200');
 
 my @left = qw/
 	get_gamma_ramp
-	GL_load_library
-	GL_get_proc_address
-	GL_get_attribute
-	GL_set_attribute
-	GL_swap_buffers
-	GL_attr
 	/;
 
-my $why = '[Percentage Completion] '.int( 100 * $#done / ($#done + $#left) ) ."\% implementation. $#done / ".($#done+$#left); 
+my $why = '[Percentage Completion] '.int( 100 * ($#done +1) / ($#done + $#left + 2) ) ."\% implementation. ". ($#done +1)." / ".($#done+$#left + 2); 
 
 TODO:
 {
