@@ -10,6 +10,8 @@ my @done =qw/
 	quit
 	was_init
 	get_error
+	version
+	linked_version
 	  /;
 
 use_ok( 'SDL' ); 
