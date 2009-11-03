@@ -17,7 +17,7 @@ use SDL::Rect;
 use SDL::Color;
 use SDL::Video;
 use SDL::PixelFormat;
-use Test::More tests => 35;
+use Test::More tests => 37;
 
 my $surface
     = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 640, 320, 8, 0, 0, 0, 0 );
@@ -98,7 +98,13 @@ SDL::Video::update_rects( $app, $small_rect );
 
 diag( 'This is in surface : ' . SDL::Surface::get_pixels($app) );
 
-SDL::SurfacePixel($app, 20, 20 , SDL::Color->new(20, 20, 20) );
+#depreceated
+# SDL::SurfacePixel($app, 20, 20 , SDL::Color->new(20, 20, 20) );
+
+$app->set_pixel_RGB( 20, 20, 100, 100, 100); pass '[set_pixel_RGB] ran!'; 
+
+$app->set_pixel_RGBA( 20, 20, 100, 100, 10, 100); pass '[set_pixel_RGBA] ran!';
+
 
 pass 'did this pass';
 
