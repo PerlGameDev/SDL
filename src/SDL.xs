@@ -1096,17 +1096,13 @@ SurfacePixels ( surface )
 	OUTPUT:
 		RETVAL
 
-=cut
-
-=for comment
-
-Comment out for now as it does not compile
-
 SDL_Color*
 SurfacePixel ( surface, x, y, ... )
 	SDL_Surface *surface
 	Sint32 x
 	Sint32 y
+	PREINIT:
+		char* CLASS = "SDL::Color";
 	CODE:
 		SDL_Color* color;
 		int pix,index;
@@ -1165,6 +1161,7 @@ SurfacePixel ( surface, x, y, ... )
 		}
 	OUTPUT:
 		RETVAL
+=for documenation
 
 int
 MUSTLOCK ( surface )
