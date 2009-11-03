@@ -98,6 +98,8 @@ SDL::Video::update_rects( $app, $small_rect );
 
 diag( 'This is in surface : ' . SDL::Surface::get_pixels($app) );
 
+SDL::SurfacePixel($app, 20, 20 , SDL::Color->new(20, 20, 20) );
+
 pass 'did this pass';
 
 SDL::delay(100);
