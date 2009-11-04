@@ -33,7 +33,7 @@ events_peep_events( events, numevents, action, mask )
 	int action
 	Uint32 mask
 	CODE:
-		if(!(action & (SDL_ADDEVENT | SDL_PEEKEVENT | SDL_GETEVENT)))
+		if(action != (action & (SDL_ADDEVENT | SDL_PEEKEVENT | SDL_GETEVENT)))
 		{
 			croak("Value of 'action' should be SDL_ADDEVENT, SDL_PEEKEVENT or SDL_GETEVENT.");
 		}
@@ -46,5 +46,21 @@ events_poll_event( event )
 	SDL_Event *event
 	CODE:
 		RETVAL = SDL_PollEvent(event);
+	OUTPUT:
+		RETVAL
+
+int
+events_push_event(event)
+	SDL_Event *event
+	CODE:
+		RETVAL = SDL_PushEvent(event);
+	OUTPUT:
+		RETVAL
+
+int
+events_wait_event(event = NULL)
+	SDL_Event *event
+	CODE:
+		RETVAL = SDL_WaitEvent(event);
 	OUTPUT:
 		RETVAL
