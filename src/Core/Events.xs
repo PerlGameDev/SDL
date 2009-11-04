@@ -33,14 +33,11 @@ events_peep_events( events, numevents, action, mask )
 	int action
 	Uint32 mask
 	CODE:
-		//if(action & (SDL_ADDEVENT | SDL_PEEKEVENT | SDL_GETEVENT))
-		//{
-			RETVAL = SDL_PeepEvents(events,numevents,action,mask);
-		/*}
-		else
+		if(!(action & (SDL_ADDEVENT | SDL_PEEKEVENT | SDL_GETEVENT)))
 		{
-			RETVAL = -1;
-		}*/
+			croak('Value of \'action\' should be SDL_ADDEVENT, SDL_PEEKEVENT or SDL_GETEVENT.');
+		}
+		RETVAL = SDL_PeepEvents(events,numevents,action,mask);
 	OUTPUT:
 		RETVAL
 
