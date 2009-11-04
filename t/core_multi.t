@@ -8,10 +8,11 @@ plan ( tests => 4 );
 my @done =qw/ none /;
 
 
+use_ok( 'SDL::MultiThread' ); 
 SKIP:
 {
-skip 'Not implemented', 2; 
-use_ok( 'SDL::MultiThread' ); 
+skip 'Not implemented', 1; 
+
 can_ok ('SDL::MultiThread ', @done); 
 }
 
