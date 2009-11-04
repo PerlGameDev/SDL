@@ -90,13 +90,15 @@ SDL_perl - Simple DirectMedia Layer for Perl
 
 =head1 DISCLAIMER
 
+First to clarify:
+
  THIS IS THE LAST RELEASE OF THIS API. 
 
 That said we are actively redesigning the SDL Bindings on the redesign branch here:
 
  git://github.com/kthakore/SDL_perl.git  
  
-This new release will B<break backwards compatibility>. We recommend you try the redesign branch to get a head start on any new code you are developing.
+The newrelease will B<break backwards compatibility>. We recommend you try the redesign branch to get a head start on any new code you are developing.
 
 =head1 SYNOPSIS
 
