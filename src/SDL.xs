@@ -901,72 +901,6 @@ IMG_Load ( filename )
 #endif
 
 
-SDL_Color*
-SurfacePixel ( surface, x, y, ... )
-	SDL_Surface *surface
-	Sint32 x
-	Sint32 y
-	PREINIT:
-		char* CLASS = "SDL::Color";
-	CODE:
-		SDL_Color* color;
-		int pix,index;
-		Uint8 r,g,b,a;
-		int bpp = surface->format->BytesPerPixel;
-		Uint8* p = (Uint8*)surface->pixels + bpp*x + surface->pitch*y;
-		if ( items < 3 || items > 4 ) 
-			Perl_croak(aTHX_ "usage: SDL::SurfacePixel(surface,x,y,[color])");
-		if ( items == 4) {
-			color = (SDL_Color*)SvIV(ST(3));
-			pix = SDL_MapRGB(surface->format,color->r,color->g,color->b);
-			switch(bpp) {
-				case 1:
-					*(Uint8*)p = pix;
-					break;
-				case 2:
-					*(Uint16*)p = pix;
-					break;
-				case 3:
-					if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-						p[0] = (pix >> 16) & 0xff;
-						p[1] = (pix >> 8) & 0xff;
-						p[2] = pix & 0xff;
-					} else {
-						p[0] = pix & 0xff;
-						p[1] = (pix >> 8) & 0xff;
-						p[2] = (pix >> 16) & 0xff;
-					}
-					break;
-				case 4:
-					*(Uint32*)p = pix;
-					break;
-			}
-		}
-		RETVAL = (SDL_Color *) safemalloc(sizeof(SDL_Color));
-		switch(bpp) {
-			case 1:
-				index = *(Uint8*)p;
-				memcpy(RETVAL,&surface->format->palette[index],sizeof(SDL_Color));
-				break;
-			case 2:
-				pix = *(Uint16*)p;
-				SDL_GetRGB(pix,surface->format,&r,&g,&b);
-				RETVAL->r = r;
-				RETVAL->g = g;
-				RETVAL->b = b;
-				break;
-			case 3:
-			case 4:
-				pix = *(Uint32*)p;
-				SDL_GetRGB(pix,surface->format,&r,&g,&b);
-				RETVAL->r = r;
-				RETVAL->g = g;
-				RETVAL->b = b;
-				break;
-		}
-	OUTPUT:
-		RETVAL
-
 =for docs
 
 
@@ -978,88 +912,9 @@ MUSTLOCK ( surface )
 	OUTPUT:
 		RETVAL		
 
-=cut
-
-=skip
-
-SDL_Palette *
-NewPalette ( number )
-	int number
-	CODE:
-		RETVAL = (SDL_Palette *)safemalloc(sizeof(SDL_Palette));
-		RETVAL->colors = (SDL_Color *)safemalloc(number * 
-						sizeof(SDL_Color));
-		RETVAL->ncolors = number;
-	OUTPUT:
-		RETVAL
-=cut
-
-int
-PaletteNColors ( palette, ... )
-	SDL_Palette *palette
-	CODE:
-		if ( items > 1 ) palette->ncolors = SvIV(ST(1));
-		RETVAL = palette->ncolors;
-	OUTPUT:
-		RETVAL
-
-=for comment
-
-Comment out for now as it does not compile
-
-SDL_Surface*
-ConvertRGB ( surface )
-	SDL_Surface * surface
-	CODE:
-		SDL_PixelFormat fmt;
-		fmt.palette = NULL;
-		fmt.BitsPerPixel = 24;
-		fmt.BytesPerPixel = 3;
-		fmt.Rmask = 0x000000ff;
-		fmt.Gmask = 0x0000ff00;
-		fmt.Bmask = 0x00ff0000;
-		fmt.Amask = 0x00000000;
-		fmt.Rloss = 0;
-		fmt.Gloss = 0;
-		fmt.Bloss = 0;
-		fmt.Aloss = 0;
-		fmt.Rshift = 0;
-		fmt.Gshift = 8;
-		fmt.Bshift = 16;
-		fmt.Ashift = 24;
-		fmt.colorkey = 0;
-		fmt.alpha = 0;
-		RETVAL = SDL_ConvertSurface(surface,&fmt,surface->flags);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface* 
-ConvertRGBA ( surface )
-	SDL_Surface * surface
-	CODE:
-		SDL_PixelFormat fmt;
-		fmt.palette = NULL;
-		fmt.BitsPerPixel = 32;
-		fmt.BytesPerPixel = 4;
-		fmt.Rmask = 0x000000ff;
-		fmt.Gmask = 0x0000ff00;
-		fmt.Bmask = 0x00ff0000;
-		fmt.Amask = 0xff000000;
-		fmt.Rloss = 0;
-		fmt.Gloss = 0;
-		fmt.Bloss = 0;
-		fmt.Aloss = 0;
-		fmt.Rshift = 0;
-		fmt.Gshift = 8;
-		fmt.Bshift = 16;
-		fmt.Ashift = 24;
-		fmt.colorkey = 0;
-		fmt.alpha = 0;
-		RETVAL = SDL_ConvertSurface(surface,&fmt,surface->flags);
-	OUTPUT:
-		RETVAL
 
 =cut
+
 
 Uint8
 GetAppState ()
@@ -2662,14 +2517,14 @@ SMPEGGetInfo ( mpeg )
 
 #ifdef HAVE_SDL_GFX
 
-=cut
-
 SDL_Surface *
 GFXRotoZoom ( src, angle, zoom, smooth)
 	SDL_Surface * src
 	double angle
 	double zoom
 	int smooth
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
 		RETVAL = rotozoomSurface( src, angle, zoom, smooth);
 	OUTPUT:
@@ -2681,12 +2536,12 @@ GFXZoom ( src, zoomx, zoomy, smooth)
 	double zoomx
 	double zoomy
 	int smooth
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
 		RETVAL = zoomSurface( src, zoomx, zoomy, smooth);
 	OUTPUT:
 		RETVAL
-
-=cut
 
 int
 GFXPixelColor ( dst, x, y, color )

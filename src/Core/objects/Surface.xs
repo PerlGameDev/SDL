@@ -128,38 +128,6 @@ surface_set_pixels(surface, pixels)
 		len = surface->pitch*surface->h;
 	  memcpy(surface->pixels, p, len);
 
-void
-surface_set_pixel_RGB(screen, x, y, r, g, b ) 
-	SDL_Surface *screen
-	int x
-	int y
-	Uint8 r
-	Uint8 g
-	Uint8 b
-
-	CODE:
-	Uint32 *pixmem32;
-	Uint32 colour;  
-	colour = SDL_MapRGB( screen->format, r, g, b );
-	pixmem32 = screen->pixels + ( y * screen->pitch ) + ( x * screen->format->BytesPerPixel );
-	*pixmem32 = colour;
-
-void 
-surface_set_pixel_RGBA(screen, x, y, r, g, b, a ) 
-	SDL_Surface *screen
-	int x
-	int y
-	Uint8 r
-	Uint8 g
-	Uint8 b
-	Uint8 a
-	CODE:
-	Uint32 *pixmem32;
-	Uint32 colour;  
-	colour = SDL_MapRGBA( screen->format, r, g, b, a );
-	pixmem32 = screen->pixels + ( y * screen->pitch ) + ( x * screen->format->BytesPerPixel ); ;
-	*pixmem32 = colour;
-
 
 void
 surface_DESTROY(surface)

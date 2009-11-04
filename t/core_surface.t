@@ -98,13 +98,6 @@ SDL::Video::update_rects( $app, $small_rect );
 
 diag( 'This is in surface : ' . SDL::Surface::get_pixels($app) );
 
-#depreceated
-# SDL::SurfacePixel($app, 20, 20 , SDL::Color->new(20, 20, 20) );
-
-$app->set_pixel_RGB( 20, 20, 100, 100, 100); pass '[set_pixel_RGB] ran!'; 
-
-$app->set_pixel_RGBA( 20, 20, 100, 100, 10, 100); pass '[set_pixel_RGBA] ran!';
-
 
 pass 'did this pass';
 
