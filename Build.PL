@@ -49,6 +49,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	MultiThread => {
+		file      => {
+			from  => 'src/Core/MultiThread.xs',
+			to    => 'lib/SDL/MultiThread.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	Video => {
 		file      => {
 			from  => 'src/Core/Video.xs',
