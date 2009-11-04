@@ -1,0 +1,51 @@
+=pod
+
+=head1 NAME
+
+SDL::Surface - Graphic surface structure. Access to C<SDL_Surface>.
+
+=head1 SYNOPSIS
+
+The main surface (display) is provided by L<SDL::Video::set_video_mode>.
+  use SDL; #provides flags & constants
+  use SDL::Video; #provides access to set_video_mode
+  use SDL::Surface; #provides access to SDL_Surface struct internals
+  
+  SDL::init(SDL_INIT_VIDEO); 
+  my $display = SDL::Video::set_video_mode(); 
+ 
+All surfaces constructed from now on are attached to the $display. There are two constructors available to do this.
+
+  my $surface  = SDL::Surface->new ( ... ); 
+  my $surface2 = SDL::Surface->new_from ( ... ); 
+  
+=head1 DESCRIPTION
+
+An C<SDL_Surface> defines a surfaceangular area of pixels.
+
+=head1 METHODS
+
+=head2 new ( flags, width, height, depth, Rmask, Gmask, Bmask, Amask )
+
+The constructor creates a new surface with the specified x, y, w, h
+values:
+
+    my $surface = SDL::Surface->new( ... );
+
+=head2 w
+
+SDL::Surface width are defined at construction. Thus the following is read only. 
+
+  my $w = $surface->w; 
+  
+=head2 h
+
+SDL::Surface height are defined at construction. Thus the following is read only. 
+
+  my $h = $surface->h; 
+  
+=head1 SEE ALSO
+
+L<SDL>, L<SDL::PixelFormat>, L<SDL::Video> 
+
+=cut
