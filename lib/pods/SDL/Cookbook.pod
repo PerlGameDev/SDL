@@ -1,0 +1,5 @@
+=pod
+
+=head1 SDL::Cookbook
+
+=cut
