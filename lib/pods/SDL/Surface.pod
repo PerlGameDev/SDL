@@ -17,7 +17,7 @@ The main surface (display) is provided by L<SDL::Video::set_video_mode>.
 All surfaces constructed from now on are attached to the $display. There are two constructors available to do this.
 
   my $surface  = SDL::Surface->new ( ... ); 
-  my $surface2 = SDL::Surface->new_from ( ... ); 
+  my $surface2 = SDL::Surface->new_from ( surface, ... ); 
   
 =head1 DESCRIPTION
 
@@ -27,10 +27,21 @@ An C<SDL_Surface> defines a surfaceangular area of pixels.
 
 =head2 new ( flags, width, height, depth, Rmask, Gmask, Bmask, Amask )
 
-The constructor creates a new surface with the specified x, y, w, h
-values:
+The constructor creates a new surface with the specified parameter values.
 
     my $surface = SDL::Surface->new( ... );
+
+=head2 new_from ( surface, width, height, depth, Rmask, Gmask, Bmask, Amask )
+
+The constructor creates a new surface with the specified parameter values. 
+
+    my $surface = SDL::Surface->new_from( $old_surface, ... );
+
+THIS WILL SEGFAULT!!! Read: http://sdlperl.ath.cx/projects/SDLPerl/ticket/53 
+
+=head3 Construtor Parameters
+
+
 
 =head2 w
 
