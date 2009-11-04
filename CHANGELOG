@@ -1,5 +1,11 @@
 Revision history for Perl extension SDL_perl.
 
+* v2.4 Nov 04 2009 Kartik Thakore 
+	- Garu added a preview of SDL::Game::Rect
+	- Garu fixed up LunarLander Tutorial
+	- Kartik and Garu made a Pong preview for YAPC::Brasil
+	- Last release of this API to provide newcomers with Pong and LunarLander Tutorial
+
 * v2.2.3.1 Sept 29 2009 Kartik Thakore <thakore.kartik@gmail.com>
 	- Critical Build.PL fix for META.yml 
 	- Doc fix
