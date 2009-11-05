@@ -6,7 +6,7 @@ my $fp = get_function_pointer();
 print '[Perl] In perl we got :'.$fp."\n";
 print '[Perl] Making Thread.';
 
-make_thread( $fp, 'I AM THE OVERLOARD XENU!!!');
+make_thread( get_function_pointer() , 'I AM THE OVERLOARD XENU!!!');
 
 __END__    
 __C__
