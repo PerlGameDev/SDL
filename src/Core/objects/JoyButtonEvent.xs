@@ -25,32 +25,40 @@ SDL_JoyButtonEvent -- Joystick button event structure
 =cut
 
 Uint8
-jbevent_type ( event, ... )
-	SDL_JoyButtonEvent *event
+jbevent_type ( event )
+
+	SDL_JoyButtonEvent * event
+
 	CODE:
 		RETVAL = event->type;
 	OUTPUT:
 		RETVAL
 
 Uint8
-jbevent_which ( event, ... )
-	SDL_JoyButtonEvent *event
+jbevent_which ( event )
+
+	SDL_JoyButtonEvent * event
+
 	CODE: 
 		RETVAL = event->which;
 	OUTPUT:
 		RETVAL
 
 Uint8
-jbevent_button ( event, ... )
-	SDL_JoyButtonEvent *event
+jbevent_button ( event )
+
+	SDL_JoyButtonEvent * event
+
 	CODE: 
 		RETVAL = event->button;
 	OUTPUT:
 		RETVAL
 
 Uint8
-jbevent_state ( event, ... )
-	SDL_JoyButtonEvent *event
+jbevent_state ( event )
+
+	SDL_JoyButtonEvent * event
+
 	CODE: 
 		RETVAL = event->state;
 	OUTPUT:
