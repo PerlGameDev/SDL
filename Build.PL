@@ -63,6 +63,20 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+#	JoyButtonEvent => {
+#		file      => {
+#			from  => 'src/Core/objects/JoyButtonEvent.xs',
+#			to    => 'lib/SDL/JoyButtonEvent.xs',
+#		},
+#		libraries => [qw( SDL )],
+#	},
+	JoyHatEvent => {
+		file      => {
+			from  => 'src/Core/objects/JoyHatEvent.xs',
+			to    => 'lib/SDL/JoyHatEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	KeyboardEvent => {
 		file      => {
 			from  => 'src/Core/objects/KeyboardEvent.xs',
