@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 1 + 544;    # use_ok + constants
+use Test::More tests => 1 + 552;    # use_ok + constants
 
 BEGIN { use_ok('SDL::Constants') }
 
@@ -343,6 +343,10 @@ is( SDLK_z(),            122, 'SDLK_z() should also be available' );
 
 is( SDL_ACTIVEEVENT,   1, 'SDL_ACTIVEEVENT should be imported' );
 is( SDL_ACTIVEEVENT(), 1, 'SDL_ACTIVEEVENT() should also be available' );
+is( SDL_ADDEVENT,      0, 'SDL_ADDEVENT should be imported' );
+is( SDL_ADDEVENT(),    0, 'SDL_ADDEVENT() should also be available' );
+is( SDL_ALLEVENTS,     0xFFFFFFFF, 'SDL_ALLEVENTS should be imported' );
+is( SDL_ALLEVENTS(),   0xFFFFFFFF, 'SDL_ALLEVENTS() should also be available' );
 is( SDL_ANYFORMAT,     268435456, 'SDL_ANYFORMAT should be imported' );
 is( SDL_ANYFORMAT(),   268435456, 'SDL_ANYFORMAT() should also be available' );
 is( SDL_APPACTIVE,     4,         'SDL_APPACTIVE should be imported' );
@@ -378,6 +382,9 @@ is( SDL_ENABLE,      1,           'SDL_ENABLE should be imported' );
 is( SDL_ENABLE(),    1,           'SDL_ENABLE() should also be available' );
 is( SDL_FULLSCREEN,  -2147483648, 'SDL_FULLSCREEN should be imported' );
 is( SDL_FULLSCREEN(), -2147483648, 'SDL_FULLSCREEN() should also be available' );
+
+is( SDL_GETEVENT,    2, 'SDL_GETEVENT should be imported' );
+is( SDL_GETEVENT(),  2, 'SDL_GETEVENT() should also be available' );
 
 is( SDL_GL_ACCUM_ALPHA_SIZE, 11, 'SDL_GL_ACCUM_ALPHA_SIZE should be imported' );
 is( SDL_GL_ACCUM_ALPHA_SIZE(), 11, 'SDL_GL_ACCUM_ALPHA_SIZE() should also be available' );
@@ -489,14 +496,18 @@ is( SDL_OPENGL(),     2,  'SDL_OPENGL() should also be available' );
 is( SDL_OPENGLBLIT,   10, 'SDL_OPENGLBLIT should be imported' );
 is( SDL_OPENGLBLIT(), 10, 'SDL_OPENGLBLIT() should also be available' );
 
+is( SDL_PEEKEVENT,     1,        'SDL_PEEKEVENT should be imported' );
+is( SDL_PEEKEVENT(),   1,        'SDL_PEEKEVENT() should also be available' );
 is( SDL_PREALLOC,      16777216, 'SDL_PREALLOC should be imported' );
 is( SDL_PREALLOC(),    16777216, 'SDL_PREALLOC() should also be available' );
 is( SDL_PRESSED,       1,        'SDL_PRESSED should be imported' );
 is( SDL_PRESSED(),     1,        'SDL_PRESSED() should also be available' );
+
 is( SDL_QUERY,         -1,       'SDL_QUERY should be imported' );
 is( SDL_QUERY(),       -1,       'SDL_QUERY() should also be available' );
 is( SDL_QUIT,          12,       'SDL_QUIT should be imported' );
 is( SDL_QUIT(),        12,       'SDL_QUIT() should also be available' );
+
 is( SDL_RELEASED,      0,        'SDL_RELEASED should be imported' );
 is( SDL_RELEASED(),    0,        'SDL_RELEASED() should also be available' );
 is( SDL_RESIZABLE,     16,       'SDL_RESIZABLE should be imported' );
@@ -505,6 +516,7 @@ is( SDL_RLEACCEL,      16384,    'SDL_RLEACCEL should be imported' );
 is( SDL_RLEACCEL(),    16384,    'SDL_RLEACCEL() should also be available' );
 is( SDL_RLEACCELOK,    8192,     'SDL_RLEACCELOK should be imported' );
 is( SDL_RLEACCELOK(),  8192,     'SDL_RLEACCELOK() should also be available' );
+
 is( SDL_SRCALPHA,      65536,    'SDL_SRCALPHA should be imported' );
 is( SDL_SRCALPHA(),    65536,    'SDL_SRCALPHA() should also be available' );
 is( SDL_SRCCOLORKEY,   4096,     'SDL_SRCCOLORKEY should be imported' );
@@ -513,12 +525,15 @@ is( SDL_SWSURFACE,     0,        'SDL_SWSURFACE should be imported' );
 is( SDL_SWSURFACE(),   0,        'SDL_SWSURFACE() should also be available' );
 is( SDL_SYSWMEVENT,    13,       'SDL_SYSWMEVENT should be imported' );
 is( SDL_SYSWMEVENT(),  13,       'SDL_SYSWMEVENT() should also be available' );
+
 is( SDL_UYVY_OVERLAY, 1498831189, 'SDL_UYVY_OVERLAY should be imported' );
 is( SDL_UYVY_OVERLAY(), 1498831189,'SDL_UYVY_OVERLAY() should also be available' );
+
 is( SDL_VIDEOEXPOSE,   17, 'SDL_VIDEOEXPOSE should be imported' );
 is( SDL_VIDEOEXPOSE(), 17, 'SDL_VIDEOEXPOSE() should also be available' );
 is( SDL_VIDEORESIZE,   16, 'SDL_VIDEORESIZE should be imported' );
 is( SDL_VIDEORESIZE(), 16, 'SDL_VIDEORESIZE() should also be available' );
+
 is( SDL_YUY2_OVERLAY, 844715353, 'SDL_YUY2_OVERLAY should be imported' );
 is( SDL_YUY2_OVERLAY(), 844715353,'SDL_YUY2_OVERLAY() should also be available' );
 is( SDL_YV12_OVERLAY, 842094169, 'SDL_YV12_OVERLAY should be imported' );

@@ -9,16 +9,17 @@ can_ok('SDL::Palette', qw/ ncolors colors color_index /);
 use SDL;
 use SDL::Surface;
 use SDL::PixelFormat;
+use SDL::Video;
 
 SDL::init(SDL_INIT_VIDEO);
 
-my $display = SDL::SetVideoMode(640,480,32, SDL_SWSURFACE );
+my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 
 isa_ok($display->format, 'SDL::PixelFormat', 'Are we a SDL::PixelFormat?');
 
 is( !defined $display->format->palette , 1, 'Palette is not defined as BitPerPixels is greater then 8');
 
-$display = SDL::SetVideoMode(640,480,8, SDL_SWSURFACE );
+$display = SDL::Video::set_video_mode(640,480,8, SDL_SWSURFACE );
 isa_ok($display->format, 'SDL::PixelFormat', 'Are we a SDL::PixelFormat?');
 
 isa_ok( $display->format->palette , 'SDL::Palette', 'Palette is SDL::Palette when BitPerPixels is 8 ');

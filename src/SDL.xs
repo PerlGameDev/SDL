@@ -308,6 +308,27 @@ was_init ( flags )
 	OUTPUT:
 		RETVAL
 
+SDL_version *
+version ()
+	PREINIT:
+		char * CLASS = "SDL::Version";
+		SDL_version *version;
+	CODE:
+	 	version = (SDL_version *) safemalloc (sizeof(SDL_version));
+		SDL_VERSION(version);
+		RETVAL = version;
+	OUTPUT:
+		RETVAL
+
+SDL_version *
+linked_version ()
+	PREINIT:
+		char * CLASS = "SDL::Version";
+	CODE:
+		RETVAL = (SDL_version *) SDL_Linked_Version();
+	OUTPUT:
+		RETVAL
+
 void
 delay ( ms )
 	int ms
@@ -879,271 +900,9 @@ IMG_Load ( filename )
 
 #endif
 
-=for comment
 
-Comment out for now as it does not compile
+=for docs
 
-SDL_Surface *
-CreateRGBSurfaceFrom (pixels, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask )
-	char *pixels
-	int width
-	int height
-	int depth
-	int pitch
-	Uint32 Rmask
-	Uint32 Gmask
-	Uint32 Bmask
-	Uint32 Amask
-	CODE:
-		Uint8* pixeldata;
-		Uint32 len = pitch * height;
-		New(0,pixeldata,len,Uint8);
-		Copy(pixels,pixeldata,len,Uint8);
-		RETVAL = SDL_CreateRGBSurfaceFrom ( pixeldata, width, height,
-				depth, pitch, Rmask, Gmask, Bmask, Amask );
-	OUTPUT:	
-		RETVAL
-
-SDL_Surface*
-SurfaceCopy ( surface )
-	SDL_Surface *surface
-	CODE:
-		Uint8* pixels;
-		Uint32 size = surface->pitch * surface->h;
-		New(0,pixels,size,Uint8);
-		Copy(surface->pixels,pixels,size,Uint8);
-		RETVAL = SDL_CreateRGBSurfaceFrom(pixels,surface->w,surface->h,
-			surface->format->BitsPerPixel, surface->pitch,
-			surface->format->Rmask, surface->format->Gmask,
-			surface->format->Bmask, surface->format->Amask);
-	OUTPUT:
-		RETVAL
-
-void
-FreeSurface ( surface )
-	SDL_Surface *surface
-	CODE:
-		if (surface) {
-			Uint8* pixels = surface->pixels;
-			Uint32 flags = surface->flags;
-			SDL_FreeSurface(surface);
-			if (flags & SDL_PREALLOC)
-				Safefree(pixels);
-		}
-	
-Uint32
-SurfaceFlags ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->flags;
-	OUTPUT:
-		RETVAL
-
-SDL_Palette *
-SurfacePalette ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->palette;
-	OUTPUT:
-		RETVAL
-
-Uint8
-SurfaceBitsPerPixel ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->BitsPerPixel;
-	OUTPUT:
-		RETVAL
-
-Uint8
-SurfaceBytesPerPixel ( surface )
-	SDL_Surface *surface
-	CODE:	
-		RETVAL = surface->format->BytesPerPixel;
-	OUTPUT:
-		RETVAL
-
-Uint8
-SurfaceRshift ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->Rshift;
-	OUTPUT:
-		RETVAL
-
-Uint8
-SurfaceGshift ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->Gshift;
-	OUTPUT:
-		RETVAL
-
-Uint8
-SurfaceBshift ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->Bshift;
-	OUTPUT:
-		RETVAL
-
-Uint8
-SurfaceAshift ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->Ashift;
-	OUTPUT:
-		RETVAL
-
-Uint32
-SurfaceRmask( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->Rmask;
-	OUTPUT:
-		RETVAL
-
-Uint32
-SurfaceGmask ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->Gmask;
-	OUTPUT:
-		RETVAL
-
-Uint32
-SurfaceBmask ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->Bmask;
-	OUTPUT:
-		RETVAL
-
-Uint32
-SurfaceAmask ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->Amask;
-	OUTPUT:
-		RETVAL
-
-Uint32
-SurfaceColorKey ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->colorkey;
-	OUTPUT:
-		RETVAL
-
-Uint32
-SurfaceAlpha( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = surface->format->alpha;
-	OUTPUT:
-		RETVAL
-
-int
-SurfaceW ( surface )
-	SDL_Surface *surface
-	CODE:	
-		RETVAL = surface->w;
-	OUTPUT:
-		RETVAL
-
-int
-SurfaceH ( surface )
-	SDL_Surface *surface
-	CODE:	
-		RETVAL = surface->h;
-	OUTPUT:
-		RETVAL
-
-Uint16
-SurfacePitch ( surface )
-	SDL_Surface *surface
-	CODE:	
-		RETVAL = surface->pitch;
-	OUTPUT:
-		RETVAL
-
-SV*
-SurfacePixels ( surface )
-	SDL_Surface *surface
-	CODE:	
-		RETVAL = newSVpvn(surface->pixels,surface->pitch*surface->h);
-	OUTPUT:
-		RETVAL
-
-=cut
-
-=for comment
-
-Comment out for now as it does not compile
-
-SDL_Color*
-SurfacePixel ( surface, x, y, ... )
-	SDL_Surface *surface
-	Sint32 x
-	Sint32 y
-	CODE:
-		SDL_Color* color;
-		int pix,index;
-		Uint8 r,g,b,a;
-		int bpp = surface->format->BytesPerPixel;
-		Uint8* p = (Uint8*)surface->pixels + bpp*x + surface->pitch*y;
-		if ( items < 3 || items > 4 ) 
-			Perl_croak(aTHX_ "usage: SDL::SurfacePixel(surface,x,y,[color])");
-		if ( items == 4) {
-			color = (SDL_Color*)SvIV(ST(3));
-			pix = SDL_MapRGB(surface->format,color->r,color->g,color->b);
-			switch(bpp) {
-				case 1:
-					*(Uint8*)p = pix;
-					break;
-				case 2:
-					*(Uint16*)p = pix;
-					break;
-				case 3:
-					if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-						p[0] = (pix >> 16) & 0xff;
-						p[1] = (pix >> 8) & 0xff;
-						p[2] = pix & 0xff;
-					} else {
-						p[0] = pix & 0xff;
-						p[1] = (pix >> 8) & 0xff;
-						p[2] = (pix >> 16) & 0xff;
-					}
-					break;
-				case 4:
-					*(Uint32*)p = pix;
-					break;
-			}
-		}
-		RETVAL = (SDL_Color *) safemalloc(sizeof(SDL_Color));
-		switch(bpp) {
-			case 1:
-				index = *(Uint8*)p;
-				memcpy(RETVAL,&surface->format->palette[index],sizeof(SDL_Color));
-				break;
-			case 2:
-				pix = *(Uint16*)p;
-				SDL_GetRGB(pix,surface->format,&r,&g,&b);
-				RETVAL->r = r;
-				RETVAL->g = g;
-				RETVAL->b = b;
-				break;
-			case 3:
-			case 4:
-				pix = *(Uint32*)p;
-				SDL_GetRGB(pix,surface->format,&r,&g,&b);
-				RETVAL->r = r;
-				RETVAL->g = g;
-				RETVAL->b = b;
-				break;
-		}
-	OUTPUT:
-		RETVAL
 
 int
 MUSTLOCK ( surface )
@@ -1153,380 +912,9 @@ MUSTLOCK ( surface )
 	OUTPUT:
 		RETVAL		
 
-int
-SurfaceLock ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = SDL_LockSurface(surface);
-	OUTPUT:
-		RETVAL
-
-void
-SurfaceUnlock ( surface )
-	SDL_Surface *surface
-	CODE:
-		SDL_UnlockSurface(surface);
-
-SDL_Surface *
-GetVideoSurface ()
-	CODE:
-		RETVAL = SDL_GetVideoSurface();
-	OUTPUT:
-		RETVAL
 
 =cut
 
-HV *
-VideoInfo ()
-	CODE:
-		HV *hv;
-		SDL_VideoInfo *info;
-		info = (SDL_VideoInfo *) safemalloc ( sizeof(SDL_VideoInfo));
-		memcpy(info,SDL_GetVideoInfo(),sizeof(SDL_VideoInfo));
-		hv = newHV();
-		hv_store(hv,"hw_available",strlen("hw_available"),
-			newSViv(info->hw_available),0);
-		hv_store(hv,"wm_available",strlen("wm_available"),
-			newSViv(info->wm_available),0);
-		hv_store(hv,"blit_hw",strlen("blit_hw"),
-			newSViv(info->blit_hw),0);
-		hv_store(hv,"blit_hw_CC",strlen("blit_hw_CC"),
-			newSViv(info->blit_hw_CC),0);
-		hv_store(hv,"blit_hw_A",strlen("blit_hw_A"),
-			newSViv(info->blit_hw_A),0);
-		hv_store(hv,"blit_sw",strlen("blit_sw"),
-			newSViv(info->blit_sw),0);
-		hv_store(hv,"blit_sw_CC",strlen("blit_sw_CC"),
-			newSViv(info->blit_sw_CC),0);
-		hv_store(hv,"blit_sw_A",strlen("blit_sw_A"),
-			newSViv(info->blit_sw_A),0);
-		hv_store(hv,"blit_fill",strlen("blit_fill"),
-			newSViv(info->blit_fill),0);
-		hv_store(hv,"video_mem",strlen("video_mem"),
-			newSViv(info->video_mem),0);
-		RETVAL = hv;
-	OUTPUT:
-		RETVAL
-
-AV*
-ListModes ( format, flags )
-	Uint32 flags
-	SDL_PixelFormat *format
-	CODE:
-		SDL_Rect **mode;
-		RETVAL = newAV();
-		mode = SDL_ListModes(format,flags);
-		if (mode == (SDL_Rect**)-1 ) {
-			av_push(RETVAL,newSVpv("all",0));
-		} else if (! mode ) {
-			av_push(RETVAL,newSVpv("none",0));
-		} else {
-			for (;*mode;mode++) {
-				av_push(RETVAL,newSViv(PTR2IV(*mode)));
-			}
-		}
-	OUTPUT:
-		RETVAL
-=skip
-
-SDL_Palette *
-NewPalette ( number )
-	int number
-	CODE:
-		RETVAL = (SDL_Palette *)safemalloc(sizeof(SDL_Palette));
-		RETVAL->colors = (SDL_Color *)safemalloc(number * 
-						sizeof(SDL_Color));
-		RETVAL->ncolors = number;
-	OUTPUT:
-		RETVAL
-=cut
-
-int
-PaletteNColors ( palette, ... )
-	SDL_Palette *palette
-	CODE:
-		if ( items > 1 ) palette->ncolors = SvIV(ST(1));
-		RETVAL = palette->ncolors;
-	OUTPUT:
-		RETVAL
-
-SDL_Surface *
-SetVideoMode ( width, height, bpp, flags )
-
-	int width
-	int height
-	int bpp
-	Uint32 flags
-
-	CODE:
-	        char *CLASS = "SDL::Surface";
-		RETVAL = SDL_SetVideoMode(width,height,bpp,flags);
-	OUTPUT:
-		RETVAL
-
-int
-Flip ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = SDL_Flip(surface);
-	OUTPUT:
-		RETVAL
-
-int
-BlitSurface ( src, src_rect, dest, dest_rect )
-	SDL_Surface *src
-	SDL_Surface *dest
-	SDL_Rect *src_rect
-	SDL_Rect *dest_rect
-	CODE:
-		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
-	OUTPUT:
-		RETVAL
-
-Uint32
-MapRGB ( pixel_format, r, g, b )
-	SDL_PixelFormat *pixel_format
-	Uint8 r
-	Uint8 g
-	Uint8 b
-	CODE:
-		RETVAL = SDL_MapRGB(pixel_format,r,g,b);
-	OUTPUT:
-		RETVAL
-
-void
-UpdateRect ( surface, x, y, w ,h )
-	SDL_Surface *surface
-	int x
-	int y
-	int w
-	int h
-	CODE:
-		SDL_UpdateRect(surface,x,y,w,h);
-
-SDL_Surface *
-DisplayFormat ( surface )
-	SDL_Surface *surface
-	CODE:
-		char* CLASS = "SDL::Surface";
-		RETVAL = SDL_DisplayFormat(surface);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface *
-DisplayFormatAlpha ( surface )
-	SDL_Surface *surface
-	CODE:
-		char* CLASS = "SDL::Surface";
-		RETVAL = SDL_DisplayFormatAlpha(surface);
-	OUTPUT:
-		RETVAL
-
-void
-UpdateRects ( surface, ... )
-	SDL_Surface *surface
-	CODE:
-		SDL_Rect *rects;
-		int num_rects,i;
-		if ( items < 2 ) return;
-		num_rects = items - 1;
-		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
-		for(i=0;i<num_rects;i++) {
-			rects[i] = *(SDL_Rect *)SvIV((SV*)SvRV( ST(i + 1) ));
-		}
-		SDL_UpdateRects(surface,num_rects,rects);
-		safefree(rects);
-
-=for comment
-
-Comment out for now as it does not compile
-
-int
-VideoModeOK ( width, height, bpp, flags )
-	int width
-	int height
-	int bpp
-	Uint32 flags
-	CODE:
-		RETVAL = SDL_VideoModeOK(width,height,bpp,flags);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface *
-SetVideoMode ( width, height, bpp, flags )
-	int width
-	int height
-	int bpp
-	Uint32 flags
-	CODE:
-		RETVAL = SDL_SetVideoMode(width,height,bpp,flags);
-	OUTPUT:
-		RETVAL
-
-int
-Flip ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = SDL_Flip(surface);
-	OUTPUT:
-		RETVAL
-
-int
-SetColors ( surface, start, ... )
-	SDL_Surface *surface
-	int start
-	CODE:
-		SDL_Color *colors,*temp;
-		int i, length;
-		if ( items < 3 ) { RETVAL = 0;	goto all_done; }
-		length = items - 2;
-		colors = (SDL_Color *)safemalloc(sizeof(SDL_Color)*(length+1));
-		for ( i = 0; i < length ; i++ ) {
-			temp = (SDL_Color *)SvIV(ST(i+2));
-			colors[i].r = temp->r;
-			colors[i].g = temp->g;
-			colors[i].b = temp->b;
-		}
-		RETVAL = SDL_SetColors(surface, colors, start, length );
-		safefree(colors);
-all_done:
-	OUTPUT:	
-		RETVAL
-
-Uint32
-MapRGBA ( surface, r, g, b, a )
-	SDL_Surface *surface
-	Uint8 r
-	Uint8 g
-	Uint8 b
-	Uint8 a
-	CODE:
-		RETVAL = SDL_MapRGBA(surface->format,r,g,b,a);
-	OUTPUT:
-		RETVAL
-
-AV *
-GetRGB ( surface, pixel )
-	SDL_Surface *surface
-	Uint32 pixel
-	CODE:
-		Uint8 r,g,b;
-		SDL_GetRGB(pixel,surface->format,&r,&g,&b);
-		RETVAL = newAV();
-		av_push(RETVAL,newSViv(r));
-		av_push(RETVAL,newSViv(g));
-		av_push(RETVAL,newSViv(b));
-	OUTPUT:
-		RETVAL
-
-AV *
-GetRGBA ( surface, pixel )
-	SDL_Surface *surface
-	Uint32 pixel
-	CODE:
-		Uint8 r,g,b,a;
-		SDL_GetRGBA(pixel,surface->format,&r,&g,&b,&a);
-		RETVAL = newAV();
-		av_push(RETVAL,newSViv(r));
-		av_push(RETVAL,newSViv(g));
-		av_push(RETVAL,newSViv(b));
-		av_push(RETVAL,newSViv(a));
-	OUTPUT:
-		RETVAL
-
-int
-SaveBMP ( surface, filename )
-	SDL_Surface *surface
-	char *filename
-	CODE:
-		RETVAL = SDL_SaveBMP(surface,filename);
-	OUTPUT:
-		RETVAL	
-
-int
-SetColorKey ( surface, flag, key )
-	SDL_Surface *surface
-	Uint32 flag
-	SDL_Color *key
-	CODE:
-		Uint32 pixel = SDL_MapRGB(surface->format,key->r,key->g,key->b);
-		RETVAL = SDL_SetColorKey(surface,flag,pixel);
-	OUTPUT:
-		RETVAL
-
-int
-SetAlpha ( surface, flag, alpha )
-	SDL_Surface *surface
-	Uint32 flag
-	Uint8 alpha
-	CODE:
-		RETVAL = SDL_SetAlpha(surface,flag,alpha);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface*
-ConvertRGB ( surface )
-	SDL_Surface * surface
-	CODE:
-		SDL_PixelFormat fmt;
-		fmt.palette = NULL;
-		fmt.BitsPerPixel = 24;
-		fmt.BytesPerPixel = 3;
-		fmt.Rmask = 0x000000ff;
-		fmt.Gmask = 0x0000ff00;
-		fmt.Bmask = 0x00ff0000;
-		fmt.Amask = 0x00000000;
-		fmt.Rloss = 0;
-		fmt.Gloss = 0;
-		fmt.Bloss = 0;
-		fmt.Aloss = 0;
-		fmt.Rshift = 0;
-		fmt.Gshift = 8;
-		fmt.Bshift = 16;
-		fmt.Ashift = 24;
-		fmt.colorkey = 0;
-		fmt.alpha = 0;
-		RETVAL = SDL_ConvertSurface(surface,&fmt,surface->flags);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface* 
-ConvertRGBA ( surface )
-	SDL_Surface * surface
-	CODE:
-		SDL_PixelFormat fmt;
-		fmt.palette = NULL;
-		fmt.BitsPerPixel = 32;
-		fmt.BytesPerPixel = 4;
-		fmt.Rmask = 0x000000ff;
-		fmt.Gmask = 0x0000ff00;
-		fmt.Bmask = 0x00ff0000;
-		fmt.Amask = 0xff000000;
-		fmt.Rloss = 0;
-		fmt.Gloss = 0;
-		fmt.Bloss = 0;
-		fmt.Aloss = 0;
-		fmt.Rshift = 0;
-		fmt.Gshift = 8;
-		fmt.Bshift = 16;
-		fmt.Ashift = 24;
-		fmt.colorkey = 0;
-		fmt.alpha = 0;
-		RETVAL = SDL_ConvertSurface(surface,&fmt,surface->flags);
-	OUTPUT:
-		RETVAL
-
-=cut
-
-int
-FillRect ( dest, dest_rect, pixel )
-	SDL_Surface *dest
-	SDL_Rect *dest_rect
-	Uint32 pixel
-	CODE:
-		RETVAL = SDL_FillRect(dest,dest_rect,pixel);
-	OUTPUT:
-		RETVAL
 
 Uint8
 GetAppState ()
@@ -2165,48 +1553,6 @@ MixCloseAudio ()
 #endif
 
 int
-GLLoadLibrary ( path )
-	char *path
-	CODE:
-		RETVAL = SDL_GL_LoadLibrary(path);
-	OUTPUT:
-		RETVAL
-
-void*
-GLGetProcAddress ( proc )
-	char *proc
-	CODE:
-		RETVAL = SDL_GL_GetProcAddress(proc);
-	OUTPUT:
-		RETVAL
-
-int
-GLSetAttribute ( attr,  value )
-	int        attr
-	int        value
-	CODE:
-		RETVAL = SDL_GL_SetAttribute(attr, value);
-	OUTPUT:
-	        RETVAL
-
-AV *
-GLGetAttribute ( attr )
-	int        attr
-	CODE:
-		int value;
-		RETVAL = newAV();
-		av_push(RETVAL,newSViv(SDL_GL_GetAttribute(attr, &value)));
-		av_push(RETVAL,newSViv(value));
-	OUTPUT:
-	        RETVAL
-
-void
-GLSwapBuffers ()
-	CODE:
-		SDL_GL_SwapBuffers ();
-
-
-int
 BigEndian ()
 	CODE:
 		RETVAL = (SDL_BYTEORDER == SDL_BIG_ENDIAN);
@@ -2439,21 +1785,6 @@ JoyBallEventYrel ( e )
                 RETVAL = e->jball.yrel;
         OUTPUT:
                 RETVAL
-
-void
-SetClipRect ( surface, rect )
-	SDL_Surface *surface
-	SDL_Rect *rect
-	CODE:
-		SDL_SetClipRect(surface,rect);
-	
-void
-GetClipRect ( surface, rect )
-	SDL_Surface *surface
-	SDL_Rect *rect;
-	CODE:
-	 	SDL_GetClipRect(surface, rect);
-
 
 #ifdef HAVE_SDL_NET
 
@@ -2789,30 +2120,6 @@ NetRead32 ( area )
 		RETVAL
 
 #endif 
-
-int
-LockYUVOverlay ( overlay )
-	SDL_Overlay *overlay
-	CODE:
-		RETVAL = SDL_LockYUVOverlay(overlay);
-	OUTPUT:
-		RETVAL
-
-void
-UnlockYUVOverlay ( overlay )
-        SDL_Overlay *overlay
-        CODE:
-                SDL_UnlockYUVOverlay(overlay);
-
-int
-DisplayYUVOverlay ( overlay, dstrect )
-	SDL_Overlay *overlay
-	SDL_Rect *dstrect
-	CODE:
-		RETVAL = SDL_DisplayYUVOverlay ( overlay, dstrect );
-	OUTPUT:
-		RETVAL
-
 Uint32
 OverlayFormat ( overlay, ... )
 	SDL_Overlay *overlay
@@ -3210,14 +2517,14 @@ SMPEGGetInfo ( mpeg )
 
 #ifdef HAVE_SDL_GFX
 
-=cut
-
 SDL_Surface *
 GFXRotoZoom ( src, angle, zoom, smooth)
 	SDL_Surface * src
 	double angle
 	double zoom
 	int smooth
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
 		RETVAL = rotozoomSurface( src, angle, zoom, smooth);
 	OUTPUT:
@@ -3229,12 +2536,12 @@ GFXZoom ( src, zoomx, zoomy, smooth)
 	double zoomx
 	double zoomy
 	int smooth
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
 		RETVAL = zoomSurface( src, zoomx, zoomy, smooth);
 	OUTPUT:
 		RETVAL
-
-=cut
 
 int
 GFXPixelColor ( dst, x, y, color )

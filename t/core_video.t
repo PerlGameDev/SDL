@@ -4,12 +4,11 @@ use SDL;
 use SDL::Color;
 use SDL::Surface;
 use SDL::Config;
-use Devel::Peek;
-use Data::Dumper;
+use SDL::Overlay;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 23);
+plan ( tests => 50);
 
 use_ok( 'SDL::Video' ); 
 
@@ -32,13 +31,57 @@ my @done =
 	map_RGBA
 	unlock_surface
 	lock_surface	
+	convert_surface
+	display_format
+	display_format_alpha
+	set_color_key
+	set_alpha
+	get_RGB
+	get_RGBA
+	load_BMP
+	save_BMP
+	fill_rect
+	blit_surface
+	set_clip_rect
+	get_clip_rect
+	lock_YUV_overlay
+	unlock_YUV_overlay
+	display_YUV_overlay
+	GL_load_library
+	GL_get_proc_address
+	GL_get_attribute
+	GL_set_attribute
+	GL_swap_buffers
 	/;
 
 can_ok ('SDL::Video', @done); 
 
 #testing get_video_surface
 SDL::init(SDL_INIT_VIDEO);                                                                          
-                                                                                                    
+
+#needs to be done before set_video_mode
+my $glVal = SDL::Video::GL_load_library('this/should/fail');
+
+is ($glVal, -1, '[GL_load_library] Failed appropraitly');
+
+TODO: {
+local $TODO = 'These should be tested with OS specific DLL or SO';
+is (SDL::Video::GL_load_library('t/realGL.so'), 0, '[GL_load_libary] returns 0 on success');
+# this gets set by GL_load_library => SDL_GL_LOADLIBARY. How do we get this from XS though?
+# below t/realGL.so needs to use SDL_GL_LOADLIBRARY
+isnt(SDL::Video::GL_get_proc_address('t/realGL.so'), NULL, '[GL_get_proc_address] returns not null on success');
+is (SDL::Video::GL_set_attribute( SDL_GL_DOUBLEBUFFER, 1) , 0 , '[GL_set_attribute] returns 0 on success');
+my $tdisplay = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
+my $value = -3;
+SDL::Video::GL_set_attribute( SDL_GL_DOUBLEBUFFER, $value); 
+is ($value  , 1 , '[GL_get_attribute] returns 1 on success as set above');
+
+SDL::Video::GL_swap_buffers(); pass ( '[GL_swap_buffers] should work because Double Buffering is turned on');
+
+
+};
+
+
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 
 if(!$display){
@@ -91,6 +134,14 @@ my @b_w_colors;
 for(my $i=0;$i<256;$i++){
 	$b_w_colors[$i] = SDL::Color->new($i,$i,$i);
       }
+my $overlay =  SDL::Overlay->new(200 , 220, SDL_IYUV_OVERLAY, $display);  
+
+is( SDL::Video::lock_YUV_overlay($overlay), 0, '[lock_YUV_overlay] returns a 0 on success');
+SDL::Video::unlock_YUV_overlay($overlay); pass '[unlock_YUV_overlay] ran';
+my $display_at_rect = SDL::Rect->new(0, 0, 100, 100);
+is( SDL::Video::display_YUV_overlay( $overlay, $display_at_rect), 0 ,'[display_YUV_overlay] returns 0 on success'); 
+
+
 my $hwdisplay = SDL::Video::set_video_mode(640,480,8, SDL_HWSURFACE );
 
 if(!$hwdisplay){
@@ -119,33 +170,53 @@ SDL::Video::unlock_surface($hwdisplay); pass '[unlock_surface] ran';
 is( SDL::Video::map_RGB($hwdisplay->format, 10, 10 ,10) > 0, 1, '[map_RGB] maps correctly to 8-bit surface');
 is( SDL::Video::map_RGBA($hwdisplay->format, 10, 10 ,10, 10) > 0, 1, '[map_RGBA] maps correctly to 8-bit surface');
 
+isa_ok(SDL::Video::convert_surface( $display , $hwdisplay->format, SDL_SRCALPHA), 'SDL::Surface', '[convert_surface] Checking if we get a surface ref back'); 
+
+isa_ok(SDL::Video::display_format( $display ), 'SDL::Surface', '[display_format] Returns a SDL::Surface');
+isa_ok(SDL::Video::display_format_alpha( $display ), 'SDL::Surface', '[display_format_alpha] Returns a SDL::Surface');
+
+is(  SDL::Video::set_color_key($display, SDL_SRCCOLORKEY, SDL::Color->new( 0, 10, 0 ) ),
+   0,  '[set_color_key] Returns 0 on success' 
+   ) ;
+
+is(  SDL::Video::set_alpha($display, SDL_SRCALPHA, 100 ),
+   0,  '[set_alpha] Returns 0 on success' 
+   ) ;
+
+is_deeply(SDL::Video::get_RGB($display->format, 0), [0,0,0], '[get_RGB] returns r,g,b');
+
+is_deeply(SDL::Video::get_RGBA($display->format, 0), [0,0,0,255], '[get_RGBA] returns r,g,b,a');
+
+my $bmp = 't/core_video.bmp';
+unlink($bmp) if -f $bmp;
+SDL::Video::save_BMP($display, $bmp);
+ok(-f $bmp, '[save_BMP] creates a file');
+my $bmp_surface = SDL::Video::load_BMP($bmp);
+isa_ok($bmp_surface, 'SDL::Surface', '[load_BMP] returns an SDL::Surface');
+unlink($bmp) if -f $bmp;
+
+my $pixel = SDL::Video::map_RGB( $display->format, 255, 127, 0 );
+SDL::Video::fill_rect( $display, SDL::Rect->new( 0, 0, 32, 32 ), $pixel );
+ok( 1, '[fill_rect] filled rect' );
+
+my $clip_rect = SDL::Rect->new(0, 0, 10, 20);
+SDL::Video::get_clip_rect($display, $clip_rect);
+is($clip_rect->x, 0, '[get_clip_rect] returns a rect with x 0');
+is($clip_rect->y, 0, '[get_clip_rect] returns a rect with y 0');
+is($clip_rect->w, 640, '[get_clip_rect] returns a rect with w 640');
+is($clip_rect->h, 480, '[get_clip_rect] returns a rect with h 480');
+SDL::Video::set_clip_rect($display, SDL::Rect->new(10, 20, 100, 200));
+SDL::Video::get_clip_rect($display, $clip_rect);
+is($clip_rect->x, 10, '[get_clip_rect] returns a rect with x 10');
+is($clip_rect->y, 20, '[get_clip_rect] returns a rect with y 20');
+is($clip_rect->w, 100, '[get_clip_rect] returns a rect with w 100');
+is($clip_rect->h, 200, '[get_clip_rect] returns a rect with h 200');
+
 my @left = qw/
 	get_gamma_ramp
-	get_RGB
-	get_RGBA
-	convert_surface
-	display_format
-	display_format_alpha
-	load_BMP
-	save_BMP
-	set_color_key
-	set_alpha
-	set_clip_rect
-	get_clip_rect
-	blit_surface
-	fill_rect
-	GL_load_library
-	GL_get_proc_address
-	GL_get_attribute
-	GL_set_attribute
-	GL_swap_buffers
-	GL_attr
-	lock_YUV_overlay
-	unlock_YUV_overlay
-	display_YUV_overlay
 	/;
 
-my $why = '[Percentage Completion] '.int( 100 * $#done / ($#done + $#left) ) ."\% implementation. $#done / ".($#done+$#left); 
+my $why = '[Percentage Completion] '.int( 100 * ($#done +1) / ($#done + $#left + 2) ) ."\% implementation. ". ($#done +1)." / ".($#done+$#left + 2); 
 
 TODO:
 {
