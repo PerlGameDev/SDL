@@ -48,7 +48,7 @@ jhevent_hat ( event, ... )
 	OUTPUT:
 		RETVAL
 
-Sint16
+Uint8
 jhevent_value ( event, ... )
 	SDL_JoyHatEvent *event
 	CODE: 
