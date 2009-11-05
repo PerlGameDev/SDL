@@ -63,6 +63,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	MouseButtonEvent => {
+		file      => {
+			from  => 'src/Core/objects/MouseButtonEvent.xs',
+			to    => 'lib/SDL/MouseButtonEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	MouseMotionEvent => {
 		file      => {
 			from  => 'src/Core/objects/MouseMotionEvent.xs',
