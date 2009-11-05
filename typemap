@@ -21,6 +21,7 @@ SDL_MouseMotionEvent * 	O_OBJECT
 SDL_MouseButtonEvent * 	O_OBJECT
 SDL_JoyAxisEvent * 	O_OBJECT
 SDL_JoyHatEvent * 	O_OBJECT
+SDL_JoyButtonEvent *	O_OBJECT
 SDL_JoyBallEvent * 	O_OBJECT
 SDL_ResizeEvent * 	O_OBJECT
 SDL_ExposeEvent * 	O_OBJECT
