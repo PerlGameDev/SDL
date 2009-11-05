@@ -14,11 +14,11 @@ MODULE = SDL::ActiveEvent 	PACKAGE = SDL::ActiveEvent    PREFIX = aevent_
 
 SDL_ActiveEvent -- Application visibility event structure
 
- typedef union{
+ typedef struct{
   Uint8 type;
   Uint8 gain;
   Uint8 state;
- } SDL_Event;
+ } SDL_ActiveEvent;
 
 
 =cut
