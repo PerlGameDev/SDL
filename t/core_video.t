@@ -5,8 +5,6 @@ use SDL::Color;
 use SDL::Surface;
 use SDL::Config;
 use SDL::Overlay;
-use Devel::Peek;
-use Data::Dumper;
 use Test::More;
 use SDL::Rect;
 
