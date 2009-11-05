@@ -14,21 +14,20 @@ Sint16 *		T_PTR
 Sint32			T_IV
 Sint32 *		T_PTR
 SDL_Event *		T_PTR
-SDL_ActiveEvent 	O_OBJECT
-SDL_KeyboardEvent 	O_OBJECT
-SDL_TextInputEvent 	O_OBJECT
-SDL_MouseMotionEvent 	O_OBJECT
-SDL_MouseButtonEvent 	O_OBJECT
-SDL_JoyAxisEvent 	O_OBJECT
-SDL_JoyHatEvent 	O_OBJECT
-SDL_JoyBallEvent 	O_OBJECT
-SDL_ResizeEvent 	O_OBJECT
-SDL_ExposeEvent 	O_OBJECT
-SDL_SysWMEvent	 	O_OBJECT
-SDL_UserEvent	 	O_OBJECT
-SDL_QuitEvent	 	O_OBJECT
-SDLKey		 	O_OBJECT
-SDLMod			O_OBJECT
+SDL_ActiveEvent * 	O_OBJECT
+SDL_KeyboardEvent * 	O_OBJECT
+SDL_TextInputEvent * 	O_OBJECT
+SDL_MouseMotionEvent * 	O_OBJECT
+SDL_MouseButtonEvent * 	O_OBJECT
+SDL_JoyAxisEvent * 	O_OBJECT
+SDL_JoyHatEvent * 	O_OBJECT
+SDL_JoyBallEvent * 	O_OBJECT
+SDL_ResizeEvent * 	O_OBJECT
+SDL_ExposeEvent * 	O_OBJECT
+SDL_SysWMEvent * 	O_OBJECT
+SDL_UserEvent * 	O_OBJECT
+SDL_QuitEvent * 	O_OBJECT
+SDL_keysym *		O_OBJECT
 SDL_Surface *		O_OBJECT
 SDL_SysWMmsg *		T_PTR
 SDL_CD *		T_PTR
