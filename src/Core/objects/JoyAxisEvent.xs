@@ -41,7 +41,7 @@ jaevent_which ( event, ... )
 		RETVAL
 
 Uint8
-jaevent_button ( event, ... )
+jaevent_axis ( event, ... )
 	SDL_JoyAxisEvent *event
 	CODE: 
 		RETVAL = event->axis;
