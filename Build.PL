@@ -147,6 +147,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	SysWMEvent => {
+		file      => {
+			from  => 'src/Core/objects/SysWMEvent.xs',
+			to    => 'lib/SDL/SysWMEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	Overlay => {
 		file      => {
 			from  => 'src/Core/objects/Overlay.xs',
