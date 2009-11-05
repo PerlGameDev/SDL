@@ -112,6 +112,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	UserEvent => {
+		file      => {
+			from  => 'src/Core/objects/UserEvent.xs',
+			to    => 'lib/SDL/UserEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	MultiThread => {
 		file      => {
 			from  => 'src/Core/MultiThread.xs',
