@@ -175,6 +175,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	QuitEvent => {
+		file      => {
+			from  => 'src/Core/objects/QuitEvent.xs',
+			to    => 'lib/SDL/QuitEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	ResizeEvent => {
 		file      => {
 			from  => 'src/Core/objects/ResizeEvent.xs',
