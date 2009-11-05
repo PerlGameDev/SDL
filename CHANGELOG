@@ -1,10 +1,11 @@
 Revision history for Perl extension SDL_perl.
 
 * ?
-  - Fix bug with TTFSizeText, it actually returns 0 on success [acme]
-  - Add display_format_alpha [acme]
-  - Add an example that plays a .WAV sound sample [acme]
-  - Add left/right panning to the mixer [acme]
+	- Fix bug with TTFSizeText, it actually returns 0 on success [acme]
+	- Add display_format_alpha [acme]
+	- Add an example that plays a .WAV sound sample [acme]
+	- Add left/right panning to the mixer [acme]
+	- Throw warning message if header files are missing while Build [FROGGS]
 
 * v2.2.3.1 Sept 29 2009 Kartik Thakore <thakore.kartik@gmail.com>
 	- Critical Build.PL fix for META.yml 
@@ -22,24 +23,26 @@ Revision history for Perl extension SDL_perl.
 * Sept 1 2009 Kartik Thakore <thakore.kartik@gmail.com>
 	- Made Alien::SDL 0.3 dependency
 	- Updated MANIFEST
+
 * Aug 31 2009 Kartik Thakore <thakore.kartik@gmail.com>
 	- Fixed broken mixer test on FreeBSD
+
 * Aug 27 2009 Kartik Thakore <thakore.kartik@gmail.com>
-	-Made App loop() faster https://rt.cpan.org/Public/Bug/Display.html?id=16988
-	-Patched support for add support for gluquadric* sub https://rt.cpan.org/Public/Bug/Display.html?id=25598
-	-Made App init slimer https://rt.cpan.org/Public/Bug/Display.html?id=16987
-	-Added faster SDL::Color alternative https://rt.cpan.org/Public/Bug/Display.html?id=17975
-	-Added better error reporting for TTFont errors
-	-Added win32 support https://rt.cpan.org/Ticket/Display.html?id=49003
+	- Made App loop() faster https://rt.cpan.org/Public/Bug/Display.html?id=16988
+	- Patched support for add support for gluquadric* sub https://rt.cpan.org/Public/Bug/Display.html?id=25598
+	- Made App init slimer https://rt.cpan.org/Public/Bug/Display.html?id=16987
+	- Added faster SDL::Color alternative https://rt.cpan.org/Public/Bug/Display.html?id=17975
+	- Added better error reporting for TTFont errors
+	- Added win32 support https://rt.cpan.org/Ticket/Display.html?id=49003
 	
 * Aug 22 2009 Kartik Thakore <thakore.kartik@gmail.com>
-	-Added no index 
-	-Added james's openbsd.pm
+	- Added no index 
+	- Added james's openbsd.pm
 
 * Aug 18 2009  Kartik Thakore   <thakore.kartik@gmail.com>
-	-Fixed constants with help from arodland
-	-Added warning instead of die for frozenbubble's sake
-	-Made a build script for Solaris
+	- Fixed constants with help from arodland
+	- Added warning instead of die for frozenbubble's sake
+	- Made a build script for Solaris
 
 * Aug 17 2009   Gabor Szabo <szabgab@gmail.com>
 	- Small fixes in the tutorials

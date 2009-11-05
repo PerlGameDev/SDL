@@ -37,6 +37,7 @@ use SDL;
 use SDL::Event;
 use SDL::Surface;
 use SDL::Rect;
+use SDL::Video;
 
 our @ISA = qw(SDL::Surface);
 sub DESTROY {
@@ -112,7 +113,7 @@ sub new {
 		$SDL::App::USING_OPENGL = 0;
 	}
 
-	my $self = SDL::SetVideoMode($w,$h,$d,$f)
+	my $self = SDL::Video::set_video_mode($w,$h,$d,$f)
 		or croak SDL::get_error();
 	
 	if ($ic and -e $ic) {
@@ -195,7 +196,7 @@ sub sync ($) {
 	if ($SDL::App::USING_OPENGL) {
 		SDL::GLSwapBuffers()
 	} else {
-		SDL::Flip($self);
+		SDL::Video::flip($self);
 	}
 }
 

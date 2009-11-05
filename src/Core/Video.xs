@@ -262,7 +262,7 @@ video_map_RGBA ( pixel_format, r, g, b, a )
 	Uint8 b	
 	Uint8 a
 	CODE:
-		RETVAL = SDL_MapRGB(pixel_format,r,g,b);
+		RETVAL = SDL_MapRGBA(pixel_format,r,g,b,a);
 	OUTPUT:
 		RETVAL
 
@@ -279,4 +279,212 @@ video_unlock_surface ( surface )
 	SDL_Surface *surface
 	CODE:
 		SDL_UnlockSurface(surface);
+
+
+SDL_Surface *
+video_convert_surface( src, fmt, flags)
+	SDL_Surface* src
+	SDL_PixelFormat* fmt
+	Uint32	flags
+	PREINIT:
+		char *CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = SDL_ConvertSurface(src, fmt, flags);
+	OUTPUT:
+		RETVAL
+
+
+SDL_Surface *
+video_display_format ( surface )
+	SDL_Surface *surface
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = SDL_DisplayFormat(surface);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+video_display_format_alpha ( surface )
+	SDL_Surface *surface
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = SDL_DisplayFormatAlpha(surface);
+	OUTPUT:
+		RETVAL
+
+
+int
+video_set_color_key ( surface, flag, key )
+	SDL_Surface *surface
+	Uint32 flag
+	SDL_Color *key
+	CODE:
+		Uint32 pixel = SDL_MapRGB(surface->format,key->r,key->g,key->b);
+		RETVAL = SDL_SetColorKey(surface,flag,pixel);
+	OUTPUT:
+		RETVAL
+
+int
+video_set_alpha ( surface, flag, alpha )
+	SDL_Surface *surface
+	Uint32 flag
+	Uint8 alpha
+	CODE:
+		RETVAL = SDL_SetAlpha(surface,flag,alpha);
+	OUTPUT:
+		RETVAL
+
+AV *
+get_RGB ( pixel_format, pixel )
+	SDL_PixelFormat *pixel_format
+	Uint32 pixel
+	CODE:
+		Uint8 r,g,b;
+		SDL_GetRGB(pixel,pixel_format,&r,&g,&b);
+		RETVAL = newAV();
+		av_push(RETVAL,newSViv(r));
+		av_push(RETVAL,newSViv(g));
+		av_push(RETVAL,newSViv(b));
+	OUTPUT:
+		RETVAL
+
+AV *
+get_RGBA ( pixel_format, pixel )
+	SDL_PixelFormat *pixel_format
+	Uint32 pixel
+	CODE:
+		Uint8 r,g,b,a;
+		SDL_GetRGBA(pixel,pixel_format,&r,&g,&b,&a);
+		RETVAL = newAV();
+		av_push(RETVAL,newSViv(r));
+		av_push(RETVAL,newSViv(g));
+		av_push(RETVAL,newSViv(b));
+		av_push(RETVAL,newSViv(a));
+	OUTPUT:
+		RETVAL
+
+SDL_Surface*
+load_BMP ( filename )
+	char *filename
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = SDL_LoadBMP(filename);
+	OUTPUT:
+		RETVAL
+
+int
+save_BMP ( surface, filename )
+	SDL_Surface *surface
+	char *filename
+	CODE:
+		RETVAL = SDL_SaveBMP(surface,filename);
+	OUTPUT:
+		RETVAL
+
+int
+fill_rect ( dest, dest_rect, pixel )
+	SDL_Surface *dest
+	SDL_Rect *dest_rect
+	Uint32 pixel
+	CODE:
+		RETVAL = SDL_FillRect(dest,dest_rect,pixel);
+	OUTPUT:
+		RETVAL
+
+int
+blit_surface ( src, src_rect, dest, dest_rect )
+	SDL_Surface *src
+	SDL_Surface *dest
+	SDL_Rect *src_rect
+	SDL_Rect *dest_rect
+	CODE:
+		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
+	OUTPUT:
+		RETVAL
+
+void
+set_clip_rect ( surface, rect )
+	SDL_Surface *surface
+	SDL_Rect *rect
+	CODE:
+		SDL_SetClipRect(surface,rect);
+
+void
+get_clip_rect ( surface, rect )
+	SDL_Surface *surface
+	SDL_Rect *rect;
+	CODE:
+		SDL_GetClipRect(surface, rect);
+
+
+
+int
+video_lock_YUV_overlay ( overlay )
+	SDL_Overlay *overlay
+	CODE:
+		RETVAL = SDL_LockYUVOverlay(overlay);
+	OUTPUT:
+		RETVAL
+
+void
+video_unlock_YUV_overlay ( overlay )
+        SDL_Overlay *overlay
+        CODE:
+                SDL_UnlockYUVOverlay(overlay);
+
+int
+video_display_YUV_overlay ( overlay, dstrect )
+	SDL_Overlay *overlay
+	SDL_Rect *dstrect
+	CODE:
+		RETVAL = SDL_DisplayYUVOverlay ( overlay, dstrect );
+	OUTPUT:
+		RETVAL
+
+
+int
+video_GL_load_library ( path )
+	char *path
+	CODE:
+		RETVAL = SDL_GL_LoadLibrary(path);
+	OUTPUT:
+		RETVAL
+
+void*
+video_GL_get_proc_address ( proc )
+	char *proc
+	CODE:
+		RETVAL = SDL_GL_GetProcAddress(proc);
+	OUTPUT:
+		RETVAL
+
+int
+video_GL_set_attribute ( attr,  value )
+	int        attr
+	int        value
+	CODE:
+		RETVAL = SDL_GL_SetAttribute(attr, value);
+	OUTPUT:
+	        RETVAL
+
+AV *
+video_GL_get_attribute ( attr )
+	int        attr
+	CODE:
+		int value;
+		RETVAL = newAV();
+		av_push(RETVAL,newSViv(SDL_GL_GetAttribute(attr, &value)));
+		av_push(RETVAL,newSViv(value));
+	OUTPUT:
+	        RETVAL
+
+void
+video_GL_swap_buffers ()
+	CODE:
+		SDL_GL_SwapBuffers ();
+
+
 

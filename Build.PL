@@ -42,6 +42,41 @@ my %subsystems =
 		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
 		                  png jpeg smpeg )],
 	},
+	Events => {
+		file      => {
+			from  => 'src/Core/Events.xs',
+			to    => 'lib/SDL/Events.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	ActiveEvent => {
+		file      => {
+			from  => 'src/Core/objects/ActiveEvent.xs',
+			to    => 'lib/SDL/ActiveEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	KeyboardEvent => {
+		file      => {
+			from  => 'src/Core/objects/KeyboardEvent.xs',
+			to    => 'lib/SDL/KeyboardEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	MouseMotionEvent => {
+		file      => {
+			from  => 'src/Core/objects/MouseMotionEvent.xs',
+			to    => 'lib/SDL/MouseMotionEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	MultiThread => {
+		file      => {
+			from  => 'src/Core/MultiThread.xs',
+			to    => 'lib/SDL/MultiThread.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	Video => {
 		file      => {
 			from  => 'src/Core/Video.xs',
@@ -106,6 +141,13 @@ my %subsystems =
 			to    => 'lib/SDL/TTF_Font.xs',
 		},
 		libraries => [qw( SDL SDL_ttf )],
+	},
+	Version => {
+		file      => {
+			from  => 'src/Core/objects/Version.xs',
+			to    => 'lib/SDL/Version.xs',
+		},
+		libraries => [qw( SDL )],
 	},
 	OpenGL => {
 		file      => {
@@ -202,7 +244,7 @@ my $build   = SDL::Build->new(
 	build_requires =>
 	{
 		'Test::Simple' => '0.47',
-
+		'Test::Trap' => '0',
 	},
 	build_recommends     =>
 	{
