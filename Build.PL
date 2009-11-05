@@ -56,6 +56,20 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	KeyboardEvent => {
+		file      => {
+			from  => 'src/Core/objects/KeyboardEvent.xs',
+			to    => 'lib/SDL/KeyboardEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	MouseMotionEvent => {
+		file      => {
+			from  => 'src/Core/objects/MouseMotionEvent.xs',
+			to    => 'lib/SDL/MouseMotionEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	MultiThread => {
 		file      => {
 			from  => 'src/Core/MultiThread.xs',

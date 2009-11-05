@@ -39,10 +39,12 @@ kbevent_state ( event, ... )
 	OUTPUT:
 		RETVAL
 
-SDL_keysym
+SDL_keysym *
 kbevent_keysym ( event, ... )
 	SDL_KeyboardEvent *event
+	PREINIT:
+		char* CLASS = "SDL::keysym";
 	CODE: 
-		RETVAL = event->gain;
+		RETVAL = &(event->keysym);
 	OUTPUT:
 		RETVAL
