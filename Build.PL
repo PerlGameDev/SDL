@@ -91,6 +91,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	MixChunk => {
+		file      => {
+			from  => 'src/Core/objects/MixChunk.xs',
+			to    => 'lib/SDL/MixChunk.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	Palette => {
 		file      => {
 			from  => 'src/Core/objects/Palette.xs',
