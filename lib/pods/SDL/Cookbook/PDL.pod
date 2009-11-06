@@ -4,9 +4,11 @@ PDL provides great number crunching capabilities to Perl and SDL provides game-d
 
 =head1 Old SDL interface
 
+
 Please be aware that much of the code in this example uses SDL Perl v 2.2.4.  The SDL Perl developers are hard at work rewriting SDL, to be released as SDL 3.0 soon.  The new version of SDL is not backwards compatible.  Check back with this page after SDL 3.0 has been released to get the updated commands.
 
 =head1 Perl's SDL in a nutshell
+
 
 SDL stands for Simple DirectMedia Layer.  It's a cross-platform library written in C that's meant to handle all of the low-level graphics and sound stuff.  You can read more about SDL here: http://www.libsdl.org/.  Because SDL is focused on game programming, it has a raw but clean feel to it.  We will focus for now on using SDL to handle images for us.  Handling sound may some day be the focus of another chapter.
 
@@ -105,6 +107,7 @@ We will separate our program into two parts: the computational logic and the ani
 If you've ever written a simulation, you'll probably object that we don't have any iteration over time.  You're right, but it turns out that the timing works much better in SDL's event loop than in our computational logic.  The purpose of the computational logic is to let us focus on encoding our systems dynamics without having to worry about the application logic.  In this case, the computational logic simply updates the positions of the particles according to their velocities.
 
 =head2 Animation Logic
+
 We next need to figure out how the application is actually going to run and display anything.  We'll do this in two stages, the application intialization and the run loop.
 
 Here's some initialization code to get started; put this below the code already supplied above:
@@ -187,6 +190,7 @@ So far I've been carrying that explicit constant of 5 to represent the size of t
 	my $velocities = grandom(2, $numb_of_atoms) * 5;
 
 =head2 Disappearing Particles, take 2
+
 Unless you experience an unusual circumstance, all of the particles will quickly shrivel up and disappear!  What's going on?  It turns out we have a problem with our computational logic again, but we are also running into strange behavior from SDL.  We'll take a look at SDL's weird behavior first.
 
 Clearly the particle rectangle's size is not supposed to change, but somehow it does.  To confince yourself of this, modify the <code>for</code> loop in the application loop so it looks more like this, which explicitly sets the particle size for every particle that's drawn:
@@ -568,6 +572,7 @@ Just so that you've got a complete working example, here is the final state of t
 Next, if you want to model interactions among particles, you could write code in the compute function to handle that for you.  If you wanted to use little balls instead of the boxes we've used here, you could create your own images and use an SDL::Surface to load the image.  You can't resize an image using SDL, but then you'd probably be working with real interactions anyway, like a Coulomb force, in which case you'd really be adjusting the interaction strength, not the particle size.
 
 =head1 Directions for future work
+
 I have a couple of ideas for future work combining PDL and SDL.
 
 =over 
