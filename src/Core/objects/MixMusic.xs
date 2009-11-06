@@ -21,6 +21,6 @@ SDL_mixmusic - This is an opaque data type used for Music data
 
 void
 mixmusic_DESTROY(mixmusic)
-	Mix_Chunk *mixmusic
+	Mix_Music *mixmusic
 	CODE:
 		Mix_FreeMusic(mixmusic);
