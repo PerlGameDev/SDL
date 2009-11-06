@@ -20,4 +20,9 @@ Described on the SDL API site.
 
 =cut
 
-
+int
+wmanage_get_WM_info(  )
+	CODE:
+		RETVAL = 1;
+	OUTPUT:
+		RETVAL

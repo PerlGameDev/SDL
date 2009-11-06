@@ -47,7 +47,7 @@ Uint8
 event_type ( event, ... )
 	SDL_Event *event
 	CODE:
-		RETVAL = NULL;
+		RETVAL = -1;
 		if ( &event != NULL ) 
 		RETVAL = event->type;
 	OUTPUT:
@@ -179,7 +179,7 @@ event_quit ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::QuitEvent";
 	CODE:
-		RETVAL = NULL;
+		RETVALE = NULL;
 		if ( &event != NULL ) 
 		RETVAL = &(event->quit);
 	OUTPUT:
@@ -191,7 +191,7 @@ event_user ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::UserEvent";
 	CODE:
-		RETVAL = NULL;
+		RETVALE = NULL;
 		if ( &event != NULL ) 
 		RETVAL = &(event->user);
 	OUTPUT:
@@ -203,7 +203,7 @@ event_syswm ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::SysWMEvent";
 	CODE:
-		RETVAL = NULL;
+		RETVALE = NULL;
 		if ( &event != NULL ) 
 		RETVAL = &(event->syswm);
 	OUTPUT:

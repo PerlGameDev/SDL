@@ -1,8 +1,8 @@
-package SDL::WMangement;
+package SDL::WManagement;
 use strict;
 use warnings;
 require Exporter;
 require DynaLoader;
 our @ISA = qw(Exporter DynaLoader);
-bootstrap SDL::WMangement;
+bootstrap SDL::WManagement;
 1;
