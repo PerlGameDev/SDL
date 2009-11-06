@@ -2,19 +2,76 @@
 use strict;
 use SDL;
 use SDL::Event;
-#use SDL::Surface;
+use SDL::Events;
+use SDL::ActiveEvent;
+use SDL::ExposeEvent;
+use SDL::JoyAxisEvent;
+use SDL::JoyBallEvent;
+use SDL::JoyButtonEvent;
+use SDL::JoyHatEvent;
+use SDL::KeyboardEvent;
+use SDL::MouseButtonEvent;
+use SDL::MouseMotionEvent;
+use SDL::QuitEvent;
+use SDL::ResizeEvent;
+use SDL::SysWMEvent;
+use SDL::UserEvent;
 use SDL::Video;
 use Test::More;
 
-plan ( tests => 5);
+plan ( tests => 33 );
 
 my @done =qw/
 pump_events 
 /;
 
+my @done_event =qw/
+type
+active
+key
+motion
+button
+jaxis
+jball
+jhat
+jbutton
+resize
+expose
+quit
+user
+syswm
+/;
 
 use_ok( 'SDL::Events' ); 
-can_ok ('SDL::Events', @done); 
+use_ok( 'SDL::Event' ); 
+use_ok( 'SDL::ActiveEvent' ); 
+use_ok( 'SDL::ExposeEvent' ); 
+use_ok( 'SDL::JoyAxisEvent' ); 
+use_ok( 'SDL::JoyBallEvent' ); 
+use_ok( 'SDL::JoyButtonEvent' ); 
+use_ok( 'SDL::JoyHatEvent' ); 
+use_ok( 'SDL::KeyboardEvent' ); 
+use_ok( 'SDL::MouseButtonEvent' ); 
+use_ok( 'SDL::MouseMotionEvent' ); 
+use_ok( 'SDL::QuitEvent' ); 
+use_ok( 'SDL::ResizeEvent' ); 
+use_ok( 'SDL::SysWMEvent' ); 
+use_ok( 'SDL::UserEvent' ); 
+can_ok( 'SDL::Events',           @done); 
+can_ok( 'SDL::Event',            @done_event);
+can_ok( 'SDL::ActiveEvent',      qw/type gain state/);
+can_ok( 'SDL::ExposeEvent',      qw/type/);
+can_ok( 'SDL::JoyAxisEvent',     qw/type which axis value/);
+can_ok( 'SDL::JoyBallEvent',     qw/type which ball xrel yrel/);
+can_ok( 'SDL::JoyButtonEvent',   qw/type which button state/);
+can_ok( 'SDL::JoyHatEvent',      qw/type which hat value/);
+can_ok( 'SDL::KeyboardEvent',    qw/type state keysym/);
+can_ok( 'SDL::MouseButtonEvent', qw/type which button state x y/);
+can_ok( 'SDL::MouseMotionEvent', qw/type state x y xrel yrel/);
+can_ok( 'SDL::QuitEvent',        qw/type/);
+can_ok( 'SDL::ResizeEvent',      qw/type w h/);
+can_ok( 'SDL::SysWMEvent',       qw/type msg/);
+can_ok( 'SDL::UserEvent',        qw/type code data1 data2/);
 
 SDL::init(SDL_INIT_VIDEO);                                                                          
 

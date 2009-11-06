@@ -29,7 +29,7 @@
 #	dgoehrig\@cpan.org
 #
 #
-# basic testing of SDL::Event
+# basic testing of SDL::Game::Event
 
 BEGIN {
 	unshift @INC, 'blib/lib','blib/arch';
@@ -41,9 +41,9 @@ use Test::More;
 
 plan ( tests => 2 );
 
-use_ok( 'SDL::Event' ); 
+use_ok( 'SDL::Game::Event' ); 
   
-can_ok ('SDL::Event', qw/
+can_ok ('SDL::Game::Event', qw/
 	new 
 	type 
 	pump 
