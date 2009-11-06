@@ -49,6 +49,83 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	ActiveEvent => {
+		file      => {
+			from  => 'src/Core/objects/ActiveEvent.xs',
+			to    => 'lib/SDL/ActiveEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	ExposeEvent => {
+		file      => {
+			from  => 'src/Core/objects/ExposeEvent.xs',
+			to    => 'lib/SDL/ExposeEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	JoyAxisEvent => {
+		file      => {
+			from  => 'src/Core/objects/JoyAxisEvent.xs',
+			to    => 'lib/SDL/JoyAxisEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	JoyBallEvent => {
+		file      => {
+			from  => 'src/Core/objects/JoyBallEvent.xs',
+			to    => 'lib/SDL/JoyBallEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	JoyButtonEvent => {
+		file      => {
+			from  => 'src/Core/objects/JoyButtonEvent.xs',
+			to    => 'lib/SDL/JoyButtonEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	JoyHatEvent => {
+		file      => {
+			from  => 'src/Core/objects/JoyHatEvent.xs',
+			to    => 'lib/SDL/JoyHatEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	KeyboardEvent => {
+		file      => {
+			from  => 'src/Core/objects/KeyboardEvent.xs',
+			to    => 'lib/SDL/KeyboardEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	MouseButtonEvent => {
+		file      => {
+			from  => 'src/Core/objects/MouseButtonEvent.xs',
+			to    => 'lib/SDL/MouseButtonEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	MouseMotionEvent => {
+		file      => {
+			from  => 'src/Core/objects/MouseMotionEvent.xs',
+			to    => 'lib/SDL/MouseMotionEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	UserEvent => {
+		file      => {
+			from  => 'src/Core/objects/UserEvent.xs',
+			to    => 'lib/SDL/UserEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	MultiThread => {
+		file      => {
+			from  => 'src/Core/MultiThread.xs',
+			to    => 'lib/SDL/MultiThread.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	Video => {
 		file      => {
 			from  => 'src/Core/Video.xs',
@@ -77,6 +154,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	SysWMEvent => {
+		file      => {
+			from  => 'src/Core/objects/SysWMEvent.xs',
+			to    => 'lib/SDL/SysWMEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	Overlay => {
 		file      => {
 			from  => 'src/Core/objects/Overlay.xs',
@@ -102,6 +186,20 @@ my %subsystems =
 		file      => {
 			from  => 'src/Core/objects/Palette.xs',
 			to    => 'lib/SDL/Palette.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	QuitEvent => {
+		file      => {
+			from  => 'src/Core/objects/QuitEvent.xs',
+			to    => 'lib/SDL/QuitEvent.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	ResizeEvent => {
+		file      => {
+			from  => 'src/Core/objects/ResizeEvent.xs',
+			to    => 'lib/SDL/ResizeEvent.xs',
 		},
 		libraries => [qw( SDL )],
 	},

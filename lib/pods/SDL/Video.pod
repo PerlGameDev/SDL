@@ -6,77 +6,189 @@ SDL::Video - Bindings to the video category in SDL API
 
 =head1 SYNOPSIS
 
-This module is not an object. Please read the 
+To be done.
 
 =head1 DESCRIPTION
-
 
 
 =head1 METHODS
 
 =head2	get_video_surface
 
-Returns a pointer to the current display surface 
+It return the current SDL::Surface on succés or undef on error.
+get_video_surface doesn't take any parameters.
 
 =head2	get_video_info
 
-Returns a pointer to information about the video hardware 
+Returns a SDL::VideoInfo about the video hardware. 
+It doesn't take any parameters.
 
 =head2	video_driver_name
 
-Obtain the name of the video driver 
+Return the 1024 first char of name of the video driver. 
+It doesn't take any parameters.
 
-=head2	list_modes
+=head2	list_modes(formats,flags)
 
-Returns a pointer to an array of available screen dimensions for the given format and video flags 
+Returns a pointer to an array of available screen dimensions for the given format and video flags,
+or it return undef if no modes are avalaibles.
 
-=head2	set_video_mode
+=head2	video_mode_ok(width,height,bpp,flags)
 
-Checks to see if a particular video mode is supported. 
+Checks to see if a particular video mode of the given width,height,bpp and flags is supported. 
+It returns 0 if the mode is not supported at all, or the suggested bpp.
 
-=head2	video_mode_ok
+=head2	set_video_mode(width,height,bpp,flags)
 
-Sets up a video mode with the specified width, height and bits-per-pixel. 
+Sets up a video mode with the specified width, height,  bits-per-pixel and flags. 
+set_video_mode returns a SDL::Surface on succés or it returns undef on error, the error message is retrieved using C<SDL::get_error>.
 
-=head2	update_rect
+=head4 List of avalaibles flags
 
-Makes sure the given area is updated on the given screen. 
+=over 4
 
-=head2	update_rects
+
+	SDL_SWSURFACE	Create the video surface in system memory
+	SDL_HWSURFACE	Create the video surface in video memory
+	SDL_ASYNCBLIT	Enables the use of asynchronous updates of the display surface. 
+			This will usually slow down blitting on single CPU machines, but may provide a speed increase on SMP systems.
+	SDL_ANYFORMAT	Normally, if a video surface of the requested bits-per-pixel (bpp) is not available, SDL will emulate one with a shadow surface.
+			Passing SDL_ANYFORMAT prevents this and causes SDL to use the video surface, regardless of its pixel depth.
+	SDL_HWPALETTE	Give SDL exclusive palette access. Without this flag you may not always get the colors you request with SDL::set_colors or SDL::set_palette.
+	SDL_DOUBLEBUF	Enable hardware double buffering; only valid with SDL_HWSURFACE. Calling SDL::flip will flip the buffers and update the screen. 
+			All drawing will take place on the surface that is not displayed at the moment. 
+			If double buffering could not be enabled then SDL_Flip will just perform a SDL::update_rect on the entire screen.
+	SDL_FULLSCREEN	SDL will attempt to use a fullscreen mode. If a hardware resolution change is not possible (for whatever reason), 
+			the next higher resolution will be used and the display window centered on a black background.
+	SDL_OPENGL	Create an OpenGL rendering context. You should have previously set OpenGL video attributes with SDL::gl_setattribute.
+	SDL_OPENGLBLIT	Create an OpenGL rendering context, like above, but allow normal blitting operations. 
+			The screen (2D) surface may have an alpha channel, and SDL::update_rects must be used for updating changes to the screen surface. 
+			NOTE: This option is kept for compatibility only, and will be removed in next versions. Is not recommended for new code.
+	SDL_RESIZABLE	Create a resizable window. 
+			When the window is resized by the user a SDL_VIDEORESIZE event is generated and SDL::set_video_mode  can be called again with the new size.
+	SDL_NOFRAME	If possible, SDL_NOFRAME causes SDL to create a window with no title bar or frame decoration. 
+			Fullscreen modes automatically have this flag set.
+
+
+=back
+
+Note 1: Use SDL_SWSURFACE if you plan on doing per-pixel manipulations, or blit surfaces with alpha channels, and require a high framerate. When you use hardware surfaces (by passing the flag SDL_HWSURFACE as parameter), SDL copies the surfaces from video memory to system memory when you lock them, and back when you unlock them. This can cause a major performance hit. Be aware that you may request a hardware surface, but receive a software surface because the video driver doesn't support hardware surface. Many platforms can only provide a hardware surface when using SDL_FULLSCREEN. The SDL_HWSURFACE flag is best used when the surfaces you'll be blitting can also be stored in video memory.
+
+Note 2: If you want to control the position on the screen when creating a windowed surface, you may do so by setting the environment variables SDL_VIDEO_CENTERED=center or SDL_VIDEO_WINDOW_POS=x,y. You can also set them via C<SDL::putenv>.
+
+Note 3: This function should be called in the main thread of your application.
+
+User note 1: Some have found that enabling OpenGL attributes like SDL_GL_STENCIL_SIZE (the stencil buffer size) before the video mode has been set causes the application to simply ignore those attributes, while enabling attributes after the video mode has been set works fine.
+
+User note 2: Also note that, in Windows, setting the video mode resets the current OpenGL context. You must execute again the OpenGL initialization code (set the clear color or the shade model, or reload textures, for example) after calling SDL::set_video_mode. In Linux, however, it works fine, and the initialization code only needs to be executed after the first call to SDL::set_video_mode (although there is no harm in executing the initialization code after each call to SDL::set_video_mode, for example for a multiplatform application). 
+
+
+
+
+=head2	update_rect(surface,x,y,width,height)
+
+Makes sure the given area is updated on the given screen.  
+The rectangle must be confined within the screen boundaries because there's no clipping.
+update_rect doesn't returns any value.
+
+Note : This function should not be called while screen is locked by SDL::lock_surface
+Note2 : If x, y, width and height are all equal to 0, SDL_UpdateRect will update the entire screen. 
+
+=head2	update_rects(surface,rects) 
 
 Makes sure the given list of rectangles is updated on the given screen. 
+The rectangle must be confined within the screen boundaries because there's no clipping.
+update_rects doesn't returns any value.
 
-=head2	flip
+Note : This function should not be called while screen is locked by SDL::lock_surface
 
-Swaps screen buffers 
+=head2	flip(surface)
 
-=head2	set_colors
+On hardware that supports double-buffering, this function sets up a flip and returns. 
+The hardware will wait for vertical retrace, and then swap video buffers before the next video surface blit or lock will return. 
+On hardware that doesn't support double-buffering or if SDL_SWSURFACE was set, this is equivalent to calling SDL::update_rect(screen, 0, 0, 0, 0)
+
+A software screen surface is also updated automatically when parts of a SDL window are redrawn, caused by overlapping windows or by restoring from an iconified state. As a result there is no proper double buffer behavior in windowed mode for a software screen, in contrast to a full screen software mode.
+
+The SDL_DOUBLEBUF flag must have been passed to SDL::set_video_mode, when setting the video mode for this function to perform hardware flipping.
+flip returns 0 on succés or -1 on error.
+
+Note : If you want to swap the buffers of an initialized OpenGL context, use the function SDL::gl_swap_buffers instead. 
+
+=head2	set_colors(surface,start,colors)
 
 Sets a portion of the colormap for the given 8-bit surface. 
 
-=head2	set_palette
+When surface is the surface associated with the current display, the display colormap will be updated with the requested colors. 
+If SDL_HWPALETTE was set in SDL::set_video_mode flags, SDL::set_colors will always return 1, and the palette is guaranteed to be set the way you desire, even if the window colormap has to be warped or run under emulation.
+The color components of a SDL::Color structure are 8-bits in size, giving you a total of 2563 = 16777216 colors.
+Palettized (8-bit) screen surfaces with the SDL_HWPALETTE flag have two palettes, a logical palette that is used for mapping blits to/from the surface and a physical palette (that determines how the hardware will map the colors to the display). 
+SDL::SetColors modifies both palettes (if present), and is equivalent to calling SDL::SetPalette with the flags set to (SDL_LOGPAL | SDL_PHYSPAL). 
 
-Sets the colors in the palette of an 8-bit surface. 
+If surface is not a palettized surface, this function does nothing, returning 0. 
+If all of the colors were set as passed to SDL::set_colors, it will return 1.
+If not all the color entries were set exactly as given, it will return 0, and you should look at the surface palette to determine the actual color palette.
 
-=head2	set_gamma
+=head2	set_palette(surface,flags,start,colors)
 
-Sets the color gamma function for the display 
+Sets a portion of the palette for the given 8-bit surface.
 
-=head2	get_gamma_ramp
+Palettized (8-bit) screen surfaces with the SDL_HWPALETTE flag have two palettes, a logical palette that is used for mapping blits to/from the surface and a physical palette (that determines how the hardware will map the colors to the display). 
+Non screen surfaces have a logical palette only. SDL::blit_surface always uses the logical palette when blitting surfaces (if it has to convert between surface pixel formats). Because of this, it is often useful to modify only one or the other palette to achieve various special color effects (e.g., screen fading, color flashes, screen dimming).
 
-Gets the color gamma lookup tables for the display 
+This function can modify either the logical or physical palette by specifying SDL_LOGPAL or SDL_PHYSPAL the in the flags parameter.
 
-=head2	set_gmmma_ramp
+When surface is the surface associated with the current display, the display colormap will be updated with the requested colors.
+If SDL_HWPALETTE was set in SDL::set_video_mode flags, SDL::set_palette will always return 1, and the palette is guaranteed to be set the way you desire, even if the window colormap has to be warped or run under emulation.
+The color components of a SDL::Color structure are 8-bits in size, giving you a total of 2563 = 16777216 colors. 
 
-Sets the color gamma lookup tables for the display 
+If surface is not a palettized surface, this function does nothing, returning 0. If all of the colors were set as passed to SDL_SetPalette, it will return 1. If not all the color entries were set exactly as given, it will return 0, and you should look at the surface palette to determine the actual color palette.
 
-=head2	map_RGB
+=head2	set_gamma(r,g,b)
 
-Maps a RGB color value to a pixel format. 
+Sets the "gamma function" for the display of each color component. Gamma controls the brightness/contrast of colors displayed on the screen. 
+A gamma value of 1.0 is identity (i.e., no adjustment is made).
 
-=head2	map_RGBA
+This function adjusts the gamma based on the "gamma function" parameter, you can directly specify lookup tables for gamma adjustment with SDL::set_gamma_ramp.
 
-Maps a RGBA color value to a pixel format. 
+Not all display hardware is able to change gamma.
+SDL::set_gamma returns -1 on error.
+
+Warning: Under Linux (X.org Gnome and Xfce), gamma settings affects the entire display (including the desktop)! 
+
+=head2	get_gamma_ramp(rt,gt,bt) * to be coded
+
+Gets the gamma translation lookup tables currently used by the display. Each table is an array of 256 Uint16 values.
+SDL::get_gamma_ramp returns -1 on error.
+
+=head2	set_gamma_ramp(rt,gt,bt)
+
+Sets the gamma lookup tables for the display for each color component. Each table is an array of 256 Uint16 values, representing a mapping between the input and output for that channel.
+The input is the index into the array, and the output is the 16-bit gamma value at that index, scaled to the output color precision. 
+You may pass NULL to any of the channels to leave them unchanged.
+
+This function adjusts the gamma based on lookup tables, you can also have the gamma calculated based on a "gamma function" parameter with SDL::set_gamma.
+
+Not all display hardware is able to change gamma. 
+SDL::set_gamma_ramp returns -1 on error.
+
+=head2	map_RGB(pixel_format,r,g,b)
+
+Maps the RGB color value to the specified SDL::pixel_format and returns the pixel value as a 32-bit int.
+If the format has a palette (8-bit) the index of the closest matching color in the palette will be returned.
+If the specified pixel format has an alpha component it will be returned as all 1 bits (fully opaque). 
+
+SDL::map_RGP returns a pixel value best approximating the given RGB color value for a given pixel format.
+If the SDL::pixel_format's  bpp (color depth) is less than 32-bpp then the unused upper bits of the return value can safely be ignored (e.g., with a 16-bpp format the return value can be assigned to a Uint16, and similarly a Uint8 for an 8-bpp format).
+
+=head2	map_RGBA(pixel_format,r,g,b,a)
+
+Maps the RGBA color value to the specified SDL::pixel_format and returns the pixel value as a 32-bit int.
+If the format has a palette (8-bit) the index of the closest matching color in the palette will be returned.
+If the specified pixel format has no alpha component the alpha value will be ignored (as it will be in formats with a palette). 
+
+A pixel value best approximating the given RGBA color value for a given pixel format.
+If the pixel format bpp (color depth) is less than 32-bpp then the unused upper bits of the return value can safely be ignored (e.g., with a 16-bpp format the return value can be assigned to a Uint16, and similarly a Uint8 for an 8-bpp format).
 
 =head2	get_RGB
 

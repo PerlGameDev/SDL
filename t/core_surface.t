@@ -17,11 +17,10 @@ use SDL::Rect;
 use SDL::Color;
 use SDL::Video;
 use SDL::PixelFormat;
-use Test::More tests => 37;
+use Test::More tests => 36;
 
 my $surface
     = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 640, 320, 8, 0, 0, 0, 0 );
-    #TODO: test SDL::Surface->new_from
 isa_ok( $surface, 'SDL::Surface' );
 is( $surface->w,     640, 'surface has width' );
 is( $surface->h,     320, 'surface has height' );
@@ -98,7 +97,20 @@ SDL::Video::update_rects( $app, $small_rect );
 
 diag( 'This is in surface : ' . SDL::Surface::get_pixels($app) );
 
+SKIP:
+{
+	skip('new_form is segfaulting on DESTROY of created surface. Read: http://sdlperl.ath.cx/projects/SDLPerl/ticket/53', 1); 
 
-pass 'did this pass';
+my $other_surface =  SDL::Surface->new_from( $surface->get_pixels, 640, 320, 8, $surface->pitch, 0, 0, 0, 0 ); 
+
+isa_ok( $other_surface, 'SDL::Surface' );
+
+$surface->DESTROY();
+$other_surface->DESTROY();
+
+}
+pass 'Final SegFault test';
 
 SDL::delay(100);
+
+

@@ -47,8 +47,7 @@ surface_new (CLASS, flags, width, height, depth, Rmask, Gmask, Bmask, Amask )
 
 SDL_Surface *
 surface_new_from (CLASS, pixels, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask )
-	char *CLASS
-	char *pixels
+	char* CLASS
 	int width
 	int height
 	int depth
@@ -57,16 +56,16 @@ surface_new_from (CLASS, pixels, width, height, depth, pitch, Rmask, Gmask, Bmas
 	Uint32 Gmask
 	Uint32 Bmask
 	Uint32 Amask
+	IV pixels
 	CODE:
-		void* pixeldata;
-		int len = pitch * height;
-		Newx(pixeldata,len,Uint8);
-		Copy(pixels,pixeldata,len,Uint8);
-		RETVAL = SDL_CreateRGBSurfaceFrom ( pixeldata, width, height,
-				depth, pitch, Rmask, Gmask, Bmask, Amask );
+		warn ("USING THIS WILL CAUSE YOUR CODE TO SEGFAULT ON EXIT! \n READ: http://sdlperl.ath.cx/projects/SDLPerl/ticket/53");
+		void *p = INT2PTR(void*, pixels);
+		RETVAL = SDL_CreateRGBSurfaceFrom ( p, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask );
+		if( RETVAL == NULL)
+		croak ("SDL_CreateRGBSurfaceFrom failed: %s", SDL_GetError());
+
 	OUTPUT:	
 		RETVAL
-
 
 
 SDL_PixelFormat *
