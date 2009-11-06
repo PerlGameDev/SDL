@@ -1202,10 +1202,17 @@ MixLoadWAV ( filename )
 		RETVAL
 
 Mix_Music *
-MixLoadMusic ( filename )
+MixLoadMUS ( filename )
 	char *filename
+	PREINIT:
+		char * CLASS = "SDL::MixMusic";
 	CODE:
-		RETVAL = Mix_LoadMUS(filename);
+		Mix_Music * mixmusic;
+		mixmusic = Mix_LoadMUS(filename);
+		if (mixmusic == NULL) {
+		  fprintf(stderr, "Could not load %s\n", filename);
+		}
+		RETVAL = mixmusic;
 	OUTPUT:
 		RETVAL
 

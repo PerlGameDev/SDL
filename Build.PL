@@ -180,7 +180,14 @@ my %subsystems =
 			from  => 'src/Core/objects/MixChunk.xs',
 			to    => 'lib/SDL/MixChunk.xs',
 		},
-		libraries => [qw( SDL )],
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixMusic => {
+		file      => {
+			from  => 'src/Core/objects/MixMusic.xs',
+			to    => 'lib/SDL/MixMusic.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
 	},
 	Palette => {
 		file      => {
