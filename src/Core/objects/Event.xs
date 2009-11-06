@@ -179,7 +179,7 @@ event_quit ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::QuitEvent";
 	CODE:
-		RETVALE = NULL;
+		RETVAL = NULL;
 		if ( &event != NULL ) 
 		RETVAL = &(event->quit);
 	OUTPUT:
@@ -191,7 +191,7 @@ event_user ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::UserEvent";
 	CODE:
-		RETVALE = NULL;
+		RETVAL = NULL;
 		if ( &event != NULL ) 
 		RETVAL = &(event->user);
 	OUTPUT:
@@ -203,7 +203,7 @@ event_syswm ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::SysWMEvent";
 	CODE:
-		RETVALE = NULL;
+		RETVAL = NULL;
 		if ( &event != NULL ) 
 		RETVAL = &(event->syswm);
 	OUTPUT:
