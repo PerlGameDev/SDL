@@ -7,12 +7,12 @@ plan ( tests => 4 );
 
 my @done =qw/ none /;
 
+use_ok( 'SDL::WManagement' ); 
 
 SKIP:
 {
-skip 'Not implemented', 2; 
-use_ok( 'SDL::WM' ); 
-can_ok ('SDL:WM', @done); 
+skip 'Not implemented', 1; 
+can_ok ('SDL:WMangement', @done); 
 }
 
 my @left = qw/
@@ -25,7 +25,7 @@ toggle_fullscreen
 grab_input 	
 /;
 
-my $why = '[Percentage Completion] '.int( 100 * $#done / ($#done + $#left) ) ."\% implementation. $#done / ".($#done+$#left); 
+my $why = '[Percentage Completion] '.int( 100 * ($#done+1) / ($#done + $#left +2 ) ) ."\% implementation.". ($#done +1) .' / '.($#done+$#left +2); 
 
 TODO:
 {
