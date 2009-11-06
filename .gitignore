@@ -5,6 +5,8 @@ blib
 lib/SDL/Config.pm
 lib/SDL/*.c
 lib/SDL/*.xs
+lib/SDL/Mixer/*.c
+lib/SDL/Mixer/*.xs
 SDL_perl.c
 SDL_perl.xs
 stage

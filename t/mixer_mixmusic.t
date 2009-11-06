@@ -3,14 +3,9 @@ use strict;
 use warnings;
 use SDL;
 use SDL::Mixer::MixMusic;
-use Test::More;
+use Test::More tests => 4;
 
-if ( SDL::init(SDL_INIT_AUDIO) < 0 ) {
-    plan( skip_all => 'No sound card?' );
-
-} else {
-    plan( tests => 3 );
-}
+is( SDL::init(SDL_INIT_AUDIO), 0, '[init] returns 0 on success' );
 
 is( SDL::MixOpenAudio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ),
     0, 'MixOpenAudio passed' );

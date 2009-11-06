@@ -177,15 +177,15 @@ my %subsystems =
 	},
 	MixChunk => {
 		file      => {
-			from  => 'src/Core/objects/MixChunk.xs',
-			to    => 'lib/SDL/MixChunk.xs',
+			from  => 'src/Mixer/objects/MixChunk.xs',
+			to    => 'lib/SDL/Mixer/MixChunk.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
 	},
 	MixMusic => {
 		file      => {
-			from  => 'src/Core/objects/MixMusic.xs',
-			to    => 'lib/SDL/MixMusic.xs',
+			from  => 'src/Mixer/objects/MixMusic.xs',
+			to    => 'lib/SDL/Mixer/MixMusic.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
 	},

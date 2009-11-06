@@ -9,7 +9,7 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 
-MODULE = SDL::MixMusic 	PACKAGE = SDL::MixMusic    PREFIX = mixmusic_
+MODULE = SDL::Mixer::MixMusic 	PACKAGE = SDL::Mixer::MixMusic    PREFIX = mixmusic_
 
 =for documentation
 

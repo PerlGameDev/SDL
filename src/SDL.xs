@@ -1190,7 +1190,7 @@ Mix_Chunk *
 MixLoadWAV ( filename )
 	char *filename
 	PREINIT:
-		char * CLASS = "SDL::MixChunk";
+		char * CLASS = "SDL::Mixer::MixChunk";
 	CODE:
 		Mix_Chunk * mixchunk;
 		mixchunk = Mix_LoadWAV(filename);
@@ -1205,7 +1205,7 @@ Mix_Music *
 MixLoadMUS ( filename )
 	char *filename
 	PREINIT:
-		char * CLASS = "SDL::MixMusic";
+		char * CLASS = "SDL::Mixer::MixMusic";
 	CODE:
 		Mix_Music * mixmusic;
 		mixmusic = Mix_LoadMUS(filename);
@@ -1220,7 +1220,7 @@ Mix_Chunk *
 MixQuickLoadWAV ( buf )
 	Uint8 *buf
 	PREINIT:
-		char * CLASS = "SDL::MixChunk";
+		char * CLASS = "SDL::Mixer::MixChunk";
 	CODE:
 		RETVAL = Mix_QuickLoad_WAV(buf);
 	OUTPUT:

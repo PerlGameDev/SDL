@@ -9,7 +9,7 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 
-MODULE = SDL::MixChunk 	PACKAGE = SDL::MixChunk    PREFIX = mixchunk_
+MODULE = SDL::Mixer::MixChunk 	PACKAGE = SDL::Mixer::MixChunk    PREFIX = mixchunk_
 
 =for documentation
 
