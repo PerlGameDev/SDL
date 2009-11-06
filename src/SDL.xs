@@ -1189,22 +1189,38 @@ MixQuerySpec ()
 Mix_Chunk *
 MixLoadWAV ( filename )
 	char *filename
+	PREINIT:
+		char * CLASS = "SDL::Mixer::MixChunk";
 	CODE:
-		RETVAL = Mix_LoadWAV(filename);
+		Mix_Chunk * mixchunk;
+		mixchunk = Mix_LoadWAV(filename);
+		if (mixchunk == NULL) {
+		  fprintf(stderr, "Could not load %s\n", filename);
+		}
+		RETVAL = mixchunk;
 	OUTPUT:
 		RETVAL
 
 Mix_Music *
-MixLoadMusic ( filename )
+MixLoadMUS ( filename )
 	char *filename
+	PREINIT:
+		char * CLASS = "SDL::Mixer::MixMusic";
 	CODE:
-		RETVAL = Mix_LoadMUS(filename);
+		Mix_Music * mixmusic;
+		mixmusic = Mix_LoadMUS(filename);
+		if (mixmusic == NULL) {
+		  fprintf(stderr, "Could not load %s\n", filename);
+		}
+		RETVAL = mixmusic;
 	OUTPUT:
 		RETVAL
 
 Mix_Chunk *
 MixQuickLoadWAV ( buf )
 	Uint8 *buf
+	PREINIT:
+		char * CLASS = "SDL::Mixer::MixChunk";
 	CODE:
 		RETVAL = Mix_QuickLoad_WAV(buf);
 	OUTPUT:

@@ -44,8 +44,8 @@ SDL_Cursor *		T_PTR
 SDL_AudioSpec *		T_PTR
 SDL_AudioCVT *		T_PTR
 Mix_Fading		T_UV
-Mix_Chunk *		T_PTR
-Mix_Music *		T_PTR
+Mix_Chunk *		O_OBJECT
+Mix_Music *		O_OBJECT
 SDL_GLattr              T_IV
 int *			T_PTR
 void *			T_PTR
