@@ -56,6 +56,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	Event => {
+		file      => {
+			from  => 'src/Core/objects/Event.xs',
+			to    => 'lib/SDL/Event.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	ExposeEvent => {
 		file      => {
 			from  => 'src/Core/objects/ExposeEvent.xs',
