@@ -23,14 +23,20 @@ SDL_UserEvent -- A user-defined event type
 
 
 =cut
+
+SDL_UserEvent *
+uevent_new ( CLASS )
+	char* CLASS
+	CODE:
+		RETVAL = safemalloc(sizeof(SDL_UserEvent));
+		RETVAL->type = SDL_USEREVENT;
+	OUTPUT:
+		RETVAL
+
 Uint8
-uevent_type ( event, ... )
+uevent_type ( event )
 	SDL_UserEvent *event
 	CODE: 
-		if( items > 2)
-		{
-			event->type = SvIV(ST(1));
-		}
 		RETVAL = event->type;
 	OUTPUT:
 		RETVAL
@@ -39,27 +45,43 @@ int
 uevent_code ( event, ... )
 	SDL_UserEvent *event
 	CODE: 
-		if( items > 2 )
+		if( items > 1 )
 		{
-			event->code = SvIV(ST(1));
+			event->code = SvIV( ST(1) );
+
 		}
-		RETVAL = event->code;
+		RETVAL = (int)event->code;
 	OUTPUT:
 		RETVAL
 
-void
-uevent_data1 ( event, data )
+SV*
+uevent_data1 ( event, ... )
 	SDL_UserEvent *event	
-	IV data
-	CODE:
-		void * dataP = INT2PTR( void *, data);
-		event->data1 = dataP;
+	CODE: 
+		if( items > 1 )
+		{
+			event->data1 = (void *)SvIV(ST(1));
+		}
+		RETVAL = event->data1;
+	OUTPUT:
+		RETVAL
+
+
+SV*
+uevent_data2 ( event, ... ) 
+	SDL_UserEvent *event	
+	CODE: 
+		if( items > 1 )
+		{
+			event->data1 = (void *) ST(1);
+		}
+		RETVAL = event->data1;
+	OUTPUT:
+		RETVAL
 
 
 void
-uevent_data2 ( event, data )
-	SDL_UserEvent *event	
-	IV data
+uevent_DESTROY(self)
+	SDL_UserEvent *self
 	CODE:
-		void * dataP = INT2PTR( void *, data);
-		event->data2 = dataP;
+		safefree( (char *)self );

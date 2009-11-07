@@ -19,7 +19,7 @@ use SDL::UserEvent;
 use SDL::Video;
 use Test::More;
 
-plan ( tests => 33 );
+plan ( tests => 38 );
 
 my @done =qw/
 pump_events 
@@ -78,6 +78,23 @@ SDL::init(SDL_INIT_VIDEO);
 SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE);
 
 is(SDL::Events::pump_events(), undef,  '[pump_events] Returns undef');
+
+my $uevent = SDL::UserEvent->new(); 
+$uevent->code(200 );
+isa_ok( $uevent, 'SDL::UserEvent', '[SDL::UserEvent::new] is creating a User Event');
+is( $uevent->type, 0x0018, '[SDL::UserEvent->type] returns correctly');
+is( $uevent->code, 200, '[SDL::UserEvent->code] is set correctly');
+
+TODO:
+{
+	local $TODO = 'Try to send a Scalar Ref as an IV and return a Scalar Ref';
+
+my $data1 = 'wow';
+$uevent->data1(\$data1);
+$uevent->data2('notwow');
+is( $uevent->data1, 'wow', '[SDL::UserEvent->data1] is set correctly');
+is( $uevent->data2, 'notwow','[SDL::UserEvent->data2] is set correctly');
+}
 
 =pod
 
