@@ -7,7 +7,6 @@ lib/SDL.pm
 lib/SDL/App.pm
 lib/SDL/Cdrom.pm
 lib/SDL/Color.pm
-lib/SDL/Config.pm
 lib/SDL/Constants.pm
 lib/SDL/Cursor.pm
 lib/SDL/Event.pm
