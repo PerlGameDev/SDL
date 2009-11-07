@@ -24,6 +24,15 @@ SDL_JoyAxisEvent -- Joystick axis motion event structure
 
 =cut
 
+SDL_JoyAxisEvent *
+jaevent_new ( CLASS )
+	char* CLASS
+	CODE:
+		RETVAL = safemalloc(sizeof(SDL_JoyAxisEvent));
+		RETVAL->type = SDL_JOYAXISMOTION;
+	OUTPUT:
+		RETVAL
+
 Uint8
 jaevent_type ( event, ... )
 	SDL_JoyAxisEvent *event

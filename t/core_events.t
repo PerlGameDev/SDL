@@ -19,7 +19,7 @@ use SDL::UserEvent;
 use SDL::Video;
 use Test::More;
 
-plan ( tests => 38 );
+plan ( tests => 51 );
 
 my @done =qw/
 pump_events 
@@ -79,11 +79,43 @@ SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE);
 
 is(SDL::Events::pump_events(), undef,  '[pump_events] Returns undef');
 
-my $uevent = SDL::UserEvent->new(); 
-$uevent->code(200 );
-isa_ok( $uevent, 'SDL::UserEvent', '[SDL::UserEvent::new] is creating a User Event');
+my $event   = SDL::Event->new();
+my $aevent  = SDL::ActiveEvent->new(); 
+my $weevent = SDL::ExposeEvent->new(); 
+my $jaevent = SDL::JoyAxisEvent->new(); 
+my $jtevent = SDL::JoyBallEvent->new(); 
+my $jbevent = SDL::JoyButtonEvent->new(); 
+my $jhevent = SDL::JoyHatEvent->new(); 
+my $kbevent = SDL::KeyboardEvent->new(); 
+my $mbevent = SDL::MouseButtonEvent->new(); 
+my $mmevent = SDL::MouseMotionEvent->new(); 
+my $qevent  = SDL::QuitEvent->new(); 
+my $wrevent = SDL::ResizeEvent->new(); 
+my $wmevent = SDL::SysWMEvent->new(); 
+my $uevent  = SDL::UserEvent->new(); 
+
+#isa_ok( $event,   'SDL::Event',            '[SDL::Event::new] is creating an Event');
+isa_ok( $aevent,  'SDL::ActiveEvent',      '[SDL::ActiveEvent::new] is creating an ActiveEvent');
+isa_ok( $weevent, 'SDL::ExposeEvent',      '[SDL::ExposeEvent::new] is creating an ExposeEvent');
+isa_ok( $jaevent, 'SDL::JoyAxisEvent',     '[SDL::JoyAxisEvent::new] is creating an JoyAxisEvent');
+isa_ok( $jtevent, 'SDL::JoyBallEvent',     '[SDL::JoyBallEvent::new] is creating an JoyBallEvent');
+isa_ok( $jbevent, 'SDL::JoyButtonEvent',   '[SDL::JoyButtonEvent::new] is creating an JoyButtonEvent');
+isa_ok( $jhevent, 'SDL::JoyHatEvent',      '[SDL::JoyHatEvent::new] is creating an JoyHatEvent');
+isa_ok( $kbevent, 'SDL::KeyboardEvent',    '[SDL::KeyboardEvent::new] is creating an KeyboardEvent');
+isa_ok( $mbevent, 'SDL::MouseButtonEvent', '[SDL::MouseButtonEvent::new] is creating an MouseButtonEvent');
+isa_ok( $mmevent, 'SDL::MouseMotionEvent', '[SDL::MouseMotionEvent::new] is creating an MouseMotionEvent');
+isa_ok( $qevent,  'SDL::QuitEvent',        '[SDL::QuitEvent::new] is creating an QuitEvent');
+isa_ok( $wrevent, 'SDL::ResizeEvent',      '[SDL::ResizeEvent::new] is creating an ResizeEvent');
+isa_ok( $wmevent, 'SDL::SysWMEvent',       '[SDL::SysWMEvent::new] is creating an SysWMEvent');
+isa_ok( $uevent,  'SDL::UserEvent',        '[SDL::UserEvent::new] is creating an UserEvent');
+
 is( $uevent->type, 0x0018, '[SDL::UserEvent->type] returns correctly');
+
+$uevent->code(200);
 is( $uevent->code, 200, '[SDL::UserEvent->code] is set correctly');
+
+my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
+is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
 
 TODO:
 {
@@ -99,7 +131,7 @@ is( $uevent->data2, 'notwow','[SDL::UserEvent->data2] is set correctly');
 =pod
 
 my $events = SDL::Event->new();
-my $num_peep_events = SDL::Events::peep_events( $events, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
+my $num_peep_events = SDL::Events::peep_events( SDL::Event->new(), 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
 is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
 
 my $event = SDL::Event->new();

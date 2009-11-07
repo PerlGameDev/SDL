@@ -23,6 +23,15 @@ see also: L<SDL::WindowManagement::sys_WM_event>
 
 =cut
 
+SDL_SysWMEvent *
+wmevent_new ( CLASS )
+	char* CLASS
+	CODE:
+		RETVAL = safemalloc(sizeof(SDL_SysWMEvent));
+		RETVAL->type = SDL_SYSWMEVENT;
+	OUTPUT:
+		RETVAL
+
 Uint8
 wmevent_type ( event, ... )
 	SDL_SysWMEvent *event

@@ -24,6 +24,15 @@ SDL_MouseMotionEvent -- Mouse motion event structure
 
 =cut
 
+SDL_MouseMotionEvent *
+mmevent_new ( CLASS )
+	char* CLASS
+	CODE:
+		RETVAL = safemalloc(sizeof(SDL_MouseMotionEvent));
+		RETVAL->type = SDL_MOUSEMOTION;
+	OUTPUT:
+		RETVAL
+
 Uint8
 mmevent_type ( event, ... )
 	SDL_MouseMotionEvent *event

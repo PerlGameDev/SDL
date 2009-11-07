@@ -23,6 +23,15 @@ SDL_KeyboardEvent --Keyboard event structure
 
 =cut
 
+SDL_KeyboardEvent *
+kbevent_new ( CLASS )
+	char* CLASS
+	CODE:
+		RETVAL = safemalloc(sizeof(SDL_KeyboardEvent));
+		RETVAL->type = SDL_KEYDOWN | SDL_KEYUP;
+	OUTPUT:
+		RETVAL
+
 Uint8
 kbevent_type ( event, ... )
 	SDL_KeyboardEvent *event

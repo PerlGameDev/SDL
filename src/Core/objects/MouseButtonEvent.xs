@@ -25,6 +25,15 @@ SDL_MouseButtonEvent -- Mouse button event structure
 
 =cut
 
+SDL_MouseButtonEvent *
+mbevent_new ( CLASS )
+	char* CLASS
+	CODE:
+		RETVAL = safemalloc(sizeof(SDL_MouseButtonEvent));
+		RETVAL->type = SDL_MOUSEBUTTONDOWN | SDL_MOUSEBUTTONUP;
+	OUTPUT:
+		RETVAL
+
 Uint8
 mbevent_type ( event, ... )
 	SDL_MouseButtonEvent *event

@@ -24,6 +24,15 @@ SDL_JoyHatEvent -- Joystick hat position change event structure
 
 =cut
 
+SDL_JoyHatEvent *
+jhevent_new ( CLASS )
+	char* CLASS
+	CODE:
+		RETVAL = safemalloc(sizeof(SDL_JoyHatEvent));
+		RETVAL->type = SDL_JOYHATMOTION;
+	OUTPUT:
+		RETVAL
+
 Uint8
 jhevent_type ( event, ... )
 	SDL_JoyHatEvent *event
