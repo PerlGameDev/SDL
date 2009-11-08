@@ -58,6 +58,7 @@ jhevent_which ( event, ... )
 Uint8
 jhevent_hat ( event, ... )
 	SDL_JoyHatEvent *event
+	CODE:
 	if( items > 1 )
 		{
 			event->hat = SvIV( ST(1) );
@@ -65,7 +66,6 @@ jhevent_hat ( event, ... )
 		}
 
 
-	CODE: 
 		RETVAL = event->hat;
 	OUTPUT:
 		RETVAL

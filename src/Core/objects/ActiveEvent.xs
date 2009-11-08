@@ -69,7 +69,7 @@ aevent_state ( event, ... )
 		RETVAL
 
 void
-uevent_DESTROY(self)
+aevent_DESTROY(self)
 	SDL_ActiveEvent *self
 	CODE:
 		safefree( (char *)self );

@@ -45,6 +45,11 @@ Uint8
 mmevent_state ( event, ... )
 	SDL_MouseMotionEvent *event
 	CODE: 
+	if( items > 1 )
+		{
+			event->state = SvIV( ST(1) );
+
+		}
 		RETVAL = event->state;
 	OUTPUT:
 		RETVAL
@@ -53,6 +58,11 @@ Uint16
 mmevent_x ( event, ... )
 	SDL_MouseMotionEvent *event
 	CODE: 
+	if( items > 1 )
+		{
+			event->x = SvIV( ST(1) );
+
+		}
 		RETVAL = event->x;
 	OUTPUT:
 		RETVAL
@@ -61,6 +71,11 @@ Uint16
 mmevent_y ( event, ... )
 	SDL_MouseMotionEvent *event
 	CODE: 
+	if( items > 1 )
+		{
+			event->y = SvIV( ST(1) );
+
+		}
 		RETVAL = event->y;
 	OUTPUT:
 		RETVAL
@@ -69,14 +84,31 @@ Uint16
 mmevent_xrel ( event, ... )
 	SDL_MouseMotionEvent *event
 	CODE: 
+	if( items > 1 )
+		{
+			event->xrel = SvIV( ST(1) );
+
+		}
 		RETVAL = event->xrel;
 	OUTPUT:
 		RETVAL
+
 
 Uint16
 mmevent_yrel ( event, ... )
 	SDL_MouseMotionEvent *event
 	CODE: 
+	if( items > 1 )
+		{
+			event->yrel = SvIV( ST(1) );
+
+		}
 		RETVAL = event->yrel;
 	OUTPUT:
 		RETVAL
+
+void
+mmtevent_DESTROY(self)
+	SDL_MouseMotionEvent *self
+	CODE:
+		safefree( (char *)self );
