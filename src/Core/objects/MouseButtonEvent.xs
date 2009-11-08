@@ -46,6 +46,13 @@ Uint8
 mbevent_which ( event, ... )
 	SDL_MouseButtonEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->which = SvIV( ST(1) );
+
+		}
+
+
 		RETVAL = event->which;
 	OUTPUT:
 		RETVAL
@@ -53,7 +60,14 @@ mbevent_which ( event, ... )
 Uint8
 mbevent_button ( event, ... )
 	SDL_MouseButtonEvent *event
-	CODE: 
+	CODE:
+ 		if( items > 1 )
+		{
+			event->button = SvIV( ST(1) );
+
+		}
+
+
 		RETVAL = event->button;
 	OUTPUT:
 		RETVAL
@@ -62,6 +76,13 @@ Uint8
 mbevent_state ( event, ... )
 	SDL_MouseButtonEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->state = SvIV( ST(1) );
+
+		}
+
+
 		RETVAL = event->state;
 	OUTPUT:
 		RETVAL
@@ -70,6 +91,13 @@ Uint16
 mbevent_x ( event, ... )
 	SDL_MouseButtonEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->x = SvIV( ST(1) );
+
+		}
+
+
 		RETVAL = event->x;
 	OUTPUT:
 		RETVAL
@@ -78,6 +106,20 @@ Uint16
 mbevent_y ( event, ... )
 	SDL_MouseButtonEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->y = SvIV( ST(1) );
+
+		}
+
+
 		RETVAL = event->y;
 	OUTPUT:
 		RETVAL
+
+
+void
+mbevent_DESTROY(self)
+	SDL_MouseButtonEvent *self
+	CODE:
+		safefree( (char *)self );
