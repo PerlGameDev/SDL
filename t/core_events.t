@@ -19,7 +19,7 @@ use SDL::UserEvent;
 use SDL::Video;
 use Test::More;
 
-plan ( tests => 108 );
+plan ( tests => 111 );
 
 my @done =qw/
 pump_events 
@@ -52,6 +52,7 @@ use_ok( 'SDL::JoyBallEvent' );
 use_ok( 'SDL::JoyButtonEvent' ); 
 use_ok( 'SDL::JoyHatEvent' ); 
 use_ok( 'SDL::KeyboardEvent' ); 
+use_ok( 'SDL::keysym' ); 
 use_ok( 'SDL::MouseButtonEvent' ); 
 use_ok( 'SDL::MouseMotionEvent' ); 
 use_ok( 'SDL::QuitEvent' ); 
@@ -67,6 +68,7 @@ can_ok( 'SDL::JoyBallEvent',     qw/type which ball xrel yrel/);
 can_ok( 'SDL::JoyButtonEvent',   qw/type which button state/);
 can_ok( 'SDL::JoyHatEvent',      qw/type which hat value/);
 can_ok( 'SDL::KeyboardEvent',    qw/type state keysym/);
+can_ok( 'SDL::keysym',           qw/scancode sym mod unicode/);
 can_ok( 'SDL::MouseButtonEvent', qw/type which button state x y/);
 can_ok( 'SDL::MouseMotionEvent', qw/type state x y xrel yrel/);
 can_ok( 'SDL::QuitEvent',        qw/type/);
@@ -88,6 +90,7 @@ my $jtevent = SDL::JoyBallEvent->new();
 my $jbevent = SDL::JoyButtonEvent->new(); 
 my $jhevent = SDL::JoyHatEvent->new(); 
 my $kbevent = SDL::KeyboardEvent->new(); 
+my $keysym  = SDL::keysym->new(); 
 my $mbevent = SDL::MouseButtonEvent->new(); 
 my $mmevent = SDL::MouseMotionEvent->new(); 
 my $qevent  = SDL::QuitEvent->new(); 
@@ -103,6 +106,7 @@ isa_ok( $jtevent, 'SDL::JoyBallEvent',     '[SDL::JoyBallEvent::new] is creating
 isa_ok( $jbevent, 'SDL::JoyButtonEvent',   '[SDL::JoyButtonEvent::new] is creating an JoyButtonEvent');
 isa_ok( $jhevent, 'SDL::JoyHatEvent',      '[SDL::JoyHatEvent::new] is creating an JoyHatEvent');
 isa_ok( $kbevent, 'SDL::KeyboardEvent',    '[SDL::KeyboardEvent::new] is creating an KeyboardEvent');
+isa_ok( $keysym,  'SDL::keysym',           '[SDL::keysym::new] is creating an keysym');
 isa_ok( $mbevent, 'SDL::MouseButtonEvent', '[SDL::MouseButtonEvent::new] is creating an MouseButtonEvent');
 isa_ok( $mmevent, 'SDL::MouseMotionEvent', '[SDL::MouseMotionEvent::new] is creating an MouseMotionEvent');
 isa_ok( $qevent,  'SDL::QuitEvent',        '[SDL::QuitEvent::new] is creating an QuitEvent');

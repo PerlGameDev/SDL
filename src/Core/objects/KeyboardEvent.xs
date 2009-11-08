@@ -12,7 +12,7 @@ MODULE = SDL::KeyboardEvent 	PACKAGE = SDL::KeyboardEvent    PREFIX = kbevent_
 
 =for documentation
 
-SDL_KeyboardEvent --Keyboard event structure
+SDL_KeyboardEvent -- Keyboard event structure
 
  typedef struct{
   Uint8 type;

@@ -105,6 +105,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	keysym => {
+		file      => {
+			from  => 'src/Core/objects/keysym.xs',
+			to    => 'lib/SDL/keysym.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	MouseButtonEvent => {
 		file      => {
 			from  => 'src/Core/objects/MouseButtonEvent.xs',

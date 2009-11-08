@@ -9,6 +9,9 @@ Uint16 *		T_PTR
 Uint32			T_UV
 Uint32 *		T_PTR
 SDLKey			T_UV
+SDLKey *		T_PTR
+SDLMod			T_UV
+SDLMod *		T_PTR
 Sint16			T_IV
 Sint16 *		T_PTR
 Sint32			T_IV
