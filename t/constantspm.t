@@ -1,6 +1,7 @@
 use strict;
 use warnings;
-use Test::More tests => 1 + 552;    # use_ok + constants
+use SDL::Events;
+use Test::More tests => 1 + 610;    # use_ok + constants
 
 BEGIN { use_ok('SDL::Constants') }
 
@@ -343,6 +344,8 @@ is( SDLK_z(),            122, 'SDLK_z() should also be available' );
 
 is( SDL_ACTIVEEVENT,   1, 'SDL_ACTIVEEVENT should be imported' );
 is( SDL_ACTIVEEVENT(), 1, 'SDL_ACTIVEEVENT() should also be available' );
+is( SDL_ACTIVEEVENTMASK,   SDL_EVENTMASK(SDL_ACTIVEEVENT), 'SDL_ACTIVEVENTMASK should be imported');
+is( SDL_ACTIVEEVENTMASK(), SDL_EVENTMASK(SDL_ACTIVEEVENT), 'SDL_ACTIVEVENTMASK() should also be available');
 is( SDL_ADDEVENT,      0, 'SDL_ADDEVENT should be imported' );
 is( SDL_ADDEVENT(),    0, 'SDL_ADDEVENT() should also be available' );
 is( SDL_ALLEVENTS,     0xFFFFFFFF, 'SDL_ALLEVENTS should be imported' );
@@ -378,8 +381,26 @@ is( SDL_BUTTON_WHEELDOWN(), 16, 'SDL_BUTTON_WHEELDOWN() should also be available
 
 is( SDL_DOUBLEBUF,   1073741824,  'SDL_DOUBLEBUF should be imported' );
 is( SDL_DOUBLEBUF(), 1073741824,  'SDL_DOUBLEBUF() should also be available' );
-is( SDL_ENABLE,      1,           'SDL_ENABLE should be imported' );
-is( SDL_ENABLE(),    1,           'SDL_ENABLE() should also be available' );
+
+is( SDL_ENABLE,            1,  'SDL_ENABLE should be imported' );
+is( SDL_ENABLE(),          1,  'SDL_ENABLE() should also be available' );
+is( SDL_EVENT_RESERVEDA,   14, 'SDL_EVENT_RESERVEDA should be imported');
+is( SDL_EVENT_RESERVEDA(), 14, 'SDL_EVENT_RESERVEDA() should also be available');
+is( SDL_EVENT_RESERVEDB,   15, 'SDL_EVENT_RESERVEDB should be imported');
+is( SDL_EVENT_RESERVEDB(), 15, 'SDL_EVENT_RESERVEDB() should also be available');
+is( SDL_EVENT_RESERVED2,   18, 'SDL_EVENT_RESERVED2 should be imported');
+is( SDL_EVENT_RESERVED2(), 18, 'SDL_EVENT_RESERVED2() should also be available');
+is( SDL_EVENT_RESERVED3,   19, 'SDL_EVENT_RESERVED3 should be imported');
+is( SDL_EVENT_RESERVED3(), 19, 'SDL_EVENT_RESERVED3() should also be available');
+is( SDL_EVENT_RESERVED4,   20, 'SDL_EVENT_RESERVED4 should be imported');
+is( SDL_EVENT_RESERVED4(), 20, 'SDL_EVENT_RESERVED4() should also be available');
+is( SDL_EVENT_RESERVED5,   21, 'SDL_EVENT_RESERVED5 should be imported');
+is( SDL_EVENT_RESERVED5(), 21, 'SDL_EVENT_RESERVED5() should also be available');
+is( SDL_EVENT_RESERVED6,   22, 'SDL_EVENT_RESERVED6 should be imported');
+is( SDL_EVENT_RESERVED6(), 22, 'SDL_EVENT_RESERVED6() should also be available');
+is( SDL_EVENT_RESERVED7,   23, 'SDL_EVENT_RESERVED7 should be imported');
+is( SDL_EVENT_RESERVED7(), 23, 'SDL_EVENT_RESERVED7() should also be available');
+
 is( SDL_FULLSCREEN,  -2147483648, 'SDL_FULLSCREEN should be imported' );
 is( SDL_FULLSCREEN(), -2147483648, 'SDL_FULLSCREEN() should also be available' );
 
@@ -475,11 +496,39 @@ is( SDL_JOYBUTTONUP,     11, 'SDL_JOYBUTTONUP should be imported' );
 is( SDL_JOYBUTTONUP(),   11, 'SDL_JOYBUTTONUP() should also be available' );
 is( SDL_JOYHATMOTION,    9,  'SDL_JOYHATMOTION should be imported' );
 is( SDL_JOYHATMOTION(),  9,  'SDL_JOYHATMOTION() should also be available' );
+is( SDL_JOYAXISMOTIONMASK,   SDL_EVENTMASK(SDL_JOYAXISMOTION),   'SDL_JOYAXISMOTIONMASK should be imported');
+is( SDL_JOYAXISMOTIONMASK(), SDL_EVENTMASK(SDL_JOYAXISMOTION),   'SDL_JOYAXISMOTIONMASK() should also be available');
+is( SDL_JOYBALLMOTIONMASK,   SDL_EVENTMASK(SDL_JOYBALLMOTION),   'SDL_JOYBALLMOTIONMASK should be imported');
+is( SDL_JOYBALLMOTIONMASK(), SDL_EVENTMASK(SDL_JOYBALLMOTION),   'SDL_JOYBALLMOTIONMASK() should also be available');
+is( SDL_JOYHATMOTIONMASK,    SDL_EVENTMASK(SDL_JOYHATMOTION),    'SDL_JOYHATMOTIONMASK should be imported');
+is( SDL_JOYHATMOTIONMASK(),  SDL_EVENTMASK(SDL_JOYHATMOTION),    'SDL_JOYHATMOTIONMASK() should also be available');
+is( SDL_JOYBUTTONDOWNMASK,   SDL_EVENTMASK(SDL_JOYBUTTONDOWN),   'SDL_JOYBUTTONDOWNMASK should be imported');
+is( SDL_JOYBUTTONDOWNMASK(), SDL_EVENTMASK(SDL_JOYBUTTONDOWN),   'SDL_JOYBUTTONDOWNMASK() should also be available');
+is( SDL_JOYBUTTONUPMASK,     SDL_EVENTMASK(SDL_JOYBUTTONUP),     'SDL_JOYBUTTONUPMASK should be imported');
+is( SDL_JOYBUTTONUPMASK(),   SDL_EVENTMASK(SDL_JOYBUTTONUP),     'SDL_JOYBUTTONUPMASK() should also be available');
+is( SDL_JOYEVENTMASK,        SDL_EVENTMASK(SDL_JOYAXISMOTION)|
+                             SDL_EVENTMASK(SDL_JOYBALLMOTION)|
+                             SDL_EVENTMASK(SDL_JOYHATMOTION)|
+                             SDL_EVENTMASK(SDL_JOYBUTTONDOWN)|
+                             SDL_EVENTMASK(SDL_JOYBUTTONUP),     'SDL_JOYEVENTMASK should be imported');
+is( SDL_JOYEVENTMASK(),      SDL_EVENTMASK(SDL_JOYAXISMOTION)|
+                             SDL_EVENTMASK(SDL_JOYBALLMOTION)|
+                             SDL_EVENTMASK(SDL_JOYHATMOTION)|
+                             SDL_EVENTMASK(SDL_JOYBUTTONDOWN)|
+                             SDL_EVENTMASK(SDL_JOYBUTTONUP),     'SDL_JOYEVENTMASK() should also be available');
 
 is( SDL_KEYDOWN,   2, 'SDL_KEYDOWN should be imported' );
 is( SDL_KEYDOWN(), 2, 'SDL_KEYDOWN() should also be available' );
 is( SDL_KEYUP,     3, 'SDL_KEYUP should be imported' );
 is( SDL_KEYUP(),   3, 'SDL_KEYUP() should also be available' );
+is( SDL_KEYDOWNMASK,     SDL_EVENTMASK(SDL_KEYDOWN), 'SDL_KEYDOWNMASK should be imported');
+is( SDL_KEYDOWNMASK(),   SDL_EVENTMASK(SDL_KEYDOWN), 'SDL_KEYDOWNMASK() should also be available');
+is( SDL_KEYUPMASK,       SDL_EVENTMASK(SDL_KEYUP),   'SDL_KEYUPMASK should be imported');
+is( SDL_KEYUPMASK(),     SDL_EVENTMASK(SDL_KEYUP),   'SDL_KEYUPMASK() should also be available');
+is( SDL_KEYEVENTMASK,    SDL_EVENTMASK(SDL_KEYDOWN)|
+                         SDL_EVENTMASK(SDL_KEYUP),   'SDL_KEYEVENTMASK should be imported');
+is( SDL_KEYEVENTMASK(),  SDL_EVENTMASK(SDL_KEYDOWN)|
+                         SDL_EVENTMASK(SDL_KEYUP),   'SDL_KEYEVENTMASK() should also be available');
 
 is( SDL_MIX_MAXVOLUME,   128, 'SDL_MIX_MAXVOLUME should be imported' );
 is( SDL_MIX_MAXVOLUME(), 128, 'SDL_MIX_MAXVOLUME() should also be available' );
@@ -490,6 +539,23 @@ is( SDL_MOUSEBUTTONUP,   6, 'SDL_MOUSEBUTTONUP should be imported' );
 is( SDL_MOUSEBUTTONUP(), 6, 'SDL_MOUSEBUTTONUP() should also be available' );
 is( SDL_MOUSEMOTION,     4, 'SDL_MOUSEMOTION should be imported' );
 is( SDL_MOUSEMOTION(),   4, 'SDL_MOUSEMOTION() should also be available' );
+is( SDL_MOUSEMOTIONMASK,       SDL_EVENTMASK(SDL_MOUSEMOTION),     'SDL_MOUSEMOTIONMASK should be imported');
+is( SDL_MOUSEMOTIONMASK(),     SDL_EVENTMASK(SDL_MOUSEMOTION),     'SDL_MOUSEMOTIONMASK() should also be available');
+is( SDL_MOUSEBUTTONDOWNMASK,   SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN), 'SDL_MOUSEBUTTONDOWNMASK should be imported');
+is( SDL_MOUSEBUTTONDOWNMASK(), SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN), 'SDL_MOUSEBUTTONDOWNMASK() should also be available');
+is( SDL_MOUSEBUTTONUPMASK,     SDL_EVENTMASK(SDL_MOUSEBUTTONUP),   'SDL_MOUSEBUTTONUPMASK should be imported');
+is( SDL_MOUSEBUTTONUPMASK(),   SDL_EVENTMASK(SDL_MOUSEBUTTONUP),   'SDL_MOUSEBUTTONUPMASK() should also be available');
+is( SDL_MOUSEEVENTMASK,        SDL_EVENTMASK(SDL_MOUSEMOTION)|
+                               SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN)|
+                               SDL_EVENTMASK(SDL_MOUSEBUTTONUP),   'SDL_MOUSEEVENTMASK should be imported');
+is( SDL_MOUSEEVENTMASK(),      SDL_EVENTMASK(SDL_MOUSEMOTION)|
+                               SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN)|
+                               SDL_EVENTMASK(SDL_MOUSEBUTTONUP),   'SDL_MOUSEEVENTMASK() should also be available');
+
+is( SDL_NOEVENT,         0,  'SDL_NOEVENT should be imported' );
+is( SDL_NOEVENT(),       0,  'SDL_NOEVENT() should also be available' );
+is( SDL_NUMEVENTS,       32, 'SDL_NUMEVENTS should be imported' );
+is( SDL_NUMEVENTS(),     32, 'SDL_NUMEVENTS() should also be available' );
 
 is( SDL_OPENGL,       2,  'SDL_OPENGL should be imported' );
 is( SDL_OPENGL(),     2,  'SDL_OPENGL() should also be available' );
@@ -507,6 +573,8 @@ is( SDL_QUERY,         -1,       'SDL_QUERY should be imported' );
 is( SDL_QUERY(),       -1,       'SDL_QUERY() should also be available' );
 is( SDL_QUIT,          12,       'SDL_QUIT should be imported' );
 is( SDL_QUIT(),        12,       'SDL_QUIT() should also be available' );
+is( SDL_QUITMASK,      SDL_EVENTMASK(SDL_QUIT), 'SDL_QUITMASK should be imported');
+is( SDL_QUITMASK(),    SDL_EVENTMASK(SDL_QUIT), 'SDL_QUITMASK() should also be available');
 
 is( SDL_RELEASED,      0,        'SDL_RELEASED should be imported' );
 is( SDL_RELEASED(),    0,        'SDL_RELEASED() should also be available' );
@@ -525,14 +593,23 @@ is( SDL_SWSURFACE,     0,        'SDL_SWSURFACE should be imported' );
 is( SDL_SWSURFACE(),   0,        'SDL_SWSURFACE() should also be available' );
 is( SDL_SYSWMEVENT,    13,       'SDL_SYSWMEVENT should be imported' );
 is( SDL_SYSWMEVENT(),  13,       'SDL_SYSWMEVENT() should also be available' );
+is( SDL_SYSWMEVENTMASK,   SDL_EVENTMASK(SDL_SYSWMEVENT), 'SDL_SYSWMEVENTMASK should be imported');
+is( SDL_SYSWMEVENTMASK(), SDL_EVENTMASK(SDL_SYSWMEVENT), 'SDL_SYSWMEVENTMASK() should also be available');
 
-is( SDL_UYVY_OVERLAY, 1498831189, 'SDL_UYVY_OVERLAY should be imported' );
-is( SDL_UYVY_OVERLAY(), 1498831189,'SDL_UYVY_OVERLAY() should also be available' );
+is( SDL_USEREVENT,      24,         'SDL_USEREVENT should be imported' );
+is( SDL_USEREVENT(),    24,         'SDL_USEREVENT() should also be available' );
+is( SDL_UYVY_OVERLAY,   1498831189, 'SDL_UYVY_OVERLAY should be imported' );
+is( SDL_UYVY_OVERLAY(), 1498831189, 'SDL_UYVY_OVERLAY() should also be available' );
 
-is( SDL_VIDEOEXPOSE,   17, 'SDL_VIDEOEXPOSE should be imported' );
-is( SDL_VIDEOEXPOSE(), 17, 'SDL_VIDEOEXPOSE() should also be available' );
-is( SDL_VIDEORESIZE,   16, 'SDL_VIDEORESIZE should be imported' );
-is( SDL_VIDEORESIZE(), 16, 'SDL_VIDEORESIZE() should also be available' );
+is( SDL_VIDEOEXPOSE,       17,                             'SDL_VIDEOEXPOSE should be imported' );
+is( SDL_VIDEOEXPOSE(),     17,                             'SDL_VIDEOEXPOSE() should also be available' );
+is( SDL_VIDEOEXPOSEMASK,   SDL_EVENTMASK(SDL_VIDEOEXPOSE), 'SDL_VIDEOEXPOSEMASK should be imported');
+is( SDL_VIDEOEXPOSEMASK(), SDL_EVENTMASK(SDL_VIDEOEXPOSE), 'SDL_VIDEOEXPOSEMASK() should also be available');
+is( SDL_VIDEORESIZE,       16,                             'SDL_VIDEORESIZE should be imported' );
+is( SDL_VIDEORESIZE(),     16,                             'SDL_VIDEORESIZE() should also be available' );
+is( SDL_VIDEORESIZEMASK,   SDL_EVENTMASK(SDL_VIDEORESIZE), 'SDL_VIDEORESIZEMASK should be imported');
+is( SDL_VIDEORESIZEMASK(), SDL_EVENTMASK(SDL_VIDEORESIZE), 'SDL_VIDEORESIZEMASK() should also be available');
+
 
 is( SDL_YUY2_OVERLAY, 844715353, 'SDL_YUY2_OVERLAY should be imported' );
 is( SDL_YUY2_OVERLAY(), 844715353,'SDL_YUY2_OVERLAY() should also be available' );

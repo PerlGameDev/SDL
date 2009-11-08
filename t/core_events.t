@@ -19,7 +19,7 @@ use SDL::UserEvent;
 use SDL::Video;
 use Test::More;
 
-plan ( tests => 111 );
+plan ( tests => 66 );
 
 my @done =qw/
 pump_events 
@@ -113,62 +113,6 @@ isa_ok( $qevent,  'SDL::QuitEvent',        '[SDL::QuitEvent::new] is creating an
 isa_ok( $wrevent, 'SDL::ResizeEvent',      '[SDL::ResizeEvent::new] is creating an ResizeEvent');
 isa_ok( $wmevent, 'SDL::SysWMEvent',       '[SDL::SysWMEvent::new] is creating an SysWMEvent');
 isa_ok( $uevent,  'SDL::UserEvent',        '[SDL::UserEvent::new] is creating an UserEvent');
-
-# checking constants
-is(SDL_NOEVENT,          0, 'Constant SDL_NOEVENT');         # Unused
-is(SDL_ACTIVEEVENT,      1, 'Constant SDL_ACTIVEVENT');      # Application loses/gains visibility
-is(SDL_KEYDOWN,          2, 'Constant SDL_KEYDOWN');         # Keys pressed
-is(SDL_KEYUP,            3, 'Constant SDL_KEYUP');           # Keys released
-is(SDL_MOUSEMOTION,      4, 'Constant SDL_MOUSEMOTION');     # Mouse moved
-is(SDL_MOUSEBUTTONDOWN,  5, 'Constant SDL_MOUSEBUTTONDOWN'); # Mouse button pressed
-is(SDL_MOUSEBUTTONUP,    6, 'Constant SDL_MOUSEBUTTONUP');   # Mouse button released
-is(SDL_JOYAXISMOTION,    7, 'Constant SDL_JOYAXISMOTION');   # Joystick axis motion
-is(SDL_JOYBALLMOTION,    8, 'Constant SDL_JOYBALLMOTION');   # Joystick trackball motion
-is(SDL_JOYHATMOTION,     9, 'Constant SDL_JOYHATMOTION');    # Joystick hat position change
-is(SDL_JOYBUTTONDOWN,   10, 'Constant SDL_JOYBUTTONDOWN');   # Joystick button pressed
-is(SDL_JOYBUTTONUP,     11, 'Constant SDL_JOYBUTTONUP');     # Joystick button released
-is(SDL_QUIT,            12, 'Constant SDL_QUIT');            # User-requested quit
-is(SDL_SYSWMEVENT,      13, 'Constant SDL_SYSWMEVENT');      # System specific event
-is(SDL_EVENT_RESERVEDA, 14, 'Constant SDL_EVENT_RESERVEDA'); # Reserved for future use..
-is(SDL_EVENT_RESERVEDB, 15, 'Constant SDL_EVENT_RESERVEDB'); # Reserved for future use..
-is(SDL_VIDEORESIZE,     16, 'Constant SDL_VIDEORESIZE');     # User resized video mode
-is(SDL_VIDEOEXPOSE,     17, 'Constant SDL_VIDEOEXPOSE');     # Screen needs to be redrawn
-is(SDL_EVENT_RESERVED2, 18, 'Constant SDL_EVENT_RESERVED2'); # Reserved for future use..
-is(SDL_EVENT_RESERVED3, 19, 'Constant SDL_EVENT_RESERVED3'); # Reserved for future use..
-is(SDL_EVENT_RESERVED4, 20, 'Constant SDL_EVENT_RESERVED4'); # Reserved for future use..
-is(SDL_EVENT_RESERVED5, 21, 'Constant SDL_EVENT_RESERVED5'); # Reserved for future use..
-is(SDL_EVENT_RESERVED6, 22, 'Constant SDL_EVENT_RESERVED6'); # Reserved for future use..
-is(SDL_EVENT_RESERVED7, 23, 'Constant SDL_EVENT_RESERVED7'); # Reserved for future use..
-is(SDL_USEREVENT,       24, 'Constant SDL_USEREVENT');
-is(SDL_NUMEVENTS,       32, 'Constant SDL_NUMEVENTS');
-
-# checking eventmasks
-is(SDL_ACTIVEEVENTMASK,     SDL_EVENTMASK(SDL_ACTIVEEVENT),     'Constant SDL_ACTIVEVENTMASK');
-is(SDL_KEYDOWNMASK,         SDL_EVENTMASK(SDL_KEYDOWN),         'Constant SDL_KEYDOWNMASK');
-is(SDL_KEYUPMASK,           SDL_EVENTMASK(SDL_KEYUP),           'Constant SDL_KEYUPMASK');
-is(SDL_KEYEVENTMASK,        SDL_EVENTMASK(SDL_KEYDOWN)|
-                            SDL_EVENTMASK(SDL_KEYUP),           'Constant SDL_KEYEVENTMASK');
-is(SDL_MOUSEMOTIONMASK,     SDL_EVENTMASK(SDL_MOUSEMOTION),     'Constant SDL_MOUSEMOTIONMASK');
-is(SDL_MOUSEBUTTONDOWNMASK, SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN), 'Constant SDL_MOUSEBUTTONDOWNMASK');
-is(SDL_MOUSEBUTTONUPMASK,   SDL_EVENTMASK(SDL_MOUSEBUTTONUP),   'Constant SDL_MOUSEBUTTONUPMASK');
-is(SDL_MOUSEEVENTMASK,      SDL_EVENTMASK(SDL_MOUSEMOTION)|
-                            SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN)|
-                            SDL_EVENTMASK(SDL_MOUSEBUTTONUP),   'Constant SDL_MOUSEEVENTMASK');
-is(SDL_JOYAXISMOTIONMASK,   SDL_EVENTMASK(SDL_JOYAXISMOTION),   'Constant SDL_JOYAXISMOTIONMASK');
-is(SDL_JOYBALLMOTIONMASK,   SDL_EVENTMASK(SDL_JOYBALLMOTION),   'Constant SDL_JOYBALLMOTIONMASK');
-is(SDL_JOYHATMOTIONMASK,    SDL_EVENTMASK(SDL_JOYHATMOTION),    'Constant SDL_JOYHATMOTIONMASK');
-is(SDL_JOYBUTTONDOWNMASK,   SDL_EVENTMASK(SDL_JOYBUTTONDOWN),   'Constant SDL_JOYBUTTONDOWNMASK');
-is(SDL_JOYBUTTONUPMASK,     SDL_EVENTMASK(SDL_JOYBUTTONUP),     'Constant SDL_JOYBUTTONUPMASK');
-is(SDL_JOYEVENTMASK,        SDL_EVENTMASK(SDL_JOYAXISMOTION)|
-                            SDL_EVENTMASK(SDL_JOYBALLMOTION)|
-                            SDL_EVENTMASK(SDL_JOYHATMOTION)|
-                            SDL_EVENTMASK(SDL_JOYBUTTONDOWN)|
-                            SDL_EVENTMASK(SDL_JOYBUTTONUP),     'Constant SDL_JOYEVENTMASK');
-is(SDL_VIDEORESIZEMASK,     SDL_EVENTMASK(SDL_VIDEORESIZE),     'Constant SDL_VIDEORESIZEMASK');
-is(SDL_VIDEOEXPOSEMASK,     SDL_EVENTMASK(SDL_VIDEOEXPOSE),     'Constant SDL_VIDEOEXPOSEMASK');
-is(SDL_QUITMASK,            SDL_EVENTMASK(SDL_QUIT),            'Constant SDL_QUITMASK');
-is(SDL_SYSWMEVENTMASK,      SDL_EVENTMASK(SDL_SYSWMEVENT),      'Constant SDL_SYSWMEVENTMASK');
-is(SDL_ALLEVENTS,           0xFFFFFFFF,                         'Constant SDL_SYSWMEVENTMASK');
 
 # checking the ->type of an event
 #is($event->type,   SDL_EVENT, '[SDL::Event->type] returns correctly');
