@@ -45,6 +45,11 @@ Uint8
 aevent_gain ( event, ... )
 	SDL_ActiveEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->gain = SvIV( ST(1) );
+
+		}
 		RETVAL = event->gain;
 	OUTPUT:
 		RETVAL
@@ -53,6 +58,18 @@ Uint8
 aevent_state ( event, ... )
 	SDL_ActiveEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->state = SvIV( ST(1) );
+
+		}
+		
 		RETVAL = event->state;
 	OUTPUT:
 		RETVAL
+
+void
+uevent_DESTROY(self)
+	SDL_ActiveEvent *self
+	CODE:
+		safefree( (char *)self );
