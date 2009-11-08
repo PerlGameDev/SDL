@@ -45,6 +45,12 @@ Uint8
 jhevent_which ( event, ... )
 	SDL_JoyHatEvent *event
 	CODE: 
+	if( items > 1 )
+		{
+			event->which = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->which;
 	OUTPUT:
 		RETVAL
@@ -52,6 +58,13 @@ jhevent_which ( event, ... )
 Uint8
 jhevent_hat ( event, ... )
 	SDL_JoyHatEvent *event
+	if( items > 1 )
+		{
+			event->hat = SvIV( ST(1) );
+
+		}
+
+
 	CODE: 
 		RETVAL = event->hat;
 	OUTPUT:
@@ -61,6 +74,18 @@ Uint8
 jhevent_value ( event, ... )
 	SDL_JoyHatEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->value = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->value;
 	OUTPUT:
 		RETVAL
+
+void
+jhevent_DESTROY(self)
+	SDL_JoyHatEvent *self
+	CODE:
+		safefree( (char *)self );
