@@ -46,6 +46,20 @@ wmevent_msg ( event, ... )
 	PREINIT:
 		char* CLASS = "SDL::SysWMmsg";
 	CODE: 
-		RETVAL = &(event->msg);
+		if( items > 1 )
+		{
+			SDL_SysWMmsg * sysm = (SDL_SysWMmsg * )SvPV( ST(1), PL_na) ;
+			event->msg = sysm;
+
+		}
+
+		RETVAL = event->msg;
 	OUTPUT:
 		RETVAL
+
+void
+wmevent_DESTROY ( event)
+	SDL_SysWMEvent *event
+	CODE:
+		safefree( (char *) event);
+

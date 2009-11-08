@@ -37,3 +37,9 @@ qevent_type ( event, ... )
 		RETVAL = event->type;
 	OUTPUT:
 		RETVAL
+
+void
+qevent_DESTROY ( event)
+	SDL_QuitEvent *event
+	CODE:
+		safefree( (char *) event);
