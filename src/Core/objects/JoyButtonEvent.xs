@@ -49,6 +49,12 @@ jbevent_which ( event )
 	SDL_JoyButtonEvent * event
 
 	CODE: 
+		if( items > 1 )
+		{
+			event->which = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->which;
 	OUTPUT:
 		RETVAL
@@ -59,6 +65,12 @@ jbevent_button ( event )
 	SDL_JoyButtonEvent * event
 
 	CODE: 
+		if( items > 1 )
+		{
+			event->button = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->button;
 	OUTPUT:
 		RETVAL
@@ -69,6 +81,20 @@ jbevent_state ( event )
 	SDL_JoyButtonEvent * event
 
 	CODE: 
+		if( items > 1 )
+		{
+			event->state = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->state;
 	OUTPUT:
 		RETVAL
+
+void
+jbevent_DESTROY(self)
+
+	SDL_JoyButtonEvent *self
+
+	CODE:
+		safefree( (char *)self );
