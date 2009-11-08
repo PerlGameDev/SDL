@@ -45,6 +45,12 @@ Uint8
 jaevent_which ( event, ... )
 	SDL_JoyAxisEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->which = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->which;
 	OUTPUT:
 		RETVAL
@@ -52,7 +58,13 @@ jaevent_which ( event, ... )
 Uint8
 jaevent_axis ( event, ... )
 	SDL_JoyAxisEvent *event
-	CODE: 
+	CODE:
+ 		if( items > 1 )
+		{
+			event->axis = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->axis;
 	OUTPUT:
 		RETVAL
@@ -61,6 +73,18 @@ Sint16
 jaevent_value ( event, ... )
 	SDL_JoyAxisEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->value = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->value;
 	OUTPUT:
 		RETVAL
+
+void
+jaevent_DESTROY(self)
+	SDL_JoyAxisEvent *self
+	CODE:
+		safefree( (char *)self );

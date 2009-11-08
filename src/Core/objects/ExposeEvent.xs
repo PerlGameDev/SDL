@@ -37,3 +37,9 @@ weevent_type ( event, ... )
 		RETVAL = event->type;
 	OUTPUT:
 		RETVAL
+
+void
+weevent_DESTROY(self)
+	SDL_ExposeEvent *self
+	CODE:
+		safefree( (char *)self );

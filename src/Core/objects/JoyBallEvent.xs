@@ -45,6 +45,12 @@ Uint8
 jtevent_which ( event, ... )
 	SDL_JoyBallEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->which = SvIV( ST(1) );
+
+		}
+		
 		RETVAL = event->which;
 	OUTPUT:
 		RETVAL
@@ -52,7 +58,14 @@ jtevent_which ( event, ... )
 Uint8
 jtevent_ball ( event, ... )
 	SDL_JoyBallEvent *event
-	CODE: 
+	CODE:
+		if( items > 1 )
+		{
+			event->ball = SvIV( ST(1) );
+
+		}
+ 
+		
 		RETVAL = event->ball;
 	OUTPUT:
 		RETVAL
@@ -61,6 +74,12 @@ Sint16
 jtevent_xrel ( event, ... )
 	SDL_JoyBallEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->xrel = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->xrel;
 	OUTPUT:
 		RETVAL
@@ -69,6 +88,19 @@ Sint16
 jtevent_yrel ( event, ... )
 	SDL_JoyBallEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->yrel = SvIV( ST(1) );
+
+		}
+
+
 		RETVAL = event->yrel;
 	OUTPUT:
 		RETVAL
+
+void
+jtevent_DESTROY(self)
+	SDL_JoyBallEvent *self
+	CODE:
+		safefree( (char *)self );

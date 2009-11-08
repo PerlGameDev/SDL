@@ -23,6 +23,7 @@ plan ( tests => 51 );
 
 my @done =qw/
 pump_events 
+peep_events 
 /;
 
 my @done_event =qw/
@@ -169,7 +170,6 @@ is(SDL::Events::wait_event(), 1,  '[wait_event] Returns 1 on success');
 
 
 my @left = qw/
-peep_events 
 poll_event
 push_event
 wait_event
