@@ -19,7 +19,7 @@ use SDL::UserEvent;
 use SDL::Video;
 use Test::More;
 
-plan ( tests => 51 );
+plan ( tests => 90 );
 
 my @done =qw/
 pump_events 
@@ -110,7 +110,51 @@ isa_ok( $wrevent, 'SDL::ResizeEvent',      '[SDL::ResizeEvent::new] is creating 
 isa_ok( $wmevent, 'SDL::SysWMEvent',       '[SDL::SysWMEvent::new] is creating an SysWMEvent');
 isa_ok( $uevent,  'SDL::UserEvent',        '[SDL::UserEvent::new] is creating an UserEvent');
 
-is( $uevent->type, 0x0018, '[SDL::UserEvent->type] returns correctly');
+# checking constants
+is(SDL_NOEVENT,          0, 'Constant SDL_NOEVENT');         # Unused
+is(SDL_ACTIVEEVENT,      1, 'Constant SDL_ACTIVEVENT');      # Application loses/gains visibility
+is(SDL_KEYDOWN,          2, 'Constant SDL_KEYDOWN');         # Keys pressed
+is(SDL_KEYUP,            3, 'Constant SDL_KEYUP');           # Keys released
+is(SDL_MOUSEMOTION,      4, 'Constant SDL_MOUSEMOTION');     # Mouse moved
+is(SDL_MOUSEBUTTONDOWN,  5, 'Constant SDL_MOUSEBUTTONDOWN'); # Mouse button pressed
+is(SDL_MOUSEBUTTONUP,    6, 'Constant SDL_MOUSEBUTTONUP');   # Mouse button released
+is(SDL_JOYAXISMOTION,    7, 'Constant SDL_JOYAXISMOTION');   # Joystick axis motion
+is(SDL_JOYBALLMOTION,    8, 'Constant SDL_JOYBALLMOTION');   # Joystick trackball motion
+is(SDL_JOYHATMOTION,     9, 'Constant SDL_JOYHATMOTION');    # Joystick hat position change
+is(SDL_JOYBUTTONDOWN,   10, 'Constant SDL_JOYBUTTONDOWN');   # Joystick button pressed
+is(SDL_JOYBUTTONUP,     11, 'Constant SDL_JOYBUTTONUP');     # Joystick button released
+is(SDL_QUIT,            12, 'Constant SDL_QUIT');            # User-requested quit
+is(SDL_SYSWMEVENT,      13, 'Constant SDL_SYSWMEVENT');      # System specific event
+is(SDL_EVENT_RESERVEDA, 14, 'Constant SDL_EVENT_RESERVEDA'); # Reserved for future use..
+is(SDL_EVENT_RESERVEDB, 15, 'Constant SDL_EVENT_RESERVEDB'); # Reserved for future use..
+is(SDL_VIDEORESIZE,     16, 'Constant SDL_VIDEORESIZE');     # User resized video mode
+is(SDL_VIDEOEXPOSE,     17, 'Constant SDL_VIDEOEXPOSE');     # Screen needs to be redrawn
+is(SDL_EVENT_RESERVED2, 18, 'Constant SDL_EVENT_RESERVED2'); # Reserved for future use..
+is(SDL_EVENT_RESERVED3, 19, 'Constant SDL_EVENT_RESERVED3'); # Reserved for future use..
+is(SDL_EVENT_RESERVED4, 20, 'Constant SDL_EVENT_RESERVED4'); # Reserved for future use..
+is(SDL_EVENT_RESERVED5, 21, 'Constant SDL_EVENT_RESERVED5'); # Reserved for future use..
+is(SDL_EVENT_RESERVED6, 22, 'Constant SDL_EVENT_RESERVED6'); # Reserved for future use..
+is(SDL_EVENT_RESERVED7, 23, 'Constant SDL_EVENT_RESERVED7'); # Reserved for future use..
+is(SDL_USEREVENT,       24, 'Constant SDL_USEREVENT');
+is(SDL_NUMEVENTS,       32, 'Constant SDL_NUMEVENTS');
+
+# checking eventmasks
+is(SDL_ACTIVEEVENTMASK,  SDL_EVENTMASK(SDL_ACTIVEEVENT), 'Constant SDL_ACTIVEVENTMASK');
+
+#is($event->type,   SDL_EVENT, '[SDL::Event->type] returns correctly');
+is($aevent->type,  SDL_ACTIVEEVENT, '[SDL::ActiveEvent->type] returns correctly'); 
+is($weevent->type, SDL_VIDEOEXPOSE, '[SDL::ExposeEvent->type] returns correctly'); 
+is($jaevent->type, SDL_JOYAXISMOTION, '[SDL::JoyAxisEvent->type] returns correctly'); 
+is($jtevent->type, SDL_JOYBALLMOTION, '[SDL::JoyBallEvent->type] returns correctly'); 
+is((($jbevent->type == SDL_JOYBUTTONDOWN) || ($jbevent->type == SDL_JOYBUTTONUP)), 1, '[SDL::JoyButtonEvent->type] returns correctly'); 
+is($jhevent->type, SDL_JOYHATMOTION, '[SDL::JoyHatEvent->type] returns correctly'); 
+is((($kbevent->type == SDL_KEYUP) || ($kbevent->type == SDL_KEYDOWN)), 1, '[SDL::KeyboardEvent->type] returns correctly'); 
+is((($mbevent->type == SDL_MOUSEBUTTONDOWN) || ($mbevent->type == SDL_MOUSEBUTTONUP)), 1, '[SDL::MouseButtonEvent->type] returns correctly'); 
+is($mmevent->type, SDL_MOUSEMOTION, '[SDL::MouseMotionEvent->type] returns correctly'); 
+is($qevent->type,  SDL_QUIT, '[SDL::QuitEvent->type] returns correctly'); 
+is($wrevent->type, SDL_VIDEORESIZE, '[SDL::ResizeEvent->type] returns correctly'); 
+is($wmevent->type, SDL_SYSWMEVENT, '[SDL::SysWMEvent->type] returns correctly'); 
+is($uevent->type,  SDL_USEREVENT, '[SDL::UserEvent->type] returns correctly'); 
 
 $uevent->code(200);
 is( $uevent->code, 200, '[SDL::UserEvent->code] is set correctly');

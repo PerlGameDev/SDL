@@ -28,7 +28,7 @@ kbevent_new ( CLASS )
 	char* CLASS
 	CODE:
 		RETVAL = safemalloc(sizeof(SDL_KeyboardEvent));
-		RETVAL->type = SDL_KEYDOWN | SDL_KEYUP;
+		RETVAL->type = SDL_KEYDOWN;
 	OUTPUT:
 		RETVAL
 

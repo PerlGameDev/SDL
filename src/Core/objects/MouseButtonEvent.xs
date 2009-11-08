@@ -30,7 +30,7 @@ mbevent_new ( CLASS )
 	char* CLASS
 	CODE:
 		RETVAL = safemalloc(sizeof(SDL_MouseButtonEvent));
-		RETVAL->type = SDL_MOUSEBUTTONDOWN | SDL_MOUSEBUTTONUP;
+		RETVAL->type = SDL_MOUSEBUTTONDOWN;
 	OUTPUT:
 		RETVAL
 

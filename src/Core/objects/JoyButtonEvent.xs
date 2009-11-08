@@ -29,7 +29,7 @@ jbevent_new ( CLASS )
 	char* CLASS
 	CODE:
 		RETVAL = safemalloc(sizeof(SDL_JoyButtonEvent));
-		RETVAL->type = SDL_JOYBUTTONDOWN | SDL_JOYBUTTONUP;
+		RETVAL->type = SDL_JOYBUTTONDOWN;
 	OUTPUT:
 		RETVAL
 
