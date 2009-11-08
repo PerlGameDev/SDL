@@ -40,10 +40,17 @@ kbevent_type ( event, ... )
 	OUTPUT:
 		RETVAL
 
+
 Uint8
 kbevent_state ( event, ... )
 	SDL_KeyboardEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->state = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->state;
 	OUTPUT:
 		RETVAL
@@ -54,6 +61,20 @@ kbevent_keysym ( event, ... )
 	PREINIT:
 		char* CLASS = "SDL::keysym";
 	CODE: 
+		if( items > 1 )
+		{
+			SDL_keysym * ksp = (SDL_keysym * )SvPV( ST(1), PL_na) ;
+			event->keysym = *ksp;
+
+		}
+
 		RETVAL = &(event->keysym);
 	OUTPUT:
 		RETVAL
+
+void
+kbevent_DESTROY(self)
+	SDL_KeyboardEvent *self
+	CODE:
+		safefree( (char *)self );
+
