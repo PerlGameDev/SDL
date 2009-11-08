@@ -34,11 +34,17 @@ jbevent_new ( CLASS )
 		RETVAL
 
 Uint8
-jbevent_type ( event )
+jbevent_type ( event, ... )
 
 	SDL_JoyButtonEvent * event
 
 	CODE:
+		if( items > 1 )
+		{
+			event->type = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->type;
 	OUTPUT:
 		RETVAL

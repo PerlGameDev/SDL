@@ -36,6 +36,12 @@ Uint8
 kbevent_type ( event, ... )
 	SDL_KeyboardEvent *event
 	CODE: 
+		if( items > 1 )
+		{
+			event->type = SvIV( ST(1) );
+
+		}
+
 		RETVAL = event->type;
 	OUTPUT:
 		RETVAL
