@@ -3,19 +3,6 @@ use strict;
 use SDL;
 use SDL::Event;
 use SDL::Events;
-use SDL::ExposeEvent;
-use SDL::JoyAxisEvent;
-use SDL::JoyBallEvent;
-use SDL::JoyButtonEvent;
-use SDL::JoyHatEvent;
-use SDL::KeyboardEvent;
-use SDL::keysym;
-use SDL::MouseButtonEvent;
-use SDL::MouseMotionEvent;
-use SDL::QuitEvent;
-use SDL::ResizeEvent;
-use SDL::SysWMEvent;
-use SDL::UserEvent;
 use SDL::Video;
 use Devel::Peek;
 use Test::More;
@@ -48,6 +35,8 @@ syswm
 
 can_ok( 'SDL::Events',           @done); 
 can_ok( 'SDL::Event',            @done_event);
+
+=pod
 can_ok( 'SDL::ExposeEvent',      qw/type/);
 can_ok( 'SDL::JoyAxisEvent',     qw/type which axis value/);
 can_ok( 'SDL::JoyBallEvent',     qw/type which ball xrel yrel/);
@@ -61,6 +50,7 @@ can_ok( 'SDL::QuitEvent',        qw/type/);
 can_ok( 'SDL::ResizeEvent',      qw/type w h/);
 can_ok( 'SDL::SysWMEvent',       qw/type msg/);
 can_ok( 'SDL::UserEvent',        qw/type code data1 data2/);
+=cut 
 
 SDL::init(SDL_INIT_VIDEO);                                                                          
 

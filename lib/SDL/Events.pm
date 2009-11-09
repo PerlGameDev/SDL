@@ -1,7 +1,6 @@
 package SDL::Events;
 use strict;
 use warnings;
-use SDL::keysym;
 require Exporter;
 require DynaLoader;
 our @ISA = qw(Exporter DynaLoader);

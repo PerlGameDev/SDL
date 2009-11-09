@@ -16,20 +16,6 @@ SDL::Overlay
 SDL::Rect
 SDL::Events 
 SDL::Event 
-SDL::ActiveEvent 
-SDL::ExposeEvent 
-SDL::JoyAxisEvent 
-SDL::JoyBallEvent 
-SDL::JoyButtonEvent 
-SDL::JoyHatEvent 
-SDL::KeyboardEvent 
-SDL::keysym 
-SDL::MouseButtonEvent 
-SDL::MouseMotionEvent 
-SDL::QuitEvent 
-SDL::ResizeEvent 
-SDL::SysWMEvent 
-SDL::UserEvent    			
 /;
     plan tests => scalar @modules;
 
