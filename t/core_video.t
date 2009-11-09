@@ -8,9 +8,7 @@ use SDL::Overlay;
 use Test::More;
 use SDL::Rect;
 
-plan ( tests => 50);
-
-use_ok( 'SDL::Video' ); 
+use SDL::Video;
 
 my @done =
 	qw/ 
@@ -227,3 +225,5 @@ TODO:
 
 
 pass 'Are we still alive? Checking for segfaults';
+
+done_testing();
