@@ -203,6 +203,66 @@ event_jaxis ( event, ... )
 	OUTPUT:
 		RETVAL
 
+Uint8
+event_jaxis_type ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_JoyAxisEvent * a = &(event->jaxis);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+
+		RETVAL = a->type;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_jaxis_which ( event, ... )
+	SDL_Event *event
+	CODE:
+		SDL_JoyAxisEvent * a = &(event->jaxis);
+
+		if( items > 1 )
+		{
+			a->which = SvIV( ST(1) );
+		}
+
+		RETVAL = a->which;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_jaxis_axis ( event, ... )
+	SDL_Event *event
+	CODE:
+		SDL_JoyAxisEvent * a = &(event->jaxis);
+
+ 		if( items > 1 )
+		{
+			a->axis = SvIV( ST(1) );
+		}
+
+		RETVAL = a->axis;
+	OUTPUT:
+		RETVAL
+
+Sint16
+event_jaxis_value ( event, ... )
+	SDL_Event *event
+	CODE:
+		SDL_JoyAxisEvent * a = &(event->jaxis);
+
+		if( items > 1 )
+		{
+			a->value = SvIV( ST(1) );
+		}
+
+		RETVAL = a->value;
+	OUTPUT:
+		RETVAL
+
 SDL_JoyBallEvent *
 event_jball ( event, ... )
 	SDL_Event * event
