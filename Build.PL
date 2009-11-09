@@ -98,13 +98,6 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
-	SysWMEvent => {
-		file      => {
-			from  => 'src/Core/objects/SysWMEvent.xs',
-			to    => 'lib/SDL/SysWMEvent.xs',
-		},
-		libraries => [qw( SDL )],
-	},
 	Overlay => {
 		file      => {
 			from  => 'src/Core/objects/Overlay.xs',
@@ -137,13 +130,6 @@ my %subsystems =
 		file      => {
 			from  => 'src/Core/objects/Palette.xs',
 			to    => 'lib/SDL/Palette.xs',
-		},
-		libraries => [qw( SDL )],
-	},
-	QuitEvent => {
-		file      => {
-			from  => 'src/Core/objects/QuitEvent.xs',
-			to    => 'lib/SDL/QuitEvent.xs',
 		},
 		libraries => [qw( SDL )],
 	},
