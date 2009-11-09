@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use SDL::Events;
-use Test::More tests => 1 + 610;    # use_ok + constants
+use Test::More tests => 1 + 624;    # use_ok + constants
 
 BEGIN { use_ok('SDL::Constants') }
 
@@ -45,16 +45,26 @@ is( KMOD_LALT,     256,  'KMOD_LALT should be imported' );
 is( KMOD_LALT(),   256,  'KMOD_LALT() should also be available' );
 is( KMOD_LCTRL,    64,   'KMOD_LCTRL should be imported' );
 is( KMOD_LCTRL(),  64,   'KMOD_LCTRL() should also be available' );
-is( KMOD_LSHIFT,   1,    'KMOD_LSHIFT should be imported' );
+is( KMOD_LMETA,    0x0400, 'KMOD_LMETA should be imported' );
+is( KMOD_LMETA(),  0x0400, 'KMOD_LMETA() should also be available' );
+is( KMOD_LSHIFT,   1,      'KMOD_LSHIFT should be imported' );
 is( KMOD_LSHIFT(), 1,    'KMOD_LSHIFT() should also be available' );
+is( KMOD_META,     0x0400 | 0x0800, 'KMOD_META should be imported' );
+is( KMOD_META(),   0x0400 | 0x0800, 'KMOD_META() should also be available' );
+is( KMOD_MODE,     0x4000, 'KMOD_MODE should be imported' );
+is( KMOD_MODE(),   0x4000, 'KMOD_MODE() should also be available' );
 is( KMOD_NONE,     0,    'KMOD_NONE should be imported' );
 is( KMOD_NONE(),   0,    'KMOD_NONE() should also be available' );
 is( KMOD_NUM,      4096, 'KMOD_NUM should be imported' );
 is( KMOD_NUM(),    4096, 'KMOD_NUM() should also be available' );
+is( KMOD_RESERVED,   0x8000, 'KMOD_RESERVED should be imported' );
+is( KMOD_RESERVED(), 0x8000, 'KMOD_RESERVED() should also be available' );
 is( KMOD_RALT,     512,  'KMOD_RALT should be imported' );
 is( KMOD_RALT(),   512,  'KMOD_RALT() should also be available' );
 is( KMOD_RCTRL,    128,  'KMOD_RCTRL should be imported' );
 is( KMOD_RCTRL(),  128,  'KMOD_RCTRL() should also be available' );
+is( KMOD_RMETA,    0x0800, 'KMOD_RMETA should be imported' );
+is( KMOD_RMETA(),  0x0800, 'KMOD_RMETA() should also be available' );
 is( KMOD_RSHIFT,   2,    'KMOD_RSHIFT should be imported' );
 is( KMOD_RSHIFT(), 2,    'KMOD_RSHIFT() should also be available' );
 is( KMOD_SHIFT,    3,    'KMOD_SHIFT should be imported' );
@@ -211,6 +221,8 @@ is( SDLK_KP_PLUS,        270, 'SDLK_KP_PLUS should be imported' );
 is( SDLK_KP_PLUS(),      270, 'SDLK_KP_PLUS() should also be available' );
 is( SDLK_LALT,           308, 'SDLK_LALT should be imported' );
 is( SDLK_LALT(),         308, 'SDLK_LALT() should also be available' );
+is( SDLK_LAST,           323, 'SDLK_LAST should be imported' );
+is( SDLK_LAST(),         323, 'SDLK_LAST() should also be available' );
 is( SDLK_LCTRL,          306, 'SDLK_LCTRL should be imported' );
 is( SDLK_LCTRL(),        306, 'SDLK_LCTRL() should also be available' );
 is( SDLK_LEFT,           276, 'SDLK_LEFT should be imported' );
@@ -287,6 +299,8 @@ is( SDLK_TAB,            9,   'SDLK_TAB should be imported' );
 is( SDLK_TAB(),          9,   'SDLK_TAB() should also be available' );
 is( SDLK_UNDERSCORE,     95,  'SDLK_UNDERSCORE should be imported' );
 is( SDLK_UNDERSCORE(),   95,  'SDLK_UNDERSCORE() should also be available' );
+is( SDLK_UNDO,           322, 'SDLK_UNDO should be imported' );
+is( SDLK_UNDO(),         322, 'SDLK_UNDO() should also be available' );
 is( SDLK_UP,             273, 'SDLK_UP should be imported' );
 is( SDLK_UP(),           273, 'SDLK_UP() should also be available' );
 is( SDLK_a,              97,  'SDLK_a should be imported' );

@@ -54,11 +54,16 @@ our @EXPORT=qw(
 	KMOD_CTRL
 	KMOD_LALT
 	KMOD_LCTRL
+	KMOD_LMETA
 	KMOD_LSHIFT
+	KMOD_META
+	KMOD_MODE
 	KMOD_NONE
 	KMOD_NUM
+	KMOD_RESERVED
 	KMOD_RALT
 	KMOD_RCTRL
+	KMOD_RMETA
 	KMOD_RSHIFT
 	KMOD_SHIFT
 	MIX_DEFAULT_CHANNELS
@@ -135,6 +140,7 @@ our @EXPORT=qw(
 	SDLK_KP_MULTIPLY
 	SDLK_KP_PERIOD
 	SDLK_KP_PLUS
+	SDLK_LAST
 	SDLK_LALT
 	SDLK_LCTRL
 	SDLK_LEFT
@@ -174,6 +180,7 @@ our @EXPORT=qw(
 	SDLK_SYSREQ
 	SDLK_TAB
 	SDLK_UNDERSCORE
+	SDLK_UNDO
 	SDLK_UP
 	SDLK_a
 	SDLK_b
@@ -363,18 +370,23 @@ use constant {
     INADDR_ANY  => 0,
     INADDR_NONE => -1,
     
-    KMOD_ALT    => 768,
-    KMOD_CAPS   => 8192,
-    KMOD_CTRL   => 192,
-    KMOD_LALT   => 256,
-    KMOD_LCTRL  => 64,
-    KMOD_LSHIFT => 1,
-    KMOD_NONE   => 0,
-    KMOD_NUM    => 4096,
-    KMOD_RALT   => 512,
-    KMOD_RCTRL  => 128,
-    KMOD_RSHIFT => 2,
-    KMOD_SHIFT  => 3,
+    KMOD_ALT                => 768,
+    KMOD_CAPS               => 8192,
+    KMOD_CTRL               => 192,
+    KMOD_LALT               => 256,
+    KMOD_LCTRL              => 64,
+	KMOD_LMETA              => 0x0400,
+    KMOD_LSHIFT             => 1,
+	KMOD_META               => 0x0400 | 0x0800,
+	KMOD_MODE               => 0x4000,
+    KMOD_NONE               => 0,
+    KMOD_NUM                => 4096,
+	KMOD_RESERVED           => 0x8000,
+    KMOD_RALT               => 512,
+    KMOD_RCTRL              => 128,
+	KMOD_RMETA              => 0x0800,
+    KMOD_RSHIFT             => 2,
+    KMOD_SHIFT              => 3,
     
     MIX_DEFAULT_CHANNELS  => 2,
     MIX_DEFAULT_FORMAT    => 32784,
@@ -451,6 +463,7 @@ use constant {
     SDLK_KP_MULTIPLY  => 268,
     SDLK_KP_PERIOD    => 266,
     SDLK_KP_PLUS      => 270,
+    SDLK_LAST         => 323,
     SDLK_LALT         => 308,
     SDLK_LCTRL        => 306,
     SDLK_LEFT         => 276,
@@ -490,6 +503,7 @@ use constant {
     SDLK_SYSREQ       => 317,
     SDLK_TAB          => 9,
     SDLK_UNDERSCORE   => 95,
+	SDLK_UNDO         => 322,
     SDLK_UP           => 273,
     SDLK_a            => 97,
     SDLK_b            => 98,
