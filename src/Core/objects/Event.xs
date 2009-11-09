@@ -100,9 +100,7 @@ event_active_state ( event, ... )
 		if( items > 1 )
 		{
 			a->state = SvIV( ST(1) );
-
 		}
-		
 		RETVAL = a->state;
 	OUTPUT:
 		RETVAL
@@ -117,6 +115,55 @@ event_key ( event, ... )
 		RETVAL = NULL;
 		if ( &event != NULL ) 
 		RETVAL = &(event->key);
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_key_type ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_KeyboardEvent * a = &(event->key);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+
+		RETVAL = a->type;
+	OUTPUT:
+		RETVAL
+
+
+Uint8
+event_key_state ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_KeyboardEvent * a = &(event->key);
+
+		if( items > 1 )
+		{
+			a->state = SvIV( ST(1) );
+		}
+
+		RETVAL = a->state;
+	OUTPUT:
+		RETVAL
+
+SDL_keysym *
+event_key_keysym ( event, ... )
+	SDL_Event *event
+	PREINIT:
+		char* CLASS = "SDL::keysym";
+	CODE: 
+		SDL_KeyboardEvent * a = &(event->key);
+
+		if( items > 1 )
+		{
+			SDL_keysym * ksp = (SDL_keysym * )SvPV( ST(1), PL_na) ;
+			a->keysym = *ksp;
+		}
+
+		RETVAL = &(a->keysym);
 	OUTPUT:
 		RETVAL
 
