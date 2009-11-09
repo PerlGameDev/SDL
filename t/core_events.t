@@ -54,7 +54,7 @@ can_ok( 'SDL::UserEvent',        qw/type code data1 data2/);
 
 SDL::init(SDL_INIT_VIDEO);                                                                          
 
-SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE);
+my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE);
 
 is(SDL::Events::pump_events(), undef,  '[pump_events] Returns undef');
 
@@ -99,49 +99,9 @@ my $value = SDL::Events::wait_event($event);
 
 is( $value, 1, '[wait_event] waited for event');
 
-
-=pod
-
-#is($event->type,   SDL_EVENT, '[SDL::Event->type] returns correctly');
-is($aevent->type,  SDL_ACTIVEEVENT, '[SDL::ActiveEvent->type] returns correctly'); 
-is($weevent->type, SDL_VIDEOEXPOSE, '[SDL::ExposeEvent->type] returns correctly'); 
-is($jaevent->type, SDL_JOYAXISMOTION, '[SDL::JoyAxisEvent->type] returns correctly'); 
-is($jtevent->type, SDL_JOYBALLMOTION, '[SDL::JoyBallEvent->type] returns correctly'); 
-is((($jbevent->type == SDL_JOYBUTTONDOWN) || ($jbevent->type == SDL_JOYBUTTONUP)), 1, '[SDL::JoyButtonEvent->type] returns correctly'); 
-is($jhevent->type, SDL_JOYHATMOTION, '[SDL::JoyHatEvent->type] returns correctly'); 
-is((($kbevent->type == SDL_KEYUP) || ($kbevent->type == SDL_KEYDOWN)), 1, '[SDL::KeyboardEvent->type] returns correctly'); 
-is((($mbevent->type == SDL_MOUSEBUTTONDOWN) || ($mbevent->type == SDL_MOUSEBUTTONUP)), 1, '[SDL::MouseButtonEvent->type] returns correctly'); 
-is($mmevent->type, SDL_MOUSEMOTION, '[SDL::MouseMotionEvent->type] returns correctly'); 
-is($qevent->type,  SDL_QUIT, '[SDL::QuitEvent->type] returns correctly'); 
-is($wrevent->type, SDL_VIDEORESIZE, '[SDL::ResizeEvent->type] returns correctly'); 
-is($wmevent->type, SDL_SYSWMEVENT, '[SDL::SysWMEvent->type] returns correctly'); 
-is($uevent->type,  SDL_USEREVENT, '[SDL::UserEvent->type] returns correctly'); 
-
-SDL::init(SDL_INIT_VIDEO);                                                                          
-
-SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE);
-
-my $event   = SDL::Event->new();
-
-my $aevent  = SDL::Event->new(); 
-$aevent->type( SDL_ACTIVEEVENT);
-$aevent->active_gain(1);
-$aevent->active_state(SDL_APPMOUSEFOCUS);
-
-#my $weevent = SDL::Event->new(); 
-#$weevent->type(SDL_VIDEOEXPOSE);
-
-SDL::Events::push_event($aevent); pass '[push_event] Pushed in an Active Event';
-
-SDL::Events::push_event($aevent); pass '[push_event] ran'; 
-
-SDL::Events::pump_events(); 
-
-
 my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
 is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
 
-=cut 
 
 
 my @left = qw/
