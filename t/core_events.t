@@ -139,6 +139,8 @@ is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_pee
 
 SDL::Events::push_event($aevent); pass '[push_event] ran';
 
+SDL::Events::pump_events(); pass '[pump_event] ran';
+
 SDL::Events::poll_event($event);
 
 is( $event->type, $aevent->type, '[poll_event] Got the right event back out') ;
