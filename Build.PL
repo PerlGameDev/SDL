@@ -217,14 +217,6 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
-	ResizeEvent => {
-		file      => {
-			from  => 'src/Core/objects/ResizeEvent.xs',
-			to    => 'lib/SDL/ResizeEvent.xs',
-		},
-		libraries => [qw( SDL )],
-	},
-
 	VideoInfo => {
 		file      => {
 			from  => 'src/Core/objects/VideoInfo.xs',

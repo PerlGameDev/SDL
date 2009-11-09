@@ -311,6 +311,45 @@ event_resize ( event, ... )
 	OUTPUT:
 		RETVAL
 
+Uint8
+event_resize_type ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_ResizeEvent * r = &(event->resize);
+		RETVAL = r->type;
+	OUTPUT:
+		RETVAL
+
+int
+event_resize_w ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_ResizeEvent * r = &(event->resize);
+		if( items > 1 )
+		{
+			r->w = SvIV( ST(1) );
+
+		}
+
+		RETVAL = r->w;
+	OUTPUT:
+		RETVAL
+
+int
+event_resize_h ( event, ... )
+	SDL_Event *event
+	CODE: 
+		 SDL_ResizeEvent * r = &(event->resize); 
+		if( items > 1 )
+		{
+			r->h = SvIV( ST(1) );
+
+		}
+
+		RETVAL = r->h;
+	OUTPUT:
+		RETVAL
+
 SDL_ExposeEvent *
 event_expose ( event, ... )
 	SDL_Event * event
