@@ -58,8 +58,16 @@ SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE);
 
 is(SDL::Events::pump_events(), undef,  '[pump_events] Returns undef');
 
-=pod
 my $event   = SDL::Event->new();
+
+my $aevent = SDL::Event->new();
+   $aevent->type ( SDL_ACTIVEEVENT );
+   $aevent->active_gain(1);
+   $aevent->active_state(SDL_APPINPUTFOCUS);
+
+SDL::Events::push_event($aevent); pass '[push_event] Event can be pushed';
+
+=pod
 my $aevent  = SDL::ActiveEvent->new(); 
 my $weevent = SDL::ExposeEvent->new(); 
 my $jaevent = SDL::JoyAxisEvent->new(); 

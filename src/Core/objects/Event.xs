@@ -413,7 +413,7 @@ event_button_state ( event, ... )
 		RETVAL
 
 Uint16
-event__button_x ( event, ... )
+event_button_x ( event, ... )
 	SDL_Event *event
 	CODE: 
 		SDL_MouseButtonEvent * a = &(event->button);
