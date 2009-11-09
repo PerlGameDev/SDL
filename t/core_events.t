@@ -17,13 +17,16 @@ use SDL::ResizeEvent;
 use SDL::SysWMEvent;
 use SDL::UserEvent;
 use SDL::Video;
+use Devel::Peek;
 use Test::More;
 
-plan ( tests => 66 );
+plan ( tests => 69 );
 
 my @done =qw/
 pump_events 
 peep_events 
+push_event
+poll_event
 /;
 
 my @done_event =qw/
@@ -98,7 +101,7 @@ my $wrevent = SDL::ResizeEvent->new();
 my $wmevent = SDL::SysWMEvent->new(); 
 my $uevent  = SDL::UserEvent->new(); 
 
-#isa_ok( $event,   'SDL::Event',            '[SDL::Event::new] is creating an Event');
+isa_ok( $event,   'SDL::Event',            '[SDL::Event::new] is creating an Event');
 isa_ok( $aevent,  'SDL::ActiveEvent',      '[SDL::ActiveEvent::new] is creating an ActiveEvent');
 isa_ok( $weevent, 'SDL::ExposeEvent',      '[SDL::ExposeEvent::new] is creating an ExposeEvent');
 isa_ok( $jaevent, 'SDL::JoyAxisEvent',     '[SDL::JoyAxisEvent::new] is creating an JoyAxisEvent');
@@ -130,11 +133,19 @@ is($wrevent->type, SDL_VIDEORESIZE, '[SDL::ResizeEvent->type] returns correctly'
 is($wmevent->type, SDL_SYSWMEVENT, '[SDL::SysWMEvent->type] returns correctly'); 
 is($uevent->type,  SDL_USEREVENT, '[SDL::UserEvent->type] returns correctly'); 
 
+my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
+is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
+
+
+SDL::Events::push_event($aevent); pass '[push_event] ran';
+
+SDL::Events::poll_event($event);
+
+is( $event->type, $aevent->type, '[poll_event] Got the right event back out') ;
+
 $uevent->code(200);
 is( $uevent->code, 200, '[SDL::UserEvent->code] is set correctly');
 
-my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
-is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
 
 TODO:
 {

@@ -46,7 +46,7 @@ events_poll_event( event )
 	SDL_Event *event
 	CODE:
 		RETVAL = -1;
-		if ( &event != NULL )
+		if (  event != NULL )
 		RETVAL = SDL_PollEvent(event);
 	OUTPUT:
 		RETVAL

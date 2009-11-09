@@ -38,8 +38,7 @@ SDL_Event *
 event_new (CLASS)
 	char *CLASS
 	CODE:
-		SDL_Event *empty_event;
-		RETVAL = empty_event;
+		RETVAL = (SDL_Event *) safemalloc(sizeof (SDL_Event));
 	OUTPUT:
 		RETVAL
 
@@ -103,7 +102,7 @@ event_button ( event, ... )
 
 SDL_JoyAxisEvent *
 event_jaxis ( event, ... )
-	SDL_Event *event
+	SDL_Event * event
 	PREINIT:
 		char *CLASS = "SDL::JoyAxisEvent";
 	CODE:
@@ -115,7 +114,7 @@ event_jaxis ( event, ... )
 
 SDL_JoyBallEvent *
 event_jball ( event, ... )
-	SDL_Event *event
+	SDL_Event * event
 	PREINIT:
 		char *CLASS = "SDL::JoyBallEvent";
 	CODE:
@@ -127,7 +126,7 @@ event_jball ( event, ... )
 
 SDL_JoyHatEvent *
 event_jhat ( event, ... )
-	SDL_Event *event
+	SDL_Event * event
 	PREINIT:
 		char *CLASS = "SDL::JoyHatEvent";
 	CODE:
@@ -139,7 +138,7 @@ event_jhat ( event, ... )
 
 SDL_JoyButtonEvent *
 event_jbutton ( event, ... )
-	SDL_Event *event
+	SDL_Event * event
 	PREINIT:
 		char *CLASS = "SDL::JoyButtonEvent";
 	CODE:
@@ -151,7 +150,7 @@ event_jbutton ( event, ... )
 
 SDL_ResizeEvent *
 event_resize ( event, ... )
-	SDL_Event *event
+	SDL_Event * event
 	PREINIT:
 		char *CLASS = "SDL::ResizeEvent";
 	CODE:
@@ -163,7 +162,7 @@ event_resize ( event, ... )
 
 SDL_ExposeEvent *
 event_expose ( event, ... )
-	SDL_Event *event
+	SDL_Event * event
 	PREINIT:
 		char *CLASS = "SDL::ExposeEvent";
 	CODE:
@@ -175,7 +174,7 @@ event_expose ( event, ... )
 
 SDL_QuitEvent *
 event_quit ( event, ... )
-	SDL_Event *event
+	SDL_Event * event
 	PREINIT:
 		char *CLASS = "SDL::QuitEvent";
 	CODE:
@@ -187,7 +186,7 @@ event_quit ( event, ... )
 
 SDL_UserEvent *
 event_user ( event, ... )
-	SDL_Event *event
+	SDL_Event * event
 	PREINIT:
 		char *CLASS = "SDL::UserEvent";
 	CODE:
@@ -199,7 +198,7 @@ event_user ( event, ... )
 
 SDL_SysWMEvent *
 event_syswm ( event, ... )
-	SDL_Event *event
+	SDL_Event * event
 	PREINIT:
 		char *CLASS = "SDL::SysWMEvent";
 	CODE:
@@ -209,3 +208,8 @@ event_syswm ( event, ... )
 	OUTPUT:
 		RETVAL
 
+void
+event_DESTROY(self)
+	SDL_Event *self
+	CODE:
+		safefree( (char *)self );
