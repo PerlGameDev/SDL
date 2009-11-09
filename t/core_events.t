@@ -118,17 +118,31 @@ is($wrevent->type, SDL_VIDEORESIZE, '[SDL::ResizeEvent->type] returns correctly'
 is($wmevent->type, SDL_SYSWMEVENT, '[SDL::SysWMEvent->type] returns correctly'); 
 is($uevent->type,  SDL_USEREVENT, '[SDL::UserEvent->type] returns correctly'); 
 
+
+
 my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
 is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
 
 
 SDL::Events::push_event($aevent); pass '[push_event] ran';
 
+my $got_event = 0;
+
+while(1)
+{
 SDL::Events::pump_events(); pass '[pump_event] ran';
 
 SDL::Events::poll_event($event);
 
-is( $event->type, $aevent->type, '[poll_event] Got the right event back out') ;
+if ($event->type == SDL_ACTIVEEVENT)
+ {
+	 $got_event = 1;
+	 last;
+ }
+
+}
+
+is( $got_event, 1, '[poll_event] Got the right event back out') ;
 
 SDL::Events::push_event($weevent); pass '[push_event] ran';
 
