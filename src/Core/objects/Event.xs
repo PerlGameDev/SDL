@@ -167,6 +167,76 @@ event_key_keysym ( event, ... )
 	OUTPUT:
 		RETVAL
 
+Uint8
+event_key_scancode ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_KeyboardEvent * a = &(event->key);
+		SDL_keysym * b        = &(a->keysym);
+		
+		if( items > 1 )
+		{
+			b->scancode = SvIV( ST(1) );
+		}
+
+		RETVAL = b->scancode;
+	OUTPUT:
+		RETVAL
+
+SDLKey *
+event_key_sym ( event, ... )
+	SDL_Event *event
+	PREINIT:
+		char* CLASS = "SDL::Key";
+	CODE: 
+		SDL_KeyboardEvent * a = &(event->key);
+		SDL_keysym * b        = &(a->keysym);
+		
+		if( items > 1 )
+		{
+			SDLKey *kp  = (SDLKey * )SvPV( ST(1), PL_na) ;
+			b->sym = *kp;
+		}
+
+		RETVAL = &(b->sym);
+	OUTPUT:
+		RETVAL
+
+SDLMod *
+event_key_mod ( event, ... )
+	SDL_Event *event
+	PREINIT:
+		char* CLASS = "SDL::Mod";
+	CODE: 
+		SDL_KeyboardEvent * a = &(event->key);
+		SDL_keysym * b        = &(a->keysym);
+		
+		if( items > 1 )
+		{
+			SDLMod *mp  = (SDLMod * )SvPV( ST(1), PL_na) ;
+			b->mod = *mp;
+		}
+
+		RETVAL = &(b->mod);
+	OUTPUT:
+		RETVAL
+
+Uint16
+event_key_unicode ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_KeyboardEvent * a = &(event->key);
+		SDL_keysym * b        = &(a->keysym);
+		
+		if( items > 1 )
+		{
+			b->unicode = SvIV( ST(1) );
+		}
+
+		RETVAL = b->unicode;
+	OUTPUT:
+		RETVAL
+
 SDL_MouseMotionEvent *
 event_motion ( event, ... )
 	SDL_Event *event
