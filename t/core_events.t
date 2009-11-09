@@ -77,7 +77,7 @@ SDL::Events::pump_events();
 
 my $ret =  SDL::Events::poll_event($event);
 
-if ($event->type == SDL_ACTIVEEVENT)
+if ($event->type == SDL_ACTIVEEVENT && $event->active_gain == 1 && $event->active_state == SDL_APPINPUTFOCUS )
  {
 	 $got_event = 1;
 	 last;
