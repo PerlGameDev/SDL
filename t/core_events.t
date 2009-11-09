@@ -20,13 +20,14 @@ use SDL::Video;
 use Devel::Peek;
 use Test::More;
 
-plan ( tests => 69 );
+plan ( tests => 71 );
 
 my @done =qw/
 pump_events 
 peep_events 
 push_event
 poll_event
+wait_event
 /;
 
 my @done_event =qw/
@@ -143,6 +144,12 @@ SDL::Events::poll_event($event);
 
 is( $event->type, $aevent->type, '[poll_event] Got the right event back out') ;
 
+SDL::Events::push_event($weevent); pass '[push_event] ran';
+
+my $value = SDL::Events::wait_event($event); 
+
+is( $value, 1, '[wait_event] waited for event');
+
 $uevent->code(200);
 is( $uevent->code, 200, '[SDL::UserEvent->code] is set correctly');
 
@@ -158,48 +165,8 @@ is( $uevent->data1, 'wow', '[SDL::UserEvent->data1] is set correctly');
 is( $uevent->data2, 'notwow','[SDL::UserEvent->data2] is set correctly');
 }
 
-=pod
-
-my $events = SDL::Event->new();
-my $num_peep_events = SDL::Events::peep_events( SDL::Event->new(), 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
-is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
-
-my $event = SDL::Event->new();
-my $value = SDL::Events::poll_event($event);
-is(($value == 1) || ($value == 0), 1,  '[poll_event] Returns 1 or 0');
-
-
-my $event2 = SDL::Event->new();
-is(SDL::Events::push_event($event2), 0,  '[push_event] Returns 0 on success');
-my $event3 = SDL::Event->new();
-is(SDL::Events::push_event($event3), 0,  '[push_event] Returns 0 on success');
-
-
-my $events2 = SDL::Event->new();
-my $num_peep_events2 = SDL::Events::peep_events( $events2, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
-is($num_peep_events2 > $num_peep_events, 1,  '[peep_events] Size of event queue is ' . $num_peep_events2."\t". SDL::get_error());
-
-
-
-my $events3 = SDL::Event->new();
-$num_peep_events = SDL::Events::peep_events( $events3, 1, SDL_ADDEVENT, SDL_ALLEVENTS);
-is($num_peep_events, 1,  '[peep_events] Added 1 event to the back of the queue');
-
-my $events4 = SDL::Event->new();
-$num_peep_events = SDL::Events::peep_events( $events4, 1, SDL_GETEVENT, SDL_ALLEVENTS);
-is($num_peep_events, 1,  '[peep_events] Got 1 event from the front of the queue');
-
-
-
-my $event4 = SDL::Event->new();
-is(SDL::Events::wait_event($event4), 1,  '[wait_event] Returns 1 on success');
-is(SDL::Events::wait_event(), 1,  '[wait_event] Returns 1 on success');
-
-=cut
-
 
 my @left = qw/
-wait_event
 seteventfilter 
 eventstate 
 getkeystate 
