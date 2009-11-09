@@ -21,15 +21,6 @@ SDL_QuitEvent -- Quit requested event
 
 =cut
 
-SDL_QuitEvent *
-qevent_new ( CLASS )
-	char* CLASS
-	CODE:
-		RETVAL = safemalloc(sizeof(SDL_QuitEvent));
-		RETVAL->type = SDL_QUIT;
-	OUTPUT:
-		RETVAL
-
 Uint8
 qevent_type ( event, ... )
 	SDL_QuitEvent *event
@@ -37,9 +28,3 @@ qevent_type ( event, ... )
 		RETVAL = event->type;
 	OUTPUT:
 		RETVAL
-
-void
-qevent_DESTROY ( event)
-	SDL_QuitEvent *event
-	CODE:
-		safefree( (char *) event);

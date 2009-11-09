@@ -24,15 +24,6 @@ SDL_JoyBallEvent -- Joystick trackball motion event structure
 
 =cut
 
-SDL_JoyBallEvent *
-jtevent_new ( CLASS )
-	char* CLASS
-	CODE:
-		RETVAL = safemalloc(sizeof(SDL_JoyBallEvent));
-		RETVAL->type = SDL_JOYBALLMOTION;
-	OUTPUT:
-		RETVAL
-
 Uint8
 jtevent_type ( event, ... )
 	SDL_JoyBallEvent *event
@@ -98,9 +89,3 @@ jtevent_yrel ( event, ... )
 		RETVAL = event->yrel;
 	OUTPUT:
 		RETVAL
-
-void
-jtevent_DESTROY(self)
-	SDL_JoyBallEvent *self
-	CODE:
-		safefree( (char *)self );

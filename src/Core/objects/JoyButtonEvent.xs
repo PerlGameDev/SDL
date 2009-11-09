@@ -24,15 +24,6 @@ SDL_JoyButtonEvent -- Joystick button event structure
 
 =cut
 
-SDL_JoyButtonEvent *
-jbevent_new ( CLASS )
-	char* CLASS
-	CODE:
-		RETVAL = safemalloc(sizeof(SDL_JoyButtonEvent));
-		RETVAL->type = SDL_JOYBUTTONDOWN;
-	OUTPUT:
-		RETVAL
-
 Uint8
 jbevent_type ( event, ... )
 
@@ -96,11 +87,3 @@ jbevent_state ( event )
 		RETVAL = event->state;
 	OUTPUT:
 		RETVAL
-
-void
-jbevent_DESTROY(self)
-
-	SDL_JoyButtonEvent *self
-
-	CODE:
-		safefree( (char *)self );

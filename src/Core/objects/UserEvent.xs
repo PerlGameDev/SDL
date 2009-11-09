@@ -24,15 +24,6 @@ SDL_UserEvent -- A user-defined event type
 
 =cut
 
-SDL_UserEvent *
-uevent_new ( CLASS )
-	char* CLASS
-	CODE:
-		RETVAL = safemalloc(sizeof(SDL_UserEvent));
-		RETVAL->type = SDL_USEREVENT;
-	OUTPUT:
-		RETVAL
-
 Uint8
 uevent_type ( event )
 	SDL_UserEvent *event
@@ -78,10 +69,3 @@ uevent_data2 ( event, ... )
 		RETVAL = event->data1;
 	OUTPUT:
 		RETVAL
-
-
-void
-uevent_DESTROY(self)
-	SDL_UserEvent *self
-	CODE:
-		safefree( (char *)self );

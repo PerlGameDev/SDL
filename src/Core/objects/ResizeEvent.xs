@@ -22,15 +22,6 @@ SDL_ResizeEvent -- Window resize event structure
 
 =cut
 
-SDL_ResizeEvent *
-wrevent_new ( CLASS )
-	char* CLASS
-	CODE:
-		RETVAL = safemalloc(sizeof(SDL_ResizeEvent));
-		RETVAL->type = SDL_VIDEORESIZE;
-	OUTPUT:
-		RETVAL
-
 Uint8
 wrevent_type ( event, ... )
 	SDL_ResizeEvent *event
@@ -66,9 +57,3 @@ wrevent_h ( event, ... )
 		RETVAL = event->h;
 	OUTPUT:
 		RETVAL
-
-void
-wrevent_DESTROY ( event)
-	SDL_ResizeEvent *event
-	CODE:
-		safefree( (char *) event);

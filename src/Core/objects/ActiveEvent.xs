@@ -23,15 +23,6 @@ SDL_ActiveEvent -- Application visibility event structure
 
 =cut
 
-SDL_ActiveEvent *
-aevent_new ( CLASS )
-	char* CLASS
-	CODE:
-		RETVAL = safemalloc(sizeof(SDL_ActiveEvent));
-		RETVAL->type = SDL_ACTIVEEVENT;
-	OUTPUT:
-		RETVAL
-
 Uint8
 aevent_type ( event, ... )
 	SDL_ActiveEvent *event
@@ -67,9 +58,3 @@ aevent_state ( event, ... )
 		RETVAL = event->state;
 	OUTPUT:
 		RETVAL
-
-void
-aevent_DESTROY(self)
-	SDL_ActiveEvent *self
-	CODE:
-		safefree( (char *)self );

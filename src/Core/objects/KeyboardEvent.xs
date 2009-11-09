@@ -23,15 +23,6 @@ SDL_KeyboardEvent -- Keyboard event structure
 
 =cut
 
-SDL_KeyboardEvent *
-kbevent_new ( CLASS )
-	char* CLASS
-	CODE:
-		RETVAL = safemalloc(sizeof(SDL_KeyboardEvent));
-		RETVAL->type = SDL_KEYDOWN;
-	OUTPUT:
-		RETVAL
-
 Uint8
 kbevent_type ( event, ... )
 	SDL_KeyboardEvent *event
@@ -77,10 +68,3 @@ kbevent_keysym ( event, ... )
 		RETVAL = &(event->keysym);
 	OUTPUT:
 		RETVAL
-
-void
-kbevent_DESTROY(self)
-	SDL_KeyboardEvent *self
-	CODE:
-		safefree( (char *)self );
-

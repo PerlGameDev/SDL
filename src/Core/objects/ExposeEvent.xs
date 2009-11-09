@@ -21,15 +21,6 @@ SDL_ExposeEvent -- Window expose event
 
 =cut
 
-SDL_ExposeEvent *
-weevent_new ( CLASS )
-	char* CLASS
-	CODE:
-		RETVAL = safemalloc(sizeof(SDL_ExposeEvent));
-		RETVAL->type = SDL_VIDEOEXPOSE;
-	OUTPUT:
-		RETVAL
-
 Uint8
 weevent_type ( event, ... )
 	SDL_ExposeEvent *event
@@ -37,9 +28,3 @@ weevent_type ( event, ... )
 		RETVAL = event->type;
 	OUTPUT:
 		RETVAL
-
-void
-weevent_DESTROY(self)
-	SDL_ExposeEvent *self
-	CODE:
-		safefree( (char *)self );
