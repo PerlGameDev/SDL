@@ -263,6 +263,21 @@ event_expose ( event, ... )
 	OUTPUT:
 		RETVAL
 
+Uint8
+event_expose_type ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_ExposeEvent * a = &(event->expose);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+
+		RETVAL = a->type;
+	OUTPUT:
+		RETVAL
+
 SDL_QuitEvent *
 event_quit ( event, ... )
 	SDL_Event * event
