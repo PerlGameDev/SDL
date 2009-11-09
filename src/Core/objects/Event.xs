@@ -68,7 +68,7 @@ event_active ( event, ... )
 		RETVAL
 
 Uint8
-event_active_type ( event)
+event_active_type ( event, ... )
 	SDL_Event *event
 	CODE: 
 		SDL_ActiveEvent * a = &(event->active);
@@ -708,7 +708,7 @@ event_jbutton_type ( event, ... )
 		RETVAL
 
 Uint8
-event_jbutton_which ( event )
+event_jbutton_which ( event, ... )
 	SDL_Event *event
 	CODE: 
 		SDL_JoyButtonEvent * a = &(event->jbutton);
@@ -723,7 +723,7 @@ event_jbutton_which ( event )
 		RETVAL
 
 Uint8
-event_jbutton_button ( event )
+event_jbutton_button ( event, ... )
 	SDL_Event *event
 	CODE: 
 		SDL_JoyButtonEvent * a = &(event->jbutton);
@@ -738,7 +738,7 @@ event_jbutton_button ( event )
 		RETVAL
 
 Uint8
-event_jbutton_state ( event )
+event_jbutton_state ( event, ... )
 	SDL_Event *event
 	CODE: 
 		SDL_JoyButtonEvent * a = &(event->jbutton);
@@ -875,7 +875,7 @@ event_user ( event, ... )
 		RETVAL
 
 Uint8
-event_user_type ( event )
+event_user_type ( event, ... )
 	SDL_Event *event
 	CODE: 
 		SDL_UserEvent * a = &(event->user);
