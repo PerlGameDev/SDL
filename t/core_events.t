@@ -20,7 +20,6 @@ use SDL::Video;
 use Devel::Peek;
 use Test::More;
 
-plan ( tests => 71 );
 
 my @done =qw/
 pump_events 
@@ -150,22 +149,6 @@ my $value = SDL::Events::wait_event($event);
 
 is( $value, 1, '[wait_event] waited for event');
 
-$uevent->code(200);
-is( $uevent->code, 200, '[SDL::UserEvent->code] is set correctly');
-
-
-TODO:
-{
-	local $TODO = 'Try to send a Scalar Ref as an IV and return a Scalar Ref';
-
-my $data1 = 'wow';
-$uevent->data1(\$data1);
-$uevent->data2('notwow');
-is( $uevent->data1, 'wow', '[SDL::UserEvent->data1] is set correctly');
-is( $uevent->data2, 'notwow','[SDL::UserEvent->data2] is set correctly');
-}
-
-
 my @left = qw/
 seteventfilter 
 eventstate 
@@ -195,3 +178,6 @@ TODO:
 
 
 pass 'Are we still alive? Checking for segfaults';
+
+done_testing;
+
