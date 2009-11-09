@@ -199,8 +199,6 @@ is(SDL::Events::wait_event(), 1,  '[wait_event] Returns 1 on success');
 
 
 my @left = qw/
-poll_event
-push_event
 wait_event
 seteventfilter 
 eventstate 
