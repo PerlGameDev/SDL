@@ -249,6 +249,97 @@ event_motion ( event, ... )
 	OUTPUT:
 		RETVAL
 
+Uint8
+event_motion_type ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_MouseMotionEvent * a = &(event->motion);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+
+		RETVAL = a->type;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_motion_state ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_MouseMotionEvent * a = &(event->motion);
+
+		if( items > 1 )
+		{
+			a->state = SvIV( ST(1) );
+		}
+
+		RETVAL = a->state;
+	OUTPUT:
+		RETVAL
+
+Uint16
+event_motion_x ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_MouseMotionEvent * a = &(event->motion);
+
+		if( items > 1 )
+		{
+			a->x = SvIV( ST(1) );
+		}
+
+		RETVAL = a->x;
+	OUTPUT:
+		RETVAL
+
+Uint16
+event_motion_y ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_MouseMotionEvent * a = &(event->motion);
+
+		if( items > 1 )
+		{
+			a->y = SvIV( ST(1) );
+		}
+
+		RETVAL = a->y;
+	OUTPUT:
+		RETVAL
+
+Uint16
+event_motion_xrel ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_MouseMotionEvent * a = &(event->motion);
+
+		if( items > 1 )
+		{
+			a->xrel = SvIV( ST(1) );
+		}
+
+		RETVAL = a->xrel;
+	OUTPUT:
+		RETVAL
+
+
+Uint16
+event_motion_yrel ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_MouseMotionEvent * a = &(event->motion);
+
+		if( items > 1 )
+		{
+			a->yrel = SvIV( ST(1) );
+		}
+
+		RETVAL = a->yrel;
+	OUTPUT:
+		RETVAL
+
 SDL_MouseButtonEvent *
 event_button ( event, ... )
 	SDL_Event *event
