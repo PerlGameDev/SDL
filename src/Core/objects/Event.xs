@@ -352,6 +352,96 @@ event_button ( event, ... )
 	OUTPUT:
 		RETVAL
 
+Uint8
+event_button_type ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_MouseButtonEvent * a = &(event->button);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+	
+		RETVAL = a->type;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_button_which ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_MouseButtonEvent * a = &(event->button);
+
+		if( items > 1 )
+		{
+			a->which = SvIV( ST(1) );
+		}
+
+		RETVAL = a->which;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_button_button ( event, ... )
+	SDL_Event *event
+	CODE:
+		SDL_MouseButtonEvent * a = &(event->button);
+
+ 		if( items > 1 )
+		{
+			a->button = SvIV( ST(1) );
+		}
+
+		RETVAL = a->button;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_button_state ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_MouseButtonEvent * a = &(event->button);
+
+		if( items > 1 )
+		{
+			a->state = SvIV( ST(1) );
+		}
+
+		RETVAL = a->state;
+	OUTPUT:
+		RETVAL
+
+Uint16
+event__button_x ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_MouseButtonEvent * a = &(event->button);
+
+		if( items > 1 )
+		{
+			a->x = SvIV( ST(1) );
+		}
+
+		RETVAL = a->x;
+	OUTPUT:
+		RETVAL
+
+Uint16
+event_button_y ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_MouseButtonEvent * a = &(event->button);
+
+		if( items > 1 )
+		{
+			a->y = SvIV( ST(1) );
+		}
+
+		RETVAL = a->y;
+	OUTPUT:
+		RETVAL
+
 SDL_JoyAxisEvent *
 event_jaxis ( event, ... )
 	SDL_Event * event
