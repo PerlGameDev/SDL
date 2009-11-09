@@ -3,7 +3,6 @@ use strict;
 use SDL;
 use SDL::Event;
 use SDL::Events;
-use SDL::ActiveEvent;
 use SDL::ExposeEvent;
 use SDL::JoyAxisEvent;
 use SDL::JoyBallEvent;
@@ -49,7 +48,6 @@ syswm
 
 can_ok( 'SDL::Events',           @done); 
 can_ok( 'SDL::Event',            @done_event);
-can_ok( 'SDL::ActiveEvent',      qw/type gain state/);
 can_ok( 'SDL::ExposeEvent',      qw/type/);
 can_ok( 'SDL::JoyAxisEvent',     qw/type which axis value/);
 can_ok( 'SDL::JoyBallEvent',     qw/type which ball xrel yrel/);
@@ -118,7 +116,6 @@ is($qevent->type,  SDL_QUIT, '[SDL::QuitEvent->type] returns correctly');
 is($wrevent->type, SDL_VIDEORESIZE, '[SDL::ResizeEvent->type] returns correctly'); 
 is($wmevent->type, SDL_SYSWMEVENT, '[SDL::SysWMEvent->type] returns correctly'); 
 is($uevent->type,  SDL_USEREVENT, '[SDL::UserEvent->type] returns correctly'); 
-=cut
 
 SDL::init(SDL_INIT_VIDEO);                                                                          
 
@@ -128,11 +125,11 @@ my $event   = SDL::Event->new();
 
 my $aevent  = SDL::Event->new(); 
 $aevent->type( SDL_ACTIVEEVENT);
-$aevent->active->gain(1);
-$aevent->active->state(SDL_APPMOUSEFOCUS);
+$aevent->active_gain(1);
+$aevent->active_state(SDL_APPMOUSEFOCUS);
 
-my $weevent = SDL::Event->new(); 
-$weevent->type(SDL_VIDEOEXPOSE);
+#my $weevent = SDL::Event->new(); 
+#$weevent->type(SDL_VIDEOEXPOSE);
 
 SDL::Events::push_event($aevent); pass '[push_event] Pushed in an Active Event';
 
@@ -155,11 +152,11 @@ last if ($ret == 0 );
 }
 
 is( $got_event, 1, '[poll_event] Got an Active event back out') ;
-is( $event->active->gain() , 1, '[poll_event] Got right active->gain');
-is( $event->active->state() , SDL_APPMOUSEFOCUS, '[poll_event] Got right active->state');
+is( $event->active_gain() , 1, '[poll_event] Got right active->gain');
+is( $event->active_state() , SDL_APPMOUSEFOCUS, '[poll_event] Got right active->state');
 
 
-SDL::Events::push_event($weevent); pass '[push_event] ran';
+SDL::Events::push_event($aevent); pass '[push_event] ran';
 
 SDL::Events::pump_events(); 
 
@@ -167,7 +164,7 @@ my $value = SDL::Events::wait_event($event);
 
 is( $value, 1, '[wait_event] waited for event');
 
-SDL::Events::push_event($weevent); pass '[push_event] ran'; 
+SDL::Events::push_event($aevent); pass '[push_event] ran'; 
 
 SDL::Events::pump_events(); 
 
@@ -175,7 +172,7 @@ SDL::Events::pump_events();
 my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
 is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
 
-
+=cut 
 
 
 my @left = qw/

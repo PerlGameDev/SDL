@@ -67,6 +67,47 @@ event_active ( event, ... )
 	OUTPUT:
 		RETVAL
 
+Uint8
+event_active_type ( event)
+	SDL_Event *event
+	CODE: 
+		SDL_ActiveEvent * a = &(event->active);
+		RETVAL = a->type;
+	OUTPUT:
+		RETVAL
+
+
+Uint8
+event_active_gain ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_ActiveEvent * a = &(event->active);
+	
+		if( items > 1 )
+		{
+			a->gain = SvIV( ST(1) );
+
+		}
+		RETVAL = a->gain;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_active_state ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_ActiveEvent * a = &(event->active);
+		if( items > 1 )
+		{
+			a->state = SvIV( ST(1) );
+
+		}
+		
+		RETVAL = a->state;
+	OUTPUT:
+		RETVAL
+
+
 SDL_KeyboardEvent *
 event_key ( event, ... )
 	SDL_Event *event
@@ -215,4 +256,4 @@ void
 event_DESTROY(self)
 	SDL_Event *self
 	CODE:
-		//safefree( (char *)self );
+		safefree( (char *)self );
