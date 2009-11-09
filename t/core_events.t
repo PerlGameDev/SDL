@@ -132,7 +132,7 @@ while(1)
 {
 SDL::Events::pump_events(); pass '[pump_event] ran';
 
-SDL::Events::poll_event($event);
+my $ret =  SDL::Events::poll_event($event);
 
 if ($event->type == SDL_ACTIVEEVENT)
  {
@@ -140,6 +140,7 @@ if ($event->type == SDL_ACTIVEEVENT)
 	 last;
  }
 
+last if ($ret == 0 );
 }
 
 is( $got_event, 1, '[poll_event] Got the right event back out') ;
