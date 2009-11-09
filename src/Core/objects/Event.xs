@@ -362,6 +362,66 @@ event_jhat ( event, ... )
 	OUTPUT:
 		RETVAL
 
+Uint8
+event_jhat_type ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_JoyHatEvent * a = &(event->jhat);
+
+		if( items > 1 )
+		{
+			a->which = SvIV( ST(1) );
+		}
+
+		RETVAL = a->type;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_jhat_which ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_JoyHatEvent * a = &(event->jhat);
+
+		if( items > 1 )
+		{
+			a->which = SvIV( ST(1) );
+		}
+
+		RETVAL = a->which;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_jhat_hat ( event, ... )
+	SDL_Event *event
+	CODE:
+		SDL_JoyHatEvent * a = &(event->jhat);
+
+		if( items > 1 )
+		{
+			a->hat = SvIV( ST(1) );
+		}
+
+		RETVAL = a->hat;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_jhat_value ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_JoyHatEvent * a = &(event->jhat);
+
+		if( items > 1 )
+		{
+			a->value = SvIV( ST(1) );
+		}
+
+		RETVAL = a->value;
+	OUTPUT:
+		RETVAL
+
 SDL_JoyButtonEvent *
 event_jbutton ( event, ... )
 	SDL_Event *event
