@@ -147,6 +147,8 @@ is( $got_event, 1, '[poll_event] Got the right event back out') ;
 
 SDL::Events::push_event($weevent); pass '[push_event] ran';
 
+SDL::Events::pump_events(); 
+
 my $value = SDL::Events::wait_event($event); 
 
 is( $value, 1, '[wait_event] waited for event');
