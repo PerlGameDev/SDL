@@ -67,39 +67,41 @@ my $aevent = SDL::Event->new();
 
 SDL::Events::push_event($aevent); pass '[push_event] Event can be pushed';
 
+SDL::Events::pump_events(); pass '[pump_event] pumping events';
+
+my $got_event = 0;
+
+while(1)
+{
+SDL::Events::pump_events(); 
+
+my $ret =  SDL::Events::poll_event($event);
+
+if ($event->type == SDL_ACTIVEEVENT)
+ {
+	 $got_event = 1;
+	 last;
+ }
+
+last if ($ret == 0 );
+}
+
+is( $got_event, 1, '[poll_event] Got an Active event back out') ;
+is( $event->active_gain() , 1, '[poll_event] Got right active->gain');
+is( $event->active_state() , SDL_APPINPUTFOCUS, '[poll_event] Got right active->state');
+
+
+SDL::Events::push_event($aevent); pass '[push_event] ran';
+
+SDL::Events::pump_events(); 
+
+my $value = SDL::Events::wait_event($event); 
+
+is( $value, 1, '[wait_event] waited for event');
+
+
 =pod
-my $aevent  = SDL::ActiveEvent->new(); 
-my $weevent = SDL::ExposeEvent->new(); 
-my $jaevent = SDL::JoyAxisEvent->new(); 
-my $jtevent = SDL::JoyBallEvent->new(); 
-my $jbevent = SDL::JoyButtonEvent->new(); 
-my $jhevent = SDL::JoyHatEvent->new(); 
-my $kbevent = SDL::KeyboardEvent->new(); 
-my $keysym  = SDL::keysym->new(); 
-my $mbevent = SDL::MouseButtonEvent->new(); 
-my $mmevent = SDL::MouseMotionEvent->new(); 
-my $qevent  = SDL::QuitEvent->new(); 
-my $wrevent = SDL::ResizeEvent->new(); 
-my $wmevent = SDL::SysWMEvent->new(); 
-my $uevent  = SDL::UserEvent->new(); 
 
-isa_ok( $event,   'SDL::Event',            '[SDL::Event::new] is creating an Event');
-isa_ok( $aevent,  'SDL::ActiveEvent',      '[SDL::ActiveEvent::new] is creating an ActiveEvent');
-isa_ok( $weevent, 'SDL::ExposeEvent',      '[SDL::ExposeEvent::new] is creating an ExposeEvent');
-isa_ok( $jaevent, 'SDL::JoyAxisEvent',     '[SDL::JoyAxisEvent::new] is creating an JoyAxisEvent');
-isa_ok( $jtevent, 'SDL::JoyBallEvent',     '[SDL::JoyBallEvent::new] is creating an JoyBallEvent');
-isa_ok( $jbevent, 'SDL::JoyButtonEvent',   '[SDL::JoyButtonEvent::new] is creating an JoyButtonEvent');
-isa_ok( $jhevent, 'SDL::JoyHatEvent',      '[SDL::JoyHatEvent::new] is creating an JoyHatEvent');
-isa_ok( $kbevent, 'SDL::KeyboardEvent',    '[SDL::KeyboardEvent::new] is creating an KeyboardEvent');
-isa_ok( $keysym,  'SDL::keysym',           '[SDL::keysym::new] is creating an keysym');
-isa_ok( $mbevent, 'SDL::MouseButtonEvent', '[SDL::MouseButtonEvent::new] is creating an MouseButtonEvent');
-isa_ok( $mmevent, 'SDL::MouseMotionEvent', '[SDL::MouseMotionEvent::new] is creating an MouseMotionEvent');
-isa_ok( $qevent,  'SDL::QuitEvent',        '[SDL::QuitEvent::new] is creating an QuitEvent');
-isa_ok( $wrevent, 'SDL::ResizeEvent',      '[SDL::ResizeEvent::new] is creating an ResizeEvent');
-isa_ok( $wmevent, 'SDL::SysWMEvent',       '[SDL::SysWMEvent::new] is creating an SysWMEvent');
-isa_ok( $uevent,  'SDL::UserEvent',        '[SDL::UserEvent::new] is creating an UserEvent');
-
-# checking the ->type of an event
 #is($event->type,   SDL_EVENT, '[SDL::Event->type] returns correctly');
 is($aevent->type,  SDL_ACTIVEEVENT, '[SDL::ActiveEvent->type] returns correctly'); 
 is($weevent->type, SDL_VIDEOEXPOSE, '[SDL::ExposeEvent->type] returns correctly'); 
@@ -130,37 +132,6 @@ $aevent->active_state(SDL_APPMOUSEFOCUS);
 #$weevent->type(SDL_VIDEOEXPOSE);
 
 SDL::Events::push_event($aevent); pass '[push_event] Pushed in an Active Event';
-
-my $got_event = 0;
-
-while(1)
-{
-SDL::Events::push_event($aevent); #flooding so more likely to catch this  
-SDL::Events::pump_events(); pass '[pump_event] ran';
-
-my $ret =  SDL::Events::poll_event($event);
-
-if ($event->type == SDL_ACTIVEEVENT)
- {
-	 $got_event = 1;
-	 last;
- }
-
-last if ($ret == 0 );
-}
-
-is( $got_event, 1, '[poll_event] Got an Active event back out') ;
-is( $event->active_gain() , 1, '[poll_event] Got right active->gain');
-is( $event->active_state() , SDL_APPMOUSEFOCUS, '[poll_event] Got right active->state');
-
-
-SDL::Events::push_event($aevent); pass '[push_event] ran';
-
-SDL::Events::pump_events(); 
-
-my $value = SDL::Events::wait_event($event); 
-
-is( $value, 1, '[wait_event] waited for event');
 
 SDL::Events::push_event($aevent); pass '[push_event] ran'; 
 
