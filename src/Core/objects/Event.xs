@@ -275,9 +275,84 @@ event_jball ( event, ... )
 	OUTPUT:
 		RETVAL
 
+Uint8
+event_jball_type ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_JoyBallEvent * a = &(event->jball);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+		
+		RETVAL = event->type;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_jball_which ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_JoyBallEvent * a = &(event->jball);
+
+		if( items > 1 )
+		{
+			a->which = SvIV( ST(1) );
+		}
+		
+		RETVAL = a->which;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_jball_ball ( event, ... )
+	SDL_Event *event
+	CODE:
+		SDL_JoyBallEvent * a = &(event->jball);
+
+		if( items > 1 )
+		{
+			a->ball = SvIV( ST(1) );
+		}
+		
+		RETVAL = a->ball;
+	OUTPUT:
+		RETVAL
+
+Sint16
+event_jball_xrel ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_JoyBallEvent * a = &(event->jball);
+
+		if( items > 1 )
+		{
+			a->xrel = SvIV( ST(1) );
+		}
+
+		RETVAL = a->xrel;
+	OUTPUT:
+		RETVAL
+
+Sint16
+event_jball_yrel ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_JoyBallEvent * a = &(event->jball);
+
+		if( items > 1 )
+		{
+			a->yrel = SvIV( ST(1) );
+		}
+
+		RETVAL = a->yrel;
+	OUTPUT:
+		RETVAL
+
 SDL_JoyHatEvent *
 event_jhat ( event, ... )
-	SDL_Event * event
+	SDL_Event *event
 	PREINIT:
 		char *CLASS = "SDL::JoyHatEvent";
 	CODE:
@@ -289,13 +364,73 @@ event_jhat ( event, ... )
 
 SDL_JoyButtonEvent *
 event_jbutton ( event, ... )
-	SDL_Event * event
+	SDL_Event *event
 	PREINIT:
 		char *CLASS = "SDL::JoyButtonEvent";
 	CODE:
 		RETVAL = NULL;
 		if ( &event != NULL ) 
 		RETVAL = &(event->jbutton);
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_jbutton_type ( event, ... )
+	SDL_Event *event
+	CODE:
+		SDL_JoyButtonEvent * a = &(event->jbutton);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+
+		RETVAL = a->type;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_jbutton_which ( event )
+	SDL_Event *event
+	CODE: 
+		SDL_JoyButtonEvent * a = &(event->jbutton);
+
+		if( items > 1 )
+		{
+			a->which = SvIV( ST(1) );
+		}
+
+		RETVAL = a->which;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_jbutton_button ( event )
+	SDL_Event *event
+	CODE: 
+		SDL_JoyButtonEvent * a = &(event->jbutton);
+
+		if( items > 1 )
+		{
+			a->button = SvIV( ST(1) );
+		}
+
+		RETVAL = a->button;
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_jbutton_state ( event )
+	SDL_Event *event
+	CODE: 
+		SDL_JoyButtonEvent * a = &(event->jbutton);
+
+		if( items > 1 )
+		{
+			a->state = SvIV( ST(1) );
+		}
+
+		RETVAL = a->state;
 	OUTPUT:
 		RETVAL
 
