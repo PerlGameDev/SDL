@@ -70,6 +70,7 @@ SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE);
 
 is(SDL::Events::pump_events(), undef,  '[pump_events] Returns undef');
 
+=pod
 my $event   = SDL::Event->new();
 my $aevent  = SDL::ActiveEvent->new(); 
 my $weevent = SDL::ExposeEvent->new(); 
@@ -117,19 +118,29 @@ is($qevent->type,  SDL_QUIT, '[SDL::QuitEvent->type] returns correctly');
 is($wrevent->type, SDL_VIDEORESIZE, '[SDL::ResizeEvent->type] returns correctly'); 
 is($wmevent->type, SDL_SYSWMEVENT, '[SDL::SysWMEvent->type] returns correctly'); 
 is($uevent->type,  SDL_USEREVENT, '[SDL::UserEvent->type] returns correctly'); 
+=cut
 
+SDL::init(SDL_INIT_VIDEO);                                                                          
 
+SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE);
 
-my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
-is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
+my $event   = SDL::Event->new();
 
+my $aevent  = SDL::Event->new(); 
+$aevent->type( SDL_ACTIVEEVENT);
+$aevent->active->gain(1);
+$aevent->active->state(SDL_APPMOUSEFOCUS);
 
-SDL::Events::push_event($aevent); pass '[push_event] ran';
+my $weevent = SDL::Event->new(); 
+$weevent->type(SDL_VIDEOEXPOSE);
+
+SDL::Events::push_event($aevent); pass '[push_event] Pushed in an Active Event';
 
 my $got_event = 0;
 
 while(1)
 {
+SDL::Events::push_event($aevent); #flooding so more likely to catch this  
 SDL::Events::pump_events(); pass '[pump_event] ran';
 
 my $ret =  SDL::Events::poll_event($event);
@@ -143,7 +154,10 @@ if ($event->type == SDL_ACTIVEEVENT)
 last if ($ret == 0 );
 }
 
-is( $got_event, 1, '[poll_event] Got the right event back out') ;
+is( $got_event, 1, '[poll_event] Got an Active event back out') ;
+is( $event->active->gain() , 1, '[poll_event] Got right active->gain');
+is( $event->active->state() , SDL_APPMOUSEFOCUS, '[poll_event] Got right active->state');
+
 
 SDL::Events::push_event($weevent); pass '[push_event] ran';
 
@@ -152,6 +166,17 @@ SDL::Events::pump_events();
 my $value = SDL::Events::wait_event($event); 
 
 is( $value, 1, '[wait_event] waited for event');
+
+SDL::Events::push_event($weevent); pass '[push_event] ran'; 
+
+SDL::Events::pump_events(); 
+
+
+my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
+is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
+
+
+
 
 my @left = qw/
 seteventfilter 

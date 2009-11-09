@@ -46,8 +46,11 @@ Uint8
 event_type ( event, ... )
 	SDL_Event *event
 	CODE:
-		RETVAL = -1;
-		if ( &event != NULL ) 
+		if( items > 1 )
+		{
+			event->type = SvIV( ST(1) );
+
+		}
 		RETVAL = event->type;
 	OUTPUT:
 		RETVAL
@@ -212,4 +215,4 @@ void
 event_DESTROY(self)
 	SDL_Event *self
 	CODE:
-		safefree( (char *)self );
+		//safefree( (char *)self );
