@@ -10,6 +10,7 @@ use SDL::JoyBallEvent;
 use SDL::JoyButtonEvent;
 use SDL::JoyHatEvent;
 use SDL::KeyboardEvent;
+use SDL::keysym;
 use SDL::MouseButtonEvent;
 use SDL::MouseMotionEvent;
 use SDL::QuitEvent;
@@ -45,24 +46,6 @@ quit
 user
 syswm
 /;
-
-use SDL::Events;
-use SDL::Event;
-use SDL::ActiveEvent;
-use SDL::ExposeEvent;
-use SDL::JoyAxisEvent;
-use SDL::JoyBallEvent;
-use SDL::JoyButtonEvent;
-use SDL::JoyHatEvent;
-use SDL::KeyboardEvent;
-use SDL::keysym;
-use SDL::MouseButtonEvent;
-use SDL::MouseMotionEvent;
-use SDL::QuitEvent;
-use SDL::ResizeEvent;
-use SDL::SysWMEvent;
-use SDL::UserEvent;
-
 
 can_ok( 'SDL::Events',           @done); 
 can_ok( 'SDL::Event',            @done_event);
