@@ -49,8 +49,8 @@ event_type ( event, ... )
 		if( items > 1 )
 		{
 			event->type = SvIV( ST(1) );
-
 		}
+
 		RETVAL = event->type;
 	OUTPUT:
 		RETVAL
@@ -72,6 +72,12 @@ event_active_type ( event)
 	SDL_Event *event
 	CODE: 
 		SDL_ActiveEvent * a = &(event->active);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+
 		RETVAL = a->type;
 	OUTPUT:
 		RETVAL
@@ -86,8 +92,8 @@ event_active_gain ( event, ... )
 		if( items > 1 )
 		{
 			a->gain = SvIV( ST(1) );
-
 		}
+
 		RETVAL = a->gain;
 	OUTPUT:
 		RETVAL
@@ -97,10 +103,12 @@ event_active_state ( event, ... )
 	SDL_Event *event
 	CODE: 
 		SDL_ActiveEvent * a = &(event->active);
+
 		if( items > 1 )
 		{
 			a->state = SvIV( ST(1) );
 		}
+
 		RETVAL = a->state;
 	OUTPUT:
 		RETVAL
@@ -132,7 +140,6 @@ event_key_type ( event, ... )
 		RETVAL = a->type;
 	OUTPUT:
 		RETVAL
-
 
 Uint8
 event_key_state ( event, ... )
@@ -413,7 +420,7 @@ event_button_state ( event, ... )
 		RETVAL
 
 Uint16
-event__button_x ( event, ... )
+event_button_x ( event, ... )
 	SDL_Event *event
 	CODE: 
 		SDL_MouseButtonEvent * a = &(event->button);
@@ -761,8 +768,14 @@ Uint8
 event_resize_type ( event, ... )
 	SDL_Event *event
 	CODE: 
-		SDL_ResizeEvent * r = &(event->resize);
-		RETVAL = r->type;
+		SDL_ResizeEvent * a = &(event->resize);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+
+		RETVAL = a->type;
 	OUTPUT:
 		RETVAL
 
@@ -770,14 +783,13 @@ int
 event_resize_w ( event, ... )
 	SDL_Event *event
 	CODE: 
-		SDL_ResizeEvent * r = &(event->resize);
+		SDL_ResizeEvent * a = &(event->resize);
 		if( items > 1 )
 		{
-			r->w = SvIV( ST(1) );
-
+			a->w = SvIV( ST(1) );
 		}
 
-		RETVAL = r->w;
+		RETVAL = a->w;
 	OUTPUT:
 		RETVAL
 
@@ -785,14 +797,14 @@ int
 event_resize_h ( event, ... )
 	SDL_Event *event
 	CODE: 
-		 SDL_ResizeEvent * r = &(event->resize); 
+		SDL_ResizeEvent * a = &(event->resize); 
+
 		if( items > 1 )
 		{
-			r->h = SvIV( ST(1) );
-
+			a->h = SvIV( ST(1) );
 		}
 
-		RETVAL = r->h;
+		RETVAL = a->h;
 	OUTPUT:
 		RETVAL
 
@@ -835,6 +847,21 @@ event_quit ( event, ... )
 	OUTPUT:
 		RETVAL
 
+Uint8
+event_quit_type ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_QuitEvent * a = &(event->quit);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+
+		RETVAL = a->type;
+	OUTPUT:
+		RETVAL
+
 SDL_UserEvent *
 event_user ( event, ... )
 	SDL_Event * event
@@ -847,6 +874,66 @@ event_user ( event, ... )
 	OUTPUT:
 		RETVAL
 
+Uint8
+event_user_type ( event )
+	SDL_Event *event
+	CODE: 
+		SDL_UserEvent * a = &(event->user);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+
+		RETVAL = a->type;
+	OUTPUT:
+		RETVAL
+
+int
+event_user_code ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_UserEvent * a = &(event->user);
+
+		if( items > 1 )
+		{
+			a->code = SvIV( ST(1) );
+		}
+
+		RETVAL = (int)a->code;
+	OUTPUT:
+		RETVAL
+
+SV*
+event_user_data1 ( event, ... )
+	SDL_Event *event	
+	CODE: 
+		SDL_UserEvent * a = &(event->user);
+
+		if( items > 1 )
+		{
+			a->data1 = (void *)SvIV(ST(1));
+		}
+
+		RETVAL = a->data1;
+	OUTPUT:
+		RETVAL
+
+SV*
+event_user_data2 ( event, ... ) 
+	SDL_Event *event	
+	CODE: 
+		SDL_UserEvent * a = &(event->user);
+
+		if( items > 1 )
+		{
+			a->data1 = (void *) ST(1);
+		}
+
+		RETVAL = a->data1;
+	OUTPUT:
+		RETVAL
+
 SDL_SysWMEvent *
 event_syswm ( event, ... )
 	SDL_Event * event
@@ -856,6 +943,39 @@ event_syswm ( event, ... )
 		RETVAL = NULL;
 		if ( &event != NULL ) 
 		RETVAL = &(event->syswm);
+	OUTPUT:
+		RETVAL
+
+Uint8
+event_syswm_type ( event, ... )
+	SDL_Event *event
+	CODE: 
+		SDL_SysWMEvent * a = &(event->syswm);
+
+		if( items > 1 )
+		{
+			a->type = SvIV( ST(1) );
+		}
+
+		RETVAL = a->type;
+	OUTPUT:
+		RETVAL
+
+SDL_SysWMmsg *
+event_syswm_msg ( event, ... )
+	SDL_Event *event
+	PREINIT:
+		char* CLASS = "SDL::SysWMmsg";
+	CODE: 
+		SDL_SysWMEvent * a = &(event->syswm);
+
+		if( items > 1 )
+		{
+			SDL_SysWMmsg * sysm = (SDL_SysWMmsg * )SvPV( ST(1), PL_na) ;
+			a->msg = sysm;
+		}
+
+		RETVAL = a->msg;
 	OUTPUT:
 		RETVAL
 
