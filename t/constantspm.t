@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use SDL::Events;
-use Test::More tests => 1 + 624;    # use_ok + constants
+use Test::More;    # use_ok + constants
 
 BEGIN { use_ok('SDL::Constants') }
 
@@ -685,3 +685,4 @@ is( SDL_SAMPLEFLAG_ERROR(), 1 << 30,  'SDL_SAMPLEFLAG_ERROR() should also be ava
 is( SDL_SAMPLEFLAG_EAGAIN, 1 << 31,   'SDL_SAMPLEFLAG_EAGAIN should be imported' );
 is( SDL_SAMPLEFLAG_EAGAIN(), 1 << 31, 'SDL_SAMPLEFLAG_EAGAIN() should also be available' );
 
+done_testing();

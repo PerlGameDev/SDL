@@ -46,22 +46,24 @@ user
 syswm
 /;
 
-use_ok( 'SDL::Events' ); 
-use_ok( 'SDL::Event' ); 
-use_ok( 'SDL::ActiveEvent' ); 
-use_ok( 'SDL::ExposeEvent' ); 
-use_ok( 'SDL::JoyAxisEvent' ); 
-use_ok( 'SDL::JoyBallEvent' ); 
-use_ok( 'SDL::JoyButtonEvent' ); 
-use_ok( 'SDL::JoyHatEvent' ); 
-use_ok( 'SDL::KeyboardEvent' ); 
-use_ok( 'SDL::keysym' ); 
-use_ok( 'SDL::MouseButtonEvent' ); 
-use_ok( 'SDL::MouseMotionEvent' ); 
-use_ok( 'SDL::QuitEvent' ); 
-use_ok( 'SDL::ResizeEvent' ); 
-use_ok( 'SDL::SysWMEvent' ); 
-use_ok( 'SDL::UserEvent' ); 
+use SDL::Events;
+use SDL::Event;
+use SDL::ActiveEvent;
+use SDL::ExposeEvent;
+use SDL::JoyAxisEvent;
+use SDL::JoyBallEvent;
+use SDL::JoyButtonEvent;
+use SDL::JoyHatEvent;
+use SDL::KeyboardEvent;
+use SDL::keysym;
+use SDL::MouseButtonEvent;
+use SDL::MouseMotionEvent;
+use SDL::QuitEvent;
+use SDL::ResizeEvent;
+use SDL::SysWMEvent;
+use SDL::UserEvent;
+
+
 can_ok( 'SDL::Events',           @done); 
 can_ok( 'SDL::Event',            @done_event);
 can_ok( 'SDL::ActiveEvent',      qw/type gain state/);
