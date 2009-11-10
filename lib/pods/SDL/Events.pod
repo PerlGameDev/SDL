@@ -1,0 +1,41 @@
+=pod
+
+=head1 NAME
+
+SDL::Events - Bindings to the Events Category in SDL API
+
+=head1 SYNOPSIS
+
+Most likely you just want to know how to get events for you app.
+  use SDL;
+  use SDL::Event;
+  use SDL::Events;
+  
+  SDL::init(SDL_INIT_VIDEO); # Event can only be grabbed in the same thread as this 
+
+  ...
+ 
+  my $event = SDL::Event->new(); # notices 'Event' ne 'Events'
+
+  while( 1 )
+	{
+          SDL::Events::pump_events(); 	 
+       	 while(  SDL::Events::poll_event($event) )
+	 {
+ 		#check by event type
+ 		on_active() if $event->type == SDL_ACTIVEEVENT; 
+		...
+	 }
+	}
+
+=head1 DESCRIPTION
+
+
+=head1 METHODS
+
+
+=head1 SEE ALSO
+
+L<SDL::Event>
+
+=cut
