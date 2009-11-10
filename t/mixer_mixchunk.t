@@ -3,10 +3,28 @@ use strict;
 use warnings;
 use SDL;
 use SDL::Mixer::MixChunk;
-use Test::More tests => 7;
+use Test::More;
+use IO::CaptureOutput qw(capture);
 
-is( SDL::init(SDL_INIT_AUDIO), 0, '[init] returns 0 on success' );
+sub test_audio
+{
+	my $stdout = '' ;
+	my $stderr = '' ;
+	capture { SDL::init(SDL_INIT_AUDIO) } \$stdout, \$stderr;
+	SDL::quit();
+	return ($stderr ne '' ); 
+}
 
+if ( test_audio )
+{
+    plan ( skip_all => 'Failed to init sound' );
+}
+elsif(SDL::init(SDL_INIT_AUDIO) >= 0)    
+    { plan( tests => 6 ) }
+else
+    {
+ plan ( skip_all => 'Failed to init sound' );
+  }
 is( SDL::MixOpenAudio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ),
     0, 'MixOpenAudio passed' );
 
