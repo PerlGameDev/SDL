@@ -47,7 +47,7 @@ my @left = qw/
 	clear_error
 	load_object
 	load_function
-	unload_fuction
+	unload_function
 	unload_object
 	/;
 
