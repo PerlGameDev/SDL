@@ -281,7 +281,7 @@ init ( flags )
 		RETVAL
 
 int
-init_subsystem ( flags )
+init_sub_system ( flags )
 	Uint32 flags
 	CODE:
 		RETVAL = SDL_InitSubSystem(flags);
@@ -289,7 +289,7 @@ init_subsystem ( flags )
 		RETVAL
 
 void
-quit_subsystem ( flags )
+quit_sub_system ( flags )
 	Uint32 flags
 	CODE:
 		SDL_QuitSubSystem(flags);

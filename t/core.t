@@ -4,7 +4,7 @@ use SDL;
 use SDL::Video;
 use Test::More;
 
-plan ( tests => 11 );
+plan ( tests => 13 );
 my @done =qw/ 
 	init
 	quit
@@ -14,6 +14,8 @@ my @done =qw/
 	linked_version
 	putenv
 	getenv
+	init_sub_system
+	quit_sub_system
 	  /;
 
 use_ok( 'SDL' ); 
@@ -27,6 +29,11 @@ my $display =  SDL::Video::set_video_mode(640,480,232, SDL_SWSURFACE );
 
 isnt( SDL::get_error(), '', '[get_error] got error '.SDL::get_error() );
 
+SDL::quit_sub_system(SDL_INIT_VIDEO);
+isnt( SDL::was_init( SDL_INIT_VIDEO ), SDL_INIT_VIDEO, '[was_init] recognizes turned off sub system');
+SDL::init_sub_system(SDL_INIT_VIDEO);
+is( SDL::was_init( SDL_INIT_VIDEO ), SDL_INIT_VIDEO, '[was_init] recognizes turned back on sub system');
+
 SDL::quit(); pass '[quit] SDL quit with out segfaults or errors';
 
 isnt( SDL::was_init( 0 ), SDL_INIT_VIDEO, '[was_init] recognizes turned off flags');
@@ -35,8 +42,6 @@ is(SDL::putenv('PERLSDL_TEST=hello'), 0, '[putenv] returns 0');
 is(SDL::getenv('PERLSDL_TEST'), 'hello', '[getenv] returns hello');
 
 my @left = qw/
-	init_sub_system
-	quit_sub_system
 	set_error
 	error
 	clear_error
