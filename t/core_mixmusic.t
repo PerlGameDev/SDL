@@ -4,11 +4,21 @@ use warnings;
 use SDL;
 use SDL::Mixer::MixMusic;
 use Test::More;
+use File::Spec;
 
-if ( SDL::init(SDL_INIT_AUDIO) < 0 ) {
-    plan( skip_all => 'No sound card?' );
+sub test_audio
+{
+	my $devnull = File::Spec->devnull();
+	`perl -e  "use lib '../'; use SDL; SDL::init(SDL_INIT_AUDIO)" 2>$devnull`;
+	return ($? >> 8 );
+}
 
-} else {
+if ( test_audio != 1)
+{
+    plan ( skip_all => 'Failed to init sound' );
+}
+else {
+    SDL::init(SDL_INIT_AUDIO);
     plan( tests => 3 );
 }
 

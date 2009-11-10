@@ -250,7 +250,7 @@ my $build   = SDL::Build->new(
 	build_requires =>
 	{
 		'Test::Simple' => '0.47',
-		'Test::Trap' => '0',
+		'File::Spec' => '0',
 		'Test::Most' => '0.21',
 	},
 	build_recommends     =>
