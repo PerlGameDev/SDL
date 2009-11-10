@@ -366,14 +366,14 @@ delay ( ms )
 		SDL_Delay(ms);
 
 Uint32
-GetTicks ()
+get_ticks ()
 	CODE:
 		RETVAL = SDL_GetTicks();
 	OUTPUT:
 		RETVAL
 
 int
-SetTimer ( interval, callback )
+set_timer ( interval, callback )
 	Uint32 interval
 	SDL_TimerCallback callback
 	CODE:
