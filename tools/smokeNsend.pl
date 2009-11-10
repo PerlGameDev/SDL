@@ -1,7 +1,8 @@
 #!perl
 #
-die "Usage: username password [git-branch] [extra options for smolder_smoke_signal]. \n Found @ARGV args" if $#ARGV < 1;
-system split ' ', "git pull origin $ARGV[2]" if $ARGV[2];
+die "Usage: username password [git-branch] [toggle for main repo] [extra options for smolder_smoke_signal]. \n Found @ARGV args" if $#ARGV < 1;
+system split ' ', "git pull origin $ARGV[2]" if ( $ARGV[2] && !($ARGV[3]));
+system split ' ', "git pull git://github.com/kthakore/SDL_perl.git $ARGV[2]" if $ARGV[3];
 system( 'perl',  'Build.PL');
 system( 'perl', 'Build');
 system split ' ', 'prove -l -b -m --archive sdl.tar.gz';
