@@ -5,22 +5,28 @@ use SDL;
 use SDL::Mixer::MixChunk;
 use Test::More;
 use File::Spec;
+use IO::CaptureOutput qw(capture);
 
 sub test_audio
 {
-	my $devnull = File::Spec->devnull();
-	`perl -e  "use lib '../'; use SDL; SDL::init(SDL_INIT_AUDIO)" 2>$devnull`;
-	return ($? >> 8 );
+	my $stdout = 0 ;
+	my $stderr = 0 ;
+	capture { SDL::init(SDL_INIT_AUDIO) } \$stdout, \$stderr;
+	SDL::quit();
+	return ($stderr == 0 ); 
 }
 
-if ( test_audio != 1)
+
+if ( test_audio )
 {
     plan ( skip_all => 'Failed to init sound' );
 }
-else {
-    SDL::init(SDL_INIT_AUDIO);
-    plan( tests => 3 );
-}
+elsif(SDL::init(SDL_INIT_AUDIO) >= 0)    
+    { plan( tests => 3 ) }
+else
+    {
+ plan ( skip_all => 'Failed to init sound' );
+  }
 
 
 
