@@ -80,5 +80,11 @@ sub verify (\%@) {
 	}
 }
 
+# workaround as:
+# extern DECLSPEC void SDLCALL SDL_SetError(const char *fmt, ...);
+sub set_error {
+	my($format, @arguments) = @_;
+	SDL::set_error_real(sprintf($format, @arguments));
+}
 
 1;

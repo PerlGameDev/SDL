@@ -42,9 +42,6 @@ is(SDL::putenv('PERLSDL_TEST=hello'), 0, '[putenv] returns 0');
 is(SDL::getenv('PERLSDL_TEST'), 'hello', '[getenv] returns hello');
 
 my @left = qw/
-	set_error
-	error
-	clear_error
 	load_object
 	load_function
 	unload_function

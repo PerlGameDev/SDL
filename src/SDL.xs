@@ -256,12 +256,26 @@ XS(boot_SDL_perl)
 MODULE = SDL_perl	PACKAGE = SDL
 PROTOTYPES : DISABLE
 
+
+# workaround as:
+#  extern DECLSPEC void SDLCALL SDL_SetError(const char *fmt, ...);
+void
+set_error_real (fmt, ...)
+	char *fmt
+	CODE:
+		SDL_SetError(fmt, items);
+
 char *
 get_error ()
 	CODE:
 		RETVAL = SDL_GetError();
 	OUTPUT:
 		RETVAL
+
+void
+clear_error ()
+	CODE:
+		SDL_ClearError();
 
 int
 init ( flags )
