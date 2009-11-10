@@ -44,7 +44,43 @@ Often the need for calls to pump_events is hidden from the user since L<poll_eve
 However, if you are not polling or waiting for events (e.g. you are filtering them), then you must call pump_events to force an event queue update.
 
 
-=head2 peep_events
+=head2 peep_events (event, num_events, action, mask) 
+
+Checks the event queue for messages and optionally returns them.  
+
+	my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
+
+If action is SDL_ADDEVENT, up to numevents events will be added to the back of the event queue.
+
+If action is SDL_PEEKEVENT, up to numevents events at the front of the event queue, matching mask, will be returned and will not be removed from the queue.
+
+If action is SDL_GETEVENT, up to numevents events at the front of the event queue, matching mask, will be returned and will be removed from the queue.
+
+The mask parameter is a bitwise OR of SDL::Events::SDL_EVENTMASK(event_type), for all event types you are interested in
+
+This function is thread-safe.
+
+You may have to call pump_events before calling this function. Otherwise, the events may not be ready to be filtered when you call peep_events.
+
+Examples of mask:
+
+=over
+
+=item SDL_EVENTMASK (SDL_KEYUP)
+
+=item (SDL_EVENTMASK (SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK (SDL_MOUSEBUTTONUP))
+    
+=item SDL_ALLEVENTS
+   
+=item SDL_KEYUPMASK
+    
+=item SDL_ALLEVENTS ^ SDL_QUITMASK
+
+=back 
+
+=head3 RETURN
+
+Number of Events actually stored or -1 if there was an error
 
 =head2 poll_event
 
