@@ -33,6 +33,24 @@ Most likely you just want to know how to get events for you app.
 
 =head1 METHODS
 
+=head2 pump_events
+
+Pumps the event loop, gathering events from the input devices.
+
+	pump_events();
+
+pump_events gathers all the pending input information from devices and places it on the event queue. Without calls to pump_events no events would ever be placed on the queue. 
+Often the need for calls to pump_events is hidden from the user since L<poll_event> and L<wait_event> implicitly call pump_events. 
+However, if you are not polling or waiting for events (e.g. you are filtering them), then you must call pump_events to force an event queue update.
+
+
+=head2 peep_events
+
+=head2 poll_event
+
+=head2 push_event
+
+=head2 wait_event 
 
 =head1 SEE ALSO
 
