@@ -2,178 +2,287 @@
 
 =head1 NAME
 
-SDL::Event - a SDL perl extension
+SDL::Event - General event structure
 
 =head1 SYNOPSIS
 
- use SDL::Event;
- my $event = new SDL::Event;             # create a new event
- $event->pump(); 		   	 # pump all events from SDL Event Queue
- $event->poll();			 # Get the top one from the queue
- while ($event->wait()) {
- 	my $type = $event->type();      # get event type
- 	# ... handle event
- 	exit if $type == SDL_QUIT;
+ use SDL::Event;                             # for the event object itself
+ use SDL::Events qw(pump_events poll_event); # functions for event queue handling
+ 
+ SDL::init(SDL_INIT_VIDEO);
+ my $event = SDL::Event->new();
+ 
+ while(1)
+ {
+     pump_events();
+
+     if(poll_event($event))
+     {
+        if($event->type == SDL_MOUSEBUTTONDOWN)
+        {
+            # now you can handle the details
+            $event->button_which;
+            $event->button_button;
+            $event->button_x;
+            $event->button_y;
+        }
+        
+        last if $event->type == SDL_QUIT;
+     }
+
+     # your screen drawing code will be here
  }
  
 =head1 DESCRIPTION
 
-C<SDL::Event> offers an object-oriented approach to SDL events. By creating
-an instance of SDL::Event via new() you can wait for events, and then determine
-the type of the event and take an appropriate action.
+Event handling allows your application to receive input from the user. 
+Event handling is initalised (along with video) with a call to:
 
-=head1 EXAMPLE
+C<SDL::init(SDL_INIT_VIDEO);>
 
-Here is an example of a simple event handler loop routine.
-See also L<SDL::App::loop>.
+Internally, SDL stores all the events waiting to be handled in an event queue. 
+Using functions like C<SDL::Events::poll_event()>, C<SDL::Events::peep_events> 
+and C<SDL::Events::wait_event()> you can observe and handle waiting input events.
 
-       sub loop {
-               my ($self,$href) = @_;
-               my $event = new SDL::Event;
-               while ( $event->wait() ) {
-                       # ... insert here your event handling like:
-                       if ( ref($$href{$event->type()}) eq "CODE" ) {
-                               &{$$href{$event->type()}}($event);
-                               $self->sync();
-                       }
-               }
-       }
+The key to event handling in SDL is the C<SDL::Event> union. 
+The event queue itself is composed of a series of C<SDL::Event> unions, one for each waiting event. 
+C<SDL::Event> unions are read from the queue with the C<SDL::Events::poll_event()> function 
+and it is then up to the application to process the information stored with them. 
 
-=head1 METHODS
+=head1	METHODS
 
-=head2 new()
+=head2	new
 
-Create a new event object.It returns a SDL::Event.
+C<new> creates an empty event-object, which can be used store information. 
+Either by calling C<poll_event($event)> that transferes one event from the queue into our object 
+or by setting all the needed data manually in order to push the event to the queue.
 
-=head2 type(event)
+ use SDL::Event;
 
-Returns the type of the SDL::Event given as first parameter, see list of exported symbols for which are
-available.
+ my $event = SDL::Event->new();
+ 
+=head2	type
 
-=head2 pump()
+SDL::Event is a union of all event structures used in SDL, using it is a simple matter of knowing 
+which union member relates to which event C<type>.
 
-SDL::Events::pump gathers all the pending input information from devices and places
-it on the event queue.
-Without calls to pump no events would ever be placed on the queue.
-Often the need for calls to pump is hidden from the user 
-since C</SDL::Events::poll> and C<SDL::Events::wait_event implicitly call pump. 
-However, if you are not polling or waiting for events (e.g. you are filtering them), 
-then you must call pump force an event queue update.
-pump doesn't return any value and doesn't take any parameters.
+ print 'heureka' if $event->type = SDL_MOUSEBUTTONDOWN;
 
-Note: You can only call this function in the thread that set the video mode. 
+Available type constants:
 
+=over 4
 
-=head2 poll(event)
+=item *
 
-Polls for currently pending events.
-If event is not undef, the next event is removed from the queue and returned as a C< SDL::Event>.
-As this function implicitly calls C<SDL::Events::pump>, you can only call this function in the thread that set the video mode. 
-it take a SDL::Event as first parameter.
+L<SDL_ACTIVEEVENT|/active> - Application visibility event structure 
 
-=head2 wait(event)
+=item *
 
-Waits indefinitely for the next available event, returning undef if there was an error while waiting for events,
-a L< SDL::Event> otherwise.
-If event is not NULL, the next event is removed.
-As this function implicitly calls L<SDL::Events::pump>, you can only call this function in the thread that set the video mode. 
-WaitEvent take a SDL::Event as first parameter.
+L<SDL_KEYDOWN|/active> - Keyboard event structure 
 
-=head2 set( type, state )
+=item *
 
-Set the state for all events of the given event's type
+L<SDL_KEYUP|/active> - Keyboard event structure 
 
-=head2 set_unicode( toggle )
+=item *
 
-Toggle unicode on the event.
+L<SDL_MOUSEMOTION|/active> - Mouse motion event structure 
 
-=head2 set_key_repeat( delay, interval)
+=item *
 
-Sets the delay and intervall of the key repeat rate (e.g. when a user
-holds down a key on the keyboard).
+L<SDL_MOUSEBUTTONDOWN|/active> - Mouse button event structure 
 
-=head2 active_gain(event)
+=item *
 
-active_gain return the active gain from the SDL::Event given as first parameter.
+L<SDL_MOUSEBUTTONUP|/button> - Mouse button event structure 
 
-=head2 active_state(event)
+=item *
 
-active_state return the active state from the SDL::Event given as first parameter.
+L<SDL_JOYAXISMOTION|/active> - Joystick axis motion event structure 
 
-=head2 key_state(event)
+=item *
 
-key_state return the active key state from the SDL::Event given as first parameter.
+L<SDL_JOYBALLMOTION|/active> - Joystick trackball motion event structure 
 
+=item *
 
-=head2 key_sym(key)
+L<SDL_JOYHATMOTION|/active> - Joystick hat position change event structure 
 
-key_sym return the key pressed/released  information from the SDL::Event given as first parameter.
+=item *
 
-=head2 get_key_name(key)
+L<SDL_JOYBUTTONDOWN|/active> - Joystick button event structure 
 
-get_key_name get the name of an SDL virtual keysym. 
-it returns the key name.
+=item *
 
-=head2 key_mod(event)
+L<SDL_JOYBUTTONUP|/active> - Joystick button event structure 
 
-key_mod return the mod keys pressed information from the SDL::Event given as first parameter.
+=item *
 
-=head2 key_unicode(event)
+L<SDL_VIDEORESIZE|/active> - Window resize event structure 
 
-key_unicode return the unicode translated keys pressed/released information from the SDL::Event given as first parameter.
+=item *
 
-=head2 key_scancode(event) * to move in SDL::Game::Keyboard
+L<SDL_VIDEOEXPOSE|/active> - Window expose event 
 
-key_scancode return the hardware specific keyboard scan code from the SDL::Event given as first parameter.
+=item *
 
-=head2 motion_state(event) * to move in SDL::Game::Mouse
+L<SDL_QUIT|/active> - Quit requested event 
 
-motion_state return the state of the mouse button from the SDL::Event given as first parameter.
+=item *
 
-=head2 motion_x(event) * to move in SDL::Game::Mouse
+L<SDL_USEREVENT|/active> - A user-defined event type 
 
-Returns the motion of the mouse in X direction as an absolute value.
-It take a SDL::Event as first parameter.
+=item *
 
-=head2 motion_y(event) * to move in SDL::Game::Mouse
+L<SDL_SYSWMEVENT|/active> - Platform-dependent window manager event. 
 
-Returns the motion of the mouse in Y direction as an absolute value.
-It take a SDL::Event as first parameter.
+=back
 
-=head2 motion_xrel(event) * to move in SDL::Game::Mouse
+TODO: SDL_EVENTMASK()
 
-Returns the motion of the mouse in X direction as a relative value.
-It take a SDL::Event as first parameter.
+=head2 active
 
-=head2 motion_yrel(event) * to move in SDL::Game::Mouse
+C<active> is a member of the C<SDL::Event> union and is used when an event of type C<SDL_ACTIVEEVENT> is reported.
 
-Returns the motion of the mouse in Y direction as a relative value.
-It take a SDL::Event as first parameter.
+When the mouse leaves or enters the window area a C<SDL_APPMOUSEFOCUS> type activation event occurs, 
+if the mouse entered the window then B<gain> will be 1, otherwise B<gain> will be 0. 
 
-=head2 button_state(event) * to move in SDL::Game::Mouse
+A C<SDL_APPINPUTFOCUS> type activation event occurs when the application loses or gains keyboard focus. 
+This usually occurs when another application is made active. 
 
-Returns the state of the mouse buttons.
-It take a SDL::Event as first parameter.
+Finally, a C<SDL_APPACTIVE> type event occurs when the application is either minimised/iconified (B<gain>=0) or restored. 
 
-=head2 button_x(event) * to move in SDL::Game::Mouse
+A single event can have multiple values set in B<state>.
 
-Return the X position of the mouse at keypress.it take a SDL::Event as first parameter.
+B<Note:> This event does not occur when an application window is first created. 
 
-=head2 button_y(event) * to move in SDL::Game::Mouse
+A new ActiveEvent (to fake focus loss) will be created like this:
 
-Return the Y position of the mouse at keypress.it take a SDL::Event as first parameter.
+ my $event = SDL::Event->new();
+    $event->type(SDL_ACTIVEEVENT);
+    $event->active_gain(0);
+    $event->active_state(SDL_APPMOUSEFOCUS);
 
-=head2 button(event) * to move in SDL::Game::Mouse
+ # I think this is wrong, ->active_type() should get SDL_APPMOUSEFOCUS, but what state gets?
 
-Return the mouse button index (SDL_BUTTON_LEFT, SDL_BUTTON_MIDDLE, SDL_BUTTON_RIGHT, SDL_BUTTON_WHEELUP, SDL_BUTTON_WHEELDOWN)
+=head3 active_type
+
+=head3 active_gain
+
+=head3 active_state
+
+=head2 key
+
+=head3 key_type
+
+=head3 key_state
+
+=head3 key_keysym
+
+=head3 key_scancode
+
+=head3 key_sym
+
+=head3 key_mod
+
+=head3 key_unicode
+
+=head2 motion
+
+=head3 motion_type
+
+=head3 motion_state
+
+=head3 motion_x, motion_y
+
+=head3 motion_xrel, motion_yrel
+
+=head2 button
+
+=head3 button_type
+
+=head3 button_which
+
+=head3 button_button
+
+=head3 button_state
+
+=head3 button_x, button_y
+
+=head2 jaxis
+
+=head3 jaxis_type
+
+=head3 jaxis_which
+
+=head3 jaxis_axis
+
+=head3 jaxis_value
+
+=head2 jbutton
+
+=head3 jbutton_type
+
+=head3 jbutton_which
+
+=head3 jbutton_button
+
+=head3 jbutton_state
+
+=head2 jhat
+
+=head3 jhat_type
+
+=head3 jhat_which
+
+=head3 jhat_hat
+
+=head3 jhat_value
+
+=head2 jball
+
+=head3 jball_type
+
+=head3 jball_which
+
+=head3 jball_ball
+
+=head3 jball_xrel, jball_yrel
+
+=head2 resize
+
+=head3 resize_type
+
+=head3 resize_x, resize_y
+
+=head2 expose
+
+=head3 expose_type
+
+=head2 syswm
+
+=head3 syswm_type
+
+=head3 syswm_msg
+
+=head2 user
+
+=head3 user_type
+
+=head3 user_code
+
+=head3 user_data1, user_data2
+
+=head2 quit
+
+=head3 quit_type
+
+Create a new SDL::Event object.
 
 =head1 AUTHOR
 
-David J. Goehrig
-Documentation by Tels <http://bloodgate.com/>
-
 =head1 SEE ALSO
 
-L<perl> L<SDL::App>
+L<perl>
 
 =cut
