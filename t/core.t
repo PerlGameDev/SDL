@@ -4,7 +4,7 @@ use SDL;
 use SDL::Video;
 use Test::More;
 
-plan ( tests => 9 );
+plan ( tests => 11 );
 my @done =qw/ 
 	init
 	quit
@@ -12,6 +12,8 @@ my @done =qw/
 	get_error
 	version
 	linked_version
+	putenv
+	getenv
 	  /;
 
 use_ok( 'SDL' ); 
@@ -29,6 +31,8 @@ SDL::quit(); pass '[quit] SDL quit with out segfaults or errors';
 
 isnt( SDL::was_init( 0 ), SDL_INIT_VIDEO, '[was_init] recognizes turned off flags');
 
+is(SDL::putenv('PERLSDL_TEST=hello'), 0, '[putenv] returns 0');
+is(SDL::getenv('PERLSDL_TEST'), 'hello', '[getenv] returns hello');
 
 my @left = qw/
 	init_sub_system
@@ -40,7 +44,6 @@ my @left = qw/
 	load_function
 	unload_fuction
 	unload_object
-	envvars
 	/;
 
 my $why = '[Percentage Completion] '.int( 100 * $#done / ($#done + $#left) ) ."\% implementation. $#done / ".($#done+$#left); 
