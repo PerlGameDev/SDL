@@ -8,12 +8,12 @@ my $head_loc = `sdl-config --cflags`;
 print "# Getting header constants from $head_loc\n";
 
 
-my @header = qw/ SDL.h SDL_events.h /;
+my @header = <$head_loc/*>;
 
 foreach (@header)
 {
 	print "# from $_:\n";
-	open FH, "$head_loc/$_";
+	open FH, $_;
 	while(<FH>)
 	{
 		if($_ =~ /#define SDL_/)
