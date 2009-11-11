@@ -16,15 +16,11 @@ foreach (@header)
 	open FH, $_;
 	while(<FH>)
 	{
-		if($_ =~ /#define SDL_/)
-		{
-			my $line = $_;
-			my @cop = (split ' ', $line);
-			print  'sub '.$cop[1].' {return '.$cop[2].'}'."\n" ;
-		}
+		# pattern: "#define SDL_RELEASED 0" (decimal)
+		printf("sub %s{ return %s; }\n", $1, $2) if($_ =~ /^#define\s+(\w+)\s+(\d+)\s*$/);
 		
-		# pattern: "#define SDL_RELEASED	0"
-		printf("sub %s{ return %s; }\n", $1, $2) if($_ =~ /^#define\s+(\w+)\s+(\w+)\s*$/);
+		# pattern: "#define SDL_RELEASED 0x1234" (hex)
+		printf("sub %s{ return %s; }\n", $1, $2) if($_ =~ /^#define\s+(\w+)\s+(0x\d+)\s*$/);
 	}
 	close FH;
 }
