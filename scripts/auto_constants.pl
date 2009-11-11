@@ -17,10 +17,10 @@ foreach (@header)
 	while(<FH>)
 	{
 		# pattern: "#define SDL_RELEASED 0" (decimal)
-		printf("sub %s{ return %s; }\n", $1, $2) if($_ =~ /^#define\s+(\w+)\s+(\d+)\s*$/);
+		printf("sub %s{ return %s; }\n", $1, $2) if($_ =~ /^#define\s+([^_]\w+)\s+(\d+)\s*$/);
 		
 		# pattern: "#define SDL_RELEASED 0x1234" (hex)
-		printf("sub %s{ return %s; }\n", $1, $2) if($_ =~ /^#define\s+(\w+)\s+(0x\d+)\s*$/);
+		printf("sub %s{ return %s; }\n", $1, $2) if($_ =~ /^#define\s+([^_]\w+)\s+(0x\d+)\s*$/);
 	}
 	close FH;
 }
