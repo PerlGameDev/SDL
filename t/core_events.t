@@ -104,43 +104,46 @@ is( $value, 1, '[wait_event] waited for event');
 my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
 is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
 
-my $callback = sub { print shift->type; return 1; }; 
+my $callback = sub {  return 1; };
 SDL::Events::set_event_filter( $callback );
 pass '[set_event_filter] takes a callback';
+
 my $array = SDL::Events::get_key_state();
 isa_ok( $array, 'ARRAY', '[get_key_state] returned and array');
 SDL::quit();
 
 SKIP:
 {
-	skip "Turn SDL_GUI_TEST on", 1 unless $ENV{'SDL_GUI_TEST'};
+skip "Turn SDL_GUI_TEST on", 1 unless $ENV{'SDL_GUI_TEST'};
 SDL::init(SDL_INIT_VIDEO);
  $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
  $event = SDL::Event->new();
 
-
-
-my $filter = sub { Dump $_[0] ; return 1; };
+ #This filters out all ActiveEvents
+my $filter = sub { if($_[0]->type == SDL_ACTIVEEVENT){ return 0} else{ return 1; }};
+my $filtered = 1;
 
 SDL::Events::set_event_filter($filter);
 
 while(1)
-{ 
+{
 
   SDL::Events::pump_events();
-  SDL::Events::poll_event($event);
-
-  if($event->type == SDL_ACTIVEEVENT)
-{
-print "Hello Mouse!!!\n" if ($event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
-print "Bye Mouse!!!\n" if (!$event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
-} 
+  if(SDL::Events::poll_event($event))
+  {
+  if(  $event->type == SDL_ACTIVEEVENT)
+	{
+	diag 'We should not be in here. The next test will fail!';
+	$filtered = 0; #we got a problem!
+	print "Hello Mouse!!!\n" if ($event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
+	print "Bye Mouse!!!\n" if (!$event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
+	}
   exit if($event->type == SDL_QUIT);
+  }
 }
-pass 'Ok now set_event_filter works';
-
+is( $filtered, 1, '[set_event_filter] Properly filtered SDL_ACTIVEEVENT');
+SDL::quit();
 }
-
 
 my @left = qw/
 eventstate 

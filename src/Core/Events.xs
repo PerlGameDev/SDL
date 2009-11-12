@@ -13,27 +13,26 @@
 /* Static Memory for event filter call back */
 static SV * eventfiltersv;
 
-
 int eventfilter_cb( const void * event)
 {
+	
 
 	dSP;
 	int count;
 	int filter_signal;
-
+	SV * eventref = newSV( sizeof(SDL_Event *) );
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
 	
-	XPUSHs( sv_setref_pv(' ', 'SDL::Event', event) );
-
+	XPUSHs( sv_setref_pv( eventref, "SDL::Event", (void *)event) );
 	PUTBACK;
 	
 	filter_signal = call_sv(eventfiltersv, G_SCALAR);
 
 	SPAGAIN;
 
-	if (count != 1 ) croak("callback returned more than 1 value\n");
+	//if (count != 1 ) croak("callback returned more than 1 value\n");
 	
 	filter_signal = POPi;
 
@@ -43,9 +42,6 @@ int eventfilter_cb( const void * event)
 	return filter_signal;
 }
 	
-
-
-
 
 MODULE = SDL::Events 	PACKAGE = SDL::Events    PREFIX = events_
 
@@ -111,8 +107,9 @@ void
 events_set_event_filter(callback)
 	SV* callback
 	CODE:
-		eventfiltersv = callback;
-		SDL_SetEventFilter( (SDL_EventFilter*)eventfilter_cb);
+	eventfiltersv = callback;
+	
+	SDL_SetEventFilter( (SDL_EventFilter *)eventfilter_cb);
 
 
 AV *
