@@ -82,7 +82,13 @@ Examples of mask:
 
 Number of Events actually stored or -1 if there was an error
 
-=head2 poll_event
+=head2 poll_event($event)
+
+Polls for currently pending events. 
+
+If $event is not NULL, the next event is removed from the queue and stored in the L<SDL::Event> structure pointed to by $event.
+
+As this function implicitly calls pump_events, you can only call this function in the thread that set the video mode with L<SDL::Video::set_video_mode>. 
 
 =head2 push_event
 
@@ -90,6 +96,6 @@ Number of Events actually stored or -1 if there was an error
 
 =head1 SEE ALSO
 
-L<SDL::Event>
+L<SDL::Event>, L<SDL::Video>
 
 =cut
