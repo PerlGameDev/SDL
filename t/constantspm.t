@@ -32,8 +32,8 @@ is( CD_TRAYEMPTY(), 0,  'CD_TRAYEMPTY() should also be available' );
 
 is( INADDR_ANY,    0,  'INADDR_ANY should be imported' );
 is( INADDR_ANY(),  0,  'INADDR_ANY() should also be available' );
-is( INADDR_NONE,   -1, 'INADDR_NONE should be imported' );
-is( INADDR_NONE(), -1, 'INADDR_NONE() should also be available' );
+is( INADDR_NONE,   0xFFFFFFFF, 'INADDR_NONE should be imported' );
+is( INADDR_NONE(), 0xFFFFFFFF, 'INADDR_NONE() should also be available' );
 
 is( KMOD_ALT,      768,  'KMOD_ALT should be imported' );
 is( KMOD_ALT(),    768,  'KMOD_ALT() should also be available' );
@@ -584,12 +584,12 @@ is( SDL_BUTTON_LEFT,      1,  'SDL_BUTTON_LEFT should be imported' );
 is( SDL_BUTTON_LEFT(),    1,  'SDL_BUTTON_LEFT() should also be available' );
 is( SDL_BUTTON_MIDDLE,    2,  'SDL_BUTTON_MIDDLE should be imported' );
 is( SDL_BUTTON_MIDDLE(),  2,  'SDL_BUTTON_MIDDLE() should also be available' );
-is( SDL_BUTTON_RIGHT,     4,  'SDL_BUTTON_RIGHT should be imported' );
-is( SDL_BUTTON_RIGHT(),   4,  'SDL_BUTTON_RIGHT() should also be available' );
-is( SDL_BUTTON_WHEELUP,   8,  'SDL_BUTTON_WHEELUP should be imported' );
-is( SDL_BUTTON_WHEELUP(), 8,  'SDL_BUTTON_WHEELUP() should also be available' );
-is( SDL_BUTTON_WHEELDOWN, 16, 'SDL_BUTTON_WHEELDOWN should be imported' );
-is( SDL_BUTTON_WHEELDOWN(), 16, 'SDL_BUTTON_WHEELDOWN() should also be available' );
+is( SDL_BUTTON_RIGHT,     3,  'SDL_BUTTON_RIGHT should be imported' );
+is( SDL_BUTTON_RIGHT(),   3,  'SDL_BUTTON_RIGHT() should also be available' );
+is( SDL_BUTTON_WHEELUP,   4,  'SDL_BUTTON_WHEELUP should be imported' );
+is( SDL_BUTTON_WHEELUP(), 4,  'SDL_BUTTON_WHEELUP() should also be available' );
+is( SDL_BUTTON_WHEELDOWN, 5, 'SDL_BUTTON_WHEELDOWN should be imported' );
+is( SDL_BUTTON_WHEELDOWN(), 5, 'SDL_BUTTON_WHEELDOWN() should also be available' );
 
 is( SDL_DISABLE,         0,  'SDL_DISABLE should be imported' );
 is( SDL_DISABLE(),       0,  'SDL_DISABLE() should also be available' );
@@ -615,8 +615,8 @@ is( SDL_EVENT_RESERVED6(), 22, 'SDL_EVENT_RESERVED6() should also be available')
 is( SDL_EVENT_RESERVED7,   23, 'SDL_EVENT_RESERVED7 should be imported');
 is( SDL_EVENT_RESERVED7(), 23, 'SDL_EVENT_RESERVED7() should also be available');
 
-is( SDL_FULLSCREEN,  -2147483648, 'SDL_FULLSCREEN should be imported' );
-is( SDL_FULLSCREEN(), -2147483648, 'SDL_FULLSCREEN() should also be available' );
+is( SDL_FULLSCREEN,  0x80000000, 'SDL_FULLSCREEN should be imported' );
+is( SDL_FULLSCREEN(), 0x80000000, 'SDL_FULLSCREEN() should also be available' );
 
 is( SDL_GETEVENT,    2, 'SDL_GETEVENT should be imported' );
 is( SDL_GETEVENT(),  2, 'SDL_GETEVENT() should also be available' );
@@ -844,13 +844,6 @@ is( SMPEG_PLAYING(), 1,  'SMPEG_PLAYING() should also be available' );
 is( SMPEG_STOPPED,   0,  'SMPEG_STOPPED should be imported' );
 is( SMPEG_STOPPED(), 0,  'SMPEG_STOPPED() should also be available' );
 
-is( TEXT_BLENDED,   4, 'TEXT_BLENDED should be imported' );
-is( TEXT_BLENDED(), 4, 'TEXT_BLENDED() should also be available' );
-is( TEXT_SHADED,    2, 'TEXT_SHADED should be imported' );
-is( TEXT_SHADED(),  2, 'TEXT_SHADED() should also be available' );
-is( TEXT_SOLID,     1, 'TEXT_SOLID should be imported' );
-is( TEXT_SOLID(),   1, 'TEXT_SOLID() should also be available' );
-
 is( TTF_STYLE_BOLD,      1, 'TTF_STYLE_BOLD should be imported' );
 is( TTF_STYLE_BOLD(),    1, 'TTF_STYLE_BOLD() should also be available' );
 is( TTF_STYLE_ITALIC,    2, 'TTF_STYLE_ITALIC should be imported' );
@@ -860,34 +853,9 @@ is( TTF_STYLE_NORMAL(),  0, 'TTF_STYLE_NORMAL() should also be available' );
 is( TTF_STYLE_UNDERLINE, 4, 'TTF_STYLE_UNDERLINE should be imported' );
 is( TTF_STYLE_UNDERLINE(), 4, 'TTF_STYLE_UNDERLINE() should also be available' );
 
-is( UNICODE_BLENDED,   256, 'UNICODE_BLENDED should be imported' );
-is( UNICODE_BLENDED(), 256, 'UNICODE_BLENDED() should also be available' );
-is( UNICODE_SHADED,    128, 'UNICODE_SHADED should be imported' );
-is( UNICODE_SHADED(),  128, 'UNICODE_SHADED() should also be available' );
-is( UNICODE_SOLID,     64,  'UNICODE_SOLID should be imported' );
-is( UNICODE_SOLID(),   64,  'UNICODE_SOLID() should also be available' );
-
-is( UTF8_BLENDED,   32, 'UTF8_BLENDED should be imported' );
-is( UTF8_BLENDED(), 32, 'UTF8_BLENDED() should also be available' );
-is( UTF8_SHADED,    16, 'UTF8_SHADED should be imported' );
-is( UTF8_SHADED(),  16, 'UTF8_SHADED() should also be available' );
-is( UTF8_SOLID,     8,  'UTF8_SOLID should be imported' );
-is( UTF8_SOLID(),   8,  'UTF8_SOLID() should also be available' );
-
 is( SDL_SVG_FLAG_DIRECT, 0, 'SDL_SVG_FLAG_DIRECT should be imported' );
 is( SDL_SVG_FLAG_DIRECT(), 0, 'SDL_SVG_FLAG_DIRECT() should also be available' );
 is( SDL_SVG_FLAG_COMPOSITE, 1, 'SDL_SVG_FLAG_COMPOSITE should be imported' );
 is( SDL_SVG_FLAG_COMPOSITE(), 1, 'SDL_SVG_FLAG_COMPOSITE() should also be available' );
-
-is( SDL_SAMPLEFLAG_NONE, 0, 'SDL_SAMPLEFLAG_NONE should be imported' );
-is( SDL_SAMPLEFLAG_NONE(), 0,'SDL_SAMPLEFLAG_NONE() should also be available' );
-is( SDL_SAMPLEFLAG_CANSEEK, 1, 'SDL_SAMPLEFLAG_CANSEEK should be imported' );
-is( SDL_SAMPLEFLAG_CANSEEK(), 1, 'SDL_SAMPLEFLAG_CANSEEK() should also be available' );
-is( SDL_SAMPLEFLAG_EOF, 1 << 29, 'SDL_SAMPLEFLAG_EOF should be imported' );
-is( SDL_SAMPLEFLAG_EOF(), 1 << 29, 'SDL_SAMPLEFLAG_EOF() should also be available' );
-is( SDL_SAMPLEFLAG_ERROR, 1 << 30, 'SDL_SAMPLEFLAG_ERROR should be imported' );
-is( SDL_SAMPLEFLAG_ERROR(), 1 << 30,  'SDL_SAMPLEFLAG_ERROR() should also be available' );
-is( SDL_SAMPLEFLAG_EAGAIN, 1 << 31,   'SDL_SAMPLEFLAG_EAGAIN should be imported' );
-is( SDL_SAMPLEFLAG_EAGAIN(), 1 << 31, 'SDL_SAMPLEFLAG_EAGAIN() should also be available' );
 
 done_testing();
