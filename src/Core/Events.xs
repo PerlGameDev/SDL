@@ -23,8 +23,8 @@ int eventfilter_cb( const void * event)
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
-
-	XPUSHs((SDL_Event *)event);
+	
+	XPUSHs( sv_setref_pv(' ', 'SDL::Event', event) );
 
 	PUTBACK;
 	

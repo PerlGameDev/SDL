@@ -108,6 +108,37 @@ my $callback = sub { print shift->type; return 1; };
 SDL::Events::set_event_filter( $callback );
 pass '[set_event_filter] takes a callback';
 
+SDL::quit();
+
+SKIP:
+{
+	skip "Turn SDL_GUI_TEST on", 1 unless $ENV{'SDL_GUI_TEST'};
+SDL::init(SDL_INIT_VIDEO);
+ $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
+ $event = SDL::Event->new();
+
+
+
+my $filter = sub { Dump $_[0] ; return 1; };
+
+SDL::Events::set_event_filter($filter);
+
+while(1)
+{ 
+
+  SDL::Events::pump_events();
+  SDL::Events::poll_event($event);
+
+  if($event->type == SDL_ACTIVEEVENT)
+{
+print "Hello Mouse!!!\n" if ($event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
+print "Bye Mouse!!!\n" if (!$event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
+} 
+  exit if($event->type == SDL_QUIT);
+}
+pass 'Ok now set_event_filter works';
+
+}
 
 
 my @left = qw/
