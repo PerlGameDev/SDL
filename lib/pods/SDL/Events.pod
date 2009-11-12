@@ -90,9 +90,36 @@ If $event is not NULL, the next event is removed from the queue and stored in th
 
 As this function implicitly calls pump_events, you can only call this function in the thread that set the video mode with L<SDL::Video::set_video_mode>. 
 
-=head2 push_event
+=head3 RETURN
 
-=head2 wait_event 
+Returns 1 if there are any pending events, or 0 if there are none available. 
+
+=head2 push_event($event)
+
+Pushes an event onto the event queue 
+
+The event queue can actually be used as a two way communication channel. Not only can events be read from the queue, but the user can also push their own events onto it. event is a pointer to the event structure you wish to push onto the queue. 
+The event is copied into the queue, and the caller may dispose of the memory pointed to after push_event returns.
+
+Note: Pushing device input events onto the queue doesn't modify the state of the device within SDL. 
+
+This function is thread safe, and can be called from other threads safely.
+
+=head3 RETURN
+
+Returns 0 on success or -1 if the event couldn't be pushed.
+
+=head2 wait_event($event)
+
+Waits indefinitely for the next available $event, returning 0 if there was an error while waiting for events, 1 otherwise.
+
+If $event is not NULL, the next event is removed from the queue and stored in $event.
+
+As this function implicitly calls SDL_PumpEvents, you can only call this function in the thread that  L<SDL::Video::set_video_mode>.  
+
+=head3 RETURN
+
+0 if there was an error while waiting for events, 1 otherwise
 
 =head1 SEE ALSO
 
