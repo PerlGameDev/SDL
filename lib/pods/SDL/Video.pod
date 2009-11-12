@@ -394,32 +394,58 @@ If you call this on the video surface (ie: the value of SDL::get_video_surface()
 
 SDL::fill_rect returns 0 on succés or -1 on error.
 
-=head2	GL_load_library
+=head2	GL_load_library(path)
 
+If you wish, you may load the OpenGL library from the given path at runtime, this must be done before SDL::set_video_mode is called.
+The path of the GL library is passed to SDL::GL_load_library and it returns 0 on success, or -1 on an error. You must then use SDL::GL_get_proc_address to retrieve function pointers to GL functions. 
 
-=head2	GL_get_proc_address
+SDL::GL_load_library returns 0 on succés or -1 or error.
 
+=head2	GL_get_proc_address(proc)
 
-=head2	GL_get_attribute
+Returns the address of the GL function proc, or NULL if the function is not found. If the GL library is loaded at runtime, with SDL::GL_load_library, then all GL functions must be retrieved this way. Usually this is used to retrieve function pointers to OpenGL extensions. Note that this function needs an OpenGL context to function properly, so it should be called after SDL::set_video_mode has been called (with the SDL_OPENGL flag).
 
+OpenGL function pointers must be declared APIENTRY . This will ensure the proper calling convention is followed on platforms where this matters (Win32) thereby avoiding stack corruption. In a Win32 build environment, APIENTRY should be defined as __stdcall. 
 
-=head2	GL_set_attribute
+it returns undef if the function is not found.
 
+=head2	GL_get_attribute(attr)
+
+It returns  SDL/OpenGL attribute attr . This is useful after a call to SDL::set_video_mode to check whether your attributes have been set as you expected. 
+SDL::GL_get_attribute returns undef if the attribute is not found.
+
+=head2	GL_set_attribute(attr,value)
+
+This function sets the given OpenGL attribute attr to value. The requested attributes will take effect after a call to SDL::set_video_mode.
+You should use SDL::GL_get_attribute to check the values after a SDL::set_video_mode call, since the values obtained can differ from the requested ones.
+See SDL_GLattr for the full list of available attributes. 
+SDL::GL_set_attribute returns 0 on succés or -1 on error.
+
+Note : The SDL_DOUBLEBUF flag is not required to enable double buffering when setting an OpenGL video mode. Double buffering is enabled or disabled using the SDL_GL_DOUBLEBUFFER attribute. 
 
 =head2	GL_swap_buffers
 
+Swap the OpenGL buffers, if double-buffering is supported.
+SDL::GL_swap_buffers doesn't returns any value.
 
-=head2	GL_attr
-
-
-=head2	lock_YUV_overlay
-
-
-=head2	unlock_YUV_overlay
+=head2	GL_attr *** to be coded
 
 
-=head2	display_YUV_overlay
+=head2	lock_YUV_overlay(overlay)
 
+Much the same as C<SDL::lock_surface>, SDL::lock_YUV_overlay locks the overlay for direct access to pixel data.
+It returns 0 on succés or -1 on error.
+
+=head2	unlock_YUV_overlay(overlay)
+
+The opposite to C<SDL::lock_YUV_overlay. Unlocks a previously locked overlay. An overlay must be unlocked before it can be displayed. 
+It returns 0 on succés or -1 on error.
+
+=head2	display_YUV_overlay(overlay,dstrect)
+
+Blit the overlay to the display surface specified when the overlay was created. The SDL::rect structure, dstrect, specifies a rectangle on the display where the overlay is drawn. The .x and .y fields of dstrect specify the upper left location in display coordinates. The overlay is scaled (independently in x and y dimensions) to the size specified by dstrect, and is optimized for 2x scaling
+
+It returns 0 on succés or -1 on error.
 
 
 =head1 SEE ALSO
