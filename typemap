@@ -91,6 +91,7 @@ Sound_AudioInfo *	T_PTR
 SDL_RWops*		T_PTR
 SDL_svg_context*	T_PTR
 int			T_IV
+intArray		T_ARRAY
 
 OUTPUT
 

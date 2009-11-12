@@ -9,6 +9,7 @@
 #include <SDL.h>
 #include <SDL_events.h>
 
+
 /* Static Memory for event filter call back */
 static SV * eventfiltersv;
 
@@ -110,5 +111,29 @@ void
 events_set_event_filter(callback)
 	SV* callback
 	CODE:
-	eventfiltersv = callback;
-	SDL_SetEventFilter( (SDL_EventFilter*)eventfilter_cb);
+		eventfiltersv = callback;
+		SDL_SetEventFilter( (SDL_EventFilter*)eventfilter_cb);
+
+
+AV *
+events_get_key_state()
+	PREINIT:
+	int value;
+	CODE:
+
+	Uint8* KeyArray = SDL_GetKeyState(&value);
+	RETVAL = newAV();
+	int i;
+	for( i = 0; i <value; i++)
+	{
+		SV* scalar = newSViv( KeyArray[i]  );
+		av_push( RETVAL, scalar);
+	
+	}
+	sv_2mortal(RETVAL);	
+
+	OUTPUT:
+		RETVAL
+	 
+
+

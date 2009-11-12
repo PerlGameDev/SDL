@@ -15,7 +15,7 @@ push_event
 poll_event
 wait_event
 set_event_filter 
-
+get_key_state
 /;
 
 my @done_event =qw/
@@ -107,7 +107,8 @@ is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_pee
 my $callback = sub { print shift->type; return 1; }; 
 SDL::Events::set_event_filter( $callback );
 pass '[set_event_filter] takes a callback';
-
+my $array = SDL::Events::get_key_state();
+isa_ok( $array, 'ARRAY', '[get_key_state] returned and array');
 SDL::quit();
 
 SKIP:
@@ -143,7 +144,6 @@ pass 'Ok now set_event_filter works';
 
 my @left = qw/
 eventstate 
-getkeystate 
 getmodstate 
 setmodstate 
 getkeyname 
