@@ -14,6 +14,8 @@ peep_events
 push_event
 poll_event
 wait_event
+set_event_filter 
+
 /;
 
 my @done_event =qw/
@@ -102,10 +104,13 @@ is( $value, 1, '[wait_event] waited for event');
 my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
 is($num_peep_events >= 0, 1,  '[peep_events] Size of event queue is ' . $num_peep_events);
 
+my $callback = sub { print shift->type; return 1; }; 
+SDL::Events::set_event_filter( $callback );
+pass '[set_event_filter] takes a callback';
+
 
 
 my @left = qw/
-seteventfilter 
 eventstate 
 getkeystate 
 getmodstate 
