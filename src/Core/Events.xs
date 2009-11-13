@@ -157,3 +157,11 @@ events_event_state(type, state)
 		RETVAL=SDL_EventState(type, state);
 	OUTPUT:
 		RETVAL 
+
+char *
+events_get_key_name(key)
+	SDLKey key
+	CODE:
+		RETVAL = SDL_GetKeyName(key);
+	OUTPUT:
+		RETVAL

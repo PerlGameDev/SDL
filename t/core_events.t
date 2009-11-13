@@ -17,6 +17,7 @@ wait_event
 set_event_filter 
 event_state
 get_key_state
+get_key_name
 get_mod_state
 set_mod_state
 /;
@@ -144,6 +145,8 @@ SDL::init(SDL_INIT_VIDEO);
 
 SDL::Video::get_video_info();
 
+is( SDL::Events::get_key_name(SDLK_ESCAPE), 'escape', '[get_key_name] Gets name of key_sym back'); 
+
 SDL::Events::push_event( $aevent );
 my $nevent = SDL::Event->new();
 SDL::Events::event_state( SDL_ACTIVEEVENT, SDL_IGNORE);
@@ -153,6 +156,7 @@ my $got = 0;
 while( SDL::Events::poll_event($nevent)) 
 {
 $got = 1 if  $nevent->type == SDL_ACTIVEEVENT;
+	
 }
 is ( $got, 0, '[event_state] works with SDL_IGNORE on SDL_ACTIVEEVENT');
 
@@ -177,7 +181,7 @@ SKIP:
 	SDL::init(SDL_INIT_VIDEO);
 	$display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 	$event = SDL::Event->new();
-
+	
 	#This filters out all ActiveEvents
 	my $filter = sub { if($_[0]->type == SDL_ACTIVEEVENT){ return 0} else{ return 1; }};
 	my $filtered = 1;
@@ -206,7 +210,6 @@ SKIP:
 }
 
 my @left = qw/
-getkeyname 
 enableunicode 
 enablekeyrepeat 
 getmousestate 
