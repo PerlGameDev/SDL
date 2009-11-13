@@ -143,4 +143,8 @@ events_get_mod_state()
 	OUTPUT:
 		RETVAL
 
-
+void
+events_set_mod_state(mod)
+	SDLMod mod
+	CODE:
+		SDL_SetModState(mod); 

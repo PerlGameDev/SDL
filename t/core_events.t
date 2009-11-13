@@ -17,6 +17,7 @@ wait_event
 set_event_filter 
 get_key_state
 get_mod_state
+set_mod_state
 /;
 
 my @done_event =qw/
@@ -126,13 +127,13 @@ my @mods = (
 	KMOD_CAPS  ,
 	KMOD_MODE  ,
 );
-my $mpass = 0;
+
 foreach(@mods)
 {
-	my $mod = SDL::Events::get_mod_state();
-	if( $mod == $_ ){ $mpass = 1; last; }
+	SDL::Events::set_mod_state($_); pass '[set_mod_state] set the mod properly';
+	is( SDL::Events::get_mod_state(), $_, '[get_mod_state] got the mod properly'); 
+
 }
-is( $mpass, 1, '[get_mod_state] return a mod');
 
 
 SDL::quit();
@@ -173,7 +174,6 @@ SKIP:
 
 my @left = qw/
 eventstate 
-setmodstate 
 getkeyname 
 enableunicode 
 enablekeyrepeat 
