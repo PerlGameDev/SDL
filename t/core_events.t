@@ -148,10 +148,14 @@ SDL::Events::push_event( $aevent );
 my $nevent = SDL::Event->new();
 SDL::Events::event_state( SDL_ACTIVEEVENT, SDL_IGNORE);
 SDL::Events::pump_events();
+
+my $got = 0; 
 while( SDL::Events::poll_event($nevent)) 
 {
-isnt( $nevent->type, SDL_ACTIVEEVENT, '[event_state] works with SDL_IGNORE on SDL_ACTIVEEVENT');
-} 
+$got = 1 if  $nevent->type == SDL_ACTIVEEVENT;
+}
+is ( $got, 0, '[event_state] works with SDL_IGNORE on SDL_ACTIVEEVENT');
+
 
 
 SDL::Events::event_state( SDL_ACTIVEEVENT, SDL_ENABLE);
@@ -163,7 +167,6 @@ while( SDL::Events::poll_event($nevent))
  $atleast = 1 if ( $nevent->type == SDL_ACTIVEEVENT)
 }
 is ( $atleast, 1,  '[event_state] works with SDL_ENABLE on SDL_ACTIVEEVENT');
- 
 
 
 SDL::quit();
