@@ -61,7 +61,7 @@ SDL::init(SDL_INIT_VIDEO);
 #needs to be done before set_video_mode
 my $glVal = SDL::Video::GL_load_library('this/should/fail');
 
-is ($glVal, -1, '[GL_load_library] Failed appropraitly');
+is ($glVal, -1, '[GL_load_library] Failed appropriately');
 
 TODO: {
 local $TODO = 'These should be tested with OS specific DLL or SO';
