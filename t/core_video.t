@@ -50,6 +50,7 @@ my @done =
 	GL_get_attribute
 	GL_set_attribute
 	GL_swap_buffers
+	get_gamma_ramp
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -124,6 +125,10 @@ is(  $value , 0,  '[set_palette] returns 0 trying to write to 32 bit surface'  )
 
 my $zero = [0,0,0,0]; 
 SDL::Video::set_gamma_ramp($zero, $zero, $zero);  pass '[set_gamma_ramp] ran';
+
+my($r, $g, $b) = ([], [], []);
+SDL::Video::get_gamma_ramp($r, $g, $b);
+pass '[get_gamma_ramp] ran';
 
 SDL::Video::set_gamma( 1.0, 1.0, 1.0 ); pass '[set_gamma] ran ';
 
@@ -210,9 +215,7 @@ is($clip_rect->y, 20, '[get_clip_rect] returns a rect with y 20');
 is($clip_rect->w, 100, '[get_clip_rect] returns a rect with w 100');
 is($clip_rect->h, 200, '[get_clip_rect] returns a rect with h 200');
 
-my @left = qw/
-	get_gamma_ramp
-	/;
+my @left = qw//;
 
 my $why = '[Percentage Completion] '.int( 100 * ($#done +1) / ($#done + $#left + 2) ) ."\% implementation. ". ($#done +1)." / ".($#done+$#left + 2); 
 

@@ -223,6 +223,24 @@ video_set_gamma(r, g, b)
 	OUTPUT:	
 		RETVAL
 
+int
+video_get_gamma_ramp( redtable, greentable, bluetable )
+	AV* redtable;
+	AV* greentable;
+	AV* bluetable;
+	CODE:
+		Uint16 red_ramp[256];
+		Uint16 green_ramp[256];
+		Uint16 blue_ramp[256];
+		int i;
+		RETVAL = SDL_GetGammaRamp(red_ramp, green_ramp, blue_ramp);
+		for ( i=0; i<256; ++i ) {
+			av_push(redtable,newSViv(red_ramp[i]));
+			av_push(greentable,newSViv(green_ramp[i]));
+			av_push(bluetable,newSViv(blue_ramp[i]));
+		}
+	OUTPUT:
+		RETVAL
 	
 int
 video_set_gamma_ramp( rt, gt, bt )
