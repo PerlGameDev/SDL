@@ -232,15 +232,9 @@ is($icon, 'Icon text', '[wm_set_caption set icon]');
 SDL::Video::wm_set_icon($bmp_surface);
 pass '[wm_set_icon] ran';
 
-SDL::Video::wm_toggle_fullscreen($display);
-pass '[wm_toggle_fullscreen] ran';
 
-SDL::Video::wm_iconify_window();
-pass '[wm_iconify_window] ran';
 
-SKIP: 
-{
-  skip 'Need SDL_GUI_TEST on' , 4 unless $ENV{SDL_GUI_TEST};
+
 SDL::Video::wm_grab_input(SDL_GRAB_ON);
 pass '[wm_grab_input] ran with SDL_GRAB_ON';
 
@@ -252,7 +246,12 @@ pass '[wm_grab_input] ran with SDL_GRAB_OFF';
 
 is( SDL::Video::wm_grab_input(SDL_GRAB_QUERY), SDL_GRAB_OFF, 
     '[wm_grab_input] Got Correct grab mode back');
-}
+
+my $ic = SDL::Video::wm_iconify_window();
+is( $ic, 1,'[wm_iconify_window] ran');
+
+SDL::Video::wm_toggle_fullscreen($display);
+pass '[wm_toggle_fullscreen] ran';
 
 
 my @left = qw/
