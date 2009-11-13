@@ -17,12 +17,6 @@ can_ok ('SDL:WMangement', @done);
 
 my @left = qw/
 get_wminfo
-set_caption 
-get_caption 
-set_icon 
-iconify_window 
-toggle_fullscreen 
-grab_input 	
 /;
 
 my $why = '[Percentage Completion] '.int( 100 * ($#done+1) / ($#done + $#left +2 ) ) ."\% implementation.". ($#done +1) .' / '.($#done+$#left +2); 

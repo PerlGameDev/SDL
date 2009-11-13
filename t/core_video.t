@@ -215,7 +215,14 @@ is($clip_rect->y, 20, '[get_clip_rect] returns a rect with y 20');
 is($clip_rect->w, 100, '[get_clip_rect] returns a rect with w 100');
 is($clip_rect->h, 200, '[get_clip_rect] returns a rect with h 200');
 
-my @left = qw//;
+my @left = qw/
+set_caption
+get_caption
+set_icon
+iconify_window
+toggle_fullscreen
+grab_input
+/;
 
 my $why = '[Percentage Completion] '.int( 100 * ($#done +1) / ($#done + $#left + 2) ) ."\% implementation. ". ($#done +1)." / ".($#done+$#left + 2); 
 
