@@ -238,8 +238,22 @@ pass '[wm_toggle_fullscreen] ran';
 SDL::Video::wm_iconify_window();
 pass '[wm_iconify_window] ran';
 
-SDL::Video::wm_grab_input(SDL::Constants::SDL_GRAB_ON);
-pass '[wm_grab_input] ran';
+SKIP: 
+{
+  skip 'Need SDL_GUI_TEST on' , 4 unless $ENV{SDL_GUI_TEST};
+SDL::Video::wm_grab_input(SDL_GRAB_ON);
+pass '[wm_grab_input] ran with SDL_GRAB_ON';
+
+is( SDL::Video::wm_grab_input(SDL_GRAB_QUERY), SDL_GRAB_ON, 
+    '[wm_grab_input] Got Correct grab mode back');
+
+SDL::Video::wm_grab_input(SDL_GRAB_OFF);
+pass '[wm_grab_input] ran with SDL_GRAB_OFF';
+
+is( SDL::Video::wm_grab_input(SDL_GRAB_QUERY), SDL_GRAB_OFF, 
+    '[wm_grab_input] Got Correct grab mode back');
+}
+
 
 my @left = qw/
 /;
