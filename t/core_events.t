@@ -138,7 +138,7 @@ while(1)
 	print "Hello Mouse!!!\n" if ($event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
 	print "Bye Mouse!!!\n" if (!$event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
 	}
-  exit if($event->type == SDL_QUIT);
+  last if($event->type == SDL_QUIT);
   }
 }
 is( $filtered, 1, '[set_event_filter] Properly filtered SDL_ACTIVEEVENT');
