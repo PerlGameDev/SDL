@@ -749,29 +749,6 @@ GetAppState ()
 		RETVAL
 
 
-void
-WMSetCaption ( title, icon )
-	char *title
-	char *icon
-	CODE:
-		SDL_WM_SetCaption(title,icon);
-
-AV *
-WMGetCaption ()
-	CODE:
-		char *title,*icon;
-		SDL_WM_GetCaption(&title,&icon);
-		RETVAL = newAV();
-		av_push(RETVAL,newSVpv(title,0));
-		av_push(RETVAL,newSVpv(icon,0));
-	OUTPUT:
-		RETVAL
-
-void
-WMSetIcon ( icon )
-	SDL_Surface *icon
-	CODE:
-		SDL_WM_SetIcon(icon,NULL);
 
 void
 WarpMouse ( x, y )
@@ -2022,29 +1999,6 @@ OverlayPixels ( overlay )
 	SDL_Overlay *overlay
 	CODE:
 		RETVAL = overlay->pixels;
-	OUTPUT:
-		RETVAL
-
-int
-WMToggleFullScreen ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = SDL_WM_ToggleFullScreen(surface);
-	OUTPUT:
-		RETVAL
-
-Uint32
-WMGrabInput ( mode )
-	Uint32 mode
-	CODE:
-		RETVAL = SDL_WM_GrabInput(mode);
-	OUTPUT:
-		RETVAL
-
-int
-WMIconifyWindow ()
-	CODE:
-		RETVAL = SDL_WM_IconifyWindow();
 	OUTPUT:
 		RETVAL
 

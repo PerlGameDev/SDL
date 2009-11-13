@@ -51,6 +51,12 @@ my @done =
 	GL_set_attribute
 	GL_swap_buffers
 	get_gamma_ramp
+	wm_set_caption
+	wm_get_caption
+	wm_set_icon
+	wm_toggle_fullscreen
+	wm_iconify_window
+	wm_grab_input
 	/;
 
 can_ok ('SDL::Video', @done); 
@@ -215,13 +221,27 @@ is($clip_rect->y, 20, '[get_clip_rect] returns a rect with y 20');
 is($clip_rect->w, 100, '[get_clip_rect] returns a rect with w 100');
 is($clip_rect->h, 200, '[get_clip_rect] returns a rect with h 200');
 
+my($title, $icon) = @{SDL::Video::wm_get_caption()};
+is($title, undef, '[wm_get_caption] title is undef');
+is($icon, undef, '[wm_get_caption] icon is undef');
+SDL::Video::wm_set_caption('Title text', 'Icon text');
+($title, $icon) = @{SDL::Video::wm_get_caption()};
+is($title, 'Title text', '[wm_set_caption set title]');
+is($icon, 'Icon text', '[wm_set_caption set icon]');
+
+SDL::Video::wm_set_icon($bmp_surface);
+pass '[wm_set_icon] ran';
+
+SDL::Video::wm_toggle_fullscreen($display);
+pass '[wm_toggle_fullscreen] ran';
+
+SDL::Video::wm_iconify_window();
+pass '[wm_iconify_window] ran';
+
+SDL::Video::wm_grab_input(SDL::Constants::SDL_GRAB_ON);
+pass '[wm_grab_input] ran';
+
 my @left = qw/
-set_caption
-get_caption
-set_icon
-iconify_window
-toggle_fullscreen
-grab_input
 /;
 
 my $why = '[Percentage Completion] '.int( 100 * ($#done +1) / ($#done + $#left + 2) ) ."\% implementation. ". ($#done +1)." / ".($#done+$#left + 2); 

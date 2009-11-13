@@ -523,5 +523,49 @@ video_GL_swap_buffers ()
 	CODE:
 		SDL_GL_SwapBuffers ();
 
+void
+wm_set_caption ( title, icon )
+	char *title
+	char *icon
+	CODE:
+		SDL_WM_SetCaption(title,icon);
 
+AV *
+wm_get_caption ()
+	CODE:
+		char *title,*icon;
+		SDL_WM_GetCaption(&title,&icon);
+		RETVAL = newAV();
+		av_push(RETVAL,newSVpv(title,0));
+		av_push(RETVAL,newSVpv(icon,0));
+	OUTPUT:
+		RETVAL
 
+void
+wm_set_icon ( icon )
+	SDL_Surface *icon
+	CODE:
+		SDL_WM_SetIcon(icon,NULL);
+
+Uint32
+wm_grab_input ( mode )
+	Uint32 mode
+	CODE:
+		RETVAL = SDL_WM_GrabInput(mode);
+	OUTPUT:
+		RETVAL
+
+int
+wm_iconify_window ()
+	CODE:
+		RETVAL = SDL_WM_IconifyWindow();
+	OUTPUT:
+		RETVAL
+
+int
+wm_toggle_fullscreen ( surface )
+	SDL_Surface *surface
+	CODE:
+		RETVAL = SDL_WM_ToggleFullScreen(surface);
+	OUTPUT:
+		RETVAL

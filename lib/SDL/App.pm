@@ -118,10 +118,10 @@ sub new {
 	
 	if ($ic and -e $ic) {
 	   my $icon = new SDL::Surface -name => $ic;
-	   SDL::WMSetIcon($$icon);	   
+	   SDL::Video::wm_set_icon($$icon);
 	}
 
-	SDL::WMSetCaption($t,$it);
+	SDL::Video::wm_set_caption($t,$it);
 	
 	bless $self,$class;
 	return $self;
