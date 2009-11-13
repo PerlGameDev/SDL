@@ -16,6 +16,7 @@ poll_event
 wait_event
 set_event_filter 
 get_key_state
+get_mod_state
 /;
 
 my @done_event =qw/
@@ -63,9 +64,9 @@ is(SDL::Events::pump_events(), undef,  '[pump_events] Returns undef');
 my $event   = SDL::Event->new();
 
 my $aevent = SDL::Event->new();
-   $aevent->type ( SDL_ACTIVEEVENT );
-   $aevent->active_gain(1);
-   $aevent->active_state(SDL_APPINPUTFOCUS);
+$aevent->type ( SDL_ACTIVEEVENT );
+$aevent->active_gain(1);
+$aevent->active_state(SDL_APPINPUTFOCUS);
 
 SDL::Events::push_event($aevent); pass '[push_event] Event can be pushed';
 
@@ -75,17 +76,17 @@ my $got_event = 0;
 
 while(1)
 {
-SDL::Events::pump_events(); 
+	SDL::Events::pump_events(); 
 
-my $ret =  SDL::Events::poll_event($event);
+	my $ret =  SDL::Events::poll_event($event);
 
-if ($event->type == SDL_ACTIVEEVENT && $event->active_gain == 1 && $event->active_state == SDL_APPINPUTFOCUS )
- {
-	 $got_event = 1;
-	 last;
- }
+	if ($event->type == SDL_ACTIVEEVENT && $event->active_gain == 1 && $event->active_state == SDL_APPINPUTFOCUS )
+	{
+		$got_event = 1;
+		last;
+	}
 
-last if ($ret == 0 );
+	last if ($ret == 0 );
 }
 
 is( $got_event, 1, '[poll_event] Got an Active event back out') ;
@@ -110,44 +111,68 @@ pass '[set_event_filter] takes a callback';
 
 my $array = SDL::Events::get_key_state();
 isa_ok( $array, 'ARRAY', '[get_key_state] returned and array');
+
+my @mods = ( 
+	KMOD_NONE, 
+	KMOD_LSHIFT,
+	KMOD_RSHIFT,
+	KMOD_LCTRL ,
+	KMOD_RCTRL ,
+	KMOD_LALT  ,
+	KMOD_RALT  ,
+	KMOD_LMETA ,
+	KMOD_RMETA ,
+	KMOD_NUM   ,
+	KMOD_CAPS  ,
+	KMOD_MODE  ,
+);
+my $mpass = 0;
+foreach(@mods)
+{
+	my $mod = SDL::Events::get_mod_state();
+	if( $mod == $_ ){ $mpass = 1; last; }
+}
+is( $mpass, 1, '[get_mod_state] return a mod');
+
+
 SDL::quit();
 
 SKIP:
 {
-skip "Turn SDL_GUI_TEST on", 1 unless $ENV{'SDL_GUI_TEST'};
-SDL::init(SDL_INIT_VIDEO);
- $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
- $event = SDL::Event->new();
+	skip "Turn SDL_GUI_TEST on", 1 unless $ENV{'SDL_GUI_TEST'};
+	SDL::init(SDL_INIT_VIDEO);
+	$display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
+	$event = SDL::Event->new();
 
- #This filters out all ActiveEvents
-my $filter = sub { if($_[0]->type == SDL_ACTIVEEVENT){ return 0} else{ return 1; }};
-my $filtered = 1;
+	#This filters out all ActiveEvents
+	my $filter = sub { if($_[0]->type == SDL_ACTIVEEVENT){ return 0} else{ return 1; }};
+	my $filtered = 1;
 
-SDL::Events::set_event_filter($filter);
+	SDL::Events::set_event_filter($filter);
 
-while(1)
-{
-
-  SDL::Events::pump_events();
-  if(SDL::Events::poll_event($event))
-  {
-  if(  $event->type == SDL_ACTIVEEVENT)
+	while(1)
 	{
-	diag 'We should not be in here. The next test will fail!';
-	$filtered = 0; #we got a problem!
-	print "Hello Mouse!!!\n" if ($event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
-	print "Bye Mouse!!!\n" if (!$event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
+
+		SDL::Events::pump_events();
+		if(SDL::Events::poll_event($event))
+		{
+			if(  $event->type == SDL_ACTIVEEVENT)
+			{
+				diag 'We should not be in here. The next test will fail!';
+				$filtered = 0; #we got a problem!
+				print "Hello Mouse!!!\n" if ($event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
+				print "Bye Mouse!!!\n" if (!$event->active_gain && ($event->active_state == SDL_APPMOUSEFOCUS) );
+			}
+			last if($event->type == SDL_QUIT);
+		}
 	}
-  last if($event->type == SDL_QUIT);
-  }
-}
-is( $filtered, 1, '[set_event_filter] Properly filtered SDL_ACTIVEEVENT');
-SDL::quit();
+	is( $filtered, 1, '[set_event_filter] Properly filtered SDL_ACTIVEEVENT');
+
+	SDL::quit();
 }
 
 my @left = qw/
 eventstate 
-getmodstate 
 setmodstate 
 getkeyname 
 enableunicode 
@@ -168,7 +193,7 @@ TODO:
 	local $TODO = $why;
 	pass "\nThe following functions:\n".join ",", @left; 
 }
-	if( $done[0] eq 'none'){ diag '0% done 0/'.$#left } else { diag  $why} 
+if( $done[0] eq 'none'){ diag '0% done 0/'.$#left } else { diag  $why} 
 
 
 pass 'Are we still alive? Checking for segfaults';
