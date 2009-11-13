@@ -28,11 +28,11 @@ int eventfilter_cb( const void * event)
 	XPUSHs( sv_setref_pv( eventref, "SDL::Event", (void *)event) );
 	PUTBACK;
 	
-	filter_signal = call_sv(eventfiltersv, G_SCALAR);
+	count = call_sv(eventfiltersv, G_SCALAR);
 
 	SPAGAIN;
 
-	//if (count != 1 ) croak("callback returned more than 1 value\n");
+	if (count != 1 ) croak("callback returned more than 1 value\n");
 	
 	filter_signal = POPi;
 
