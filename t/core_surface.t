@@ -97,7 +97,7 @@ SDL::Video::update_rects( $app, $small_rect );
 
 SKIP:
 {
-	skip('new_form is segfaulting on DESTROY of created surface. Read: http://sdlperl.ath.cx/projects/SDLPerl/ticket/53', 1); 
+	skip('new_from is segfaulting on DESTROY of created surface. Read: http://sdlperl.ath.cx/projects/SDLPerl/ticket/53', 1); 
 
 my $other_surface =  SDL::Surface->new_from( $surface->get_pixels, 640, 320, 8, $surface->pitch, 0, 0, 0, 0 ); 
 
