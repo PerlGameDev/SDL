@@ -983,4 +983,8 @@ void
 event_DESTROY(self)
 	SDL_Event *self
 	CODE:
-		safefree( (char *)self );
+//		if (self == NULL || sizeof(self) == 0)
+	//	 printf ("self = %p \n", self, sizeof(*self) );
+		//else
+		safefree(self);
+		

@@ -21,19 +21,23 @@ int eventfilter_cb( const void * event)
 	int count;
 	int filter_signal;
 	SV * eventref = newSV( sizeof(SDL_Event *) );
+	void * copyEvent = safemalloc( sizeof(SDL_Event) );
+	memcpy( copyEvent, event, sizeof(SDL_Event) );
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
 	
-	XPUSHs( sv_setref_pv( eventref, "SDL::Event", (void *)event) );
+	XPUSHs( sv_setref_pv( eventref, "SDL::Event", (void *)copyEvent) );
 	PUTBACK;
+
+//	printf ( "Eventref is %p. Event is %p. CopyEvent is %p \n", eventref, event, copyEvent);
 	
 	count = call_sv(eventfiltersv, G_SCALAR);
 
 	SPAGAIN;
 
-	if (count != 1 ) croak("callback returned more than 1 value\n");
-	
+	if (count != 1 ) croak("callback returned more than 1 value\n");	
+
 	filter_signal = POPi;
 
 	FREETMPS;
