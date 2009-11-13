@@ -148,3 +148,12 @@ events_set_mod_state(mod)
 	SDLMod mod
 	CODE:
 		SDL_SetModState(mod); 
+
+Uint8 
+events_event_state(type, state)
+	Uint8 type
+	int state
+	CODE:
+		RETVAL=SDL_EventState(type, state);
+	OUTPUT:
+		RETVAL 

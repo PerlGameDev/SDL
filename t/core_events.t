@@ -15,6 +15,7 @@ push_event
 poll_event
 wait_event
 set_event_filter 
+event_state
 get_key_state
 get_mod_state
 set_mod_state
@@ -134,7 +135,22 @@ foreach(@mods)
 	is( SDL::Events::get_mod_state(), $_, '[get_mod_state] got the mod properly'); 
 
 }
+SDL::quit();
 
+
+SDL::init(SDL_INIT_VIDEO);
+
+	$display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
+
+SDL::Video::get_video_info();
+
+SDL::Events::push_event( $aevent );
+my $nevent = SDL::Event->new();
+SDL::Events::event_state( SDL_ACTIVEEVENT, SDL_IGNORE);
+SDL::Events::pump_events();
+SDL::Events::poll_event($nevent);
+
+isnt( $nevent->type, SDL_ACTIVEEVENT, '[event_state] works with SDL_IGNORE on SDL_ACTIVEEVENT');
 
 SDL::quit();
 
@@ -173,7 +189,6 @@ SKIP:
 }
 
 my @left = qw/
-eventstate 
 getkeyname 
 enableunicode 
 enablekeyrepeat 
