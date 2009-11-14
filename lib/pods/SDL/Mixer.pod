@@ -177,7 +177,7 @@ Sets the volume for the left or right channels. To do true panning:
 
   $mixer->set_panning($channel, $left, 254 - $left);
 
-=end
+=end verbatim
 
 =head1 AUTHORS 
 
