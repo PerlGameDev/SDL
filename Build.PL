@@ -245,7 +245,7 @@ my $build   = SDL::Build->new(
 	{
 		'YAML'	=> '0.68',
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL' => '0.7.1',
+		'Alien::SDL' => '0.07.2',
 	},
 	build_requires =>
 	{
