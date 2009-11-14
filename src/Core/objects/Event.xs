@@ -61,8 +61,6 @@ event_active ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::ActiveEvent";
 	CODE:
-		RETVAL = NULL;
-		if ( &event != NULL ) 
 		RETVAL = &(event->active);
 	OUTPUT:
 		RETVAL
@@ -120,8 +118,6 @@ event_key ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::KeyboardEvent";
 	CODE:
-		RETVAL = NULL;
-		if ( &event != NULL ) 
 		RETVAL = &(event->key);
 	OUTPUT:
 		RETVAL
@@ -193,8 +189,6 @@ event_key_scancode ( event, ... )
 SDLKey *
 event_key_sym ( event, ... )
 	SDL_Event *event
-	PREINIT:
-		char* CLASS = "SDL::Key";
 	CODE: 
 		SDL_KeyboardEvent * a = &(event->key);
 		SDL_keysym * b        = &(a->keysym);
@@ -212,8 +206,6 @@ event_key_sym ( event, ... )
 SDLMod *
 event_key_mod ( event, ... )
 	SDL_Event *event
-	PREINIT:
-		char* CLASS = "SDL::Mod";
 	CODE: 
 		SDL_KeyboardEvent * a = &(event->key);
 		SDL_keysym * b        = &(a->keysym);
@@ -250,8 +242,6 @@ event_motion ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::MouseMotionEvent";
 	CODE:
-		RETVAL = NULL;
-		if ( &event != NULL ) 
 		RETVAL = &(event->motion);
 	OUTPUT:
 		RETVAL
@@ -353,8 +343,6 @@ event_button ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::MouseButtonEvent";
 	CODE:
-		RETVAL = NULL;
-		if ( &event != NULL ) 
 		RETVAL = &(event->button);
 	OUTPUT:
 		RETVAL
@@ -455,8 +443,6 @@ event_jaxis ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::JoyAxisEvent";
 	CODE:
-		RETVAL = NULL;
-		if ( &event != NULL ) 
 		RETVAL = &(event->jaxis);
 	OUTPUT:
 		RETVAL
@@ -527,8 +513,6 @@ event_jball ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::JoyBallEvent";
 	CODE:
-		RETVAL = NULL;
-		if ( &event != NULL ) 
 		RETVAL = &(event->jball);
 	OUTPUT:
 		RETVAL
@@ -814,8 +798,6 @@ event_expose ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::ExposeEvent";
 	CODE:
-		RETVAL = NULL;
-		if ( &event != NULL ) 
 		RETVAL = &(event->expose);
 	OUTPUT:
 		RETVAL
@@ -841,8 +823,6 @@ event_quit ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::QuitEvent";
 	CODE:
-		RETVAL = NULL;
-		if ( &event != NULL ) 
 		RETVAL = &(event->quit);
 	OUTPUT:
 		RETVAL
@@ -868,8 +848,6 @@ event_user ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::UserEvent";
 	CODE:
-		RETVAL = NULL;
-		if ( &event != NULL ) 
 		RETVAL = &(event->user);
 	OUTPUT:
 		RETVAL
@@ -940,8 +918,6 @@ event_syswm ( event, ... )
 	PREINIT:
 		char *CLASS = "SDL::SysWMEvent";
 	CODE:
-		RETVAL = NULL;
-		if ( &event != NULL ) 
 		RETVAL = &(event->syswm);
 	OUTPUT:
 		RETVAL
@@ -983,8 +959,5 @@ void
 event_DESTROY(self)
 	SDL_Event *self
 	CODE:
-//		if (self == NULL || sizeof(self) == 0)
-	//	 printf ("self = %p \n", self, sizeof(*self) );
-		//else
 		safefree(self);
 		
