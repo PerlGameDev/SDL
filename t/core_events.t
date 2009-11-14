@@ -184,6 +184,11 @@ is( SDL::Events::enable_unicode(-1), 1, '[enable_unicode] return 1 took -1');
 is( SDL::Events::enable_unicode(0),  1,  '[enable_unicode] return 1 took 0');
 is( SDL::Events::enable_unicode(-1), 0, '[enable_unicode] return 1 took -1');
 
+#my $kr =  SDL::Events::enable_key_repeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+my $kr =  SDL::Events::enable_key_repeat( 10 , 10);
+
+is( ($kr == -1 || $kr == 0), 1, '[enable_key_repeat] returned expeceted values');
+
 SDL::quit();
 
 SKIP:

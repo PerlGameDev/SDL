@@ -174,12 +174,14 @@ events_enable_unicode ( enable )
 	OUTPUT:
 		RETVAL
 
-void
+int
 events_enable_key_repeat ( delay, interval )
 	int delay
 	int interval
 	CODE:
-		SDL_EnableKeyRepeat(delay,interval);
+		RETVAL = SDL_EnableKeyRepeat(delay,interval);
+	OUTPUT:
+		RETVAL
 
 
 AV*
