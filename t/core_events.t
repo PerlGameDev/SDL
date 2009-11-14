@@ -147,7 +147,7 @@ SDL::quit();
 
 SDL::init(SDL_INIT_VIDEO);
 
-	$display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
+$display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 
 SDL::Video::get_video_info();
 
@@ -161,8 +161,8 @@ SDL::Events::pump_events();
 my $got = 0; 
 while( SDL::Events::poll_event($nevent)) 
 {
-$got = 1 if  $nevent->type == SDL_ACTIVEEVENT;
-	
+	$got = 1 if  $nevent->type == SDL_ACTIVEEVENT;
+
 }
 is ( $got, 0, '[event_state] works with SDL_IGNORE on SDL_ACTIVEEVENT');
 
@@ -174,7 +174,8 @@ SDL::Events::pump_events();
 my $atleast = 0;
 while( SDL::Events::poll_event($nevent)) 
 {
- $atleast = 1 if ( $nevent->type == SDL_ACTIVEEVENT)
+	$atleast = 1 if ( $nevent->type == SDL_ACTIVEEVENT)
+
 }
 is ( $atleast, 1,  '[event_state] works with SDL_ENABLE on SDL_ACTIVEEVENT');
 
@@ -189,6 +190,28 @@ my $kr =  SDL::Events::enable_key_repeat( 10 , 10);
 
 is( ($kr == -1 || $kr == 0), 1, '[enable_key_repeat] returned expeceted values');
 
+SDL::Events::pump_events();
+
+my $ms = SDL::Events::get_mouse_state();
+
+isa_ok($ms, 'ARRAY', '[get_mouse_state] got back array size of '.@{$ms}.' ');
+
+$ms = SDL::Events::get_relative_mouse_state();
+
+isa_ok($ms, 'ARRAY', '[get_relative_mouse_state] got back array size of '.@{$ms}.' ');
+
+$ms = SDL::Events::get_app_state();
+
+is( ( $ms >= SDL_APPACTIVE||SDL_APPINPUTFOCUS  && $ms <= SDL_APPMOUSEFOCUS ), 1, 
+	'[get_app_state] Returns value within parameter '.$ms );
+
+is( SDL::Events::joystick_event_state(SDL_ENABLE), SDL_ENABLE, '[joystick_event_state] return SDL_IGNORE correctly');
+is( SDL::Events::joystick_event_state(SDL_QUERY), SDL_ENABLE, '[joystick_event_state] return SDL_ENABLE took SDL_QUERY');
+is( SDL::Events::joystick_event_state(SDL_IGNORE),  SDL_IGNORE,  '[joystick_event_state] return SDL_IGNORE correctly');
+is( SDL::Events::joystick_event_state(SDL_QUERY), SDL_IGNORE, '[joystick_event_state] return  SDL_IGNORE took SDL_QUERY ');
+
+
+
 SDL::quit();
 
 SKIP:
@@ -197,7 +220,7 @@ SKIP:
 	SDL::init(SDL_INIT_VIDEO);
 	$display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 	$event = SDL::Event->new();
-	
+
 	#This filters out all ActiveEvents
 	my $filter = sub { if($_[0]->type == SDL_ACTIVEEVENT){ return 0} else{ return 1; }};
 	my $filtered = 1;
