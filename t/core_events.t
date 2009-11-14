@@ -20,6 +20,12 @@ get_key_state
 get_key_name
 get_mod_state
 set_mod_state
+enable_unicode 
+enable_key_repeat 
+get_mouse_state 
+get_relative_mouse_state 
+get_app_state 
+joystick_event_state 
 /;
 
 my @done_event =qw/
@@ -173,6 +179,11 @@ while( SDL::Events::poll_event($nevent))
 is ( $atleast, 1,  '[event_state] works with SDL_ENABLE on SDL_ACTIVEEVENT');
 
 
+is( SDL::Events::enable_unicode(1), 0, '[enable_unicode] return 0 took 1');
+is( SDL::Events::enable_unicode(-1), 1, '[enable_unicode] return 1 took -1');
+is( SDL::Events::enable_unicode(0),  1,  '[enable_unicode] return 1 took 0');
+is( SDL::Events::enable_unicode(-1), 0, '[enable_unicode] return 1 took -1');
+
 SDL::quit();
 
 SKIP:
@@ -210,15 +221,6 @@ SKIP:
 }
 
 my @left = qw/
-enableunicode 
-enablekeyrepeat 
-getmousestate 
-getrelativemousestate 
-getappstate 
-joystickeventstate 
-StartTextInput 
-StopTextInput 
-SetTextInputRect 
 /;
 
 my $why = '[Percentage Completion] '.int( 100 * ($#done +1 ) / ($#done + $#left + 2  ) ) .'% implementation. '.($#done +1 ).'/'.($#done+$#left + 2 ); 

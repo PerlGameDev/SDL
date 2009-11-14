@@ -676,42 +676,6 @@ CDTrack ( cd, number )
 	OUTPUT:
 		RETVAL
 
-int
-EnableUnicode ( enable )
-	int enable
-	CODE:
-		RETVAL = SDL_EnableUNICODE(enable);
-	OUTPUT:
-		RETVAL
-
-void
-EnableKeyRepeat ( delay, interval )
-	int delay
-	int interval
-	CODE:
-		SDL_EnableKeyRepeat(delay,interval);
-
-Uint32
-GetModState ()
-	CODE:
-		RETVAL = SDL_GetModState();
-	OUTPUT:
-		RETVAL
-
-void
-SetModState ( state )
-	Uint32 state
-	CODE:
-		SDL_SetModState(state);
-
-char *
-get_key_name ( sym )
-	int sym
-	CODE:
-		RETVAL = SDL_GetKeyName(sym);
-	OUTPUT:
-		RETVAL
-
 #ifdef HAVE_SDL_IMAGE
 
 SDL_Surface *
@@ -741,15 +705,6 @@ MUSTLOCK ( surface )
 =cut
 
 
-Uint8
-GetAppState ()
-	CODE:
-		RETVAL = SDL_GetAppState();
-	OUTPUT:
-		RETVAL
-
-
-
 void
 WarpMouse ( x, y )
 	Uint16 x
@@ -757,33 +712,6 @@ WarpMouse ( x, y )
 	CODE:
 		SDL_WarpMouse(x,y);
 
-AV*
-GetMouseState ()
-	CODE:
-		Uint8 mask;
-		int x;
-		int y;
-		mask = SDL_GetMouseState(&x,&y);
-		RETVAL = newAV();
-		av_push(RETVAL,newSViv(mask));
-		av_push(RETVAL,newSViv(x));
-		av_push(RETVAL,newSViv(y));
-	OUTPUT:
-		RETVAL	
-
-AV*
-GetRelativeMouseState ()
-	CODE:
-		Uint8 mask;
-		int x;
-		int y;
-		mask = SDL_GetRelativeMouseState(&x,&y);
-		RETVAL = newAV();
-		av_push(RETVAL,newSViv(mask));
-		av_push(RETVAL,newSViv(x));
-		av_push(RETVAL,newSViv(y));
-	OUTPUT:
-		RETVAL	
 
 SDL_Cursor *
 NewCursor ( data, mask, x ,y )
@@ -1938,100 +1866,12 @@ NetRead32 ( area )
 		RETVAL
 
 #endif 
-Uint32
-OverlayFormat ( overlay, ... )
-	SDL_Overlay *overlay
-	CODE:
-		if ( items > 1 ) 
-			overlay->format = SvIV(ST(1));
-		RETVAL = overlay->format;
-	OUTPUT:
-		RETVAL
-
-int 
-OverlayW ( overlay, ... )
-	SDL_Overlay *overlay
-	CODE:
-		if ( items > 1 ) 
-			overlay->w = SvIV(ST(1));
-		RETVAL = overlay->w;
-	OUTPUT:
-		RETVAL
-
-int
-OverlayH ( overlay, ... )
-	SDL_Overlay *overlay
-	CODE:
-		if ( items > 1 )
-			overlay->h = SvIV(ST(1));
-		RETVAL = overlay->h;
-	OUTPUT:
-		RETVAL 
-
-int
-OverlayPlanes ( overlay, ... )
-        SDL_Overlay *overlay
-        CODE:
-                if ( items > 1 )
-                        overlay->planes = SvIV(ST(1));
-                RETVAL = overlay->planes;
-        OUTPUT:
-                RETVAL
-
-Uint32
-OverlayHW ( overlay )
-	SDL_Overlay *overlay
-	CODE:
-		RETVAL = overlay->hw_overlay;
-	OUTPUT:
-		RETVAL
-
-Uint16*
-OverlayPitches ( overlay )
-	SDL_Overlay *overlay
-	CODE:
-		RETVAL = overlay->pitches;
-	OUTPUT:
-		RETVAL
-
-Uint8**
-OverlayPixels ( overlay )
-	SDL_Overlay *overlay
-	CODE:
-		RETVAL = overlay->pixels;
-	OUTPUT:
-		RETVAL
-
-int
-ResizeEventW ( e )
-	SDL_Event *e
-	CODE:
-		RETVAL = e->resize.w;
-	OUTPUT:
-		RETVAL
-
-int
-ResizeEventH ( e )
-	SDL_Event *e
-	CODE:
-		RETVAL = e->resize.h;
-	OUTPUT:
-		RETVAL
 
 char*
 AudioDriverName ()
 	CODE:
 		char name[32];
 		RETVAL = SDL_AudioDriverName(name,32);
-	OUTPUT:
-		RETVAL
-
-Uint32
-GetKeyState ( k )
-	SDLKey k
-	CODE:
-		if (k >= SDLK_LAST) Perl_croak (aTHX_ "Key out of range");	
-		RETVAL = SDL_GetKeyState(NULL)[k];
 	OUTPUT:
 		RETVAL
 

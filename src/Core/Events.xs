@@ -124,6 +124,7 @@ events_get_key_state()
 
 	Uint8* KeyArray = SDL_GetKeyState(&value);
 	RETVAL = newAV();
+	sv_2mortal((SV*)RETVAL);	
 	int i;
 	for( i = 0; i <value; i++)
 	{
@@ -131,8 +132,7 @@ events_get_key_state()
 		av_push( RETVAL, scalar);
 	
 	}
-	sv_2mortal(RETVAL);	
-
+	
 	OUTPUT:
 		RETVAL
 	 
@@ -165,3 +165,66 @@ events_get_key_name(key)
 		RETVAL = SDL_GetKeyName(key);
 	OUTPUT:
 		RETVAL
+
+int
+events_enable_unicode ( enable )
+	int enable
+	CODE:
+		RETVAL = SDL_EnableUNICODE(enable);
+	OUTPUT:
+		RETVAL
+
+void
+events_enable_key_repeat ( delay, interval )
+	int delay
+	int interval
+	CODE:
+		SDL_EnableKeyRepeat(delay,interval);
+
+
+AV*
+events_get_mouse_state ()
+	CODE:
+		Uint8 mask;
+		int x;
+		int y;
+		mask = SDL_GetMouseState(&x,&y);
+		RETVAL = newAV();
+		sv_2mortal((SV*)RETVAL);
+		av_push(RETVAL,newSViv(mask));
+		av_push(RETVAL,newSViv(x));
+		av_push(RETVAL,newSViv(y));
+	OUTPUT:
+		RETVAL	
+
+AV*
+events_get_relative_mouse_state ()
+	CODE:
+		Uint8 mask;
+		int x;
+		int y;
+		mask = SDL_GetRelativeMouseState(&x,&y);
+		RETVAL = newAV();
+		sv_2mortal((SV*)RETVAL);
+		av_push(RETVAL,newSViv(mask));
+		av_push(RETVAL,newSViv(x));
+		av_push(RETVAL,newSViv(y));
+	OUTPUT:
+		RETVAL	
+
+Uint8
+events_get_app_state ()
+	CODE:
+		RETVAL = SDL_GetAppState();
+	OUTPUT:
+		RETVAL
+
+int
+events_joystick_event_state (state)
+	int state;
+	CODE:
+		RETVAL = SDL_JoystickEventState(state);
+	OUTPUT:
+		RETVAL
+
+
