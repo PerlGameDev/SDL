@@ -142,22 +142,44 @@ code can be :
 
 =over 4
 
-		SDL_errorcode  	The corresponding error string
+=item SDL_errorcode
 
-		SDL_ENOMEM     	Out of memory
-		SDL_EFREAD	Error reading from datastream
-		SDL_EFWRITE	Error writing to datastream
-		SDL_EFSEEK	Error seeking in datastream
-		SDL_UNSUPPORTED	Unknown SDL error
-		SDL_LASTERROR	Unknown SDL error
-		any other value	Unknown SDL error
+The corresponding error string
 
+=item SDL_ENOMEM
 
-		Note 1: SDL_LASTERROR marks the highest numbered predefined error.
-		Note 2: SDL also defines SDL_OutOfMemory() and SDL_Unsupported() for internal use
-		which are equivalent to SDL_Error(SDL_ENOMEM) and SDL_Error(SDL_UNSUPPORTED) respectively. 
+Out of memory
+
+=item SDL_EFREAD
+
+Error reading from datastream
+
+=item SDL_EFWRITE
+
+Error writing to datastream
+
+=item SDL_EFSEEK
+
+Error seeking in datastream
+
+=item SDL_UNSUPPORTED
+
+Unknown SDL error
+
+=item SDL_LASTERROR
+
+Unknown SDL error
+
+=item any other value
+
+Unknown SDL error
 
 =back
+
+
+Note 1: SDL_LASTERROR marks the highest numbered predefined error.
+Note 2: SDL also defines SDL_OutOfMemory() and SDL_Unsupported() for internal use
+which are equivalent to SDL_Error(SDL_ENOMEM) and SDL_Error(SDL_UNSUPPORTED) respectively. 
 
 SDL::Error doesn't returns any value.
 
