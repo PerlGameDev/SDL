@@ -45,7 +45,7 @@ SDL_VideoInfo *		O_OBJECT
 SDL_version *		O_OBJECT
 SDL_SysWMInfo *		O_OBJECT
 SDL_Cursor *		T_PTR
-SDL_AudioSpec *		T_PTR
+SDL_AudioSpec *		O_OBJECT
 SDL_AudioCVT *		T_PTR
 Mix_Fading		T_UV
 Mix_Chunk *		O_OBJECT

@@ -752,6 +752,8 @@ ShowCursor ( toggle )
 	OUTPUT: 
 		RETVAL
 
+=for comment
+
 SDL_AudioSpec *
 NewAudioSpec ( freq, format, channels, samples )
 	int freq
@@ -871,7 +873,9 @@ LoadWAV ( filename, spec )
 error:
 	OUTPUT:
 		RETVAL
-	
+
+=cut
+
 #ifdef HAVE_SDL_MIXER
 
 void

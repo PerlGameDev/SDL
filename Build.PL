@@ -105,6 +105,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	AudioSpec => {
+		file      => {
+			from  => 'src/Core/objects/AudioSpec.xs',
+			to    => 'lib/SDL/AudioSpec.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	MixChunk => {
 		file      => {
 			from  => 'src/Mixer/objects/MixChunk.xs',
