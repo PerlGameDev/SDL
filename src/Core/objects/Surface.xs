@@ -112,21 +112,12 @@ surface_get_pixels(surface)
 	  RETVAL
 
 void
-surface_set_pixels(surface, pixels)
+surface_set_pixels(surface, index, value)
 	SDL_Surface *surface
-
-	SV *pixels
-
-	PREINIT:
-	  STRLEN len;
-	  void *p;
-
+	int index
+	unsigned int value
 	CODE:
-	  p = SvPV(pixels, len);
-	  if (len > surface->pitch*surface->h)
-		len = surface->pitch*surface->h;
-	  memcpy(surface->pixels, p, len);
-
+	((unsigned int*)surface->pixels)[index] = value;
 
 void
 surface_DESTROY(surface)

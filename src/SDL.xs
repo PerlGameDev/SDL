@@ -689,22 +689,6 @@ IMG_Load ( filename )
 
 #endif
 
-
-=for docs
-
-
-int
-MUSTLOCK ( surface )
-	SDL_Surface *surface
-	CODE:
-		RETVAL = SDL_MUSTLOCK(surface);
-	OUTPUT:
-		RETVAL		
-
-
-=cut
-
-
 void
 WarpMouse ( x, y )
 	Uint16 x
