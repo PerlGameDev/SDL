@@ -54,6 +54,17 @@ glyph_metrics
 size_text	  	
 size_UTF8	  	
 size_UNICODE	  	
+render_utf8_solid	  	
+render_unicode_solid	  	
+render_glyph_solid	  	
+render_text_shaded	  	
+render_utf8_shaded	  	
+render_unicode_shaded	  	
+render_glyph_shaded	  	
+render_text_blended	  	
+render_utf8_blended	  	
+render_unicode_blended	  	
+render_glyph_blended	  
 /;
 
 my $why
