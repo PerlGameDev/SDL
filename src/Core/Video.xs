@@ -524,14 +524,14 @@ video_GL_swap_buffers ()
 		SDL_GL_SwapBuffers ();
 
 void
-wm_set_caption ( title, icon )
+video_wm_set_caption ( title, icon )
 	char *title
 	char *icon
 	CODE:
 		SDL_WM_SetCaption(title,icon);
 
 AV *
-wm_get_caption ()
+video_wm_get_caption ()
 	CODE:
 		char *title,*icon;
 		SDL_WM_GetCaption(&title,&icon);
@@ -542,13 +542,13 @@ wm_get_caption ()
 		RETVAL
 
 void
-wm_set_icon ( icon )
+video_wm_set_icon ( icon )
 	SDL_Surface *icon
 	CODE:
 		SDL_WM_SetIcon(icon,NULL);
 
 Uint32
-wm_grab_input ( mode )
+video_wm_grab_input ( mode )
 	Uint32 mode
 	CODE:
 		RETVAL = SDL_WM_GrabInput(mode);
@@ -556,16 +556,27 @@ wm_grab_input ( mode )
 		RETVAL
 
 int
-wm_iconify_window ()
+video_wm_iconify_window ()
 	CODE:
 		RETVAL = SDL_WM_IconifyWindow();
 	OUTPUT:
 		RETVAL
 
 int
-wm_toggle_fullscreen ( surface )
+video_wm_toggle_fullscreen ( surface )
 	SDL_Surface *surface
 	CODE:
 		RETVAL = SDL_WM_ToggleFullScreen(surface);
 	OUTPUT:
 		RETVAL
+
+int
+video_MUSTLOCK ( surface )
+	SDL_Surface *surface
+	CODE:
+		RETVAL = SDL_MUSTLOCK(surface);
+	OUTPUT:
+		RETVAL		
+
+
+
