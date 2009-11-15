@@ -1,6 +1,11 @@
 package SDL::Tutorial::MoP;
 use strict;
 
+#use SDL::Tutorial::MoP::Models;
+#my $model = new SDL::Tutorial::MoP::Models;
+#my @map   = $model->map();
+#print ${$map[8]}[15]; 
+
 BEGIN {
     use Exporter ();
     use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -104,7 +109,6 @@ perl(1).
 =cut
 
 #################### main pod documentation end ###################
-
 
 1;
 # The preceding line will help the module return a true value

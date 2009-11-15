@@ -36,7 +36,8 @@ sub load_map
 	open (FH, $path)  || die "Can not open file $_: $!";
 	while(<FH>)
 	{
-		push(@map, split(//, $_));
+		my @row = split(//, $_);
+		push(@map, \@row);
 	}
 	close(FH);
 }
@@ -47,5 +48,3 @@ sub map
 }
 
 1;
-# The preceding line will help the module return a true value
-
