@@ -63,13 +63,6 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
-	WManagement => {
-		file      => {
-			from  => 'src/Core/WManagement.xs',
-			to    => 'lib/SDL/WManagement.xs',
-		},
-		libraries => [qw( SDL )],
-	},
 	Video => {
 		file      => {
 			from  => 'src/Core/Video.xs',
