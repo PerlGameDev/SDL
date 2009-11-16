@@ -225,4 +225,17 @@ number of milliseconds provided as the argument.  The actual delay may be longer
 than the specified depending on the underlying OS.
 
 
+=head1 STUFF TO BE DONE for the documentation
 
+
+	SDL:: to improve
+	SDL::Video add examples, need general improvement.
+	Event.pod need to be checked against Events.pod
+	SDL::Events need to be completed
+	SDL::Mouse need to be created.
+	SDL::Joystick need to be created.
+	SDL::Audio need to be created.
+	SDL::Cdrom need some examples. 
+	SDL::MultiThread to be created( once implemented  ). 
+	SDL::Time to be created.
+	SDL::RW to be created.
