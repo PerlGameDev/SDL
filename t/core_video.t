@@ -234,7 +234,9 @@ pass '[wm_set_icon] ran';
 
 
 
-
+SKIP:
+{
+	skip 'Turn on SDL_GUI_TEST', 6 unless $ENV{SDL_GUI_TEST};
 SDL::Video::wm_grab_input(SDL_GRAB_ON);
 pass '[wm_grab_input] ran with SDL_GRAB_ON';
 
@@ -252,7 +254,7 @@ is( $ic, 1,'[wm_iconify_window] ran');
 
 SDL::Video::wm_toggle_fullscreen($display);
 pass '[wm_toggle_fullscreen] ran';
-
+}
 
 my @left = qw/
 /;
