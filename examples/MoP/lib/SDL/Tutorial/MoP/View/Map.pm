@@ -19,9 +19,26 @@ BEGIN {
     %EXPORT_TAGS = ();
 }
 
+use constant
+{
+	MOP_TOP    => 0,
+	MOP_BOTTOM => 1,
+	MOP_RIGHT  => 2,
+	MOP_LEFT   => 3	
+};
+
 my $screen;
-my $model = new SDL::Tutorial::MoP::Models;
-my @map   = $model->map();
+my $screen_width  = 640;
+my $screen_height = 480;
+my $tile_size     = 10;
+my $model         = new SDL::Tutorial::MoP::Models;
+my @map           = $model->map();
+
+my @map_center    = (32, 24); # x, y
+
+my ($volume, $dirs) = splitpath(rel2abs(__FILE__));
+my $path            = catpath($volume, catfile($dirs, 'MoP/../../tiles.bmp'));
+my $tiles           = SDL::Video::load_BMP($path);
 
 sub draw_map
 {
@@ -31,27 +48,49 @@ sub draw_map
 
 	carp 'Unable to set 640x480x32 video ' . SDL::get_error() if(!$screen);
 
-	my ($volume, $dirs) = splitpath(rel2abs(__FILE__));
-	my $path            = catpath($volume, $dirs, catfile('MoP', '../../', 'tiles.bmp'));
-    my $tiles = SDL::Video::load_BMP($path);
+	move_map(MOP_LEFT);
 
-	carp 'Unable to load tiles ' . SDL::get_error() if(!$tiles);
+	my $x_offset = $map_center[0] - ($screen_width  / $tile_size / 2);
+	my $y_offset = $map_center[1] - ($screen_height / $tile_size / 2);
 
-	for (my $y = 0; $y < 48; $y++)
+	   $y_offset = 0 if($y_offset < 0);
+	   $x_offset = 0 if($x_offset < 0);
+
+	for (my $y = 0; $y < $screen_height / $tile_size; $y++)
 	{
-		for (my $x = 0; $x < 64; $x++)
+		for (my $x = 0; $x < $screen_width / $tile_size; $x++)
 		{
-	    	my $tiles_rect  = SDL::Rect->new (${$map[$y]}[$x] ? 40 : 50, 0, 10, 10);
-	    	my $screen_rect = SDL::Rect->new ($x * 10, $y * 10, 640, 480);
+	    	my $tiles_rect  = get_tile(${$map[$y + $y_offset]}[$x + $x_offset] ? 5 : 6);
+	    	my $screen_rect = SDL::Rect->new($x * $tile_size, $y * $tile_size, 
+	    	                                 $screen_width, $screen_height);
 	
 	    	SDL::Video::blit_surface( $tiles, $tiles_rect, $screen, $screen_rect );
 		}
 	}
-    SDL::Video::update_rect( $screen, 0, 0, 640, 480 ); 
+    SDL::Video::update_rect( $screen, 0, 0, $screen_width, $screen_height ); 
 
 	sleep(5);
 
     return 1;
+}
+
+sub move_map
+{
+	my $direction = shift;
+	
+	$map_center[0]++;
+}
+
+sub get_tile
+{
+	my $index = shift || 0;	
+
+	carp 'Unable to load tiles ' . SDL::get_error() if(!$tiles);
+
+	my $x = ($index * $tile_size) % $tiles->w;
+	my $y = int(($index * $tile_size) / $tiles->w) * $tile_size;
+	
+  	return SDL::Rect->new($x, $y, $tile_size, $tile_size);
 }
 
 1;
