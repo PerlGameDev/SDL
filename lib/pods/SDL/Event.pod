@@ -384,35 +384,117 @@ The X/Y coordinates of the mouse at press/release time
 
 =head2 Joystick axis events
 
+A C<SDL_JOYAXISMOTION> event occurs whenever a user moves an axis on the joystick.
+
 =head3 jaxis_which
+
+The field C<jaxis_which> is the index of the joystick that reported the event.
 
 =head3 jaxis_axis
 
+The C<jaxis_axis> is the index of the axis (for a more detailed explaination see the Joystick section).
+
 =head3 jaxis_value
+
+C<jaxis_value> is the current position of the axis (range: -32768 to 32767).
 
 =head2 Joystick button events
 
+A C<SDL_JOYBUTTONDOWN> or C<SDL_JOYBUTTONUP> event occurs when ever a user presses 
+or releases a button on a joystick.
+
 =head3 jbutton_which
+
+The field C<jbutton_which> is the index of the joystick that reported the event.
 
 =head3 jbutton_button
 
+The C<jbutton_button> is the index of the button (for a more detailed explanation see the Joystick section).
+
 =head3 jbutton_state
+
+C<jbutton_state> is the current state of the button which is either C<jbutton_SDL_PRESSED> 
+or C<jbutton_SDL_RELEASED>. 
 
 =head2 Joystick hat events
 
+A C<SDL_JOYHATMOTION> event occurs when ever a user moves a hat on the joystick. 
+
 =head3 jhat_which
+
+The field C<jhat_which> is the index of the joystick that reported the event.
 
 =head3 jhat_hat
 
+C<jhat_hat> is the index of the hat (for a more detailed explanation see the Joystick section).
+
 =head3 jhat_value
+
+C<jhat_value> is the current position of the hat. It is a bitwise OR'd combination of the following 
+values (whose meanings should be pretty obvious):
+
+=over 4
+
+=item *
+
+C<SDL_HAT_CENTERED>
+
+=item *
+
+C<SDL_HAT_UP>
+
+=item *
+
+C<SDL_HAT_RIGHT>
+
+=item *
+
+C<SDL_HAT_DOWN>
+
+=item *
+
+C<SDL_HAT_LEFT>
+
+=back
+
+The following defines are also provided:
+
+=over 4
+
+=item *
+
+C<SDL_HAT_RIGHTUP>
+
+=item *
+
+C<SDL_HAT_RIGHTDOWN>
+
+=item *
+
+C<SDL_HAT_LEFTUP>
+
+=item *
+
+C<SDL_HAT_LEFTDOWN>
+
+=back
 
 =head2 Joystrick trackball events
 
+A C<SDL_JOYBALLMOTION> event occurs when a user moves a trackball on the joystick.
+
 =head3 jball_which
+
+The field C<jball_which> is the index of the joystick that reported the event.
 
 =head3 jball_ball
 
+C<jball_ball> is the index of the trackball (for a more detailed explanation see the Joystick section).
+
 =head3 jball_xrel, jball_yrel
+
+Trackballs only return relative motion, this is the change in position on the ball since it was last 
+polled (last cycle of the event loop) and it is stored in C<jball_xrel> and C<jball_yrel>.
 
 =head2 Window resize events
 
