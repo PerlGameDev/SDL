@@ -51,15 +51,22 @@ audio_load_wav ( filename, spec )
 		Uint8 *buf;
 		Uint32 len;
 
-		RETVAL = newAV();
 		temp = SDL_LoadWAV(filename,spec,&buf,&len);
-		if ( ! temp ) goto error;
+		if ( ! temp ) 
+		{
+		  warn("Error in SDL_LoadWAV"); 
+		  RETVAL = newAV(); 	
+		  RETVAL = sv_2mortal((SV*)RETVAL ); 
+		}
+		else
+		{	
+		RETVAL = newAV();
+		RETVAL = sv_2mortal((SV*)RETVAL );
 		av_push(RETVAL,newSViv(PTR2IV(temp)));
 		av_push(RETVAL,newSViv(PTR2IV(buf)));
 		av_push(RETVAL,newSViv(len));
-error:
+		}
 	OUTPUT:
-		Perl_warn("Error in SDL_LoadWAV");
 		RETVAL
 
 void
