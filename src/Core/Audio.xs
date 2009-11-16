@@ -33,6 +33,16 @@ audio_get_audio_status ()
 		RETVAL
 
 void
+audio_lock_audio ()
+	CODE:
+		SDL_LockAudio();
+
+void
+audio_unlock_audio ()
+	CODE:
+		SDL_UnlockAudio();
+
+void
 audio_close_audio ()
 	CODE:
 		SDL_CloseAudio();

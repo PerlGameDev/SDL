@@ -12,6 +12,8 @@ my @done = qw/
     pause_audio
     close_audio
     get_audio_status
+    lock_audio
+    unlock_audio
     /;
 
 my $desired = SDL::AudioSpec->new;
@@ -41,6 +43,9 @@ SDL::Audio::pause_audio(0);
 is( SDL::Audio::get_audio_status, SDL_AUDIO_PLAYING,
     '[get_audio_status playing]' );
 
+SDL::Audio::lock_audio();
+SDL::Audio::unlock_audio();
+
 SDL::Audio::close_audio();
 
 is( SDL::Audio::get_audio_status, SDL_AUDIO_STOPPED,
@@ -53,8 +58,6 @@ my @left = qw/
     build_audio_cvt
     convert_audio
     mix_audio
-    lock_audio
-    unlock_audio
     /;
 
 my $why

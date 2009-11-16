@@ -746,16 +746,6 @@ ConvertAudioData ( cvt, data, len )
 		RETVAL = SDL_ConvertAudio(cvt);
 	OUTPUT:
 		RETVAL			
-	
-void
-LockAudio ()
-	CODE:
-		SDL_LockAudio();
-
-void
-UnlockAudio ()
-	CODE:
-		SDL_UnlockAudio();
 
 void
 FreeWAV ( buf )
