@@ -747,31 +747,6 @@ ConvertAudioData ( cvt, data, len )
 	OUTPUT:
 		RETVAL			
 
-void
-FreeWAV ( buf )
-	Uint8 *buf
-	CODE:
-		SDL_FreeWAV(buf);
-
-AV *
-LoadWAV ( filename, spec )
-	char *filename
-	SDL_AudioSpec *spec
-	CODE:
-		SDL_AudioSpec *temp;
-		Uint8 *buf;
-		Uint32 len;
-
-		RETVAL = newAV();
-		temp = SDL_LoadWAV(filename,spec,&buf,&len);
-		if ( ! temp ) goto error;
-		av_push(RETVAL,newSViv(PTR2IV(temp)));
-		av_push(RETVAL,newSViv(PTR2IV(buf)));
-		av_push(RETVAL,newSViv(len));
-error:
-	OUTPUT:
-		RETVAL
-
 =cut
 
 #ifdef HAVE_SDL_MIXER

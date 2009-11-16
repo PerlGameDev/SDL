@@ -42,6 +42,33 @@ audio_unlock_audio ()
 	CODE:
 		SDL_UnlockAudio();
 
+AV *
+audio_load_wav ( filename, spec )
+	char *filename
+	SDL_AudioSpec *spec
+	CODE:
+		SDL_AudioSpec *temp;
+		Uint8 *buf;
+		Uint32 len;
+
+		RETVAL = newAV();
+		temp = SDL_LoadWAV(filename,spec,&buf,&len);
+		if ( ! temp ) goto error;
+		av_push(RETVAL,newSViv(PTR2IV(temp)));
+		av_push(RETVAL,newSViv(PTR2IV(buf)));
+		av_push(RETVAL,newSViv(len));
+error:
+	OUTPUT:
+		Perl_warn("Error in SDL_LoadWAV");
+		RETVAL
+
+void
+audio_free_wav ( audio_buf )
+	Uint8 *audio_buf
+	CODE:
+		SDL_FreeWAV(audio_buf);
+
+
 void
 audio_close_audio ()
 	CODE:

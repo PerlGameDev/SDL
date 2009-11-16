@@ -51,6 +51,17 @@ SDL::Audio::close_audio();
 is( SDL::Audio::get_audio_status, SDL_AUDIO_STOPPED,
     '[get_audio_status stopped]' );
 
+{
+    local $TODO = 1;
+
+    # I'm not sure why this does give us the correct params
+    my ( $wav_spec, $audio_buf, $audio_len )
+        = @{ SDL::Audio::load_wav( 'test/sample.wav', $obtained ) };
+    isa_ok( $wav_spec,  'SDL::AudioSpec' );
+    isa_ok( $audio_len, 3 );
+    SDL::Audio::free_wav($audio_buf);
+};
+
 my @left = qw/
     load_wav
     free_wav
