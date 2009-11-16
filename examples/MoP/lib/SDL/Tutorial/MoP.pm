@@ -1,10 +1,6 @@
 package SDL::Tutorial::MoP;
 use strict;
-
-#use SDL::Tutorial::MoP::Models;
-#my $model = new SDL::Tutorial::MoP::Models;
-#my @map   = $model->map();
-#print ${$map[8]}[15]; 
+use SDL::Tutorial::MoP::View::Map qw(draw_map);
 
 BEGIN {
     use Exporter ();
@@ -36,13 +32,13 @@ See Also   :
 
 #################### subroutine header end ####################
 
-
 sub new
 {
     my ($class, %parameters) = @_;
-
     my $self = bless ({}, ref ($class) || $class);
-
+    
+    draw_map();
+    
     return $self;
 }
 
