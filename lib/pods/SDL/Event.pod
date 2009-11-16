@@ -66,7 +66,7 @@ or by setting all the needed data manually in order to push the event to the que
 SDL::Event is a union of all event structures used in SDL, using it is a simple matter of knowing 
 which union member relates to which event C<type>.
 
- print 'heureka' if $event->type = SDL_MOUSEBUTTONDOWN;
+ print 'heureka' if $event->type == SDL_MOUSEBUTTONDOWN;
 
 Available type constants:
 
@@ -138,11 +138,102 @@ L<SDL_SYSWMEVENT|/active> - Platform-dependent window manager event.
 
 =back
 
-TODO: SDL_EVENTMASK()
+Event types are grouped by masks. C<SDL_EVENTMASK($type)> will return the proper mask for the given C<type>.
 
-=head2 active
+Available event mask constants:
 
-C<active> is a member of the C<SDL::Event> union and is used when an event of type C<SDL_ACTIVEEVENT> is reported.
+=over 4
+
+=item *
+
+SDL_ACTIVEEVENTMASK
+
+=item *
+
+SDL_KEYDOWNMASK
+
+=item *
+
+SDL_KEYUPMASK
+
+=item *
+
+SDL_KEYEVENTMASK
+
+=item *
+
+SDL_MOUSEMOTIONMASK
+
+=item *
+
+SDL_MOUSEBUTTONDOWNMASK
+
+=item *
+
+SDL_MOUSEBUTTONUPMASK
+
+=item *
+
+SDL_MOUSEEVENTMASK
+
+=item *
+
+SDL_JOYAXISMOTIONMASK
+
+=item *
+
+SDL_JOYBALLMOTIONMASK
+
+=item *
+
+SDL_JOYHATMOTIONMASK
+
+=item *
+
+SDL_JOYBUTTONDOWNMASK
+
+=item *
+
+SDL_JOYBUTTONUPMASK
+
+=item *
+
+SDL_JOYEVENTMASK
+
+=item *
+
+SDL_VIDEORESIZEMASK
+
+=item *
+
+SDL_VIDEOEXPOSEMASK
+
+=item *
+
+SDL_QUITMASK
+
+=item *
+
+SDL_SYSWMEVENTMASK
+
+=back
+
+This way you can check if a given C<type> matches a mask:
+
+ (SDL_JOYBUTTONDOWN   & SDL_MOUSEEVENTMASK) # is false
+ (SDL_MOUSEBUTTONDOWN & SDL_MOUSEEVENTMASK) # is true
+ (SDL_MOUSEBUTTONUP   & SDL_MOUSEEVENTMASK) # is true
+ (SDL_MOUSEMOTION     & SDL_MOUSEEVENTMASK) # is true
+ 
+ # and also true is:
+ 
+ (SDL_MOUSEEVENTMASK == SDL_EVENTMASK(SDL_MOUSEBUTTONDOWN) 
+                      | SDL_EVENTMASK(SDL_MOUSEBUTTONUP) 
+                      | SDL_EVENTMASK(SDL_MOUSEMOTION))
+
+=head2 Application visibility events
+
+C<active> is used when an event of type C<SDL_ACTIVEEVENT> is reported.
 
 When the mouse leaves or enters the window area a C<SDL_APPMOUSEFOCUS> type activation event occurs, 
 if the mouse entered the window then B<gain> will be 1, otherwise B<gain> will be 0. 
@@ -165,19 +256,33 @@ A new ActiveEvent (to fake focus loss) will be created like this:
 
  # I think this is wrong, ->active_type() should get SDL_APPMOUSEFOCUS, but what state gets?
 
-=head3 active_type
-
 =head3 active_gain
+
+See C<active>. 0 if the event is a loss or 1 if it is a gain.
 
 =head3 active_state
 
-=head2 key
+A bitmask of the following values: SDL_APPMOUSEFOCUS if mouse focus was gained or lost, 
+SDL_APPINPUTFOCUS if input focus was gained or lost, and SDL_APPACTIVE if the application was iconified (gain=0) or restored(gain=1).
 
-=head3 key_type
+=head2 Keyboard events
+
+C<key> is used when an event of type C<SDL_KEYDOWN> or C<SDL_KEYUP> is reported.
+
+The type and state actually report the same information, they just use different values to do it. 
+A keyboard event generally occurs when a key is released (C<type=SDL_KEYUP> or C<key_state=SDL_RELEASED>) 
+and when a key is pressed (C<type=SDL_KEYDOWN> or C<key_state=SDL_PRESSED>). 
+
+The C<SDLK_CAPSLOCK> and C<SDLK_NUMLOCK> keys are special cases and report an C<SDL_KEYDOWN> when first pressed, 
+then an C<SDL_RELEASED> when released and pressed again. For these keys C<KEYUP> and C<KEYDOWN> events are therefore 
+analogous to the state of the caps lock and num lock LEDs rather than the keys themselves. 
+These special cases are required for compatibility with Sun workstations.
+
+B<Note:> Repeating C<SDL_KEYDOWN> events will occur if key repeat is enabled (see C<SDL_EnableKeyRepeat>). 
 
 =head3 key_state
 
-=head3 key_keysym
+C<SDL_PRESSED> or C<SDL_RELEASED>
 
 =head3 key_scancode
 
@@ -187,9 +292,7 @@ A new ActiveEvent (to fake focus loss) will be created like this:
 
 =head3 key_unicode
 
-=head2 motion
-
-=head3 motion_type
+=head2 Mouse motion events
 
 =head3 motion_state
 
@@ -197,9 +300,7 @@ A new ActiveEvent (to fake focus loss) will be created like this:
 
 =head3 motion_xrel, motion_yrel
 
-=head2 button
-
-=head3 button_type
+=head2 Mouse button events
 
 =head3 button_which
 
@@ -209,9 +310,7 @@ A new ActiveEvent (to fake focus loss) will be created like this:
 
 =head3 button_x, button_y
 
-=head2 jaxis
-
-=head3 jaxis_type
+=head2 Joystick axis events
 
 =head3 jaxis_which
 
@@ -219,9 +318,7 @@ A new ActiveEvent (to fake focus loss) will be created like this:
 
 =head3 jaxis_value
 
-=head2 jbutton
-
-=head3 jbutton_type
+=head2 Joystick button events
 
 =head3 jbutton_which
 
@@ -229,9 +326,7 @@ A new ActiveEvent (to fake focus loss) will be created like this:
 
 =head3 jbutton_state
 
-=head2 jhat
-
-=head3 jhat_type
+=head2 Joystick hat events
 
 =head3 jhat_which
 
@@ -239,9 +334,7 @@ A new ActiveEvent (to fake focus loss) will be created like this:
 
 =head3 jhat_value
 
-=head2 jball
-
-=head3 jball_type
+=head2 Joystrick trackball events
 
 =head3 jball_which
 
@@ -249,33 +342,23 @@ A new ActiveEvent (to fake focus loss) will be created like this:
 
 =head3 jball_xrel, jball_yrel
 
-=head2 resize
-
-=head3 resize_type
+=head2 Window resize events
 
 =head3 resize_x, resize_y
 
-=head2 expose
+=head2 Window expose events
 
-=head3 expose_type
-
-=head2 syswm
-
-=head3 syswm_type
+=head2 System window manager events
 
 =head3 syswm_msg
 
-=head2 user
-
-=head3 user_type
+=head2 User defined events
 
 =head3 user_code
 
 =head3 user_data1, user_data2
 
-=head2 quit
-
-=head3 quit_type
+=head2 Quit event
 
 Create a new SDL::Event object.
 
