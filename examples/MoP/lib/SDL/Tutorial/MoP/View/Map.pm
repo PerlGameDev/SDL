@@ -78,7 +78,10 @@ sub move_map
 {
 	my $direction = shift;
 	
-	$map_center[0]++;
+	$map_center[0]++ if $direction == MOP_LEFT;
+	$map_center[0]-- if $direction == MOP_RIGHT;
+	$map_center[1]++ if $direction == MOP_TOP;
+	$map_center[1]-- if $direction == MOP_BOTTOM;
 }
 
 sub get_tile
