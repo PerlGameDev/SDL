@@ -498,23 +498,65 @@ polled (last cycle of the event loop) and it is stored in C<jball_xrel> and C<jb
 
 =head2 Window resize events
 
-=head3 resize_x, resize_y
+=head3 resize_w, resize_h
+
+When C<SDL_RESIZABLE> is passed as a flag to C<SDL_SetVideoMode> the user is allowed to resize the 
+applications window. When the window is resized an C<SDL_VIDEORESIZE> is reported, with the new 
+window width and height values stored in the resize structure's C<resize_w> and C<resize_h>. 
+When an C<SDL_VIDEORESIZE> is received the window should be resized to the new dimensions using 
+SDL_SetVideoMode. 
 
 =head2 Window expose events
 
+A C<VIDEOEXPOSE> event is triggered when the screen has been modified outside of the application, 
+usually by the window manager and needs to be redrawn.
+
 =head2 System window manager events
+
+The system window manager event contains a system-specific information about unknown window manager 
+events. If you enable this event using C<SDL_EventState>, it will be generated whenever unhandled 
+events are received from the window manager. This can be used, for example, to implement cut-and-paste 
+in your application.
+
+If you want to obtain system-specific information about the window manager, you can fill in the 
+version member of a SDL_SysWMinfo structure (details can be found in SDL_syswm.h, which must be included) 
+using the SDL_VERSION() macro found in SDL_version.h, and pass it to the function:
+
+ int SDL_GetWMInfo(SDL_SysWMinfo *info);
+ 
+See L<http://www.libsdl.org/cgi/docwiki.cgi/SDL_SysWMEvent>
 
 =head3 syswm_msg
 
 =head2 User defined events
 
+This event is unique, it is never created by SDL but only by the user. The event can be pushed onto
+the event queue using C<SDL::Events::push_event>. The contents of the structure members are completely up to the 
+programmer, the only requirement is that type is a value from C<SDL_USEREVENT> to C<SDL_NUMEVENTS-1> (inclusive)
+
+ my $event = SDL::Event->new();
+    $event->type ( SDL_USEREVENT + 3 );
+    $event->event_code(10);
+    $event->data1('hello event');
+
+ SDL::Events::push_event($event);
+
 =head3 user_code
+
+User defined event code (integer).
 
 =head3 user_data1, user_data2
 
+User defined data.
+
 =head2 Quit event
 
-Create a new SDL::Event object.
+As can be seen, the C<SDL_QuitEvent> structure serves no useful purpose. The event itself, on the other hand, 
+is very important. If you filter out or ignore a quit event then it is impossible for the user to close the 
+window. On the other hand, if you do accept a quit event then the application window will be closed, and 
+screen updates will still report success even though the application will no longer be visible.
+
+B<Note>: The macro SDL_QuitRequested will return non-zero if a quit event is pending 
 
 =head1 AUTHOR
 
