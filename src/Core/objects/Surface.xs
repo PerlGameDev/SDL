@@ -58,9 +58,14 @@ surface_new_from (CLASS, pixels, width, height, depth, pitch, Rmask, Gmask, Bmas
 	Uint32 Amask
 	IV pixels
 	CODE:
-		warn ("USING THIS WILL CAUSE YOUR CODE TO SEGFAULT ON EXIT! \n READ: http://sdlperl.ath.cx/projects/SDLPerl/ticket/53");
+		//warn ("USING THIS WILL CAUSE YOUR CODE TO SEGFAULT ON EXIT! \n READ: http://sdlperl.ath.cx/projects/SDLPerl/ticket/53");
 		void *p = INT2PTR(void*, pixels);
-		RETVAL = SDL_CreateRGBSurfaceFrom ( p, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask );
+		int size_p = sizeof( (*p));  //gets freed by old surface
+	        unsigned int *newpixels = safemalloc( size_p ); //gets freed by new Surface
+		memcpy(newpixels, p, size_p);
+		//warn("p is %p, newpixels is %p \n", p, newpixels);
+		
+		RETVAL = SDL_CreateRGBSurfaceFrom ( newpixels, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask );
 		if( RETVAL == NULL)
 		croak ("SDL_CreateRGBSurfaceFrom failed: %s", SDL_GetError());
 
@@ -123,9 +128,6 @@ void
 surface_DESTROY(surface)
 	SDL_Surface *surface
 	CODE:
-		Uint8* pixels = surface->pixels;
-		Uint32 flags = surface->flags;
+		//warn("Freed surface %p and pixels %p \n", surface, surface->pixels);
 		SDL_FreeSurface(surface);
-		if (flags & SDL_PREALLOC)
-			Safefree(pixels);
-
+		

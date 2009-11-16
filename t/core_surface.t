@@ -95,18 +95,11 @@ SDL::Video::fill_rect( $app, $rect, $blue_pixel );
 SDL::Video::update_rect( $app, 0, 0, 0, 0 );
 SDL::Video::update_rects( $app, $small_rect );
 
-SKIP:
-{
-	skip('new_from is segfaulting on DESTROY of created surface. Read: http://sdlperl.ath.cx/projects/SDLPerl/ticket/53', 1); 
 
 my $other_surface =  SDL::Surface->new_from( $surface->get_pixels, 640, 320, 8, $surface->pitch, 0, 0, 0, 0 ); 
 
 isa_ok( $other_surface, 'SDL::Surface' );
 
-$surface->DESTROY();
-$other_surface->DESTROY();
-
-}
 pass 'Final SegFault test';
 
 SDL::delay(100);
