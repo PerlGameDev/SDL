@@ -37,7 +37,6 @@ The constructor creates a new surface with the specified parameter values.
 
     my $surface = SDL::Surface->new_from( $old_surface, ... );
 
-THIS WILL SEGFAULT!!! Read: http://sdlperl.ath.cx/projects/SDLPerl/ticket/53 
 
 =head3 Construtor Parameters
 
