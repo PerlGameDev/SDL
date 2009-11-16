@@ -16,7 +16,7 @@ BEGIN {
 
 my @map    = (); # bool values where we can go
 my @frame  = (); # tile gfx definitions
-my @avatar = (); # player pos
+my $avatar = { x=> 0, y=> 0, face=>0 } ; # player pos
 
 my ($volume, $dirs) = splitpath(rel2abs(__FILE__));
 my $path            = catpath($volume, $dirs, 'main.map');
