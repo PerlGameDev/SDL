@@ -286,29 +286,101 @@ C<SDL_PRESSED> or C<SDL_RELEASED>
 
 =head3 key_scancode
 
+The C<scancode> field should generally be left alone, it is the hardware-dependent scancode returned by the keyboard.
+
 =head3 key_sym
+
+The C<sym> field is extremely useful. It is the SDL-defined value of the key (see the keysym definitions in SDLKey). 
+This field is very useful when you are checking for certain key presses, like so: 
+
+ while(poll_event($event))
+ {
+     switch($event->type)
+     {
+         case SDL_KEYDOWN:
+             move_left() if($event->key_sym == SDLK_LEFT);
+             break;
+         .
+         .
+         .
+     }
+ }
 
 =head3 key_mod
 
+C<mod> stores the current state of the keyboard modifiers as explained in SDL_GetModState.
+
 =head3 key_unicode
+
+The C<unicode> field is only used when UNICODE translation is enabled with SDL_EnableUNICODE. 
+If C<unicode> is non-zero then this is the UNICODE character corresponding to the keypress. 
+If the high 9 bits of the character are 0, then this maps to the equivalent ASCII character:
+
+ my $char;
+ if(($event->key_unicode & 0xFF80) == 0)
+ {
+     $char = $event->key_unicode & 0x7F;
+ }
+ else
+ {
+     print("An International Character.\n");
+ }
+
+UNICODE translation does create a slight overhead so don't enable it unless its needed.
+
+NOTE: Key release events (SDL_KEYUP) won't necessarily (ever?) contain unicode information. 
+See L<http://lists.libsdl.org/pipermail/sdl-libsdl.org/2005-January/048355.html>
 
 =head2 Mouse motion events
 
+Simply put, a SDL_MOUSEMOTION type event occurs when a user moves the mouse within the 
+application window or when SDL_WarpMouse is called. Both the absolute (C<motion_x> and C<motion_y>) 
+and relative (C<motion_xrel> and C<motion_yrel>) coordinates are reported along with the current 
+button states (C<motion_state>).
+
 =head3 motion_state
+
+The button state can be interpreted using the C<SDL_BUTTON> macro (see SDL_GetMouseState). 
 
 =head3 motion_x, motion_y
 
+The X/Y coordinates of the mouse
+
 =head3 motion_xrel, motion_yrel
+
+Relative motion in the X/Y direction.
+
+If the cursor is hidden (SDL_ShowCursor(0)) and the input is grabbed (SDL_WM_GrabInput(SDL_GRAB_ON)), 
+then the mouse will give relative motion events even when the cursor reaches the edge of the screen. 
+This is currently only implemented on Windows and Linux/Unix-alikes.
 
 =head2 Mouse button events
 
+When a mouse button press or release is detected the number of the button pressed (from 1 to 255, 
+with 1 usually being the left button and 2 the right) is placed into C<button_button>, the position of the mouse 
+when this event occured is stored in the C<button_x> and the C<button_y> fields. Like SDL_KeyboardEvent, 
+information on whether the event was a press or a release event is stored in both the C<button_type> 
+and C<button_state> fields, but this should be obvious.
+
+Mouse wheel events are reported as buttons 4 (up) and 5 (down). Two events are generated i.e. you get 
+a C<SDL_MOUSEBUTTONDOWN> followed by a C<SDL_MOUSEBUTTONUP> event.
+
 =head3 button_which
+
+The input device index
 
 =head3 button_button
 
+The mouse button index (C<SDL_BUTTON_LEFT>, C<SDL_BUTTON_MIDDLE>, C<SDL_BUTTON_RIGHT>, C<SDL_BUTTON_WHEELUP>, 
+C<SDL_BUTTON_WHEELDOWN>)
+
 =head3 button_state
 
+C<SDL_PRESSED> or C<SDL_RELEASED>
+
 =head3 button_x, button_y
+
+The X/Y coordinates of the mouse at press/release time
 
 =head2 Joystick axis events
 
