@@ -14,14 +14,12 @@ qw/
 
 my @left = qw/
 warp_mouse
-create_cursor 
-free_cursor 
 set_cursor 
 get_cursor 
 show_cursor 
 /;
-can_ok ('SDL::Video', @left); #change to @done later ... after tests
-
+can_ok ('SDL::Mouse', @left); #change to @done later ... after tests
+can_ok ('SDL::Cursor', qw/new DESTROY/);
 
 my $why
     = '[Percentage Completion] '
