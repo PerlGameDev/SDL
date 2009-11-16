@@ -689,53 +689,6 @@ IMG_Load ( filename )
 
 #endif
 
-void
-WarpMouse ( x, y )
-	Uint16 x
-	Uint16 y
-	CODE:
-		SDL_WarpMouse(x,y);
-
-
-SDL_Cursor *
-NewCursor ( data, mask, x ,y )
-	SDL_Surface *data
-	SDL_Surface *mask
-	int x
-	int y
-	CODE:
-		RETVAL = SDL_CreateCursor((Uint8*)data->pixels,
-				(Uint8*)mask->pixels,data->w,data->h,x,y);
-	OUTPUT:
-		RETVAL
-
-void
-FreeCursor ( cursor )
-	SDL_Cursor *cursor
-	CODE:
-		SDL_FreeCursor(cursor);
-
-void
-SetCursor ( cursor )
-	SDL_Cursor *cursor
-	CODE:
-		SDL_SetCursor(cursor);
-
-SDL_Cursor *
-GetCursor ()
-	CODE:
-		RETVAL = SDL_GetCursor();
-	OUTPUT:
-		RETVAL
-
-int
-ShowCursor ( toggle )
-	int toggle
-	CODE:
-		RETVAL = SDL_ShowCursor(toggle);
-	OUTPUT: 
-		RETVAL
-
 =for comment
 
 SDL_AudioSpec *

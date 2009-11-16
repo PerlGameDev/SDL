@@ -140,6 +140,20 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	Mouse => {
+		file      => {
+			from  => 'src/Core/Mouse.xs',
+			to    => 'lib/SDL/Mouse.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Cursor => {
+		file      => {
+			from  => 'src/Core/objects/Cursor.xs',
+			to    => 'lib/SDL/Cursor.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 
 	TTF_Font => {
 		file      => {

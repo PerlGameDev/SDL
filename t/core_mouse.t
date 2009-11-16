@@ -2,11 +2,19 @@
 use strict;
 use SDL;
 use Test::More;
+use SDL::Mouse;
+use SDL::Cursor;
+use SDL::Surface;
 
-my @done = qw//;
+my @done = 
+qw/
+/;
+
+can_ok ('SDL::Video', @left); #change to @done later ... after tests
+
 
 my @left = qw/
-warp_mouse 
+warp_mouse
 create_cursor 
 free_cursor 
 set_cursor 
