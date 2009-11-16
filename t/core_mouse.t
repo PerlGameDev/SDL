@@ -10,7 +10,6 @@ my @done =
 qw/
 /;
 
-can_ok ('SDL::Video', @left); #change to @done later ... after tests
 
 
 my @left = qw/
@@ -21,6 +20,8 @@ set_cursor
 get_cursor 
 show_cursor 
 /;
+can_ok ('SDL::Video', @left); #change to @done later ... after tests
+
 
 my $why
     = '[Percentage Completion] '
