@@ -1,11 +1,17 @@
 #!/usr/bin/perl -w
 use strict;
 use SDL;
+use SDL::Constants;
+use SDL::Audio;
 use SDL::AudioSpec;
 use Test::More;
 
 my @done = qw/
     audio_spec
+    open_audio
+    pause_audio
+    close_audio
+    get_audio_status
     /;
 
 my $desired = SDL::AudioSpec->new;
@@ -19,10 +25,28 @@ is( $desired->channels, 2, '[audiospec] can set channels' );
 $desired->samples(4096);
 is( $desired->samples, 4096, '[audiospec] can set samples' );
 
+is( SDL::Audio::get_audio_status, SDL_AUDIO_STOPPED,
+    '[get_audio_status stopped]' );
+
+my $obtained = SDL::AudioSpec->new;
+is( SDL::Audio::open_audio( $desired, $obtained ),
+    0, '[open_audio returned success]' );
+isa_ok( $obtained, 'SDL::AudioSpec' );
+
+is( SDL::Audio::get_audio_status, SDL_AUDIO_PAUSED,
+    '[get_audio_status paused]' );
+
+SDL::Audio::pause_audio(0);
+
+is( SDL::Audio::get_audio_status, SDL_AUDIO_PLAYING,
+    '[get_audio_status playing]' );
+
+SDL::Audio::close_audio();
+
+is( SDL::Audio::get_audio_status, SDL_AUDIO_STOPPED,
+    '[get_audio_status stopped]' );
+
 my @left = qw/
-    open_audio
-    pause_audio
-    get_audio_status
     load_wav
     free_wav
     audio_cvt
@@ -31,7 +55,6 @@ my @left = qw/
     mix_audio
     lock_audio
     unlock_audio
-    close_audio
     /;
 
 my $why

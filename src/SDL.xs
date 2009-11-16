@@ -746,30 +746,6 @@ ConvertAudioData ( cvt, data, len )
 		RETVAL = SDL_ConvertAudio(cvt);
 	OUTPUT:
 		RETVAL			
-
-int
-OpenAudio ( spec, callback )
-	SDL_AudioSpec *spec
-	SV* callback
-	CODE:
-		spec->userdata = (void*)callback;
-		spec->callback = sdl_perl_audio_callback;
-		RETVAL = SDL_OpenAudio(spec,NULL);
-	OUTPUT:
-		RETVAL
-
-Uint32
-GetAudioStatus ()
-	CODE:
-		RETVAL = SDL_GetAudioStatus ();
-	OUTPUT:
-		RETVAL
-
-void
-PauseAudio ( p_on )
-	int p_on
-	CODE:
-		SDL_PauseAudio(p_on);
 	
 void
 LockAudio ()
@@ -780,11 +756,6 @@ void
 UnlockAudio ()
 	CODE:
 		SDL_UnlockAudio();
-
-void
-CloseAudio ()
-	CODE:
-		SDL_CloseAudio();
 
 void
 FreeWAV ( buf )

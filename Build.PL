@@ -70,6 +70,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	Audio => {
+		file      => {
+			from  => 'src/Core/Audio.xs',
+			to    => 'lib/SDL/Audio.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	Rect => {
 		file      => {
 			from  => 'src/Core/objects/Rect.xs',
