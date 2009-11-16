@@ -37,7 +37,7 @@ my @map           = $model->map();
 my @map_center    = (32, 24); # x, y
 
 my ($volume, $dirs) = splitpath(rel2abs(__FILE__));
-my $diff = '../../';
+my $diff = 'MoP/../../';
  $diff = '../' if ($^O =~ /linux/);
 my $path            = catpath($volume, catfile($dirs, $diff.'tiles.bmp'));
 my $tiles           = SDL::Video::load_BMP($path);
