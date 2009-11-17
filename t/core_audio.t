@@ -5,7 +5,14 @@ use SDL::Constants;
 use SDL::Audio;
 use SDL::AudioSpec;
 use Test::More;
+use lib 't/lib';
+use SDL::TestTool;
 
+if ( SDL::TestTool->init_audio ) {
+    plan( skip_all => 'Failed to init sound' );
+} else {
+    plan( tests => 18 );
+}
 my @done = qw/
     audio_spec
     open_audio
@@ -15,6 +22,7 @@ my @done = qw/
     lock_audio
     unlock_audio
     /;
+
 
 my $desired = SDL::AudioSpec->new;
 $desired->freq(44100);
@@ -86,4 +94,4 @@ TODO:
 }
 diag $why;
 
-done_testing;
+
