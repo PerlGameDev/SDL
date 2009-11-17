@@ -2,25 +2,36 @@
 use strict;
 use SDL;
 use Test::More;
+use SDL::Joystick;
+my @done = qw/num_joysticks/;
+can_ok( "SDL::Joystick", @done);
 
-my @done = qw//;
+is( SDL::Joystick::num_joysticks() >= 0, 1, "[num_joysticks] ran");
+
+SKIP:
+{
+    SDL::init_sub_system(SDL_INIT_JOYSTICK);
+
+    skip "Need a joystick for below tests", 1 unless (SDL::Joystick::num_joysticks() > 0 );
+     
+    my $joy = SDL::Joystick->new(0);
+    pass"[new] can open joystick";
+
+}
 
 my @left = qw/
-num_joysticks  
-joystick_name  
-joystick_open  
-joystick_opened  
-joystick_index  
-joystick_num_axes  
-joystick_num_balls  
-joystick_num_hats  
-joystick_num_buttons  
-joystick_update  
-joystick_get_axis  
-joystick_get_hat  
-joystick_get_button  
-joystick_get_ball  
-joystick_close 
+name  
+opened  
+index  
+num_axes  
+num_balls  
+num_hats  
+num_buttons  
+update  
+get_axis  
+get_hat  
+get_button  
+get_ball  
 /;
 
 my $why

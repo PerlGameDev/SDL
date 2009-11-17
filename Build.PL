@@ -161,6 +161,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	Joystick => {
+		file      => {
+			from  => 'src/Core/Joystick.xs',
+			to    => 'lib/SDL/Joystick.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 
 	TTF_Font => {
 		file      => {

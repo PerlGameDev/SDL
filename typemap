@@ -55,7 +55,7 @@ int *			T_PTR
 void *			T_PTR
 SDL_TimerID		T_PTR
 SDL_NewTimerCallback	T_PTR
-SDL_Joystick *		T_PTR
+SDL_Joystick *		O_OBJECT	
 SDLNet_SocketSet	T_PTR
 TCPsocket		T_PTR
 UDPsocket		T_PTR

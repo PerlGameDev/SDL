@@ -17,6 +17,7 @@ SDL::Rect
 SDL::Events 
 SDL::Event 
 SDL::Mouse
+SDL::Joystick
 SDL::Cursor
 /;
     plan tests => scalar @modules;
