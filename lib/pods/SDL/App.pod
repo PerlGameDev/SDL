@@ -4,6 +4,10 @@
 
 SDL::App - a SDL perl extension
 
+=head1 CATEGORY
+
+Extension
+
 =head1 SYNOPSIS
 		
 	use SDL;

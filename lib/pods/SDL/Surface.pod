@@ -4,6 +4,11 @@
 
 SDL::Surface - Graphic surface structure. Access to C<SDL_Surface>.
 
+=head2 CATEGORY
+
+Core, Video, Structure
+
+
 =head1 SYNOPSIS
 
 The main surface (display) is provided by L<SDL::Video::set_video_mode>.

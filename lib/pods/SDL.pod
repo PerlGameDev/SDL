@@ -2,6 +2,10 @@
 
 SDL_perl - Simple DirectMedia Layer for Perl
 
+=head2 CATEGORY
+
+Core
+
 =head1 SYNOPSIS
 
   use SDL;

@@ -4,9 +4,9 @@
 
 SDL::Video - Bindings to the video category in SDL API
 
-=head1 SYNOPSIS
+=head1 CATEGORY
 
-To be done.
+Core, Video
 
 =head1 DESCRIPTION
 

@@ -4,6 +4,10 @@
 
 SDL::Mixer - a SDL perl extension
 
+=head1 CATEGORY
+
+Mixer
+
 =head1 SYNOPSIS
 
   $mixer = new SDL::Mixer 	-frequency => MIX_DEFAULT_FREQUENCY,
