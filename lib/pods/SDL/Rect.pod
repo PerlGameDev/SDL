@@ -4,6 +4,10 @@
 
 SDL::Rect - Defines a rectangular area
 
+=head2 CATEGORY
+
+Core, Video, Structure
+
 =head1 SYNOPSIS
 
   my $rect = SDL::Rect->new( 0, 0, 0, 0 );

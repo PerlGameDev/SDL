@@ -4,6 +4,10 @@ tags: Tutorials, Beginner
 
 Let's Make Tetris
 
+=head2 CATEGORY
+
+Tutorials
+
 =head2 The Overall view
 
 All games are a while loop. So we will have something like this.

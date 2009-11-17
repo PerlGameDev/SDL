@@ -6,6 +6,10 @@ This tutorial is intended to help you build your very own version of the Pong ga
 
 Just in case you live under a rock, Pong is one of the earliest arcade games, a true classic by Atari Inc. The game has two simple rectangles scrolling up and down trying to hit a (square) ball that bounces around, and could be thought of as a table tennis simulation.
 
+=head2 CATEGORY
+
+Tutorials
+
 =head2 Part 1: We start with a Rect
 
 In Pong, the player controls a rectangle that moves up and down, so creating the rectangle looks like a good place to start:

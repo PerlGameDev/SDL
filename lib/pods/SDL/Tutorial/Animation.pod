@@ -4,6 +4,10 @@ tags: Tutorials
 
 SDL::Tutorial::Animation
 
+=head2 CATEGORY
+
+Tutorials
+
 =head1 SYNOPSIS
 
 	# to read this tutorial

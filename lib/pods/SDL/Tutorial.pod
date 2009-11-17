@@ -2,6 +2,10 @@
 
 SDL::Tutorial - introduction to Perl SDL
 
+=head2 CATEGORY
+
+Tutorials
+
 =head1 SYNOPSIS
 
 	# to read this tutorial

@@ -4,6 +4,10 @@
 
 SDL::VideoInfo - Video Target Information 
 
+=head2 CATEGORY
+
+Core, Video, Structure
+
 =head1 SYNOPSIS
 
 	my $video_info = SDL::Video::get_video_info();

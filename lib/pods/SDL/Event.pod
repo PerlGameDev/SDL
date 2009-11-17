@@ -1,8 +1,10 @@
-=pod
-
 =head1 NAME
 
 SDL::Event - General event structure
+
+=head2 CATEGORY
+
+Core, Events, Structure
 
 =head1 SYNOPSIS
 
@@ -563,5 +565,3 @@ B<Note>: The macro SDL_QuitRequested will return non-zero if a quit event is pen
 =head1 SEE ALSO
 
 L<perl>
-
-=cut

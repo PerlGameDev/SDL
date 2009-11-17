@@ -4,6 +4,10 @@ tags: Tutorials
 
 Lunar Lander - a small tutorial on Perl SDL
 
+=head2 CATEGORY
+
+Tutorials
+
 =head1 INTRODUCTION
 
 This is a quick introduction to Games, Perl, and  SDL (Simple 

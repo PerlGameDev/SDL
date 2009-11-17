@@ -4,6 +4,10 @@
 
 SDL::Overlay - YUV Video overlay
 
+=head2 CATEGORY
+
+Core, Video, Structure
+
 =head1 SYNOPSIS
 
 First import the following modules to get access to constants and functions needed for overlay.

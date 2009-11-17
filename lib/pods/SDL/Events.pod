@@ -1,8 +1,10 @@
-=pod
-
 =head1 NAME
 
 SDL::Events - Bindings to the Events Category in SDL API
+
+=head2 CATEGORY
+
+Core, Events
 
 =head1 SYNOPSIS
 
@@ -124,5 +126,3 @@ As this function implicitly calls SDL_PumpEvents, you can only call this functio
 =head1 SEE ALSO
 
 L<SDL::Event>, L<SDL::Video>
-
-=cut

@@ -2,13 +2,15 @@
 
 PDL provides great number crunching capabilities to Perl and SDL provides game-developer quality real-time bitmapping and sound.  You can use PDL and SDL ''together'' to create real-time, responsive animations and simulations.  In this section we will go through the pleasures and pitfalls of working with both powerhouse libraries.
 
-=head1 Old SDL interface
+=head2 CATEGORY
 
+Cookbook
+
+=head1 Old SDL interface
 
 Please be aware that much of the code in this example uses SDL Perl v 2.2.4.  The SDL Perl developers are hard at work rewriting SDL, to be released as SDL 3.0 soon.  The new version of SDL is not backwards compatible.  Check back with this page after SDL 3.0 has been released to get the updated commands.
 
 =head1 Perl's SDL in a nutshell
-
 
 SDL stands for Simple DirectMedia Layer.  It's a cross-platform library written in C that's meant to handle all of the low-level graphics and sound stuff.  You can read more about SDL here: http://www.libsdl.org/.  Because SDL is focused on game programming, it has a raw but clean feel to it.  We will focus for now on using SDL to handle images for us.  Handling sound may some day be the focus of another chapter.
 

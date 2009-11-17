@@ -1,5 +1,8 @@
-=pod
+=head1 NAME
 
-=head1 SDL::Cookbook
+SDL::Cookbook
 
-=cut
+=head2 CATEGORY
+
+Cookbook
+

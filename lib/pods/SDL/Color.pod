@@ -4,6 +4,10 @@
 
 SDL::Color - Format independent color description
 
+=head2 CATEGORY
+
+Core, Video, Structure
+
 =head1 SYNOPSIS
 
   my $black = SDL::Color->new( 0, 0, 0);

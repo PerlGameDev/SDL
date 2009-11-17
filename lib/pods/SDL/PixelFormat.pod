@@ -4,6 +4,10 @@
 
 SDL::PixelFormat - Stores surface format information
 
+=head2 CATEGORY
+
+Core, Video, Structure
+
 =head1 SYNOPSIS
 
 	my $surface = SDL::Surface->new( ...
