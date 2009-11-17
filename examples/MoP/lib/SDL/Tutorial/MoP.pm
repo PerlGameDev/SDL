@@ -1,6 +1,11 @@
 package SDL::Tutorial::MoP;
 use strict;
-use SDL::Tutorial::MoP::View::Map qw(draw_map);
+use SDL::Tutorial::MoP::EventManager;
+use SDL::Tutorial::MoP::Base;
+use SDL::Tutorial::MoP::View;
+use SDL::Tutorial::MoP::Controller::Keyboard;
+use SDL::Tutorial::MoP::Controller::CPUSpinner;
+use SDL::Tutorial::MoP::Controller::Game;
 
 BEGIN {
     use Exporter ();
@@ -32,15 +37,27 @@ See Also   :
 
 #################### subroutine header end ####################
 
-sub new
-{
-    my ($class, %parameters) = @_;
-    my $self = bless ({}, ref ($class) || $class);
-    
-    draw_map();
-    
-    return $self;
+sub play {
+    my ($class, $EDEBUG, $KEYDEBUG, $GDEBUG, $FPS) = @_;
+
+    my $keybd    = SDL::Tutorial::MoP::Controller::Keyboard->new();
+    my $spinner  = SDL::Tutorial::MoP::Controller::CPUSpinner->new();
+    my $gameView = SDL::Tutorial::MoP::View::Game->new();
+
+    my $game     = SDL::Tutorial::MoP::Controller::Game->new(
+        EDEBUG      => ${EDEBUG},
+        GDEBUG      => ${GDEBUG},
+        KEYDEBUG    => ${KEYDEBUG},
+        FPS         => $FPS,
+    );
+
+    $spinner->run;
 }
+
+if (!caller) {
+    SDL::Tutorial::MoP->play(@ARGV);
+}
+
 
 
 #################### main pod documentation begin ###################
