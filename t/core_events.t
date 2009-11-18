@@ -79,7 +79,7 @@ $aevent->active_state(SDL_APPINPUTFOCUS);
 
 SDL::Events::push_event($aevent); pass '[push_event] Event can be pushed';
 
-SDL::Events::pump_events(); pass '[pump_event] pumping events';
+SDL::Events::pump_events(); pass '[pump_events] pumping events';
 
 my $got_event = 0;
 
