@@ -47,22 +47,23 @@ audio_load_wav ( filename, spec )
 	char *filename
 	SDL_AudioSpec *spec
 	CODE:
-		SDL_AudioSpec *temp;
+		SDL_AudioSpec *temp = safemalloc(sizeof(SDL_AudioSpec));
 		Uint8 *buf;
 		Uint32 len;
+		SV * asref = newSV( sizeof(SDL_AudioSpec *) );
 
-		temp = SDL_LoadWAV(filename,spec,&buf,&len);
-		if ( ! temp ) 
+		memcpy( temp, spec, sizeof(SDL_AudioSpec) );
+		temp = SDL_LoadWAV(filename,temp,&buf,&len);
+		if ( temp == NULL ) 
 		{
-		  warn("Error in SDL_LoadWAV"); 
-		  RETVAL = newAV(); 	
-		  RETVAL = sv_2mortal((SV*)RETVAL ); 
+		  croak("Error in SDL_LoadWAV: %s", SDL_GetError()); 
 		}
 		else
 		{	
+		 warn ("sd");
 		RETVAL = newAV();
 		RETVAL = sv_2mortal((SV*)RETVAL );
-		av_push(RETVAL,newSViv(PTR2IV(temp)));
+		av_push(RETVAL, sv_setref_pv( asref, "SDL::AudioSpec", (void *)temp));
 		av_push(RETVAL,newSViv(PTR2IV(buf)));
 		av_push(RETVAL,newSViv(len));
 		}
