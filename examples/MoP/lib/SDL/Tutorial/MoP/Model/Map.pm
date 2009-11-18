@@ -31,11 +31,8 @@ use constant
 	MOP_LEFT   => 3	
 };
 
-my $screen_width  = 640;
-my $screen_height = 480;
 my $tile_size     = 10;
-my $model         = new SDL::Tutorial::MoP::Models;
-my @map           = $model->map();
+my @map           = ();
 
 my @map_center    = (32, 24); # x, y
 
@@ -59,10 +56,8 @@ sub init
 {
     my ($self, %params) = @_;
     
-	#SDL::init(SDL_INIT_VIDEO);
-
-	#$self->{app} = SDL::Video::set_video_mode( 640, 480, 32, SDL_SWSURFACE);
-	
+    @map = $self->load_map();
+    
 	$self->{map} ||= [];
 }
 
@@ -78,37 +73,6 @@ sub notify
     }
 }
 
-sub draw_map
-{
-	my $self = shift;
-	
-	move_map(MOP_LEFT);
-
-	my $x_offset = $map_center[0] - ($screen_width  / $tile_size / 2);
-	my $y_offset = $map_center[1] - ($screen_height / $tile_size / 2);
-
-	   $y_offset = 0 if($y_offset < 0);
-	   $x_offset = 0 if($x_offset < 0);
-
-	for (my $y = 0; $y < $screen_height / $tile_size; $y++)
-	{
-		for (my $x = 0; $x < $screen_width / $tile_size; $x++)
-		{
-	    	my $tiles_rect  = get_tile(${$map[$y + $y_offset]}[$x + $x_offset] ? 5 : 6);
-	    	my $screen_rect = SDL::Rect->new($x * $tile_size, $y * $tile_size, 
-	    	                                 $screen_width, $screen_height);
-	
-	    	SDL::Video::blit_surface( $tiles, $tiles_rect, $self->{app}, $screen_rect );
-		}
-	}
-			$self->{app} = 'hallo';
-    #SDL::Video::update_rect( $self->{app}, 0, 0, $screen_width, $screen_height ); 
-
-	#sleep(5);
-
-    return 1;
-}
-
 sub move_map
 {
 	my $direction = shift;
@@ -119,9 +83,33 @@ sub move_map
 	$map_center[1]-- if $direction == MOP_BOTTOM;
 }
 
+sub load_map
+{
+	my $path = module_file('SDL::Tutorial::MoP', 'data/main.map');
+	open (FH, $path)  || die "Can not open file $path: $!";
+	while(<FH>)
+	{
+		my @row = split(//, $_);
+		push(@map, \@row);
+	}
+	close(FH);
+	
+	return @map;
+}
+
 sub get_tile
 {
-	my $index = shift || 0;	
+	my $self = shift;
+	my $x    = shift;
+	my $y    = shift;
+	
+	return $self->get_tile_by_index(${$map[$y]}[$x] ? 5 : 6);
+}
+
+sub get_tile_by_index
+{
+	my $self = shift;
+	my $index = shift || 0;
 
 	carp 'Unable to load tiles ' . SDL::get_error() if(!$tiles);
 
@@ -130,5 +118,19 @@ sub get_tile
 	
   	return SDL::Rect->new($x, $y, $tile_size, $tile_size);
 }
+
+sub tile_size
+{
+	my $self = shift;
+	$tile_size = shift || return $tile_size;
+}
+
+sub tiles
+{
+	my $self = shift;
+	$tiles = shift || return $tiles;
+}
+
+
 
 1;
