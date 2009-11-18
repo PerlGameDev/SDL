@@ -46,7 +46,7 @@ sub notify
             $self->{game} = $event->{game};
             $self->draw_scene() if $self->{map};
         },
-        'CharactorMove' => sub {
+        'MapMove' => sub {
             $self->clear();
             $self->draw_scene() if ($self->{map} && $self->{map});
         },
@@ -150,7 +150,7 @@ sub draw_map
 	my $self = shift;
 	my $map  = SDL::Tutorial::MoP::Model::Map->new();
 	
-	#$map->move_map(MOP_LEFT);
+	$map->move_map('LEFT');
 
 	my $x_offset = 0;#$map->map_center[0] - ($screen_width  / $map->tile_size / 2);
 	my $y_offset = 0;#$map->map_center[1] - ($screen_height / $map->tile_size / 2);

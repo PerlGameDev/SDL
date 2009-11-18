@@ -2,6 +2,7 @@ package SDL::Tutorial::MoP::Controller::Keyboard;
 
 use strict;
 use warnings;
+use Carp;
 
 use base 'SDL::Tutorial::MoP::Base';
 
@@ -32,7 +33,7 @@ sub notify
     while(SDL::Events::poll_event($sdl_event)) #get the first one
     {
 	    my $event_type = $sdl_event->type;
-	    my $key        = $self->{last_key} || $sdl_event->key_sym;
+	    my $key        = $self->{last_key} || '';
 	
 	    if ( $key eq 'down' ) { # TODO: left, right
 	        # store last pressed key, so the blocks 
@@ -44,6 +45,7 @@ sub notify
 	    {
 	        # stop sliding on key up
 	        delete $self->{last_key};
+	        carp($sdl_event->key_sym . "<>" . SDLK_LEFT);
 	        $key = '';
 	    }
 	    elsif($event_type == SDL_QUIT)
@@ -54,11 +56,10 @@ sub notify
 	    my %event_key =
 	    (
 	        'escape' => { name => 'Quit' },
-	        'up'     => { name => 'CharactorMoveRequest', direction => 'ROTATE_C' },
-	        'space'  => { name => 'CharactorMoveRequest', direction => 'ROTATE_CC' },
-	        'down'   => { name => 'CharactorMoveRequest', direction => 'DIRECTION_DOWN' },
-	        'left'   => { name => 'CharactorMoveRequest', direction => 'DIRECTION_LEFT' },
-	        'right'  => { name => 'CharactorMoveRequest', direction => 'DIRECTION_RIGHT' },
+	        'down'   => { name => 'MapMoveRequest', direction => 'DIRECTION_DOWN' },
+	        'left'   => { name => 'MapMoveRequest', direction => 'DIRECTION_LEFT' },
+	        'right'  => { name => 'MapMoveRequest', direction => 'DIRECTION_RIGHT' },
+	        'up'     => { name => 'MapMoveRequest', direction => 'DIRECTION_UP' },
 	    );
 	
 	    $event_to_process = $event_key{$key} if defined $event_key{$key};

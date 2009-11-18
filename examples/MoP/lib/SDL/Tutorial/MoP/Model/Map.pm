@@ -23,14 +23,6 @@ use SDL::Tutorial::MoP::Models;
 #    %EXPORT_TAGS = ();
 #}
 
-use constant
-{
-	MOP_TOP    => 0,
-	MOP_BOTTOM => 1,
-	MOP_RIGHT  => 2,
-	MOP_LEFT   => 3	
-};
-
 my $tile_size     = 10;
 my @map           = ();
 
@@ -67,9 +59,18 @@ sub notify
  
     print "Notify in Map \n" if $self->{EDEBUG};
  
-    if (defined $event && $event->{name} eq 'Tick')
-    {
-        #do checks
+    my %event_action = (
+        'MapMoveRequest' => sub {
+            $self->move_map($event->{direction}) if ($self->{map});
+            $self->evt_manager->post({ name => 'MapMove' });
+        },
+    );
+
+    my $action = $event_action{$event->{name}};
+    
+    if (defined $action) {
+        print "Event $event->{name}\n" if $self->{GDEBUG};
+        $action->();
     }
 }
 
@@ -77,10 +78,10 @@ sub move_map
 {
 	my $direction = shift;
 	
-	$map_center[0]++ if $direction == MOP_LEFT;
-	$map_center[0]-- if $direction == MOP_RIGHT;
-	$map_center[1]++ if $direction == MOP_TOP;
-	$map_center[1]-- if $direction == MOP_BOTTOM;
+	$map_center[0]++ if $direction eq 'LEFT';
+	$map_center[0]-- if $direction eq 'RIGHT';
+	$map_center[1]++ if $direction eq 'UP';
+	$map_center[1]-- if $direction eq 'DOWN';
 }
 
 sub load_map
