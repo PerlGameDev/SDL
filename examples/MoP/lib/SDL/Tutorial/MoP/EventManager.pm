@@ -11,15 +11,18 @@ sub new {
     return $self;
 }
 
-sub listeners : lvalue {
+sub listeners : lvalue 
+{
     return shift->{listeners};
 }
 
-sub evt_queue : lvalue {
+sub evt_queue : lvalue 
+{
     return shift->{evt_queue};
 }
 
-sub reg_listener {
+sub reg_listener 
+{
     my ($self, $listener) = (@_);
     $self->listeners->{$listener} = $listener
       if defined $listener;
@@ -27,7 +30,8 @@ sub reg_listener {
     return $self->listeners->{$listener};
 }
 
-sub un_reg_listener {
+sub un_reg_listener 
+{
     my ($self, $listener) = (@_);
 
     if (defined $listener) {
@@ -38,14 +42,15 @@ sub un_reg_listener {
     }
 }
 
-sub post {
-    my $self = shift;
+sub post 
+{
+    my $self  = shift;
     my $event = shift;
-
 
     die "Post needs a Event as parameter" unless defined $event->{name};
 
-    foreach my $listener (values %{$self->listeners}) {
+    foreach my $listener (values %{$self->listeners}) 
+    {
         $listener->notify($event);
     }
 }

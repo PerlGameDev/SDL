@@ -37,7 +37,17 @@ See Also   :
 
 #################### subroutine header end ####################
 
-sub play {
+sub new
+{
+	my ($class, %parameters) = @_;
+
+	my $self = bless ({}, ref ($class) || $class);
+
+	return $self;
+}
+
+sub play
+{
     my ($class, $EDEBUG, $KEYDEBUG, $GDEBUG, $FPS) = @_;
 
     my $keybd    = SDL::Tutorial::MoP::Controller::Keyboard->new();
@@ -54,11 +64,7 @@ sub play {
     $spinner->run;
 }
 
-if (!caller) {
-    SDL::Tutorial::MoP->play(@ARGV);
-}
-
-
+SDL::Tutorial::MoP->play(@ARGV) unless caller;
 
 #################### main pod documentation begin ###################
 ## Below is the stub of documentation for your module. 

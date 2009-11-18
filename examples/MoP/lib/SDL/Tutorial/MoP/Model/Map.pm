@@ -1,23 +1,27 @@
 package SDL::Tutorial::MoP::Model::Map;
+
 use strict;
-use SDL;
-use SDL::App;
-use SDL::Event;
-use SDL::Video;
-use File::Spec::Functions qw(rel2abs splitpath catpath catfile);
+use warnings;
+
+use base 'SDL::Tutorial::MoP::Base';
+
+use File::ShareDir qw(module_file);
 use Carp;
+
+use SDL;
+use SDL::Video;
 use SDL::Tutorial::MoP::Models;
 
-BEGIN {
-    use Exporter ();
-    use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-    $VERSION     = '0.01';
-    @ISA         = qw(Exporter);
-    #Give a hoot don't pollute, do not export more than needed by default
-    @EXPORT      = qw();
-    @EXPORT_OK   = qw(draw_map);
-    %EXPORT_TAGS = ();
-}
+#BEGIN {
+#    use Exporter ();
+#    use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+#    $VERSION     = '0.01';
+#    @ISA         = qw(Exporter);
+#    #Give a hoot don't pollute, do not export more than needed by default
+#    @EXPORT      = qw();
+#    @EXPORT_OK   = qw(draw_map);
+#    %EXPORT_TAGS = ();
+#}
 
 use constant
 {
@@ -27,7 +31,6 @@ use constant
 	MOP_LEFT   => 3	
 };
 
-my $screen;
 my $screen_width  = 640;
 my $screen_height = 480;
 my $tile_size     = 10;
@@ -36,21 +39,49 @@ my @map           = $model->map();
 
 my @map_center    = (32, 24); # x, y
 
-my ($volume, $dirs) = splitpath(rel2abs(__FILE__));
-my $diff = 'MoP/../../';
- $diff = '../' if ($^O =~ /linux/);
-my $path            = catpath($volume, catfile($dirs, $diff.'tiles.bmp'));
-my $tiles           = SDL::Video::load_BMP($path);
+my $path          = module_file('SDL::Tutorial::MoP', 'data/tiles.bmp');
+my $tiles         = SDL::Video::load_BMP($path);
 croak 'Error: '.SDL::get_error() if(!$tiles);
+
+sub new
+{
+	my ($class, %params) = (@_);
+
+	my $self = $class->SUPER::new(%params);
+
+	$self->evt_manager->reg_listener($self);
+	$self->init(%params);
+
+	return $self;
+}
+
+sub init 
+{
+    my ($self, %params) = @_;
+    
+	#SDL::init(SDL_INIT_VIDEO);
+
+	#$self->{app} = SDL::Video::set_video_mode( 640, 480, 32, SDL_SWSURFACE);
+	
+	$self->{map} ||= [];
+}
+
+sub notify
+{
+    my ($self, $event) = (@_);
+ 
+    print "Notify in Map \n" if $self->{EDEBUG};
+ 
+    if (defined $event && $event->{name} eq 'Tick')
+    {
+        #do checks
+    }
+}
 
 sub draw_map
 {
-	carp 'Unable to init SDL: ' . SDL::get_error() if(SDL::init(SDL_INIT_VIDEO) < 0);
-
-	$screen = SDL::Video::set_video_mode( 640, 480, 32, SDL_SWSURFACE);
-
-	carp 'Unable to set 640x480x32 video ' . SDL::get_error() if(!$screen);
-
+	my $self = shift;
+	
 	move_map(MOP_LEFT);
 
 	my $x_offset = $map_center[0] - ($screen_width  / $tile_size / 2);
@@ -67,12 +98,13 @@ sub draw_map
 	    	my $screen_rect = SDL::Rect->new($x * $tile_size, $y * $tile_size, 
 	    	                                 $screen_width, $screen_height);
 	
-	    	SDL::Video::blit_surface( $tiles, $tiles_rect, $screen, $screen_rect );
+	    	SDL::Video::blit_surface( $tiles, $tiles_rect, $self->{app}, $screen_rect );
 		}
 	}
-    SDL::Video::update_rect( $screen, 0, 0, $screen_width, $screen_height ); 
+			$self->{app} = 'hallo';
+    #SDL::Video::update_rect( $self->{app}, 0, 0, $screen_width, $screen_height ); 
 
-	sleep(5);
+	#sleep(5);
 
     return 1;
 }

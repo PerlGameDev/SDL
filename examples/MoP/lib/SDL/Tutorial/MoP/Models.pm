@@ -1,8 +1,8 @@
 package SDL::Tutorial::MoP::Models;
 use strict;
-use File::Spec::Functions qw(rel2abs splitpath catpath);
+use File::ShareDir        qw(module_file);
+use Cwd                   qw(abs_path);
 use Data::Dumper;
-use Cwd qw(abs_path);
 
 BEGIN {
     use Exporter ();
@@ -19,9 +19,6 @@ my @map    = (); # bool values where we can go
 my @frame  = (); # tile gfx definitions
 my $avatar = { x=> 0, y=> 0, face=>0 } ; # player pos
 
-my ($volume, $dirs) = splitpath(abs_path(__FILE__));
-my $path            = catpath($volume, $dirs, 'main.map');
-
 sub new
 {
     my ($class, %parameters) = @_;
@@ -34,6 +31,7 @@ sub new
 
 sub load_map
 {
+	my $path = module_file('SDL::Tutorial::MoP', 'data/main.map');
 	open (FH, $path)  || die "Can not open file $path: $!";
 	while(<FH>)
 	{

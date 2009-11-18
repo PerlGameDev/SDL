@@ -2,10 +2,9 @@ package SDL::Tutorial::MoP::Base;
 
 use strict;
 use warnings;
+use Carp;
 
 use SDL::Tutorial::MoP::EventManager;
-
-use Carp;
 
 our $VERSION = '0.01';
 
@@ -14,7 +13,8 @@ our $VERSION = '0.01';
 my $evt_manager = SDL::Tutorial::MoP::EventManager->new();
 sub evt_manager { $evt_manager }
 
-sub new {
+sub new 
+{
     my ($class, %params) = (@_);
 
     my $self = bless {%params}, $class;
@@ -22,8 +22,6 @@ sub new {
     # all controllers must register a listener
     $self->evt_manager->reg_listener($self);
 
-	print __LINE__ . "\n";
-	
     $self->init(%params) if $self->can('init');
 
     return $self;

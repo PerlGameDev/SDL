@@ -16,7 +16,8 @@ Readonly my $STATE_PREPARING => 0;
 Readonly my $STATE_RUNNING   => 1;
 Readonly my $STATE_PAUSED    => 2;
 
-sub init {
+sub init
+{
     my $self = shift;
 
     $self->{level} = 0.5;
@@ -30,7 +31,8 @@ sub init {
     #$self->{player} =; For points, level so on
 }
 
-sub notify {
+sub notify
+{
     my ($self, $event) = (@_);
 
     return if $event->{name} eq 'MapBuilt';
@@ -61,7 +63,8 @@ sub notify {
     #now
 }
 
-sub _charactor_move_request {
+sub _charactor_move_request
+{
     my ($self, $event) = @_;
 
     print "Move charactor sprite \n" if $self->{GDEBUG};
@@ -81,49 +84,50 @@ sub _charactor_move_request {
         $action->();
     }
 
-    if ($self->{grid}->is_possible_movement($mx, $my, $self->{piece}, $rot)) {
-        ($self->{posx}, $self->{posy}, $self->{pieceRotation}) = ($mx, $my, $rot);
-        $self->evt_manager->post({name => 'CharactorMove'});
-    }
+#    if ($self->{grid}->is_possible_movement($mx, $my, $self->{piece}, $rot)) {
+#        ($self->{posx}, $self->{posy}, $self->{pieceRotation}) = ($mx, $my, $rot);
+#        $self->evt_manager->post({name => 'CharactorMove'});
+#    }
 }
 
-sub _tick {
+sub _tick
+{
     my ($self, $event) = @_;
 
     return if (time - $self->{wait}) < $self->{level};
 
     $self->{wait} = time;
 
-    if ($self->{grid}->is_possible_movement($self->{posx}, $self->{posy} + 1, $self->{piece}, $self->{pieceRotation})) {
-        $self->{posy}++;
-        $self->evt_manager->post({name => 'CharactorMove'});
-    }
-    else {
+#    if ($self->{grid}->is_possible_movement($self->{posx}, $self->{posy} + 1, $self->{piece}, $self->{pieceRotation})) {
+#        $self->{posy}++;
+#        $self->evt_manager->post({name => 'CharactorMove'});
+#    }
+#    else {
 
-        $self->{grid}->store_piece($self->{posx}, $self->{posy}, $self->{piece}, $self->{pieceRotation});
-        $self->_create_new_piece();
+#        $self->{grid}->store_piece($self->{posx}, $self->{posy}, $self->{piece}, $self->{pieceRotation});
+#        $self->_create_new_piece();
 
-        $self->{level} -= (0.01) * $self->{grid}->delete_possible_lines;
-        if ($self->{grid}->is_game_over()) {
+#        $self->{level} -= (0.01) * $self->{grid}->delete_possible_lines;
+#        if ($self->{grid}->is_game_over()) {
 
-            #make GameOver
-            $self->evt_manager->post({name => 'Quit'});
-        }
-    }
+#            #make GameOver
+#            $self->evt_manager->post({name => 'Quit'});
+#        }
+#    }
 }
 
-sub _start {
+sub _start
+{
     my $self = shift;
 
     $self->{state} = $STATE_RUNNING;
     print "Game RUNNING \n" if $self->{GDEBUG};
     $self->evt_manager->post({ name => 'GameStart', game => $self });
     $self->{wait} = time;
-    
-    print __FILE__ . "\n";
 }
 
-sub _init_map {
+sub _init_map
+{
     my $self = shift;
     $self->{'map'} = SDL::Tutorial::MoP::Model::Map->new();
 
@@ -138,7 +142,8 @@ sub _init_map {
 #    $self->{next_posy}     = 0;
 }
 
-sub _create_new_piece {
+sub _create_new_piece
+{
     my $self = shift;
     $self->{piece}         = $self->{next_piece};
     $self->{pieceRotation} = $self->{next_rotation};
