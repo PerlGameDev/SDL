@@ -1,17 +1,18 @@
 #!/usr/bin/perl -w
 use strict;
 use SDL;
-use SDL::Constants;
 use SDL::Audio;
 use SDL::AudioSpec;
 use Test::More;
+use Devel::Peek;
+
 use lib 't/lib';
 use SDL::TestTool;
 
 if ( SDL::TestTool->init_audio ) {
     plan( skip_all => 'Failed to init sound' );
 } else {
-    plan( tests => 18 );
+    plan( tests => 19 );
 }
 my @done = qw/
     audio_spec
@@ -41,7 +42,7 @@ is( SDL::Audio::get_audio_status, SDL_AUDIO_STOPPED,
 my $obtained = SDL::AudioSpec->new;
 is( SDL::Audio::open_audio( $desired, $obtained ),
     0, '[open_audio returned success]' );
-isa_ok( $obtained, 'SDL::AudioSpec' );
+isa_ok( $obtained, 'SDL::AudioSpec', 'Created a new AudioSpec' );
 
 is( SDL::Audio::get_audio_status, SDL_AUDIO_PAUSED,
     '[get_audio_status paused]' );
@@ -59,16 +60,18 @@ SDL::Audio::close_audio();
 is( SDL::Audio::get_audio_status, SDL_AUDIO_STOPPED,
     '[get_audio_status stopped]' );
 
-{
-    local $TODO = 1;
+
 
     # I'm not sure why this does give us the correct params
-    my ( $wav_spec, $audio_buf, $audio_len )
-        = @{ SDL::Audio::load_wav( 'test/sample.wav', $obtained ) };
-    isa_ok( $wav_spec,  'SDL::AudioSpec' );
-    isa_ok( $audio_len, 3 );
+    my $wav_ref =  SDL::Audio::load_wav( 'test/data/sample.wav', $obtained ); 
+    #printf Dump  @wav_ref;
+
+    isa_ok( $wav_ref, 'ARRAY', "Got and Array Out of load_wav. $wav_ref");
+    my ( $wav_spec, $audio_buf, $audio_len ) = @{$wav_ref};
+    isa_ok( $wav_spec,  'SDL::AudioSpec', '[load_wav] got Audio::Spec back out ');
+    is( $audio_len, 481712, '[load_wav] length is correct' );
     SDL::Audio::free_wav($audio_buf);
-};
+
 
 my @left = qw/
     load_wav
