@@ -57,7 +57,7 @@ sub notify
 {
     my ($self, $event) = (@_);
  
-    print "Notify in Map \n" if $self->{EDEBUG};
+    print carp(sprintf("Notify '%s'in Map", $event->{name})) if $self->{EDEBUG};
  
     my %event_action = (
         'MapMoveRequest' => sub {
@@ -76,6 +76,7 @@ sub notify
 
 sub move_map
 {
+	my $self = shift;
 	my $direction = shift;
 	
 	$map_center[0]++ if $direction eq 'LEFT';
@@ -104,7 +105,7 @@ sub get_tile
 	my $x    = shift;
 	my $y    = shift;
 	
-	return $self->get_tile_by_index(${$map[$y]}[$x] ? 5 : 6);
+	return $self->get_tile_by_index(${$map[$y + $map_center[1]]}[$x + $map_center[0]] ? 5 : 6);
 }
 
 sub get_tile_by_index

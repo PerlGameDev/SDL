@@ -35,17 +35,18 @@ sub notify
 	    my $event_type = $sdl_event->type;
 	    my $key        = $self->{last_key} || '';
 	
-	    if ( $key eq 'down' ) { # TODO: left, right
-	        # store last pressed key, so the blocks 
-	        # will continue sliding next time
+	    if($event_type == SDL_KEYDOWN)
+	    {
+	        $key              = 'left'  if $sdl_event->key_sym == SDLK_LEFT;
+	        $key              = 'right' if $sdl_event->key_sym == SDLK_RIGHT;
+	        $key              = 'up'    if $sdl_event->key_sym == SDLK_UP;
+	        $key              = 'down'  if $sdl_event->key_sym == SDLK_DOWN;
 	        $self->{last_key} = $key;
 	    }
-	
-	    if($event_type == SDL_KEYUP)
+	    elsif($event_type == SDL_KEYUP)
 	    {
 	        # stop sliding on key up
 	        delete $self->{last_key};
-	        carp($sdl_event->key_sym . "<>" . SDLK_LEFT);
 	        $key = '';
 	    }
 	    elsif($event_type == SDL_QUIT)
@@ -56,10 +57,10 @@ sub notify
 	    my %event_key =
 	    (
 	        'escape' => { name => 'Quit' },
-	        'down'   => { name => 'MapMoveRequest', direction => 'DIRECTION_DOWN' },
-	        'left'   => { name => 'MapMoveRequest', direction => 'DIRECTION_LEFT' },
-	        'right'  => { name => 'MapMoveRequest', direction => 'DIRECTION_RIGHT' },
-	        'up'     => { name => 'MapMoveRequest', direction => 'DIRECTION_UP' },
+	        'down'   => { name => 'MapMoveRequest', direction => 'DOWN' },
+	        'left'   => { name => 'MapMoveRequest', direction => 'LEFT' },
+	        'right'  => { name => 'MapMoveRequest', direction => 'RIGHT' },
+	        'up'     => { name => 'MapMoveRequest', direction => 'UP' },
 	    );
 	
 	    $event_to_process = $event_key{$key} if defined $event_key{$key};

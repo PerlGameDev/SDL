@@ -150,17 +150,6 @@ sub draw_map
 	my $self = shift;
 	my $map  = SDL::Tutorial::MoP::Model::Map->new();
 	
-	$map->move_map('LEFT');
-
-	my $x_offset = 0;#$map->map_center[0] - ($screen_width  / $map->tile_size / 2);
-	my $y_offset = 0;#$map->map_center[1] - ($screen_height / $map->tile_size / 2);
-
-	   $y_offset = 0 if($y_offset < 0);
-	   $x_offset = 0 if($x_offset < 0);
-
-	$screen_width  = 640;
-	$screen_height = 480;
-	
 	carp('There is no surface to draw to') unless $self->{app};	
 	carp('There are no tiles to draw')     unless $map->tiles;	
 
@@ -168,7 +157,7 @@ sub draw_map
 	{
 		for (my $x = 0; $x < $screen_width / $map->tile_size; $x++)
 		{
-	    	my $tiles_rect  = $map->get_tile($x + $x_offset, $y + $y_offset);
+	    	my $tiles_rect  = $map->get_tile($x, $y);
 	    	my $screen_rect = SDL::Rect->new($x * $map->tile_size, $y * $map->tile_size, 
 	    	                                 $screen_width, $screen_height);
 	
