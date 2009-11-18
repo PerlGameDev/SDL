@@ -186,7 +186,7 @@ event_key_scancode ( event, ... )
 	OUTPUT:
 		RETVAL
 
-SDLKey *
+Uint16
 event_key_sym ( event, ... )
 	SDL_Event *event
 	CODE: 
@@ -199,7 +199,7 @@ event_key_sym ( event, ... )
 			b->sym = *kp;
 		}
 
-		RETVAL = &(b->sym);
+		RETVAL = b->sym;
 	OUTPUT:
 		RETVAL
 
