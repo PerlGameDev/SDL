@@ -12,7 +12,7 @@ use SDL::TestTool;
 if ( SDL::TestTool->init_audio ) {
     plan( skip_all => 'Failed to init sound' );
 } else {
-    plan( tests => 19 );
+    plan( tests => 17 );
 }
 my @done = qw/
     audio_spec
@@ -74,8 +74,6 @@ is( SDL::Audio::get_audio_status, SDL_AUDIO_STOPPED,
 
 
 my @left = qw/
-    load_wav
-    free_wav
     audio_cvt
     build_audio_cvt
     convert_audio

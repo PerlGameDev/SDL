@@ -168,6 +168,27 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	CDROM => {
+		file      => {
+			from  => 'src/Core/CDROM.xs',
+			to    => 'lib/SDL/CDROM.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	CDTrack => {
+		file      => {
+			from  => 'src/Core/objects/CDTrack.xs',
+			to    => 'lib/SDL/CDTrack.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	CD => {
+		file      => {
+			from  => 'src/Core/objects/CD.xs',
+			to    => 'lib/SDL/CD.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 
 	TTF_Font => {
 		file      => {

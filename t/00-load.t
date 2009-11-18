@@ -19,6 +19,11 @@ SDL::Event
 SDL::Mouse
 SDL::Joystick
 SDL::Cursor
+SDL::Audio
+SDL::AudioSpec
+SDL::CDROM
+SDL::CDTrack
+SDL::CD
 /;
     plan tests => scalar @modules;
 

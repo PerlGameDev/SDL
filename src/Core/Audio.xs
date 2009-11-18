@@ -60,7 +60,6 @@ audio_load_wav ( filename, spec )
 		}
 		else
 		{	
-		 warn ("sd");
 		RETVAL = newAV();
 		RETVAL = sv_2mortal((SV*)RETVAL );
 		av_push(RETVAL, sv_setref_pv( asref, "SDL::AudioSpec", (void *)temp));

@@ -40,7 +40,7 @@ SDL_AudioSpec *
 audiospec_new (CLASS)
 	char* CLASS
 	CODE:
-		RETVAL = malloc(sizeof(SDL_AudioSpec));
+		RETVAL = safemalloc(sizeof(SDL_AudioSpec));
 	OUTPUT:
 		RETVAL
 
