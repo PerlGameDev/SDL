@@ -88,7 +88,7 @@ Sound_DecoderInfo *	T_PTR
 const Sound_DecoderInfo *	T_PTR
 Sound_Sample *		T_PTR
 Sound_AudioInfo *	T_PTR
-SDL_RWops*		T_PTR
+SDL_RWops*		O_OBJECT
 SDL_svg_context*	T_PTR
 int			T_IV
 intArray		T_ARRAY

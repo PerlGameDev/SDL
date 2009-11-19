@@ -105,6 +105,14 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	RWOps => {
+		file      => {
+			from  => 'src/Core/objects/RWOps.xs',
+			to    => 'lib/SDL/RWOps.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+
 	PixelFormat => {
 		file      => {
 			from  => 'src/Core/objects/PixelFormat.xs',

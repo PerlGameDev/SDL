@@ -1,8 +1,9 @@
-package SDL::TextInputEvent;
+package SDL::RWOps;
 use strict;
 use warnings;
 require Exporter;
 require DynaLoader;
 our @ISA = qw(Exporter DynaLoader);
-bootstrap SDL::TextInputEvent;
+bootstrap SDL::RWOps;
+
 1;
