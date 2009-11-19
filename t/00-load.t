@@ -24,6 +24,13 @@ SDL::AudioSpec
 SDL::CDROM
 SDL::CDTrack
 SDL::CD
+SDL::MultiThread
+SDL::PixelFormat
+SDL::VideoInfo
+SDL::Mixer
+SDL::Mixer::MixChunk
+SDL::Mixer::MixMusic
+SDL::Version
 /;
     plan tests => scalar @modules;
 

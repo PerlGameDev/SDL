@@ -2,7 +2,7 @@
 use strict;
 use SDL;
 use Test::More;
-
+use SDL::RWOps;
 my @done = qw//;
 
 my @left = qw/

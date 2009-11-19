@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::RWOps -- SDL Bindings to SDL_RWOPs
+
+=head1 CATEGORY
+
+TODO, Core, Structure
+
+=cut
