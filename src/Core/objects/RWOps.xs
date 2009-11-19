@@ -8,7 +8,7 @@
 
 #include <SDL.h>
 
-MODULE = SDL::RWops 	PACKAGE = SDL::RWops    PREFIX = rwops_
+MODULE = SDL::RWOps 	PACKAGE = SDL::RWOps    PREFIX = rwops_
 
 =for documentation
 
