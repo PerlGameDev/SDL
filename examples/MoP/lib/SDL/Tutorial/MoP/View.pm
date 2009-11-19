@@ -8,10 +8,14 @@ use Carp;
 use base 'SDL::Tutorial::MoP::Base';
 
 use SDL;
-use SDL::App;
+use SDL::Video;
+use SDL::Rect;
 
 my $screen_width  = 800;
 my $screen_height = 600;
+
+my $map;
+my $view_rect     = SDL::Rect->new(0, 0, $screen_width, $screen_height);
 
 sub init 
 {
@@ -20,6 +24,7 @@ sub init
 	SDL::init(SDL_INIT_VIDEO);
 
 	$self->{app} = SDL::Video::set_video_mode( $screen_width, $screen_height, 32, SDL_SWSURFACE);
+	$map         = SDL::Tutorial::MoP::Model::Map->new();
 	
 	$self->clear();
 }
@@ -68,102 +73,19 @@ sub clear
 #        $palette{background});
 }
 
-sub show_map 
-{
-    my $self = shift;
-
-#     // Calculate the limits of the board in pixels
-#    my $x1 = $self->{'map'}->get_x_pos_in_pixels(0);
-#    my $x2 = $self->{'map'}->get_x_pos_in_pixels($self->{'map'}->{width});
-#    my $y =
-#      $self->{app}->height
-#      - ($self->{'map'}->{block_size} * $self->{'map'}->{height});
-
-#    $self->draw_rectangle(
-#        $x1 - $self->{grid}->{board_line_width},
-#        $y,
-#        $self->{grid}->{board_line_width},
-#        $self->{app}->height - 1,
-#        $palette{lines},
-#    );
-
-#
-#    $self->draw_rectangle(
-#        $x2, $y,
-#        $self->{grid}->{board_line_width},
-#        $self->{app}->height - 1,
-#        $palette{lines},
-#    );
-
-#    my $color;
-#    for (my $i = 0; $i < ($self->{'map'}->{width}); $i++) {
-#        for (my $j = 0; $j < $self->{'map'}->{height}; $j++) {
-
-            # Check if the block is filled, if so, draw it
-#            my $color = $self->{grid}->is_free_loc($i, $j) ? $palette{free}
-#                                                           : $palette{blocked};
-
-#            $self->draw_rectangle(
-#                $self->{grid}->get_x_pos_in_pixels($i),
-#                $self->{grid}->get_y_pos_in_pixels($j),
-#                $self->{grid}->{block_size} - 1,
-#                $self->{grid}->{block_size} - 1,
-#                $color
-#            );
-
-#        }
-#    }
-}
-
-#needs the charactor now
-sub show_charactor    # peice
-{
-#    my $self = shift;
-#    die 'Expecting 4 arguments' if ($#_ != 3);
-
-#    my ($x, $y, $piece, $rotation) = @_;
-#    my $pixels_x = $self->{'map'}->get_x_pos_in_pixels($x);
-#    my $pixels_y = $self->{'map'}->get_y_pos_in_pixels($y);
-
-#    for (my $i = 0; $i < 5; $i++) {
-#        for (my $j = 0; $j < 5; $j++) {
-
-            # Get the type of the block and draw it with the correct color
-#            my $color = SDL::Tutorial::Tetris::Model::Pieces->block_color($piece, $rotation, $j, $i);
-#            if (defined $color and $palette{$color}) {
-#                my $block_size = $self->{grid}->{block_size};
-#                $self->draw_rectangle(
-#                    $pixels_x + $i * $block_size,
-#                    $pixels_y + $j * $block_size,
-#                    $block_size - 1,
-#                    $block_size - 1,
-#                    $palette{$color},
-#                );
-#            }
-#        }
-#    }
-
-}
-
 sub draw_map
 {
 	my $self = shift;
-	my $map  = SDL::Tutorial::MoP::Model::Map->new();
 	
 	carp('There is no surface to draw to') unless $self->{app};	
 	carp('There are no tiles to draw')     unless $map->tiles;	
 
-	for (my $y = 0; $y < $screen_height / $map->tile_size; $y++)
+	# blitting the whole map-surface to app-surface
+	unless($map->is_up_to_date)
 	{
-		for (my $x = 0; $x < $screen_width / $map->tile_size; $x++)
-		{
-	    	my $tiles_rect  = $map->get_tile($x, $y);
-	    	my $screen_rect = SDL::Rect->new($x * $map->tile_size, $y * $map->tile_size, 
-	    	                                 $screen_width, $screen_height);
-	
-	    	SDL::Video::blit_surface( $map->tiles, $tiles_rect, $self->{app}, $screen_rect );
-		}
-	}
+		SDL::Video::blit_surface( $map->surface, $map->rect, $self->{app}, $view_rect );
+		$map->is_up_to_date(0);
+	}	
 
     return 1;
 }
@@ -173,35 +95,12 @@ sub draw_scene
     my $self = shift;
     my $game = $self->{game};
     
-    #print($self->{app} . "\n");
-
     $self->draw_map();
     
-#    $self->show_charactor(
-#        $game->{posx},  $game->{posy},
-#        $game->{piece}, $game->{pieceRotation}
-#    );
-#    $self->show_charactor(
-#        $game->{next_posx},  $game->{next_posy},
-#        $game->{next_piece}, $game->{next_rotation}
-#    );
-
 	carp('There is no surface to draw to') unless $self->{app};
 
     SDL::Video::update_rect( $self->{app}, 0, 0, $screen_width, $screen_height );
 }
-
-sub draw_rectangle 
-{
-    my $self = shift;
-#    die 'Expecting 5 parameters got: ' . $#_ if ($#_ != 4);
-#    my ($x, $y, $w, $h, $color) = @_;
-#    my $box = SDL::Rect->new(-x => $x, -y => $y, -w => $w, -h => $h);
-#    $self->{app}->fill($box, $color);
-
-    #print "Drew rect at ( $x $y $w $h ) \n";
-}
-
 
 # Should be in Game::Utility
 my $frame_rate = 0;

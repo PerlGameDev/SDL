@@ -26,11 +26,13 @@ use SDL::Tutorial::MoP::Models;
 my $tile_size     = 10;
 my @map           = ();
 
-my @map_center    = (32, 24); # x, y
-
 my $path          = module_file('SDL::Tutorial::MoP', 'data/tiles.bmp');
 my $tiles         = SDL::Video::load_BMP($path);
 croak 'Error: '.SDL::get_error() if(!$tiles);
+
+my $map_surface;       # the image(s) of the current map are here
+my $map_rect;
+my $is_up_to_date = 0;
 
 sub new
 {
@@ -48,7 +50,8 @@ sub init
 {
     my ($self, %params) = @_;
     
-    @map = $self->load_map();
+    $self->load_map() || carp("load_map() failed");
+    $map_rect = SDL::Rect->new( 0, 0, 800, 600); # TODO we need global screen dimensions
     
 	$self->{map} ||= [];
 }
@@ -61,7 +64,7 @@ sub notify
  
     my %event_action = (
         'MapMoveRequest' => sub {
-            $self->move_map($event->{direction}) if ($self->{map});
+            $self->move_map($event->{direction}) if $map_rect;
             $self->evt_manager->post({ name => 'MapMove' });
         },
     );
@@ -76,27 +79,44 @@ sub notify
 
 sub move_map
 {
-	my $self = shift;
+	my $self      = shift;
 	my $direction = shift;
 	
-	$map_center[0]++ if $direction eq 'LEFT';
-	$map_center[0]-- if $direction eq 'RIGHT';
-	$map_center[1]++ if $direction eq 'UP';
-	$map_center[1]-- if $direction eq 'DOWN';
+	$map_rect->x($map_rect->x + 1) if $direction eq 'LEFT';
+	$map_rect->x($map_rect->x - 1) if $direction eq 'RIGHT';
+	$map_rect->y($map_rect->y + 1) if $direction eq 'UP';
+	$map_rect->y($map_rect->y - 1) if $direction eq 'DOWN';
 }
 
+# loads the bitmap file into $self->surface and also the tile-definitions into @map
 sub load_map
 {
-	my $path = module_file('SDL::Tutorial::MoP', 'data/main.map');
-	open (FH, $path)  || die "Can not open file $path: $!";
-	while(<FH>)
-	{
-		my @row = split(//, $_);
-		push(@map, \@row);
-	}
-	close(FH);
+	my $self = shift;
+#	my $_path = module_file('SDL::Tutorial::MoP', 'data/main.map');
+#	open (FH, $_path)  || die "Can not open file $path: $!";
+#	while(<FH>)
+#	{
+#		my @_row = split(//, $_);
+#		push(@map, \@_row);
+#	}
+#	close(FH);
+#	return @map;
+
+	my $_path    = module_file('SDL::Tutorial::MoP', 'data/main.bmp');
+	my $_surface = SDL::Video::load_BMP($_path);
 	
-	return @map;
+	if($_surface)
+	{
+		$self->surface($_surface);
+		$is_up_to_date = 0;
+		$_surface      = undef;
+		return 1;
+	}
+	else
+	{
+		carp("Could not load bitmap $_path.");
+		return -1;
+	}
 }
 
 sub get_tile
@@ -105,7 +125,7 @@ sub get_tile
 	my $x    = shift;
 	my $y    = shift;
 	
-	return $self->get_tile_by_index(${$map[$y + $map_center[1]]}[$x + $map_center[0]] ? 5 : 6);
+#	return $self->get_tile_by_index(${$map[$y + $map_center[1]]}[$x + $map_center[0]] ? 5 : 6);
 }
 
 sub get_tile_by_index
@@ -123,14 +143,92 @@ sub get_tile_by_index
 
 sub tile_size
 {
-	my $self = shift;
+	my $self   = shift;
 	$tile_size = shift || return $tile_size;
 }
 
 sub tiles
 {
 	my $self = shift;
-	$tiles = shift || return $tiles;
+	$tiles   = shift || return $tiles;
+}
+
+sub surface
+{
+	my $self     = shift;
+	$map_surface = shift || return $map_surface;
+}
+
+sub x
+{
+	my $self = shift;
+	my $_x   = shift;
+	
+	if(defined $_x)
+	{
+		$map_rect->x = $_x;
+		$self->is_up_to_date(0);
+		return $self;
+	}
+	
+	return $map_rect->x;
+}
+
+sub y
+{
+	my $self = shift;
+	my $_y   = shift;
+	
+	if(defined $_y)
+	{
+		$map_rect->y = $_y;
+		$self->is_up_to_date(0);
+		return $self;
+	}
+	
+	return $map_rect->y;
+}
+
+sub w
+{
+	my $self = shift;
+	my $_w   = shift;
+	
+	if(defined $_w)
+	{
+		$map_rect->w = $_w;
+		$self->is_up_to_date(0);
+		return $self;
+	}
+	
+	return $map_rect->w;
+}
+
+sub h
+{
+	my $self = shift;
+	my $_h   = shift;
+	
+	if(defined $_h)
+	{
+		$map_rect->h = $_h;
+		$self->is_up_to_date(0);
+		return $self;
+	}
+	
+	return $map_rect->h;
+}
+
+sub rect
+{
+	my $self  = shift;
+	$map_rect = shift || return $map_rect;
+}
+
+sub is_up_to_date
+{
+	my $self       = shift;
+	$is_up_to_date = shift || return $is_up_to_date;
 }
 
 
