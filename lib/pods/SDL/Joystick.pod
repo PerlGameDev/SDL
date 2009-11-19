@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::Joystick -- SDL Bindings for the Joystick device
+
+=head1 CATEGORY
+
+TODO, Core, Joystick
+
+=cut

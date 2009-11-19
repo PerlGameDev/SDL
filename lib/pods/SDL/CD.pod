@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::CD -- SDL Bindings for structure SDL_CD
+
+=head1 CATEGORY
+
+TODO, Core, CDROM, Structure
+
+=cut

@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::CDROM -- SDL Bindings for the CDROM device
+
+=head1 CATEGORY
+
+TODO, Core, CDROM
+
+=cut

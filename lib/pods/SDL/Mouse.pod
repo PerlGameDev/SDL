@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::Mouse -- SDL Bindings for the Mouse device
+
+=head1 CATEGORY
+
+TODO, Core, Mouse
+
+=cut
