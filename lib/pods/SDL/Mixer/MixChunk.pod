@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::MixChunk -- SDL Bindings for structure SDL_MixChunk
+
+=head1 CATEGORY
+
+TODO, Core, Mixer, Structure
+
+=cut

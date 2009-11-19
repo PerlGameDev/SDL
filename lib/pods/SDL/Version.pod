@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::Version -- SDL Bindings for structure SDL_Version
+
+=head1 CATEGORY
+
+TODO, Core, Structure
+
+=cut

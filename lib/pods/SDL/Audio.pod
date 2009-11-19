@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::Audio -- SDL Bindings for Audio
+
+=head1 CATEGORY
+
+TODO, Core, Audio
+
+=cut
