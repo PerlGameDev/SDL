@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Data::Dumper;
 use Carp;
+use Time::HiRes qw(usleep);
 
 use base 'SDL::Tutorial::MoP::Base';
 
@@ -49,11 +50,15 @@ sub notify
         },
         'GameStart' => sub {
             $self->{game} = $event->{game};
-            $self->draw_scene() if $self->{map};
+            $self->draw_scene();
         },
         'MapMove' => sub {
             $self->clear();
-            $self->draw_scene() if ($self->{map} && $self->{map});
+            $self->draw_scene();
+        },
+        'MapMoveRequest' => sub {
+            $self->clear();
+            $self->map_move($event->{direction});
         },
     );
 
@@ -73,6 +78,42 @@ sub clear
 #        $palette{background});
 }
 
+sub map_move_rel
+{
+	my $self = shift;
+	my $_x   = shift;
+	my $_y   = shift;
+	
+	my $step = $_x > 0 ? 1 : -1;
+	
+	for(my $x = 0; $x != $_x; $x += $step)
+	{
+		$map->x($map->x() + $step);
+		$self->draw_scene();
+		#usleep(1000);
+	}
+	
+	$step = $_y > 0 ? 1 : -1;
+	
+	for(my $y = 0; $y != $_y; $y += $step)
+	{
+		$map->y($map->y() + $step);
+		$self->draw_scene();
+		#usleep(1000);
+	}
+}
+
+sub map_move
+{
+	my $self      = shift;
+	my $direction = shift;
+	
+	$self->map_move_rel(+16, 0) if $direction eq 'RIGHT';
+	$self->map_move_rel(-16, 0) if $direction eq 'LEFT';
+	$self->map_move_rel(0, -16) if $direction eq 'UP';
+	$self->map_move_rel(0, +16) if $direction eq 'DOWN';
+}
+
 sub draw_map
 {
 	my $self = shift;
@@ -81,9 +122,12 @@ sub draw_map
 	carp('There are no tiles to draw')     unless $map->tiles;	
 
 	# blitting the whole map-surface to app-surface
+	my $srect = SDL::Rect->new(0, 0, $map->w(), $map->h()); #we want all of map;
+	my $drect = SDL::Rect->new($map->x(), $map->y(), $screen_width, $screen_height);
+	
 	unless($map->is_up_to_date)
 	{
-		SDL::Video::blit_surface( $map->surface, $map->rect, $self->{app}, $view_rect );
+		SDL::Video::blit_surface( $map->surface, $srect, $self->{app}, $drect );
 		$map->is_up_to_date(0);
 	}	
 

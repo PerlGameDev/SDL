@@ -30,7 +30,7 @@ sub notify
     my $sdl_event = SDL::Event->new();
 
     SDL::Events::pump_events();                #get events from SDL queue
-    while(SDL::Events::poll_event($sdl_event)) #get the first one
+    while(SDL::Events::poll_event($sdl_event) || $self->{last_key}) #get the first one
     {
 	    my $event_type = $sdl_event->type;
 	    my $key        = $self->{last_key} || '';
