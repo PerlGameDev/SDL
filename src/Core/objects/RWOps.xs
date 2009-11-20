@@ -27,7 +27,7 @@ rwops_alloc (CLASS)
 
 
 SDL_RWops*
-rwops_from_file ( CLASS, file, mode )
+rwops_new_file ( CLASS, file, mode )
 	char* CLASS
 	char* file
 	char * mode
@@ -37,7 +37,7 @@ rwops_from_file ( CLASS, file, mode )
 		RETVAL
 
 SDL_RWops*
-rwops_from_FP ( CLASS, fp, autoclose )
+rwops_new_FP ( CLASS, fp, autoclose )
 	char* CLASS
 	FILE* fp
 	int autoclose
@@ -47,7 +47,7 @@ rwops_from_FP ( CLASS, fp, autoclose )
 		RETVAL
 
 SDL_RWops*
-rwops_from_mem ( CLASS, mem, size )
+rwops_new_mem ( CLASS, mem, size )
 	char* CLASS
 	char* mem
 	int size
@@ -57,7 +57,7 @@ rwops_from_mem ( CLASS, mem, size )
 		RETVAL
 
 SDL_RWops*
-rwops_from_const_mem (CLASS, mem, size )
+rwops_new_const_mem (CLASS, mem, size )
 	char* CLASS
 	const char* mem
 	int size
