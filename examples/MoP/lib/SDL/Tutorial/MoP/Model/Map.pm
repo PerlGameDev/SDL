@@ -82,10 +82,20 @@ sub move_map
 	my $self      = shift;
 	my $direction = shift;
 	
+	carp($map_rect->x . "x" . $map_rect->y);
+
 	$map_rect->x($map_rect->x + 1) if $direction eq 'LEFT';
 	$map_rect->x($map_rect->x - 1) if $direction eq 'RIGHT';
 	$map_rect->y($map_rect->y + 1) if $direction eq 'UP';
 	$map_rect->y($map_rect->y - 1) if $direction eq 'DOWN';
+	
+	return;
+	
+	$self->rect->x($self->rect->x + 1) if $direction eq 'LEFT';
+	$self->rect->x($self->rect->x - 1) if $direction eq 'RIGHT';
+	$self->rect->y($self->rect->y + 1) if $direction eq 'UP';
+	$self->rect->y($self->rect->y - 1) if $direction eq 'DOWN';
+	
 }
 
 # loads the bitmap file into $self->surface and also the tile-definitions into @map
@@ -160,66 +170,6 @@ sub surface
 	$map_surface = shift || return $map_surface;
 }
 
-sub x
-{
-	my $self = shift;
-	my $_x   = shift;
-	
-	if(defined $_x)
-	{
-		$map_rect->x = $_x;
-		$self->is_up_to_date(0);
-		return $self;
-	}
-	
-	return $map_rect->x;
-}
-
-sub y
-{
-	my $self = shift;
-	my $_y   = shift;
-	
-	if(defined $_y)
-	{
-		$map_rect->y = $_y;
-		$self->is_up_to_date(0);
-		return $self;
-	}
-	
-	return $map_rect->y;
-}
-
-sub w
-{
-	my $self = shift;
-	my $_w   = shift;
-	
-	if(defined $_w)
-	{
-		$map_rect->w = $_w;
-		$self->is_up_to_date(0);
-		return $self;
-	}
-	
-	return $map_rect->w;
-}
-
-sub h
-{
-	my $self = shift;
-	my $_h   = shift;
-	
-	if(defined $_h)
-	{
-		$map_rect->h = $_h;
-		$self->is_up_to_date(0);
-		return $self;
-	}
-	
-	return $map_rect->h;
-}
-
 sub rect
 {
 	my $self  = shift;
@@ -231,7 +181,5 @@ sub is_up_to_date
 	my $self       = shift;
 	$is_up_to_date = shift || return $is_up_to_date;
 }
-
-
 
 1;
