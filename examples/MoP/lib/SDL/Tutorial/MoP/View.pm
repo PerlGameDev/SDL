@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Data::Dumper;
 use Carp;
-use Time::HiRes qw(usleep);
+use Time::HiRes qw(time usleep);
 
 use base 'SDL::Tutorial::MoP::Base';
 
@@ -26,7 +26,8 @@ sub init
 
 	$self->{app} = SDL::Video::set_video_mode( $screen_width, $screen_height, 32, SDL_SWSURFACE);
 	$map         = SDL::Tutorial::MoP::Model::Map->new();
-	
+	$self->{count} = 0;
+	$self->{iTime} = time;
 	$self->clear();
 }
 
@@ -74,8 +75,9 @@ sub notify
 sub clear 
 {
     my $self = shift;
-#    $self->draw_rectangle(0, 0, $self->{app}->width, $self->{app}->height,
-#        $palette{background});
+    my $mapped_color =SDL::Video::map_RGB( $self->{app}->format(), 0, 0, 0);
+    SDL::Video::fill_rect($self->{app}, SDL::Rect->new(0, 0, $screen_width, $screen_height), $mapped_color);
+    
 }
 
 sub map_move_rel
@@ -143,6 +145,16 @@ sub draw_scene
     
 	carp('There is no surface to draw to') unless $self->{app};
 
+    $self->{count} = $self->{count}+1;
+    
+    
+    if( $self->{count} > 10 )
+    {
+        #reset fps
+        $self->{count} = 0;
+        $self->{iTime} = time;
+    }
+ 
     SDL::Video::update_rect( $self->{app}, 0, 0, $screen_width, $screen_height );
 }
 
