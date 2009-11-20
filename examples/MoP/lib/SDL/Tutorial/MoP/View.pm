@@ -24,7 +24,7 @@ sub init
     
 	SDL::init(SDL_INIT_VIDEO);
 
-	$self->{app} = SDL::Video::set_video_mode( $screen_width, $screen_height, 32, SDL_SWSURFACE);
+	$self->{app} = SDL::Video::set_video_mode( $screen_width, $screen_height, 32, SDL_SWSURFACE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
 	$map         = SDL::Tutorial::MoP::Model::Map->new();
 	$self->{count} = 0;
 	$self->{iTime} = time;
@@ -85,8 +85,9 @@ sub map_move_rel
 	my $self = shift;
 	my $_x   = shift;
 	my $_y   = shift;
-	
-	my $step = $_x > 0 ? 1 : -1;
+	$self->clear();
+
+	my $step = $_x > 0 ? 2 : -2;
 	
 	for(my $x = 0; $x != $_x; $x += $step)
 	{
@@ -95,7 +96,7 @@ sub map_move_rel
 		#usleep(1000);
 	}
 	
-	$step = $_y > 0 ? 1 : -1;
+	$step = $_y > 0 ? 2 : -2;
 	
 	for(my $y = 0; $y != $_y; $y += $step)
 	{

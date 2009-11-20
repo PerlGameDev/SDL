@@ -41,6 +41,7 @@ sub notify
 	        $key              = 'right' if $sdl_event->key_sym == SDLK_RIGHT;
 	        $key              = 'up'    if $sdl_event->key_sym == SDLK_UP;
 	        $key              = 'down'  if $sdl_event->key_sym == SDLK_DOWN;
+		if($sdl_event->key_sym == SDLK_ESCAPE ){ exit;}
 	        $self->{last_key} = $key;
 	    }
 	    elsif($event_type == SDL_KEYUP)
