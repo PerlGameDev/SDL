@@ -103,7 +103,8 @@ sub load_map
 #	return @map;
 
 	my $_path    = module_file('SDL::Tutorial::MoP', 'data/main.bmp');
-	my $_surface = SDL::Video::load_BMP($_path);
+	#my $_surface = SDL::Video::load_BMP($_path);
+	my $_surface = SDL::IMG_Load($_path);
 	
 	if($_surface)
 	{
