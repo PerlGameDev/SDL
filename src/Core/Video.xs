@@ -268,17 +268,8 @@ video_map_RGB ( pixel_format, r, g, b )
 	Uint8 g
 	Uint8 b
 	CODE:
-		Uint32 value = SDL_MapRGB(pixel_format, r,g,b);
-		if(value > 0)  
-		{ 
-                RETVAL = value; 
-		}
-		else
-		{
-		warn( "SDL_MapRGB failed: %s", SDL_GetError() );
-		RETVAL = -1;  
-		}
-	OUTPUT:
+		RETVAL = SDL_MapRGB(pixel_format, r,g,b);
+       	OUTPUT:
 		RETVAL
 
 Uint32
@@ -289,17 +280,7 @@ video_map_RGBA ( pixel_format, r, g, b, a )
 	Uint8 b	
 	Uint8 a
 	CODE:
-		Uint32 value = SDL_MapRGBA(pixel_format, r,g,b,a );
-		if(value > 0)  
-		{ 
-                RETVAL = value; 
-		}
-		else
-		{
-		warn( "SDL_MapRGBA failed: %s", SDL_GetError() );
-		RETVAL = -1;  
-		}
-	
+		RETVAL = SDL_MapRGBA(pixel_format, r,g,b,a );
 	OUTPUT:
 		RETVAL
 

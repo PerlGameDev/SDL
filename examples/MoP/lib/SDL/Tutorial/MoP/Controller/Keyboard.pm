@@ -30,7 +30,7 @@ sub notify
     my $sdl_event = SDL::Event->new();
 
     SDL::Events::pump_events();                #get events from SDL queue
-    while(SDL::Events::poll_event($sdl_event)) #get the first one
+    while(SDL::Events::poll_event($sdl_event) || $self->{last_key}) #get the first one
     {
 	    my $event_type = $sdl_event->type;
 	    my $key        = $self->{last_key} || '';
@@ -41,6 +41,7 @@ sub notify
 	        $key              = 'right' if $sdl_event->key_sym == SDLK_RIGHT;
 	        $key              = 'up'    if $sdl_event->key_sym == SDLK_UP;
 	        $key              = 'down'  if $sdl_event->key_sym == SDLK_DOWN;
+		if($sdl_event->key_sym == SDLK_ESCAPE ){ exit;}
 	        $self->{last_key} = $key;
 	    }
 	    elsif($event_type == SDL_KEYUP)
