@@ -176,8 +176,8 @@ $value = SDL::Video::lock_surface($hwdisplay); pass '[lock_surface] ran returned
 
 SDL::Video::unlock_surface($hwdisplay); pass '[unlock_surface] ran';
 
-is( SDL::Video::map_RGB($hwdisplay->format, 10, 10 ,10) > 0, 1, '[map_RGB] maps correctly to 8-bit surface');
-is( SDL::Video::map_RGBA($hwdisplay->format, 10, 10 ,10, 10) > 0, 1, '[map_RGBA] maps correctly to 8-bit surface');
+is( SDL::Video::map_RGB($hwdisplay->format, 10, 10 ,10) , 62, '[map_RGB] maps correctly to 8-bit surface');
+is( SDL::Video::map_RGBA($hwdisplay->format, 10, 10 ,10, 10) , 62, '[map_RGBA] maps correctly to 8-bit surface');
 
 isa_ok(SDL::Video::convert_surface( $display , $hwdisplay->format, SDL_SRCALPHA), 'SDL::Surface', '[convert_surface] Checking if we get a surface ref back'); 
 

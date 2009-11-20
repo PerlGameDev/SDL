@@ -268,9 +268,8 @@ video_map_RGB ( pixel_format, r, g, b )
 	Uint8 g
 	Uint8 b
 	CODE:
-		Uint32 value = SDL_MapRGB(pixel_format, r,g,b);
-                RETVAL = value; 
-	OUTPUT:
+		RETVAL = SDL_MapRGB(pixel_format, r,g,b);
+       	OUTPUT:
 		RETVAL
 
 Uint32
@@ -281,8 +280,7 @@ video_map_RGBA ( pixel_format, r, g, b, a )
 	Uint8 b	
 	Uint8 a
 	CODE:
-		Uint32 value = SDL_MapRGBA(pixel_format, r,g,b,a );
-                RETVAL = value; 
+		RETVAL = SDL_MapRGBA(pixel_format, r,g,b,a );
 	OUTPUT:
 		RETVAL
 
