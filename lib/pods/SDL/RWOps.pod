@@ -13,6 +13,12 @@ TODO, Core, Structure
 
 use SDL::RW;
 
+
+SDL::RWOps is an "undocumented" feature of SDL, allowing you to use pointers to memory instead of files (though it can handle files too) for things such as images or samples. The primary advantage of this feature is that many libraries load files from the filesystem themselves, leaving you a bit stuck if you want to implement your own special file access, such as an archive format. Fortunately many libraries, such as SDL_image, provide additional methods designed to read from an SDL_RWops, so that you can provide the data in whatever way you like.
+
+An example usage would be to put a bunch of resources in a zip file and use Zziplib to access them easily.
+
+
 =head1 METHODS
 
 
@@ -70,7 +76,7 @@ It returns a SDL::RWops on succés on undef on error.
 alloc_rw allocates an empty, unpopulated SDL::RWops structure. You must fill out the fields yourself. 
 It returns a SDL::RWops structure on succés or undef on error. 
 
-Note: You must free any memory allocated with SDL::alloc_rw with SDL::free_rw
+Note: You must free any memory allocated with SDL::alloc_rw with SDL::free_rw.
 
 
 =head2 free_rw(context)
@@ -80,6 +86,50 @@ It doesn't returns anything.
 
 
 =head2 rw_seek(ctx,offset,whence)
+
+SDL::rw_seek calls the seek function pointer in an SDL::RWOps structure. It takes the same 3 parameters as the function pointer:
+
+	1. A pointer to an SDL::rwops structure
+   	2. An offset in bytes. This can be a negative value.
+   	3.SEEK_SET, SEEK_CUR, or SEEK_END. SEEK_SET seeks from the beginning of the file, SEEK_CUR from the current position, and SEEK_END from the end of the file. 
+
+SDL::rw_seek returns the final offset in the data source.
+
+=head2 rw_tell(ctx)
+
+SDL::rw_tell performs a do-nothing seek to get the current offset in an SDL::RWOps stream ctx. It takes one parameter, a pointer to an SDL::RWOps structure.
+It returns the offset in the stream. 
+
+=head2 rw_read(ctx,ptr,size,n)
+
+SDL_RWread calls the function pointed to by an SDL::RWOps structure's read member. It takes the same 4 parameters as the function pointer:
+
+   1. A pointer to an SDL::RWOps structure
+   2. A pointer to an area of memory to read data into
+   3. The size of each block of memory to read
+   4. The maxinum number of memory blocks to read(it may read less) 
+
+It returns the number of memory blocks read, or -1 if the read failed. 
+
+
+=head2 rw_write(ctx,ptr,size,n)
+
+SDL_RWwrite calls the write function in an SDL::RWOps structure. It takes the same parameters as the write function given in the SDL::RWOps structure:
+
+   1. A pointer to an SDL::RWOps structure
+   2. A pointer to an area in memory to read data from
+   3. The size of the memory blocks to write
+   4. The exact number of memory blocks to write 
+
+0n success, it returns the number of memory blocks you told it to write. 
+If it couldn't write that exact number of blocks, or the write didn't work at all, it returns -1.
+
+
+=head2 rw_close(ctx)
+
+SDL::rw_close calls the close function in an SDL::RWOps structure. It only takes one parameter, an  SDL::RWOps structure. 
+Returns 0 on success, -1 on error. 
+
 
 
 =cut
