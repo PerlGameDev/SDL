@@ -107,8 +107,18 @@ surface_h ( surface )
 	OUTPUT:
 		RETVAL
 
+int
+surface_get_pixel(surface, offset)
+	SDL_Surface *surface
+	int offset
+	CODE:
+	  RETVAL =((unsigned int*)surface->pixels)[offset];
+	OUTPUT:
+	  RETVAL
+
+
 IV
-surface_get_pixels(surface)
+surface_get_pixels_ptr(surface)
 	SDL_Surface *surface
 	CODE:
 	  if(!surface->pixels) croak("Incomplete surface");
