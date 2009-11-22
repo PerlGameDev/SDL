@@ -8,4 +8,128 @@ SDL::RWOps -- SDL Bindings to SDL_RWOPs
 
 TODO, Core, Structure
 
+
+=head1 SYNOPSIS
+
+use SDL::RW;
+
+
+SDL::RWOps is an "undocumented" feature of SDL, allowing you to use pointers to memory instead of files (though it can handle files too) for things such as images or samples. The primary advantage of this feature is that many libraries load files from the filesystem themselves, leaving you a bit stuck if you want to implement your own special file access, such as an archive format. Fortunately many libraries, such as SDL_image, provide additional methods designed to read from an SDL_RWops, so that you can provide the data in whatever way you like.
+
+An example usage would be to put a bunch of resources in a zip file and use Zziplib to access them easily.
+
+
+=head1 METHODS
+
+
+=head2 rw_from_file(file,mode) 
+
+rw_from_file creates a new SDL::RWops structure for reading from and/or writing to a named file. 
+The mode string is treated the same as in a call to the C library's fopen().
+SDL::rw_from_file() returns a SDL::RWops structure on succés or undef on failure. 
+
+	Mode Strings:
+	
+	"r"	Open a file for reading. The file must exist.
+
+	"w"	Create an empty file for writing. If a file with the same name already exists its content is erased and the file is treated as a new empty file.
+	
+	"a"	Append to a file. Writing operations append data at the end of the file. The file is created if it does not exist.
+
+	"r+"	Open a file for update both reading and writing. The file must exist.
+
+	"w+"	Create an empty file for both reading and writing. 
+		If a file with the same name already exists its content is erased and the file is treated as a new empty file.
+
+	"a+"	Open a file for reading and appending. All writing operations are performed at the end of the file, protecting the previous content to be overwritten.
+		You can reposition (fseek, rewind) the internal pointer to anywhere in the file for reading, but writing operations will move it back to the end of file.		 The file is created if it does not exist.
+
+
+NOTE: In order to open a file as a binary file, a "b" character has to be included in the mode string. 
+This additional "b" character can either be appended at the end of the string (thus making the following compound modes: "rb", "wb", "ab", "r+b", "w+b", "a+b") or be inserted between the letter and the "+" sign for the mixed modes ("rb+", "wb+", "ab+"). Additional characters may follow the sequence, although they should have no effect. For example, "t" is sometimes appended to make explicit the file is a text file.
+
+
+
+=head2 rw_from_fp(fp,autoclose)
+
+SDL::rw_from_fp creates a new SDL::RWops structure from a file pointer, opened with stdio. If autoclose is nonzero, the file will be automatically closed when the SDL::RWops structure is closed.
+It returns a SDL::RWops on succés or undef on error.
+
+Note: This is not available under Win32, since files opened in an application on that platform cannot be used by a dynamically linked library. 
+
+
+=head2 rw_from_mem(mem,size)
+
+SDL::rw_from_mem sets up a SDL::RWops struct based on a chunk of memory of a certain size.
+It returns a SDL::Rwops on succés or undef on error. 
+
+Note: If the memory is not writable, use SDL::rw_from_const_mem instead. 
+
+
+=head2 rw_from_const_mem(mem,size)
+
+rw_from_const_mem sets up a SDL::RWops struct based on a memory area of a certain size. It assumes the memory area is not writable. 
+It returns a SDL::RWops on succés on undef on error.
+
+=head2 alloc_rw()
+
+alloc_rw allocates an empty, unpopulated SDL::RWops structure. You must fill out the fields yourself. 
+It returns a SDL::RWops structure on succés or undef on error. 
+
+Note: You must free any memory allocated with SDL::alloc_rw with SDL::free_rw.
+
+
+=head2 free_rw(context)
+
+SDL::free_rw frees an SDL::RWops structure previously allocated by SDL::alloc_rw. Only use it on memory allocated by SDL::alloc_rw. 
+It doesn't returns anything.
+
+
+=head2 rw_seek(ctx,offset,whence)
+
+SDL::rw_seek calls the seek function pointer in an SDL::RWOps structure. It takes the same 3 parameters as the function pointer:
+
+	1. A pointer to an SDL::rwops structure
+   	2. An offset in bytes. This can be a negative value.
+   	3.SEEK_SET, SEEK_CUR, or SEEK_END. SEEK_SET seeks from the beginning of the file, SEEK_CUR from the current position, and SEEK_END from the end of the file. 
+
+SDL::rw_seek returns the final offset in the data source.
+
+=head2 rw_tell(ctx)
+
+SDL::rw_tell performs a do-nothing seek to get the current offset in an SDL::RWOps stream ctx. It takes one parameter, a pointer to an SDL::RWOps structure.
+It returns the offset in the stream. 
+
+=head2 rw_read(ctx,ptr,size,n)
+
+SDL_RWread calls the function pointed to by an SDL::RWOps structure's read member. It takes the same 4 parameters as the function pointer:
+
+   1. A pointer to an SDL::RWOps structure
+   2. A pointer to an area of memory to read data into
+   3. The size of each block of memory to read
+   4. The maxinum number of memory blocks to read(it may read less) 
+
+It returns the number of memory blocks read, or -1 if the read failed. 
+
+
+=head2 rw_write(ctx,ptr,size,n)
+
+SDL_RWwrite calls the write function in an SDL::RWOps structure. It takes the same parameters as the write function given in the SDL::RWOps structure:
+
+   1. A pointer to an SDL::RWOps structure
+   2. A pointer to an area in memory to read data from
+   3. The size of the memory blocks to write
+   4. The exact number of memory blocks to write 
+
+0n success, it returns the number of memory blocks you told it to write. 
+If it couldn't write that exact number of blocks, or the write didn't work at all, it returns -1.
+
+
+=head2 rw_close(ctx)
+
+SDL::rw_close calls the close function in an SDL::RWOps structure. It only takes one parameter, an  SDL::RWOps structure. 
+Returns 0 on success, -1 on error. 
+
+
+
 =cut

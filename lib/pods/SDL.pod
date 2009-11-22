@@ -238,7 +238,7 @@ than the specified depending on the underlying OS.
 	SDL::Events need to be completed
 	SDL::Cdrom need some examples. 
 	SDL::MultiThread to be created( once implemented  ). 
-	SDL::Time to be completed.
+	SDL::Timer need examples. 
 	SDL::RW to be created.
 	SDL::Mouse need to be created.
 	SDL::Joystick need to be created.
