@@ -23,9 +23,13 @@ Core, Joystick
 
 =head2 num_joysticks
 
+ int SDL::Joystick::num_joysticks( void );
+
 Counts and returns available joysticks.
 
 =head2 name
+
+ string SDL::Joystick::name( index );
 
 Get the implementation dependent name of joystick. The C<index> parameter refers to the N'th joystick on the system. 
 
@@ -39,6 +43,8 @@ Get the implementation dependent name of joystick. The C<index> parameter refers
  }
 
 =head2 open
+
+ object SDL::Joystick::open( index );
 
 Opens a joystick for use within SDL. The C<index> refers to the N'th joystick in the system. 
 A joystick must be opened before it can be used.
@@ -71,33 +77,48 @@ A joystick must be opened before it can be used.
 
 =head2 opened
 
+ int SDL::Joystick::opened( index );
+
 Determines whether a joystick has already been opened within the application. C<index> refers to the N'th joystick on the system.
 
 Returns 1 if the joystick has been opened, or 0 if it has not.
 
 =head2 index
 
-Returns the C<index> of a given C<SDL_Joystick> structure. See L<SDL::Joystick::open>
+ int SDL::Joystick::index( object );
+
+Returns the C<index> of a given C<SDL_Joystick> structure. See L<SDL::Joystick::open|/open>
 
 =head2 num_axes
 
-Return the number of axes available from a previously opened joystick. See L<SDL::Joystick::open>
+ int SDL::Joystick::num_axes( object );
+
+Return the number of axes available from a previously opened joystick. See L<SDL::Joystick::open|/open>
 
 =head2 num_balls
 
-Return the number of trackballs available from a previously opened joystick. See L<SDL::Joystick::open>
+ int SDL::Joystick::num_balls( object );
+
+Return the number of trackballs available from a previously opened joystick. See L<SDL::Joystick::open|/open>
 
 =head2 num_hats
 
-Gets the number of joystick hats
+ int SDL::Joystick::num_hats( object );
+
+Gets the number of joystick hats from a previously opened joystick. See L<SDL::Joystick::open|/open>
 
 =head2 num_buttons
 
-Gets the number of joystick buttons
+ int SDL::Joystick::num_buttons( object );
+
+Gets the number of joystick buttons from a previously opened joystick. See L<SDL::Joystick::open>
 
 =head2 update
 
-Updates the state of all joysticks
+ void SDL::Joystick::update();
+
+Updates the state(position, buttons, etc.) of all open joysticks. If joystick events have been enabled 
+with C<SDL::Joystick::event_state> then this is called automatically in the event loop. 
 
 =head2 get_axis
 
@@ -118,17 +139,82 @@ Returns a 16-bit signed integer representing the current position of the axis.
 
 =head2 get_hat
 
-Gets the current state of a joystick hat
+ int SDL::Joystick::get_hat( object, int );
+
+C<get_hat> returns the current state of the given C<hat> on the given C<joystick>. 
+
+The current state is returned which is an OR'd combination of one or more of the following:
+
+=over 4
+
+=item *
+
+C<SDL_HAT_CENTERED>
+
+=item *
+
+C<SDL_HAT_UP>
+
+=item *
+
+C<SDL_HAT_RIGHT>
+
+=item *
+
+C<SDL_HAT_DOWN>
+
+=item *
+
+C<SDL_HAT_LEFT>
+
+=item *
+
+C<SDL_HAT_RIGHTUP>
+
+=item *
+
+C<SDL_HAT_RIGHTDOWN>
+
+=item *
+
+C<SDL_HAT_LEFTUP>
+
+=item *
+
+C<SDL_HAT_LEFTDOWN>
+
+=back
+
+ my $joystick = SDL::Joystick::open(0);
+ 
+ my $position = SDL::Joystick::get_hat($joystick, 0);
+ 
+ print("hat is in position UP\n") if $position & SDL_HAT_UP;
 
 =head2 get_button
 
-Gets the current state of a given button on a given joystick
+ int SDL::Joystick::get_button( object, int );
+
+C<get_button> returns the current state of the given button on the given joystick.
+
+Returns 1 if the button is pressed. Otherwise, 0. 
+
+ my $joystick    = SDL::Joystick::open(0);
+ 
+ my $num_buttons = SDL::Joystick::num_buttons($joystick);
+ 
+ for(my $i = 0; $i < $num_buttons; $i++)
+ {
+     printf("button %d is %s\n", $i, SDL::Joystick::get_button($joystick, $i) ? 'pressed' : 'not pressed');
+ }
+ 
+ SDL::Joystick::close($joystick) if SDL::Joystick::opened(0);
 
 =head2 get_ball
 
-Get the ball axis change.
-
  int SDL::Joystick::get_ball(SDL_Joystick $joystick, int $ball, int $dx, int $dy);
+
+Get the ball axis change.
 
 Trackballs can only return relative motion since the last call to SDL::Joystick::get_ball, these motion deltas are placed into C<dx> and C<dy>.
 
@@ -145,6 +231,10 @@ Returns 0 on success or -1 on failure
 
 =head2 close
 
-Closes a previously opened joystick 
+ void SDL::Joystick::close( object );
+
+Closes a previously opened joystick. See L<SDL::Joystick::open|/open>
+
+ SDL::Joystick::close($joystick) if SDL::Joystick::opened(0);
 
 =cut
