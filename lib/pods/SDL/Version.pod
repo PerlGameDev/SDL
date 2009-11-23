@@ -6,6 +6,40 @@ SDL::Version -- SDL Bindings for structure SDL_Version
 
 =head1 CATEGORY
 
-TODO, Core, Structure
+Core, Structure
+
+=head1 SYNOPSIS
+
+ use SDL;
+ use SDL::Version;
+ 
+ # print compile-time version
+ printf("SDL::version is %d.%d.%d\n", SDL::version->major, 
+                                      SDL::version->minor,
+                                      SDL::version->patch); 
+ 
+ # print linked version
+ printf("SDL::linked_version is %d.%d.%d\n", SDL::linked_version->major, 
+                                             SDL::linked_version->minor, 
+                                             SDL::linked_version->patch);
+
+=head1 DESCRIPTION
+
+The C<SDL::Version> structure is used by the C<SDL::linked_version> function and the C<SDL::version> macro. The C<SDL::linked_version> function 
+returns the link-time SDL version whereas the C<SDL::version> macro returns the compile-time SDL version. 
+
+=head1 METHODS
+
+=head2 major
+
+Major version number
+
+=head2 minor
+
+Minor version number
+
+=head2 patch
+
+Patch version number
 
 =cut
