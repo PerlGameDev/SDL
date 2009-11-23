@@ -6,6 +6,61 @@ SDL::Mouse -- SDL Bindings for the Mouse device
 
 =head1 CATEGORY
 
-TODO, Core, Mouse
+Core, Mouse
+
+=head1 METHODS
+
+=head2 warp_mouse
+
+ void warp_mouse( int $x, int $y );
+
+Set the position of the mouse cursor (generates a mouse motion event).
+
+=head2 free_cursor
+
+ void free_cursor( object );
+
+Frees a cursor that was created using C<SDL::Cursor->new()>. 
+
+=head2 set_cursor
+
+ void set_cursor( object );
+
+Sets the currently active cursor to the specified one. If the cursor is currently visible, the change will be immediately represented 
+on the display. C<set_cursor()> can be used to force cursor redraw, if this is desired for any reason. 
+
+=head2 get_cursor
+
+ object get_cursor();
+ 
+Gets the currently active mouse cursor.
+
+=head2 show_cursor
+
+ int show_cursor( int toggle );
+
+Toggle whether or not the cursor is shown on the screen. Passing C<SDL_ENABLE> displays the cursor and passing C<SDL_DISABLE> hides it. 
+The current state of the mouse cursor can be queried by passing C<SDL_QUERY>, either C<SDL_DISABLE> or C<SDL_ENABLE> will be returned.
+
+ use SDL;
+ use SDL::Mouse;
+ use SDL::Video;
+ 
+ SDL::init(SDL_INIT_VIDEO);
+ SDL::Video::set_video_mode( 640, 480, 16, SDL_SWSURFACE);
+ 
+ printf("Cursor is %s\n", SDL::Mouse::show_cursor(SDL_QUERY) ? 'visible' : 'not visible');
+ 
+ sleep(3);
+ 
+ SDL::Mouse::show_cursor(SDL_DISABLE);
+ printf("Cursor is %s\n", SDL::Mouse::show_cursor(SDL_QUERY) ? 'visible' : 'not visible');
+ 
+ sleep(3);
+ 
+ SDL::Mouse::show_cursor(SDL_ENABLE);
+ printf("Cursor is %s\n", SDL::Mouse::show_cursor(SDL_QUERY) ? 'visible' : 'not visible');
+ 
+ sleep(3);
 
 =cut
