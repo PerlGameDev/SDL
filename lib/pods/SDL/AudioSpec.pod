@@ -2,10 +2,87 @@
 
 =head1 NAME
 
-SDL::AudioSpec -- SDL Bindings for structure SDL_AudioSpec
+SDL::AudioSpec -- SDL Bindings for structure SDL::AudioSpec
 
 =head1 CATEGORY
 
-TODO, Core, Audio, Structure
+Core, Audio, Structure
+
+=head1 SYNOPSIS
+
+ use SDL;
+ use SDL::AudioSpec;
+ 
+ SDL::init(SDL_INIT_AUDIO);
+ 
+ my $audio_spec = SDL::AudioSpec->new();
+ 
+    $audio_spec->freq(22050);          # 22050Hz - FM Radio quality
+    $audio_spec->format(AUDIO_S16SYS); # 16-bit signed audio
+    $audio_spec->samples(8192);        # Large audio buffer reduces risk of dropouts but increases response time
+    $audio_spec->channels(1);          # Mono
+
+=head1 DESCIPTION
+
+The C<SDL::AudioSpec> structure is used to describe the format of some audio data. This structure is used by C<SDL::Audio::open_audio> 
+and C<SDL::Audio::load_wav>. 
+While all fields are used by C<SDL::Audio::open_audio>, only C<freq>, C<format>, C<samples> and C<channels> are used by C<SDL::Audio::load_wav>. 
+We will detail these common members here.
+
+=head1 METHODS
+
+=head2 freq
+
+The number of samples sent to the sound device every second. Common values are 11025, 22050 and 44100. The higher the better.
+
+=head2 format
+
+Specifies the size and type of each sample element. Values it can take are:
+
+=over 4
+
+=item AUDIO_U8
+
+Unsigned 8-bit samples.
+
+=item AUDIO_S8
+
+Signed 8-bit samples.
+
+=item AUDIO_U16 or AUDIO_U16LSB
+
+not supported by all hardware (unsigned 16-bit little-endian)
+
+=item AUDIO_S16 or AUDIO_S16LSB
+
+not supported by all hardware (signed 16-bit little-endian)
+
+=item AUDIO_U16MSB
+
+not supported by all hardware (unsigned 16-bit big-endian)
+
+=item AUDIO_S16MSB
+
+not supported by all hardware (signed 16-bit big-endian)
+
+=item AUDIO_U16SYS
+
+Either AUDIO_U16LSB or AUDIO_U16MSB depending on hardware CPU endianness
+
+=item AUDIO_S16SYS
+
+Either AUDIO_S16LSB or AUDIO_S16MSB depending on hardware CPU endianness
+
+=back
+
+=head2 channels
+
+The number of separate sound channels. 1 is mono (single channel), 2 is stereo (dual channel).
+
+=head2 samples
+
+When used with C<SDL::Audio::open_audio> this refers to the size of the audio buffer in samples. A sample is a chunk of audio data of the 
+size specified in format multiplied by the number of channels. When the C<SDL::AudioSpec> is used with C<SDL::Audio::load_wav> samples is 
+set to 4096.
 
 =cut
