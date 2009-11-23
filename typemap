@@ -46,7 +46,7 @@ SDL_version *		O_OBJECT
 SDL_SysWMInfo *		O_OBJECT
 SDL_Cursor *		O_OBJECT	
 SDL_AudioSpec *		O_OBJECT
-SDL_AudioCVT *		T_PTR
+SDL_AudioCVT *		O_OBJECT
 Mix_Fading		T_UV
 Mix_Chunk *		O_OBJECT
 Mix_Music *		O_OBJECT

@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::AudioCVT -- Bindings to SDL structure SDL_AudioCVT
+
+=head1 CATEGORY
+
+TODO, Core, Audio
+
+=cut
