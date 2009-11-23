@@ -8,4 +8,58 @@ SDL::Audio -- SDL Bindings for Audio
 
 TODO, Core, Audio
 
+=head1 DESCRIPTION
+ 
+
+=head1 METHODS
+
+=head2 open_audio
+
+Opens the audio device with the desired parameters.
+
+=head2 PauseAudio 
+
+Pauses and unpauses the audio callback processing
+
+=head2 GetAudioStatus 
+
+Gets the current audio state
+
+=head2 LoadWAV 
+
+Loads a WAVE file
+
+=head2 FreeWAV 
+
+Frees previously opened WAV data
+
+=head2 AudioCVT 
+
+Audio Conversion Structure
+
+=head2 BuildAudioCVT 
+
+Initializes a SDL_AudioCVT - structure for conversion
+
+=head2 ConvertAudio  
+
+Converts audio data to a desired audio format.
+
+=head2 MixAudio 
+
+Mixes audio data
+
+=head2 LockAudio
+
+Locks out the callback function
+
+=head2 UnlockAudio
+
+Unlocks the callback function
+
+=head2 CloseAudio 
+
+Shuts down audio processing and closes the audio device.  
+
 =cut
+
