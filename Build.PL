@@ -42,6 +42,13 @@ my %subsystems =
 		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
 		                  png jpeg smpeg )],
 	},
+	Time => {
+		file      => {
+			from  => 'src/Core/Time.xs',
+			to    => 'lib/SDL/Time.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	Events => {
 		file      => {
 			from  => 'src/Core/Events.xs',

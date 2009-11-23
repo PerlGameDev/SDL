@@ -2,7 +2,7 @@
 use strict;
 use SDL;
 use Test::More tests => 6;
-
+use SDL::Time;
 my @done = qw/get_ticks
     delay/;
 
@@ -13,8 +13,9 @@ my $before = SDL::get_ticks();
 like( $before, qr/^\d+$/, '[get_ticks] returns a number' );
 
 # at the moment this segfaults. i wonder why?
-# my $fired = 0;
-# SDL::set_timer( 100, sub { warn "hi"; $fired = 1 } );
+ my $fired = 0;
+ #SDL::Time::add_timer (0, NULL);
+ SDL::Time::set_timer( 100, sub { warn $_[0];  return $_[0] } );
 
 SDL::delay(250);
 my $after = SDL::get_ticks();
