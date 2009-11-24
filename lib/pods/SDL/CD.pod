@@ -62,5 +62,97 @@ Returns the current status of the CD tray
 =back
 
 
+=head2 play_tracks
+
+ $CD->play_tracks($start_track, $start_frame, $ntracks, $nframes)
+
+Plays the given SDL::CD starting at track $start_track, for $ntracks tracks.  
+
+$start_frame is the frame offset, from the beginning of the $start_track, at which to start. $nframes is the frame offset, from the beginning of the last track ($start_track+$ntracks), at which to end playing.
+
+play_tracks() should only be called after calling SDL_CDStatus to get track information about the CD use $CD->status().
+
+B<Note: Data tracks are ignored.>
+
+=head3 Returns
+
+0, or -1 if there was an error.  
+
+=head2 play
+ 
+ $CD->play($start, $length );
+
+Plays the given SDL::CD , starting a frame $start for $length frames. 
+
+=head3 Returns
+
+0 on success, -1 on error
+
+=head2 pause 
+
+ $CD->pause();
+
+Pauses play on CD
+
+=head3 Returns
+
+Returns 0 on success, or -1 on an error.  
+
+=head2 resume
+
+ $CD->resume();
+
+=head3 Returns
+
+Returns 0 on success, or -1 on an error.  
+
+=head2 stop
+
+ $CD->stop();
+
+Stops play on the CD.  
+
+=head3 Returns
+
+Returns 0 on success, or -1 on an error.  
+
+=head2 eject
+
+ $CD->eject();
+
+Ejects the CD.
+
+=head3 Returns
+
+Returns 0 on success, or -1 on an error.  
+
+=head2 id
+
+ $CD->id();
+
+Private drive identifier
+
+=head2 num_tracks
+
+ $CD->num_tracks();
+
+Number of tracks on the CD
+
+=head2 cur_track 
+
+ $CD->cur_track();
+
+Current track on the CD;
+
+=head2 track
+
+ my $track =  $CD->track($number);
+ 
+Retrives track description of track $number in CD. See L<SDL::CDTrack>.
+
+
+=head1 SEE ALSO
+
+L<SDL::CDROM>, L<SDL::CDTrack>
 
 =cut
