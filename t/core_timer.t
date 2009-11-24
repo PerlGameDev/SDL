@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
 use strict;
 use SDL;
-use Test::More tests => 6;
-use SDL::Time;
+use Test::More tests => 7;
+#use SDL::Time;
 my @done = qw/get_ticks
     delay/;
 
@@ -17,8 +17,8 @@ SKIP:
 skip 'segaulting', 1;
 # at the moment this segfaults. i wonder why?
  my $fired = 0;
- #SDL::Time::add_timer (0, NULL);
- SDL::Time::set_timer( 100, sub { $fired++  return $_[0] } );
+#SDL::Time::add_timer (0, NULL);
+# SDL::Time::set_timer( 100, sub { $fired++;  return $_[0] } );
  is ( $fired > 0 ,1, '[set_timer] ran' );
 }
 
