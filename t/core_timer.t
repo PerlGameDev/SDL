@@ -2,7 +2,7 @@
 use strict;
 use SDL;
 use Test::More tests => 7;
-#use SDL::Time;
+use SDL::Time;
 my @done = qw/get_ticks
     delay/;
 
@@ -12,15 +12,6 @@ is( SDL::was_init(0), SDL_INIT_TIMER, '[was_init] managed to init timer' );
 my $before = SDL::get_ticks();
 like( $before, qr/^\d+$/, '[get_ticks] returns a number' );
 
-SKIP:
-{
-skip 'segaulting', 1;
-# at the moment this segfaults. i wonder why?
- my $fired = 0;
-#SDL::Time::add_timer (0, NULL);
-# SDL::Time::set_timer( 100, sub { $fired++;  return $_[0] } );
- is ( $fired > 0 ,1, '[set_timer] ran' );
-}
 
 SDL::delay(250);
 my $after = SDL::get_ticks();
@@ -29,7 +20,14 @@ like( $after, qr/^\d+$/, '[get_ticks] returns a number again' );
 my $diff = $after - $before;
 ok( $diff > 50 && $diff < 300, '[delay](250) delayed for around 250ms' );
 
-# is( $fired, 1, '[set_timer] triggered' );
+
+TODO:
+{
+ local $TODO = 'Multithreaded callback almost working';
+ my $fired = 0;
+ SDL::Time::set_timer( 100, sub { $fired++;  return $_[0] } );
+ isnt( $fired  , 0, '[set_timer] ran' );
+}
 
 my @left = qw/set_timer new_timer_callback add_timer remove_timer/;
 
