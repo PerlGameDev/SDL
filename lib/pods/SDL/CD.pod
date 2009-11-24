@@ -6,6 +6,61 @@ SDL::CD -- SDL Bindings for structure SDL_CD
 
 =head1 CATEGORY
 
-TODO, Core, CDROM, Structure
+Core, CDROM, Structure
+
+=head1 SYNOPSIS
+
+ use SDL;
+ use SDL::CDROM;
+ use SDL::CD;
+
+ SDL::init(SDL_INIT_CDROM);
+
+ my $drives = SDL::CDROM::num_drives;
+ 
+ if( $drives > 0 )
+ {
+  my $CD = SDL::CD->new( 0 );
+ 
+   if($CD != NULL)
+   {
+	... 
+   }
+  
+ }
+ 
+ SDL::quit();
+
+=head1 METHOD
+
+=head2 new( $drive )
+
+ my $CD = SDL::CD->new( $drive )
+
+Makes a new SDL::CD object. Returns NULL if the drive is busy or inaccessible. 
+
+=head2 status
+ 
+ my $status = $CD->status(); 
+
+Returns the current status of the CD tray 
+
+=head3 returns
+
+=over 
+
+=item CD_TRAYEMPTY
+
+=item CD_STOPPED
+
+=item CD_PLAYING
+
+=item CD_PAUSED
+
+=item CD_ERROR = -1 
+
+=back
+
+
 
 =cut
