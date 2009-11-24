@@ -62,4 +62,8 @@ Length, in frames, of this track
 
 Frame offset to the beginning of this track 
 
+=head1 SEE ALSO
+
+L<SDL::CDROM>, L<SDL::CD>
+
 =cut
