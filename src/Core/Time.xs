@@ -39,18 +39,37 @@ extern PerlInterpreter *parent_perl;
 
 SV* set_timersv;
 
-Uint32 gretval;
 
 Uint32 set_timer_cb( Uint32 interval)
 {
+	Uint32 retval;
+	int back;
+	SV* cmd;
 	ENTER_TLS_CONTEXT
 	dSP;
-	PUSHMARK(SP); 
+
+	cmd = (SV*)set_timersv;
+
+	ENTER;
+	SAVETMPS;
+	PUSHMARK(SP);
+	XPUSHs(sv_2mortal(newSViv(interval)));
 	PUTBACK;
-	 call_sv(set_timersv, G_NOARGS|G_DISCARD);
+
+	if (0 != (back = call_sv(cmd,G_SCALAR))) {
+		SPAGAIN;
+		if (back != 1 ) Perl_croak (aTHX_ "Timer Callback failed!");
+		retval = POPi;	
+	} else {
+		Perl_croak(aTHX_ "Timer Callback failed!");
+	}
+
+	FREETMPS;
+	LEAVE;
+
 	LEAVE_TLS_CONTEXT
 	
-return interval;	
+	return retval;
 
 }
 
