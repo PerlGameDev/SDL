@@ -6,6 +6,60 @@ SDL::CDTrack -- SDL Bindings for structure SDL_CDTrack
 
 =head1 CATEGORY
 
-TODO, Core, CDROM, Structure
+Core, CDROM, Structure
+
+=head1 SYNOPSIS
+
+ use SDL;
+ use SDL::CDROM;
+ use SDL::CD;
+ use SDL::CDTrack;
+
+ SDL::init( SDL_INIT_CDROM );
+ 
+ my $drives = SDL::CDROM::num_drives(); 
+
+ if( $drives > 0 )
+ {
+  my $CD = SDL::CD->new(0); #first drive's CD
+
+  if( $CD != NULL)
+  {
+	if( $CD->status != CD_TRAYEMPTY )
+	{
+	my $track = SDL::CD->track(0);
+	}
+  }
+ 
+ }
+
+ SDL::quit();
+
+
+=head1 METHOD
+
+=head2 id
+
+ $track->id() # 0-99 
+
+Track number
+
+=head2 type
+
+ $track->type() # SDL_AUDIO_TRACK or SDL_DATA_TRACK 
+
+Type of track
+
+=head2 length
+
+ $track->length() 
+
+Length, in frames, of this track 
+
+=head2 offset 
+
+ $track->offset()
+
+Frame offset to the beginning of this track 
 
 =cut
