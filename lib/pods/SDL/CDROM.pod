@@ -8,6 +8,19 @@ SDL::CDROM -- SDL Bindings for the CDROM device
 
 Core, CDROM
 
+=head1 SYNOPSIS
+
+ use SDL;
+ use SDL::CDROM;
+ 
+ SDL::init(SDL_INIT_CDROM);
+ 
+ print SDL::CDROM::num_drives();
+ 
+ print SDL::CDROM::name(0);
+ 
+ SDL::quit();
+
 =head1 METHODS
 
 =head2 num_drives
