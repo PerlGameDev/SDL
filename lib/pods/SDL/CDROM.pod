@@ -6,6 +6,36 @@ SDL::CDROM -- SDL Bindings for the CDROM device
 
 =head1 CATEGORY
 
-TODO, Core, CDROM
+Core, CDROM
+
+=head1 METHODS
+
+=head2 num_drives
+
+ my $drives = SDL::CDROM::num_drives(); 
+
+Returns number of drives available on the system
+
+=head2 name
+
+ my $drive_name = SDL::CDROM::name($drive_num);
+
+Returns human readable name for CDROM device
+
+=head3 Examples
+
+=over
+
+=item '/dev/cdrom'
+
+=item 'E:'
+
+=item '/dev/disk/ide/1/master'  
+
+=back
+
+=head1 See Also
+
+L<SDL::CD>, L<SDL::CDTrack>
 
 =cut
