@@ -10,6 +10,75 @@ Core, Mouse
 
 =head1 METHODS
 
+=head2 create_cursor
+
+ my $cursor = SDL::Mouse::create_cursor( \@data, \@mask, $width, $height, $hotspot_left, $hotspot_top );
+
+Create a cursor using the specified data and mask (in MSB format). The cursor width must be a multiple of 8 bits.
+
+The cursor is created in black and white according to the following:
+
+ Data / Mask   Resulting pixel on screen
+    0 / 1      White
+    1 / 1      Black
+    0 / 0      Transparent
+    1 / 0      Inverted color if possible, black if not.
+
+Cursors created with this function must be freed with SDL_FreeCursor.
+
+If you want to have color cursor, then this function is not for you; instead, you must hide normal system cursor with C<SDL::Mouse::show_cursor>
+and in your main loop, when you draw graphics, also draw a C<SDL::Surface> at the location of the mouse cursor. 
+
+Example:
+
+ use SDL;
+ use SDL::Cursor;
+ use SDL::Mouse;
+ use SDL::Surface;
+ use SDL::Video;
+ 
+ SDL::init(SDL_INIT_VIDEO);
+ SDL::Video::set_video_mode( 640, 480, 16, SDL_SWSURFACE);
+ 
+ my @data = (
+     bin2dec('00000000'),
+     bin2dec('00111100'),
+     bin2dec('01111110'),
+     bin2dec('01111110'),
+     bin2dec('01111110'),
+     bin2dec('01111110'),
+     bin2dec('00111100'),
+     bin2dec('00000000')
+ );
+
+ my @mask = (
+     bin2dec('00111100'),
+     bin2dec('01111110'),
+     bin2dec('11100111'),
+     bin2dec('11000011'),
+     bin2dec('11000011'),
+     bin2dec('11100111'),
+     bin2dec('01111110'),
+     bin2dec('00111100')
+ );
+		  
+ my $cursor = SDL::Mouse::create_cursor( \@data, \@mask, 8, 8, 0, 0 );
+ 
+ sleep(1);
+ SDL::Mouse::set_cursor($cursor);
+ 
+ sleep(5);
+ 
+ sub dec2bin {
+     my $str = unpack("B64", pack("N", shift));
+     $str =~ s/^0+(?=\d)//;   # otherwise you'll get leading zeros
+     return $str;
+ }
+
+ sub bin2dec {
+     return unpack("N", pack("B64", substr("0" x 32 . shift, -32)));
+ }
+
 =head2 warp_mouse
 
  void warp_mouse( int $x, int $y );
