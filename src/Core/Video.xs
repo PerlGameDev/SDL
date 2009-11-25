@@ -14,18 +14,21 @@ static Uint16* av_to_uint16 (AV* av)
 	int len = av_len(av);
 	if( len != -1)
 	{
-	int i;
-	Uint16* table = (Uint16 *)safemalloc(sizeof(Uint16)*(len));
-	for ( i = 0; i < len+1 ; i++ ){ 
-		SV ** temp = av_fetch(av,i,0);
-	      if( temp != NULL)
-		{
-			table[i] =  (Uint16 *) SvIV(  *temp   );
+		int i;
+		Uint16* table = (Uint16 *)safemalloc(sizeof(Uint16)*(len));
+		for ( i = 0; i < len+1 ; i++ )
+		{ 
+			SV ** temp = av_fetch(av,i,0);
+			if( temp != NULL )
+			{
+				table[i] = (Uint16) SvIV( *temp );
+			}
+			else
+			{
+				table[i] = 0;
+			}
 		}
-		else { table[i] =0; }
-
-	}
-	return table;
+		return table;
 	}
 	return NULL;
 }
