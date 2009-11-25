@@ -4,6 +4,10 @@
 
 SDL::Cursor - a SDL perl extension
 
+=head1 CATEGORY
+
+Core, Mouse, Structure
+
 =head1 SYNOPSIS
 
  my $cursor = SDL::Cursor->new(
