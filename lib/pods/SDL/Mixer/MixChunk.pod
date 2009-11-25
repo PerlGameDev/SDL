@@ -2,10 +2,36 @@
 
 =head1 NAME
 
-SDL::MixChunk -- SDL Bindings for structure SDL_MixChunk
+SDL::Mixer::MixChunk -- SDL Bindings for structure SDL_MixChunk
 
 =head1 CATEGORY
 
-TODO, Core, Mixer, Structure
+Core, Mixer, Structure
+
+=head1 SYNOPSIS
+
+ use SDL;
+ use SDL::Mixer::MixChunk;
+
+ my $mix_chunk = SDL::MixLoadWAV('sample.wav');
+
+ printf("length of audio data is %d bytes\n", $mix_chunk->alen);
+ printf("volume is %d\n",                     $mix_chunk->volume);
+
+=head1 DESCRIPTION
+
+Stores audio data in memory.
+
+B<Note:> It's a bad idea to free a chunk that is still being played...
+
+=head1 METHODS
+
+=head2 alen
+
+length of audio data in bytes
+
+=head2 volume
+
+Per-sample volume, 0-128 (normally C<MIX_MAX_VOLUME> after loading)
 
 =cut
