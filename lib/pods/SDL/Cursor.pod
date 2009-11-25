@@ -12,11 +12,11 @@ Core, Mouse, Structure
 
  my $cursor = SDL::Cursor->new(
      \@data,
-	 \@mask,
-	 $width,
-	 $height,
-	 $hotspot_left,
-	 $hotspot_top );
+     \@mask,
+     $width,
+     $height,
+     $hotspot_left,
+     $hotspot_top );
 
  SDL::Mouse::set_cursor($cursor);
 
