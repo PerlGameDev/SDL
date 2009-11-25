@@ -26,7 +26,7 @@ SKIP:
 # local $TODO = 'Multithreaded callback almost working';
  skip 'segfault', 1;
  my $fired = 0;
- SDL::Time::set_timer( 100, sub { $fired++;  return $_[0] } );
+ SDL::Time::set_timer( 1, sub { $fired++;  return $_[0] } );
  isnt( $fired  , 0, '[set_timer] ran' );
 }
 

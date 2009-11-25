@@ -35,75 +35,42 @@ extern PerlInterpreter *parent_perl;
 
 #include <SDL.h>
 
-#define MY_CXT_KEY "SDL::Time::_guts" XS_VERSION 
+SV* cb; 
 
-
- typedef struct {
- void* data;
- SV* callback;
- Uint32 retval;
- } my_cxt_t;
-
-static my_cxt_t gcxt;
-
-START_MY_CXT 
-
-
-static Uint32 add_timer_cb ( Uint32 interval, void* param )
+STATIC void perl_call ( pTHX_ Uint32 interval, void* param)
 {
-	    
-	    ENTER_TLS_CONTEXT
-	    dMY_CXT;
-	    dSP;
-	    int back;
-	    fprintf ( stderr, "Timer %d ansd %p \n", interval, MY_CXT.callback );
-	    ENTER;
-	    SAVETMPS;
-	    PUSHMARK(SP);
-	    XPUSHs(sv_2mortal(newSViv(interval)));
-	    PUTBACK;
-	    
-	    if (0 != (back = call_sv(MY_CXT.callback,G_SCALAR))) {
-		SPAGAIN;
-		if (back != 1 ) Perl_croak (aTHX_ "Timer Callback failed!");
-		MY_CXT.retval = POPi;     
-	    } else {
-		Perl_croak(aTHX_ "Timer Callback failed!");
-	    }
 		
-	    FREETMPS;
-	    LEAVE;
-		
-	    LEAVE_TLS_CONTEXT
-	    dMY_CXT;
-	    return MY_CXT.retval;
+	dSP;
+	PUSHMARK(SP);
+	call_sv( (SV*)cb, G_DISCARD);     
+	
+}
 
+Uint32 add_timer_cb (Uint32 interval, void* param )
+{
+//	ENTER_TLS_CONTEXT
+	dTHX;
+		perl_call(aTHX_ interval, param);
+
+//	LEAVE_TLS_CONTEXT
+
+     	return interval; 
 }
 
 MODULE = SDL::Time 	PACKAGE = SDL::Time    PREFIX = time_
 
-BOOT:
-{
-  MY_CXT_INIT;
-}
-
-
 SDL_TimerID
 time_add_timer ( interval, cmd )
 	Uint32 interval
-	void *cmd
-	PREINIT:
-		dMY_CXT;
+	SV *cmd
 	CODE:
-		MY_CXT.callback=cmd;	
-		gcxt = MY_CXT;
+
+	 cb = newSVsv(cmd);
+
 		RETVAL = SDL_AddTimer(interval,add_timer_cb,(void *)cmd);
 		fprintf( stderr, "Timer %d  \n Return = %x \n error = %s \n ", interval, (int)RETVAL, SDL_GetError() );
 
 	OUTPUT:
 		RETVAL
 
-void
-CLONE(...)
-  CODE:
-    MY_CXT_CLONE;  
+

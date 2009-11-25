@@ -6,10 +6,6 @@
 #define aTHX_
 #endif
 
-#ifdef MY_CXT_KEY  
-#define MY_CXT_KEY "SDL::RWOps::_guts" XS_VERSION  
-#endif
-
 #include <SDL.h>
 
 MODULE = SDL::RWOps 	PACKAGE = SDL::RWOps    PREFIX = rwops_

@@ -17,15 +17,14 @@ SDL_Cursor -- Cursor object
 =cut
 
 SDL_Cursor *
-cursor_new(data, mask, w, h, x ,y )
+cursor_new(CLASS, data, mask, w, h, x ,y )
+	char* CLASS
 	AV* data
 	AV* mask
 	int w
 	int h
 	int x
 	int y
-	PREINIT:
-		char* CLASS = "SDL::Cursor";
 	CODE:
 		int len = av_len(data);
 		Uint8 *_data = (Uint8 *)safemalloc(sizeof(Uint8)*(len));
