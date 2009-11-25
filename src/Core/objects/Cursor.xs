@@ -54,6 +54,8 @@ cursor_new(CLASS, data, mask, w, h, x ,y )
 		}
 
 		RETVAL = SDL_CreateCursor(_data, _mask, w, h, x, y);
+		safefree(_data);
+		safefree(_mask);
 	OUTPUT:
 		RETVAL
 
