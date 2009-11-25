@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-SDL::Cursor - a SDL perl extension
+SDL::Cursor -- Mouse cursor structure
 
 =head1 CATEGORY
 
