@@ -21,9 +21,10 @@ my $diff = $after - $before;
 ok( $diff > 50 && $diff < 300, '[delay](250) delayed for around 250ms' );
 
 
-TODO:
+SKIP:
 {
- local $TODO = 'Multithreaded callback almost working';
+# local $TODO = 'Multithreaded callback almost working';
+ skip 'segfault', 1;
  my $fired = 0;
  SDL::Time::set_timer( 100, sub { $fired++;  return $_[0] } );
  isnt( $fired  , 0, '[set_timer] ran' );
