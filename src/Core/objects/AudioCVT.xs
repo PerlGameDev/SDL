@@ -39,14 +39,13 @@ audiocvt_new(CLASS)
 
 SDL_AudioCVT* 
 audiocvt_build(CLASS, src_format, src_channels, src_rate, dst_format, dst_channels, dst_rate)
+	char* CLASS
 	Uint16 src_format
 	Uint8 src_channels
 	int src_rate
 	Uint16 dst_format
 	Uint8 dst_channels
 	int dst_rate
-	PREINIT:
-		char* CLASS = "SDL::AudioCVT";
 	CODE:
 		RETVAL = (SDL_AudioCVT *)safemalloc(sizeof(SDL_AudioCVT));
 		if(SDL_BuildAudioCVT(RETVAL, src_format, src_channels, src_rate,
