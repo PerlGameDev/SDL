@@ -21,7 +21,7 @@ C<SDL::AudioCVT->build> function, while the actual conversion is done by the C<S
 
 This constructor returns an empty C<SDL::AudioCVT> structure.
 
-=head2 new
+=head2 build
 
  $cvt = SDL::AudioCVT->build( $src_format, $src_channels, $src_rate
                               $dst_format, $dst_channels, $dst_rate );
