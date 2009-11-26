@@ -26,7 +26,7 @@ audio_pause ( pause_on )
 		SDL_PauseAudio(pause_on);
 
 Uint32
-audio_get_audio_status ()
+audio_get_status ()
 	CODE:
 		RETVAL = SDL_GetAudioStatus ();
 	OUTPUT:
