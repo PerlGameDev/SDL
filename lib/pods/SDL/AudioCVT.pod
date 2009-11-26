@@ -2,10 +2,75 @@
 
 =head1 NAME
 
-SDL::AudioCVT -- Bindings to SDL structure SDL_AudioCVT
+SDL::AudioCVT -- Audio Conversion Structure
 
 =head1 CATEGORY
 
-TODO, Core, Audio
+Core, Audio, Structure
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+The C<SDL::AudioCVT> is used to convert audio data between different formats. A C<SDL::AudioCVT> structure is created with the 
+C<SDL::AudioCVT->build> function, while the actual conversion is done by the C<SDL::Audio::convert_audio> function. 
+
+=head1 METHODS
+
+=head2 new
+
+This constructor returns an empty C<SDL::AudioCVT> structure.
+
+=head2 new
+
+ $cvt = SDL::AudioCVT->build( $src_format, $src_channels, $src_rate
+                              $dst_format, $dst_channels, $dst_rate );
+
+Before an C<SDL::AudioCVT> structure can be used to convert audio data it must be initialized with source and destination information.
+
+C<src_format> and C<dst_format> are the source and destination format of the conversion. (For information on audio formats see 
+C<SDL::AudioSpec>). C<src_channels> and C<dst_channels> are the number of channels in the source and destination formats. 
+Finally, C<src_rate> and C<dst_rate> are the frequency or samples-per-second of the source and destination formats. Once again, 
+see C<SDL::AudioSpec>.
+
+Currently (SDL-1.2.11) only rate conversions of 2x and (1/2)x with x > 0 are done, nearing the requested rate conversion. 
+
+See C<SDL::Audio::convert_audio>.
+
+=head2 needed
+
+Set to one if the conversion is possible
+
+=head2 src_format
+
+Audio format of the source
+
+=head2 dest_format
+
+Audio format of the destination
+
+=head2 rate_incr
+
+Rate conversion increment
+
+=head2 len
+
+Length of the original audio buffer in bytes
+
+=head2 len_cvt
+
+Length of converted audio buffer in bytes (calculated)
+
+=head2 len_mult
+
+C<buf> must be C<len*len_mult> bytes in size (calculated)
+
+=head2 len_ratio
+
+Final audio size is C<len*len_ratio>
+
+=head1 AUTHOR
+
+Tobias Leich
 
 =cut

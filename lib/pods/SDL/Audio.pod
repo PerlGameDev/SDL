@@ -33,17 +33,80 @@ Loads a WAVE file
 
 Frees previously opened WAV data
 
-=head2 AudioCVT 
+=head2 convert_audio
 
-Audio Conversion Structure
-
-=head2 BuildAudioCVT 
-
-Initializes a SDL_AudioCVT - structure for conversion
-
-=head2 ConvertAudio  
-
+ SDL::Audio->convert_audio( cvt, data, len )
+ 
 Converts audio data to a desired audio format.
+
+C<convert_audio> takes as first parameter C<cvt>, which was previously initialized. Initializing a C<SDL::AudioCVT> is a two step process. 
+First of all, the structure must be created via C<SDL::AudioCVT->build> along with source and destination format parameters. Secondly, 
+the C<data> and C<len> fields must be setup. C<data> should point to the audio data buffer beeing source and destination at 
+once and C<len> should be set to the buffer length in bytes. Remember, the length of the buffer pointed to by buf should be 
+C<len*len_mult> bytes in length.
+
+Once the C<SDL::AudioCVT> structure is initialized, we can pass it to C<convert_audio>, which will convert the audio data pointed to 
+by C<data>. If C<convert_audio> fails C<undef> is returned, otherwise the converted C<SDL::AudioCVT> structure.
+
+If the conversion completed successfully then the converted audio data can be read from C<cvt->buf>. The amount of valid, converted, 
+audio data in the buffer is equal to C<cvt->len*cvt->len_ratio>. 
+
+Example:
+
+ use SDL;
+ use SDL::Audio;
+ use SDL::AudioSpec;
+ use SDL::AudioCVT;
+ 
+ # Converting some WAV data to hardware format
+
+ my $desired  = SDL::AudioSpec->new();
+ my $obtained = SDL::AudioSpec->new();
+ 
+ # Set desired format
+ $desired->freq(22050);
+ $desired->channels(1);
+ $desired->format(AUDIO_S16);
+ $desired->samples(8192);
+ 
+ # Open the audio device
+ if( SDL::Audio::open_audio($desired, $obtained) < 0 )
+ {
+     printf( STDERR "Couldn't open audio: %s\n", SDL::get_error() );
+     exit(-1);
+ }
+ 
+ # Load the test.wav
+ my $wav_ref = SDL::Audio::load_wav('C:/SDL_perl/test/data/sample.wav', $obtained);
+ 
+ unless( $wav_ref )
+ {
+     printf( STDERR "Could not open sample.wav: %s\n", SDL::get_error() );
+     SDL::Audio::close_audio();
+     exit(-1);
+ }
+ 
+ my ( $wav_spec, $wav_buf, $wav_len ) = @{$wav_ref};
+ 
+ # Build AudioCVT
+ my $wav_cvt = SDL::AudioCVT->build( $wav_spec->format, $wav_spec->channels, $wav_spec->freq,
+                                     $obtained->format, $obtained->channels, $obtained->freq); 
+
+ # Check that the convert was built
+ unless( $wav_cvt )
+ {
+     printf( STDERR "Couldn't build converter!\n" );
+     SDL::Audio::close_audio();
+     SDL::Audio::free_wav($wav_buf);
+ }
+
+ # And now we're ready to convert
+ SDL::Audio::convert_audio($wav_cvt, $wav_buf, $wav_len);
+
+ # We can delete to original WAV data now
+ SDL::Audio::free_wav($wav_buf);
+ 
+B<TODO>: What to do with it? How to use callback? See http://www.libsdl.org/cgi/docwiki.cgi/SDL_ConvertAudio
 
 =head2 MixAudio 
 
