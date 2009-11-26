@@ -8,16 +8,9 @@ SDL::Audio -- SDL Bindings for Audio
 
 TODO, Core, Audio
 
-=head1 DESCRIPTION
- 
-
 =head1 METHODS
 
 =head2 open
-
-Opens the audio device with the desired parameters.
-
-=head3 Synopsis
 
   use SDL;
   use SDL::Audio;
@@ -28,11 +21,9 @@ Opens the audio device with the desired parameters.
   
   my $obtained;
 
-  SDL::open_audio($desired, $obtained);
+  SDL::Audio::open( $desired, $obtained );
   
   # $obtained->... (A new SDL::AudioSpec now);
-
-=head3 Description
 
 This function opens the audio device with the desired parameters, and returns 0 if successful, placing the actual hardware parameters in the structure pointed to by obtained. If obtained is NULL, the audio data passed to the callback function will be guaranteed to be in the requested format, and will be automatically converted to the hardware audio format if necessary. This function returns -1 if it failed to open the audio device, or couldn't set up the audio thread.
 
@@ -66,7 +57,7 @@ THIS IS NOT READY YET
 
     $desired->callback
 
-    my $callback= sub{ my ($userdata, $stream, $len) = @_;  };
+    my $callback = sub{ my ($userdata, $stream, $len) = @_;  };
 
     $userdata is a reference stored in the userdata field of the SDL::AudioSpec. 
     $stream is a pointer to the audio buffer you want to fill with information and $len is the length of the audio buffer in bytes.
@@ -87,19 +78,76 @@ The audio device starts out playing silence when it's opened, and should be enab
 
 =head2 pause
 
-Pauses and unpauses the audio callback processing
+ pause( $bool )
 
-=head2 GetAudioStatus 
+This function pauses and unpauses the audio callback processing. It should be called with C<$bool = 0> after opening the audio device to 
+start playing sound. This is so you can safely initialize data for your callback function after opening the audio device. Silence will 
+be written to the audio device during the pause.
 
-Gets the current audio state
+=head2 get_status
 
-=head2 load_WAV 
+ int get_status();
 
-Loads a WAVE file
+Returns either C<SDL_AUDIO_STOPPED>, C<SDL_AUDIO_PLAYING> or C<SDL_AUDIO_PAUSED> depending on the current audio state. 
 
-=head2 free_WAV 
+=head2 load_wav 
 
-Frees previously opened WAV data
+ SDL::AudioSpec load_wav( $filename, $spec );
+
+This function loads a WAVE file into memory.
+
+If this function succeeds, it returns the given C<SDL::AudioSpec>, filled with the audio data format of the wave data, and sets C<buf> 
+to a buffer containing the audio data, and sets C<len> to the length of that audio buffer, in bytes. You need to free the audio buffer 
+with C<SDL::Audio::free_wav> when you are done with it.
+
+This function returns NULL and sets the SDL error message if the wave file cannot be opened, uses an unknown data format, or is corrupt. 
+Currently raw, MS-ADPCM and IMA-ADPCM WAVE files are supported.
+
+Example:
+
+ use SDL;
+ use SDL::Audio;
+ use SDL::AudioSpec;
+ 
+ SDL::init(SDL_INIT_AUDIO);
+ 
+ # Converting some WAV data to hardware format
+
+ my $desired  = SDL::AudioSpec->new();
+ my $obtained = SDL::AudioSpec->new();
+ 
+ # Set desired format
+ $desired->freq(22050);
+ $desired->channels(1);
+ $desired->format(AUDIO_S16);
+ $desired->samples(8192);
+ 
+ # Open the audio device
+ if( SDL::Audio::open($desired, $obtained) < 0 )
+ {
+     printf( STDERR "Couldn't open audio: %s\n", SDL::get_error() );
+     exit(-1);
+ }
+ 
+ # Load the test.wav
+ my $wav_ref = SDL::Audio::load_wav('../../test/data/sample.wav', $obtained);
+ 
+ unless( $wav_ref )
+ {
+     warn( "Could not open sample.wav: %s\n", SDL::get_error() );
+     SDL::Audio::close_audio();
+     SDL::quit;
+     exit(-1);
+ }
+ 
+ my ( $wav_spec, $wav_buf, $wav_len ) = @{$wav_ref};
+
+=head2 free_wav 
+
+ free_wav( $buffer )
+
+After a WAVE file has been opened with C<load_wav> its data can eventually be freed with C<free_wav>. C<buffer> is the buffer created 
+by C<load_wav>. 
 
 =head2 convert
 
@@ -182,19 +230,28 @@ Example:
  
 B<TODO>: What to do with it? How to use callback? See http://www.libsdl.org/cgi/docwiki.cgi/SDL_ConvertAudio
 
-=head2 MixAudio 
+=head2 mix
 
 Mixes audio data
 
+B<Not implemented yet>. See: L<http://www.libsdl.org/cgi/docwiki.cgi/SDL_MixAudio>
+
 =head2 lock
 
-Locks out the callback function
+ lock();
+
+The lock manipulated by these functions protects the callback function. During a C<lock> period, you can be guaranteed that the callback 
+function is not running. Do not call this from the callback function or you will cause deadlock.
 
 =head2 unlock
 
-Unlocks the callback function
+ unlock();
+
+Unlocks a previous C<lock> call.
 
 =head2 close 
+
+ close();
 
 Shuts down audio processing and closes the audio device.  
 

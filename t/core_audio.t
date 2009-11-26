@@ -16,17 +16,17 @@ if ( SDL::TestTool->init_audio ) {
 }
 my @done = qw/
     audio_spec
-    open_audio
-    pause_audio
-    close_audio
-    get_audio_status
-    lock_audio
-    unlock_audio
+    open
+    pause
+    close
+    get_status
+    lock
+    unlock
     /;
 
 
 my $desired = SDL::AudioSpec->new;
-$desired->freq(44100);
+   $desired->freq(44100);
 is( $desired->freq, 44100, '[audiospec] can set freq' );
 $desired->format(SDL::Constants::AUDIO_S16);
 is( $desired->format, SDL::Constants::AUDIO_S16,
@@ -36,29 +36,25 @@ is( $desired->channels, 2, '[audiospec] can set channels' );
 $desired->samples(4096);
 is( $desired->samples, 4096, '[audiospec] can set samples' );
 
-is( SDL::Audio::get_audio_status, SDL_AUDIO_STOPPED,
-    '[get_audio_status stopped]' );
+is( SDL::Audio::get_status, SDL_AUDIO_STOPPED, '[get_status stopped]' );
 
 my $obtained = SDL::AudioSpec->new;
 is( SDL::Audio::open( $desired, $obtained ),
-    0, '[open_audio returned success]' );
+    0, '[open returned success]' );
 isa_ok( $obtained, 'SDL::AudioSpec', 'Created a new AudioSpec' );
 
-is( SDL::Audio::get_audio_status, SDL_AUDIO_PAUSED,
-    '[get_audio_status paused]' );
+is( SDL::Audio::get_status, SDL_AUDIO_PAUSED, '[get_status paused]' );
 
 SDL::Audio::pause(0);
 
-is( SDL::Audio::get_audio_status, SDL_AUDIO_PLAYING,
-    '[get_audio_status playing]' );
+is( SDL::Audio::get_status, SDL_AUDIO_PLAYING, '[get_status playing]' );
 
 SDL::Audio::lock();
 SDL::Audio::unlock();
 
 SDL::Audio::close();
 
-is( SDL::Audio::get_audio_status, SDL_AUDIO_STOPPED,
-    '[get_audio_status stopped]' );
+is( SDL::Audio::get_status, SDL_AUDIO_STOPPED, '[get_status stopped]' );
 
 
 
