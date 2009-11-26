@@ -1,13 +1,22 @@
 #!/usr/bin/perl -w
 use strict;
 use SDL;
-use Test::More tests => 7;
+use Test::More;
 use SDL::Time;
+use lib 't/lib';
+use SDL::TestTool;
+
+if ( SDL::TestTool->init_audio ) {
+    plan( skip_all => 'Failed to init timer' );
+} else {
+    plan( tests => 5 );
+}
+
 my @done = qw/get_ticks
     delay/;
 
-is( SDL::init(SDL_INIT_TIMER), 0, '[init] can init SDL_INIT_TIMER' );
-is( SDL::was_init(0), SDL_INIT_TIMER, '[was_init] managed to init timer' );
+
+
 
 my $before = SDL::get_ticks();
 like( $before, qr/^\d+$/, '[get_ticks] returns a number' );

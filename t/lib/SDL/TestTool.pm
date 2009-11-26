@@ -11,4 +11,11 @@ sub init_audio {
     return ( $stderr ne '' );
 }
 
+sub init_time {
+    my $stdout = '';
+    my $stderr = '';
+    capture { SDL::init(SDL_INIT_TIMER) } \$stdout, \$stderr;
+    return ( $stderr ne '' );
+}
+
 1;
