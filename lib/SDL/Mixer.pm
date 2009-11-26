@@ -54,7 +54,7 @@ sub new {
 	my $size = $options{-size} || 4096;
 	unless ( $SDL::Mixer::initialized ) {
 		SDL::MixOpenAudio($frequency,$format,$channels,$size ) && 
-			croak SDL::GetError(); 
+			croak SDL::get_error(); 
 		$SDL::Mixer::initialized = 1;
 	} else {
 		++$SDL::Mixer::initialized;
