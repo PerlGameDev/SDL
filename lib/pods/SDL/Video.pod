@@ -8,15 +8,41 @@ SDL::Video - Bindings to the video category in SDL API
 
 Core, Video
 
-=head1 DESCRIPTION
+=head1 SYNOPSIS
 
+ use SDL;
+ use SDL::Video;
+ use SDL::Surface;
+ use SDL::Rect;
+
+ # the size of the window box or the screen resolution if fullscreen
+ my $screen_width   = 800;
+ my $screen_height  = 600;
+
+ SDL::init(SDL_INIT_VIDEO);
+
+ # setting video mode
+ my $screen_surface = SDL::Video::set_video_mode($screen_width, $screen_height, 32, SDL_SWSURFACE);
+ 
+ # drawing something somewhere
+ my $mapped_color   = SDL::Video::map_RGB($screen_surface->format(), 0, 0, 255); # blue
+ SDL::Video::fill_rect($screen_surface, 
+                       SDL::Rect->new($screen_width / 4, $screen_height / 4, 
+                                      $screen_width / 2, $screen_height / 2), $mapped_color);
+ 
+ # update an area on the screen so its visible
+ SDL::Video::update_rect($screen_surface, 0, 0, $screen_width, $screen_height);
+
+ sleep(5); # just to have time to see it
 
 =head1 METHODS
 
 =head2	get_video_surface
 
-It return the current SDL::Surface on succés or undef on error.
-get_video_surface doesn't take any parameters.
+ my $surface = SDL::Video::get_video_surface();
+
+This function returns the current display surface. If SDL is doing format conversion on the display surface, this 
+function returns the publicly visible surface, not the real video surface.
 
 =head2	get_video_info
 
@@ -40,78 +66,92 @@ It returns 0 if the mode is not supported at all, or the suggested bpp.
 
 =head2	set_video_mode(width,height,bpp,flags)
 
+ my $surface = SDL::Video::set_video_mode( 800, 600, 32, SDL_SWSURFACE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
+
 Sets up a video mode with the specified width, height,  bits-per-pixel and flags. 
-set_video_mode returns a SDL::Surface on succés or it returns undef on error, the error message is retrieved using C<SDL::get_error>.
+C<set_video_mode> returns a L<SDL::Surface> on success or it returns undef on error, the error message is retrieved using C<SDL::get_error>.
 
 =head3 List of avalaibles flags
 
 =over 4
 
-=item SDL_SWSURFACE
+=item C<SDL_SWSURFACE>
 
 Create the video surface in system memory
 
-=item SDL_HWSURFACE
+=item C<SDL_HWSURFACE>
 
 Create the video surface in video memory
 
-=item SDL_ASYNCBLIT
+=item C<SDL_ASYNCBLIT>
 
 Enables the use of asynchronous updates of the display surface. 
 This will usually slow down blitting on single CPU machines, but may provide a speed increase on SMP systems.
 
-=item SDL_ANYFORMAT
+=item C<SDL_ANYFORMAT>
 
 Normally, if a video surface of the requested bits-per-pixel (bpp) is not available, SDL will emulate one with a shadow surface.
-Passing SDL_ANYFORMAT prevents this and causes SDL to use the video surface, regardless of its pixel depth.
+Passing C<SDL_ANYFORMAT> prevents this and causes SDL to use the video surface, regardless of its pixel depth.
 
-=item SDL_HWPALETTE
+=item C<SDL_HWPALETTE>
 
 Give SDL exclusive palette access. Without this flag you may not always get the colors you request with SDL::set_colors or SDL::set_palette.
 
-=item SDL_DOUBLEBUF
+=item C<SDL_DOUBLEBUF>
 
-Enable hardware double buffering; only valid with SDL_HWSURFACE. Calling SDL::flip will flip the buffers and update the screen. 
+Enable hardware double buffering; only valid with C<SDL_HWSURFACE>. Calling L<SDL::Video::flip|/flip_surface> will flip the buffers and update 
+the screen. 
 All drawing will take place on the surface that is not displayed at the moment. 
-If double buffering could not be enabled then SDL_Flip will just perform a SDL::update_rect on the entire screen.
+If double buffering could not be enabled then L<SDL::Video::flip|/flip_surface> will just perform a 
+L<SDL::Video::update_rect|/update_rect_surface_x_y_width_height> on the entire screen.
 
-=item SDL_FULLSCREEN
+=item C<SDL_FULLSCREEN>
 
 SDL will attempt to use a fullscreen mode. If a hardware resolution change is not possible (for whatever reason), 
 the next higher resolution will be used and the display window centered on a black background.
 
-=item SDL_OPENGL
+=item C<SDL_OPENGL>
 
-Create an OpenGL rendering context. You should have previously set OpenGL video attributes with SDL::gl_setattribute.
+Create an OpenGL rendering context. You should have previously set OpenGL video attributes with 
+L<SDL::Video::GL_set_attribute|/GL_set_attribute_attr_value>.
 
-=item SDL_OPENGLBLIT
+=item C<SDL_OPENGLBLIT>
 
 Create an OpenGL rendering context, like above, but allow normal blitting operations. 
 The screen (2D) surface may have an alpha channel, and SDL::update_rects must be used for updating changes to the screen surface. 
 NOTE: This option is kept for compatibility only, and will be removed in next versions. Is not recommended for new code.
 
-=item SDL_RESIZABLE
+=item C<SDL_RESIZABLE>
 
 Create a resizable window. 
-When the window is resized by the user a SDL_VIDEORESIZE event is generated and SDL::set_video_mode  can be called again with the new size.
+When the window is resized by the user a C<SDL_VIDEORESIZE> event is generated and 
+L<SDL::Video::set_video_mode|/set_video_mode_width_height_bpp_flag> can be called again with the new size.
 
-
-=item SDL_NOFRAME
+=item C<SDL_NOFRAME>
 
 If possible, SDL_NOFRAME causes SDL to create a window with no title bar or frame decoration. 
 Fullscreen modes automatically have this flag set.
 
 =back
 
-Note 1: Use SDL_SWSURFACE if you plan on doing per-pixel manipulations, or blit surfaces with alpha channels, and require a high framerate. When you use hardware surfaces (by passing the flag SDL_HWSURFACE as parameter), SDL copies the surfaces from video memory to system memory when you lock them, and back when you unlock them. This can cause a major performance hit. Be aware that you may request a hardware surface, but receive a software surface because the video driver doesn't support hardware surface. Many platforms can only provide a hardware surface when using SDL_FULLSCREEN. The SDL_HWSURFACE flag is best used when the surfaces you'll be blitting can also be stored in video memory.
+Note 1: Use SDL_SWSURFACE if you plan on doing per-pixel manipulations, or blit surfaces with alpha channels, and require a high framerate. 
+When you use hardware surfaces (by passing the flag SDL_HWSURFACE as parameter), SDL copies the surfaces from video memory to system memory 
+when you lock them, and back when you unlock them. This can cause a major performance hit. Be aware that you may request a hardware surface, 
+but receive a software surface because the video driver doesn't support hardware surface. Many platforms can only provide a hardware surface 
+when using SDL_FULLSCREEN. The SDL_HWSURFACE flag is best used when the surfaces you'll be blitting can also be stored in video memory.
 
-Note 2: If you want to control the position on the screen when creating a windowed surface, you may do so by setting the environment variables SDL_VIDEO_CENTERED=center or SDL_VIDEO_WINDOW_POS=x,y. You can also set them via C<SDL::putenv>.
+Note 2: If you want to control the position on the screen when creating a windowed surface, you may do so by setting the environment 
+variables SDL_VIDEO_CENTERED=center or SDL_VIDEO_WINDOW_POS=x,y. You can also set them via C<SDL::putenv>.
 
 Note 3: This function should be called in the main thread of your application.
 
-User note 1: Some have found that enabling OpenGL attributes like SDL_GL_STENCIL_SIZE (the stencil buffer size) before the video mode has been set causes the application to simply ignore those attributes, while enabling attributes after the video mode has been set works fine.
+User note 1: Some have found that enabling OpenGL attributes like SDL_GL_STENCIL_SIZE (the stencil buffer size) before the video mode has 
+been set causes the application to simply ignore those attributes, while enabling attributes after the video mode has been set works fine.
 
-User note 2: Also note that, in Windows, setting the video mode resets the current OpenGL context. You must execute again the OpenGL initialization code (set the clear color or the shade model, or reload textures, for example) after calling SDL::set_video_mode. In Linux, however, it works fine, and the initialization code only needs to be executed after the first call to SDL::set_video_mode (although there is no harm in executing the initialization code after each call to SDL::set_video_mode, for example for a multiplatform application). 
+User note 2: Also note that, in Windows, setting the video mode resets the current OpenGL context. You must execute again the OpenGL 
+initialization code (set the clear color or the shade model, or reload textures, for example) after calling SDL::set_video_mode. In Linux, 
+however, it works fine, and the initialization code only needs to be executed after the first call to SDL::set_video_mode (although there 
+is no harm in executing the initialization code after each call to SDL::set_video_mode, for example for a multiplatform application). 
 
 
 
@@ -139,10 +179,13 @@ On hardware that supports double-buffering, this function sets up a flip and ret
 The hardware will wait for vertical retrace, and then swap video buffers before the next video surface blit or lock will return. 
 On hardware that doesn't support double-buffering or if SDL_SWSURFACE was set, this is equivalent to calling SDL::update_rect(screen, 0, 0, 0, 0)
 
-A software screen surface is also updated automatically when parts of a SDL window are redrawn, caused by overlapping windows or by restoring from an iconified state. As a result there is no proper double buffer behavior in windowed mode for a software screen, in contrast to a full screen software mode.
+A software screen surface is also updated automatically when parts of a SDL window are redrawn, caused by overlapping windows or by 
+restoring from an iconified state. As a result there is no proper double buffer behavior in windowed mode for a software screen, in 
+contrast to a full screen software mode.
 
-The SDL_DOUBLEBUF flag must have been passed to SDL::set_video_mode, when setting the video mode for this function to perform hardware flipping.
-flip returns 0 on succés or -1 on error.
+The SDL_DOUBLEBUF flag must have been passed to SDL::set_video_mode, when setting the video mode for this function to perform hardware 
+flipping.
+flip returns 0 on success or -1 on error.
 
 Note : If you want to swap the buffers of an initialized OpenGL context, use the function SDL::gl_swap_buffers instead. 
 
@@ -151,36 +194,47 @@ Note : If you want to swap the buffers of an initialized OpenGL context, use the
 Sets a portion of the colormap for the given 8-bit surface. 
 
 When surface is the surface associated with the current display, the display colormap will be updated with the requested colors. 
-If SDL_HWPALETTE was set in SDL::set_video_mode flags, SDL::set_colors will always return 1, and the palette is guaranteed to be set the way you desire, even if the window colormap has to be warped or run under emulation.
+If SDL_HWPALETTE was set in SDL::set_video_mode flags, SDL::set_colors will always return 1, and the palette is guaranteed to be set the 
+way you desire, even if the window colormap has to be warped or run under emulation.
 The color components of a SDL::Color structure are 8-bits in size, giving you a total of 2563 = 16777216 colors.
-Palettized (8-bit) screen surfaces with the SDL_HWPALETTE flag have two palettes, a logical palette that is used for mapping blits to/from the surface and a physical palette (that determines how the hardware will map the colors to the display). 
-SDL::SetColors modifies both palettes (if present), and is equivalent to calling SDL::SetPalette with the flags set to (SDL_LOGPAL | SDL_PHYSPAL). 
+Palettized (8-bit) screen surfaces with the SDL_HWPALETTE flag have two palettes, a logical palette that is used for mapping blits to/from 
+the surface and a physical palette (that determines how the hardware will map the colors to the display). 
+SDL::SetColors modifies both palettes (if present), and is equivalent to calling SDL::SetPalette with the flags set to 
+(SDL_LOGPAL | SDL_PHYSPAL). 
 
 If surface is not a palettized surface, this function does nothing, returning 0. 
 If all of the colors were set as passed to SDL::set_colors, it will return 1.
-If not all the color entries were set exactly as given, it will return 0, and you should look at the surface palette to determine the actual color palette.
+If not all the color entries were set exactly as given, it will return 0, and you should look at the surface palette to determine the 
+actual color palette.
 
 =head2	set_palette(surface,flags,start,colors)
 
 Sets a portion of the palette for the given 8-bit surface.
 
-Palettized (8-bit) screen surfaces with the SDL_HWPALETTE flag have two palettes, a logical palette that is used for mapping blits to/from the surface and a physical palette (that determines how the hardware will map the colors to the display). 
-Non screen surfaces have a logical palette only. SDL::blit_surface always uses the logical palette when blitting surfaces (if it has to convert between surface pixel formats). Because of this, it is often useful to modify only one or the other palette to achieve various special color effects (e.g., screen fading, color flashes, screen dimming).
+Palettized (8-bit) screen surfaces with the SDL_HWPALETTE flag have two palettes, a logical palette that is used for mapping blits to/from 
+the surface and a physical palette (that determines how the hardware will map the colors to the display). 
+Non screen surfaces have a logical palette only. SDL::blit_surface always uses the logical palette when blitting surfaces (if it has to 
+convert between surface pixel formats). Because of this, it is often useful to modify only one or the other palette to achieve various 
+special color effects (e.g., screen fading, color flashes, screen dimming).
 
 This function can modify either the logical or physical palette by specifying SDL_LOGPAL or SDL_PHYSPAL the in the flags parameter.
 
 When surface is the surface associated with the current display, the display colormap will be updated with the requested colors.
-If SDL_HWPALETTE was set in SDL::set_video_mode flags, SDL::set_palette will always return 1, and the palette is guaranteed to be set the way you desire, even if the window colormap has to be warped or run under emulation.
+If SDL_HWPALETTE was set in SDL::set_video_mode flags, SDL::set_palette will always return 1, and the palette is guaranteed to be set the 
+way you desire, even if the window colormap has to be warped or run under emulation.
 The color components of a SDL::Color structure are 8-bits in size, giving you a total of 2563 = 16777216 colors. 
 
-If surface is not a palettized surface, this function does nothing, returning 0. If all of the colors were set as passed to SDL_SetPalette, it will return 1. If not all the color entries were set exactly as given, it will return 0, and you should look at the surface palette to determine the actual color palette.
+If surface is not a palettized surface, this function does nothing, returning 0. If all of the colors were set as passed to SDL_SetPalette, 
+it will return 1. If not all the color entries were set exactly as given, it will return 0, and you should look at the surface palette 
+to determine the actual color palette.
 
 =head2	set_gamma(r,g,b)
 
 Sets the "gamma function" for the display of each color component. Gamma controls the brightness/contrast of colors displayed on the screen. 
 A gamma value of 1.0 is identity (i.e., no adjustment is made).
 
-This function adjusts the gamma based on the "gamma function" parameter, you can directly specify lookup tables for gamma adjustment with SDL::set_gamma_ramp.
+This function adjusts the gamma based on the "gamma function" parameter, you can directly specify lookup tables for gamma adjustment 
+with SDL::set_gamma_ramp.
 
 Not all display hardware is able to change gamma.
 SDL::set_gamma returns -1 on error.
@@ -194,11 +248,13 @@ SDL::get_gamma_ramp returns -1 on error.
 
 =head2	set_gamma_ramp(rt,gt,bt)
 
-Sets the gamma lookup tables for the display for each color component. Each table is an array of 256 Uint16 values, representing a mapping between the input and output for that channel.
+Sets the gamma lookup tables for the display for each color component. Each table is an array of 256 Uint16 values, representing a 
+mapping between the input and output for that channel.
 The input is the index into the array, and the output is the 16-bit gamma value at that index, scaled to the output color precision. 
 You may pass NULL to any of the channels to leave them unchanged.
 
-This function adjusts the gamma based on lookup tables, you can also have the gamma calculated based on a "gamma function" parameter with SDL::set_gamma.
+This function adjusts the gamma based on lookup tables, you can also have the gamma calculated based on a "gamma function" parameter 
+with SDL::set_gamma.
 
 Not all display hardware is able to change gamma. 
 SDL::set_gamma_ramp returns -1 on error.
@@ -210,7 +266,8 @@ If the format has a palette (8-bit) the index of the closest matching color in t
 If the specified pixel format has an alpha component it will be returned as all 1 bits (fully opaque). 
 
 SDL::map_RGP returns a pixel value best approximating the given RGB color value for a given pixel format.
-If the SDL::pixel_format's  bpp (color depth) is less than 32-bpp then the unused upper bits of the return value can safely be ignored (e.g., with a 16-bpp format the return value can be assigned to a Uint16, and similarly a Uint8 for an 8-bpp format).
+If the SDL::pixel_format's  bpp (color depth) is less than 32-bpp then the unused upper bits of the return value can safely be ignored 
+(e.g., with a 16-bpp format the return value can be assigned to a Uint16, and similarly a Uint8 for an 8-bpp format).
 
 =head2	map_RGBA(pixel_format,r,g,b,a)
 
@@ -219,17 +276,20 @@ If the format has a palette (8-bit) the index of the closest matching color in t
 If the specified pixel format has no alpha component the alpha value will be ignored (as it will be in formats with a palette). 
 
 A pixel value best approximating the given RGBA color value for a given pixel format.
-If the pixel format bpp (color depth) is less than 32-bpp then the unused upper bits of the return value can safely be ignored (e.g., with a 16-bpp format the return value can be assigned to a Uint16, and similarly a Uint8 for an 8-bpp format).
+If the pixel format bpp (color depth) is less than 32-bpp then the unused upper bits of the return value can safely be ignored (e.g., 
+with a 16-bpp format the return value can be assigned to a Uint16, and similarly a Uint8 for an 8-bpp format).
 
 =head2	get_RGB(pixel_format,pixel)
 
 Returns RGB values from a pixel in the specified pixel format. 
-This function uses the entire 8-bit [0..255] range when converting color components from pixel formats with less than 8-bits per RGB component (e.g., a completely white pixel in 16-bit RGB565 format would return [0xff, 0xff, 0xff] not [0xf8, 0xfc, 0xf8]).
+This function uses the entire 8-bit [0..255] range when converting color components from pixel formats with less than 8-bits per RGB 
+component (e.g., a completely white pixel in 16-bit RGB565 format would return [0xff, 0xff, 0xff] not [0xf8, 0xfc, 0xf8]).
 
 =head2	get_RGBA(pixel_format,pixel)
 
 Gets RGBA values from a pixel in the specified pixel format. 
-This function uses the entire 8-bit [0..255] range when converting color components from pixel formats with less than 8-bits per RGB component (e.g., a completely white pixel in 16-bit RGB565 format would return [0xff, 0xff, 0xff] not [0xf8, 0xfc, 0xf8]).
+This function uses the entire 8-bit [0..255] range when converting color components from pixel formats with less than 8-bits per RGB 
+component (e.g., a completely white pixel in 16-bit RGB565 format would return [0xff, 0xff, 0xff] not [0xf8, 0xfc, 0xf8]).
 
 If the surface has no alpha component, the alpha will be returned as 0xff (100% opaque). 
 
@@ -237,7 +297,9 @@ If the surface has no alpha component, the alpha will be returned as 0xff (100% 
 
 Creates an empty SDL::Surface from pixel data
 Allocate an empty surface (must be called after SDL::set_video_mode)
-If bitsPerPixel is 8 an empty palette is allocated for the surface, otherwise a 'packed-pixel' SDL::pixel_format is created using the [RGBA]mask's provided (see SDL::pixel_format). The flags specifies the type of surface that should be created, it is an OR'd combination of the following possible values. 
+If bitsPerPixel is 8 an empty palette is allocated for the surface, otherwise a 'packed-pixel' SDL::pixel_format is created using the 
+[RGBA]mask's provided (see SDL::pixel_format). The flags specifies the type of surface that should be created, it is an OR'd combination 
+of the following possible values. 
 
 =over 4
 
@@ -279,23 +341,28 @@ You may remove this flag by calling SDL::set_alpha after surface creation.
 Also, if the SDL_HWSURFACE flag is set on the returned surface, its format might not match the requested format. 
 
 Notes: Sometimes specifying an Alpha mask value could cause strange results. 
-This can be worked around by setting the Amask parameter to 0, but still including the SDL_SRCALPHA flag, and then using SDL::set_alpha, also with the SDL_SRCALPHA flag. 
+This can be worked around by setting the Amask parameter to 0, but still including the SDL_SRCALPHA flag, and then using SDL::set_alpha, 
+also with the SDL_SRCALPHA flag. 
 
 =head2	lock_surface(surface)
 
 SDL::lock_surface sets up the given SDL::surface for directly accessing the pixels.
-Between calls to SDL::lock_surface and SDL::unlock_surface, you can write to and read from surface->pixels, using the pixel format stored in surface->format. 
+Between calls to SDL::lock_surface and SDL::unlock_surface, you can write to and read from surface->pixels, using the pixel format stored 
+in surface->format. 
 Once you are done accessing the surface, you should use SDL::unlock_surface to release the lock.
 
-Not all surfaces require locking. If SDL::MUSTLOCK(surface) evaluates to 0, then reading and writing pixels to the surface can be performed at any time, and the pixel format of the surface will not change.
+Not all surfaces require locking. If SDL::MUSTLOCK(surface) evaluates to 0, then reading and writing pixels to the surface can be performed 
+at any time, and the pixel format of the surface will not change.
 No operating system or library calls should be made between the lock/unlock pairs, as critical system locks may be held during this time.
-SDL::lock_surface returns 0 on succés or -1 on error.
+SDL::lock_surface returns 0 on success or -1 on error.
 
-Note : Since SDL 1.1.8, the surface locks are recursive. This means that you can lock a surface multiple times, but each lock must have a matching unlock.
+Note : Since SDL 1.1.8, the surface locks are recursive. This means that you can lock a surface multiple times, but each lock must have 
+a matching unlock.
 
 =head2	unlock_surface(surface)
 
-Surfaces that were previously locked using SDL::lock_surface must be unlocked with SDL::unlock_surface. Surfaces should be unlocked as soon as possible.
+Surfaces that were previously locked using SDL::lock_surface must be unlocked with SDL::unlock_surface. Surfaces should be unlocked as 
+soon as possible.
 SDL::unlock_surface doesn't return anything.
 
 Note : Since 1.1.8, the surface locks are recursive. See C<SDL::lock_surface> for more information. 
@@ -309,7 +376,7 @@ The flags parameter is passed to SDL::create_RGB_surface and has those semantics
 This function is used internally by SDL::display_format.
 This function can only be called after SDL::init. 
 
-it returns a SDL::surface on succés or undef on error.
+it returns a SDL::surface on success or undef on error.
 
 =head2	display_format
 
@@ -322,7 +389,7 @@ Converts a surface to the display format
 =head2	load_BMP(filename)
 
 Loads a SDL::surface from a named Windows BMP file.
-SDL::load_BMP returns a SDL::surface on succés or undef on error.
+SDL::load_BMP returns a SDL::surface on success or undef on error.
 
 Note: When loading a 24-bit Windows BMP file, pixel data points are loaded as blue, green, red, and NOT red, green, blue (as one might expect). 
 
@@ -331,13 +398,14 @@ Note: When loading a 24-bit Windows BMP file, pixel data points are loaded as bl
 =head2	save_BMP(surface,filename)
 
 Saves the given SDL::Surface surface as a Windows BMP file named filename. 
-it returns 0 on succés or -1 on error.
+it returns 0 on success or -1 on error.
 
 =head2	set_color_key(surface,flag,key)
 
 Sets the color key (transparent pixel) in a blittable surface and enables or disables RLE blit acceleration.
 
-RLE acceleration can substantially speed up blitting of images with large horizontal runs of transparent pixels (i.e., pixels that match the key value).
+RLE acceleration can substantially speed up blitting of images with large horizontal runs of transparent pixels (i.e., pixels that match 
+the key value).
 The key must be of the same pixel format as the surface, SDL::map_RGB is often useful for obtaining an acceptable value.
 If flag is SDL_SRCCOLORKEY then key is the transparent pixel value in the source image of a blit.
 
@@ -345,7 +413,7 @@ If flag is OR'd with SDL_RLEACCEL then the surface will be drawn using RLE accel
 The surface will actually be encoded for RLE acceleration the first time SDL::blit_surface or SDL::display_format is called on the surface.
 If flag is 0, this function clears any current color key. 
 
-SDL::set_color_key returns 0 on succés or -1 on error.
+SDL::set_color_key returns 0 on success or -1 on error.
 
 
 =head2	set_alpha(surface,flag,key)
@@ -353,10 +421,12 @@ SDL::set_color_key returns 0 on succés or -1 on error.
 SDL::set_alpha is used for setting the per-surface alpha value and/or enabling and disabling alpha blending.
 
 The surface parameter specifies which SDL::surface whose alpha attributes you wish to adjust. 
-flags is used to specify whether alpha blending should be used (SDL_SRCALPHA) and whether the surface should use RLE acceleration for blitting (SDL_RLEACCEL). 
+flags is used to specify whether alpha blending should be used (SDL_SRCALPHA) and whether the surface should use RLE acceleration for 
+blitting (SDL_RLEACCEL). 
 flags can be an OR'd combination of these two options, one of these options or 0. 
 If SDL_SRCALPHA is not passed as a flag then all alpha information is ignored when blitting the surface. 
-The alpha parameter is the per-surface alpha value; a surface need not have an alpha channel to use per-surface alpha and blitting can still be accelerated with SDL_RLEACCEL.
+The alpha parameter is the per-surface alpha value; a surface need not have an alpha channel to use per-surface alpha and blitting can 
+still be accelerated with SDL_RLEACCEL.
 
 Note: The per-surface alpha value of 128 is considered a special case and is optimised, so it's much faster than other per-surface values.
 
@@ -408,22 +478,26 @@ If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are c
 =back
 
 Note: When blitting, the presence or absence of SDL_SRCALPHA is relevant only on the source surface, not the destination.
-Note: Note that RGBA->RGBA blits (with SDL_SRCALPHA set) keep the alpha of the destination surface. This means that you cannot compose two arbitrary RGBA surfaces this way and get the result you would expect from "overlaying" them; the destination alpha will work as a mask.
+Note: Note that RGBA->RGBA blits (with SDL_SRCALPHA set) keep the alpha of the destination surface. This means that you cannot compose 
+two arbitrary RGBA surfaces this way and get the result you would expect from "overlaying" them; the destination alpha will work as a mask.
 
 Note: Also note that per-pixel and per-surface alpha cannot be combined; the per-pixel alpha is always used if available. 
 
-SDL::set_alpha returns 0 on succés or -1 on error.
+SDL::set_alpha returns 0 on success or -1 on error.
 
 =head2	set_clip_rect(surface,rect)
 
-Sets the clipping rectangle for the given SDL::surface. When this surface is the destination of a blit, only the area within the clip rectangle will be drawn into.
-The rectangle pointed to by rect will be clipped to the edges of the surface so that the clip rectangle for a surface can never fall outside the edges of the surface.
+Sets the clipping rectangle for the given SDL::surface. When this surface is the destination of a blit, only the area within the clip 
+rectangle will be drawn into.
+The rectangle pointed to by rect will be clipped to the edges of the surface so that the clip rectangle for a surface can never fall 
+outside the edges of the surface.
 If rect is NULL the clipping rectangle will be set to the full size of the surface. 
 SDL::set_clip_rect doesn't returns anything.
 
 =head2	get_clip_rect(surface,rect)
 
-Gets the clipping rectangle for the given SDL::surface. When this surface is the destination of a blit, only the area within the clip rectangle is drawn into.
+Gets the clipping rectangle for the given SDL::surface. When this surface is the destination of a blit, only the area within the clip 
+rectangle is drawn into.
 The rectangle pointed to by rect will be filled with the clipping rectangle of the surface. 
 SDL::get_clip_rect doesn't returns anything;
 
@@ -431,55 +505,69 @@ SDL::get_clip_rect doesn't returns anything;
 =head2	blit_surface(src,src_rect,dest,dest_rect)
 
 This performs a fast blit from the given source SDL::surface to the given destination SDL::surface.
-The width and height in srcrect determine the size of the copied rectangle. Only the position is used in the dstrect (the width and height are ignored). Blits with negative dstrect coordinates will be clipped properly.
+The width and height in srcrect determine the size of the copied rectangle. Only the position is used in the dstrect (the width and height 
+are ignored). Blits with negative dstrect coordinates will be clipped properly.
 If srcrect is NULL, the entire surface is copied. If dstrect is NULL, then the destination position (upper left corner) is (0, 0).
 The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
-The blit function should not be called on a locked surface. I.e. when you use your own drawing functions you may need to lock a surface, but this is not the case with SDL::blit_surface. Like most surface manipulation functions in SDL, it should not be used together with OpenGL.
+The blit function should not be called on a locked surface. I.e. when you use your own drawing functions you may need to lock a surface, 
+but this is not the case with SDL::blit_surface. Like most surface manipulation functions in SDL, it should not be used together with OpenGL.
 
-The results of blitting operations vary greatly depending on whether SDL_SRCALPHA is set or not. See SDL::set_alpha for an explanation of how this affects your results. Colorkeying and alpha attributes also interact with surface blitting.
+The results of blitting operations vary greatly depending on whether SDL_SRCALPHA is set or not. See SDL::set_alpha for an explanation of 
+how this affects your results. Colorkeying and alpha attributes also interact with surface blitting.
 SDL::blit_surface doesn't returns anything.
 
 =head2	fill_rect(dest,dest_rect,pixel)
 
-This function performs a fast fill of the given SDL::rectangle with the given SDL::pixel_format. If dstrect is NULL, the whole surface will be filled with color.
+This function performs a fast fill of the given SDL::rectangle with the given SDL::pixel_format. If dstrect is NULL, the whole surface 
+will be filled with color.
 
 The color should be a pixel of the format used by the surface, and can be generated by the SDL::MapRGB or SDL::map_RGBA functions.
 If the color value contains an alpha value then the destination is simply "filled" with that alpha information, no blending takes place.
 
-If there is a clip rectangle set on the destination (set via SDL::set_clip_rect), then this function will clip based on the intersection of the clip rectangle and the dstrect rectangle, and the dstrect rectangle will be modified to represent the area actually filled.
+If there is a clip rectangle set on the destination (set via SDL::set_clip_rect), then this function will clip based on the intersection 
+of the clip rectangle and the dstrect rectangle, and the dstrect rectangle will be modified to represent the area actually filled.
 
-If you call this on the video surface (ie: the value of SDL::get_video_surface()) you may have to update the video surface to see the result. This can happen if you are using a shadowed surface that is not double buffered in Windows XP using build 1.2.9. 
+If you call this on the video surface (ie: the value of SDL::get_video_surface()) you may have to update the video surface to see the 
+result. This can happen if you are using a shadowed surface that is not double buffered in Windows XP using build 1.2.9. 
 
-SDL::fill_rect returns 0 on succés or -1 on error.
+SDL::fill_rect returns 0 on success or -1 on error.
 
 =head2	GL_load_library(path)
 
 If you wish, you may load the OpenGL library from the given path at runtime, this must be done before SDL::set_video_mode is called.
-The path of the GL library is passed to SDL::GL_load_library and it returns 0 on success, or -1 on an error. You must then use SDL::GL_get_proc_address to retrieve function pointers to GL functions. 
+The path of the GL library is passed to SDL::GL_load_library and it returns 0 on success, or -1 on an error. You must then use 
+SDL::GL_get_proc_address to retrieve function pointers to GL functions. 
 
-SDL::GL_load_library returns 0 on succés or -1 or error.
+SDL::GL_load_library returns 0 on success or -1 or error.
 
 =head2	GL_get_proc_address(proc)
 
-Returns the address of the GL function proc, or NULL if the function is not found. If the GL library is loaded at runtime, with SDL::GL_load_library, then all GL functions must be retrieved this way. Usually this is used to retrieve function pointers to OpenGL extensions. Note that this function needs an OpenGL context to function properly, so it should be called after SDL::set_video_mode has been called (with the SDL_OPENGL flag).
+Returns the address of the GL function proc, or NULL if the function is not found. If the GL library is loaded at runtime, with 
+SDL::GL_load_library, then all GL functions must be retrieved this way. Usually this is used to retrieve function pointers to OpenGL 
+extensions. Note that this function needs an OpenGL context to function properly, so it should be called after SDL::set_video_mode 
+has been called (with the SDL_OPENGL flag).
 
-OpenGL function pointers must be declared APIENTRY . This will ensure the proper calling convention is followed on platforms where this matters (Win32) thereby avoiding stack corruption. In a Win32 build environment, APIENTRY should be defined as __stdcall. 
+OpenGL function pointers must be declared APIENTRY . This will ensure the proper calling convention is followed on platforms where this 
+matters (Win32) thereby avoiding stack corruption. In a Win32 build environment, APIENTRY should be defined as __stdcall. 
 
 it returns undef if the function is not found.
 
 =head2	GL_get_attribute(attr)
 
-It returns  SDL/OpenGL attribute attr . This is useful after a call to SDL::set_video_mode to check whether your attributes have been set as you expected. 
+It returns  SDL/OpenGL attribute attr . This is useful after a call to SDL::set_video_mode to check whether your attributes have been set 
+as you expected. 
 SDL::GL_get_attribute returns undef if the attribute is not found.
 
 =head2	GL_set_attribute(attr,value)
 
 This function sets the given OpenGL attribute attr to value. The requested attributes will take effect after a call to SDL::set_video_mode.
-You should use SDL::GL_get_attribute to check the values after a SDL::set_video_mode call, since the values obtained can differ from the requested ones.
+You should use SDL::GL_get_attribute to check the values after a SDL::set_video_mode call, since the values obtained can differ from the 
+requested ones.
 See SDL_GLattr for the full list of available attributes. 
-SDL::GL_set_attribute returns 0 on succés or -1 on error.
+SDL::GL_set_attribute returns 0 on success or -1 on error.
 
-Note : The SDL_DOUBLEBUF flag is not required to enable double buffering when setting an OpenGL video mode. Double buffering is enabled or disabled using the SDL_GL_DOUBLEBUFFER attribute. 
+Note : The SDL_DOUBLEBUF flag is not required to enable double buffering when setting an OpenGL video mode. Double buffering is enabled 
+or disabled using the SDL_GL_DOUBLEBUFFER attribute. 
 
 =head2	GL_swap_buffers
 
@@ -492,18 +580,20 @@ SDL::GL_swap_buffers doesn't returns any value.
 =head2	lock_YUV_overlay(overlay)
 
 Much the same as C<SDL::lock_surface>, SDL::lock_YUV_overlay locks the overlay for direct access to pixel data.
-It returns 0 on succés or -1 on error.
+It returns 0 on success or -1 on error.
 
 =head2	unlock_YUV_overlay(overlay)
 
 The opposite to C<SDL::lock_YUV_overlay>. Unlocks a previously locked overlay. An overlay must be unlocked before it can be displayed. 
-It returns 0 on succés or -1 on error.
+It returns 0 on success or -1 on error.
 
 =head2	display_YUV_overlay(overlay,dstrect)
 
-Blit the overlay to the display surface specified when the overlay was created. The SDL::rect structure, dstrect, specifies a rectangle on the display where the overlay is drawn. The .x and .y fields of dstrect specify the upper left location in display coordinates. The overlay is scaled (independently in x and y dimensions) to the size specified by dstrect, and is optimized for 2x scaling
+Blit the overlay to the display surface specified when the overlay was created. The SDL::rect structure, dstrect, specifies a rectangle 
+on the display where the overlay is drawn. The .x and .y fields of dstrect specify the upper left location in display coordinates. 
+The overlay is scaled (independently in x and y dimensions) to the size specified by dstrect, and is optimized for 2x scaling
 
-It returns 0 on succés or -1 on error.
+It returns 0 on success or -1 on error.
 
 
 =head1 SEE ALSO
