@@ -2,12 +2,17 @@
 
 =head1 NAME
 
-SDL::Palette - a perl extension
+SDL::Palette -- Color palette for 8-bit pixel formats 
+
+=head1 CATEGORY
+
+Core, Video, Structure
 
 =head1 DESCRIPTION
 
-L<SDL::Palette> provides an interface to the C<SDL_Palette> structures,
-and can be used to set the color values of an existing palette's indexes.
+Each pixel in an 8-bit surface is an index into the colors field of the C<SDL::Palette> structure store in C<SDL::PixelFormat>. A C<SDL::Palette>
+should never need to be created manually. It is automatically created when SDL allocates a C<SDL::PixelFormat> for a surface. The colors 
+values of a C<SDL::Surface>'s palette can be set with the C<SDL::Video::set_colors>.
 
 =head1 METHODS
 
@@ -22,11 +27,6 @@ Fetches an array of colors in palette
 =head2 color_index ( index )
 
 Fetches the SDL_Color at the provide index in palette
-
-=head2 size
-
-Returns the size of the palette.
-
 
 =head1 SEE ALSO
 
