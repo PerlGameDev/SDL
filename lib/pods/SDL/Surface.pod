@@ -2,12 +2,11 @@
 
 =head1 NAME
 
-SDL::Surface - Graphic surface structure. Access to C<SDL_Surface>.
+SDL::Surface - Graphic surface structure.
 
-=head2 CATEGORY
+=head1 CATEGORY
 
 Core, Video, Structure
-
 
 =head1 SYNOPSIS
 
