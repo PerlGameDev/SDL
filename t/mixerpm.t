@@ -1,67 +1,19 @@
-#!/usr/bin/perl -w
-#
-# Copyright (C) 2003 Tels
-# Copyright (C) 2004 David J. Goehrig
-# Copyright (C) 2005 David J. Goehrig <dgoehrig\@cpan.org>
-#
-# ------------------------------------------------------------------------------
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-# 
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
-# 
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-#
-# ------------------------------------------------------------------------------
-#
-# Please feel free to send questions, suggestions or improvements to:
-#
-#	David J. Goehrig
-#	dgoehrig\@cpan.org
-#
-#
-# basic testing of SDL::Mixer
-
 use strict;
 use SDL;
 use SDL::Config;
 use Test::More;
 
-BEGIN {
-	unshift @INC, 'blib/lib','blib/arch';
-}
+use lib 't/lib';
+use SDL::TestTool;
 
-sub check_fail_mixer
-{	
-	my $ret = 0;
-	eval
-	{
-      		$ret = SDL::init(SDL_INIT_AUDIO);
-	};
-	return 1 if ($@ or $ret == -1);
-	return 0;
-}
-
-if( check_fail_mixer() )
-{
-	 plan( skip_all => "Cannot initialize Audio for Mixer!!" );
+if ( SDL::TestTool->init_audio ) {
+    plan( skip_all => 'Failed to init sound' );
+} else {
+    plan( tests => 3 );
 }
 
 
-if ( SDL::Config->has('SDL_mixer') ) {
-	plan ( tests => 3 );
-}			
-else {
-	plan ( skip_all => 'SDL_mixer support not compiled' );
-}
+
 
 use_ok( 'SDL::Mixer' ); 
   
