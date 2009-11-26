@@ -321,6 +321,7 @@ my $build   = SDL::Build->new(
 	build_requires =>
 	{
 		'Test::Simple' => '0.47',
+		'Test::More'   => '0.88',
 		'IO::CaptureOutput' => '0',
 		'Test::Most' => '0.21',
 	},
