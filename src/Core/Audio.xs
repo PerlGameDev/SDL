@@ -56,15 +56,15 @@ audio_load_wav ( filename, spec )
 		temp = SDL_LoadWAV(filename,temp,&buf,&len);
 		if ( temp == NULL ) 
 		{
-		  croak("Error in SDL_LoadWAV: %s", SDL_GetError()); 
+			croak("Error in SDL_LoadWAV: %s", SDL_GetError()); 
 		}
 		else
 		{	
-		RETVAL = newAV();
-		RETVAL = sv_2mortal((SV*)RETVAL );
-		av_push(RETVAL, sv_setref_pv( asref, "SDL::AudioSpec", (void *)temp));
-		av_push(RETVAL,newSViv(PTR2IV(buf)));
-		av_push(RETVAL,newSViv(len));
+			RETVAL = newAV();
+			RETVAL = sv_2mortal( (SV*)RETVAL );
+			av_push(RETVAL, sv_setref_pv( asref, "SDL::AudioSpec", (void *)temp));
+			av_push(RETVAL,newSViv(PTR2IV(buf)));
+			av_push(RETVAL,newSViv(len));
 		}
 	OUTPUT:
 		RETVAL
@@ -75,6 +75,18 @@ audio_free_wav ( audio_buf )
 	CODE:
 		SDL_FreeWAV(audio_buf);
 
+int
+audio_convert_audio( cvt, data, len )
+	SDL_AudioCVT *cvt
+	Uint8 *data
+	int len
+	CODE:
+		cvt->buf = (Uint8 *)safemalloc(len * cvt->len_mult);
+		cvt->len = len;
+		memcpy(cvt->buf, data, cvt->len);
+		RETVAL = SDL_ConvertAudio(cvt);
+	OUTPUT:
+		RETVAL			
 
 void
 audio_close ()
