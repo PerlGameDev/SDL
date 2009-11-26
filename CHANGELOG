@@ -12,7 +12,8 @@ Revision history for Perl extension SDL_perl.
 	- SDL::Video substructures [acme, kthakore]
 	- SDL::Events substructures [FROGGS, kthakore]
 	- SDL  Functions and Clean Up [acme, kthakore]
-	- SDL documentation [magnet, kthakore]
+	- SDL::Mouse and SDL::Cursor [ kthakore, FROGGS ]
+	- SDL documentation [magnet, kthakore, FROGGS]
 	- Auto-Generated Constants.pm [FROGGS]
 
 * v2.2.3.1 Sept 29 2009 Kartik Thakore <thakore.kartik@gmail.com>
