@@ -133,7 +133,7 @@ If 'flags' is 0 or SDL_INIT_EVERYTHING, it returns a mask of all initialized sub
 The last error message set by the SDL library can be retrieved using the subroutine
 C<SDL::get_error>, which returns a scalar containing the text of the message if any.
 
-=head2 set_error(error)  *need to be coded
+=head2 set_error_real(error, @values)  
 
 SDL::get_error sets the SDL error to a printf style formatted string. 
 it doesn't returns any values.
@@ -188,7 +188,7 @@ which are equivalent to SDL_Error(SDL_ENOMEM) and SDL_Error(SDL_UNSUPPORTED) res
 SDL::Error doesn't returns any value.
 
 
-=head2 clear_error() * need to be coded
+=head2 clear_error() 
 
 SDL::clear_error deletes all information about the last internal SDL error. Useful if the error has been handled by the program.
 it doesn't returns any value.
@@ -229,18 +229,8 @@ number of milliseconds provided as the argument.  The actual delay may be longer
 than the specified depending on the underlying OS.
 
 
-=head1 STUFF TO BE DONE for the documentation
+=head1 AUTHORS
 
+magnet, kthakore
 
-	SDL:: to improve
-	SDL::Video add examples, need general improvement.
-	Event.pod need to be checked against Events.pod
-	SDL::Events need to be completed
-	SDL::Cdrom need some examples. 
-	SDL::MultiThread to be created( once implemented  ). 
-	SDL::Timer need examples. 
-	SDL::RW to be created.
-	SDL::Mouse need to be created.
-	SDL::Joystick need to be created.
-	SDL::Audio need to be created.
 
