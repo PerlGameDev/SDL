@@ -13,11 +13,79 @@ TODO, Core, Audio
 
 =head1 METHODS
 
-=head2 open_audio
+=head2 open
 
 Opens the audio device with the desired parameters.
 
-=head2 PauseAudio 
+=head3 Synopsis
+
+  use SDL;
+  use SDL::Audio;
+  
+  SDL::init(SDL_INIT_AUDIO);
+
+  my $desired = SDL::AudioSpec->new();
+  
+  my $obtained;
+
+  SDL::open_audio($desired, $obtained);
+  
+  # $obtained->... (A new SDL::AudioSpec now);
+
+=head3 Description
+
+This function opens the audio device with the desired parameters, and returns 0 if successful, placing the actual hardware parameters in the structure pointed to by obtained. If obtained is NULL, the audio data passed to the callback function will be guaranteed to be in the requested format, and will be automatically converted to the hardware audio format if necessary. This function returns -1 if it failed to open the audio device, or couldn't set up the audio thread.
+
+To open the audio device a desired SDL::AudioSpec must be created.
+
+  my $desired = SDL::AudioSpec->new();
+
+You must then fill this structure with your desired audio specifications.
+
+=over 
+
+=item The desired audio frequency in samples-per-second. 
+
+    $desired->freq
+
+=item The desired audio format. See L<SDL::AudioSpec>
+    
+    $desired->format
+
+=item The desired channels (1 for mono, 2 for stereo, 4 for surround, 6 for surround with center and lfe). 
+
+    $desired->channels
+
+=item The desired size of the audio buffer in samples. This number should be a power of two, and may be adjusted by the audio driver to a value more suitable for the hardware. Good values seem to range between 512 and 8192 inclusive, depending on the application and CPU speed. Smaller values yield faster response time, but can lead to underflow if the application is doing heavy processing and cannot fill the audio buffer in time. A stereo sample consists of both right and left channels in LR ordering. Note that the number of samples is directly related to time by the following formula: ms = (samples*1000)/freq 
+
+    $desired->samples
+    
+=item This should be set to a function that will be called when the audio device is ready for more data. It is passed a pointer to the audio buffer, and the length in bytes of the audio buffer. This function usually runs in a separate thread, and so you should protect data structures that it accesses by calling SDL::Audio::lock and SDL::Audio::unlock in your code. 
+
+THIS IS NOT READY YET
+
+    $desired->callback
+
+    my $callback= sub{ my ($userdata, $stream, $len) = @_;  };
+
+    $userdata is a reference stored in the userdata field of the SDL::AudioSpec. 
+    $stream is a pointer to the audio buffer you want to fill with information and $len is the length of the audio buffer in bytes.
+
+    $desired->userdata
+
+    This pointer is passed as the first parameter to the callback function. 
+
+=back
+
+SDL::Audio::open reads these fields from the desired SDL::AudioSpec structure passed to the function and attempts to find an audio configuration matching your desired. As mentioned above, if the obtained parameter is NULL then SDL with convert from your desired audio settings to the hardware settings as it plays.
+
+If obtained is NULL then the desired SDL::AudioSpec is your working specification, otherwise the obtained SDL::AudioSpec becomes the working specification and the desired specification can be deleted. The data in the working specification is used when building L<SDL::AudioCVT>'s for converting loaded data to the hardware format.
+
+SDL::Audio::open calculates the size and silence fields for both the $desired and $obtained specifications. The size field stores the total size of the audio buffer in bytes, while the silence stores the value used to represent silence in the audio buffer
+
+The audio device starts out playing silence when it's opened, and should be enabled for playing by calling SDL::Audio::pause(0) when you are ready for your audio callback function to be called. Since the audio driver may modify the requested size of the audio buffer, you should allocate any local mixing buffers after you open the audio device. 
+
+=head2 pause
 
 Pauses and unpauses the audio callback processing
 
@@ -25,11 +93,11 @@ Pauses and unpauses the audio callback processing
 
 Gets the current audio state
 
-=head2 LoadWAV 
+=head2 load_WAV 
 
 Loads a WAVE file
 
-=head2 FreeWAV 
+=head2 free_WAV 
 
 Frees previously opened WAV data
 
@@ -49,15 +117,15 @@ Converts audio data to a desired audio format.
 
 Mixes audio data
 
-=head2 LockAudio
+=head2 lock
 
 Locks out the callback function
 
-=head2 UnlockAudio
+=head2 unlock
 
 Unlocks the callback function
 
-=head2 CloseAudio 
+=head2 close 
 
 Shuts down audio processing and closes the audio device.  
 

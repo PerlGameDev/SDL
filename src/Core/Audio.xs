@@ -11,7 +11,7 @@
 MODULE = SDL::Audio     PACKAGE = SDL::Audio    PREFIX = audio_
 
 int
-audio_open_audio ( desired, obtained )
+audio_audio ( desired, obtained )
 	SDL_AudioSpec *desired
 	SDL_AudioSpec *obtained
 	CODE:
@@ -20,7 +20,7 @@ audio_open_audio ( desired, obtained )
 		RETVAL
 
 void
-audio_pause_audio ( pause_on )
+audio_pause ( pause_on )
 	int pause_on
 	CODE:
 		SDL_PauseAudio(pause_on);
@@ -33,12 +33,12 @@ audio_get_audio_status ()
 		RETVAL
 
 void
-audio_lock_audio ()
+audio_lock ()
 	CODE:
 		SDL_LockAudio();
 
 void
-audio_unlock_audio ()
+audio_unlock ()
 	CODE:
 		SDL_UnlockAudio();
 
@@ -77,7 +77,7 @@ audio_free_wav ( audio_buf )
 
 
 void
-audio_close_audio ()
+audio_close ()
 	CODE:
 		SDL_CloseAudio();
 
