@@ -101,9 +101,9 @@ Loads a WAVE file
 
 Frees previously opened WAV data
 
-=head2 convert_audio
+=head2 convert
 
- SDL::Audio->convert_audio( cvt, data, len )
+ SDL::Audio->convert( cvt, data, len )
  
 Converts audio data to a desired audio format.
 
@@ -125,6 +125,9 @@ Example:
  use SDL::Audio;
  use SDL::AudioSpec;
  use SDL::AudioCVT;
+ use Devel::Peek;
+ 
+ SDL::init(SDL_INIT_AUDIO);
  
  # Converting some WAV data to hardware format
 
@@ -138,19 +141,20 @@ Example:
  $desired->samples(8192);
  
  # Open the audio device
- if( SDL::Audio::open_audio($desired, $obtained) < 0 )
+ if( SDL::Audio::open($desired, $obtained) < 0 )
  {
      printf( STDERR "Couldn't open audio: %s\n", SDL::get_error() );
      exit(-1);
  }
  
  # Load the test.wav
- my $wav_ref = SDL::Audio::load_wav('C:/SDL_perl/test/data/sample.wav', $obtained);
+ my $wav_ref = SDL::Audio::load_wav('../../test/data/sample.wav', $obtained);
  
  unless( $wav_ref )
  {
-     printf( STDERR "Could not open sample.wav: %s\n", SDL::get_error() );
+     warn("Could not open sample.wav: %s\n", SDL::get_error() );
      SDL::Audio::close_audio();
+     SDL::quit;
      exit(-1);
  }
  
@@ -161,18 +165,23 @@ Example:
                                      $obtained->format, $obtained->channels, $obtained->freq); 
 
  # Check that the convert was built
- unless( $wav_cvt )
+ if( $wav_cvt == -1 )
  {
-     printf( STDERR "Couldn't build converter!\n" );
-     SDL::Audio::close_audio();
+     warn("Couldn't build converter!\n" );
+     SDL::Audio::close();
      SDL::Audio::free_wav($wav_buf);
+     SDL::quit();
+     exit(-1);
  }
-
+ 
  # And now we're ready to convert
- SDL::Audio::convert_audio($wav_cvt, $wav_buf, $wav_len);
+ SDL::Audio::convert($wav_cvt, $wav_buf, $wav_len);
+ 
 
- # We can delete to original WAV data now
+ # We can freeto original WAV data now
  SDL::Audio::free_wav($wav_buf);
+ 
+ 
  
 B<TODO>: What to do with it? How to use callback? See http://www.libsdl.org/cgi/docwiki.cgi/SDL_ConvertAudio
 

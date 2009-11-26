@@ -61,7 +61,7 @@ audio_load_wav ( filename, spec )
 		else
 		{	
 			RETVAL = newAV();
-			RETVAL = sv_2mortal( (SV*)RETVAL );
+			RETVAL = sv_2mortal( (SV *)RETVAL );
 			av_push(RETVAL, sv_setref_pv( asref, "SDL::AudioSpec", (void *)temp));
 			av_push(RETVAL,newSViv(PTR2IV(buf)));
 			av_push(RETVAL,newSViv(len));
@@ -76,7 +76,7 @@ audio_free_wav ( audio_buf )
 		SDL_FreeWAV(audio_buf);
 
 int
-audio_convert_audio( cvt, data, len )
+audio_convert( cvt, data, len )
 	SDL_AudioCVT *cvt
 	Uint8 *data
 	int len
@@ -85,6 +85,8 @@ audio_convert_audio( cvt, data, len )
 		cvt->len = len;
 		memcpy(cvt->buf, data, cvt->len);
 		RETVAL = SDL_ConvertAudio(cvt);
+		
+		
 	OUTPUT:
 		RETVAL			
 
