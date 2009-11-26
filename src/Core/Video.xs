@@ -82,7 +82,7 @@ video_video_driver_name( )
 		RETVAL
 
 AV*
-list_modes ( format, flags )
+video_list_modes ( format, flags )
 	Uint32 flags
 	SDL_PixelFormat *format
 
