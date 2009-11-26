@@ -144,7 +144,7 @@ videoinfo_vfmt( videoinfo )
 
 	PREINIT:
 	
-		char* CLASS = "SDL::VideoFormat";	
+		char* CLASS = "SDL::PixelFormat";	
 	
 	CODE:
 		RETVAL = videoinfo->vfmt;
