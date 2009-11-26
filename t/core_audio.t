@@ -40,22 +40,22 @@ is( SDL::Audio::get_audio_status, SDL_AUDIO_STOPPED,
     '[get_audio_status stopped]' );
 
 my $obtained = SDL::AudioSpec->new;
-is( SDL::Audio::open_audio( $desired, $obtained ),
+is( SDL::Audio::open( $desired, $obtained ),
     0, '[open_audio returned success]' );
 isa_ok( $obtained, 'SDL::AudioSpec', 'Created a new AudioSpec' );
 
 is( SDL::Audio::get_audio_status, SDL_AUDIO_PAUSED,
     '[get_audio_status paused]' );
 
-SDL::Audio::pause_audio(0);
+SDL::Audio::pause(0);
 
 is( SDL::Audio::get_audio_status, SDL_AUDIO_PLAYING,
     '[get_audio_status playing]' );
 
-SDL::Audio::lock_audio();
-SDL::Audio::unlock_audio();
+SDL::Audio::lock();
+SDL::Audio::unlock();
 
-SDL::Audio::close_audio();
+SDL::Audio::close();
 
 is( SDL::Audio::get_audio_status, SDL_AUDIO_STOPPED,
     '[get_audio_status stopped]' );

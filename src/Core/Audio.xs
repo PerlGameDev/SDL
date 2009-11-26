@@ -11,7 +11,7 @@
 MODULE = SDL::Audio     PACKAGE = SDL::Audio    PREFIX = audio_
 
 int
-audio_audio ( desired, obtained )
+audio_open ( desired, obtained )
 	SDL_AudioSpec *desired
 	SDL_AudioSpec *obtained
 	CODE:
