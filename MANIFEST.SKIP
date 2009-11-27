@@ -1,6 +1,6 @@
-Build
 _build
 blib
 exp
 .git
-
+^Build$
+lib/SDL/Config.pm
