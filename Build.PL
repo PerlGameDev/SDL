@@ -334,7 +334,8 @@ my $build   = SDL::Build->new(
 	{
 		no_index =>  { file => [ <make/lib/SDL/*.pm>, <make/lib/SDL/Build/*.pm>, <make/lib/ExtUtils/CBuilder/*>, <make/lib/ExtUtils/*>, <make/lib/ExtUtils/CBuilder/Platform/Windows.pm> ] },
 	},
-	dist_author	     => 'David J. Goehrig <DGOEHRIG@cpan.org>, Kartik Thakore <KTHAKORE@cpan.org>',
+	dist_abstract => 'SDL bindings to Perl',
+	dist_author	     => 'Kartik Thakore <KTHAKORE@cpan.org>',
 );
 
 if($arch eq 'Darwin')

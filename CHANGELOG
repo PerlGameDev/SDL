@@ -1,6 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
-* 3.0
+* 2.3_0
+	- General Memory leaking stopping [kthakore, acme]
+	- More complete unit testing [kthakore, acme, FROGGS]
 	- Fix bug with TTFSizeText, it actually returns 0 on success [acme]
 	- Add display_format_alpha [acme]
 	- Add an example that plays a .WAV sound sample [acme]
@@ -11,10 +13,13 @@ Revision history for Perl extension SDL_perl.
 	- SDL::Video functions [acme, kthakore]
 	- SDL::Video substructures [acme, kthakore]
 	- SDL::Events substructures [FROGGS, kthakore]
-	- SDL  Functions and Clean Up [acme, kthakore]
+	- SDL::Event Filtering and user Events 2 way communication [kthakore, FROGGS]
+	- SDL  Functions and Clean Up [acme, kthakore, FROGGS]
 	- SDL::Mouse and SDL::Cursor [ kthakore, FROGGS ]
-	- SDL documentation [magnet, kthakore, FROGGS]
+	- SDL documentation [magnet, kthakore, FROGGS] 
 	- Auto-Generated Constants.pm [FROGGS]
+	- Added direct pixel writing examples [kthakore]
+	- Added walking and map moving example [kthakore, FROGGS]
 
 * v2.2.3.1 Sept 29 2009 Kartik Thakore <thakore.kartik@gmail.com>
 	- Critical Build.PL fix for META.yml 
