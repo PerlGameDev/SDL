@@ -358,7 +358,7 @@ video_set_alpha ( surface, flag, alpha )
 		RETVAL
 
 AV *
-get_RGB ( pixel_format, pixel )
+video_get_RGB ( pixel_format, pixel )
 	SDL_PixelFormat *pixel_format
 	Uint32 pixel
 	CODE:
@@ -372,7 +372,7 @@ get_RGB ( pixel_format, pixel )
 		RETVAL
 
 AV *
-get_RGBA ( pixel_format, pixel )
+video_get_RGBA ( pixel_format, pixel )
 	SDL_PixelFormat *pixel_format
 	Uint32 pixel
 	CODE:
@@ -387,7 +387,7 @@ get_RGBA ( pixel_format, pixel )
 		RETVAL
 
 SDL_Surface*
-load_BMP ( filename )
+video_load_BMP ( filename )
 	char *filename
 	PREINIT:
 		char* CLASS = "SDL::Surface";
