@@ -829,8 +829,9 @@ SDL::GL_swap_buffers doesn't returns any value.
 =head2	GL_attr *** to be coded
 
 
-=head1 L<Video Overlay | SDL::Overlay> Functions
+=head1 Video Overlay Functions
 
+see L<SDL::Overlay> 
 
 =head2	lock_YUV_overlay(overlay)
 
