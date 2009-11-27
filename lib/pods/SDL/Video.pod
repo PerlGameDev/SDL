@@ -37,7 +37,7 @@ Core, Video
  
  SDL::quit();
 
-=head1 METHODS
+=head1 Core Functions
 
 =head2	get_video_surface
 
@@ -595,57 +595,6 @@ component (e.g., a completely white pixel in 16-bit RGB565 format would return [
 
 If the surface has no alpha component, the alpha will be returned as 0xff (100% opaque). 
 
-=head2	create_RGB_surface_from ***
-
-Creates an empty SDL::Surface from pixel data
-Allocate an empty surface (must be called after SDL::set_video_mode)
-If bitsPerPixel is 8 an empty palette is allocated for the surface, otherwise a 'packed-pixel' SDL::pixel_format is created using the 
-[RGBA]mask's provided (see SDL::pixel_format). The flags specifies the type of surface that should be created, it is an OR'd combination 
-of the following possible values. 
-
-=over 4
-
-=item SDL_SWSURFACE
-
-SDL will create the surface in system memory. 
-This improves the performance of pixel level access, however you may not be able to take advantage of some types of hardware blitting.
-
-=item SDL_HWSURFACE
-
-SDL will attempt to create the surface in video memory. 
-This will allow SDL to take advantage of Video->Video blits (which are often accelerated).
-
-=item SDL_SRCCOLORKEY
-
-This flag turns on color keying for blits from this surface. 
-If SDL_HWSURFACE is also specified and color keyed blits are hardware-accelerated, then SDL will attempt to place the surface in video memory.
-If the screen is a hardware surface and color keyed blits are hardware-accelerated then the SDL_HWSURFACE flag will be set. 
-Use SDL_SetColorKey to set or clear this flag after surface creation.
-
-=item SDL_SRCALPHA
-
-This flag turns on alpha-blending for blits from this surface. 
-If SDL_HWSURFACE is also specified and alpha-blending blits are hardware-accelerated, 
-then the surface will be placed in video memory if possible. 
-If the screen is a hardware surface and alpha-blending blits are hardware-accelerated then the SDL_HWSURFACE flag will be set. 
-Use SDL_SetAlpha to set or clear this flag after surface creation.
-
-=back
-
-
-[RGBA]mask are the bitmasks used to extract that colour from a pixel.
-For instance, Rmask being FF000000 means the red data is stored in the most significant byte. 
-Using zeros for the RGB masks sets a default value, based on the depth. (e.g. SDL::create_RGB_surface(flags,w,h,32,0,0,0,0);).
-However, using zero for the Amask results in an Amask of 0.
-It returns a SDL::Surface on success or undef on error.
-Notes: If an alpha-channel is specified (that is, if Amask is nonzero), then the SDL_SRCALPHA flag is automatically set. 
-You may remove this flag by calling SDL::set_alpha after surface creation.
-Also, if the SDL_HWSURFACE flag is set on the returned surface, its format might not match the requested format. 
-
-Notes: Sometimes specifying an Alpha mask value could cause strange results. 
-This can be worked around by setting the Amask parameter to 0, but still including the SDL_SRCALPHA flag, and then using SDL::set_alpha, 
-also with the SDL_SRCALPHA flag. 
-
 =head2	lock_surface(surface)
 
 SDL::lock_surface sets up the given SDL::surface for directly accessing the pixels.
@@ -694,7 +643,6 @@ Loads a SDL::surface from a named Windows BMP file.
 SDL::load_BMP returns a SDL::surface on success or undef on error.
 
 Note: When loading a 24-bit Windows BMP file, pixel data points are loaded as blue, green, red, and NOT red, green, blue (as one might expect). 
-
 
 
 =head2	save_BMP(surface,filename)
@@ -834,6 +782,8 @@ result. This can happen if you are using a shadowed surface that is not double b
 
 SDL::fill_rect returns 0 on success or -1 on error.
 
+=head1 GL Methods
+
 =head2	GL_load_library(path)
 
 If you wish, you may load the OpenGL library from the given path at runtime, this must be done before SDL::set_video_mode is called.
@@ -877,6 +827,9 @@ Swap the OpenGL buffers, if double-buffering is supported.
 SDL::GL_swap_buffers doesn't returns any value.
 
 =head2	GL_attr *** to be coded
+
+
+=head1 L<Video Overlay | SDL::Overlay> Functions
 
 
 =head2	lock_YUV_overlay(overlay)
