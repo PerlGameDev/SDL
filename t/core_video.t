@@ -7,8 +7,14 @@ use SDL::Config;
 use SDL::Overlay;
 use Test::More;
 use SDL::Rect;
-
 use SDL::Video;
+
+use lib 't/lib';
+use SDL::TestTool;
+
+if ( SDL::TestTool->init(SDL_INIT_VIDEO) ) {
+    plan( skip_all => 'Failed to init video' );
+}
 
 my @done =
 	qw/ 
@@ -62,7 +68,7 @@ my @done =
 can_ok ('SDL::Video', @done); 
 
 #testing get_video_surface
-SDL::init(SDL_INIT_VIDEO);                                                                          
+#SDL::init(SDL_INIT_VIDEO);                                                                          
 
 #needs to be done before set_video_mode
 my $glVal = SDL::Video::GL_load_library('this/should/fail');
