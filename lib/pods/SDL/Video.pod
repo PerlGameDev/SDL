@@ -560,20 +560,20 @@ If the L<SDL::PixelFormat>'s  bpp (color depth) is less than 32-bpp then the unu
  my $_16bit = SDL::Video::map_RGB( $screen_surface->format, $r, $g, $b );
  
  # 16bpp is 5 bits red, 6 bits green and 5 bits blue
- # we will obtain the values for each color and calculating them back to 24bit color system
- $r = (($_16bit & 0b1111100000000000) >> 11) / 0b11111  * 0b11111111;
- $g = (($_16bit & 0b0000011111100000) >>  5) / 0b111111 * 0b11111111;
- $b =  ($_16bit & 0b0000000000011111)        / 0b11111  * 0b11111111;
+ # we will obtain the values for each color and calculating them back to 24/32bit color system
+ ($r, $g, $b) = @{ SDL::Video::get_RGB( $screen_surface->format, $_16bit ) };
  
  printf( "for 16bpp it is: 0x%02X 0x%02X 0x%02X\n", $r, $g, $b );
  
- # so color #9CDC67 becomes #9CDE62
+ # so color #9CDC67 becomes #9CDF63
  
  SDL::quit();
 
 =head2	map_RGBA(pixel_format,r,g,b,a)
 
-Maps the RGBA color value to the specified SDL::pixel_format and returns the pixel value as a 32-bit int.
+ $pixel = SDL::Video::map_RGB( $pixel_format, $r, $g, $b, $a );
+
+Maps the RGBA color value to the specified L<SDL::PixelFormat> and returns the pixel value as a 32-bit int.
 If the format has a palette (8-bit) the index of the closest matching color in the palette will be returned.
 If the specified pixel format has no alpha component the alpha value will be ignored (as it will be in formats with a palette). 
 
@@ -583,11 +583,17 @@ with a 16-bpp format the return value can be assigned to a Uint16, and similarly
 
 =head2	get_RGB(pixel_format,pixel)
 
+ $rgb_array_ref = SDL::Video::get_RGB( $pixel_format, $pixel );
+
 Returns RGB values from a pixel in the specified pixel format. 
 This function uses the entire 8-bit [0..255] range when converting color components from pixel formats with less than 8-bits per RGB 
 component (e.g., a completely white pixel in 16-bit RGB565 format would return [0xff, 0xff, 0xff] not [0xf8, 0xfc, 0xf8]).
 
+For an example see C<SDL::Video::map_RGB>.
+
 =head2	get_RGBA(pixel_format,pixel)
+
+ $rgba_array_ref = SDL::Video::get_RGBA( $pixel_format, $pixel );
 
 Gets RGBA values from a pixel in the specified pixel format. 
 This function uses the entire 8-bit [0..255] range when converting color components from pixel formats with less than 8-bits per RGB 
