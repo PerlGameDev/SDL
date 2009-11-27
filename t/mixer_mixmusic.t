@@ -8,7 +8,7 @@ use SDL::TestTool;
 use Test::More;
 use IO::CaptureOutput qw(capture);
 
-if ( SDL::TestTool->init_audio ) {
+if ( SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
 } else {
     plan( tests => 3 );

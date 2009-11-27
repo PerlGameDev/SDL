@@ -6,7 +6,7 @@ use SDL::Time;
 use lib 't/lib';
 use SDL::TestTool;
 
-if ( SDL::TestTool->init_audio ) {
+if ( SDL::TestTool->init(SDL_INIT_TIMER) ) {
     plan( skip_all => 'Failed to init timer' );
 } else {
     plan( tests => 5 );
@@ -35,7 +35,7 @@ SKIP:
 # local $TODO = 'Multithreaded callback almost working';
  skip 'segfault', 1;
  my $fired = 0;
- SDL::Time::set_timer( 1, sub { $fired++;  return $_[0] } );
+ SDL::Time::add_timer( 1, sub { $fired++;  return $_[0] } );
  isnt( $fired  , 0, '[set_timer] ran' );
 }
 
