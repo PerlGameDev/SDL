@@ -486,26 +486,90 @@ SDL::get_gamma_ramp returns -1 on error.
 
 =head2	set_gamma_ramp(rt,gt,bt)
 
-Sets the gamma lookup tables for the display for each color component. Each table is an array of 256 Uint16 values, representing a 
+ $set_gamma_ramp = SDL::Video::set_gamma_ramp( \@red_table, \@green_table, \@blue_table );
+
+Sets the gamma lookup tables for the display for each color component. Each table is an array ref of 256 Uint16 values, representing a 
 mapping between the input and output for that channel.
 The input is the index into the array, and the output is the 16-bit gamma value at that index, scaled to the output color precision. 
 You may pass NULL to any of the channels to leave them unchanged.
 
 This function adjusts the gamma based on lookup tables, you can also have the gamma calculated based on a "gamma function" parameter 
-with SDL::set_gamma.
+with C<SDL::Video::set_gamma>.
 
 Not all display hardware is able to change gamma. 
-SDL::set_gamma_ramp returns -1 on error.
+C<SDL::Video::set_gamma_ramp> returns C<-1> on error (or if gamma adjustment is not supported).
+
+Example:
+
+ use SDL;
+ use SDL::Video;
+
+ SDL::init(SDL_INIT_VIDEO);
+
+ my (@red, @green, @blue);
+ 
+ my $ret = SDL::Video::get_gamma_ramp( \@red, \@green, \@blue );
+ 
+ $red[127] = 0xFF00;
+ 
+    $ret = SDL::Video::set_gamma_ramp( \@red, \@green, \@blue );
+ 
+    $ret = SDL::Video::get_gamma_ramp( \@red, \@green, \@blue );
+ 
+ if( -1 == $ret )
+ {
+     print( "an error occoured" );
+ }
+ else
+ {
+     printf( "for gamma = 1.0: red=0x%04X, green=0x%04X, blue=0x%04X\n", $red[255], $green[255], $blue[255] );
+     printf( "for gamma = 0.5: red=0x%04X, green=0x%04X, blue=0x%04X\n", $red[127], $green[127], $blue[127] );
+     printf( "for gamma = 0.0: red=0x%04X, green=0x%04X, blue=0x%04X\n", $red[0],   $green[0],   $blue[0]   );
+ }
+ 
+ SDL::quit();
 
 =head2	map_RGB(pixel_format,r,g,b)
 
-Maps the RGB color value to the specified SDL::pixel_format and returns the pixel value as a 32-bit int.
+ $pixel = SDL::Video::map_RGB( $pixel_format, $r, $g, $b );
+
+Maps the RGB color value to the specified L<SDL::PixelFormat> and returns the pixel value as a 32-bit int.
 If the format has a palette (8-bit) the index of the closest matching color in the palette will be returned.
 If the specified pixel format has an alpha component it will be returned as all 1 bits (fully opaque). 
 
-SDL::map_RGP returns a pixel value best approximating the given RGB color value for a given pixel format.
-If the SDL::pixel_format's  bpp (color depth) is less than 32-bpp then the unused upper bits of the return value can safely be ignored 
+C<SDL::Video::map_RGB> returns a pixel value best approximating the given RGB color value for a given pixel format.
+If the L<SDL::PixelFormat>'s  bpp (color depth) is less than 32-bpp then the unused upper bits of the return value can safely be ignored 
 (e.g., with a 16-bpp format the return value can be assigned to a Uint16, and similarly a Uint8 for an 8-bpp format).
+
+ use SDL;
+ use SDL::Video;
+ use SDL::PixelFormat;
+ use SDL::Surface;
+
+ SDL::init(SDL_INIT_VIDEO);
+ 
+ my $screen_surface = SDL::Video::set_video_mode(640, 480, 16, SDL_SWSURFACE);
+ #                                                          ^-- 16 bits per pixel
+ 
+ $r = 0x9C;
+ $g = 0xDC;
+ $b = 0x67;
+ 
+ printf( "for 24bpp it is: 0x%02X 0x%02X 0x%02X\n", $r, $g, $b);
+ 
+ my $_16bit = SDL::Video::map_RGB( $screen_surface->format, $r, $g, $b );
+ 
+ # 16bpp is 5 bits red, 6 bits green and 5 bits blue
+ # we will obtain the values for each color and calculating them back to 24bit color system
+ $r = (($_16bit & 0b1111100000000000) >> 11) / 0b11111  * 0b11111111;
+ $g = (($_16bit & 0b0000011111100000) >>  5) / 0b111111 * 0b11111111;
+ $b =  ($_16bit & 0b0000000000011111)        / 0b11111  * 0b11111111;
+ 
+ printf( "for 16bpp it is: 0x%02X 0x%02X 0x%02X\n", $r, $g, $b );
+ 
+ # so color #9CDC67 becomes #9CDE62
+ 
+ SDL::quit();
 
 =head2	map_RGBA(pixel_format,r,g,b,a)
 
