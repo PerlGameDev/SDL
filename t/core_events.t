@@ -65,10 +65,9 @@ my $userdata = SDL::Event->new();
 $userdata->type (SDL_USEREVENT);
 my @udata = (0..10); 
 $userdata->user_data1(\@udata);
-warn "got data:";
-Dump $userdata->user_data1();
-SDL::Events::push_event($aevent); pass '[push_event] Event can be pushed';
 
+SDL::Events::push_event($aevent); pass '[push_event] Event can be pushed';
+SDL::Events::push_event($userdata);
 SDL::Events::pump_events(); pass '[pump_events] pumping events';
 
 my $got_event = 0;
@@ -83,6 +82,12 @@ while(1)
 	{
 		$got_event = 1;
 		last;
+	}
+	if ($event->type == SDL_USEREVENT)
+	{
+		my $r =   $event->user_data1();
+		is( @{$r}, 11, '[user_events] can hold user data now');
+
 	}
 
 	last if ($ret == 0 );

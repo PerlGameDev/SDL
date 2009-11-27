@@ -8,6 +8,15 @@
 
 #include <SDL.h>
 
+SV* new_data( SV* thing )
+{
+ if (  SvROK( thing ) ) 
+    return  newRV_inc(SvRV(thing ) );
+ else
+    return  SvREFCNT_inc(thing); 
+
+}
+
 MODULE = SDL::Event 	PACKAGE = SDL::Event    PREFIX = event_
 
 =for documentation
@@ -889,24 +898,26 @@ event_user_code ( event, ... )
 SV*
 event_user_data1 ( event, ... )
 	SDL_Event *event	
-	CODE: 
+	PPCODE: 
 		SDL_UserEvent * a = &(event->user);
 		if ( items > 1)
-			a->data1 = (void *) newRV( newSVsv(  ST(1)  ) );
-		RETVAL = (SV *)(a->data1);
-	OUTPUT:
-		RETVAL
+			a->data1 = new_data( ST(1) ); 
+		 if (!a->data1)
+		  XSRETURN_EMPTY;
+		  ST(0) = a->data1;
+		  XSRETURN(1);
 
 SV*
 event_user_data2 ( event, ... ) 
 	SDL_Event *event	
-	CODE: 
+	PPCODE: 
 		SDL_UserEvent * a = &(event->user);
 		if ( items > 1)
-			a->data2 = (void *) newRV( newSVsv(  ST(1)  ) );
-		RETVAL = (SV *)(a->data2);
-	OUTPUT:
-		RETVAL
+			a->data2 = new_data( ST(1) ); 
+		 if (!a->data2)
+		  XSRETURN_EMPTY;
+		  ST(0) = a->data2;
+		  XSRETURN(1);
 
 SDL_SysWMEvent *
 event_syswm ( event, ... )
@@ -955,5 +966,11 @@ void
 event_DESTROY(self)
 	SDL_Event *self
 	CODE:
+		if( (self->user).data1 )
+		  SvREFCNT_dec( (self->user).data1);
+		if( (self->user).data2 )
+		  SvREFCNT_dec( (self->user).data2);
 		safefree(self);
+
+
 		
