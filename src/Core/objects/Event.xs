@@ -39,6 +39,10 @@ event_new (CLASS)
 	char *CLASS
 	CODE:
 		RETVAL = (SDL_Event *) safemalloc(sizeof (SDL_Event));
+		//set userdata to NULL for now 
+		(RETVAL->user).data1 =(void *)NULL;
+		(RETVAL->user).data2 =(void *)NULL;
+
 	OUTPUT:
 		RETVAL
 
@@ -887,13 +891,9 @@ event_user_data1 ( event, ... )
 	SDL_Event *event	
 	CODE: 
 		SDL_UserEvent * a = &(event->user);
-
-		if( items > 1 )
-		{
-			a->data1 = (void *)SvIV(ST(1));
-		}
-
-		RETVAL = a->data1;
+		if ( items > 1)
+			a->data1 = (void *) newRV( newSVsv(  ST(1)  ) );
+		RETVAL = (SV *)(a->data1);
 	OUTPUT:
 		RETVAL
 
@@ -902,13 +902,9 @@ event_user_data2 ( event, ... )
 	SDL_Event *event	
 	CODE: 
 		SDL_UserEvent * a = &(event->user);
-
-		if( items > 1 )
-		{
-			a->data1 = (void *) ST(1);
-		}
-
-		RETVAL = a->data1;
+		if ( items > 1)
+			a->data2 = (void *) newRV( newSVsv(  ST(1)  ) );
+		RETVAL = (SV *)(a->data2);
 	OUTPUT:
 		RETVAL
 
