@@ -307,60 +307,95 @@ Example:
 
 =head2	flip(surface)
 
+ $flip = SDL::Video::flip( $screen_surface );
+
 On hardware that supports double-buffering, this function sets up a flip and returns. 
 The hardware will wait for vertical retrace, and then swap video buffers before the next video surface blit or lock will return. 
-On hardware that doesn't support double-buffering or if SDL_SWSURFACE was set, this is equivalent to calling SDL::update_rect(screen, 0, 0, 0, 0)
+On hardware that doesn't support double-buffering or if C<SDL_SWSURFACE> was set, this is equivalent to calling 
+C<SDL::Video::update_rect( $screen, 0, 0, 0, 0 )>.
 
 A software screen surface is also updated automatically when parts of a SDL window are redrawn, caused by overlapping windows or by 
 restoring from an iconified state. As a result there is no proper double buffer behavior in windowed mode for a software screen, in 
 contrast to a full screen software mode.
 
-The SDL_DOUBLEBUF flag must have been passed to SDL::set_video_mode, when setting the video mode for this function to perform hardware 
-flipping.
-flip returns 0 on success or -1 on error.
+The C<SDL_DOUBLEBUF> flag must have been passed to C<SDL::Video::set_video_mode>, when setting the video mode for this function to 
+perform hardware flipping.
 
-Note : If you want to swap the buffers of an initialized OpenGL context, use the function SDL::gl_swap_buffers instead. 
+C<flip> returns C<0> on success or C<-1> on error.
+
+B<Note>: If you want to swap the buffers of an initialized OpenGL context, use the function C<SDL::Video::GL_swap_buffers> instead. 
+
+Example:
+
+ use SDL;
+ use SDL::Video;
+ use SDL::Surface;
+
+ # the size of the window box or the screen resolution if fullscreen
+ my $screen_width   = 800;
+ my $screen_height  = 600;
+
+ SDL::init(SDL_INIT_VIDEO);
+
+ # setting video mode
+ my $screen_surface = SDL::Video::set_video_mode($screen_width, $screen_height, 32, SDL_DOUBLEBUF|SDL_FULLSCREEN);
+
+ # do some video operations here
+
+ # doing page flipping
+ unless( SDL::Video::flip($screen_surface) == 0 )
+ {
+     printf( STDERR "failed to swap buffers: %s\n", SDL::get_error() );
+ }
+ 
+ SDL::quit();
 
 =head2	set_colors(surface,start,colors)
+
+ $set_colors = SDL::Video::set_colors( $surface, $start, $color1, $color2, ... )
 
 Sets a portion of the colormap for the given 8-bit surface. 
 
 When surface is the surface associated with the current display, the display colormap will be updated with the requested colors. 
-If SDL_HWPALETTE was set in SDL::set_video_mode flags, SDL::set_colors will always return 1, and the palette is guaranteed to be set the 
-way you desire, even if the window colormap has to be warped or run under emulation.
-The color components of a SDL::Color structure are 8-bits in size, giving you a total of 2563 = 16777216 colors.
-Palettized (8-bit) screen surfaces with the SDL_HWPALETTE flag have two palettes, a logical palette that is used for mapping blits to/from 
+If C<SDL_HWPALETTE> was set in C<SDL::Video::set_video_mode> flags, C<SDL::Video::set_colors> will always return 1, and the palette is 
+guaranteed to be set the way you desire, even if the window colormap has to be warped or run under emulation.
+The color components of a L<SDL::Color> structure are 8-bits in size, giving you a total of 2563 = 16777216 colors.
+Palettized (8-bit) screen surfaces with the C<SDL_HWPALETTE> flag have two palettes, a logical palette that is used for mapping blits to/from 
 the surface and a physical palette (that determines how the hardware will map the colors to the display). 
-SDL::SetColors modifies both palettes (if present), and is equivalent to calling SDL::SetPalette with the flags set to 
-(SDL_LOGPAL | SDL_PHYSPAL). 
+C<SDL::Video::set_colors> modifies both palettes (if present), and is equivalent to calling C<SDL::Video::set_palette> with the flags set to 
+( C<SDL_LOGPAL | SDL_PHYSPAL> ). 
 
-If surface is not a palettized surface, this function does nothing, returning 0. 
-If all of the colors were set as passed to SDL::set_colors, it will return 1.
+If C<surface> is not a palettized surface, this function does nothing, returning 0. 
+If all of the colors were set as passed to C<SDL::Video::set_colors>, it will return 1.
 If not all the color entries were set exactly as given, it will return 0, and you should look at the surface palette to determine the 
 actual color palette.
 
 =head2	set_palette(surface,flags,start,colors)
 
+ $set_palette = set_palette( $surface, $flags, $start, $color1, $color2, ... );
+
 Sets a portion of the palette for the given 8-bit surface.
 
-Palettized (8-bit) screen surfaces with the SDL_HWPALETTE flag have two palettes, a logical palette that is used for mapping blits to/from 
+Palettized (8-bit) screen surfaces with the C<SDL_HWPALETTE> flag have two palettes, a logical palette that is used for mapping blits to/from 
 the surface and a physical palette (that determines how the hardware will map the colors to the display). 
-Non screen surfaces have a logical palette only. SDL::blit_surface always uses the logical palette when blitting surfaces (if it has to 
+Non screen surfaces have a logical palette only. C<SDL::Video::blit> always uses the logical palette when blitting surfaces (if it has to 
 convert between surface pixel formats). Because of this, it is often useful to modify only one or the other palette to achieve various 
 special color effects (e.g., screen fading, color flashes, screen dimming).
 
-This function can modify either the logical or physical palette by specifying SDL_LOGPAL or SDL_PHYSPAL the in the flags parameter.
+This function can modify either the logical or physical palette by specifying C<SDL_LOGPAL> or C<SDL_PHYSPAL> the in the flags parameter.
 
 When surface is the surface associated with the current display, the display colormap will be updated with the requested colors.
-If SDL_HWPALETTE was set in SDL::set_video_mode flags, SDL::set_palette will always return 1, and the palette is guaranteed to be set the 
-way you desire, even if the window colormap has to be warped or run under emulation.
-The color components of a SDL::Color structure are 8-bits in size, giving you a total of 2563 = 16777216 colors. 
+If C<SDL_HWPALETTE> was set in C<SDL::Video::set_video_mode> flags, C<SDL::Video::set_palette> will always return 1, and the palette is 
+guaranteed to be set the way you desire, even if the window colormap has to be warped or run under emulation.
+The color components of a C<SDL::Color> structure are 8-bits in size, giving you a total of 2563 = 16777216 colors. 
 
-If surface is not a palettized surface, this function does nothing, returning 0. If all of the colors were set as passed to SDL_SetPalette, 
-it will return 1. If not all the color entries were set exactly as given, it will return 0, and you should look at the surface palette 
+If C<surface> is not a palettized surface, this function does nothing, returning C<0>. If all of the colors were set as passed to C<set_palette>,
+it will return C<1>. If not all the color entries were set exactly as given, it will return C<0>, and you should look at the surface palette 
 to determine the actual color palette.
 
 =head2	set_gamma(r,g,b)
+
+ $set_gamma = SDL::Video::set_gamma( $red_gamma, $green_gamma, $blue_gamma );
 
 Sets the "gamma function" for the display of each color component. Gamma controls the brightness/contrast of colors displayed on the screen. 
 A gamma value of 1.0 is identity (i.e., no adjustment is made).
@@ -368,15 +403,86 @@ A gamma value of 1.0 is identity (i.e., no adjustment is made).
 This function adjusts the gamma based on the "gamma function" parameter, you can directly specify lookup tables for gamma adjustment 
 with SDL::set_gamma_ramp.
 
-Not all display hardware is able to change gamma.
-SDL::set_gamma returns -1 on error.
+B<Note>: Not all display hardware is able to change gamma.
 
-Warning: Under Linux (X.org Gnome and Xfce), gamma settings affects the entire display (including the desktop)! 
+C<SDL::Video::set_gamma> returns C<-1> on error.
 
-=head2	get_gamma_ramp(rt,gt,bt) * to be coded
+B<Warning>: Under Linux (X.org Gnome and Xfce), gamma settings affects the entire display (including the desktop)! 
+
+Example:
+
+ use SDL;
+ use SDL::Video;
+ use SDL::Surface;
+ use SDL::Rect;
+ use Time::HiRes qw( usleep );
+
+ # the size of the window box or the screen resolution if fullscreen
+ my $screen_width   = 800;
+ my $screen_height  = 600;
+
+ SDL::init(SDL_INIT_VIDEO);
+
+ # setting video mode
+ my $screen_surface = SDL::Video::set_video_mode($screen_width, $screen_height, 32, SDL_SWSURFACE);
+ 
+ # drawing something somewhere
+ my $mapped_color   = SDL::Video::map_RGB($screen_surface->format(), 128, 128, 128); # gray
+ SDL::Video::fill_rect($screen_surface, 
+                       SDL::Rect->new($screen_width / 4, $screen_height / 4, $screen_width / 2, $screen_height / 2), 
+                       $mapped_color);
+ 
+ # update the whole screen
+ SDL::Video::update_rect($screen_surface, 0, 0, $screen_width, $screen_height);
+
+ usleep(500000);
+ 
+ for(1..20)
+ {
+    SDL::Video::set_gamma( 1 - $_ / 20, 1, 1 );
+	usleep(40000);
+ }
+ 
+ for(1..20)
+ {
+    SDL::Video::set_gamma( $_ / 20, 1, 1 );
+	usleep(40000);
+ }
+
+ SDL::Video::set_gamma( 1, 1, 1 );
+ 
+ usleep(500000);
+ 
+ SDL::quit();
+
+=head2	get_gamma_ramp(rt,gt,bt)
+
+ $get_gamma_ramp = SDL::Video::get_gamma_ramp( \@red_table, \@green_table, \@blue_table );
 
 Gets the gamma translation lookup tables currently used by the display. Each table is an array of 256 Uint16 values.
 SDL::get_gamma_ramp returns -1 on error.
+
+ use SDL;
+ use SDL::Video;
+
+ SDL::init(SDL_INIT_VIDEO);
+
+ my (@red, @green, @blue);
+ 
+ my $ret = SDL::Video::get_gamma_ramp( \@red, \@green, \@blue );
+ 
+ if( -1 == $ret )
+ {
+     print( "an error occoured" );
+ }
+ else
+ {
+     printf( "for gamma = 1.0: red=0x%04X, green=0x%04X, blue=0x%04X\n", $red[255], $green[255], $blue[255] );
+     printf( "for gamma = 0.5: red=0x%04X, green=0x%04X, blue=0x%04X\n", $red[127], $green[127], $blue[127] );
+     printf( "for gamma = 0.0: red=0x%04X, green=0x%04X, blue=0x%04X\n", $red[0],   $green[0],   $blue[0]   );
+ }
+ 
+ SDL::quit();
 
 =head2	set_gamma_ramp(rt,gt,bt)
 
