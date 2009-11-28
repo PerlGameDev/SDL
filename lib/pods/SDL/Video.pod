@@ -248,6 +248,239 @@ however, it works fine, and the initialization code only needs to be executed af
 L<SDL::Video::set_video_mode|/set_video_mode_width_height_bpp_flag> (although there is no harm in executing the initialization code after 
 each call to L<SDL::Video::set_video_mode|/set_video_mode_width_height_bpp_flag>, for example for a multiplatform application). 
 
+=head2	convert_surface(surface,format,flags)
+
+Creates a new SDL::surface of the specified SDL::pixel_format, and then copies and maps the given surface to it. 
+It is also useful for making a copy of a surface.
+
+The flags parameter is passed to SDL::create_RGB_surface and has those semantics.
+This function is used internally by SDL::display_format.
+This function can only be called after SDL::init. 
+
+it returns a SDL::surface on success or undef on error.
+
+=head2	display_format
+
+Converts a surface to the display format 
+
+=head2	display_format_alpha
+
+Converts a surface to the display format 
+
+=head2	load_BMP(filename)
+
+Loads a SDL::surface from a named Windows BMP file.
+SDL::load_BMP returns a SDL::surface on success or undef on error.
+
+Note: When loading a 24-bit Windows BMP file, pixel data points are loaded as blue, green, red, and NOT red, green, blue (as one might expect). 
+
+
+=head2	save_BMP(surface,filename)
+
+Saves the given SDL::Surface surface as a Windows BMP file named filename. 
+it returns 0 on success or -1 on error.
+
+=head2	set_color_key(surface,flag,key)
+
+Sets the color key (transparent pixel) in a blittable surface and enables or disables RLE blit acceleration.
+
+RLE acceleration can substantially speed up blitting of images with large horizontal runs of transparent pixels (i.e., pixels that match 
+the key value).
+The key must be of the same pixel format as the surface, SDL::map_RGB is often useful for obtaining an acceptable value.
+If flag is SDL_SRCCOLORKEY then key is the transparent pixel value in the source image of a blit.
+
+If flag is OR'd with SDL_RLEACCEL then the surface will be drawn using RLE acceleration when drawn with SDL::Blit_surface.
+The surface will actually be encoded for RLE acceleration the first time SDL::blit_surface or SDL::display_format is called on the surface.
+If flag is 0, this function clears any current color key. 
+
+SDL::set_color_key returns 0 on success or -1 on error.
+
+
+=head2	set_alpha(surface,flag,key)
+
+SDL::set_alpha is used for setting the per-surface alpha value and/or enabling and disabling alpha blending.
+
+The surface parameter specifies which SDL::surface whose alpha attributes you wish to adjust. 
+flags is used to specify whether alpha blending should be used (SDL_SRCALPHA) and whether the surface should use RLE acceleration for 
+blitting (SDL_RLEACCEL). 
+flags can be an OR'd combination of these two options, one of these options or 0. 
+If SDL_SRCALPHA is not passed as a flag then all alpha information is ignored when blitting the surface. 
+The alpha parameter is the per-surface alpha value; a surface need not have an alpha channel to use per-surface alpha and blitting can 
+still be accelerated with SDL_RLEACCEL.
+
+Note: The per-surface alpha value of 128 is considered a special case and is optimised, so it's much faster than other per-surface values.
+
+Alpha affects surface blitting in the following ways: 
+
+=over 4
+
+=item RGBA->RGB with SDL_SRCALPHA
+
+The source is alpha-blended with the destination, using the alpha channel. 
+SDL_SRCCOLORKEY and the per-surface alpha are ignored.
+
+=item RGBA->RGB without SDL_SRCALPHA
+
+The RGB data is copied from the source. The source alpha channel and the per-surface alpha value are ignored. 
+If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
+
+=item RGB->RGBA with SDL_SRCALPHA
+
+The source is alpha-blended with the destination using the per-surface alpha value. 
+If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied. 
+The alpha channel of the copied pixels is set to opaque.
+
+=item RGB->RGBA without SDL_SRCALPHA
+
+The RGB data is copied from the source and the alpha value of the copied pixels is set to opaque. 
+If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
+
+=item RGBA->RGBA with SDL_SRCALPHA
+
+The source is alpha-blended with the destination using the source alpha channel. 
+The alpha channel in the destination surface is left untouched. SDL_SRCCOLORKEY is ignored.
+
+=item RGBA->RGBA without SDL_SRCALPHA
+
+The RGBA data is copied to the destination surface.
+If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
+
+=item RGB->RGB with SDL_SRCALPHA
+
+The source is alpha-blended with the destination using the per-surface alpha value. 
+If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
+
+=item RGB->RGB without SDL_SRCALPHA
+
+The RGB data is copied from the source. 
+If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
+
+=back
+
+Note: When blitting, the presence or absence of SDL_SRCALPHA is relevant only on the source surface, not the destination.
+Note: Note that RGBA->RGBA blits (with SDL_SRCALPHA set) keep the alpha of the destination surface. This means that you cannot compose 
+two arbitrary RGBA surfaces this way and get the result you would expect from "overlaying" them; the destination alpha will work as a mask.
+
+Note: Also note that per-pixel and per-surface alpha cannot be combined; the per-pixel alpha is always used if available. 
+
+SDL::set_alpha returns 0 on success or -1 on error.
+
+=head2	fill_rect(dest,dest_rect,pixel)
+
+This function performs a fast fill of the given SDL::rectangle with the given SDL::pixel_format. If dstrect is NULL, the whole surface 
+will be filled with color.
+
+The color should be a pixel of the format used by the surface, and can be generated by the SDL::MapRGB or SDL::map_RGBA functions.
+If the color value contains an alpha value then the destination is simply "filled" with that alpha information, no blending takes place.
+
+If there is a clip rectangle set on the destination (set via SDL::set_clip_rect), then this function will clip based on the intersection 
+of the clip rectangle and the dstrect rectangle, and the dstrect rectangle will be modified to represent the area actually filled.
+
+If you call this on the video surface (ie: the value of SDL::get_video_surface()) you may have to update the video surface to see the 
+result. This can happen if you are using a shadowed surface that is not double buffered in Windows XP using build 1.2.9. 
+
+SDL::fill_rect returns 0 on success or -1 on error.
+
+=head1 Surface locking and unlocking
+
+=head2	lock_surface(surface)
+
+ int SDL::Video::lock_surface( $surface );
+
+C<SDL::Video::lock_surface> sets up the given L<SDL::Surface> for directly accessing the pixels.
+Between calls to SDL::lock_surface and SDL::unlock_surface, you can write to ( C<surface->set_pixels>) and read from ( C<surface->get_pixels> ), 
+using the pixel format stored in C<surface->format>. 
+Once you are done accessing the surface, you should use C<SDL::Video::unlock_surface> to release the lock.
+
+Not all surfaces require locking. If C<SDL::Video::MUSTLOCK(surface)> evaluates to C<0>, then reading and writing pixels to the surface can 
+be performed at any time, and the pixel format of the surface will not change.
+No operating system or library calls should be made between the lock/unlock pairs, as critical system locks may be held during this time.
+C<SDL::Video::lock_surface> returns C<0> on success or C<-1> on error.
+
+B<Note>: Since SDL 1.1.8, the surface locks are recursive. This means that you can lock a surface multiple times, but each lock must have 
+a matching unlock.
+
+ use SDL;
+ use SDL::Video;
+ use SDL::Surface;
+
+ SDL::init(SDL_INIT_VIDEO);
+ 
+ my $screen_surface = SDL::Video::set_video_mode(640, 480, 16, SDL_HWSURFACE);
+ 
+ if(SDL::Video::MUSTLOCK($screen_surface))
+ {
+     print( "the surface must be locked\n" );
+     
+     if(0 == SDL::Video::lock_surface($screen_surface))
+     {
+         print( "lock succesful\n" );
+     }
+	 else
+	 {
+	     print( "error while locking surface" );
+	 }
+	 
+	 # pixel manipulation goes here
+	 
+     SDL::Video::unlock_surface($screen_surface); # unlock_surface returns nothing
+ }
+ else
+ {
+     print( "the surface need not to be locked" );
+ }
+ 
+ SDL::quit();
+
+=head2	unlock_surface(surface)
+
+ void SDL::Video::unlock_surface( $surface );
+
+Surfaces that were previously locked using C<SDL::Video::lock_surface> must be unlocked with C<SDL::Video::unlock_surface>. Surfaces should 
+be unlocked as soon as possible.
+C<SDL::Video::unlock_surface> doesn't return anything.
+
+B<Note>: Since 1.1.8, the surface locks are recursive. See C<SDL::Video::lock_surface> for more information. 
+
+=head2	MUSTLOCK(surface)
+
+ int SDL::Video::MUSTLOCK( $surface );
+
+C<MUSTLOCK> returns C<0> if the surface does not have to be locked during pixel operations, otherwise C<1>.
+
+=head1 Screen Updating Functions
+
+=head2	set_clip_rect(surface,rect)
+
+Sets the clipping rectangle for the given SDL::surface. When this surface is the destination of a blit, only the area within the clip 
+rectangle will be drawn into.
+The rectangle pointed to by rect will be clipped to the edges of the surface so that the clip rectangle for a surface can never fall 
+outside the edges of the surface.
+If rect is NULL the clipping rectangle will be set to the full size of the surface. 
+SDL::set_clip_rect doesn't returns anything.
+
+=head2	get_clip_rect(surface,rect)
+
+Gets the clipping rectangle for the given SDL::surface. When this surface is the destination of a blit, only the area within the clip 
+rectangle is drawn into.
+The rectangle pointed to by rect will be filled with the clipping rectangle of the surface. 
+SDL::get_clip_rect doesn't returns anything;
+
+
+=head2	blit_surface(src,src_rect,dest,dest_rect)
+
+This performs a fast blit from the given source SDL::surface to the given destination SDL::surface.
+The width and height in srcrect determine the size of the copied rectangle. Only the position is used in the dstrect (the width and height 
+are ignored). Blits with negative dstrect coordinates will be clipped properly.
+If srcrect is NULL, the entire surface is copied. If dstrect is NULL, then the destination position (upper left corner) is (0, 0).
+The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
+The blit function should not be called on a locked surface. I.e. when you use your own drawing functions you may need to lock a surface, 
+but this is not the case with SDL::blit_surface. Like most surface manipulation functions in SDL, it should not be used together with OpenGL.
+
+The results of blitting operations vary greatly depending on whether SDL_SRCALPHA is set or not. See SDL::set_alpha for an explanation of 
+how this affects your results. Colorkeying and alpha attributes also interact with surface blitting.
+SDL::blit_surface doesn't returns anything.
+
 =head2	update_rect(surface,x,y,width,height)
 
  update_rect( $surface, $left, $top, $width, $height );
@@ -349,6 +582,8 @@ Example:
  }
  
  SDL::quit();
+
+=head1 Palette, Color and Pixel Functions
 
 =head2	set_colors(surface,start,colors)
 
@@ -600,235 +835,6 @@ This function uses the entire 8-bit [0..255] range when converting color compone
 component (e.g., a completely white pixel in 16-bit RGB565 format would return [0xff, 0xff, 0xff] not [0xf8, 0xfc, 0xf8]).
 
 If the surface has no alpha component, the alpha will be returned as 0xff (100% opaque). 
-
-=head2	lock_surface(surface)
-
- int SDL::Video::lock_surface( $surface );
-
-C<SDL::Video::lock_surface> sets up the given L<SDL::Surface> for directly accessing the pixels.
-Between calls to SDL::lock_surface and SDL::unlock_surface, you can write to ( C<surface->set_pixels>) and read from ( C<surface->get_pixels> ), 
-using the pixel format stored in C<surface->format>. 
-Once you are done accessing the surface, you should use C<SDL::Video::unlock_surface> to release the lock.
-
-Not all surfaces require locking. If C<SDL::Video::MUSTLOCK(surface)> evaluates to C<0>, then reading and writing pixels to the surface can 
-be performed at any time, and the pixel format of the surface will not change.
-No operating system or library calls should be made between the lock/unlock pairs, as critical system locks may be held during this time.
-C<SDL::Video::lock_surface> returns C<0> on success or C<-1> on error.
-
-B<Note>: Since SDL 1.1.8, the surface locks are recursive. This means that you can lock a surface multiple times, but each lock must have 
-a matching unlock.
-
- use SDL;
- use SDL::Video;
- use SDL::Surface;
-
- SDL::init(SDL_INIT_VIDEO);
- 
- my $screen_surface = SDL::Video::set_video_mode(640, 480, 16, SDL_HWSURFACE);
- 
- if(SDL::Video::MUSTLOCK($screen_surface))
- {
-     print( "the surface must be locked\n" );
-     
-     if(0 == SDL::Video::lock_surface($screen_surface))
-     {
-         print( "lock succesful\n" );
-     }
-	 else
-	 {
-	     print( "error while locking surface" );
-	 }
-	 
-	 # pixel manipulation goes here
-	 
-     SDL::Video::unlock_surface($screen_surface); # unlock_surface returns nothing
- }
- else
- {
-     print( "the surface need not to be locked" );
- }
- 
- SDL::quit();
-
-=head2	unlock_surface(surface)
-
- void SDL::Video::unlock_surface( $surface );
-
-Surfaces that were previously locked using C<SDL::Video::lock_surface> must be unlocked with C<SDL::Video::unlock_surface>. Surfaces should 
-be unlocked as soon as possible.
-C<SDL::Video::unlock_surface> doesn't return anything.
-
-B<Note>: Since 1.1.8, the surface locks are recursive. See C<SDL::Video::lock_surface> for more information. 
-
-=head2	MUSTLOCK(surface)
-
- int SDL::Video::MUSTLOCK( $surface );
-
-C<MUSTLOCK> returns C<0> if the surface does not have to be locked during pixel operations, otherwise C<1>.
-
-=head2	convert_surface(surface,format,flags)
-
-Creates a new SDL::surface of the specified SDL::pixel_format, and then copies and maps the given surface to it. 
-It is also useful for making a copy of a surface.
-
-The flags parameter is passed to SDL::create_RGB_surface and has those semantics.
-This function is used internally by SDL::display_format.
-This function can only be called after SDL::init. 
-
-it returns a SDL::surface on success or undef on error.
-
-=head2	display_format
-
-Converts a surface to the display format 
-
-=head2	display_format_alpha
-
-Converts a surface to the display format 
-
-=head2	load_BMP(filename)
-
-Loads a SDL::surface from a named Windows BMP file.
-SDL::load_BMP returns a SDL::surface on success or undef on error.
-
-Note: When loading a 24-bit Windows BMP file, pixel data points are loaded as blue, green, red, and NOT red, green, blue (as one might expect). 
-
-
-=head2	save_BMP(surface,filename)
-
-Saves the given SDL::Surface surface as a Windows BMP file named filename. 
-it returns 0 on success or -1 on error.
-
-=head2	set_color_key(surface,flag,key)
-
-Sets the color key (transparent pixel) in a blittable surface and enables or disables RLE blit acceleration.
-
-RLE acceleration can substantially speed up blitting of images with large horizontal runs of transparent pixels (i.e., pixels that match 
-the key value).
-The key must be of the same pixel format as the surface, SDL::map_RGB is often useful for obtaining an acceptable value.
-If flag is SDL_SRCCOLORKEY then key is the transparent pixel value in the source image of a blit.
-
-If flag is OR'd with SDL_RLEACCEL then the surface will be drawn using RLE acceleration when drawn with SDL::Blit_surface.
-The surface will actually be encoded for RLE acceleration the first time SDL::blit_surface or SDL::display_format is called on the surface.
-If flag is 0, this function clears any current color key. 
-
-SDL::set_color_key returns 0 on success or -1 on error.
-
-
-=head2	set_alpha(surface,flag,key)
-
-SDL::set_alpha is used for setting the per-surface alpha value and/or enabling and disabling alpha blending.
-
-The surface parameter specifies which SDL::surface whose alpha attributes you wish to adjust. 
-flags is used to specify whether alpha blending should be used (SDL_SRCALPHA) and whether the surface should use RLE acceleration for 
-blitting (SDL_RLEACCEL). 
-flags can be an OR'd combination of these two options, one of these options or 0. 
-If SDL_SRCALPHA is not passed as a flag then all alpha information is ignored when blitting the surface. 
-The alpha parameter is the per-surface alpha value; a surface need not have an alpha channel to use per-surface alpha and blitting can 
-still be accelerated with SDL_RLEACCEL.
-
-Note: The per-surface alpha value of 128 is considered a special case and is optimised, so it's much faster than other per-surface values.
-
-Alpha affects surface blitting in the following ways: 
-
-=over 4
-
-=item RGBA->RGB with SDL_SRCALPHA
-
-The source is alpha-blended with the destination, using the alpha channel. 
-SDL_SRCCOLORKEY and the per-surface alpha are ignored.
-
-=item RGBA->RGB without SDL_SRCALPHA
-
-The RGB data is copied from the source. The source alpha channel and the per-surface alpha value are ignored. 
-If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
-
-=item RGB->RGBA with SDL_SRCALPHA
-
-The source is alpha-blended with the destination using the per-surface alpha value. 
-If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied. 
-The alpha channel of the copied pixels is set to opaque.
-
-=item RGB->RGBA without SDL_SRCALPHA
-
-The RGB data is copied from the source and the alpha value of the copied pixels is set to opaque. 
-If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
-
-=item RGBA->RGBA with SDL_SRCALPHA
-
-The source is alpha-blended with the destination using the source alpha channel. 
-The alpha channel in the destination surface is left untouched. SDL_SRCCOLORKEY is ignored.
-
-=item RGBA->RGBA without SDL_SRCALPHA
-
-The RGBA data is copied to the destination surface.
-If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
-
-=item RGB->RGB with SDL_SRCALPHA
-
-The source is alpha-blended with the destination using the per-surface alpha value. 
-If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
-
-=item RGB->RGB without SDL_SRCALPHA
-
-The RGB data is copied from the source. 
-If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
-
-=back
-
-Note: When blitting, the presence or absence of SDL_SRCALPHA is relevant only on the source surface, not the destination.
-Note: Note that RGBA->RGBA blits (with SDL_SRCALPHA set) keep the alpha of the destination surface. This means that you cannot compose 
-two arbitrary RGBA surfaces this way and get the result you would expect from "overlaying" them; the destination alpha will work as a mask.
-
-Note: Also note that per-pixel and per-surface alpha cannot be combined; the per-pixel alpha is always used if available. 
-
-SDL::set_alpha returns 0 on success or -1 on error.
-
-=head2	set_clip_rect(surface,rect)
-
-Sets the clipping rectangle for the given SDL::surface. When this surface is the destination of a blit, only the area within the clip 
-rectangle will be drawn into.
-The rectangle pointed to by rect will be clipped to the edges of the surface so that the clip rectangle for a surface can never fall 
-outside the edges of the surface.
-If rect is NULL the clipping rectangle will be set to the full size of the surface. 
-SDL::set_clip_rect doesn't returns anything.
-
-=head2	get_clip_rect(surface,rect)
-
-Gets the clipping rectangle for the given SDL::surface. When this surface is the destination of a blit, only the area within the clip 
-rectangle is drawn into.
-The rectangle pointed to by rect will be filled with the clipping rectangle of the surface. 
-SDL::get_clip_rect doesn't returns anything;
-
-
-=head2	blit_surface(src,src_rect,dest,dest_rect)
-
-This performs a fast blit from the given source SDL::surface to the given destination SDL::surface.
-The width and height in srcrect determine the size of the copied rectangle. Only the position is used in the dstrect (the width and height 
-are ignored). Blits with negative dstrect coordinates will be clipped properly.
-If srcrect is NULL, the entire surface is copied. If dstrect is NULL, then the destination position (upper left corner) is (0, 0).
-The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
-The blit function should not be called on a locked surface. I.e. when you use your own drawing functions you may need to lock a surface, 
-but this is not the case with SDL::blit_surface. Like most surface manipulation functions in SDL, it should not be used together with OpenGL.
-
-The results of blitting operations vary greatly depending on whether SDL_SRCALPHA is set or not. See SDL::set_alpha for an explanation of 
-how this affects your results. Colorkeying and alpha attributes also interact with surface blitting.
-SDL::blit_surface doesn't returns anything.
-
-=head2	fill_rect(dest,dest_rect,pixel)
-
-This function performs a fast fill of the given SDL::rectangle with the given SDL::pixel_format. If dstrect is NULL, the whole surface 
-will be filled with color.
-
-The color should be a pixel of the format used by the surface, and can be generated by the SDL::MapRGB or SDL::map_RGBA functions.
-If the color value contains an alpha value then the destination is simply "filled" with that alpha information, no blending takes place.
-
-If there is a clip rectangle set on the destination (set via SDL::set_clip_rect), then this function will clip based on the intersection 
-of the clip rectangle and the dstrect rectangle, and the dstrect rectangle will be modified to represent the area actually filled.
-
-If you call this on the video surface (ie: the value of SDL::get_video_surface()) you may have to update the video surface to see the 
-result. This can happen if you are using a shadowed surface that is not double buffered in Windows XP using build 1.2.9. 
-
-SDL::fill_rect returns 0 on success or -1 on error.
 
 =head1 GL Methods
 
