@@ -966,10 +966,13 @@ void
 event_DESTROY(self)
 	SDL_Event *self
 	CODE:
+		if(self->type == SDL_USEREVENT)
+		{
 		if( (self->user).data1 != NULL )
 		  SvREFCNT_dec( (self->user).data1);
 		if( (self->user).data2 != NULL )
 		  SvREFCNT_dec( (self->user).data2);
+		}
 		safefree(self);
 
 
