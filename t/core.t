@@ -3,8 +3,15 @@ use strict;
 use SDL;
 use SDL::Video;
 use Test::More;
+use lib 't/lib';
+use SDL::TestTool;
 
-plan ( tests => 13 );
+if ( SDL::TestTool->init(SDL_INIT_AUDIO) ) {
+    plan( skip_all => 'Failed to init video' );
+} else {
+    plan( tests => 11 );
+}
+
 my @done =qw/ 
 	init
 	quit
@@ -20,10 +27,6 @@ my @done =qw/
 
 use_ok( 'SDL' ); 
 can_ok ('SDL', @done); 
-
-is( SDL::init(SDL_INIT_VIDEO), 0, '[init] returns 0 on success');
-
-is( SDL::was_init( 0 ), SDL_INIT_VIDEO, '[was_init] recognizes turned on flags');
 
 my $display =  SDL::Video::set_video_mode(640,480,232, SDL_SWSURFACE );
 
