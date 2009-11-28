@@ -585,7 +585,7 @@ with a 16-bpp format the return value can be assigned to a Uint16, and similarly
 
  $rgb_array_ref = SDL::Video::get_RGB( $pixel_format, $pixel );
 
-Returns RGB values from a pixel in the specified pixel format. 
+Returns RGB values from a pixel in the specified pixel format. The pixel is an integer (e.g. 16bit RGB565, 24/32bit RGB888).
 This function uses the entire 8-bit [0..255] range when converting color components from pixel formats with less than 8-bits per RGB 
 component (e.g., a completely white pixel in 16-bit RGB565 format would return [0xff, 0xff, 0xff] not [0xf8, 0xfc, 0xf8]).
 
@@ -603,26 +603,68 @@ If the surface has no alpha component, the alpha will be returned as 0xff (100% 
 
 =head2	lock_surface(surface)
 
-SDL::lock_surface sets up the given SDL::surface for directly accessing the pixels.
-Between calls to SDL::lock_surface and SDL::unlock_surface, you can write to and read from surface->pixels, using the pixel format stored 
-in surface->format. 
-Once you are done accessing the surface, you should use SDL::unlock_surface to release the lock.
+ int SDL::Video::lock_surface( $surface );
 
-Not all surfaces require locking. If SDL::MUSTLOCK(surface) evaluates to 0, then reading and writing pixels to the surface can be performed 
-at any time, and the pixel format of the surface will not change.
+C<SDL::Video::lock_surface> sets up the given L<SDL::Surface> for directly accessing the pixels.
+Between calls to SDL::lock_surface and SDL::unlock_surface, you can write to ( C<surface->set_pixels>) and read from ( C<surface->get_pixels> ), 
+using the pixel format stored in C<surface->format>. 
+Once you are done accessing the surface, you should use C<SDL::Video::unlock_surface> to release the lock.
+
+Not all surfaces require locking. If C<SDL::Video::MUSTLOCK(surface)> evaluates to C<0>, then reading and writing pixels to the surface can 
+be performed at any time, and the pixel format of the surface will not change.
 No operating system or library calls should be made between the lock/unlock pairs, as critical system locks may be held during this time.
-SDL::lock_surface returns 0 on success or -1 on error.
+C<SDL::Video::lock_surface> returns C<0> on success or C<-1> on error.
 
-Note : Since SDL 1.1.8, the surface locks are recursive. This means that you can lock a surface multiple times, but each lock must have 
+B<Note>: Since SDL 1.1.8, the surface locks are recursive. This means that you can lock a surface multiple times, but each lock must have 
 a matching unlock.
+
+ use SDL;
+ use SDL::Video;
+ use SDL::Surface;
+
+ SDL::init(SDL_INIT_VIDEO);
+ 
+ my $screen_surface = SDL::Video::set_video_mode(640, 480, 16, SDL_HWSURFACE);
+ 
+ if(SDL::Video::MUSTLOCK($screen_surface))
+ {
+     print( "the surface must be locked\n" );
+     
+     if(0 == SDL::Video::lock_surface($screen_surface))
+     {
+         print( "lock succesful\n" );
+     }
+	 else
+	 {
+	     print( "error while locking surface" );
+	 }
+	 
+	 # pixel manipulation goes here
+	 
+     SDL::Video::unlock_surface($screen_surface); # unlock_surface returns nothing
+ }
+ else
+ {
+     print( "the surface need not to be locked" );
+ }
+ 
+ SDL::quit();
 
 =head2	unlock_surface(surface)
 
-Surfaces that were previously locked using SDL::lock_surface must be unlocked with SDL::unlock_surface. Surfaces should be unlocked as 
-soon as possible.
-SDL::unlock_surface doesn't return anything.
+ void SDL::Video::unlock_surface( $surface );
 
-Note : Since 1.1.8, the surface locks are recursive. See C<SDL::lock_surface> for more information. 
+Surfaces that were previously locked using C<SDL::Video::lock_surface> must be unlocked with C<SDL::Video::unlock_surface>. Surfaces should 
+be unlocked as soon as possible.
+C<SDL::Video::unlock_surface> doesn't return anything.
+
+B<Note>: Since 1.1.8, the surface locks are recursive. See C<SDL::Video::lock_surface> for more information. 
+
+=head2	MUSTLOCK(surface)
+
+ int SDL::Video::MUSTLOCK( $surface );
+
+C<MUSTLOCK> returns C<0> if the surface does not have to be locked during pixel operations, otherwise C<1>.
 
 =head2	convert_surface(surface,format,flags)
 
@@ -857,6 +899,19 @@ The overlay is scaled (independently in x and y dimensions) to the size specifie
 
 It returns 0 on success or -1 on error.
 
+=head1 Window Management Functions
+
+=head2	wm_set_caption(title,icon)
+
+=head2	wm_get_caption()
+
+=head2	wm_set_icon(icon)
+
+=head2	wm_grab_input(mode)
+
+=head2	wm_iconify_window()
+
+=head2	wm_toggle_fullscreen(surface)
 
 =head1 SEE ALSO
 
