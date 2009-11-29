@@ -16,7 +16,7 @@ my ($SDLAPP, $WIDTH, $HEIGHT, $SDLEVENT);
 $| = 1;
 $WIDTH = 1024;
 $HEIGHT = 768;
-$SDLAPP = SDL::App->new(-title => "Test shit", -width => $WIDTH, -height => $HEIGHT, -gl => 1);
+$SDLAPP = SDL::App->new(-title => "Opengl App", -width => $WIDTH, -height => $HEIGHT, -gl => 1);
 $SDLEVENT = SDL::Event->new;
 
 SDL::Mouse::show_cursor(0);
