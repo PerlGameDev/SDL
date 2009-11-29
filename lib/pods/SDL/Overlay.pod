@@ -65,6 +65,8 @@ SDL_UYVY_OVERLAY  0x59565955  /* Packed mode: U0+Y0+V0+Y1 */
 =item *
 SDL_YVYU_OVERLAY  0x55595659  /* Packed mode: Y0+V0+Y1+U0 */
 
+=back
+
 
 =head2 format
 
@@ -94,5 +96,6 @@ see L<SDL::Video::lock_YUV_overlay>, L<SDL::Video::unload_YUV_overlay>
 
 This will be set to 1 if the overlay is hardware accelerated.
 
-=back
+
+=cut
 
