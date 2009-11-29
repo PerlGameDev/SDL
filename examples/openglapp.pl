@@ -1,5 +1,6 @@
 #!/usr/bin/perl
-
+#DISCLAIMER: This app is based on FLOYD-ATC's script"
+#
 use strict;
 use warnings;
 use SDL;
