@@ -7,3 +7,4 @@ lib/SDL/Config.pm
 MANIFEST.bak
 ^test/
 ^xt/
+^tools/
