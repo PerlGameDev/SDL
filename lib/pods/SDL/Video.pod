@@ -292,44 +292,78 @@ B<Note>: The video surface must be initialised using C<SDL::Video::set_video_mod
 
 =head2	load_BMP(filename)
 
-Loads a SDL::surface from a named Windows BMP file.
-SDL::load_BMP returns a SDL::surface on success or undef on error.
+ $surface = SDL::Video::load_BMP( $filename );
 
-Note: When loading a 24-bit Windows BMP file, pixel data points are loaded as blue, green, red, and NOT red, green, blue (as one might expect). 
+Loads a C<SDL::Surface> from a named Windows BMP file.
+C<SDL::Video::load_BMP> returns a C<SDL::Surface> on success or C<undef> on error.
 
+B<Note>: When loading a 24-bit Windows BMP file, pixel data points are loaded as blue, green, red, and NOT red, green, blue (as one might expect). 
+
+ use SDL;
+ use SDL::Video;
+ use SDL::Rect;
+ use SDL::Surface;
+ 
+ my $screen_width  = 640;
+ my $screen_height = 480;
+ 
+ SDL::init(SDL_INIT_VIDEO);
+ 
+ my $screen  = SDL::Video::set_video_mode($screen_width, $screen_height, 32, SDL_SWSURFACE);
+ 
+ my $picture = SDL::Video::load_BMP('test.bmp');
+ 
+ die(SDL::get_error) unless $picture;
+ 
+ my $rect    = SDL::Rect->new(0, 0, $screen_width, $screen_height);
+ 
+ SDL::Video::blit_surface( $picture, SDL::Rect->new(0, 0, $picture->w, $picture->h), 
+                           $screen,  SDL::Rect->new(0, 0, $screen->w,  $screen->h) );
+ 
+ SDL::Video::update_rect( $screen, 0, 0, $screen_width, $screen_height );
+ 
+ sleep(2);
+ 
+ SDL::quit;
 
 =head2	save_BMP(surface,filename)
 
-Saves the given SDL::Surface surface as a Windows BMP file named filename. 
+ $saved_BMP = SDL::Video::save_BMP( $surface, $filename );
+
+Saves the given C<SDL::Surface> as a Windows BMP file named filename. 
 it returns 0 on success or -1 on error.
 
 =head2	set_color_key(surface,flag,key)
+
+ $set_color_key = SDL::Video::set_color_key( $surface, $flag, $key );
 
 Sets the color key (transparent pixel) in a blittable surface and enables or disables RLE blit acceleration.
 
 RLE acceleration can substantially speed up blitting of images with large horizontal runs of transparent pixels (i.e., pixels that match 
 the key value).
-The key must be of the same pixel format as the surface, SDL::map_RGB is often useful for obtaining an acceptable value.
-If flag is SDL_SRCCOLORKEY then key is the transparent pixel value in the source image of a blit.
+The key must be of the same pixel format as the surface, C<SDL::Video::map_RGB> is often useful for obtaining an acceptable value.
+If flag is C<SDL_SRCCOLORKEY> then key is the transparent pixel value in the source image of a blit.
 
-If flag is OR'd with SDL_RLEACCEL then the surface will be drawn using RLE acceleration when drawn with SDL::Blit_surface.
-The surface will actually be encoded for RLE acceleration the first time SDL::blit_surface or SDL::display_format is called on the surface.
-If flag is 0, this function clears any current color key. 
+If C<flag> is OR'd with C<SDL_RLEACCEL> then the surface will be drawn using RLE acceleration when drawn with SDL::Blit_surface.
+The surface will actually be encoded for RLE acceleration the first time C<SDL::Video::blit_surface> or C<SDL::Video::display_format> 
+is called on the surface.
+If C<flag> is C<0>, this function clears any current color key. 
 
-SDL::set_color_key returns 0 on success or -1 on error.
-
+C<SDL::Video::set_color_key> returns C<0> on success or C<-1> on error.
 
 =head2	set_alpha(surface,flag,key)
 
-SDL::set_alpha is used for setting the per-surface alpha value and/or enabling and disabling alpha blending.
+ $set_alpha = SDL::Video::set_alpha( $surface, $flag, $key );
+
+C<set_alpha> is used for setting the per-surface alpha value and/or enabling and disabling alpha blending.
 
 The surface parameter specifies which SDL::surface whose alpha attributes you wish to adjust. 
-flags is used to specify whether alpha blending should be used (SDL_SRCALPHA) and whether the surface should use RLE acceleration for 
-blitting (SDL_RLEACCEL). 
-flags can be an OR'd combination of these two options, one of these options or 0. 
-If SDL_SRCALPHA is not passed as a flag then all alpha information is ignored when blitting the surface. 
+flags is used to specify whether alpha blending should be used ( C<SDL_SRCALPHA> ) and whether the surface should use RLE acceleration for 
+blitting ( C<SDL_RLEACCEL> ). 
+flags can be an OR'd combination of these two options, one of these options or C<0>. 
+If C<SDL_SRCALPHA> is not passed as a flag then all alpha information is ignored when blitting the surface. 
 The alpha parameter is the per-surface alpha value; a surface need not have an alpha channel to use per-surface alpha and blitting can 
-still be accelerated with SDL_RLEACCEL.
+still be accelerated with C<SDL_RLEACCEL>.
 
 Note: The per-surface alpha value of 128 is considered a special case and is optimised, so it's much faster than other per-surface values.
 
@@ -380,29 +414,34 @@ If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are c
 
 =back
 
-Note: When blitting, the presence or absence of SDL_SRCALPHA is relevant only on the source surface, not the destination.
-Note: Note that RGBA->RGBA blits (with SDL_SRCALPHA set) keep the alpha of the destination surface. This means that you cannot compose 
+B<Note>: When blitting, the presence or absence of C<SDL_SRCALPHA> is relevant only on the source surface, not the destination.
+B<Note>: Note that RGBA->RGBA blits (with C<SDL_SRCALPHA> set) keep the alpha of the destination surface. This means that you cannot compose 
 two arbitrary RGBA surfaces this way and get the result you would expect from "overlaying" them; the destination alpha will work as a mask.
 
-Note: Also note that per-pixel and per-surface alpha cannot be combined; the per-pixel alpha is always used if available. 
+B<Note>: Also note that per-pixel and per-surface alpha cannot be combined; the per-pixel alpha is always used if available. 
 
-SDL::set_alpha returns 0 on success or -1 on error.
+C<SDL::Video::set_alpha> returns C<0> on success or C<-1> on error.
 
 =head2	fill_rect(dest,dest_rect,pixel)
 
-This function performs a fast fill of the given SDL::rectangle with the given SDL::pixel_format. If dstrect is NULL, the whole surface 
+ $fill_rect = SDL::Video::fill_rect( $dest, $dest_rect, $pixel );
+
+This function performs a fast fill of the given L<SDL::Rect> with the given L<SDL::PixelFormat>. If dest_rect is NULL, the whole surface 
 will be filled with color.
 
-The color should be a pixel of the format used by the surface, and can be generated by the SDL::MapRGB or SDL::map_RGBA functions.
-If the color value contains an alpha value then the destination is simply "filled" with that alpha information, no blending takes place.
+The color should be a pixel of the format used by the surface, and can be generated by the C<SDL::Video::map_RGB> or C<SDL::Video::map_RGBA>
+functions. If the color value contains an alpha value then the destination is simply "filled" with that alpha information, no blending takes 
+place.
 
-If there is a clip rectangle set on the destination (set via SDL::set_clip_rect), then this function will clip based on the intersection 
-of the clip rectangle and the dstrect rectangle, and the dstrect rectangle will be modified to represent the area actually filled.
+If there is a clip rectangle set on the destination (set via C<SDL::Video::set_clip_rect>), then this function will clip based on the 
+intersection of the clip rectangle and the dstrect rectangle, and the dstrect rectangle will be modified to represent the area actually filled.
 
-If you call this on the video surface (ie: the value of SDL::get_video_surface()) you may have to update the video surface to see the 
+If you call this on the video surface (ie: the value of C<SDL::Video::get_video_surface>) you may have to update the video surface to see the 
 result. This can happen if you are using a shadowed surface that is not double buffered in Windows XP using build 1.2.9. 
 
-SDL::fill_rect returns 0 on success or -1 on error.
+C<SDL::Video::fill_rect> returns C<0> on success or C<-1> on error.
+
+for an example see L</SYNOPSIS>.
 
 =head1 Surface locking and unlocking
 
