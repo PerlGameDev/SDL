@@ -17,7 +17,19 @@ use SDL::Rect;
 use SDL::Color;
 use SDL::Video;
 use SDL::PixelFormat;
-use Test::More tests => 36;
+use Test::More;
+
+use lib 't/lib';
+use SDL::TestTool;
+
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
+    plan( skip_all => 'Failed to init video' );
+}
+else
+{
+    plan( tests => 36);
+}
+
 
 my $surface
     = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 640, 320, 8, 0, 0, 0, 0 );

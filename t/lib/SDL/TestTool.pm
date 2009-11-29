@@ -21,13 +21,23 @@ sub init {
     my ($self, $init) = @_;
     my $stdout = '';
     my $stderr = '';
+
+    if( $init == SDL_INIT_VIDEO)
+    {
+	    if( $^O !~ /win/i && !$ENV{DISPLAY} )
+	    {
+		    warn '$DISPLAY is not set! Cannot Init Video';
+		    return ;
+	    }
+    }
+
     capture { SDL::init($init) } \$stdout, \$stderr;
     if ( $stderr ne '' )
     {
 	    warn 'Init '.$inits{$init}.' failed with SDL error: '. SDL::get_error()."\nand stderr $stderr\n";
     }
     
-    return ($stderr ne '');
+    return !($stderr ne '');
 }
 
 

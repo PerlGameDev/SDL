@@ -6,7 +6,7 @@ use SDL::Time;
 use lib 't/lib';
 use SDL::TestTool;
 
-if ( SDL::TestTool->init(SDL_INIT_TIMER) ) {
+if ( !SDL::TestTool->init(SDL_INIT_TIMER) ) {
     plan( skip_all => 'Failed to init timer' );
 } else {
     plan( tests => 5 );

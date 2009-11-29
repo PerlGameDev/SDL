@@ -59,7 +59,7 @@ can_ok ('SDL::App', qw/
 
 SKIP:
 {
-	skip 'Video not avaiable', 1 unless !SDL::TestTool->init(SDL_INIT_AUDIO);
+	skip 'Video not avaiable', 1 unless SDL::TestTool->init(SDL_INIT_VIDEO);
 
 	my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
 

@@ -41,8 +41,11 @@ use SDL::Game::Rect;
 use SDL::Color;
 use SDL::Video;
 use Test::More;
+use lib 't/lib';
+use SDL::TestTool;
 
-plan ( tests => 2 );
+
+plan ( tests => 3 );
 
 use_ok( 'SDL::App' ); 
   
@@ -60,6 +63,9 @@ can_ok ('SDL::App', qw/
 	loop
 	sync 
 	attribute /);
+SKIP:
+{
+	skip 'No Video', 1 unless SDL::TestTool->init(SDL_INIT_VIDEO);
 
 	my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
 
@@ -84,4 +90,5 @@ can_ok ('SDL::App', qw/
 	}
 
 	  SDL::delay(100);
-
+	  pass 'Ran';
+  }

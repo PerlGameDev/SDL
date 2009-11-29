@@ -1,17 +1,27 @@
 #!perl
 use strict;
 use warnings;
-use Test::More tests => 9;
-use_ok('SDL::Palette');
-
-can_ok('SDL::Palette', qw/ ncolors colors color_index /); 
+use Test::More;
 
 use SDL;
 use SDL::Surface;
 use SDL::PixelFormat;
 use SDL::Video;
 
-SDL::init(SDL_INIT_VIDEO);
+use lib 't/lib';
+use SDL::TestTool;
+
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
+    plan( skip_all => 'Failed to init video' );
+}
+else
+{
+    plan( tests => 9);
+}
+
+use_ok('SDL::Palette');
+
+can_ok('SDL::Palette', qw/ ncolors colors color_index /); 
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 

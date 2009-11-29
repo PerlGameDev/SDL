@@ -6,7 +6,7 @@ use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
 
-if ( SDL::TestTool->init(SDL_INIT_AUDIO) ) {
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
     plan( skip_all => 'Failed to init video' );
 } else {
     plan( tests => 11 );
