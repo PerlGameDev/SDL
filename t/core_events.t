@@ -6,7 +6,12 @@ use SDL::Events;
 use SDL::Video;
 use Devel::Peek;
 use Test::More;
+use lib 't/lib';
+use SDL::TestTool;
 
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
+    plan( skip_all => 'Failed to init video' );
+}
 
 my @done =qw/
 pump_events 
@@ -48,7 +53,6 @@ syswm
 can_ok( 'SDL::Events',           @done); 
 can_ok( 'SDL::Event',            @done_event);
 
-SDL::init(SDL_INIT_VIDEO);                                                                          
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE);
 

@@ -12,8 +12,12 @@ use SDL::Video;
 use lib 't/lib';
 use SDL::TestTool;
 
-if ( SDL::TestTool->init(SDL_INIT_VIDEO) ) {
-    plan( skip_all => 'Failed to init video' );
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
+	   plan( skip_all => 'Failed to init video' );
+}
+else
+{
+	  plan( tests => 61);
 }
 
 my @done =
@@ -277,4 +281,4 @@ TODO:
 
 pass 'Are we still alive? Checking for segfaults';
 
-done_testing();
+

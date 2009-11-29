@@ -8,7 +8,7 @@ use SDL::TestTool;
 use Test::More;
 use IO::CaptureOutput qw(capture);
 
-if ( SDL::TestTool->init(SDL_INIT_AUDIO) ) {
+if (! SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
 } else {
     plan( tests => 6 );
@@ -33,3 +33,4 @@ SDL::MixPlayChannel( -1, $mix_chunk, 0 );
 SDL::MixCloseAudio;
 
 ok( 1, 'Got to the end' );
+SDL::quit;
