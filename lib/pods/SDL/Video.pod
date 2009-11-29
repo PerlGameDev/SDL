@@ -974,47 +974,150 @@ If the surface has no alpha component, the alpha will be returned as 0xff (100% 
 
 =head2	GL_load_library(path)
 
+ $gl_load_lib = SDL::Video::GL_load_library( 'path/to/static/glfunctions.dll' );
+
 If you wish, you may load the OpenGL library from the given path at runtime, this must be done before C<SDL::Video::set_video_mode> is called.
 You must then use C<SDL::Video::GL_get_proc_address> to retrieve function pointers to GL functions. 
 
-SDL::GL_load_library returns 0 on success or -1 or error.
+C<GL_load_library> returns C<0> on success or C<-1> or error.
 
 =head2	GL_get_proc_address(proc)
 
+ 
+
 Returns the address of the GL function proc, or NULL if the function is not found. If the GL library is loaded at runtime, with 
-SDL::GL_load_library, then all GL functions must be retrieved this way. Usually this is used to retrieve function pointers to OpenGL 
-extensions. Note that this function needs an OpenGL context to function properly, so it should be called after SDL::set_video_mode 
-has been called (with the SDL_OPENGL flag).
+C<SDL::Video::GL_load_library>, then all GL functions must be retrieved this way. Usually this is used to retrieve function pointers to OpenGL 
+extensions. Note that this function needs an OpenGL context to function properly, so it should be called after C<SDL::Video::set_video_mode>
+has been called (with the C<SDL_OPENGL> flag).
 
-OpenGL function pointers must be declared APIENTRY . This will ensure the proper calling convention is followed on platforms where this 
-matters (Win32) thereby avoiding stack corruption. In a Win32 build environment, APIENTRY should be defined as __stdcall. 
+It returns undef if the function is not found.
 
-it returns undef if the function is not found.
+Example:
+
+ my $has_multitexture = 1;
+ 
+ # Get function pointer
+ $gl_active_texture_ARB_ptr = SDL::Video::GL_get_proc_address("glActiveTextureARB");
+ 
+ # Check for a valid function ptr
+ unless($gl_active_texture_ARB_ptr)
+ {
+     printf( STDERR "Multitexture Extensions not present.\n" );
+     $has_multitexture = 0;
+ }
+
+ $gl_active_texture_ARB_ptr(GL_TEXTURE0_ARB) if $has_multitexture;
 
 =head2	GL_get_attribute(attr)
 
-It returns  SDL/OpenGL attribute attr . This is useful after a call to SDL::set_video_mode to check whether your attributes have been set 
-as you expected. 
-SDL::GL_get_attribute returns undef if the attribute is not found.
+ $value = SDL::Video::GL_get_attribute( $attr );
+
+It returns SDL/OpenGL attribute C<attr>. This is useful after a call to C<SDL::Video::set_video_mode> to check whether your attributes have 
+been set as you expected. 
+C<SDL::Video::GL_get_attribute> returns undef if the attribute is not found.
+
+Example:
+
+ print( SDL::Video::GL_set_attribute(SDL_GL_RED_SIZE) );
 
 =head2	GL_set_attribute(attr,value)
 
-This function sets the given OpenGL attribute attr to value. The requested attributes will take effect after a call to SDL::set_video_mode.
-You should use SDL::GL_get_attribute to check the values after a SDL::set_video_mode call, since the values obtained can differ from the 
-requested ones.
-See SDL_GLattr for the full list of available attributes. 
-SDL::GL_set_attribute returns 0 on success or -1 on error.
+ $set_attr = SDL::Video::GL_set_attribute( $attr, $value );
 
-Note : The SDL_DOUBLEBUF flag is not required to enable double buffering when setting an OpenGL video mode. Double buffering is enabled 
-or disabled using the SDL_GL_DOUBLEBUFFER attribute. 
+This function sets the given OpenGL attribute C<attr> to C<value>. The requested attributes will take effect after a call to 
+C<SDL::Video::set_video_mode>.
+You should use C<GL_get_attribute> to check the values after a C<set_video_mode> call, since the values obtained can differ from the 
+requested ones.
+
+Available attributes:
+
+=over 4
+
+=item *
+
+C<SDL_GL_RED_SIZE>
+
+=item *
+
+C<SDL_GL_GREEN_SIZE>
+
+=item *
+
+C<SDL_GL_BLUE_SIZE>
+
+=item *
+
+C<SDL_GL_ALPHA_SIZE>
+
+=item *
+
+C<SDL_GL_BUFFER_SIZE>
+
+=item *
+
+C<SDL_GL_DOUBLEBUFFER>
+
+=item *
+
+C<SDL_GL_DEPTH_SIZE>
+
+=item *
+
+C<SDL_GL_STENCIL_SIZE>
+
+=item *
+
+C<SDL_GL_ACCUM_RED_SIZE>
+
+=item *
+
+C<SDL_GL_ACCUM_GREEN_SIZE>
+
+=item *
+
+C<SDL_GL_ACCUM_BLUE_SIZE>
+
+=item *
+
+C<SDL_GL_ACCUM_ALPHA_SIZE>
+
+=item *
+
+C<SDL_GL_STEREO>
+
+=item *
+
+C<SDL_GL_MULTISAMPLEBUFFERS>
+
+=item *
+
+C<SDL_GL_MULTISAMPLESAMPLES>
+
+=item *
+
+C<SDL_GL_ACCELERATED_VISUAL>
+
+=item *
+
+C<SDL_GL_SWAP_CONTROL>
+
+=back
+
+C<GL_set_attribute> returns C<0> on success or C<-1> on error.
+
+B<Note>: The C<SDL_DOUBLEBUF> flag is not required to enable double buffering when setting an OpenGL video mode. Double buffering is enabled 
+or disabled using the C<SDL_GL_DOUBLEBUFFER> attribute. 
+
+Example:
+
+ SDL::Video::GL_set_attribute(SDL_GL_RED_SIZE, 5);
 
 =head2	GL_swap_buffers
 
+ SDL::Video::GL_swap_buffers();
+
 Swap the OpenGL buffers, if double-buffering is supported.
-SDL::GL_swap_buffers doesn't returns any value.
-
-=head2	GL_attr *** to be coded
-
+C<SDL::Video::GL_swap_buffers> doesn't returns any value.
 
 =head1 Video Overlay Functions
 
@@ -1022,21 +1125,27 @@ see L<SDL::Overlay>
 
 =head2	lock_YUV_overlay(overlay)
 
-Much the same as C<SDL::lock_surface>, SDL::lock_YUV_overlay locks the overlay for direct access to pixel data.
-It returns 0 on success or -1 on error.
+ $lock_overlay = SDL::Video::lock_YUV_overlay( $overlay );
+
+Much the same as C<SDL::Video::lock_surface>, C<lock_YUV_overlay> locks the overlay for direct access to pixel data.
+It returns C<0> on success or C<-1> on error.
 
 =head2	unlock_YUV_overlay(overlay)
 
-The opposite to C<SDL::lock_YUV_overlay>. Unlocks a previously locked overlay. An overlay must be unlocked before it can be displayed. 
-It returns 0 on success or -1 on error.
+ SDL::Video::unlock_YUV_overlay( $overlay );
+
+The opposite to C<SDL::Video::lock_YUV_overlay>. Unlocks a previously locked overlay. An overlay must be unlocked before it can be displayed. 
+C<unlock_YUV_overlay> does not return anything.
 
 =head2	display_YUV_overlay(overlay,dstrect)
 
-Blit the overlay to the display surface specified when the overlay was created. The SDL::rect structure, dstrect, specifies a rectangle 
-on the display where the overlay is drawn. The .x and .y fields of dstrect specify the upper left location in display coordinates. 
-The overlay is scaled (independently in x and y dimensions) to the size specified by dstrect, and is optimized for 2x scaling
+ $display_overlay = SDL::Video::display_YUV_overlay( $overlay, $dstrect );
 
-It returns 0 on success or -1 on error.
+Blit the overlay to the display surface specified when the overlay was created. The C<SDL::Rect> structure, C<dstrect>, specifies a rectangle 
+on the display where the overlay is drawn. The C<x> and C<y> fields of C<dstrect> specify the upper left location in display coordinates. 
+The overlay is scaled (independently in x and y dimensions) to the size specified by dstrect, and is C<optimized> for 2x scaling
+
+It returns C<0> on success or C<-1> on error.
 
 =head1 Window Management Functions
 
@@ -1179,6 +1288,10 @@ Example:
 
 Toggles the application between windowed and fullscreen mode, if supported. (X11 is the only target currently supported, BeOS support 
 is experimental).
+
+=head1 AUTHOR
+
+magnet, Tobias Leich (FROGGS)
 
 =head1 SEE ALSO
 
