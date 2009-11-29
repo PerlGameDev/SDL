@@ -156,7 +156,6 @@ Example:
  
  SDL::quit();
 
-
 =head2	set_video_mode(width,height,bpp,flags)
 
  my $surface = SDL::Video::set_video_mode( 800, 600, 32, SDL_SWSURFACE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
@@ -250,22 +249,46 @@ each call to L<SDL::Video::set_video_mode|/set_video_mode_width_height_bpp_flag>
 
 =head2	convert_surface(surface,format,flags)
 
-Creates a new SDL::surface of the specified SDL::pixel_format, and then copies and maps the given surface to it. 
+ $converted_surface = SDL::Video::convert_surface( $surface, $format, $flags );
+
+Creates a new SDL::surface of the specified L<SDL::PixelFormat>, and then copies and maps the given surface to it. 
 It is also useful for making a copy of a surface.
-
-The flags parameter is passed to SDL::create_RGB_surface and has those semantics.
-This function is used internally by SDL::display_format.
-This function can only be called after SDL::init. 
-
-it returns a SDL::surface on success or undef on error.
-
+ 
+The flags parameter is passed to C<SDL::Surface->new()> and has those semantics.
+This function is used internally by C<SDL::Video::display_format>.
+This function can only be called after C<SDL::init>. 
+ 
+it returns a C<SDL::Surface> on success or C<undef> on error.
+ 
 =head2	display_format
 
-Converts a surface to the display format 
+ $new_surface = SDL::Video::display_format( $surface );
+
+This function takes a surface and copies it to a new surface of the pixel format and colors of the video framebuffer, suitable for fast 
+blitting onto the display surface. It calls C<SDL::Video::convert_surface>.
+
+If you want to take advantage of hardware colorkey or alpha blit acceleration, you should set the colorkey and alpha value before calling 
+this function.
+
+If you want an alpha channel, see C<SDL::Video::display_format_alpha>.
+Return Value
+
+B<Note>: Remember to use a different variable for the returned surface, otherwise you have a memory leak, since the original surface isn't freed. 
 
 =head2	display_format_alpha
 
-Converts a surface to the display format 
+ $new_surface = SDL::Video::display_format_alpha( $surface );
+
+This function takes a surface and copies it to a new surface of the pixel format and colors of the video framebuffer plus an alpha channel, 
+suitable for fast blitting onto the display surface. It calls C<SDL::Video::convert_surface>.
+
+If you want to take advantage of hardware colorkey or alpha blit acceleration, you should set the colorkey and alpha value before calling 
+this function.
+
+This function can be used to convert a colorkey to an alpha channel, if the C<SDL_SRCCOLORKEY> flag is set on the surface. The generated 
+surface will then be transparent (alpha=0) where the pixels match the colorkey, and opaque (alpha=255) elsewhere.
+
+B<Note>: The video surface must be initialised using C<SDL::Video::set_video_mode> before this function is called, or it will segfault.
 
 =head2	load_BMP(filename)
 
