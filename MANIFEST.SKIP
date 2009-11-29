@@ -4,3 +4,6 @@ exp
 .git
 ^Build$
 lib/SDL/Config.pm
+MANIFEST.bak
+^test/
+^xt/
