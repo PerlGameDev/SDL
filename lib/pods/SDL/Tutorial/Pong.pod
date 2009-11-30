@@ -1,4 +1,8 @@
-tags: Tutorials
+=pod 
+
+=head1 NAME
+
+SDL::Tutorial::Pong -- Get started pong
 
 =head1 PONG TUTORIAL
 
