@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-SDL::MixMusic -- SDL Bindings for structure SDL_MixMusic
+SDL::Mixer::MixMusic - SDL Bindings for structure SDL_MixMusic
 
 =head1 CATEGORY
 

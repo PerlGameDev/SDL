@@ -309,7 +309,7 @@ my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
 	     keys %subsystems;
 my $build   = SDL::Build->new(
 	module_name          => 'SDL',
-	dist_name            => 'SDL_Perl', 
+	dist_name            => 'SDL', 
 	license		     => 'lgpl',
 	dist_version_from    => 'lib/SDL.pm',
 	configure_requires	      =>

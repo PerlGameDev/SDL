@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-package Pong;
+package SDL::Tutorial::Pong::Ball;
 #use SDL::Game::Rect;
 
 sub new {
@@ -33,7 +33,7 @@ my $app = SDL::App->new(
 );
 
 my $event = SDL::Event->new;
-my $ball = Pong->new;
+my $ball = SDL::Tutorial::Pong::Ball->new;
 
 my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00 );
 my $back = SDL::Rect->new( 0, 0, $app->width, $app->height);

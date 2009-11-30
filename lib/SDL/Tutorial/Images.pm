@@ -162,7 +162,7 @@ use Pod::ToDemo sub
 	my @img_files         = map { $imagebase . "_$_.gif" }
 		qw( left center right );
 	my $demo_source       = <<'END_HERE';
-package Walker;
+package SDL::Tutorial::Images::Walker;
 
 sub new
 {
@@ -248,7 +248,7 @@ my $pos = SDL::Rect->new(
 	-y      => 240,
 );
 
-my $walker = Walker->new(qw(
+my $walker = SDL::Tutorial::Images::Walker->new(qw(
 END_HERE
 
 $demo_source .= join( ' ', @img_files ) . "));" . <<'END_HERE';
@@ -409,7 +409,7 @@ walking?
 
 You'll need several frames, just as in a flip-book.  Each frame should be slightly different than the one before it.  It's probably handy to encapsulate all of this in a C<Walker> class:
 
-	package Walker;
+	package SDL::Tutorial::Images::Walker;
 
 	use SDL::Surface;
 
@@ -432,7 +432,7 @@ You'll need several frames, just as in a flip-book.  Each frame should be slight
 
 To use this class, instantiate an object:
 
-	my $walker = Walker->new( 'frame1.png', 'frame2.png', 'frame3.png' );
+	my $walker = SDL::Tutorial::Images::Walker->new( 'frame1.png', 'frame2.png', 'frame3.png' );
 
 Then call C<next_frame()> within the loop:
 

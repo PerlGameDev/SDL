@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.3_1 
+	- General fixup for CPAN
+
 * 2.3_0
 	- General Memory leaking stopping [kthakore, acme]
 	- More complete unit testing [kthakore, acme, FROGGS]
