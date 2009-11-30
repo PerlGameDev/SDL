@@ -63,6 +63,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	Primitives => {
+		file      => {
+			from  => 'src/GFX/Primitives.xs',
+			to    => 'lib/SDL/GFX/Primitives.xs',
+		},
+		libraries => [qw( SDL SDL_gfx )],
+	},
 	MultiThread => {
 		file      => {
 			from  => 'src/Core/MultiThread.xs',
