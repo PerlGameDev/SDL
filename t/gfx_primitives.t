@@ -22,16 +22,12 @@ elsif( !SDL::Config->has('SDL_gfx') )
 }
 else
 {
-    plan( tests => 6 );
+    plan( tests => 3 );
 }
 
 my @done =qw/
 pixel_color
 /;
-
-use_ok('SDL');
-use_ok('SDL::Surface');
-use_ok('SDL::GFX::Primitives');
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 my $pixel   = SDL::Video::map_RGB( $display->format, 0, 0, 0 );
