@@ -2,11 +2,11 @@
 
 =head1 NAME
 
-SDL::Video - Bindings to the MultiThread category in SDL API
+SDL::MultiThread - Bindings to the MultiThread category in SDL API
 
 =head2 CATEGORY
 
-Core, MultiThread
+TODO, Core, MultiThread
 
 =head1 SYNOPSIS
 
