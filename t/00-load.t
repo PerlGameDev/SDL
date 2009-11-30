@@ -31,6 +31,8 @@ SDL::Mixer
 SDL::Mixer::MixChunk
 SDL::Mixer::MixMusic
 SDL::Version
+
+SDL::Image
 /;
     plan tests => scalar @modules;
 

@@ -240,6 +240,14 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_ttf )],
 	},	
+	Image => {
+		file	=> {
+			from => 'src/Image/Image.xs',
+			to   =>	'lib/SDL/Image.xs',
+		},
+		libraries => [qw( SDL SDL_image )],
+	},	
+
 );
 
 my %libraries = (
