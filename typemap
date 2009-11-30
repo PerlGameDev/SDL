@@ -1,5 +1,6 @@
 TYPEMAP
 const Uint16 *		T_PTR
+const Sint16 *		T_PTR
 Uint8			T_U_CHAR
 Uint8 *			T_PTR
 const Uint8*		T_PTR
@@ -52,6 +53,7 @@ Mix_Chunk *		O_OBJECT
 Mix_Music *		O_OBJECT
 SDL_GLattr              T_IV
 int *			T_PTR
+int **			T_PTR
 void *			T_PTR
 SDL_TimerID		T_PTR
 SDL_NewTimerCallback	T_PTR
