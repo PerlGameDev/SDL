@@ -58,7 +58,7 @@ Example:
  my $video_info = SDL::Video::get_video_info();
 
 This function returns a read-only L<structure|SDL::VideoInfo> containing information about the video hardware. If it is called before 
-L<SDL::Video::set_video_mode|/set_video_mode_width_height_bpp_flag>, the C<vfmt> member of the returned structure will contain the pixel 
+L<SDL::Video::set_video_mode|/set_video_mode>, the C<vfmt> member of the returned structure will contain the pixel 
 format of the B<best> video mode. 
 
 Example:
@@ -96,7 +96,7 @@ Example:
  
  SDL::quit();
 
-=head2	list_modes(formats,flags)
+=head2	list_modes
 
  my @modes = @{ SDL::Video::list_modes( $pixel_format, $flags ) };
 
@@ -132,12 +132,12 @@ Example:
  
  SDL::quit();
 
-=head2	video_mode_ok(width,height,bpp,flags)
+=head2	video_mode_ok
 
  my $bpp_ok = SDL::Video::video_mode_ok( $width, $height, $bpp, $flags );
 
 This function is used to check whether the requested mode is supported by the current video device. The arguments passed to this function 
-are the same as those you would pass to L<SDL::Video::set_video_mode|/set_video_mode_width_height_bpp_flag>. 
+are the same as those you would pass to L<SDL::Video::set_video_mode|/set_video_mode>. 
 It returns C<0> if the mode is not supported at all, otherwise the suggested C<bpp>.
 
 Example:
@@ -156,7 +156,7 @@ Example:
  
  SDL::quit();
 
-=head2	set_video_mode(width,height,bpp,flags)
+=head2	set_video_mode
 
  my $surface = SDL::Video::set_video_mode( 800, 600, 32, SDL_SWSURFACE|SDL_DOUBLEBUF|SDL_FULLSCREEN);
 
@@ -192,11 +192,11 @@ Give SDL exclusive palette access. Without this flag you may not always get the 
 
 =item C<SDL_DOUBLEBUF>
 
-Enable hardware double buffering; only valid with C<SDL_HWSURFACE>. Calling L<SDL::Video::flip|/flip_surface> will flip the buffers and update 
+Enable hardware double buffering; only valid with C<SDL_HWSURFACE>. Calling L<SDL::Video::flip|/flip> will flip the buffers and update 
 the screen. 
 All drawing will take place on the surface that is not displayed at the moment. 
-If double buffering could not be enabled then L<SDL::Video::flip|/flip_surface> will just perform a 
-L<SDL::Video::update_rect|/update_rect_surface_x_y_width_height> on the entire screen.
+If double buffering could not be enabled then L<SDL::Video::flip|/flip> will just perform a 
+L<SDL::Video::update_rect|/update_rect> on the entire screen.
 
 =item C<SDL_FULLSCREEN>
 
@@ -206,7 +206,7 @@ the next higher resolution will be used and the display window centered on a bla
 =item C<SDL_OPENGL>
 
 Create an OpenGL rendering context. You should have previously set OpenGL video attributes with 
-L<SDL::Video::GL_set_attribute|/GL_set_attribute_attr_value>.
+L<SDL::Video::GL_set_attribute|/GL_set_attribute>.
 
 =item C<SDL_OPENGLBLIT>
 
@@ -218,7 +218,7 @@ NOTE: This option is kept for compatibility only, and will be removed in next ve
 
 Create a resizable window. 
 When the window is resized by the user a C<SDL_VIDEORESIZE> event is generated and 
-L<SDL::Video::set_video_mode|/set_video_mode_width_height_bpp_flag> can be called again with the new size.
+L<SDL::Video::set_video_mode|/set_video_mode> can be called again with the new size.
 
 =item C<SDL_NOFRAME>
 
@@ -244,28 +244,28 @@ been set causes the application to simply ignore those attributes, while enablin
 B<User note 2>: Also note that, in Windows, setting the video mode resets the current OpenGL context. You must execute again the OpenGL 
 initialization code (set the clear color or the shade model, or reload textures, for example) after calling SDL::set_video_mode. In Linux, 
 however, it works fine, and the initialization code only needs to be executed after the first call to 
-L<SDL::Video::set_video_mode|/set_video_mode_width_height_bpp_flag> (although there is no harm in executing the initialization code after 
-each call to L<SDL::Video::set_video_mode|/set_video_mode_width_height_bpp_flag>, for example for a multiplatform application). 
+L<SDL::Video::set_video_mode|/set_video_mode> (although there is no harm in executing the initialization code after 
+each call to L<SDL::Video::set_video_mode|/set_video_mode>, for example for a multiplatform application). 
 
-=head2	convert_surface(surface,format,flags)
+=head2	convert_surface
 
  $converted_surface = SDL::Video::convert_surface( $surface, $format, $flags );
 
 Creates a new SDL::surface of the specified L<SDL::PixelFormat>, and then copies and maps the given surface to it. 
 It is also useful for making a copy of a surface.
  
-The flags parameter is passed to C<SDL::Surface-E<gt>new()> and has those semantics.
-This function is used internally by C<SDL::Video::display_format>.
+The flags parameter is passed to L<SDL::Surface>C<-E<gt>new> and has those semantics.
+This function is used internally by L<SDL::Video::display_format|/display_format>.
 This function can only be called after C<SDL::init>. 
  
-it returns a C<SDL::Surface> on success or C<undef> on error.
+it returns a L<SDL::Surface> on success or C<undef> on error.
  
 =head2	display_format
 
  $new_surface = SDL::Video::display_format( $surface );
 
 This function takes a surface and copies it to a new surface of the pixel format and colors of the video framebuffer, suitable for fast 
-blitting onto the display surface. It calls C<SDL::Video::convert_surface>.
+blitting onto the display surface. It calls L<SDL::Video::convert_surface|/conver_surface>.
 
 If you want to take advantage of hardware colorkey or alpha blit acceleration, you should set the colorkey and alpha value before calling 
 this function.
@@ -280,7 +280,7 @@ B<Note>: Remember to use a different variable for the returned surface, otherwis
  $new_surface = SDL::Video::display_format_alpha( $surface );
 
 This function takes a surface and copies it to a new surface of the pixel format and colors of the video framebuffer plus an alpha channel, 
-suitable for fast blitting onto the display surface. It calls C<SDL::Video::convert_surface>.
+suitable for fast blitting onto the display surface. It calls L<SDL::Video::convert_surface|/convert_surface>.
 
 If you want to take advantage of hardware colorkey or alpha blit acceleration, you should set the colorkey and alpha value before calling 
 this function.
@@ -288,14 +288,15 @@ this function.
 This function can be used to convert a colorkey to an alpha channel, if the C<SDL_SRCCOLORKEY> flag is set on the surface. The generated 
 surface will then be transparent (alpha=0) where the pixels match the colorkey, and opaque (alpha=255) elsewhere.
 
-B<Note>: The video surface must be initialised using C<SDL::Video::set_video_mode> before this function is called, or it will segfault.
+B<Note>: The video surface must be initialised using L<SDL::Video::set_video_mode|/set_video_mode> before this function is called, or it will 
+segfault.
 
-=head2	load_BMP(filename)
+=head2	load_BMP
 
  $surface = SDL::Video::load_BMP( $filename );
 
-Loads a C<SDL::Surface> from a named Windows BMP file.
-C<SDL::Video::load_BMP> returns a C<SDL::Surface> on success or C<undef> on error.
+Loads a L<SDL::Surface> from a named Windows BMP file.
+C<SDL::Video::load_BMP> returns a L<SDL::Surface> on success or C<undef> on error.
 
 B<Note>: When loading a 24-bit Windows BMP file, pixel data points are loaded as blue, green, red, and NOT red, green, blue (as one might expect). 
 
@@ -326,14 +327,14 @@ B<Note>: When loading a 24-bit Windows BMP file, pixel data points are loaded as
  
  SDL::quit;
 
-=head2	save_BMP(surface,filename)
+=head2	save_BMP
 
  $saved_BMP = SDL::Video::save_BMP( $surface, $filename );
 
-Saves the given C<SDL::Surface> as a Windows BMP file named filename. 
+Saves the given L<SDL::Surface> as a Windows BMP file named filename. 
 it returns 0 on success or -1 on error.
 
-=head2	set_color_key(surface,flag,key)
+=head2	set_color_key
 
  $set_color_key = SDL::Video::set_color_key( $surface, $flag, $key );
 
@@ -341,17 +342,17 @@ Sets the color key (transparent pixel) in a blittable surface and enables or dis
 
 RLE acceleration can substantially speed up blitting of images with large horizontal runs of transparent pixels (i.e., pixels that match 
 the key value).
-The key must be of the same pixel format as the surface, C<SDL::Video::map_RGB> is often useful for obtaining an acceptable value.
+The key must be of the same pixel format as the surface, L<SDL::Video::map_RGB|/map_RGB> is often useful for obtaining an acceptable value.
 If flag is C<SDL_SRCCOLORKEY> then key is the transparent pixel value in the source image of a blit.
 
 If C<flag> is OR'd with C<SDL_RLEACCEL> then the surface will be drawn using RLE acceleration when drawn with SDL::Blit_surface.
-The surface will actually be encoded for RLE acceleration the first time C<SDL::Video::blit_surface> or C<SDL::Video::display_format> 
-is called on the surface.
+The surface will actually be encoded for RLE acceleration the first time L<SDL::Video::blit_surface|/blit_surface> or 
+C<SDL::Video::display_format|/display_format> is called on the surface.
 If C<flag> is C<0>, this function clears any current color key. 
 
 C<SDL::Video::set_color_key> returns C<0> on success or C<-1> on error.
 
-=head2	set_alpha(surface,flag,key)
+=head2	set_alpha
 
  $set_alpha = SDL::Video::set_alpha( $surface, $flag, $key );
 
@@ -371,43 +372,43 @@ Alpha affects surface blitting in the following ways:
 
 =over 4
 
-=item RGBA->RGB with SDL_SRCALPHA
+=item RGBA->RGB with C<SDL_SRCALPHA>
 
 The source is alpha-blended with the destination, using the alpha channel. 
 SDL_SRCCOLORKEY and the per-surface alpha are ignored.
 
-=item RGBA->RGB without SDL_SRCALPHA
+=item RGBA->RGB without C<SDL_SRCALPHA>
 
 The RGB data is copied from the source. The source alpha channel and the per-surface alpha value are ignored. 
 If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
 
-=item RGB->RGBA with SDL_SRCALPHA
+=item RGB->RGBA with C<SDL_SRCALPHA>
 
 The source is alpha-blended with the destination using the per-surface alpha value. 
 If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied. 
 The alpha channel of the copied pixels is set to opaque.
 
-=item RGB->RGBA without SDL_SRCALPHA
+=item RGB->RGBA without C<SDL_SRCALPHA>
 
 The RGB data is copied from the source and the alpha value of the copied pixels is set to opaque. 
 If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
 
-=item RGBA->RGBA with SDL_SRCALPHA
+=item RGBA->RGBA with C<SDL_SRCALPHA>
 
 The source is alpha-blended with the destination using the source alpha channel. 
 The alpha channel in the destination surface is left untouched. SDL_SRCCOLORKEY is ignored.
 
-=item RGBA->RGBA without SDL_SRCALPHA
+=item RGBA->RGBA without C<SDL_SRCALPHA>
 
 The RGBA data is copied to the destination surface.
 If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
 
-=item RGB->RGB with SDL_SRCALPHA
+=item RGB->RGB with C<SDL_SRCALPHA>
 
 The source is alpha-blended with the destination using the per-surface alpha value. 
 If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
 
-=item RGB->RGB without SDL_SRCALPHA
+=item RGB->RGB without C<SDL_SRCALPHA>
 
 The RGB data is copied from the source. 
 If SDL_SRCCOLORKEY is set, only the pixels not matching the colorkey value are copied.
@@ -422,39 +423,40 @@ B<Note>: Also note that per-pixel and per-surface alpha cannot be combined; the 
 
 C<SDL::Video::set_alpha> returns C<0> on success or C<-1> on error.
 
-=head2	fill_rect(dest,dest_rect,pixel)
+=head2	fill_rect
 
  $fill_rect = SDL::Video::fill_rect( $dest, $dest_rect, $pixel );
 
 This function performs a fast fill of the given L<SDL::Rect> with the given L<SDL::PixelFormat>. If dest_rect is NULL, the whole surface 
 will be filled with color.
 
-The color should be a pixel of the format used by the surface, and can be generated by the C<SDL::Video::map_RGB> or C<SDL::Video::map_RGBA>
-functions. If the color value contains an alpha value then the destination is simply "filled" with that alpha information, no blending takes 
-place.
+The color should be a pixel of the format used by the surface, and can be generated by the L<SDL::Video::map_RGB|/map_RGB> or 
+C<SDL::Video::map_RGBA|/map_RGBA> functions. If the color value contains an alpha value then the destination is simply "filled" with that 
+alpha information, no blending takes place.
 
-If there is a clip rectangle set on the destination (set via C<SDL::Video::set_clip_rect>), then this function will clip based on the 
-intersection of the clip rectangle and the dstrect rectangle, and the dstrect rectangle will be modified to represent the area actually filled.
+If there is a clip rectangle set on the destination (set via L<SDL::Video::set_clip_rect|/set_clip_rect>), then this function will clip based 
+on the intersection of the clip rectangle and the dstrect rectangle, and the dstrect rectangle will be modified to represent the area actually 
+filled.
 
-If you call this on the video surface (ie: the value of C<SDL::Video::get_video_surface>) you may have to update the video surface to see the 
-result. This can happen if you are using a shadowed surface that is not double buffered in Windows XP using build 1.2.9. 
+If you call this on the video surface (ie: the value of L<SDL::Video::get_video_surface|/get_video_surface>) you may have to update the video 
+surface to see the result. This can happen if you are using a shadowed surface that is not double buffered in Windows XP using build 1.2.9. 
 
 C<SDL::Video::fill_rect> returns C<0> on success or C<-1> on error.
 
 for an example see L</SYNOPSIS>.
 
-=head1 Surface locking and unlocking
+=head1 Surface Locking and Unlocking
 
-=head2	lock_surface(surface)
+=head2	lock_surface
 
  int SDL::Video::lock_surface( $surface );
 
 C<SDL::Video::lock_surface> sets up the given L<SDL::Surface> for directly accessing the pixels.
 Between calls to SDL::lock_surface and SDL::unlock_surface, you can write to ( C<surface->set_pixels>) and read from ( C<surface->get_pixels> ), 
 using the pixel format stored in C<surface->format>. 
-Once you are done accessing the surface, you should use C<SDL::Video::unlock_surface> to release the lock.
+Once you are done accessing the surface, you should use L<SDL::Video::unlock_surface|/unlock_surface> to release the lock.
 
-Not all surfaces require locking. If C<SDL::Video::MUSTLOCK(surface)> evaluates to C<0>, then reading and writing pixels to the surface can 
+Not all surfaces require locking. If L<SDL::Video::MUSTLOCK|/MUSTLOCK> evaluates to C<0>, then reading and writing pixels to the surface can 
 be performed at any time, and the pixel format of the surface will not change.
 No operating system or library calls should be made between the lock/unlock pairs, as critical system locks may be held during this time.
 C<SDL::Video::lock_surface> returns C<0> on success or C<-1> on error.
@@ -538,17 +540,17 @@ a matching unlock.
  
  SDL::quit;
 
-=head2	unlock_surface(surface)
+=head2	unlock_surface
 
- void SDL::Video::unlock_surface( $surface );
+ SDL::Video::unlock_surface( $surface );
 
-Surfaces that were previously locked using C<SDL::Video::lock_surface> must be unlocked with C<SDL::Video::unlock_surface>. Surfaces should 
-be unlocked as soon as possible.
+Surfaces that were previously locked using L<SDL::Video::lock_surface|/lock_sruface> must be unlocked with C<SDL::Video::unlock_surface>. 
+Surfaces should be unlocked as soon as possible.
 C<SDL::Video::unlock_surface> doesn't return anything.
 
-B<Note>: Since 1.1.8, the surface locks are recursive. See C<SDL::Video::lock_surface> for more information. 
+B<Note>: Since 1.1.8, the surface locks are recursive. See L<SDL::Video::lock_surface|/lock_sruface> for more information. 
 
-=head2	MUSTLOCK(surface)
+=head2	MUSTLOCK
 
  int SDL::Video::MUSTLOCK( $surface );
 
@@ -556,7 +558,7 @@ C<MUSTLOCK> returns C<0> if the surface does not have to be locked during pixel 
 
 =head1 Screen Updating Functions
 
-=head2	set_clip_rect(surface,rect)
+=head2	set_clip_rect
 
  SDL::Video::set_clip_rect( $surface, $rect );
 
@@ -567,7 +569,7 @@ outside the edges of the surface.
 If rect is NULL the clipping rectangle will be set to the full size of the surface. 
 C<SDL::Video::set_clip_rect> doesn't returns anything.
 
-=head2	get_clip_rect(surface,rect)
+=head2	get_clip_rect
 
  SDL::Video::get_clip_rect( $surface, $rect );
 
@@ -596,7 +598,7 @@ C<SDL::Video::get_clip_rect> doesn't returns anything;
  
  SDL::quit;
 
-=head2	blit_surface(src,src_rect,dest,dest_rect)
+=head2	blit_surface
 
  SDL::Video::blit_surface( $src_surface, $src_rect, $dest_surface, $dest_rect );
 
@@ -609,13 +611,13 @@ The blit function should not be called on a locked surface. I.e. when you use yo
 but this is not the case with C<SDL::Video::blit_surface>. Like most surface manipulation functions in SDL, it should not be used together 
 with OpenGL.
 
-The results of blitting operations vary greatly depending on whether C<SDL_SRCALPHA> is set or not. See C<SDL::Video::set_alpha> for an 
-explanation of how this affects your results. Colorkeying and alpha attributes also interact with surface blitting.
+The results of blitting operations vary greatly depending on whether C<SDL_SRCALPHA> is set or not. See L<SDL::Video::set_alpha|/set_alpha> 
+for an explanation of how this affects your results. Colorkeying and alpha attributes also interact with surface blitting.
 C<SDL::Video::blit_surface> doesn't returns anything.
 
-For an example see L<load_BMP|/load_BMP_filename>.
+For an example see L<SDL::Video::load_BMP|/load_BMP>.
 
-=head2	update_rect(surface,x,y,width,height)
+=head2	update_rect
 
  update_rect( $surface, $left, $top, $width, $height );
 
@@ -623,13 +625,13 @@ Makes sure the given area is updated on the given screen.
 The rectangle must be confined within the screen boundaries because there's no clipping.
 update_rect doesn't returns any value.
 
-B<Note>: This function should not be called while screen is locked by L<SDL::Video::lock_surface|/lock_surface_surface>
+B<Note>: This function should not be called while screen is locked by L<SDL::Video::lock_surface|/lock_surface>
 
 B<Note2>: If C<x>, C<y>, C<width> and C<height> are all equal to 0, C<update_rect> will update the entire screen. 
 
 For an example see L<SYNOPSIS|/SYNOPSIS>
 
-=head2	update_rects(surface,rects) 
+=head2	update_rects
 
  update_rects( $surface, @rects );
 
@@ -637,7 +639,7 @@ Makes sure the given list of rectangles is updated on the given screen.
 The rectangle must be confined within the screen boundaries because there's no clipping.
 C<update_rects> doesn't returns any value.
 
-B<Note>: This function should not be called while screen is locked by L<SDL::Video::lock_surface|/lock_surface_surface>.
+B<Note>: This function should not be called while screen is locked by L<SDL::Video::lock_surface|/lock_surface>.
 
 Example:
 
@@ -672,7 +674,7 @@ Example:
 
  SDL::quit();
 
-=head2	flip(surface)
+=head2	flip
 
  $flip = SDL::Video::flip( $screen_surface );
 
@@ -685,12 +687,13 @@ A software screen surface is also updated automatically when parts of a SDL wind
 restoring from an iconified state. As a result there is no proper double buffer behavior in windowed mode for a software screen, in 
 contrast to a full screen software mode.
 
-The C<SDL_DOUBLEBUF> flag must have been passed to C<SDL::Video::set_video_mode>, when setting the video mode for this function to 
-perform hardware flipping.
+The C<SDL_DOUBLEBUF> flag must have been passed to L<SDL::Video::set_video_mode|/set_video_mode>, when setting the video mode for this function 
+to perform hardware flipping.
 
 C<flip> returns C<0> on success or C<-1> on error.
 
-B<Note>: If you want to swap the buffers of an initialized OpenGL context, use the function C<SDL::Video::GL_swap_buffers> instead. 
+B<Note>: If you want to swap the buffers of an initialized OpenGL context, use the function L<SDL::Video::GL_swap_buffers|/GL_swap_buffers> 
+instead. 
 
 Example:
 
@@ -719,27 +722,27 @@ Example:
 
 =head1 Palette, Color and Pixel Functions
 
-=head2	set_colors(surface,start,colors)
+=head2	set_colors
 
  $set_colors = SDL::Video::set_colors( $surface, $start, $color1, $color2, ... )
 
 Sets a portion of the colormap for the given 8-bit surface. 
 
 When surface is the surface associated with the current display, the display colormap will be updated with the requested colors. 
-If C<SDL_HWPALETTE> was set in C<SDL::Video::set_video_mode> flags, C<SDL::Video::set_colors> will always return 1, and the palette is 
-guaranteed to be set the way you desire, even if the window colormap has to be warped or run under emulation.
+If C<SDL_HWPALETTE> was set in L<SDL::Video::set_video_mode|/set_video_mode> flags, C<SDL::Video::set_colors> will always return 1, and the 
+palette is guaranteed to be set the way you desire, even if the window colormap has to be warped or run under emulation.
 The color components of a L<SDL::Color> structure are 8-bits in size, giving you a total of 2563 = 16777216 colors.
 Palettized (8-bit) screen surfaces with the C<SDL_HWPALETTE> flag have two palettes, a logical palette that is used for mapping blits to/from 
 the surface and a physical palette (that determines how the hardware will map the colors to the display). 
-C<SDL::Video::set_colors> modifies both palettes (if present), and is equivalent to calling C<SDL::Video::set_palette> with the flags set to 
-( C<SDL_LOGPAL | SDL_PHYSPAL> ). 
+C<SDL::Video::set_colors> modifies both palettes (if present), and is equivalent to calling L<SDL::Video::set_palette|/set_palette> with the 
+flags set to ( C<SDL_LOGPAL | SDL_PHYSPAL> ). 
 
 If C<surface> is not a palettized surface, this function does nothing, returning 0. 
 If all of the colors were set as passed to C<SDL::Video::set_colors>, it will return 1.
 If not all the color entries were set exactly as given, it will return 0, and you should look at the surface palette to determine the 
 actual color palette.
 
-=head2	set_palette(surface,flags,start,colors)
+=head2	set_palette
 
  $set_palette = set_palette( $surface, $flags, $start, $color1, $color2, ... );
 
@@ -747,22 +750,22 @@ Sets a portion of the palette for the given 8-bit surface.
 
 Palettized (8-bit) screen surfaces with the C<SDL_HWPALETTE> flag have two palettes, a logical palette that is used for mapping blits to/from 
 the surface and a physical palette (that determines how the hardware will map the colors to the display). 
-Non screen surfaces have a logical palette only. C<SDL::Video::blit> always uses the logical palette when blitting surfaces (if it has to 
+Non screen surfaces have a logical palette only. L<SDL::Video::blit|/blit> always uses the logical palette when blitting surfaces (if it has to 
 convert between surface pixel formats). Because of this, it is often useful to modify only one or the other palette to achieve various 
 special color effects (e.g., screen fading, color flashes, screen dimming).
 
 This function can modify either the logical or physical palette by specifying C<SDL_LOGPAL> or C<SDL_PHYSPAL> the in the flags parameter.
 
 When surface is the surface associated with the current display, the display colormap will be updated with the requested colors.
-If C<SDL_HWPALETTE> was set in C<SDL::Video::set_video_mode> flags, C<SDL::Video::set_palette> will always return 1, and the palette is 
-guaranteed to be set the way you desire, even if the window colormap has to be warped or run under emulation.
+If C<SDL_HWPALETTE> was set in L<SDL::Video::set_video_mode|/set_video_mode> flags, C<SDL::Video::set_palette> will always return 1, and the 
+palette is guaranteed to be set the way you desire, even if the window colormap has to be warped or run under emulation.
 The color components of a C<SDL::Color> structure are 8-bits in size, giving you a total of 2563 = 16777216 colors. 
 
 If C<surface> is not a palettized surface, this function does nothing, returning C<0>. If all of the colors were set as passed to C<set_palette>,
 it will return C<1>. If not all the color entries were set exactly as given, it will return C<0>, and you should look at the surface palette 
 to determine the actual color palette.
 
-=head2	set_gamma(r,g,b)
+=head2	set_gamma
 
  $set_gamma = SDL::Video::set_gamma( $red_gamma, $green_gamma, $blue_gamma );
 
@@ -824,7 +827,7 @@ Example:
  
  SDL::quit();
 
-=head2	get_gamma_ramp(rt,gt,bt)
+=head2	get_gamma_ramp
 
  $get_gamma_ramp = SDL::Video::get_gamma_ramp( \@red_table, \@green_table, \@blue_table );
 
@@ -853,7 +856,7 @@ C<SDL::Video::get_gamma_ramp> returns -1 on error.
  
  SDL::quit();
 
-=head2	set_gamma_ramp(rt,gt,bt)
+=head2	set_gamma_ramp
 
  $set_gamma_ramp = SDL::Video::set_gamma_ramp( \@red_table, \@green_table, \@blue_table );
 
@@ -863,7 +866,7 @@ The input is the index into the array, and the output is the 16-bit gamma value 
 You may pass NULL to any of the channels to leave them unchanged.
 
 This function adjusts the gamma based on lookup tables, you can also have the gamma calculated based on a "gamma function" parameter 
-with C<SDL::Video::set_gamma>.
+with L<SDL::Video::set_gamma|/set_gamma>.
 
 Not all display hardware is able to change gamma. 
 C<SDL::Video::set_gamma_ramp> returns C<-1> on error (or if gamma adjustment is not supported).
@@ -898,7 +901,7 @@ Example:
  
  SDL::quit();
 
-=head2	map_RGB(pixel_format,r,g,b)
+=head2	map_RGB
 
  $pixel = SDL::Video::map_RGB( $pixel_format, $r, $g, $b );
 
@@ -938,7 +941,7 @@ If the L<SDL::PixelFormat>'s  bpp (color depth) is less than 32-bpp then the unu
  
  SDL::quit();
 
-=head2	map_RGBA(pixel_format,r,g,b,a)
+=head2	map_RGBA
 
  $pixel = SDL::Video::map_RGB( $pixel_format, $r, $g, $b, $a );
 
@@ -950,7 +953,7 @@ A pixel value best approximating the given RGBA color value for a given pixel fo
 If the pixel format bpp (color depth) is less than 32-bpp then the unused upper bits of the return value can safely be ignored (e.g., 
 with a 16-bpp format the return value can be assigned to a Uint16, and similarly a Uint8 for an 8-bpp format).
 
-=head2	get_RGB(pixel_format,pixel)
+=head2	get_RGB
 
  $rgb_array_ref = SDL::Video::get_RGB( $pixel_format, $pixel );
 
@@ -958,9 +961,9 @@ Returns RGB values from a pixel in the specified pixel format. The pixel is an i
 This function uses the entire 8-bit [0..255] range when converting color components from pixel formats with less than 8-bits per RGB 
 component (e.g., a completely white pixel in 16-bit RGB565 format would return [0xff, 0xff, 0xff] not [0xf8, 0xfc, 0xf8]).
 
-For an example see C<SDL::Video::map_RGB>.
+For an example see L<SDL::Video::map_RGB|/map_RGB>.
 
-=head2	get_RGBA(pixel_format,pixel)
+=head2	get_RGBA
 
  $rgba_array_ref = SDL::Video::get_RGBA( $pixel_format, $pixel );
 
@@ -972,23 +975,24 @@ If the surface has no alpha component, the alpha will be returned as 0xff (100% 
 
 =head1 GL Methods
 
-=head2	GL_load_library(path)
+=head2	GL_load_library
 
  $gl_load_lib = SDL::Video::GL_load_library( 'path/to/static/glfunctions.dll' );
 
-If you wish, you may load the OpenGL library from the given path at runtime, this must be done before C<SDL::Video::set_video_mode> is called.
-You must then use C<SDL::Video::GL_get_proc_address> to retrieve function pointers to GL functions. 
+If you wish, you may load the OpenGL library from the given path at runtime, this must be done before 
+L<SDL::Video::set_video_mode|/set_video_mode> is called. You must then use L<SDL::Video::GL_get_proc_address|/GL_get_proc_address> to retrieve 
+function pointers to GL functions. 
 
 C<GL_load_library> returns C<0> on success or C<-1> or error.
 
-=head2	GL_get_proc_address(proc)
+=head2	GL_get_proc_address
 
- 
+ $proc_address = SDL::Video::GL_get_proc_address( $proc );
 
 Returns the address of the GL function proc, or NULL if the function is not found. If the GL library is loaded at runtime, with 
-C<SDL::Video::GL_load_library>, then all GL functions must be retrieved this way. Usually this is used to retrieve function pointers to OpenGL 
-extensions. Note that this function needs an OpenGL context to function properly, so it should be called after C<SDL::Video::set_video_mode>
-has been called (with the C<SDL_OPENGL> flag).
+L<SDL::Video::GL_load_library|/GL_load_library>, then all GL functions must be retrieved this way. Usually this is used to retrieve function 
+pointers to OpenGL extensions. Note that this function needs an OpenGL context to function properly, so it should be called after 
+L<SDL::Video::set_video_mode|/set_video_mode> has been called (with the C<SDL_OPENGL> flag).
 
 It returns undef if the function is not found.
 
@@ -1008,26 +1012,26 @@ Example:
 
  $gl_active_texture_ARB_ptr(GL_TEXTURE0_ARB) if $has_multitexture;
 
-=head2	GL_get_attribute(attr)
+=head2	GL_get_attribute
 
  $value = SDL::Video::GL_get_attribute( $attr );
 
-It returns SDL/OpenGL attribute C<attr>. This is useful after a call to C<SDL::Video::set_video_mode> to check whether your attributes have 
-been set as you expected. 
-C<SDL::Video::GL_get_attribute> returns undef if the attribute is not found.
+It returns SDL/OpenGL attribute C<attr>. This is useful after a call to L<SDL::Video::set_video_mode|/set_video_mode> to check whether your 
+attributes have been set as you expected. 
+C<SDL::Video::GL_get_attribute> returns C<undef> if the attribute is not found.
 
 Example:
 
  print( SDL::Video::GL_set_attribute(SDL_GL_RED_SIZE) );
 
-=head2	GL_set_attribute(attr,value)
+=head2	GL_set_attribute
 
  $set_attr = SDL::Video::GL_set_attribute( $attr, $value );
 
 This function sets the given OpenGL attribute C<attr> to C<value>. The requested attributes will take effect after a call to 
-C<SDL::Video::set_video_mode>.
-You should use C<GL_get_attribute> to check the values after a C<set_video_mode> call, since the values obtained can differ from the 
-requested ones.
+L<SDL::Video::set_video_mode|/set_video_mode>.
+You should use C<SDL::Video::GL_get_attribute|/GL_get_attribute> to check the values after a L<SDL::Video::set_video_mode|/set_video_mode> call, 
+since the values obtained can differ from the requested ones.
 
 Available attributes:
 
@@ -1123,25 +1127,25 @@ C<SDL::Video::GL_swap_buffers> doesn't returns any value.
 
 see L<SDL::Overlay> 
 
-=head2	lock_YUV_overlay(overlay)
+=head2	lock_YUV_overlay
 
  $lock_overlay = SDL::Video::lock_YUV_overlay( $overlay );
 
-Much the same as C<SDL::Video::lock_surface>, C<lock_YUV_overlay> locks the overlay for direct access to pixel data.
+Much the same as L<SDL::Video::lock_surface|/lock_surface>, C<lock_YUV_overlay> locks the overlay for direct access to pixel data.
 It returns C<0> on success or C<-1> on error.
 
-=head2	unlock_YUV_overlay(overlay)
+=head2	unlock_YUV_overlay
 
  SDL::Video::unlock_YUV_overlay( $overlay );
 
-The opposite to C<SDL::Video::lock_YUV_overlay>. Unlocks a previously locked overlay. An overlay must be unlocked before it can be displayed. 
-C<unlock_YUV_overlay> does not return anything.
+The opposite to L<SDL::Video::lock_YUV_overlay|/sock_YUV_overlay>. Unlocks a previously locked overlay. An overlay must be unlocked before it 
+can be displayed. C<unlock_YUV_overlay> does not return anything.
 
-=head2	display_YUV_overlay(overlay,dstrect)
+=head2	display_YUV_overlay
 
  $display_overlay = SDL::Video::display_YUV_overlay( $overlay, $dstrect );
 
-Blit the overlay to the display surface specified when the overlay was created. The C<SDL::Rect> structure, C<dstrect>, specifies a rectangle 
+Blit the overlay to the display surface specified when the overlay was created. The L<SDL::Rect> structure, C<dstrect>, specifies a rectangle 
 on the display where the overlay is drawn. The C<x> and C<y> fields of C<dstrect> specify the upper left location in display coordinates. 
 The overlay is scaled (independently in x and y dimensions) to the size specified by dstrect, and is C<optimized> for 2x scaling
 
@@ -1149,7 +1153,7 @@ It returns C<0> on success or C<-1> on error.
 
 =head1 Window Management Functions
 
-=head2	wm_set_caption(title,icon)
+=head2	wm_set_caption
 
  SDL::Video::wm_set_caption( $title, $icon );
 
@@ -1177,7 +1181,7 @@ Example:
  
  SDL::quit;
 
-=head2	wm_get_caption()
+=head2	wm_get_caption
 
  SDL::Video::wm_get_caption( $title, $icon );
 
@@ -1201,13 +1205,14 @@ Example:
  
  SDL::quit;
 
-=head2	wm_set_icon(icon)
+=head2	wm_set_icon
 
  SDL::Video::wm_set_icon( $icon );
 
 Sets the icon for the display window. Win32 icons must be 32x32.
 
-This function must be called before the first call to C<SDL::Video::set_video_mode>. Note that this means C<SDL::Image> cannot be used.
+This function must be called before the first call to L<SDL::Video::set_video_mode|/set_video_mode>. Note that this means L<SDL::Image> 
+cannot be used.
 
 The shape is determined by the colorkey or alpha channel of the icon, if any. If neither of those are present, the icon is made opaque 
 (no transparency).
@@ -1228,7 +1233,7 @@ Example:
 
  SDL::Video::wm_set_icon($image);
 
-=head2	wm_grab_input(mode)
+=head2	wm_grab_input
 
  $grab_mode = SDL::Video::wm_grab_input($mode);
 
@@ -1255,7 +1260,7 @@ C<SDL_GRAB_ON>
 
 =back
 
-=head2	wm_iconify_window()
+=head2	wm_iconify_window
 
  $iconify_window = SDL::Video::wm_iconify_window();
 
@@ -1282,7 +1287,7 @@ Example:
  
  SDL::quit;
 
-=head2	wm_toggle_fullscreen(surface)
+=head2	wm_toggle_fullscreen
 
  $toggle = SDL::Video::wm_toggle_fullscreen( $surface );
 
