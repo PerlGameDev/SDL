@@ -7,7 +7,9 @@
 #endif
 
 #include <SDL.h>
+#ifdef HAVE_SDL_GFX
 #include <SDL_rotozoom.h>
+#endif 
 
 MODULE = SDL::GFX::Rotozoom 	PACKAGE = SDL::GFX::Rotozoom    PREFIX = gfx_roto_
 

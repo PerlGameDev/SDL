@@ -7,7 +7,10 @@
 #endif
 
 #include <SDL.h>
+
+#ifdef HAVE_SDL_GFX
 #include <SDL_gfxBlitFunc.h>
+#endif
 
 MODULE = SDL::GFX::BlitFunc 	PACKAGE = SDL::GFX::BlitFunc    PREFIX = gfx_blit_
 

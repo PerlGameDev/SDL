@@ -7,7 +7,10 @@
 #endif
 
 #include <SDL.h>
+
+#ifdef HAVE_SDL_GFX
 #include <SDL_imageFilter.h>
+#endif 
 
 MODULE = SDL::GFX::ImageFilter 	PACKAGE = SDL::GFX::ImageFilter    PREFIX = gfx_image_
 

@@ -7,7 +7,10 @@
 #endif
 
 #include <SDL.h>
+
+#ifdef HAVE_SDL_GFX
 #include <SDL_framerate.h>
+#endif
 
 MODULE = SDL::GFX::Framerate 	PACKAGE = SDL::GFX::Framerate    PREFIX = gfx_frame_
 

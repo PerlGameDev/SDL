@@ -7,7 +7,9 @@
 #endif
 
 #include <SDL.h>
+#ifdef HAVE_SDL_GFX
 #include <SDL_gfxPrimitives.h>
+#endif
 
 MODULE = SDL::GFX::Primitives 	PACKAGE = SDL::GFX::Primitives    PREFIX = gfx_prim_
 
