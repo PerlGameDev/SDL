@@ -63,6 +63,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	ImageFilter => {
+		file      => {
+			from  => 'src/GFX/ImageFilter.xs',
+			to    => 'lib/SDL/GFX/ImageFilter.xs',
+		},
+		libraries => [qw( SDL SDL_gfx )],
+	},
 	Primitives => {
 		file      => {
 			from  => 'src/GFX/Primitives.xs',
