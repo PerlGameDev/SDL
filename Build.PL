@@ -256,7 +256,7 @@ my %subsystems =
 	},	
 	Image => {
 		file	=> {
-			from => 'src/Image/Image.xs',
+			from => 'src/Image.xs',
 			to   =>	'lib/SDL/Image.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
