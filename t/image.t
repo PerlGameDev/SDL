@@ -4,6 +4,8 @@ use SDL;
 use SDL::Config;
 use SDL::Version;
 use SDL::Image;
+use SDL::RWOps;
+
 use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
@@ -29,6 +31,12 @@ isa_ok($lver, "SDL::Version", '[linked_version] got version back!' );
 
 diag ( 'Found version ('.$lver->major.'.'.$lver->minor.'.'.$lver->patch.')');
 
+isa_ok( SDL::Image::load("test/data/highlight.png"), "SDL::Surface", "[load] Gets Surface"); 
+
+my $file = SDL::RWOps->new_file("test/data/logo.png", "rb");
+
+isa_ok (SDL::Image::load_rw($file, 1), "SDL::Surface", "[load_rw] Gets surface");
+
 #need to get DEFINES to SDL::Image::Constants;
 #IMG_INIT_JPG =?o
 # IMG_INIT_JPG = 0x00000001,
@@ -45,11 +53,9 @@ SKIP:
 
 
 my @left = qw/
-load
 get_error
 set_error
 is_RW
-load_RW
 /;
 my $why
     = '[Percentage Completion] '

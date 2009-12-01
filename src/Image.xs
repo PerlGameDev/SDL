@@ -49,4 +49,17 @@ image_load ( filename )
 	OUTPUT:
 		RETVAL
 
+SDL_Surface *
+image_load_rw ( rw_file, src )
+	SDL_RWops *rw_file
+	int src
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = IMG_Load_RW(rw_file, src);
+	OUTPUT:
+		RETVAL  
+
+
+
 #endif
