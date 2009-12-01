@@ -26,6 +26,8 @@ image_linked_version()
 	OUTPUT:
 		RETVAL
 
+#if (SDL_IMAGE_MAJOR_VERSION >= 1) && (SDL_IMAGE_MINOR_VERSION >= 2) && (SDL_IMAGE_PATCHLEVEL >= 10)
+
 int
 image_init(flags)
 	int flags
@@ -38,7 +40,8 @@ void
 image_quit()
 	CODE:
 		IMG_Quit();
-		
+
+#endif
 
 SDL_Surface *
 image_load ( filename )
