@@ -33,6 +33,7 @@ SDL::Mixer::MixMusic
 SDL::Version
 
 SDL::GFX::Primitives
+SDL::GFX::ImageFilter
 SDL::Image
 /;
     plan tests => scalar @modules;
