@@ -44,6 +44,7 @@ SDL_Palette *		O_OBJECT
 SDL_PixelFormat *	O_OBJECT
 SDL_VideoInfo *		O_OBJECT
 SDL_version *		O_OBJECT
+const SDL_version *		O_OBJECT
 SDL_SysWMInfo *		O_OBJECT
 SDL_Cursor *		O_OBJECT	
 SDL_AudioSpec *		O_OBJECT
