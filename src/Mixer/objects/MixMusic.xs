@@ -7,7 +7,10 @@
 #endif
 
 #include <SDL.h>
+
+#ifdef HAVE_SDL_MIXER
 #include <SDL_mixer.h>
+#endif
 
 MODULE = SDL::Mixer::MixMusic 	PACKAGE = SDL::Mixer::MixMusic    PREFIX = mixmusic_
 
@@ -19,8 +22,12 @@ SDL_mixmusic - This is an opaque data type used for Music data
 
 =cut
 
+#ifdef HAVE_SDL_MIXER
+
 void
 mixmusic_DESTROY(mixmusic)
 	Mix_Music *mixmusic
 	CODE:
 		Mix_FreeMusic(mixmusic);
+
+#endif

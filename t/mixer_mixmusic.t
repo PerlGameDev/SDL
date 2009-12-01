@@ -1,16 +1,24 @@
 #!perl
 use strict;
 use warnings;
-use lib 't/lib';
 use SDL;
+use SDL::Config;
 use SDL::Mixer::MixMusic;
-use SDL::TestTool;
 use Test::More;
-use IO::CaptureOutput qw(capture);
+
+use lib 't/lib';
+
+use SDL::TestTool;
 
 if (! SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
-} else {
+}
+elsif( !SDL::Config->has('SDL_mixer') )
+{
+    plan( skip_all => 'SDL_mixer support not compiled' );
+}
+else
+{
     plan( tests => 3 );
 }
 

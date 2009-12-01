@@ -8,9 +8,16 @@ use SDL::TestTool;
 
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
-} else {
+}
+elsif( !SDL::Config->has('SDL_mixer') )
+{
+    plan( skip_all => 'SDL_mixer support not compiled' );
+}
+else
+{
     plan( tests => 3 );
 }
+
 
 
 
