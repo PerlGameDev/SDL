@@ -17,6 +17,29 @@ MODULE = SDL::Image 	PACKAGE = SDL::Image    PREFIX = image_
 
 #ifdef HAVE_SDL_IMAGE
 
+SDL_version*
+image_linked_version()
+	PREINIT:
+		char* CLASS = "SDL::Version";
+	CODE:
+		RETVAL = IMG_Linked_Version(); 
+	OUTPUT:
+		RETVAL
+
+int
+image_init(flags)
+	int flags
+	CODE:
+		RETVAL = IMG_Init(flags);
+	OUTPUT:
+		RETVAL 
+
+void
+image_quit()
+	CODE:
+		IMG_Quit();
+		
+
 SDL_Surface *
 image_load ( filename )
 	char *filename
@@ -27,6 +50,3 @@ image_load ( filename )
 		RETVAL
 
 #endif
-
-
-
