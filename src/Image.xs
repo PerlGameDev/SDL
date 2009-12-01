@@ -26,6 +26,20 @@ image_linked_version()
 	OUTPUT:
 		RETVAL
 
+int
+image_init(flags)
+	int flags
+	CODE:
+		RETVAL = IMG_Init(flags);
+	OUTPUT:
+		RETVAL 
+
+void
+image_quit()
+	CODE:
+		IMG_Quit();
+		
+
 SDL_Surface *
 image_load ( filename )
 	char *filename
