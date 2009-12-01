@@ -63,6 +63,20 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	BlitFunc => {
+		file      => {
+			from  => 'src/GFX/BlitFunc.xs',
+			to    => 'lib/SDL/GFX/BlitFunc.xs',
+		},
+		libraries => [qw( SDL SDL_gfx )],
+	},
+	Framerate => {
+		file      => {
+			from  => 'src/GFX/Framerate.xs',
+			to    => 'lib/SDL/GFX/Framerate.xs',
+		},
+		libraries => [qw( SDL SDL_gfx )],
+	},
 	ImageFilter => {
 		file      => {
 			from  => 'src/GFX/ImageFilter.xs',
@@ -74,6 +88,13 @@ my %subsystems =
 		file      => {
 			from  => 'src/GFX/Primitives.xs',
 			to    => 'lib/SDL/GFX/Primitives.xs',
+		},
+		libraries => [qw( SDL SDL_gfx )],
+	},
+	Rotozoom => {
+		file      => {
+			from  => 'src/GFX/Rotozoom.xs',
+			to    => 'lib/SDL/GFX/Rotozoom.xs',
 		},
 		libraries => [qw( SDL SDL_gfx )],
 	},

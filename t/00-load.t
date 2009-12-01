@@ -32,8 +32,11 @@ SDL::Mixer::MixChunk
 SDL::Mixer::MixMusic
 SDL::Version
 
-SDL::GFX::Primitives
+SDL::GFX::BlitFunc
+SDL::GFX::Framerate
 SDL::GFX::ImageFilter
+SDL::GFX::Primitives
+SDL::GFX::Rotozoom
 SDL::Image
 /;
     plan tests => scalar @modules;
