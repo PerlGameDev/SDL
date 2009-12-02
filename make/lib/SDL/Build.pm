@@ -85,10 +85,10 @@ sub find_subsystems
 			my $lib = $libraries->{$library}
 				or croak "Unknown library '$library' for '$name'\n";
 
-			my ($inc_dir, $link_dir)   =
-				$self->find_header( $lib->{header}, \%includes_libs );
-			$enabled{$name}{ $library } = $inc_dir ? [ $inc_dir, $link_dir ]
-				: 0;
+			my ($inc_dir, $link_dir)    = $self->find_header( $lib->{header}, \%includes_libs );
+			$enabled{$name}{ $library } = $inc_dir
+			                            ? [ $inc_dir, $link_dir ]
+				                        : 0;
 		}
 	}
 
@@ -167,6 +167,19 @@ sub set_flags
 		my $sub_file     = $subsystems->{$subsystem}{file}{to};
 		my $sub_includes = join(' ', @{ $includes->{$subsystem} } );
 		
+		my $fake_lib = 'SDL_gfx_blit'; # should be a list
+		
+		my $lib_count = 0;
+		foreach my $lib ( @{ $links->{$subsystem}{libs} } )
+		{
+			if($lib eq "-l$fake_lib")
+			{
+				@{ $links->{$subsystem}{libs} }[$lib_count] = '';
+				@{ $defines->{$subsystem} }[$lib_count]     = '' unless $buildable->{$fake_lib};
+			}
+			$lib_count++;
+		}
+
 		$file_flags{ $sub_file } = 
 		{
 			extra_compiler_flags =>
