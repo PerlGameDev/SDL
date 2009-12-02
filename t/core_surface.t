@@ -103,5 +103,5 @@ isa_ok( $other_surface, 'SDL::Surface' );
 pass 'Final SegFault test';
 
 SDL::delay(100);
-
+sleep(2);
 

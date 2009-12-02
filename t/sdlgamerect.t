@@ -144,3 +144,4 @@ is($rect->left, 200, 'midleft() does nothing for X when passed undef');
 $rect->midleft(154, 10);
 is($rect->centery, 154, 'midleft() can be used as an acessor for y');
 is($rect->left, 10, 'midleft() can be used as an acessor for x');
+sleep(2);

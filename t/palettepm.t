@@ -51,3 +51,4 @@ can_ok ('SDL::Game::Palette', qw/
 	blue 
 	color /);
 
+sleep(2);

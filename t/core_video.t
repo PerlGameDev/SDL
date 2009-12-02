@@ -272,3 +272,4 @@ TODO:
 pass 'Are we still alive? Checking for segfaults';
 
 done_testing();
+sleep(2);

@@ -49,3 +49,4 @@ can_ok ('SDL::Sound', qw/
 	volume
 	/);
 
+sleep(2);

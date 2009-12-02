@@ -62,4 +62,5 @@ my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init 
 
 	 $app->sync;
 	  sleep(1);
+	  sleep(2);
 

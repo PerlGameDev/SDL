@@ -20,4 +20,4 @@ is( $rect->x(), 1, 'x is now 1' );
 is( $rect->y(), 2, 'y is now 2' );
 is( $rect->w(), 3, 'w is now 3' );
 is( $rect->h(), 4, 'h is now 4' );
-
+sleep(2);

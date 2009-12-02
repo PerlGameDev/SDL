@@ -71,4 +71,4 @@ can_ok ('SDL::Game::Event', qw/
 	button_y /);
 
 
-
+sleep(2);

@@ -31,3 +31,5 @@ is( $orange->b(), 0,   'orange_notcloned b is 0' );
 is( $white->r(), 254, 'white (now orange) r is 254' );
 is( $white->g(), 153, 'white (now orange) g is 154' );
 is( $white->b(), 0,   'white (now orange) b is 0' );
+
+sleep(2);

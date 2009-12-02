@@ -49,3 +49,4 @@ can_ok ('SDL::Music', qw/
 	/);
 
 
+sleep(2);

@@ -58,4 +58,4 @@ can_ok ('SDL::Mixer', qw/
 # these are exported by default, so main:: should know them:
 my $mixer = SDL::Mixer->new();
 isa_ok($mixer, 'SDL::Mixer', 'Checking if mixer can be build');
-
+sleep(2);

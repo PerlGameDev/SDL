@@ -70,3 +70,4 @@ can_ok ('SDL::TTFont', qw/
 	unicode_shaded 
 	unicode_solid 
 	unicode_blended /);
+sleep(2);

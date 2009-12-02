@@ -32,3 +32,4 @@ TODO:
 }
 
 done_testing;
+sleep(2);

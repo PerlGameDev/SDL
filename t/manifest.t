@@ -31,3 +31,4 @@ foreach my $MODULE ( @MODULES ) {
 }
 
 manifest_ok();
+sleep(2);

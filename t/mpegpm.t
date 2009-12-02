@@ -63,4 +63,4 @@ can_ok ('SDL::MPEG', qw/
 	time 
 	length /);
 
-
+sleep(2);

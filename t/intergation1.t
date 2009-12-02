@@ -84,4 +84,4 @@ can_ok ('SDL::App', qw/
 	}
 
 	  SDL::delay(100);
-
+sleep(2);

@@ -33,3 +33,4 @@ SDL::MixPlayChannel( -1, $mix_chunk, 0 );
 SDL::MixCloseAudio;
 
 ok( 1, 'Got to the end' );
+sleep(2);

@@ -91,3 +91,5 @@ can_ok('main',qw/
 	gluNurbsProperty
 	gluNurbsSurface
 	gluPwlCurve /);
+
+sleep(2);

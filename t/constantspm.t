@@ -859,3 +859,4 @@ is( SDL_SVG_FLAG_COMPOSITE, 1, 'SDL_SVG_FLAG_COMPOSITE should be imported' );
 is( SDL_SVG_FLAG_COMPOSITE(), 1, 'SDL_SVG_FLAG_COMPOSITE() should also be available' );
 
 done_testing();
+sleep(2);

@@ -74,3 +74,4 @@ isa_ok($timer, 'SDL::Timer');
 
 SDL::delay(100);
 is ($fired, 1,'timer fired once');
+sleep(2);

@@ -17,3 +17,4 @@ is( SDL::get_error, 'Hello SDL! Three is 3.', '[get_error] returns Hello SDL! Th
 
 SDL::clear_error();
 is( SDL::get_error, '', '[get_error] returns no error' );
+sleep(2);

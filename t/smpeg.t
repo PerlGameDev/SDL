@@ -41,3 +41,4 @@ can_ok ('SDL::SMPEG', qw/
 	status /);
 
 
+sleep(2);

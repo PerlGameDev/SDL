@@ -35,4 +35,5 @@ SDL::Version
     plan tests => scalar @modules;
 
     use_ok $_ foreach @modules;
+    
  }

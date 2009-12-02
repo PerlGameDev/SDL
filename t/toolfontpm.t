@@ -80,3 +80,4 @@ my $font = new SDL::Tool::Font
 #ok( defined($$bref[0]), "Test for width SDL::TTFSizeUTF8." );
 #ok( defined($$bref[1]), "Test for height SDL::TTFSizeUTF8." );
 
+sleep(2);

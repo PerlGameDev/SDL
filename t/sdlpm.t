@@ -54,3 +54,4 @@ is (SDL::in('foo','fab','bar'), 0, "foo isn't in ('fab','bar')");
 is (SDL::in('foo','fab',undef,'bar'), 0, "foo isn't in ('fab',undef,'bar')");
 is (SDL::in('foo','fab',undef,'foo'), 1, "foo is in ('fab',undef,'foo')");
 
+sleep(2);

@@ -59,3 +59,4 @@ TODO:
 
 
 pass 'Are we still alive? Checking for segfaults';
+sleep(2);

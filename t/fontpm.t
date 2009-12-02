@@ -50,4 +50,4 @@ use_ok( 'SDL::Font' );
   
 can_ok ('SDL::Font', qw/ new use /);
 
-
+sleep(2);

@@ -55,3 +55,4 @@ can_ok ('SDL::Tool::Graphic', qw/
 my $gtool = SDL::Tool::Graphic->new();
 isa_ok ($gtool, 'SDL::Tool::Graphic');
 
+sleep(2);

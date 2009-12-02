@@ -30,3 +30,4 @@ can_ok($rect, qw(new foo));
 $rect->x(10);
 is($rect->x, 10);
 is($rect->foo, 10);
+sleep(2);

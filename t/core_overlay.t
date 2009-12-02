@@ -18,7 +18,7 @@ isa_ok( $overlay, 'SDL::Overlay');
 $overlay = undef;
 
 $display = undef;
-
+sleep(2)
 
 
 
