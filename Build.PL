@@ -310,6 +310,10 @@ my %libraries = (
 		define => 'HAVE_SDL_GFX',     
 		header => 'SDL_gfxPrimitives.h'
 	},
+	SDL_gfx_blit     => {
+		define => 'HAVE_SDL_GFX_BLIT',     
+		header => 'SDL_gfxBlitFunc.h'
+	},
 	png         => {
 		define    => 'HAVE_PNG',
 		header    => 'png.h',
