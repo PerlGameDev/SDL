@@ -90,9 +90,6 @@ SKIP:
 	}
 
 	  SDL::delay(100);
-<<<<<<< HEAD:t/intergation1.t
-sleep(2);
-=======
 	  pass 'Ran';
   }
->>>>>>> 15168dc4b6472787c29cc88fde898cca3b36395a:t/intergation1.t
+
