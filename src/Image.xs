@@ -63,6 +63,139 @@ image_load_rw ( rw_file, src )
 	OUTPUT:
 		RETVAL  
 
+SDL_Surface * 
+image_loadtyped_rw(src, freesrc, type)
+	SDL_RWops* src
+	int freesrc
+	char* type
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = IMG_LoadTyped_RW(src, freesrc, type);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadBMP_rw(src)
+	SDL_RWops* src
+ 	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadBMP_RW(src);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadGIF_rw(src)
+	SDL_RWops* src
+ 	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadGIF_RW(src);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadJPG_rw(src)
+	SDL_RWops* src
+ 	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadJPG_RW(src);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadLBM_rw(src)
+	SDL_RWops* src
+ 	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadLBM_RW(src);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadPCX_rw(src)
+	SDL_RWops* src
+ 	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadPCX_RW(src);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadPNG_rw(src)
+	SDL_RWops* src
+ 	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadPNG_RW(src);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadPNM_rw(src)
+	SDL_RWops* src
+ 	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadPNM_RW(src);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadTGA_rw(src)
+	SDL_RWops* src
+ 	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadTGA_RW(src);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadTIF_rw(src)
+	SDL_RWops* src
+ 	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadTIF_RW(src);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadXCF_rw(src)
+	SDL_RWops* src
+	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface"; 
+ 	CODE:
+		RETVAL = IMG_LoadXCF_RW(src);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadXPM_rw(src)
+	SDL_RWops* src
+	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface"; 
+ 	CODE:
+		RETVAL = IMG_LoadXPM_RW(src);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+image_loadXV_rw(src)
+	SDL_RWops* src
+	PREINIT:
+	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadXV_RW(src);
+	OUTPUT:
+		RETVAL
+
+
 
 
 #endif
