@@ -140,6 +140,9 @@ sub build_links
 	my ($self, $libraries, $build_systems) = @_;
 
 	my %links;
+	my %replace = (
+		'SDL_gfx_blit' => 'SDL_gfx',
+    );
 
 	while (my ($subsystem, $buildable) = each %$build_systems)
 	{
@@ -147,12 +150,12 @@ sub build_links
 		for my $build (grep { $buildable->{ $_ } } keys %$buildable)
 		{
 			$sub_links{ $buildable->{ $build }[1] }++;
-			push @{ $links{ $subsystem }{libs} }, "-l$build";
+			my $newbuild = $replace{$build} || $build;
+			push @{ $links{ $subsystem }{libs} }, "-l$newbuild";
 		}
 
 		$links{ $subsystem }{paths} = [ map { "-L$_" } keys %sub_links ];
 	}
-
 	return \%links;
 }
 
@@ -166,21 +169,6 @@ sub set_flags
 	{
 		my $sub_file     = $subsystems->{$subsystem}{file}{to};
 
-=for later
-			my $fake_lib = 'SDL_gfx_blit'; # should be a list
-		
-
-		my $lib_count = 0;
-		foreach my $lib ( @{ $links->{$subsystem}{libs} } )
-		{
-			if($lib eq "-l$fake_lib")
-			{
-				@{ $links->{$subsystem}{libs} }[$lib_count] = '';
-				@{ $defines->{$subsystem} }[$lib_count]     = '' unless $buildable->{$fake_lib};
-			}
-			$lib_count++;
-		}
-=cut
 		$file_flags{ $sub_file } = 
 		{
 			extra_compiler_flags =>

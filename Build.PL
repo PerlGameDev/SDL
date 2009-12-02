@@ -355,10 +355,10 @@ my $includes      = $arch->build_includes( \%libraries, $build_systems );
 
 
 #SUPER TODO: Make this work in make/lib/SDL/Build.PL 
-my $Blit =    $build_systems->{BlitFunc};
-   $Blit->{SDL_gfx} = $Blit->{SDL_gfx_blit};
-   delete $Blit->{SDL_gfx_blit};
-   $build_systems->{BlitFunc} = $Blit;
+#my $Blit =    $build_systems->{BlitFunc};
+#   $Blit->{SDL_gfx} = $Blit->{SDL_gfx_blit};
+#   delete $Blit->{SDL_gfx_blit};
+#   $build_systems->{BlitFunc} = $Blit;
 # should be $build_systems->{BlitFunc}->{SDL_gfx}
 
 
