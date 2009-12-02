@@ -68,7 +68,7 @@ my %subsystems =
 			from  => 'src/GFX/BlitFunc.xs',
 			to    => 'lib/SDL/GFX/BlitFunc.xs',
 		},
-		libraries => [qw( SDL SDL_gfx SDL_gfx_blit )],
+		libraries => [qw( SDL SDL_gfx_blit )],
 	},
 	Framerate => {
 		file      => {
