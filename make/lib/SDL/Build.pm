@@ -166,6 +166,7 @@ sub set_flags
 	{
 		my $sub_file     = $subsystems->{$subsystem}{file}{to};
 		my $sub_includes = join(' ', @{ $includes->{$subsystem} } );
+		
 		$file_flags{ $sub_file } = 
 		{
 			extra_compiler_flags =>
