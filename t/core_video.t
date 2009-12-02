@@ -139,6 +139,8 @@ $value = SDL::Video::set_palette($display, SDL_LOGPAL|SDL_PHYSPAL, 0);
 
 is(  $value , 0,  '[set_palette] returns 0 trying to write to 32 bit surface'  );
 
+SDL::delay(100);
+
 my $zero = [0,0,0,0]; 
 SDL::Video::set_gamma_ramp($zero, $zero, $zero);  pass '[set_gamma_ramp] ran';
 
