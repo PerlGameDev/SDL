@@ -352,17 +352,6 @@ $arch->write_sdl_config( $build_systems );
 # and fetch all of the information needed to compile
 my $defines       = $arch->build_defines( \%libraries, $build_systems );
 my $includes      = $arch->build_includes( \%libraries, $build_systems );
-
-
-#SUPER TODO: Make this work in make/lib/SDL/Build.PL 
-#my $Blit =    $build_systems->{BlitFunc};
-#   $Blit->{SDL_gfx} = $Blit->{SDL_gfx_blit};
-#   delete $Blit->{SDL_gfx_blit};
-#   $build_systems->{BlitFunc} = $Blit;
-# should be $build_systems->{BlitFunc}->{SDL_gfx}
-
-
-
 my $links         = $arch->build_links( \%libraries, $build_systems );
 
 # mangle the compilable files into a format Module::Build can understand
