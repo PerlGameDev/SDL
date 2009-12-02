@@ -343,6 +343,10 @@ my $arch          = SDL::Build->get_arch( $^O );
 
 # see which subsystems can be built -- do we have headers for them?
 my $build_systems = $arch->find_subsystems( \%subsystems, \%libraries );
+# This is called in make/lib/SDL/Build.pm as it is the base of arch
+
+# >>>>>> print Dump $build_systems->{BlitFunc}->{SDL_gfx_blit};
+# should be $build_systems->{BlitFunc}->{SDL_gfx}
 
 # now write SDL::Config
 $arch->write_sdl_config( $build_systems );
