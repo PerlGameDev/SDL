@@ -1,6 +1,8 @@
+=pod
+
 =head1 NAME
 
-SDL_perl - Simple DirectMedia Layer for Perl
+SDL - Simple DirectMedia Layer for Perl
 
 =head2 CATEGORY
 

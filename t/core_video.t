@@ -7,8 +7,18 @@ use SDL::Config;
 use SDL::Overlay;
 use Test::More;
 use SDL::Rect;
-
 use SDL::Video;
+
+use lib 't/lib';
+use SDL::TestTool;
+
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
+	   plan( skip_all => 'Failed to init video' );
+}
+else
+{
+	  plan( tests => 64);
+}
 
 my @done =
 	qw/ 
@@ -62,7 +72,7 @@ my @done =
 can_ok ('SDL::Video', @done); 
 
 #testing get_video_surface
-SDL::init(SDL_INIT_VIDEO);                                                                          
+#SDL::init(SDL_INIT_VIDEO);                                                                          
 
 #needs to be done before set_video_mode
 my $glVal = SDL::Video::GL_load_library('this/should/fail');
@@ -134,7 +144,11 @@ SDL::Video::set_gamma_ramp($zero, $zero, $zero);  pass '[set_gamma_ramp] ran';
 
 my($r, $g, $b) = ([], [], []);
 SDL::Video::get_gamma_ramp($r, $g, $b);
-pass '[get_gamma_ramp] ran';
+pass '[get_gamma_ramp] ran got '. @{$r} ;
+is(@{$r}, 256, '[get_gamma_ramp] got 256 gamma ramp red back');
+is(@{$g}, 256, '[get_gamma_ramp] got 256 gamma ramp green back');
+is(@{$b}, 256, '[get_gamma_ramp] got 256 gamma ramp blue back');
+
 
 SDL::Video::set_gamma( 1.0, 1.0, 1.0 ); pass '[set_gamma] ran ';
 
@@ -271,5 +285,5 @@ TODO:
 
 pass 'Are we still alive? Checking for segfaults';
 
-done_testing();
 sleep(2);
+

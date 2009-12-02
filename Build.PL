@@ -63,6 +63,41 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	BlitFunc => {
+		file      => {
+			from  => 'src/GFX/BlitFunc.xs',
+			to    => 'lib/SDL/GFX/BlitFunc.xs',
+		},
+		libraries => [qw( SDL SDL_gfx_blit )],
+	},
+	Framerate => {
+		file      => {
+			from  => 'src/GFX/Framerate.xs',
+			to    => 'lib/SDL/GFX/Framerate.xs',
+		},
+		libraries => [qw( SDL SDL_gfx )],
+	},
+	ImageFilter => {
+		file      => {
+			from  => 'src/GFX/ImageFilter.xs',
+			to    => 'lib/SDL/GFX/ImageFilter.xs',
+		},
+		libraries => [qw( SDL SDL_gfx )],
+	},
+	Primitives => {
+		file      => {
+			from  => 'src/GFX/Primitives.xs',
+			to    => 'lib/SDL/GFX/Primitives.xs',
+		},
+		libraries => [qw( SDL SDL_gfx )],
+	},
+	Rotozoom => {
+		file      => {
+			from  => 'src/GFX/Rotozoom.xs',
+			to    => 'lib/SDL/GFX/Rotozoom.xs',
+		},
+		libraries => [qw( SDL SDL_gfx )],
+	},
 	MultiThread => {
 		file      => {
 			from  => 'src/Core/MultiThread.xs',
@@ -240,6 +275,14 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_ttf )],
 	},	
+	Image => {
+		file	=> {
+			from => 'src/Image.xs',
+			to   =>	'lib/SDL/Image.xs',
+		},
+		libraries => [qw( SDL SDL_image )],
+	},	
+
 );
 
 my %libraries = (
@@ -266,6 +309,11 @@ my %libraries = (
 	SDL_gfx     => {
 		define => 'HAVE_SDL_GFX',     
 		header => 'SDL_gfxPrimitives.h'
+	},
+	SDL_gfx_blit     => {
+		define => 'HAVE_SDL_GFX_BLIT',     
+		header => 'SDL_gfxBlitFunc.h',
+		library => 'SDL_gfx' 
 	},
 	png         => {
 		define    => 'HAVE_PNG',
@@ -295,6 +343,8 @@ my $arch          = SDL::Build->get_arch( $^O );
 
 # see which subsystems can be built -- do we have headers for them?
 my $build_systems = $arch->find_subsystems( \%subsystems, \%libraries );
+# This is called in make/lib/SDL/Build.pm as it is the base of arch
+
 
 # now write SDL::Config
 $arch->write_sdl_config( $build_systems );
@@ -309,7 +359,7 @@ my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
 	     keys %subsystems;
 my $build   = SDL::Build->new(
 	module_name          => 'SDL',
-	dist_name            => 'SDL_Perl', 
+	dist_name            => 'SDL', 
 	license		     => 'lgpl',
 	dist_version_from    => 'lib/SDL.pm',
 	configure_requires	      =>
@@ -320,8 +370,7 @@ my $build   = SDL::Build->new(
 	},
 	build_requires =>
 	{
-		'Test::Simple' => '0.47',
-		'Test::More'   => '0.88',
+		'Test::Simple' => '0.88',
 		'IO::CaptureOutput' => '0',
 		'Test::Most' => '0.21',
 	},
@@ -335,7 +384,8 @@ my $build   = SDL::Build->new(
 	{
 		no_index =>  { file => [ <make/lib/SDL/*.pm>, <make/lib/SDL/Build/*.pm>, <make/lib/ExtUtils/CBuilder/*>, <make/lib/ExtUtils/*>, <make/lib/ExtUtils/CBuilder/Platform/Windows.pm> ] },
 	},
-	dist_author	     => 'David J. Goehrig <DGOEHRIG@cpan.org>, Kartik Thakore <KTHAKORE@cpan.org>',
+	dist_abstract => 'SDL bindings to Perl',
+	dist_author	     => 'Kartik Thakore <KTHAKORE@cpan.org>',
 );
 
 if($arch eq 'Darwin')

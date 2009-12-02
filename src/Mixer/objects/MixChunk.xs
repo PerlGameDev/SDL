@@ -7,7 +7,10 @@
 #endif
 
 #include <SDL.h>
+
+#ifdef HAVE_SDL_MIXER
 #include <SDL_mixer.h>
+#endif
 
 MODULE = SDL::Mixer::MixChunk 	PACKAGE = SDL::Mixer::MixChunk    PREFIX = mixchunk_
 
@@ -23,6 +26,8 @@ SDL_MixChunk - Stores audio data in memory
   } Mix_Chunk;
 
 =cut
+
+#ifdef HAVE_SDL_MIXER
 
 Uint32
 mixchunk_alen ( mixchunk )
@@ -46,3 +51,5 @@ mixchunk_DESTROY(mixchunk)
 	Mix_Chunk *mixchunk
 	CODE:
 		Mix_FreeChunk(mixchunk);
+
+#endif

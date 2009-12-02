@@ -85,10 +85,10 @@ sub find_subsystems
 			my $lib = $libraries->{$library}
 				or croak "Unknown library '$library' for '$name'\n";
 
-			my ($inc_dir, $link_dir)   =
-				$self->find_header( $lib->{header}, \%includes_libs );
-			$enabled{$name}{ $library } = $inc_dir ? [ $inc_dir, $link_dir ]
-				: 0;
+			my ($inc_dir, $link_dir)    = $self->find_header( $lib->{header}, \%includes_libs );
+			$enabled{$name}{ $library } = $inc_dir
+			                            ? [ $inc_dir, $link_dir ]
+				                        : 0;
 		}
 	}
 
@@ -140,6 +140,9 @@ sub build_links
 	my ($self, $libraries, $build_systems) = @_;
 
 	my %links;
+	my %replace = (
+		'SDL_gfx_blit' => 'SDL_gfx',
+    );
 
 	while (my ($subsystem, $buildable) = each %$build_systems)
 	{
@@ -147,12 +150,12 @@ sub build_links
 		for my $build (grep { $buildable->{ $_ } } keys %$buildable)
 		{
 			$sub_links{ $buildable->{ $build }[1] }++;
-			push @{ $links{ $subsystem }{libs} }, "-l$build";
+			my $newbuild = $replace{$build} || $build;
+			push @{ $links{ $subsystem }{libs} }, "-l$newbuild";
 		}
 
 		$links{ $subsystem }{paths} = [ map { "-L$_" } keys %sub_links ];
 	}
-
 	return \%links;
 }
 
@@ -165,7 +168,7 @@ sub set_flags
 	while (my ($subsystem, $buildable) = each %$build)
 	{
 		my $sub_file     = $subsystems->{$subsystem}{file}{to};
-		my $sub_includes = join(' ', @{ $includes->{$subsystem} } );
+
 		$file_flags{ $sub_file } = 
 		{
 			extra_compiler_flags =>

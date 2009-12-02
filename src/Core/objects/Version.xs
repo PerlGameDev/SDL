@@ -23,6 +23,15 @@ SDL_Version -- Version structure
 
 =cut
 
+SDL_version *
+version_new( CLASS )
+	char* CLASS
+	CODE:
+		RETVAL = safemalloc( sizeof( SDL_version) );
+	OUTPUT:
+		RETVAL
+		
+
 Uint8
 version_major ( version, ... )
 	SDL_version *version
@@ -46,4 +55,5 @@ version_patch ( version, ... )
 		RETVAL = version->patch;
 	OUTPUT:
 		RETVAL
+
 

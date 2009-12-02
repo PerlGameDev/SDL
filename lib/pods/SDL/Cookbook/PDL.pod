@@ -1,6 +1,11 @@
 =pod
 
+=head1 NAME
+
+SDL::CookBook::PDL -- CookBook for SDL + PDL
+
 PDL provides great number crunching capabilities to Perl and SDL provides game-developer quality real-time bitmapping and sound.  You can use PDL and SDL ''together'' to create real-time, responsive animations and simulations.  In this section we will go through the pleasures and pitfalls of working with both powerhouse libraries.
+
 
 =head2 CATEGORY
 

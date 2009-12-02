@@ -35,29 +35,14 @@ use strict;
 use SDL;
 use SDL::Config;
 use Test::More;
+use lib 't/lib';
+use SDL::TestTool;
 
-BEGIN {
-	unshift @INC, 'blib/lib','blib/arch';
+if (! SDL::TestTool->init(SDL_INIT_TIMER) ) {
+    plan( skip_all => 'Failed to init timer' );
+} else {
+    plan( tests => 4 );
 }
-
-sub check_fail_timer
-{	
-	my $ret = 0;
-	eval
-	{
-      		$ret = SDL::init(SDL_INIT_TIMER);
-	};
-	return 1 if ($@ or $ret == -1);
-	return 0;
-}
-
-if( check_fail_timer() )
-{
-	 plan( skip_all => "Cannot initialize timer!!" );
-}
-
-plan ( tests => 4 );
-
 use_ok( 'SDL::Timer' ); 
   
 can_ok ('SDL::Timer', qw/

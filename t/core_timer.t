@@ -1,13 +1,22 @@
 #!/usr/bin/perl -w
 use strict;
 use SDL;
-use Test::More tests => 7;
+use Test::More;
 use SDL::Time;
+use lib 't/lib';
+use SDL::TestTool;
+
+if ( !SDL::TestTool->init(SDL_INIT_TIMER) ) {
+    plan( skip_all => 'Failed to init timer' );
+} else {
+    plan( tests => 5 );
+}
+
 my @done = qw/get_ticks
     delay/;
 
-is( SDL::init(SDL_INIT_TIMER), 0, '[init] can init SDL_INIT_TIMER' );
-is( SDL::was_init(0), SDL_INIT_TIMER, '[was_init] managed to init timer' );
+
+
 
 my $before = SDL::get_ticks();
 like( $before, qr/^\d+$/, '[get_ticks] returns a number' );
@@ -26,7 +35,7 @@ SKIP:
 # local $TODO = 'Multithreaded callback almost working';
  skip 'segfault', 1;
  my $fired = 0;
- SDL::Time::set_timer( 1, sub { $fired++;  return $_[0] } );
+ SDL::Time::add_timer( 1, sub { $fired++;  return $_[0] } );
  isnt( $fired  , 0, '[set_timer] ran' );
 }
 

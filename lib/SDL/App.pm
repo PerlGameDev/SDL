@@ -34,10 +34,11 @@ use strict;
 use warnings;
 use Carp;
 use SDL;
-use SDL::Event;
-use SDL::Surface;
 use SDL::Rect;
 use SDL::Video;
+use SDL::Event;
+use SDL::Events;
+use SDL::Surface;
 
 our @ISA = qw(SDL::Surface);
 sub DESTROY {
@@ -96,19 +97,19 @@ sub new {
 
 	if ($f & SDL::SDL_OPENGL()) { 
 		$SDL::App::USING_OPENGL = 1;
-		SDL::GLSetAttribute(SDL::SDL_GL_RED_SIZE(),$r) if ($r);	
-		SDL::GLSetAttribute(SDL::SDL_GL_GREEN_SIZE(),$g) if ($g);	
-		SDL::GLSetAttribute(SDL::SDL_GL_BLUE_SIZE(),$b) if ($b);	
-		SDL::GLSetAttribute(SDL::SDL_GL_ALPHA_SIZE(),$a) if ($a);	
+		SDL::Video::GL_set_attribute(SDL::SDL_GL_RED_SIZE(),$r) if ($r);	
+		SDL::Video::GL_set_attribute(SDL::SDL_GL_GREEN_SIZE(),$g) if ($g);	
+		SDL::Video::GL_set_attribute(SDL::SDL_GL_BLUE_SIZE(),$b) if ($b);	
+		SDL::Video::GL_set_attribute(SDL::SDL_GL_ALPHA_SIZE(),$a) if ($a);	
 
-		SDL::GLSetAttribute(SDL::SDL_GL_RED_ACCUM_SIZE(),$ras) if ($ras);	
-		SDL::GLSetAttribute(SDL::SDL_GL_GREEN_ACCUM_SIZE(),$gas) if ($gas);	
-		SDL::GLSetAttribute(SDL::SDL_GL_BLUE_ACCUM_SIZE(),$bas) if ($bas);	
-		SDL::GLSetAttribute(SDL::SDL_GL_ALPHA_ACCUM_SIZE(),$aas) if ($aas);	
+		SDL::Video::GL_set_attribute(SDL::SDL_GL_RED_ACCUM_SIZE(),$ras) if ($ras);	
+		SDL::Video::GL_set_attribute(SDL::SDL_GL_GREEN_ACCUM_SIZE(),$gas) if ($gas);	
+		SDL::Video::GL_set_attribute(SDL::SDL_GL_BLUE_ACCUM_SIZE(),$bas) if ($bas);	
+		SDL::Video::GL_set_attribute(SDL::SDL_GL_ALPHA_ACCUM_SIZE(),$aas) if ($aas);	
 		
-		SDL::GLSetAttribute(SDL::SDL_GL_DOUBLEBUFFER(),$db) if ($db);
-		SDL::GLSetAttribute(SDL::SDL_GL_BUFFER_SIZE(),$bs) if ($bs);
-		SDL::GLSetAttribute(SDL::SDL_GL_DEPTH_SIZE(),$d);
+		SDL::Video::GL_set_attribute(SDL::SDL_GL_DOUBLEBUFFER(),$db) if ($db);
+		SDL::Video::GL_set_attribute(SDL::SDL_GL_BUFFER_SIZE(),$bs) if ($bs);
+		SDL::Video::GL_set_attribute(SDL::SDL_GL_DEPTH_SIZE(),$d);
 	} else {
 		$SDL::App::USING_OPENGL = 0;
 	}
@@ -142,19 +143,19 @@ sub title ($;$) {
 	if (@_) { 
 		$title = shift; 
 		$icon = shift || $title;
-		SDL::WMSetCaption($title,$icon);
+		SDL::Video::wm_set_caption($title,$icon);
 	}
-	return SDL::WMGetCaption();
+	return SDL::Video::wm_get_caption();
 }
 
 sub delay ($$) {
 	my $self = shift;
 	my $delay = shift;
-	SDL::Delay($delay);
+	SDL::delay($delay);
 }
 
 sub ticks {
-	return SDL::GetTicks();
+	return SDL::get_ticks();
 }
 
 sub error {
@@ -163,28 +164,28 @@ sub error {
 
 sub warp ($$$) {
 	my $self = shift;
-	SDL::WarpMouse(@_);
+	SDL::Mouse::warp_mouse(@_);
 }
 
 sub fullscreen ($) {
 	my $self = shift;
-	SDL::WMToggleFullScreen($$self);
+	SDL::Video::wm_toggle_full_screen($self);
 }
 
 sub iconify ($) {
 	my $self = shift;
-	SDL::WMIconifyWindow();
+	SDL::Video::wm_iconify_window();
 }
 
 sub grab_input ($$) {
 	my ($self,$mode) = @_;
-	SDL::WMGrabInput($mode);
+	SDL::Video::wm_grab_input($mode);
 }
 
 sub loop ($$) {
 	my ($self,$href) = @_;
-	my $event = new SDL::Event;
-	while ( $event->wait() ) {
+	my $event = SDL::Event->new();
+	while ( SDL::Events::wait($event->wait) ) {
 		if ( ref($$href{$event->type()}) eq "CODE" ) {
 			&{$$href{$event->type()}}($event);			
 		}
@@ -194,7 +195,7 @@ sub loop ($$) {
 sub sync ($) {
 	my $self = shift;
 	if ($SDL::App::USING_OPENGL) {
-		SDL::GLSwapBuffers()
+		SDL::Video::GL_swap_buffers()
 	} else {
 		SDL::Video::flip($self);
 	}
@@ -204,9 +205,9 @@ sub attribute ($$;$) {
 	my ($self,$mode,$value) = @_;
 	return undef unless ($SDL::App::USING_OPENGL);
 	if (defined $value) {
-		SDL::GLSetAttribute($mode,$value);
+		SDL::Video::GL_set_attribute($mode,$value);
 	}
-	my $returns = SDL::GLGetAttribute($mode);	
+	my $returns = SDL::Video::GL_get_attribute($mode);	
 	croak "SDL::App::attribute failed to get GL attribute" if ($$returns[0] < 0);
 	$$returns[1];	
 }

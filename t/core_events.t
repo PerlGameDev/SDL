@@ -6,7 +6,12 @@ use SDL::Events;
 use SDL::Video;
 use Devel::Peek;
 use Test::More;
+use lib 't/lib';
+use SDL::TestTool;
 
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
+    plan( skip_all => 'Failed to init video' );
+}
 
 my @done =qw/
 pump_events 
@@ -48,23 +53,6 @@ syswm
 can_ok( 'SDL::Events',           @done); 
 can_ok( 'SDL::Event',            @done_event);
 
-=pod
-can_ok( 'SDL::ExposeEvent',      qw/type/);
-can_ok( 'SDL::JoyAxisEvent',     qw/type which axis value/);
-can_ok( 'SDL::JoyBallEvent',     qw/type which ball xrel yrel/);
-can_ok( 'SDL::JoyButtonEvent',   qw/type which button state/);
-can_ok( 'SDL::JoyHatEvent',      qw/type which hat value/);
-can_ok( 'SDL::KeyboardEvent',    qw/type state keysym/);
-can_ok( 'SDL::keysym',           qw/scancode sym mod unicode/);
-can_ok( 'SDL::MouseButtonEvent', qw/type which button state x y/);
-can_ok( 'SDL::MouseMotionEvent', qw/type state x y xrel yrel/);
-can_ok( 'SDL::QuitEvent',        qw/type/);
-can_ok( 'SDL::ResizeEvent',      qw/type w h/);
-can_ok( 'SDL::SysWMEvent',       qw/type msg/);
-can_ok( 'SDL::UserEvent',        qw/type code data1 data2/);
-=cut 
-
-SDL::init(SDL_INIT_VIDEO);                                                                          
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE);
 
@@ -77,8 +65,13 @@ $aevent->type ( SDL_ACTIVEEVENT );
 $aevent->active_gain(1);
 $aevent->active_state(SDL_APPINPUTFOCUS);
 
-SDL::Events::push_event($aevent); pass '[push_event] Event can be pushed';
+my $userdata = SDL::Event->new();
+$userdata->type (SDL_USEREVENT);
+my @udata = (0..10); 
+$userdata->user_data1(\@udata);
 
+SDL::Events::push_event($aevent); pass '[push_event] Event can be pushed';
+SDL::Events::push_event($userdata);
 SDL::Events::pump_events(); pass '[pump_events] pumping events';
 
 my $got_event = 0;
@@ -93,6 +86,12 @@ while(1)
 	{
 		$got_event = 1;
 		last;
+	}
+	if ($event->type == SDL_USEREVENT)
+	{
+		my $r =   $event->user_data1();
+		is( @{$r}, 11, '[user_events] can hold user data now');
+
 	}
 
 	last if ($ret == 0 );

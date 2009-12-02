@@ -8,6 +8,15 @@
 
 #include <SDL.h>
 
+SV* new_data( SV* thing )
+{
+ if (  SvROK( thing ) ) 
+    return  newRV_inc(SvRV(thing ) );
+ else
+    return  SvREFCNT_inc(thing); 
+
+}
+
 MODULE = SDL::Event 	PACKAGE = SDL::Event    PREFIX = event_
 
 =for documentation
@@ -39,6 +48,10 @@ event_new (CLASS)
 	char *CLASS
 	CODE:
 		RETVAL = (SDL_Event *) safemalloc(sizeof (SDL_Event));
+		//set userdata to NULL for now 
+		(RETVAL->user).data1 =(void *)NULL;
+		(RETVAL->user).data2 =(void *)NULL;
+
 	OUTPUT:
 		RETVAL
 
@@ -885,32 +898,26 @@ event_user_code ( event, ... )
 SV*
 event_user_data1 ( event, ... )
 	SDL_Event *event	
-	CODE: 
+	PPCODE: 
 		SDL_UserEvent * a = &(event->user);
-
-		if( items > 1 )
-		{
-			a->data1 = (void *)SvIV(ST(1));
-		}
-
-		RETVAL = a->data1;
-	OUTPUT:
-		RETVAL
+		if ( items > 1)
+			a->data1 = new_data( ST(1) ); 
+		 if (!a->data1)
+		  XSRETURN_EMPTY;
+		  ST(0) = a->data1;
+		  XSRETURN(1);
 
 SV*
 event_user_data2 ( event, ... ) 
 	SDL_Event *event	
-	CODE: 
+	PPCODE: 
 		SDL_UserEvent * a = &(event->user);
-
-		if( items > 1 )
-		{
-			a->data1 = (void *) ST(1);
-		}
-
-		RETVAL = a->data1;
-	OUTPUT:
-		RETVAL
+		if ( items > 1)
+			a->data2 = new_data( ST(1) ); 
+		 if (!a->data2)
+		  XSRETURN_EMPTY;
+		  ST(0) = a->data2;
+		  XSRETURN(1);
 
 SDL_SysWMEvent *
 event_syswm ( event, ... )
@@ -959,5 +966,14 @@ void
 event_DESTROY(self)
 	SDL_Event *self
 	CODE:
+		if(self->type == SDL_USEREVENT)
+		{
+		if( (self->user).data1 != NULL )
+		  SvREFCNT_dec( (self->user).data1);
+		if( (self->user).data2 != NULL )
+		  SvREFCNT_dec( (self->user).data2);
+		}
 		safefree(self);
+
+
 		

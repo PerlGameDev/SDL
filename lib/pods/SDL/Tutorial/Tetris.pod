@@ -2,7 +2,7 @@ tags: Tutorials, Beginner
 
 =head1 NAME
 
-Let's Make Tetris
+SDL::Tutorial::Tetris -- Let's Make Tetris
 
 =head2 CATEGORY
 

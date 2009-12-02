@@ -4,8 +4,15 @@ use warnings;
 use SDL;
 use Test::More tests => 5;
 
+use lib 't/lib';
+use SDL::TestTool;
+
+SKIP:
+{
+	skip "Video fail", 1 unless SDL::TestTool->init(SDL_INIT_VIDEO);
 is( SDL::init(SDL_INIT_VIDEO), 0, '[init] returns 0 on success' );
 
+}
 SDL::set_error('Hello');
 is( SDL::get_error, 'Hello', '[get_error] returns Hello' );
 
