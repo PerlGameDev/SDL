@@ -165,10 +165,11 @@ sub set_flags
 	while (my ($subsystem, $buildable) = each %$build)
 	{
 		my $sub_file     = $subsystems->{$subsystem}{file}{to};
-		my $sub_includes = join(' ', @{ $includes->{$subsystem} } );
+
+=for later
+			my $fake_lib = 'SDL_gfx_blit'; # should be a list
 		
-		my $fake_lib = 'SDL_gfx_blit'; # should be a list
-		
+
 		my $lib_count = 0;
 		foreach my $lib ( @{ $links->{$subsystem}{libs} } )
 		{
@@ -179,7 +180,7 @@ sub set_flags
 			}
 			$lib_count++;
 		}
-
+=cut
 		$file_flags{ $sub_file } = 
 		{
 			extra_compiler_flags =>
