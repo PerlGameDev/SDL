@@ -132,13 +132,16 @@ SDL::Video::update_rects($display, SDL::Rect->new(0, 10, 20, 20));
 my $value = SDL::Video::flip($display);
 is( ($value == 0)  ||  ($value == -1), 1,  '[flip] returns 0 or -1'  );
 
+SKIP:
+{
+	skip( "These negative test may cause older versions of SDL to crash", 2) unless $ENV{NEW_SDL};
 $value = SDL::Video::set_colors($display, 0, SDL::Color->new(0,0,0));
 is(  $value , 0,  '[set_colors] returns 0 trying to write to 32 bit display'  );
-
-$value = SDL::Video::set_palette($display, SDL_LOGPAL|SDL_PHYSPAL, 0);
-
+	
+	$value = SDL::Video::set_palette($display, SDL_LOGPAL|SDL_PHYSPAL, 0);
+ 
 is(  $value , 0,  '[set_palette] returns 0 trying to write to 32 bit surface'  );
-
+}
 SDL::delay(100);
 
 my $zero = [0,0,0,0]; 
