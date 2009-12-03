@@ -25,6 +25,17 @@ init
 quit
 load_rw
 loadtyped_rw
+isPNG
+isBMP
+isGIF
+isJPG
+isLBM
+isPCX
+isPNM 
+isTIF
+isXCF
+isXPM
+isXV
 /;
 
 my $lver = SDL::Image::linked_version();
@@ -41,8 +52,22 @@ isa_ok (SDL::Image::load_rw($file, 1), "SDL::Surface", "[load_rw] Gets surface")
 
 my $file2 = SDL::RWOps->new_file("test/data/menu.png", "rb");
 
+isa_ok (SDL::Image::loadtyped_rw($file2, 1, "PNG"), "SDL::Surface", "[loadtyped_rw] Makes surface from png");
 
-isa_ok (SDL::Image::loadtyped_rw($file2, 0, "PNG"), "SDL::Surface", "[loadtyped_rw] Makes surface from png");
+my $file3 = SDL::RWOps->new_file("test/data/menu.png", "rb");  
+is (SDL::Image::isPNG($file3), 1 ,"[isPNG] gets correct value for png file");
+
+is( SDL::Image::isBMP($file3), 0 ,'[isBMP] returned correct value');
+is( SDL::Image::isGIF($file3), 0 ,'[isGIF] returned correct value');
+is( SDL::Image::isJPG($file3), 0 ,'[isJPG] returned correct value');
+is( SDL::Image::isLBM($file3), 0 ,'[isLMB] returned correct value');
+is( SDL::Image::isPCX($file3), 0 ,'[isPCX] returned correct value');
+is( SDL::Image::isPNM($file3), 0 ,'[isPNM] returned correct value');
+is( SDL::Image::isTIF($file3), 0 ,'[isTIF] returned correct value');
+is( SDL::Image::isXCF($file3), 0 ,'[isXCF] returned correct value');
+is( SDL::Image::isXPM($file3), 0 ,'[isXPM] returned correct value');
+is( SDL::Image::isXV($file3) , 0 ,'[isXV] returned correct value');
+
 
 
 #need to get DEFINES to SDL::Image::Constants;
