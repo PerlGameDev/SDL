@@ -13,6 +13,11 @@
 #endif 
 
 
+char** avp_to_charp( AV* array )
+{
+   
+}
+
 MODULE = SDL::Image 	PACKAGE = SDL::Image    PREFIX = image_
 
 #ifdef HAVE_SDL_IMAGE
@@ -282,6 +287,47 @@ image_isXV(src)
 		RETVAL=IMG_isXV(src);
 	OUTPUT:
 		RETVAL
+
+
+
+SDL_Surface *
+image_read_XPM_from_array(src, cols, rows)
+	int cols
+	int rows
+	AV* src
+	PREINIT:
+		char* CLASS = "SDL::Suerface";
+	CODE:
+		//make columns first
+		char**  src_x = (char**)safemalloc(cols * sizeof(char *)); 
+		if(NULL == src_x){
+		safefree(src_x);
+		 croak("Memory allocation failed while allocating for XPM array. Resolution too big.\n"); 
+		}
+
+		int x,xi;		
+		 for(x = 0; x < cols; x++)
+		{
+		    src_x[x] = (char *) malloc(rows * sizeof(char));
+		    if(NULL == src_x[x])
+			{
+			for(xi = 0; xi <=x; xi++)
+			   safefree(src_x[x]);
+
+			safefree(src_x);
+			croak("Memory allocation failed while allocating for XPM array elements. Resolution too big.\n");
+			}
+		}
+
+		RETVAL = IMG_ReadXPMFromArray(src_x) ;
+		for(x = 0; x <cols; x++)
+		   safefree(src_x[x]);
+		safefree(src_x);
+	
+	OUTPUT:
+		RETVAL
+
+
 
 
 
