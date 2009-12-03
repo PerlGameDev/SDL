@@ -23,6 +23,8 @@ my @done = qw/
 linked_version
 init
 quit
+load_rw
+loadtyped_rw
 /;
 
 my $lver = SDL::Image::linked_version();
