@@ -13,9 +13,9 @@ if( !SDL::TestTool->init(SDL_INIT_VIDEO) )
 {
     plan( skip_all => 'Failed to init video' );
 }
-elsif( !SDL::Config->has('SDL_gfx') )
+elsif( !SDL::Config->has('SDL_image') )
 {
-    plan( skip_all => 'SDL_gfx support not compiled' );
+    plan( skip_all => 'SDL_image support not compiled' );
 }
 
 
@@ -37,6 +37,12 @@ my $file = SDL::RWOps->new_file("test/data/logo.png", "rb");
 
 isa_ok (SDL::Image::load_rw($file, 1), "SDL::Surface", "[load_rw] Gets surface");
 
+my $file2 = SDL::RWOps->new_file("test/data/menu.png", "rb");
+
+
+isa_ok (SDL::Image::loadtyped_rw($file2, 0, "PNG"), "SDL::Surface", "[loadtyped_rw] Makes surface from png");
+
+
 #need to get DEFINES to SDL::Image::Constants;
 #IMG_INIT_JPG =?o
 # IMG_INIT_JPG = 0x00000001,
@@ -44,10 +50,10 @@ isa_ok (SDL::Image::load_rw($file, 1), "SDL::Surface", "[load_rw] Gets surface")
 # IMG_INIT_TIF = 0x00000004  
 SKIP:
 {
-	skip ' This is only for version >= 1.2.10', 2 unless !( $lver->major == 1 && $lver->minor ==2 &&  $lver->patch < 10);
+	skip ' This is only for version >= 1.2.10', 1 unless !( $lver->major == 1 && $lver->minor ==2 &&  $lver->patch < 10);
 	is (SDL::Image::init( 0x00000001 ), 0 , '[init] Inited jpg');
-	SDL::Image::quit();
-  	pass '[quit] we can quit fine';
+#	SDL::Image::quit();
+	# 	pass '[quit] we can quit fine';
 
 }
 
