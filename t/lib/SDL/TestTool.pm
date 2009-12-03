@@ -37,12 +37,16 @@ sub init {
 	 if (test_audio_open() != 0) 
 	 {
 		 warn "Couldn't use a valid audio device";
-		 return -1;
+		 return ;
 	 }
 	SDL::quit();
     }
 
-
+    if( $init == SDL_INIT_TIMER && $^O =~ /bsd|solaris/i) 
+    {
+	    warn "Timer is not supported in BSD environments";
+	    return ;
+    }
     capture { SDL::init($init) } \$stdout, \$stderr;
     if ( $stderr ne '' )
     {
