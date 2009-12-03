@@ -13,9 +13,17 @@
 #endif 
 
 
-char** avp_to_charp( AV* array )
+void avp_to_chp( AV* array, char** ch_as, int rows, int cols)
 {
-   
+  int x;
+  int y;
+   AV* row; 
+	for(x=0; x < rows; x++)
+	{
+	  row = (AV*)av_pop(array);
+	   for(y=0; y < cols; y++)
+		ch_as[x][y] = (char*)av_pop(row);
+	}
 }
 
 MODULE = SDL::Image 	PACKAGE = SDL::Image    PREFIX = image_
@@ -318,8 +326,8 @@ image_read_XPM_from_array(src, cols, rows)
 			croak("Memory allocation failed while allocating for XPM array elements. Resolution too big.\n");
 			}
 		}
-
-		RETVAL = IMG_ReadXPMFromArray(src_x) ;
+			avp_to_chp(src, src_x, rows,cols);
+		RETVAL = IMG_ReadXPMFromArray( src_x) ;
 		for(x = 0; x <cols; x++)
 		   safefree(src_x[x]);
 		safefree(src_x);
