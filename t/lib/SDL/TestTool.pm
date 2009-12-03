@@ -3,7 +3,8 @@ use strict;
 use warnings;
 use IO::CaptureOutput qw(capture);
 use SDL;
-
+use SDL::AudioSpec;
+use SDL::Audio;
 my %inits =
 (
 	0x00000001 => 'SDL_INIT_TIMER',
@@ -31,6 +32,17 @@ sub init {
 	    }
     }
 
+    if( $init == SDL_INIT_AUDIO)
+    {
+	 if (test_audio_open() != 0) 
+	 {
+		 warn "Couldn't use a valid audio device";
+		 return -1;
+	 }
+	SDL::quit();
+    }
+
+
     capture { SDL::init($init) } \$stdout, \$stderr;
     if ( $stderr ne '' )
     {
@@ -40,5 +52,18 @@ sub init {
     return !($stderr ne '');
 }
 
+sub test_audio_open
+{
+my $desired = SDL::AudioSpec->new;
+$desired->freq(44100);
+$desired->format(SDL::Constants::AUDIO_S16);
+$desired->channels(2);
+$desired->samples(4096);
 
+
+my $obtained = SDL::AudioSpec->new;
+return  SDL::Audio::open( $desired, $obtained );
+
+
+}
 1;
