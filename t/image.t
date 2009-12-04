@@ -21,10 +21,19 @@ elsif( !SDL::Config->has('SDL_image') )
 
 my @done = qw/
 linked_version
-init
-quit
 load_rw
 load_typed_rw
+load_PNG_rw
+load_BMP_rw
+load_GIF_rw
+load_JPG_rw
+load_LBM_rw
+load_PCX_rw
+load_PNM_rw 
+load_TIF_rw
+load_XCF_rw
+load_XPM_rw
+load_XV_rw
 is_PNG
 is_BMP
 is_GIF
@@ -37,6 +46,8 @@ is_XCF
 is_XPM
 is_XV
 /;
+
+can_ok("SDL::Image", @done);
 
 my $lver = SDL::Image::linked_version();
 
@@ -86,9 +97,6 @@ SKIP:
 
 
 my @left = qw/
-get_error
-set_error
-is_RW
 /;
 my $why
     = '[Percentage Completion] '

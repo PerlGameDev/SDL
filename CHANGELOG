@@ -1,5 +1,13 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.3_2
+	- SDL::Image implemented and tested [#72] [kthakore]
+	- FreeBSD SDL test clean up [#75] [kthakore]
+	- Handle GFX seperate headers in Build [FROGGS,kthakore]
+	- Started GFX [FROGGS]
+	- Added more init tests [kthakore]
+	- Added condition compile for mixer and ttf [kthakore]
+
 * 2.3_1 
 	- General fixup for CPAN
 
