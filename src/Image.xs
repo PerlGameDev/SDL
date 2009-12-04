@@ -12,6 +12,30 @@
 #include <SDL_image.h>
 #endif 
 
+void test( char** xpm)
+{
+
+int x, y;
+int w, h, ncolors, cpp;
+char *line;
+char ***xpmlines = NULL;
+
+
+xpmlines = &xpm;
+
+line = *(*xpmlines)++;
+
+if(sscanf(line, "%d %d %d %d", &w, &h, &ncolors, &cpp) != 4
+	   || w <= 0 || h <= 0 || ncolors <= 0 || cpp <= 0) {
+		warn( "Invalid format description %s \n  %d %d %d %d", line, w, h, ncolors, cpp);
+	}
+
+
+}
+
+
+
+
 MODULE = SDL::Image 	PACKAGE = SDL::Image    PREFIX = image_
 
 #ifdef HAVE_SDL_IMAGE
@@ -285,7 +309,8 @@ image_isXV(src)
 
 
 SDL_Surface *
-image_read_XPM_from_array(array)
+image_read_XPM_from_array(array, w)
+	int w
 	AV* array 
 	PREINIT:
 		char* CLASS = "SDL::Surface";
@@ -300,10 +325,11 @@ image_read_XPM_from_array(array)
 		{
 			 elem =  av_fetch(array, x, 0) ;
 			 temp = SvPV_nolen(*elem);
-			src_x[x] = safemalloc( sizeof(temp) );
-			memcpy( src_x[x], temp, sizeof(temp) );
-
+			src_x[x] = safemalloc(w * sizeof(char) );
+			memcpy( src_x[x], temp, w * sizeof(char) );
+			//warn("put in %s", src_x[x]);
 		}
+	  		//test(src_x); 
 		RETVAL = IMG_ReadXPMFromArray( src_x) ;
 		for(x=0; x < len; x++)
 		  safefree(src_x[x]);
