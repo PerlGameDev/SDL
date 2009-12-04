@@ -1,0 +1,87 @@
+=pod
+
+=head1 NAME
+
+SDL::Image - Bindings for the SDL_Image library
+
+=head1 DESCRIPTION
+
+SDL::Image allows you to load many different format of images into memory as an SDL::Surface.
+
+=head1 SUPPORTED FORMATS 
+
+The following types are supported:
+
+=over
+
+=item *
+
+PNG
+
+=item *
+
+BMP
+
+=item *
+
+GIF
+
+=item *
+
+JPG
+
+=item *
+
+LBM
+
+=item *
+
+PCX
+
+=item *
+
+PNM 
+
+=item *
+
+TIF
+
+=item *
+
+XCF
+
+=item *
+
+XPM
+
+=item *
+
+XV
+
+=back
+
+=head1 CATEGORY
+
+TODO, SDL, Image
+
+=head1 METHODS
+
+=head2 load
+
+=head2 load_typed_rw
+
+=head2 is_[TYPE]
+
+=head2 load_[TYPE]_rw
+
+=head2 read_XPM_from_array
+
+=head2 version
+
+=head2 init
+
+=head2 set_error
+
+=head2 get_error
+
+=cut
