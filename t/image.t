@@ -25,17 +25,17 @@ init
 quit
 load_rw
 loadtyped_rw
-isPNG
-isBMP
-isGIF
-isJPG
-isLBM
-isPCX
-isPNM 
-isTIF
-isXCF
-isXPM
-isXV
+is_PNG
+is_BMP
+is_GIF
+is_JPG
+is_LBM
+is_PCX
+is_PNM 
+is_TIF
+is_XCF
+is_XPM
+is_XV
 /;
 
 my $lver = SDL::Image::linked_version();
@@ -55,18 +55,18 @@ my $file2 = SDL::RWOps->new_file("test/data/menu.png", "rb");
 isa_ok (SDL::Image::loadtyped_rw($file2, 1, "PNG"), "SDL::Surface", "[loadtyped_rw] Makes surface from png");
 
 my $file3 = SDL::RWOps->new_file("test/data/menu.png", "rb");  
-is (SDL::Image::isPNG($file3), 1 ,"[isPNG] gets correct value for png file");
+is(SDL::Image::is_PNG($file3), 1 ,"[is_PNG] gets correct value for png file");
 
-is( SDL::Image::isBMP($file3), 0 ,'[isBMP] returned correct value');
-is( SDL::Image::isGIF($file3), 0 ,'[isGIF] returned correct value');
-is( SDL::Image::isJPG($file3), 0 ,'[isJPG] returned correct value');
-is( SDL::Image::isLBM($file3), 0 ,'[isLMB] returned correct value');
-is( SDL::Image::isPCX($file3), 0 ,'[isPCX] returned correct value');
-is( SDL::Image::isPNM($file3), 0 ,'[isPNM] returned correct value');
-is( SDL::Image::isTIF($file3), 0 ,'[isTIF] returned correct value');
-is( SDL::Image::isXCF($file3), 0 ,'[isXCF] returned correct value');
-is( SDL::Image::isXPM($file3), 0 ,'[isXPM] returned correct value');
-is( SDL::Image::isXV($file3) , 0 ,'[isXV] returned correct value');
+is( SDL::Image::is_BMP($file3), 0 ,'[is_BMP] returned correct value');
+is( SDL::Image::is_GIF($file3), 0 ,'[is_GIF] returned correct value');
+is( SDL::Image::is_JPG($file3), 0 ,'[is_JPG] returned correct value');
+is( SDL::Image::is_LBM($file3), 0 ,'[is_LMB] returned correct value');
+is( SDL::Image::is_PCX($file3), 0 ,'[is_PCX] returned correct value');
+is( SDL::Image::is_PNM($file3), 0 ,'[is_PNM] returned correct value');
+is( SDL::Image::is_TIF($file3), 0 ,'[is_TIF] returned correct value');
+is( SDL::Image::is_XCF($file3), 0 ,'[is_XCF] returned correct value');
+is( SDL::Image::is_XPM($file3), 0 ,'[is_XPM] returned correct value');
+is( SDL::Image::is_XV($file3) , 0 ,'[is_XV] returned correct value');
 
 
 

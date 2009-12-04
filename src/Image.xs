@@ -219,7 +219,7 @@ image_loadXV_rw(src)
 		RETVAL
 
 
-int image_isBMP(src)
+int image_is_BMP(src)
 	SDL_RWops* src;
 	CODE:
 		RETVAL=IMG_isBMP(src);
@@ -227,7 +227,7 @@ int image_isBMP(src)
 		RETVAL
 
 int 
-image_isGIF(src)
+image_is_GIF(src)
 	 SDL_RWops * src;
 	CODE:
 		RETVAL=IMG_isGIF(src);
@@ -235,7 +235,7 @@ image_isGIF(src)
 		RETVAL
 
 int 
-image_isJPG(src)
+image_is_JPG(src)
 	 SDL_RWops * src;
 	CODE:
 		RETVAL=IMG_isJPG(src);
@@ -243,7 +243,7 @@ image_isJPG(src)
 		RETVAL
 
 int 
-image_isLBM(src)
+image_is_LBM(src)
 	 SDL_RWops * src;
 	CODE:
 		RETVAL=IMG_isLBM(src);
@@ -251,7 +251,7 @@ image_isLBM(src)
 		RETVAL
 
 int 
-image_isPCX(src)
+image_is_PCX(src)
 	 SDL_RWops * src;
 	CODE:
 		RETVAL=IMG_isPCX(src);
@@ -259,7 +259,7 @@ image_isPCX(src)
 		RETVAL
 
 int 
-image_isPNG(src)
+image_is_PNG(src)
 	 SDL_RWops * src;
 	CODE:
 		RETVAL=IMG_isPNG(src);
@@ -267,7 +267,7 @@ image_isPNG(src)
 		RETVAL
 
 int 
-image_isPNM(src)
+image_is_PNM(src)
 	 SDL_RWops * src;
 	CODE:
 		RETVAL=IMG_isPNM(src);
@@ -275,7 +275,7 @@ image_isPNM(src)
 		RETVAL
 
 int 
-image_isTIF(src)
+image_is_TIF(src)
 	 SDL_RWops * src;
 	CODE:
 		RETVAL=IMG_isTIF(src);
@@ -283,7 +283,7 @@ image_isTIF(src)
 		RETVAL
 
 int 
-image_isXCF(src)
+image_is_XCF(src)
 	 SDL_RWops * src;
 	CODE:
 		RETVAL=IMG_isXCF(src);
@@ -291,7 +291,7 @@ image_isXCF(src)
 		RETVAL
 
 int 
-image_isXPM(src)
+image_is_XPM(src)
 	 SDL_RWops * src;
 	CODE:
 		RETVAL=IMG_isXPM(src);
@@ -299,7 +299,7 @@ image_isXPM(src)
 		RETVAL
 
 int 
-image_isXV(src)
+image_is_XV(src)
 	 SDL_RWops * src;
 	CODE:
 		RETVAL=IMG_isXV(src);
