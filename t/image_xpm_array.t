@@ -21,9 +21,6 @@ elsif( !SDL::Config->has('SDL_image') )
 }
 
 
-SKIP:
-{
-	skip "Screwed format!", 1 unless $ENV{SDLXMP};
 my $screen_width   = 800;
 my $screen_height  = 600;
 
@@ -87,8 +84,10 @@ my $picture = SDL::Image::read_XPM_from_array(\@test);
 
 
 
-die SDL::get_error."\n". Dumper $picture if(!$picture);
-
+warn SDL::get_error."\n" if(!$picture);
+SKIP:
+{
+	skip "picture not comming from XPM", 1 unless $picture;
  SDL::Video::blit_surface( $picture, SDL::Rect->new(0, 0, $picture->w, $picture->h),
 		           $screen,  SDL::Rect->new(0, 0, $screen->w,  $screen->h) );
 

@@ -304,7 +304,6 @@ image_read_XPM_from_array(array)
 			memcpy( src_x[x], temp, sizeof(temp) );
 
 		}
-		src_x[x+1] = NULL;
 		RETVAL = IMG_ReadXPMFromArray( src_x) ;
 		for(x=0; x < len; x++)
 		  safefree(src_x[x]);
