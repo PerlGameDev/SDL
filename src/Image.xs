@@ -87,7 +87,7 @@ image_load_rw ( rw_file, src )
 		RETVAL  
 
 SDL_Surface * 
-image_loadtyped_rw(src, freesrc, type)
+image_load_typed_rw(src, freesrc, type)
 	SDL_RWops* src
 	int freesrc
 	char* type
