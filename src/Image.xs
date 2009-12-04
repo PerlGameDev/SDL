@@ -12,20 +12,6 @@
 #include <SDL_image.h>
 #endif 
 
-
-void avp_to_chp( AV* array, char** ch_as, int rows, int cols)
-{
-  int x;
-  int y;
-   AV* row; 
-	for(x=0; x < rows; x++)
-	{
-	  row = (AV*)av_pop(array);
-	   for(y=0; y < cols; y++)
-		ch_as[x][y] = (char*)av_pop(row);
-	}
-}
-
 MODULE = SDL::Image 	PACKAGE = SDL::Image    PREFIX = image_
 
 #ifdef HAVE_SDL_IMAGE
@@ -299,37 +285,29 @@ image_isXV(src)
 
 
 SDL_Surface *
-image_read_XPM_from_array(src, cols, rows)
-	int cols
-	int rows
-	AV* src
+image_read_XPM_from_array(array)
+	AV* array 
 	PREINIT:
-		char* CLASS = "SDL::Suerface";
+		char* CLASS = "SDL::Surface";
 	CODE:
 		//make columns first
-		char**  src_x = (char**)safemalloc(cols * sizeof(char *)); 
-		if(NULL == src_x){
-		safefree(src_x);
-		 croak("Memory allocation failed while allocating for XPM array. Resolution too big.\n"); 
-		}
-
-		int x,xi;		
-		 for(x = 0; x < cols; x++)
+		int x, len;
+		SV ** elem;
+		len = av_len(array) + 1;
+		char** src_x = safemalloc( len * sizeof(char*));
+		char* temp;
+		for(x=0; x < len ; x++)
 		{
-		    src_x[x] = (char *) malloc(rows * sizeof(char));
-		    if(NULL == src_x[x])
-			{
-			for(xi = 0; xi <=x; xi++)
-			   safefree(src_x[x]);
+			 elem =  av_fetch(array, x, 0) ;
+			 temp = SvPV_nolen(*elem);
+			src_x[x] = safemalloc( sizeof(temp) );
+			memcpy( src_x[x], temp, sizeof(temp) );
 
-			safefree(src_x);
-			croak("Memory allocation failed while allocating for XPM array elements. Resolution too big.\n");
-			}
 		}
-			avp_to_chp(src, src_x, rows,cols);
+		src_x[x+1] = NULL;
 		RETVAL = IMG_ReadXPMFromArray( src_x) ;
-		for(x = 0; x <cols; x++)
-		   safefree(src_x[x]);
+		for(x=0; x < len; x++)
+		  safefree(src_x[x]);
 		safefree(src_x);
 	
 	OUTPUT:
