@@ -14,59 +14,57 @@ The following types are supported:
 
 =over
 
-=item *
-TGA
-    TrueVision Targa (MUST have .tga) 
+=item TGA
 
-=item * 
-BMP
-    Windows Bitmap(.bmp) 
+TrueVision Targa (MUST have .tga) 
 
-=item *
-PNM
-    Portable Anymap (.pnm)
-    .pbm = Portable BitMap (mono)
-    .pgm = Portable GreyMap (256 greys)
-    .ppm = Portable PixMap (full color)
+=item BMP
 
-=item * 
-XPM
-    X11 Pixmap (.xpm) can be #included directly in code
-    This is NOT the same as XBM(X11 Bitmap) format, which is for monocolor images. 
+Windows Bitmap(.bmp) 
 
-=item * 
-XCF
-    GIMP native (.xcf) (XCF = eXperimental Computing Facility?)
-    This format is always changing, and since there's no library supplied by the GIMP project to load XCF, the loader may frequently fail to load much of any image from an XCF file. It's better to load this in GIMP and convert to a better supported image format. 
+=item PNM
 
-=item * 
-PCX
-    ZSoft IBM PC Paintbrush (.pcx) 
+Portable Anymap (.pnm)
+.pbm = Portable BitMap (mono)
+.pgm = Portable GreyMap (256 greys)
+.ppm = Portable PixMap (full color)
 
-=item *
-GIF
-    CompuServe Graphics Interchange Format (.gif) 
+=item XPM
 
-=item *
-JPG
-    Joint Photographic Experts Group JFIF format (.jpg or .jpeg) 
+X11 Pixmap (.xpm) can be #included directly in code
+This is NOT the same as XBM(X11 Bitmap) format, which is for monocolor images. 
 
-=item * 
-TIF
-    Tagged Image File Format (.tif or .tiff) 
+=item XCF
 
-=item *
-LBM
-    Interleaved Bitmap (.lbm or .iff) FORM : ILBM or PBM(packed bitmap)
-    HAM6, HAM8, and 24bit types are not supported. 
+GIMP native (.xcf) (XCF = eXperimental Computing Facility?)
+This format is always changing, and since there's no library supplied by the GIMP project to load XCF, the loader may frequently fail to load much of any image from an XCF file. It's better to load this in GIMP and convert to a better supported image format. 
 
-=item *
-PNG
-    Portable Network Graphics (.png) =item *
+=item PCX
 
-=item * 
-XV
-     ???
+ZSoft IBM PC Paintbrush (.pcx) 
+
+=item GIF
+
+CompuServe Graphics Interchange Format (.gif) 
+
+=item JPG
+
+Joint Photographic Experts Group JFIF format (.jpg or .jpeg) 
+
+=item TIF
+
+Tagged Image File Format (.tif or .tiff) 
+
+=item LBM
+
+Interleaved Bitmap (.lbm or .iff) FORM : ILBM or PBM(packed bitmap)
+HAM6, HAM8, and 24bit types are not supported. 
+
+=item PNG
+
+Portable Network Graphics (.png) 
+
+=item XV
 
 =back
 
@@ -83,10 +81,12 @@ TODO, SDL, Image
 $file Image file name to load a surface from. 
  
 Load file for use as an image in a new L<SDL::Surface>. This actually calls C<IMG_LoadTyped_RW> the binded function to L<SDL::Image::load_typed_rw>, with the file extension used as the type string. This can load all supported image files, including TGA as long as the filename ends with ".tga". It is best to call this outside of event loops, and rather keep the loaded images around until you are really done with them, as disk speed and image conversion to a surface is not that speedy.  
-Note: If the image format loader requires initialization, it will attempt to do that the first time it is needed if you have not already called IMG_Init to load support for your image format.
-Note: If the image format supports a transparent pixel, SDL_image will set the colorkey for the surface. You can enable RLE acceleration on the surface afterwards by calling:
-SDL::Video::set_color_key($image, SDL_RLEACCEL, $image->format->colorkey);
-
+Note: If the image format loader requires initialization, it will attempt to do that the first time it is needed if you have not already called L<SDL::Image::init> to load support for your image format.
+Note: If the image format supports a transparent pixel, L<SDL::Image> will set the colorkey for the surface. You can enable RLE acceleration on the surface afterwards by calling:
+L<SDL::Video::set_color_key>
+ 
+  my $image = SDL::Image::load( $some_png_file );
+  SDL::Video::set_color_key($image, SDL_RLEACCEL, $image->format->colorkey);
 
 =head2 Returns
 
@@ -119,14 +119,11 @@ bitwise OR'd set of image formats to support by loading a library now. The value
 
 =over
 
-=item *
- IMG_INIT_JPG = 0x00000001
+=item IMG_INIT_JPG 
 
-=item *
- IMG_INIT_PNG = 0x00000002
+=item IMG_INIT_PNG 
 
-=item *
- IMG_INIT_TIF = 0x00000004  
+=item IMG_INIT_TIF
 
 =back
 
@@ -144,10 +141,13 @@ A bitmask of all the currentl initted image loaders.
   use SDL::Image;
   my $flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_JPG;
   my $inited = SDL::Image::init($flags);
-  
 
 =head2 set_error
 
 =head2 get_error
+
+=head1 SEE ALSO
+
+L<SDL>, L<SDL::Surface>, L<SDL::Video>, L<SDL::RWOps>
 
 =cut
