@@ -33,10 +33,46 @@ my $screen = SDL::Video::set_video_mode($screen_width, $screen_height, 32, SDL_S
 #
 
 my @test= (
-'1 1 1 1',
-'   c #FFFFFF',
-' '
-);
+'30 30 9 1',
+' 	c #FFFFFF',
+'.	c #EFEFEF',
+'+	c #CFCFCF',
+'@	c #9F9F9F',
+'#	c #808080',
+'$	c #505050',
+'%	c #202020',
+'&	c #000000',
+'*	c #303030',
+'                              ',
+'                              ',
+'                              ',
+'                              ',
+'                              ',
+'                              ',
+'                              ',
+'                              ',
+'                              ',
+'           .+@##@+.           ',
+'          .@$%&&%$@.          ',
+'         .@*&&&&&&*@.         ',
+'         +$&&&&&&&&$+         ',
+'         @%&&&&&&&&%@         ',
+'         #&&&&&&&&&&#         ',
+'         #&&&&&&&&&&#         ',
+'         @%&&&&&&&&%@         ',
+'         +$&&&&&&&&$+         ',
+'         .@*&&&&&&*@.         ',
+'          .@$%&&%$@.          ',
+'           .+@##@+.           ',
+'                              ',
+'                              ',
+'                              ',
+'                              ',
+'                              ',
+'                              ',
+'                              ',
+'                              ',
+'                              ',);
 
 
 my $mapped_color   = SDL::Video::map_RGB($screen->format(), 43, 43, 255); #
@@ -45,7 +81,7 @@ SDL::Video::fill_rect(  $screen,
 			$screen->w, $screen->h), $mapped_color);
 
 
-my $picture = SDL::Image::read_XPM_from_array(\@test, 12);
+my $picture = SDL::Image::read_XPM_from_array(\@test, 30);
 
 
 
