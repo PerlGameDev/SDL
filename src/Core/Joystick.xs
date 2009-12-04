@@ -123,7 +123,6 @@ joystick_get_ball ( joystick, ball )
 		int success,dx,dy;
 		success = SDL_JoystickGetBall(joystick,ball,&dx,&dy);
 		RETVAL = newAV();
-		RETVAL = sv_2mortal((SV*)RETVAL);
 		av_push(RETVAL,newSViv(success));
 		av_push(RETVAL,newSViv(dx));
 		av_push(RETVAL,newSViv(dy));
