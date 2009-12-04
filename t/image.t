@@ -83,13 +83,15 @@ is( SDL::Image::is_XV($file3) , 0 ,'[is_XV] returned correct value');
 
 #need to get DEFINES to SDL::Image::Constants;
 #IMG_INIT_JPG =?o
-# IMG_INIT_JPG = 0x00000001,
-# IMG_INIT_PNG = 0x00000002,
-# IMG_INIT_TIF = 0x00000004  
+is IMG_INIT_JPG , 0x00000001, '[IMG_INIT_JPG] constant loaded properly';
+is IMG_INIT_PNG , 0x00000002, '[IMG_INIT_PNG] constant loaded properly';
+is IMG_INIT_TIF , 0x00000004, '[IMG_INIT_TIF] constant loaded properly'; 
+
+
 SKIP:
 {
 	skip ' This is only for version >= 1.2.10', 1 unless !( $lver->major == 1 && $lver->minor ==2 &&  $lver->patch < 10);
-	is (SDL::Image::init( 0x00000001 ), 0 , '[init] Inited jpg');
+	is (SDL::Image::init( IMG_INIT_JPG ), 0 , '[init] Inited jpg');
 #	SDL::Image::quit();
 	# 	pass '[quit] we can quit fine';
 

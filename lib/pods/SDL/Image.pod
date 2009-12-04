@@ -15,48 +15,58 @@ The following types are supported:
 =over
 
 =item *
+TGA
+    TrueVision Targa (MUST have .tga) 
 
-PNG
-
-=item *
-
+=item * 
 BMP
+    Windows Bitmap(.bmp) 
 
 =item *
+PNM
+    Portable Anymap (.pnm)
+    .pbm = Portable BitMap (mono)
+    .pgm = Portable GreyMap (256 greys)
+    .ppm = Portable PixMap (full color)
 
-GIF
-
-=item *
-
-JPG
-
-=item *
-
-LBM
-
-=item *
-
-PCX
-
-=item *
-
-PNM 
-
-=item *
-
-TIF
-
-=item *
-
-XCF
-
-=item *
-
+=item * 
 XPM
+    X11 Pixmap (.xpm) can be #included directly in code
+    This is NOT the same as XBM(X11 Bitmap) format, which is for monocolor images. 
+
+=item * 
+XCF
+    GIMP native (.xcf) (XCF = eXperimental Computing Facility?)
+    This format is always changing, and since there's no library supplied by the GIMP project to load XCF, the loader may frequently fail to load much of any image from an XCF file. It's better to load this in GIMP and convert to a better supported image format. 
+
+=item * 
+PCX
+    ZSoft IBM PC Paintbrush (.pcx) 
 
 =item *
+GIF
+    CompuServe Graphics Interchange Format (.gif) 
 
+=item *
+JPG
+    Joint Photographic Experts Group JFIF format (.jpg or .jpeg) 
+
+=item * 
+TIF
+    Tagged Image File Format (.tif or .tiff) 
+
+=item *
+LBM
+    Interleaved Bitmap (.lbm or .iff) FORM : ILBM or PBM(packed bitmap)
+    HAM6, HAM8, and 24bit types are not supported. 
+
+=item *
+PNG
+    Portable Network Graphics (.png) =item *
+
+=item * 
 XV
+     ???
 
 =back
 
@@ -76,9 +86,51 @@ TODO, SDL, Image
 
 =head2 read_XPM_from_array
 
-=head2 version
+=head2 linked_version
+
+Provides the version of linked sdl_image library. see L<SDL::Version>
+
+	my $version = SDL::Image::linked_version();
+	print $version->major.' '.$version->minor.' '.$version->patch;
 
 =head2 init
+
+B<For version SDL_image 1.2.10 and up>
+
+
+
+=head3 Flags
+
+bitwise OR'd set of image formats to support by loading a library now. The values you may OR together to pass in are: 
+
+=over
+
+=item *
+ IMG_INIT_JPG = 0x00000001
+
+=item *
+ IMG_INIT_PNG = 0x00000002
+
+=item *
+ IMG_INIT_TIF = 0x00000004  
+
+=back
+
+Initialize by loading support as indicated by the flags, or at least return success if support is already loaded. You may call this multiple times, which will actually require you to call IMG_Quit just once to clean up. You may call this function with a 0 to retrieve whether support was built-in or not loaded yet.
+Note: to load JPG, PNG, and/or TIF images you can call IMG_Init with the right IMG_INIT_* flags OR'd together before you program gets busy, to prevent a later hiccup while it loads the library, and to check that you do have the support that you need before you try and use it.
+Note: No initialization is needed nor performed when using the SDL::Image::is_JPG, SDL::Image::is_PNG, and SDL::Image::is_TIF functions.
+Note: this function does not always set the error string, so do not depend on SDL::Image::get_error being meaningful all the time.  
+
+=head3 Return
+
+A bitmask of all the currentl initted image loaders.
+
+=head3 Example
+
+  use SDL::Image;
+  my $flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_JPG;
+  my $inited = SDL::Image::init($flags);
+  
 
 =head2 set_error
 
