@@ -83,9 +83,9 @@ is( SDL::Image::is_XV($file3) , 0 ,'[is_XV] returned correct value');
 
 #need to get DEFINES to SDL::Image::Constants;
 #IMG_INIT_JPG =?o
-is IMG_INIT_JPG , 0x00000001, '[IMG_INIT_JPG] constant loaded properly';
-is IMG_INIT_PNG , 0x00000002, '[IMG_INIT_PNG] constant loaded properly';
-is IMG_INIT_TIF , 0x00000004, '[IMG_INIT_TIF] constant loaded properly'; 
+is( IMG_INIT_JPG , 0x00000001, '[IMG_INIT_JPG] constant loaded properly');
+is( IMG_INIT_PNG , 0x00000002, '[IMG_INIT_PNG] constant loaded properly');
+is( IMG_INIT_TIF , 0x00000004, '[IMG_INIT_TIF] constant loaded properly'); 
 
 
 SKIP:

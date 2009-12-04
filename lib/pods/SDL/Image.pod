@@ -78,8 +78,22 @@ TODO, SDL, Image
 
 =head2 load
 
-=head2 load_typed_rw
+ my $surface = SDL::Image::load( $file );
 
+$file Image file name to load a surface from. 
+ 
+Load file for use as an image in a new L<SDL::Surface>. This actually calls C<IMG_LoadTyped_RW> the binded function to L<SDL::Image::load_typed_rw>, with the file extension used as the type string. This can load all supported image files, including TGA as long as the filename ends with ".tga". It is best to call this outside of event loops, and rather keep the loaded images around until you are really done with them, as disk speed and image conversion to a surface is not that speedy.  
+Note: If the image format loader requires initialization, it will attempt to do that the first time it is needed if you have not already called IMG_Init to load support for your image format.
+Note: If the image format supports a transparent pixel, SDL_image will set the colorkey for the surface. You can enable RLE acceleration on the surface afterwards by calling:
+SDL::Video::set_color_key($image, SDL_RLEACCEL, $image->format->colorkey);
+
+
+=head2 Returns
+
+An image as a L<SDL::Surface>. NULL is returned on errors, such as no support built for the image, or a file reading error. Use L<SDL::get_error> to get cause of error.
+
+=head2 load_typed_rw
+ 
 =head2 is_[TYPE]
 
 =head2 load_[TYPE]_rw
