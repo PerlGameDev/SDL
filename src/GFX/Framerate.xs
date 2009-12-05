@@ -26,4 +26,33 @@ See: L<http://www.ferzkopp.net/joomla/content/view/19/14/>
 
 #ifdef HAVE_SDL_GFX
 
+void
+gfx_frame_init(manager)
+	FPSmanager * manager
+	CODE:
+		SDL_initFramerate(manager);
+
+int
+gfx_frame_set(manager, rate)
+	FPSmanager * manager
+	int rate
+	CODE:
+		RETVAL = SDL_setFramerate(manager, rate);
+	OUTPUT:
+		RETVAL
+
+int
+gfx_frame_get(manager)
+	FPSmanager * manager
+	CODE:
+		RETVAL = SDL_getFramerate(manager);
+	OUTPUT:
+		RETVAL
+
+void
+gfx_frame_delay(manager)
+	FPSmanager * manager
+	CODE:
+		SDL_framerateDelay(manager);
+
 #endif

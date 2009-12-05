@@ -77,6 +77,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_gfx )],
 	},
+	FPSManager => {
+		file      => {
+			from  => 'src/GFX/FPSManager.xs',
+			to    => 'lib/SDL/GFX/FPSManager.xs',
+		},
+		libraries => [qw( SDL SDL_gfx )],
+	},
 	ImageFilter => {
 		file      => {
 			from  => 'src/GFX/ImageFilter.xs',

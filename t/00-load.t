@@ -34,6 +34,7 @@ SDL::Version
 
 SDL::GFX::BlitFunc
 SDL::GFX::Framerate
+SDL::GFX::FPSManager
 SDL::GFX::ImageFilter
 SDL::GFX::Primitives
 SDL::GFX::Rotozoom
