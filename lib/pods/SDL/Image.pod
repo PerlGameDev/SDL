@@ -8,6 +8,10 @@ SDL::Image - Bindings for the SDL_Image library
 
 SDL::Image allows you to load many different format of images into memory as an SDL::Surface.
 
+=head1 CATEGORY
+
+SDL, Image
+
 =head1 SUPPORTED FORMATS 
 
 The following types are supported:
@@ -72,9 +76,6 @@ Portable Network Graphics (.png)
 
 =back
 
-=head1 CATEGORY
-
-TODO, SDL, Image
 
 =head1 LOADING METHODS
 
@@ -269,6 +270,60 @@ The image as a new L<SDL::Surface>. NULL is returned on errors, like if the [TYP
  
 =head2 read_XPM_from_array
 
+ my $picture = SDL::Image::read_XPM_from_array(\@XPM, $width);
+
+This functions takes the reference of an array in the valid @XPM format. Also the $width of the XPM image.
+
+=head3 RETURNS
+
+The image as a new L<SDL::Surface>. NULL is returned on errors, like if XPM is not supported, or a read error. 
+
+=head3 EXAMPLE
+
+	my @XPM= (
+	'30 30 9 1',
+	' 	c #FFFFFF',
+	'.	c #EFEFEF',
+	'+	c #CFCFCF',
+	'@	c #9F9F9F',
+	'#	c #808080',
+	'$	c #505050',
+	'%	c #202020',
+	'&	c #000000',
+	'*	c #303030',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'           .+@##@+.           ',
+	'          .@$%&&%$@.          ',
+	'         .@*&&&&&&*@.         ',
+	'         +$&&&&&&&&$+         ',
+	'         @%&&&&&&&&%@         ',
+	'         #&&&&&&&&&&#         ',
+	'         #&&&&&&&&&&#         ',
+	'         @%&&&&&&&&%@         ',
+	'         +$&&&&&&&&$+         ',
+	'         .@*&&&&&&*@.         ',
+	'          .@$%&&%$@.          ',
+	'           .+@##@+.           ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',
+	'                              ',);
+	
+	my $picture = SDL::Image::read_XPM_from_array(\@XPM, 30);
+
 =head1 MISC METHODS
 
 =head2 linked_version
@@ -324,7 +379,11 @@ This function cleans up all dynamically loaded library handles, freeing memory. 
 
 =head2 set_error
 
+Same as L<SDL::set_error>
+
 =head2 get_error
+
+Same as L<SDL::get_error>
 
 =head1 SEE ALSO
 
