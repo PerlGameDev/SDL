@@ -10,7 +10,7 @@ SDL::Image allows you to load many different format of images into memory as an 
 
 =head1 CATEGORY
 
-SDL, Image
+Image
 
 =head1 SUPPORTED FORMATS 
 
