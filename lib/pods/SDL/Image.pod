@@ -156,6 +156,8 @@ Note: If the image format loader requires initialization, it will attempt to do 
 Note: If the image format supports a transparent pixel, L<SDL::Image> will set the colorkey for the surface. You can enable RLE acceleration on the surface afterwards by calling:
 L<SDL::Video::set_color_key>
 
+=head3 Transparency 
+
   use SDL;
   use SDL::RWOps;
   use SDL::Image;
@@ -165,7 +167,8 @@ L<SDL::Video::set_color_key>
 
   SDL::Video::set_color_key($image, SDL_RLEACCEL, $image->format->colorkey);
 
-=head3 RETURNS
+=head3 Return 
+
 The image as a new L<SDL::Surface>. NULL is returned on errors. 
  
 =head2 is_[TYPE]
@@ -204,17 +207,18 @@ Test for valid, supported image files:
 
 These functions take a L<SDL::RWOps> as a parameter.
 
+=head3 Return
+
+1 if the image is a valid [TYPE]  and the [TYPE] format support is compiled into SDL_image. 0 is returned otherwise. 
+
+=head3 Example
+
  use SDL::RWOps;
  use SDL::Image;
 
  my $file = SDL::RWOps->new_file("file", "rb");
  
  print "Image is BMP" if ( SDL::is_BMP );
-
-
-=head3 RETURN
-
-1 if the image is a valid [TYPE]  and the [TYPE] format support is compiled into SDL_image. 0 is returned otherwise. 
 
 =head2 load_[TYPE]_rw
 
@@ -252,7 +256,7 @@ Specific loader for known formats:
 
 These functions take a L<SDL::RWop> as a parameter
 
-=head3 RETURN
+=head3 Return
 
 The image as a new L<SDL::Surface>. NULL is returned on errors, like if the [TYPE] is not supported, or a read error.
 
@@ -274,11 +278,11 @@ The image as a new L<SDL::Surface>. NULL is returned on errors, like if the [TYP
 
 This functions takes the reference of an array in the valid @XPM format. Also the $width of the XPM image.
 
-=head3 RETURNS
+=head3 Return
 
 The image as a new L<SDL::Surface>. NULL is returned on errors, like if XPM is not supported, or a read error. 
 
-=head3 EXAMPLE
+=head3 Example
 
 	my @XPM= (
 	'30 30 9 1',
@@ -371,6 +375,8 @@ A bitmask of all the currently inited image loaders.
 B<For version SDL_image 1.2.10 and up>
 
 This function cleans up all dynamically loaded library handles, freeing memory. If support is required again it will be initialized again, either by L<SDL::Image::init> or loading an image with dynamic support required. You may call this function when L<SDL::Image::load> functions are no longer needed for the JPG, PNG, and TIF image formats. You only need to call this function once, no matter how many times L<SDL::Image::init> was called. 
+
+=head3 Example
 
  use SDL::Image;
  SDL::Image::init(IMG_INIT_JPG); #loads JPG support
