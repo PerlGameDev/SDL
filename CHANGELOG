@@ -4,7 +4,7 @@ Revision history for Perl extension SDL_perl.
 	- SDL::Image implemented and tested [#72] [kthakore]
 	- FreeBSD SDL test clean up [#75] [kthakore]
 	- Handle GFX seperate headers in Build [FROGGS,kthakore]
-	- Started GFX [FROGGS]
+	- Started GFX, GFX BlitFunc, GFX Primatives, FPSManager  [FROGGS] 
 	- Added more init tests [kthakore]
 	- Added condition compile for mixer and ttf [kthakore]
 
