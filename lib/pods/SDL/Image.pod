@@ -66,6 +66,10 @@ Portable Network Graphics (.png)
 
 =item XV
 
+=item ICO
+
+=item CUR
+
 =back
 
 =head1 CATEGORY
@@ -165,8 +169,104 @@ The image as a new L<SDL::Surface>. NULL is returned on errors.
  
 =head2 is_[TYPE]
 
+Test for valid, supported image files:
+
+=over
+
+=item is_ICO
+
+=item is_CUR
+
+=item is_PNG
+
+=item is_BMP
+
+=item is_GIF
+
+=item is_JPG
+
+=item is_LBM
+
+=item is_PCX
+
+=item is_PNM 
+
+=item is_TIF
+
+=item is_XCF
+
+=item is_XPM
+
+=item is_XV
+
+=back
+
+These functions take a L<SDL::RWOps> as a parameter.
+
+ use SDL::RWOps;
+ use SDL::Image;
+
+ my $file = SDL::RWOps->new_file("file", "rb");
+ 
+ print "Image is BMP" if ( SDL::is_BMP );
+
+
+=head3 RETURN
+
+1 if the image is a valid [TYPE]  and the [TYPE] format support is compiled into SDL_image. 0 is returned otherwise. 
+
 =head2 load_[TYPE]_rw
 
+Specific loader for known formats:
+
+=over
+
+=item load_ICO_rw
+
+=item load_CUR_rw
+
+=item load_PNG_rw
+
+=item load_BMP_rw
+
+=item load_GIF_rw
+
+=item load_JPG_rw
+
+=item load_LBM_rw
+
+=item load_PCX_rw
+
+=item load_PNM_rw 
+
+=item load_TIF_rw
+
+=item load_XCF_rw
+
+=item load_XPM_rw
+
+=item load_XV_rw
+
+=back
+
+These functions take a L<SDL::RWop> as a parameter
+
+=head3 RETURN
+
+The image as a new L<SDL::Surface>. NULL is returned on errors, like if the [TYPE] is not supported, or a read error.
+
+=head3 Example
+
+ use SDL;
+ use SDL::RWOps;
+ use SDL::Image;
+
+ my $file = SDL::RWOps->new_file("file.png", "rb");  
+
+ my $image = SDL::Image::load_PNG_rw($file);
+ 
+ die SDL::get_error if (!$image);  
+ 
 =head2 read_XPM_from_array
 
 =head1 MISC METHODS
@@ -203,7 +303,7 @@ Note: this function does not always set the error string, so do not depend on SD
 
 =head3 Return
 
-A bitmask of all the currentl initted image loaders.
+A bitmask of all the currently inited image loaders.
 
 =head3 Example
 

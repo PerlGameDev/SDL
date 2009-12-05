@@ -23,6 +23,8 @@ my @done = qw/
 linked_version
 load_rw
 load_typed_rw
+load_ICO_rw
+load_CUR_rw
 load_PNG_rw
 load_BMP_rw
 load_GIF_rw
@@ -34,6 +36,8 @@ load_TIF_rw
 load_XCF_rw
 load_XPM_rw
 load_XV_rw
+is_ICO
+is_CUR
 is_PNG
 is_BMP
 is_GIF
@@ -66,7 +70,9 @@ my $file2 = SDL::RWOps->new_file("test/data/menu.png", "rb");
 isa_ok (SDL::Image::load_typed_rw($file2, 1, "PNG"), "SDL::Surface", "[loadtyped_rw] Makes surface from png");
 
 my $file3 = SDL::RWOps->new_file("test/data/menu.png", "rb");  
+
 is(SDL::Image::is_PNG($file3), 1 ,"[is_PNG] gets correct value for png file");
+
 
 is( SDL::Image::is_BMP($file3), 0 ,'[is_BMP] returned correct value');
 is( SDL::Image::is_GIF($file3), 0 ,'[is_GIF] returned correct value');

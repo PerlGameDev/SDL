@@ -98,6 +98,29 @@ image_load_typed_rw(src, freesrc, type)
 	OUTPUT:
 		RETVAL
 
+
+SDL_Surface *
+image_load_ICO_rw(src)
+	SDL_RWops* src
+ 	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadICO_RW(src);
+	OUTPUT:
+		RETVAL
+
+
+SDL_Surface *
+image_load_CUR_rw(src)
+	SDL_RWops* src
+ 	PREINIT:
+ 	 	 char *CLASS = "SDL::Surface";
+ 	CODE:
+		RETVAL = IMG_LoadCUR_RW(src);
+	OUTPUT:
+		RETVAL
+
+
 SDL_Surface *
 image_load_BMP_rw(src)
 	SDL_RWops* src
@@ -225,6 +248,22 @@ int image_is_BMP(src)
 		RETVAL=IMG_isBMP(src);
 	OUTPUT:
 		RETVAL
+
+int image_is_CUR(src)
+	SDL_RWops* src;
+	CODE:
+		RETVAL=IMG_isCUR(src);
+	OUTPUT:
+		RETVAL
+
+
+int image_is_ICO(src)
+	SDL_RWops* src;
+	CODE:
+		RETVAL=IMG_isICO(src);
+	OUTPUT:
+		RETVAL
+
 
 int 
 image_is_GIF(src)
