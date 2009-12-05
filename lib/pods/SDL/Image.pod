@@ -93,7 +93,7 @@ L<SDL::Video::set_color_key>
   my $image = SDL::Image::load( $some_png_file );
   SDL::Video::set_color_key($image, SDL_RLEACCEL, $image->format->colorkey);
 
-=head2 Returns
+=head3 Return
 
 An image as a L<SDL::Surface>. NULL is returned on errors, such as no support built for the image, or a file reading error. Use L<SDL::get_error> to get cause of error.
 
@@ -332,7 +332,13 @@ The image as a new L<SDL::Surface>. NULL is returned on errors, like if XPM is n
 
 =head2 linked_version
 
-Provides the version of linked sdl_image library. see L<SDL::Version>
+Provides the version of linked sdl_image library.
+
+=head3 Return
+
+Returns a L<SDL::Version> object
+
+=head3 Example
 
 	my $version = SDL::Image::linked_version();
 	print $version->major.' '.$version->minor.' '.$version->patch;
