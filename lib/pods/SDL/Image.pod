@@ -72,7 +72,7 @@ Portable Network Graphics (.png)
 
 TODO, SDL, Image
 
-=head1 METHODS
+=head1 LOADING METHODS
 
 =head2 load
 
@@ -93,12 +93,83 @@ L<SDL::Video::set_color_key>
 An image as a L<SDL::Surface>. NULL is returned on errors, such as no support built for the image, or a file reading error. Use L<SDL::get_error> to get cause of error.
 
 =head2 load_typed_rw
+
+  SDL::Image::load_typed_rw($src, $freesrc, $type);
+
+=over
+
+=item src
+
+The source L<SDL::RWops> as a pointer. The image is loaded from this. 
+
+=item freesrc
+
+A non-zero value mean is will automatically close/free the src for you. Since SDL Perl cannot handle the memory inside this function you would most likely want 1 here.
+
+=item type
+
+A string that indicates which format type to interpret the image as.
+
+Here is a list of the currently recognized strings (case is not important):
+     	
+=over
+
+=item "BMP"
+
+=item "CUR"
+
+=item "GIF"
+
+=item "ICO"
+
+=item "JPG"
+
+=item "LBM"
+
+=item "PCX"
+
+=item "PNG"
+
+=item "PNM"
+
+=item "TGA"
+
+=item "TIF"
+
+=item "XCF"
+
+=item "XPM"
+
+=item "XV"
+
+=back
+
+=back 
+
+Load src for use as a surface. This can load all supported image formats. This method does not guarantee that the format specified by type is the format of the loaded image, except in the case when TGA format is specified (or any other non-magicable format in the future). Using SDL_RWops is not covered here, but they enable you to load from almost any source.
+Note: If the image format loader requires initialization, it will attempt to do that the first time it is needed if you have not already called L<SDL::Image::init> to load support for your image format.
+Note: If the image format supports a transparent pixel, L<SDL::Image> will set the colorkey for the surface. You can enable RLE acceleration on the surface afterwards by calling:
+L<SDL::Video::set_color_key>
+
+  use SDL;
+  use SDL::RWOps;
+  use SDL::Image;
+
+  my $file2 = SDL::RWOps->new_file("test/data/menu.png", "rb");
+  my $image = SDL::Image::load_typed_rw($file2, 1, "PNG");
+
+  SDL::Video::set_color_key($image, SDL_RLEACCEL, $image->format->colorkey);
+
+=head3 RETURNS
+The image as a new L<SDL::Surface>. NULL is returned on errors. 
  
 =head2 is_[TYPE]
 
 =head2 load_[TYPE]_rw
 
 =head2 read_XPM_from_array
+
+=head1 MISC METHODS
 
 =head2 linked_version
 
@@ -110,8 +181,6 @@ Provides the version of linked sdl_image library. see L<SDL::Version>
 =head2 init
 
 B<For version SDL_image 1.2.10 and up>
-
-
 
 =head3 Flags
 
@@ -141,6 +210,17 @@ A bitmask of all the currentl initted image loaders.
   use SDL::Image;
   my $flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_JPG;
   my $inited = SDL::Image::init($flags);
+
+=head2 quit
+
+B<For version SDL_image 1.2.10 and up>
+
+This function cleans up all dynamically loaded library handles, freeing memory. If support is required again it will be initialized again, either by L<SDL::Image::init> or loading an image with dynamic support required. You may call this function when L<SDL::Image::load> functions are no longer needed for the JPG, PNG, and TIF image formats. You only need to call this function once, no matter how many times L<SDL::Image::init> was called. 
+
+ use SDL::Image;
+ SDL::Image::init(IMG_INIT_JPG); #loads JPG support
+ SDL::Image::load("file.png"); #loads PNG support
+ SDL::Image::quit(); #unloads everything
 
 =head2 set_error
 

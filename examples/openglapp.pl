@@ -66,8 +66,8 @@ sub draw_cube {
 
   glBegin(GL_QUADS);
 
-  foreach $face (0..5) {
-    foreach $vertex (0..3) {
+  foreach my $face (0..5) {
+    foreach my $vertex (0..3) {
       $index  = $indices[4 * $face + $vertex];
       $coords = $vertices[$index];
       glVertex(@$coords);
