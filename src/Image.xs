@@ -98,6 +98,7 @@ image_load_typed_rw(src, freesrc, type)
 	OUTPUT:
 		RETVAL
 
+#if (SDL_IMAGE_MAJOR_VERSION >= 1) && (SDL_IMAGE_MINOR_VERSION >= 2) && (SDL_IMAGE_PATCHLEVEL >= 10)
 
 SDL_Surface *
 image_load_ICO_rw(src)
@@ -120,6 +121,7 @@ image_load_CUR_rw(src)
 	OUTPUT:
 		RETVAL
 
+#endif
 
 SDL_Surface *
 image_load_BMP_rw(src)
