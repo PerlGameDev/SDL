@@ -251,6 +251,8 @@ int image_is_BMP(src)
 	OUTPUT:
 		RETVAL
 
+#if (SDL_IMAGE_MAJOR_VERSION >= 1) && (SDL_IMAGE_MINOR_VERSION >= 2) && (SDL_IMAGE_PATCHLEVEL >= 10)
+
 int image_is_CUR(src)
 	SDL_RWops* src;
 	CODE:
@@ -266,6 +268,7 @@ int image_is_ICO(src)
 	OUTPUT:
 		RETVAL
 
+#endif
 
 int 
 image_is_GIF(src)
