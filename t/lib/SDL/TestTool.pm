@@ -23,7 +23,7 @@ sub init {
     my $stdout = '';
     my $stderr = '';
 
-    if( $ENV{SDL_BSD_TEST} && $^O =~ /bsd|solaris/i) 
+    if( !$ENV{SDL_BSD_TEST} && $^O =~ /bsd|solaris/i) 
     {
 	    warn "Timer, Audio and Video is experimental in BSD environments. ";
 	    return ;
