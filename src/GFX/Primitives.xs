@@ -11,6 +11,30 @@
 #include <SDL_gfxPrimitives.h>
 #endif
 
+static Sint16* av_to_sint16 (AV* av)
+{
+	int len = av_len(av);
+	if( len != -1)
+	{
+		int i;
+		Uint16* table = (Sint16 *)safemalloc(sizeof(Sint16)*(len));
+		for ( i = 0; i < len+1 ; i++ )
+		{ 
+			SV ** temp = av_fetch(av,i,0);
+			if( temp != NULL )
+			{
+				table[i] = (Sint16) SvIV( *temp );
+			}
+			else
+			{
+				table[i] = 0;
+			}
+		}
+		return table;
+	}
+	return NULL;
+}
+
 MODULE = SDL::GFX::Primitives 	PACKAGE = SDL::GFX::Primitives    PREFIX = gfx_prim_
 
 =for documentation
@@ -247,6 +271,8 @@ gfx_prim_circle_RGBA(dst, x, y, rad, r, g, b, a)
 	OUTPUT:
 		RETVAL
 
+#if (SDL_GFXPRIMITIVES_MAJOR >= 2) && (SDL_GFXPRIMITIVES_MINOR >= 0) && (SDL_GFXPRIMITIVES_MICRO >= 17)
+
 int
 gfx_prim_arc_color(dst, x, y, r, start, end, color)
 	SDL_Surface * dst
@@ -277,6 +303,8 @@ gfx_prim_arc_RGBA(dst, x, y, rad, start, end, r, g, b, a)
 		RETVAL = arcRGBA(dst, x, y, rad, start, end, r, g, b, a);
 	OUTPUT:
 		RETVAL
+
+#endif
 
 int
 gfx_prim_aacircle_color(dst, x, y, r, color)
@@ -583,117 +611,159 @@ gfx_prim_filled_trigon_RGBA(dst, x1, y1, x2, y2, x3, y3, r, g, b, a)
 int
 gfx_prim_polygon_color(dst, vx, vy, n, color)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	Uint32 color
 	CODE:
-		RETVAL = polygonColor(dst, vx, vy, n, color);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL       = polygonColor(dst, _vx, _vy, n, color);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
 
 int
 gfx_prim_polygon_RGBA(dst, vx, vy, n, r, g, b, a)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	Uint8 r
 	Uint8 g
 	Uint8 b
 	Uint8 a
 	CODE:
-		RETVAL = polygonRGBA(dst, vx, vy, n, r, g, b, a);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL = polygonRGBA(dst, _vx, _vy, n, r, g, b, a);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
 
 int
 gfx_prim_aapolygon_color(dst, vx, vy, n, color)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	Uint32 color
 	CODE:
-		RETVAL = aapolygonColor(dst, vx, vy, n, color);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL = aapolygonColor(dst, _vx, _vy, n, color);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
 
 int
 gfx_prim_aapolygon_RGBA(dst, vx, vy, n, r, g, b, a)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	Uint8 r
 	Uint8 g
 	Uint8 b
 	Uint8 a
 	CODE:
-		RETVAL = aapolygonRGBA(dst, vx, vy, n, r, g, b, a);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL = aapolygonRGBA(dst, _vx, _vy, n, r, g, b, a);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
 
 int
 gfx_prim_filled_polygon_color(dst, vx, vy, n, color)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	Uint32 color
 	CODE:
-		RETVAL = filledPolygonColor(dst, vx, vy, n, color);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL = filledPolygonColor(dst, _vx, _vy, n, color);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
 
 int
 gfx_prim_filled_polygon_RGBA(dst, vx, vy, n, r, g, b, a)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	Uint8 r
 	Uint8 g
 	Uint8 b
 	Uint8 a
 	CODE:
-		RETVAL = filledPolygonRGBA(dst, vx, vy, n, r, g, b, a);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL = filledPolygonRGBA(dst, _vx, _vy, n, r, g, b, a);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
 
 int
 gfx_prim_textured_polygon(dst, vx, vy, n, texture, texture_dx, texture_dy)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	SDL_Surface * texture
 	int texture_dx
 	int texture_dy
 	CODE:
-		RETVAL = texturedPolygon(dst, vx, vy, n, texture, texture_dx, texture_dy);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL = texturedPolygon(dst, _vx, _vy, n, texture, texture_dx, texture_dy);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
+
+#if (SDL_GFXPRIMITIVES_MAJOR >= 2) && (SDL_GFXPRIMITIVES_MINOR >= 0) && (SDL_GFXPRIMITIVES_MICRO >= 17)
 
 int
 gfx_prim_filled_polygon_color_MT(dst, vx, vy, n, color, polyInts, polyAllocated)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	Uint32 color
 	int **polyInts
 	int *polyAllocated
 	CODE:
-		RETVAL = filledPolygonColorMT(dst, vx, vy, n, color, polyInts, polyAllocated);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL = filledPolygonColorMT(dst, _vx, _vy, n, color, polyInts, polyAllocated);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
 
 int
 gfx_prim_filled_polygon_RGBA_MT(dst, vx, vy, n, r, g, b, a, polyInts, polyAllocated)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	Uint8 r
 	Uint8 g
@@ -702,15 +772,20 @@ gfx_prim_filled_polygon_RGBA_MT(dst, vx, vy, n, r, g, b, a, polyInts, polyAlloca
 	int **polyInts
 	int *polyAllocated
 	CODE:
-		RETVAL = filledPolygonRGBAMT(dst, vx, vy, n, r, g, b, a, polyInts, polyAllocated);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL = filledPolygonRGBAMT(dst, _vx, _vy, n, r, g, b, a, polyInts, polyAllocated);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
 
 int
 gfx_prim_textured_polygon_MT(dst, vx, vy, n, texture, texture_dx, texture_dy, polyInts, polyAllocated)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	SDL_Surface * texture
 	int texture_dx
@@ -718,28 +793,40 @@ gfx_prim_textured_polygon_MT(dst, vx, vy, n, texture, texture_dx, texture_dy, po
 	int **polyInts
 	int *polyAllocated
 	CODE:
-		RETVAL = texturedPolygonMT(dst, vx, vy, n, texture, texture_dx, texture_dy, polyInts, polyAllocated);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL = texturedPolygonMT(dst, _vx, _vy, n, texture, texture_dx, texture_dy, polyInts, polyAllocated);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
+
+#endif
 
 int
 gfx_prim_bezier_color(dst, vx, vy, n, s, color)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	int s
 	Uint32 color
 	CODE:
-		RETVAL = bezierColor(dst, vx, vy, n, s, color);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL = bezierColor(dst, _vx, _vy, n, s, color);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
 
 int
 gfx_prim_bezier_RGBA(dst, vx, vy, n, s, r, g, b, a)
 	SDL_Surface * dst
-	const Sint16 * vx
-	const Sint16 * vy
+	AV* vx
+	AV* vy
 	int n
 	int s
 	Uint8 r
@@ -747,7 +834,12 @@ gfx_prim_bezier_RGBA(dst, vx, vy, n, s, r, g, b, a)
 	Uint8 b
 	Uint8 a
 	CODE:
-		RETVAL = bezierRGBA(dst, vx, vy, n, s, r, g, b, a);
+		Sint16 * _vx = av_to_sint16(vx);
+		Sint16 * _vy = av_to_sint16(vy);
+		RETVAL = bezierRGBA(dst, _vx, _vy, n, s, r, g, b, a);
+		
+		if( _vx != NULL) { safefree(_vx); }
+		if( _vy != NULL) { safefree(_vy); }
 	OUTPUT:
 		RETVAL
 
