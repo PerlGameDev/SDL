@@ -23,13 +23,13 @@ sub init {
     my $stdout = '';
     my $stderr = '';
 
-    if( !$ENV{SDL_BSD_TEST} && $^O =~ /bsd|solaris/i) 
+    if( !$ENV{SDL_BSD_TEST} and $^O =~ /bsd|solaris/i) 
     {
 	    warn "SDL Perl is experimental in BSD environments. \n Turn on SDL_BSD_TEST to test your system.";
 	    return ;
     }
 
-    if( $init == SDL_INIT_TIMER && $^O =~ /bsd|solaris/i )
+    if( $init == SDL_INIT_TIMER and $^O =~ /bsd|solaris/i )
     {
 	    warn ' Timer is REALLY experimental with BSD environments';
 	    return ;
