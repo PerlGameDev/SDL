@@ -19,13 +19,13 @@ my %inits =
 );
 
 sub init {
-    my ($self, $init) = @_;
+    my ($self, $init) = @_; 
     my $stdout = '';
     my $stderr = '';
 
     if( !$ENV{SDL_BSD_TEST} && $^O =~ /bsd|solaris/i) 
     {
-	    warn "Timer, Audio and Video is experimental in BSD environments. ";
+	    warn "SDL Perl is experimental in BSD environments. \n Turn on SDL_BSD_TEST to test your system.";
 	    return ;
     }
 

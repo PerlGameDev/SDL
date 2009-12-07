@@ -38,17 +38,16 @@ use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
 
-if (! SDL::TestTool->init(SDL_INIT_TIMER) ) {
-    plan( skip_all => 'Failed to init timer' );
-} else {
     plan( tests => 4 );
-}
 use_ok( 'SDL::Timer' ); 
   
 can_ok ('SDL::Timer', qw/
 	new run stop
 	/);
 
+SKIP:
+{
+ skip 'Failed to init timer', 2 unless SDL::TestTool->init(SDL_INIT_TIMER);
 my $fired = 0;
 
 
@@ -60,3 +59,5 @@ isa_ok($timer, 'SDL::Timer');
 SDL::delay(100);
 is ($fired, 1,'timer fired once');
 sleep(2);
+
+}

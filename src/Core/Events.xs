@@ -109,7 +109,7 @@ events_set_event_filter(callback)
 	CODE:
 	eventfiltersv = callback;
 	
-	SDL_SetEventFilter( (SDL_EventFilter *)eventfilter_cb);
+	SDL_SetEventFilter((SDL_EventFilter) eventfilter_cb);
 
 
 AV *
