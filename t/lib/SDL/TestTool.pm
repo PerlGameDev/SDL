@@ -29,6 +29,12 @@ sub init {
 	    return ;
     }
 
+    if( $init == SDL_INIT_TIMER && $^O =~ /bsd|solaris/i )
+    {
+	    warn ' Timer is REALLY experimental with BSD environments';
+	    return ;
+    } 
+
     if( $init == SDL_INIT_VIDEO)
     {
 	    if( $^O !~ /win/i && !$ENV{DISPLAY} )
