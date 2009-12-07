@@ -23,8 +23,6 @@ my @done = qw/
 linked_version
 load_rw
 load_typed_rw
-load_ICO_rw
-load_CUR_rw
 load_PNG_rw
 load_BMP_rw
 load_GIF_rw
@@ -36,8 +34,6 @@ load_TIF_rw
 load_XCF_rw
 load_XPM_rw
 load_XV_rw
-is_ICO
-is_CUR
 is_PNG
 is_BMP
 is_GIF
@@ -96,8 +92,15 @@ is( IMG_INIT_TIF , 0x00000004, '[IMG_INIT_TIF] constant loaded properly');
 
 SKIP:
 {
-	skip ' This is only for version >= 1.2.10', 1 unless !( $lver->major == 1 && $lver->minor ==2 &&  $lver->patch < 10);
+	skip ' This is only for version >= 1.2.10', 2 unless !( $lver->major == 1 && $lver->minor ==2 &&  $lver->patch < 10);
 	is (SDL::Image::init( IMG_INIT_JPG ), 0 , '[init] Inited jpg');
+	can_ok('SDL::Image', qw/
+		load_ICO_rw
+		load_CUR_rw
+		is_ICO
+		is_CUR/
+	     );
+ 
 #	SDL::Image::quit();
 	# 	pass '[quit] we can quit fine';
 
