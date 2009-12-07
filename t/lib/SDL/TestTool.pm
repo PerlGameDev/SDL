@@ -23,6 +23,12 @@ sub init {
     my $stdout = '';
     my $stderr = '';
 
+    if( $ENV{SDL_BSD_TEST} && $^O =~ /bsd|solaris/i) 
+    {
+	    warn "Timer, Audio and Video is experimental in BSD environments. ";
+	    return ;
+    }
+
     if( $init == SDL_INIT_VIDEO)
     {
 	    if( $^O !~ /win/i && !$ENV{DISPLAY} )
@@ -42,11 +48,6 @@ sub init {
 	SDL::quit();
     }
 
-    if( $init == SDL_INIT_TIMER && $^O =~ /bsd|solaris/i) 
-    {
-	    warn "Timer is not supported in BSD environments";
-	    return ;
-    }
     capture { SDL::init($init) } \$stdout, \$stderr;
     if ( $stderr ne '' )
     {
