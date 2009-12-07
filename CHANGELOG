@@ -1,6 +1,6 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.3_2
+* 2.3_3
 	- SDL::Image implemented and tested [#72] [kthakore]
 	- FreeBSD SDL test clean up [#75] [kthakore]
 	- Handle GFX seperate headers in Build [FROGGS,kthakore]
