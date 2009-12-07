@@ -68,7 +68,7 @@ time_add_timer ( interval, cmd )
 	 cb = newSVsv(cmd);
 
 		RETVAL = SDL_AddTimer(interval,add_timer_cb,(void *)cmd);
-		fprintf( stderr, "Timer %d  \n Return = %x \n error = %s \n ", interval, (int)RETVAL, SDL_GetError() );
+		//fprintf( stderr, "Timer %d  \n Return = %x \n error = %s \n ", interval, (int)RETVAL, SDL_GetError() );
 
 	OUTPUT:
 		RETVAL
