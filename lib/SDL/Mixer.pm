@@ -37,7 +37,7 @@ use Carp;
 use SDL;
 use SDL::Sound;
 use SDL::Music;
-bootstrap SDL::Mixer;
+#bootstrap SDL::Mixer;
 
 BEGIN {
 }
