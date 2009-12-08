@@ -70,42 +70,42 @@ my %subsystems =
 			from  => 'src/GFX/BlitFunc.xs',
 			to    => 'lib/SDL/GFX/BlitFunc.xs',
 		},
-		libraries => [qw( SDL SDL_gfx_blit )],
+		libraries => [qw( SDL SDL_gfx_blitfunc )],
 	},
 	Framerate => {
 		file      => {
 			from  => 'src/GFX/Framerate.xs',
 			to    => 'lib/SDL/GFX/Framerate.xs',
 		},
-		libraries => [qw( SDL SDL_gfx )],
+		libraries => [qw( SDL SDL_gfx_framerate )],
 	},
 	FPSManager => {
 		file      => {
 			from  => 'src/GFX/FPSManager.xs',
 			to    => 'lib/SDL/GFX/FPSManager.xs',
 		},
-		libraries => [qw( SDL SDL_gfx )],
+		libraries => [qw( SDL SDL_gfx_framerate )],
 	},
 	ImageFilter => {
 		file      => {
 			from  => 'src/GFX/ImageFilter.xs',
 			to    => 'lib/SDL/GFX/ImageFilter.xs',
 		},
-		libraries => [qw( SDL SDL_gfx )],
+		libraries => [qw( SDL SDL_gfx_imagefilter )],
 	},
 	Primitives => {
 		file      => {
 			from  => 'src/GFX/Primitives.xs',
 			to    => 'lib/SDL/GFX/Primitives.xs',
 		},
-		libraries => [qw( SDL SDL_gfx )],
+		libraries => [qw( SDL SDL_gfx_primitives )],
 	},
 	Rotozoom => {
 		file      => {
 			from  => 'src/GFX/Rotozoom.xs',
 			to    => 'lib/SDL/GFX/Rotozoom.xs',
 		},
-		libraries => [qw( SDL SDL_gfx )],
+		libraries => [qw( SDL SDL_gfx_rotozoom )],
 	},
 	MultiThread => {
 		file      => {
@@ -319,10 +319,25 @@ my %libraries = (
 		define => 'HAVE_SDL_GFX',     
 		header => 'SDL_gfxPrimitives.h'
 	},
-	SDL_gfx_blit     => {
-		define => 'HAVE_SDL_GFX_BLIT',     
-		header => 'SDL_gfxBlitFunc.h',
-		library => 'SDL_gfx' 
+	SDL_gfx_blitfunc    => {
+		define => 'HAVE_SDL_GFX_BLITFUNC',     
+		header => 'SDL_gfxBlitFunc.h'
+	},
+	SDL_gfx_framerate   => {
+		define => 'HAVE_SDL_GFX_FRAMERATE',     
+		header => 'SDL_framerate.h'
+	},
+	SDL_gfx_imagefilter => {
+		define => 'HAVE_SDL_GFX_IMAGEFILTER',     
+		header => 'SDL_imageFilter.h'
+	},
+	SDL_gfx_primitives  => {
+		define => 'HAVE_SDL_GFX_PRIMITIVES',     
+		header => 'SDL_gfxPrimitives.h'
+	},
+	SDL_gfx_rotozoom    => {
+		define => 'HAVE_SDL_GFX_ROTOZOOM',     
+		header => 'SDL_rotozoom.h'
 	},
 	png         => {
 		define    => 'HAVE_PNG',

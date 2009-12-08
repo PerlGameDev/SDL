@@ -7,7 +7,7 @@
 #endif
 
 #include <SDL.h>
-#ifdef HAVE_SDL_GFX
+#ifdef HAVE_SDL_GFX_ROTOZOOM
 #include <SDL_rotozoom.h>
 #endif 
 
@@ -23,7 +23,7 @@ See: L<http://www.ferzkopp.net/joomla/content/view/19/14/>
 
 =cut
 
-#ifdef HAVE_SDL_GFX
+#ifdef HAVE_SDL_GFX_ROTOZOOM
 
 SDL_Surface *
 gfx_roto_surface(src, angle, zoom, smooth)

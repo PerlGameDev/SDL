@@ -8,7 +8,7 @@
 
 #include <SDL.h>
 
-#ifdef HAVE_SDL_GFX
+#ifdef HAVE_SDL_GFX_FRAMERATE
 #include <SDL_framerate.h>
 #endif
 
@@ -31,7 +31,7 @@ See: L<http://www.ferzkopp.net/joomla/content/view/19/14/>
 
 =cut
 
-#ifdef HAVE_SDL_GFX
+#ifdef HAVE_SDL_GFX_FRAMERATE
 
 FPSmanager *
 gfx_fps_new (CLASS, framecount, rateticks, lastticks, rate)

@@ -7,7 +7,7 @@
 #endif
 
 #include <SDL.h>
-#ifdef HAVE_SDL_GFX
+#ifdef HAVE_SDL_GFX_PRIMITIVES
 #include <SDL_gfxPrimitives.h>
 #endif
 
@@ -47,7 +47,7 @@ See: L<http://www.ferzkopp.net/joomla/content/view/19/14/>
 
 =cut
 
-#ifdef HAVE_SDL_GFX
+#ifdef HAVE_SDL_GFX_PRIMITIVES
 
 int
 gfx_prim_pixel_color(dst, x, y, color)

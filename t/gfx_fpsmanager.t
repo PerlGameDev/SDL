@@ -14,9 +14,9 @@ if( !SDL::TestTool->init(SDL_INIT_VIDEO) )
 {
     plan( skip_all => 'Failed to init video' );
 }
-elsif( !SDL::Config->has('SDL_gfx') )
+elsif( !SDL::Config->has('SDL_gfx_framerate') )
 {
-    plan( skip_all => 'SDL_gfx support not compiled' );
+    plan( skip_all => 'SDL_gfx_framerate support not compiled' );
 }
 else
 {

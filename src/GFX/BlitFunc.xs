@@ -8,7 +8,7 @@
 
 #include <SDL.h>
 
-#ifdef HAVE_SDL_GFX_BLIT
+#ifdef HAVE_SDL_GFX_BLITFUNC
 #include <SDL_gfxBlitFunc.h>
 #endif
 
@@ -24,6 +24,6 @@ See: L<http://www.ferzkopp.net/joomla/content/view/19/14/>
 
 =cut
 
-#ifdef HAVE_SDL_GFX_BLIT
+#ifdef HAVE_SDL_GFX_BLITFUNC
 
 #endif

@@ -75,9 +75,13 @@ sub build_links
 
 	my %links;
 	my %replace = (
-		'GL'           => 'opengl32', 
-		'GLU'          => 'glu32',
-		'SDL_gfx_blit' => 'SDL_gfx',
+		'GL'                  => 'opengl32', 
+		'GLU'                 => 'glu32',
+		'SDL_gfx_blitfunc'    => 'SDL_gfx',
+		'SDL_gfx_framerate'   => 'SDL_gfx',
+		'SDL_gfx_imagefilter' => 'SDL_gfx',
+		'SDL_gfx_primitives'  => 'SDL_gfx',
+		'SDL_gfx_rotozoom'    => 'SDL_gfx',
     );
 
 	while (my ($subsystem, $buildable) = each %$build_systems)
