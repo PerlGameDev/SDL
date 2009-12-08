@@ -22,7 +22,7 @@ elsif( !SDL::Config->has('SDL_gfx_primitives') )
 }
 else
 {
-    plan( tests => 52 );
+    plan( tests => 56 );
 }
 
 my @done =qw/
@@ -76,6 +76,10 @@ bezier_RGBA
 filled_polygon_color_MT
 filled_polygon_RGBA_MT
 textured_polygon_MT
+character_color
+character_RGBA
+string_color
+string_RGBA
 /;
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
@@ -318,8 +322,18 @@ is( SDL::GFX::Primitives::filled_polygon_color_MT($display, [304, 308, 306, 308,
 is( SDL::GFX::Primitives::filled_polygon_RGBA_MT( $display, [310, 314, 312, 314, 310], [243, 243, 245, 247, 247], 5, 0x00, 0xFF, 0x00, 0xFF, 0, 0),       0, 'filled_polygon_RGBA_MT' );  # green
 is( SDL::GFX::Primitives::textured_polygon_MT(    $display, [316, 320, 318, 320, 316], [243, 243, 245, 247, 247], 5, $surf,                  0, 0, 0, 0), 1, 'textured_polygon_MT' );     # texture
 
+# bezier test
 is( SDL::GFX::Primitives::bezier_color( $display, [390, 392, 394, 396], [243, 255, 235, 247], 4, 20, 0xFF00FFFF),             0, 'polygon_color' );        # red
 is( SDL::GFX::Primitives::bezier_RGBA(  $display, [398, 400, 402, 404], [243, 255, 235, 247], 4, 20, 0x00, 0xFF, 0x00, 0xFF), 0, 'polygon_RGBA' );         # green
+
+#character/string tests
+is( SDL::GFX::Primitives::character_color($display, 518, 243, 'A', 0xFF0000FF),                         0, 'character_color' );           # red
+is( SDL::GFX::Primitives::character_RGBA( $display, 526, 243, 'B', 0x00, 0xFF, 0x00, 0xFF),             0, 'character_RGBA' );            # green
+is( SDL::GFX::Primitives::string_color(   $display, 534, 243, 'CD', 0x0000FFFF),                         0, 'string_color' );         # blue
+is( SDL::GFX::Primitives::string_RGBA(    $display, 550, 243, 'DE', 0xFF, 0xFF, 0x00, 0xFF),             0, 'string_RGBA' );          # yellow
+#is( SDL::GFX::Primitives::set_font(       $display, [286, 290, 288, 290, 286], [243, 243, 245, 247, 247], 5, 0x00FFFFFF),                         0, 'set_font' );    # cyan
+
+ SDL::GFX::Primitives::character_RGBA( $display, 518 + ($_ % 15) * 8, 251 + int($_ / 15) * 10, chr($_), 0x00, 0xFF, 0x00, 0xFF) for(0..255);
 
 SDL::Video::unlock_surface($display) if(SDL::Video::MUSTLOCK($display));
 
@@ -328,10 +342,6 @@ SDL::Video::update_rect($display, 0, 0, 640, 480);
 SDL::delay(5000);
 
 my @left = qw/
-character_color
-character_RGBA
-string_color
-string_RGBA
 set_font
 /;
 
