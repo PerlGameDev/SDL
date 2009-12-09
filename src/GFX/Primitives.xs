@@ -899,7 +899,7 @@ gfx_prim_string_RGBA(dst, x, y, c, r, g, b, a)
 
 void
 gfx_prim_set_font(fontdata, cw, ch)
-	void *fontdata
+	char *fontdata
 	int cw
 	int ch
 	CODE:

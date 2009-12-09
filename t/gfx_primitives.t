@@ -80,6 +80,7 @@ character_color
 character_RGBA
 string_color
 string_RGBA
+set_font
 /;
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
@@ -331,9 +332,21 @@ is( SDL::GFX::Primitives::character_color($display, 518, 243, 'A', 0xFF0000FF), 
 is( SDL::GFX::Primitives::character_RGBA( $display, 526, 243, 'B', 0x00, 0xFF, 0x00, 0xFF),             0, 'character_RGBA' );            # green
 is( SDL::GFX::Primitives::string_color(   $display, 534, 243, 'CD', 0x0000FFFF),                         0, 'string_color' );         # blue
 is( SDL::GFX::Primitives::string_RGBA(    $display, 550, 243, 'DE', 0xFF, 0xFF, 0x00, 0xFF),             0, 'string_RGBA' );          # yellow
-#is( SDL::GFX::Primitives::set_font(       $display, [286, 290, 288, 290, 286], [243, 243, 245, 247, 247], 5, 0x00FFFFFF),                         0, 'set_font' );    # cyan
 
- SDL::GFX::Primitives::character_RGBA( $display, 518 + ($_ % 15) * 8, 251 + int($_ / 15) * 10, chr($_), 0x00, 0xFF, 0x00, 0xFF) for(0..255);
+SKIP:
+{
+	skip ' test font not found', 1 unless -e 'test/data/5x7.fnt';
+	my $font = '';
+	open(FH, '<', 'test/data/5x7.fnt');
+	binmode(FH);
+	read(FH, $font, 2048);
+	close(FH);
+
+	is( SDL::GFX::Primitives::set_font($font, 5, 7), undef, 'set_font' );
+}
+
+#chracater demo
+SDL::GFX::Primitives::character_RGBA( $display, 518 + ($_ % 17) * 7, 251 + int($_ / 17) * 8, chr($_), 0x80 + $_ / 2, 0xFF, 0x00, 0xFF) for(0..255);
 
 SDL::Video::unlock_surface($display) if(SDL::Video::MUSTLOCK($display));
 
@@ -342,17 +355,15 @@ SDL::Video::update_rect($display, 0, 0, 640, 480);
 SDL::delay(5000);
 
 my @left = qw/
-set_font
 /;
 
-my $why = '[Percentage Completion] '.int( 100 * ($#done +1 ) / ($#done + $#left + 2  ) ) .'% implementation. '.($#done +1 ).'/'.($#done+$#left + 2 ); 
-
-TODO:
-{
-	local $TODO = $why;
-	pass "\nThe following functions:\n".join ",", @left; 
-}
-if( $done[0] eq 'none'){ diag '0% done 0/'.$#left } else { diag  $why} 
+#my $why = '[Percentage Completion] '.int( 100 * ($#done +1 ) / ($#done + $#left + 2  ) ) .'% implementation. '.($#done +1 ).'/'.($#done+$#left + 2 ); 
+#TODO:
+#{
+#	local $TODO = $why;
+#	pass "\nThe following functions:\n".join ",", @left; 
+#}
+#if( $done[0] eq 'none'){ diag '0% done 0/'.$#left } else { diag  $why} 
 
 pass 'Are we still alive? Checking for segfaults';
 
