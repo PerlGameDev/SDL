@@ -185,7 +185,7 @@ sub grab_input ($$) {
 sub loop ($$) {
 	my ($self,$href) = @_;
 	my $event = SDL::Event->new();
-	while ( SDL::Events::wait($event->wait) ) {
+	while ( SDL::Events::wait_event($event) ) {
 		if ( ref($$href{$event->type()}) eq "CODE" ) {
 			&{$$href{$event->type()}}($event);			
 		}
