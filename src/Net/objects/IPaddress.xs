@@ -1,3 +1,18 @@
+#include "EXTERN.h"
+#include "perl.h"
+#include "XSUB.h"
+
+#ifndef aTHX_
+#define aTHX_
+#endif
+
+#include <SDL.h>
+
+#ifdef HAVE_SDL_NET
+#include <SDL_net.h>
+#endif
+
+
 =for docs
 
  IPaddress
@@ -18,9 +33,12 @@ This type contains the information used to form network connections and sockets.
 
 MODULE = SDL::Net::IPaddress 	PACKAGE = SDL::Net::IPaddress    PREFIX = netip_
 
+#ifdef HAVE_SDL_NET
+
 
 IPaddress*
-netip_new ( host, port )
+netip_new (CLASS, host, port )
+	char* CLASS
 	Uint32 host
 	Uint16 port
 	CODE:
@@ -52,4 +70,6 @@ netip_DESTROY ( ip )
 	CODE:
 		safefree(ip);
 
+
+#endif
 

@@ -39,6 +39,11 @@ SDL::GFX::ImageFilter
 SDL::GFX::Primitives
 SDL::GFX::Rotozoom
 SDL::Image
+
+SDL::Net
+SDL::Net::TCP
+SDL::Net::UDP
+SDL::Net::IPaddress
 /;
     plan tests => scalar @modules;
 

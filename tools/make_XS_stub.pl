@@ -1,35 +1,22 @@
 
-my @files = qw/
-ActiveEvent  	
-KeyboardEvent  	
-TextInputEvent  	
-MouseMotionEvent  	
-MouseButtonEvent  	
-JoyAxisEvent  	
-JoyHatEvent  	
-JoyButtonEvent 	
-JoyBallEvent  	
-ResizeEvent  	
-ExposeEvent  	
-SysWMEvent  	
-UserEvent  	
-QuitEvent  	
-keysym 		
-/;
+@files = @ARGV;
 
 foreach (@files)
 {
+   my $filename = $_;
    my $file = $_;
-   my $fn = $file.'.pm';
-   open FH, ">$fn";
+   $filename  =~ s/\:\:/\//g;
+   $filename = 'lib/'.$filename.'.pm';
+   print "Writing to $filename \n";
+   open FH, ">$filename" or die 'Error '.$!;
    print FH 
-"package SDL::$file;
+"package $file;
 use strict;
 use warnings;
 require Exporter;
 require DynaLoader;
 our \@ISA = qw(Exporter DynaLoader);
-bootstrap SDL::$file;
+bootstrap $file;
 1;";
    close FH;
 }

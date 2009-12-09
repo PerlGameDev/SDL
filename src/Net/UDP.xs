@@ -13,7 +13,10 @@
 #endif
 
 
-MODULE = SDL::Net:UDP 	PACKAGE = SDL::Net::UDP    PREFIX = net_UDP_
+MODULE = SDL::Net::UDP 	PACKAGE = SDL::Net::UDP    PREFIX = net_UDP_
+
+#ifdef HAVE_SDL_NET
+
 
 UDPsocket
 net_UDP_open ( port )
@@ -44,13 +47,15 @@ IPaddress*
 net_UDP_get_peer_address ( sock, channel )
 	UDPsocket sock
 	int channel
+	PREINIT:
+		char* CLASS =  "SDL::IPaddress";
 	CODE:
 		RETVAL = SDLNet_UDP_GetPeerAddress(sock,channel);
 	OUTPUT:
 		RETVAL
 
-
-net_UDP_sendV ( sock, packets, npackets )
+int
+net_UDP_sendV( sock, packets, npackets )
 	UDPsocket sock
 	UDPpacket **packets
 	int npackets
@@ -58,6 +63,7 @@ net_UDP_sendV ( sock, packets, npackets )
 		RETVAL = SDLNet_UDP_SendV(sock,packets,npackets);
 	OUTPUT:
 		RETVAL
+
 
 int
 net_UDP_send ( sock, channel, packet )
@@ -102,6 +108,7 @@ net_UDP_add_socket ( set, sock )
 		RETVAL = SDLNet_UDP_AddSocket(set,sock);
 	OUTPUT:
 		RETVAL
+
 int
 net_UDP_del_socket ( set, sock )
 	SDLNet_SocketSet set
@@ -111,5 +118,5 @@ net_UDP_del_socket ( set, sock )
 	OUTPUT:
 		RETVAL
 
-#endif
 
+#endif

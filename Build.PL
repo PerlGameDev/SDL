@@ -298,6 +298,35 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_image )],
 	},	
+	Net => {
+		file      => {
+			from  => 'src/Net/Net.xs',
+			to    => 'lib/SDL/Net.xs',
+		},
+		libraries => [qw( SDL SDL_net )],
+	},
+	TCP => {
+		file      => {
+			from  => 'src/Net/TCP.xs',
+			to    => 'lib/SDL/Net/TCP.xs',
+		},
+		libraries => [qw( SDL SDL_net )],
+	},
+	UDP => {
+		file      => {
+			from  => 'src/Net/UDP.xs',
+			to    => 'lib/SDL/Net/UDP.xs',
+		},
+		libraries => [qw( SDL SDL_net )],
+	},
+
+	IPaddress => {
+		file      => {
+			from  => 'src/Net/objects/IPaddress.xs',
+			to    => 'lib/SDL/Net/IPaddress.xs',
+		},
+		libraries => [qw( SDL SDL_net )],
+	},
 
 );
 

@@ -13,7 +13,7 @@
 #endif
 
 
-MODULE = SDL::Net:TCP 	PACKAGE = SDL::Net::TCP    PREFIX = net_TCP_
+MODULE = SDL::Net::TCP 	PACKAGE = SDL::Net::TCP    PREFIX = net_TCP_
 
 #ifdef HAVE_SDL_NET
 
@@ -36,6 +36,8 @@ net_TCP_accept ( server )
 IPaddress*
 net_TCP_get_peer_address ( sock )
 	TCPsocket sock
+	PREINIT:
+		char* CLASS = "SDL::IPaddress";
 	CODE:
 		RETVAL = SDLNet_TCP_GetPeerAddress(sock);
 	OUTPUT:
@@ -59,7 +61,7 @@ net_TCP_recv ( sock, maxlen )
 		int status;
 		void *buffer;
 		buffer = safemalloc(maxlen);
-		RETVAL = sv_2mortal((SV*)newAV());
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		status = SDLNet_TCP_Recv(sock,buffer,maxlen);
 		av_push(RETVAL,newSViv(status));
 		av_push(RETVAL,newSVpvn((char*)buffer,maxlen));

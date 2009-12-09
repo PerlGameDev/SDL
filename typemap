@@ -65,7 +65,7 @@ TCPsocket		T_PTR
 UDPsocket		T_PTR
 UDPpacket *		T_PTR
 UDPpacket **		T_PTR
-IPaddress*		T_PTR
+IPaddress*		O_OBJECT			
 SDLNet_GenericSocket	T_PTR
 TTF_Font *		O_OBJECT
 SDL_Overlay *		O_OBJECT	

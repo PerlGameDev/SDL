@@ -93,8 +93,9 @@ net_free_packetV ( packet )
 	CODE:
 		SDLNet_FreePacketV(packet);
 
-net_socket_set
-net_AllocSocketSet ( maxsockets )
+
+SDLNet_SocketSet
+net_alloc_socket_set ( maxsockets )
 	int maxsockets
 	CODE:
 		RETVAL = SDLNet_AllocSocketSet(maxsockets);
