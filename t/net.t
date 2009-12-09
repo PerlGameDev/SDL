@@ -24,9 +24,9 @@ my @done =qw/
 can_ok ('SDL::Net', @done); 
  
 
-is( 1, SDL::Net::init(), '[init] SDL net is inited');
+is( 0, SDL::Net::init(), '[init] SDL net is inited');
 SDL::Net::quit();
-pass '[quit] SDL net quit');
+pass ('[quit] SDL net quit');
 my @left = qw/
 	read16
 	write16
