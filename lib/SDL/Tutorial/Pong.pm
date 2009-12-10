@@ -57,7 +57,7 @@ sub event_loop {
 						$player->y($player->y + 2) ;	
 						$held_down_key = 'down' 						
 				}
-				if($event->key_name eq 'up' || $held_down_key eq 'up')
+				if(SDL::Events::get_key_name($event->key_sym) eq 'up' || $held_down_key eq 'up')
 				{
 						$player->y($player->y - 2) ;
 						$held_down_key = 'up' 							
