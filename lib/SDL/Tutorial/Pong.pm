@@ -37,7 +37,7 @@ my $event = SDL::Event->new;
 my $ball = SDL::Tutorial::Pong::Ball->new;
 
 my $bg_color = SDL::Color->new(0x00, 0x00, 0x00);
-my $back = SDL::Rect->new( 0, 0, $app->width, $app->height);
+my $back = SDL::Rect->new( 0, 0, $app->w, $app->h);
 my $player = SDL::Rect->new(100, 30, 20, 90);
 my $fg_color = SDL::Color->new(0xcc, 0xcc, 0xcc);
 
