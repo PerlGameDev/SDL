@@ -24,7 +24,8 @@ package main;
 use SDL;
 use SDL::Game::Rect;
 use SDL::App;
-
+use SDL::Event;
+use SDL::Events;
 
 my $app = SDL::App->new(
     -title  => 'Pong',
@@ -46,12 +47,12 @@ event_loop() while 1;
 
 sub event_loop {
 	my $held_down_key = undef;
-    while ($event->poll || defined $held_down_key) {
+    while ( (SDL::Events::poll_event($event) > 0) || defined $held_down_key) {
         my $type = $event->type;
         exit if $type == SDL_QUIT;
 
         if ($type == SDL_KEYDOWN || defined $held_down_key) {
-				if($event->key_name eq 'down' || $held_down_key eq 'down')
+				if(SDL::Events::get_key_name($event->key_sym) eq 'down' || $held_down_key eq 'down')
 				{
 						$player->y($player->y + 2) ;	
 						$held_down_key = 'down' 						
