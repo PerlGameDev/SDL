@@ -46,28 +46,25 @@ event_loop() while 1;
 
 
 sub event_loop {
-	my $held_down_key = undef;
-    while ( (SDL::Events::poll_event($event) > 0) || defined $held_down_key) {
+	my $offset = undef;
+    while ( (SDL::Events::poll_event($event) > 0) or defined $offset) {
         my $type = $event->type;
         exit if $type == SDL_QUIT;
 
-        if ($type == SDL_KEYDOWN || defined $held_down_key) {
-				if(SDL::Events::get_key_name($event->key_sym) eq 'down' || $held_down_key eq 'down')
-				{
-						$player->y($player->y + 2) ;	
-						$held_down_key = 'down' 						
+        if ($type == SDL_KEYDOWN) {
+				if(SDL::Events::get_key_name($event->key_sym) eq 'down') {
+						$offset = +2;	
 				}
-				if(SDL::Events::get_key_name($event->key_sym) eq 'up' || $held_down_key eq 'up')
-				{
-						$player->y($player->y - 2) ;
-						$held_down_key = 'up' 							
+				if(SDL::Events::get_key_name($event->key_sym) eq 'up') {
+						$offset = -2;
 				}
-				
         }
-		if ($type == SDL_KEYUP)
-		{
-			$held_down_key = undef;
+		if ($type == SDL_KEYUP) {
+			$offset = undef;
 		}
+        if (defined $offset) {
+            $player->y($player->y + $offset)
+        }
 		 draw_screen();
     }
    
