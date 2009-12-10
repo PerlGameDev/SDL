@@ -3,6 +3,7 @@ use warnings;
 
 package SDL::Tutorial::Pong::Ball;
 #use SDL::Game::Rect;
+use SDL::Color;
 
 sub new {
     my $class = shift;
@@ -10,7 +11,7 @@ sub new {
         'rect'      => SDL::Game::Rect->new(20, 20, 10, 10),
         'speed'     => 4,
         'direction' => 5,
-        'color' => SDL::Color->new(-r => 0x00, -g => 0xcc, -b => 0x00),
+        'color' => SDL::Color->new(0x00, 0xcc, 0x00),
     };
     bless $self, $class;
 }
@@ -35,10 +36,10 @@ my $app = SDL::App->new(
 my $event = SDL::Event->new;
 my $ball = SDL::Tutorial::Pong::Ball->new;
 
-my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00 );
+my $bg_color = SDL::Color->new(0x00, 0x00, 0x00);
 my $back = SDL::Rect->new( 0, 0, $app->width, $app->height);
-my $player = SDL::Rect->new( 100, 30, 20, 90);
-my $fg_color = SDL::Color->new( -r => 0xcc, -g => 0xcc, -b => 0xcc );
+my $player = SDL::Rect->new(100, 30, 20, 90);
+my $fg_color = SDL::Color->new(0xcc, 0xcc, 0xcc);
 
 event_loop() while 1;
 
