@@ -76,8 +76,8 @@ sub event_loop {
 
 sub draw_screen {
 
-   $app->fill($back, $bg_color);
-   $app->fill($player, $fg_color);
+    SDL::Video::fill_rect($app, $back, $bg_color);
+    SDL::Video::fill_rect($app, $player, $fg_color);
 
 # if I uncomment this line, the window buttons go away!!! WTF???
   
