@@ -1,0 +1,217 @@
+=head1 NAME
+
+SDL::GFX::Primitives - basic drawing functions
+
+=head1 CATEGORY
+
+GFX, Primitives
+
+=head1	DESCRIPTION
+
+All C<color> values for the C<_color> functions are C<0xRRGGBBAA> (32bit), even if the surface uses e. g. 8bit colors.
+
+=head1	METHODS
+
+=head2	pixel
+
+ int SDL::GFX::Primitives::pixel_color( $surface, $x, $y, $color );
+ int SDL::GFX::Primitives::pixel_RGBA(  $surface, $x, $y, $r, $g, $b, $a );
+
+Draws a pixel at point C<x>/C<$y>. You can pass the color by C<0xRRGGBBAA> or by passing 4 values. One for red, green, blue and alpha.
+
+ use SDL;
+ use SDL::Video;
+ use SDL::Surface;
+ use SDL::GFX::Primitives;
+
+ my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
+ 
+ SDL::GFX::Primitives::pixel_color($display, 2, 2, 0xFF0000FF);             # red pixcel
+ SDL::GFX::Primitives::pixel_RGBA( $display, 4, 4, 0x00, 0xFF, 0x00, 0xFF); # green pixel
+
+=head2	hline
+
+ int SDL::GFX::Primitives::hline_color( $surface, $x1, $x2, $y, $color );
+ int SDL::GFX::Primitives::hline_RGBA(  $surface, $x1, $x2, $y, $r, $g, $b, $a );
+
+Draws a line horizontally from C<$x1>/C<$y> to C<$x2>/C<$y>.
+
+=head2	vline
+
+ int SDL::GFX::Primitives::vline_color( $surface, $x, $y1, $y2, $color );
+ int SDL::GFX::Primitives::vline_RGBA(  $surface, $x, $y1, $y2, $r, $g, $b, $a );
+
+Draws a line vertically from C<$x>/C<$y1> to C<$x>/C<$y2>.
+
+=head2	rectangle
+
+ int SDL::GFX::Primitives::rectangle_color( $surface, $x1, $y1, $x2, $y2, $color );
+ int SDL::GFX::Primitives::rectangle_RGBA(  $surface, $x1, $y1, $x2, $y2, $r, $g, $b, $a );
+
+Draws a rectangle. Upper left edge will be at C<$x1>/C<$y1> and lower right at C<$x2>/C<$y>. The colored border has a width of 1 pixel.
+
+=head2	box
+
+ int SDL::GFX::Primitives::box_color( $surface, $x1, $y1, $x2, $y2, $color );
+ int SDL::GFX::Primitives::box_RGBA(  $surface, $x1, $y1, $x2, $y2, $r, $g, $b, $a );
+
+Draws a filled rectangle.
+
+=head2	line
+
+ int SDL::GFX::Primitives::line_color( $surface, $x1, $y1, $x2, $y2, $color );
+ int SDL::GFX::Primitives::line_RGBA(  $surface, $x1, $y1, $x2, $y2, $r, $g, $b, $a );
+
+Draws a free line from C<$x1>/C<$y1> to C<$x2>/C<$y>.
+
+=head2	aaline
+
+ int SDL::GFX::Primitives::aaline_color( $surface, $x1, $y1, $x2, $y2, $color );
+ int SDL::GFX::Primitives::aaline_RGBA(  $surface, $x1, $y1, $x2, $y2, $r, $g, $b, $a );
+
+Draws a free line from C<$x1>/C<$y1> to C<$x2>/C<$y>. This line is anti aliased.
+
+=head2	circle
+
+ int SDL::GFX::Primitives::circle_color( $surface, $x, $y, $r, $color );
+ int SDL::GFX::Primitives::circle_RGBA(  $surface, $x, $y, $rad, $r, $g, $b, $a );
+
+=head2	arc
+
+ int SDL::GFX::Primitives::arc_color( $surface, $x, $y, $r, $start, $end, $color );
+ int SDL::GFX::Primitives::arc_RGBA(  $surface, $x, $y, $rad, $start, $end, $r, $g, $b, $a );
+
+B<Note>: You need lib SDL_gfx 2.0.17 or greater for this function.
+
+=head2	aacircle
+
+ int SDL::GFX::Primitives::aacircle_color( $surface, $x, $y, $r, $color );
+ int SDL::GFX::Primitives::aacircle_RGBA(  $surface, $x, $y, $rad, $r, $g, $b, $a );
+
+B<Note>: You need lib SDL_gfx 2.0.17 or greater for this function.
+
+=head2	filled_circle
+
+ int SDL::GFX::Primitives::filled_circle_color( $surface, $x, $y, $r, $color );
+ int SDL::GFX::Primitives::filled_circle_RGBA(  $surface, $x, $y, $rad, $r, $g, $b, $a );
+
+=head2	ellipse
+
+ int SDL::GFX::Primitives::ellipse_color( $surface, $x, $y, $rx, $ry, $color );
+ int SDL::GFX::Primitives::ellipse_RGBA(  $surface, $x, $y, $rx, $ry, $r, $g, $b, $a );
+
+=head2	aaellipse
+
+ int SDL::GFX::Primitives::aaellipse_color( $surface, $xc, $yc, $rx, $ry, $color );
+ int SDL::GFX::Primitives::aaellipse_RGBA(  $surface, $x, $y, $rx, $ry, $r, $g, $b, $a );
+
+=head2	filled_ellipse
+
+ int SDL::GFX::Primitives::filled_ellipse_color( $surface, $x, $y, $rx, $ry, $color );
+ int SDL::GFX::Primitives::filled_ellipse_RGBA(  $surface, $x, $y, $rx, $ry, $r, $g, $b, $a );
+
+=head2	pie
+
+ int SDL::GFX::Primitives::pie_color( $surface, $x, $y, $rad, $start, $end, $color );
+ int SDL::GFX::Primitives::pie_RGBA(  $surface, $x, $y, $rad, $start, $end, $r, $g, $b, $a );
+
+This draws an opened pie. C<$start> and C<$end> are degree values. C<0> is at right, C<90> at bottom, C<180> at left and C<270> degrees at top.
+
+=head2	filled_pie
+
+ int SDL::GFX::Primitives::filled_pie_color( $surface, $x, $y, $rad, $start, $end, $color );
+ int SDL::GFX::Primitives::filled_pie_RGBA(  $surface, $x, $y, $rad, $start, $end, $r, $g, $b, $a );
+
+=head2	trigon
+
+ int SDL::GFX::Primitives::trigon_color( $surface, $x1, $y1, $x2, $y2, $x3, $y3, $color );
+ int SDL::GFX::Primitives::trigon_RGBA(  $surface, $x1, $y1, $x2, $y2, $x3, $y3, $r, $g, $b, $a );
+
+=head2	aatrigon
+
+ int SDL::GFX::Primitives::aatrigon_color( $surface, $x1, $y1, $x2, $y2, $x3, $y3, $color );
+ int SDL::GFX::Primitives::aatrigon_RGBA(  $surface, $x1, $y1, $x2, $y2, $x3, $y3, $r, $g, $b, $a );
+
+=head2	filled_trigon
+
+ int SDL::GFX::Primitives::filled_trigon_color( $surface, $x1, $y1, $x2, $y2, $x3, $y3, $color );
+ int SDL::GFX::Primitives::filled_trigon_RGBA(  $surface, $x1, $y1, $x2, $y2, $x3, $y3, $r, $g, $b, $a );
+
+=head2	polygon
+
+ int SDL::GFX::Primitives::polygon_color( $surface, $vx, $vy, $n, $color );
+ int SDL::GFX::Primitives::polygon_RGBA(  $surface, $vx, $vy, $n, $r, $g, $b, $a );
+
+Example:
+
+ SDL::GFX::Primitives::polygon_color($display, [262, 266, 264, 266, 262], [243, 243, 245, 247, 247], 5, 0xFF0000FF);
+
+=head2	aapolygon
+
+ int SDL::GFX::Primitives::aapolygon_color( $surface, $vx, $vy, $n, $color );
+ int SDL::GFX::Primitives::aapolygon_RGBA(  $surface, $vx, $vy, $n, $r, $g, $b, $a );
+
+=head2	filled_polygon
+
+ int SDL::GFX::Primitives::filled_polygon_color( $surface, $vx, $vy, $n, $color );
+ int SDL::GFX::Primitives::filled_polygon_RGBA(  $surface, $vx, $vy, $n, $r, $g, $b, $a );
+
+=head2	textured_polygon
+
+ int SDL::GFX::Primitives::textured_polygon( $surface, $vx, $vy, $n, $texture, $texture_dx, $texture_dy );
+
+=head2	filled_polygon_MT
+
+ int SDL::GFX::Primitives::filled_polygon_color_MT( $surface, $vx, $vy, $n, $color, $polyInts, $polyAllocated );
+ int SDL::GFX::Primitives::filled_polygon_RGBA_MT(  $surface, $vx, $vy, $n, $r, $g, $b, $a, $polyInts, $polyAllocated );
+
+B<Note>: You need lib SDL_gfx 2.0.17 or greater for this function.
+
+=head2	textured_polygon_MT
+
+ int SDL::GFX::Primitives::textured_polygon_MT( $surface, $vx, $vy, $n, $texture, $texture_dx, $texture_dy, $polyInts, $polyAllocated );
+
+B<Note>: You need lib SDL_gfx 2.0.17 or greater for this function.
+
+=head2	bezier
+
+ int SDL::GFX::Primitives::bezier_color( $surface, $vx, $vy, $n, $s, $color );
+ int SDL::GFX::Primitives::bezier_RGBA(  $surface, $vx, $vy, $n, $s, $r, $g, $b, $a );
+
+C<$n> is the number of elements in C<$vx> and C<$vy>, and C<$s> is the number of steps. So the bigger C<$s> is, the smother it becomes.
+
+Example:
+
+ SDL::GFX::Primitives::bezier_color($display, [390, 392, 394, 396], [243, 255, 235, 247], 4, 20, 0xFF00FFFF);
+
+=head2	character
+
+ int SDL::GFX::Primitives::character_color( $surface, $x, $y, $c, $color );
+ int SDL::GFX::Primitives::character_RGBA(  $surface, $x, $y, $c, $r, $g, $b, $a );
+
+C<$c> is the character that will be drawn at C<$x>,C<$y>.
+
+=head2	string
+
+ int SDL::GFX::Primitives::string_color( $surface, $x, $y, $c, $color );
+ int SDL::GFX::Primitives::string_RGBA(  $surface, $x, $y, $c, $r, $g, $b, $a );
+
+=head2	set_font
+
+ void SDL::GFX::Primitives::set_font(fontdata, $cw, $ch );
+
+The fontsets are included in the SDL_gfx distribution. Check L<http://www.ferzkopp.net/joomla/content/view/19/14/> for more.
+
+Example:
+
+ my $font = '';
+ open(FH, '<', 'data/5x7.fnt');
+ binmode(FH);
+ read(FH, $font, 4096);
+ close(FH);
+
+ SDL::GFX::Primitives::set_font($font, 5, 7);
+
+=head1 AUTHORS
+
+Tobias Leich [FROGGS]

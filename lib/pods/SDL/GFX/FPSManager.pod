@@ -1,0 +1,73 @@
+=head1 NAME
+
+SDL::GFX::FPSManager - blitting functions
+
+=head1 CATEGORY
+
+TODO, GFX, FPSManager
+
+=head1 METHODS
+
+=head2 new
+
+ FPSmanager *
+ gfx_fps_new (CLASS, framecount, rateticks, lastticks, rate)
+ 	char *CLASS
+ 	Uint32 framecount
+ 	float rateticks
+ 	Uint32 lastticks
+	Uint32 rate
+ 	CODE:
+ 		RETVAL = (FPSmanager *) safemalloc(sizeof(FPSmanager));
+ 		RETVAL->framecount = framecount;
+ 		RETVAL->rateticks  = rateticks;
+ 		RETVAL->lastticks  = lastticks;
+ 		RETVAL->rate       = rate;
+ 	OUTPUT:
+ 		RETVAL
+
+=head2 framecount
+
+ Uint32
+ gfx_fps_framecount ( fps, ... )
+ 	FPSmanager *fps
+ 	CODE:
+ 		if (items > 1 ) fps->framecount = SvIV(ST(1)); 
+ 		RETVAL = fps->framecount;
+ 	OUTPUT:
+ 		RETVAL
+
+=head2 rateticks
+
+ float
+ gfx_fps_rateticks ( fps, ... )
+ 	FPSmanager *fps
+ 	CODE:
+ 		if (items > 1 ) fps->rateticks = SvNV(ST(1)); 
+ 		RETVAL = fps->rateticks;
+ 	OUTPUT:
+ 		RETVAL
+
+=head2 lastticks
+
+ Uint32
+ gfx_fps_lastticks ( fps, ... )
+ 	FPSmanager *fps
+ 	CODE:
+ 		if (items > 1 ) fps->lastticks = SvIV(ST(1)); 
+ 		RETVAL = fps->lastticks;
+ 	OUTPUT:
+ 		RETVAL
+
+=head2 rate
+
+ Uint32
+ gfx_fps_rate ( fps, ... )
+ 	FPSmanager *fps
+ 	CODE:
+ 		if (items > 1 ) fps->rate = SvIV(ST(1)); 
+ 		RETVAL = fps->rate;
+ 	OUTPUT:
+ 		RETVAL
+
+
