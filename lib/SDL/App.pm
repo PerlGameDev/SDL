@@ -118,7 +118,7 @@ sub new {
 		or croak SDL::get_error();
 	
 	if ($ic and -e $ic) {
-	   my $icon = new SDL::Surface -name => $ic;
+	   my $icon =  SDL::Video::load_BMP($ic);
 	   SDL::Video::wm_set_icon($$icon);
 	}
 

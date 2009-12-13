@@ -91,6 +91,15 @@ surface_pitch( surface )
 	OUTPUT:
 		RETVAL
 
+Uint32
+surface_flags( surface )
+	SDL_Surface *surface
+	CODE:
+		RETVAL = surface->flags;
+	OUTPUT:
+		RETVAL
+
+
 Uint16
 surface_w ( surface )
 	SDL_Surface *surface
