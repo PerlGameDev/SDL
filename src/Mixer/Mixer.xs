@@ -159,7 +159,7 @@ mixer_get_music_hook_data ()
 		RETVAL
 
 int
-mixer_reverse_channels ( number )
+mixer_reserve_channels ( number )
 	int number
 	CODE:
 		RETVAL = Mix_ReserveChannels ( number );

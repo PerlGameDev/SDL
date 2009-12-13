@@ -8,13 +8,6 @@ SDL::Mixer - a SDL perl extension
 
 Mixer
 
-=head1 SYNOPSIS
-
-  $mixer = new SDL::Mixer 	-frequency => MIX_DEFAULT_FREQUENCY,
-				-format => MIX_DEFAULT_FORMAT,
-				-channels => MIX_DEFAULT_CHANNELS,
-				-size => 4096;
-
 =head1 DESCRIPTION
 
 SDL::Mixer allows you access to the SDL mixer library, enablig sound and
@@ -23,15 +16,6 @@ the sound and music in and out.
 
 =head1 METHODS
   
-=head2 new()
-
-	$mixer = SDL::Mixer->new(	-frequency => MIX_DEFAULT_FREQUENCY,
-					-format    => MIX_DEFAULT_FORMAT,
-					-channels  => MIX_DEFAULT_CHANNELS,
-					-size      => 4096);
-
-Creates a new SDL::Mixer object. C<$size> is the buffer size in bytes.
-
 =head2 query_spec()
 
 	my $specs = SDL::Mixer::query_spec();
@@ -113,7 +97,7 @@ Stops a group of channels
 
 Stops the music
 
-=head2 channel_expire(channel,ticks)
+=head2 expire_channel(channel,ticks)
 
 Ignores the channel after C<ticks> has expired
 
@@ -137,7 +121,7 @@ Return true when the music is currently fading in or out.
 
 Return true when the channel number C<$channel> is currently fading in or out.
 
-=head2 pause( channel )
+=head2 pause(channel)
 
 Pause the channel C<$channel>.
 

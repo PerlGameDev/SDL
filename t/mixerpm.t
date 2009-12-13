@@ -22,7 +22,7 @@ use_ok( 'SDL::Mixer' );
   
 can_ok ('SDL::Mixer', qw/
 	query_spec
-	reverse_channels
+	reserve_channels
 	allocate_channels
 	group_channel
 	group_channels

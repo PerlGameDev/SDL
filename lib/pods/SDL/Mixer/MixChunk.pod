@@ -6,7 +6,7 @@ SDL::Mixer::MixChunk -- SDL Bindings for structure SDL_MixChunk
 
 =head1 CATEGORY
 
-Core, Mixer, Structure
+Mixer, Structure
 
 =head1 SYNOPSIS
 
