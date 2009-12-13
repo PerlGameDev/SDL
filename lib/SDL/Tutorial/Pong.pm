@@ -49,37 +49,38 @@ sub event_loop {
 	my $offset = undef;
     while ( (SDL::Events::poll_event($event) > 0) or defined $offset) {
         my $type = $event->type;
+        my $key  = SDL::Events::get_key_name($event->key_sym);
         exit if $type == SDL_QUIT;
 
         if ($type == SDL_KEYDOWN) {
-				if(SDL::Events::get_key_name($event->key_sym) eq 'down') {
-						$offset = +2;	
-				}
-				if(SDL::Events::get_key_name($event->key_sym) eq 'up') {
-						$offset = -2;
-				}
+			if($key eq 'down') {
+				$offset = +2;	
+			}
+			if(SDL::Events::get_key_name($event->key_sym) eq 'up') {
+				$offset = -2;
+			}
         }
-		if ($type == SDL_KEYUP) {
+		elsif ($type == SDL_KEYUP) {
 			$offset = undef;
 		}
-        if (defined $offset) {
+        # if we are supposed to move,
+        # move *only* if we are inside bounds
+        # (there should be a collision check for this
+        #  inside SDLX::Rect
+        if (defined $offset 
+            and $player->y + $offset > 0
+            and $player->y + $offset < ($back->h - $player->h)
+        ) {
             $player->y($player->y + $offset)
         }
-		 draw_screen();
+		draw_screen();
     }
-   
-
 }
 
 sub draw_screen { 
-
-    
-
     SDL::Video::fill_rect($app, $back, map_color( $bg_color) );
     SDL::Video::fill_rect($app, $player, map_color( $fg_color));
- 
-  
-  $app->sync();
+    $app->sync();
 }
 
 sub map_color{
