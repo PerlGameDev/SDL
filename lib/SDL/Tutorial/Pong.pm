@@ -35,12 +35,13 @@ my $app = SDL::App->new(
 );
 
 my $event = SDL::Event->new;
-my $ball = SDL::Tutorial::Pong::Ball->new;
+my $ball  = SDL::Tutorial::Pong::Ball->new;
 
-my $bg_color = SDL::Color->new(0x00, 0x00, 0x00);
-my $back = SDL::Rect->new( 0, 0, $app->w, $app->h);
-my $player = SDL::Rect->new(100, 30, 20, 90);
+my $back     = SDL::Rect->new( 0, 0, $app->w, $app->h);
+my $player   = SDL::Rect->new(100, 30, 20, 90);
+my $nemesis  = SDL::Rect->new(540, 30, 20, 90);
 my $fg_color = SDL::Color->new(0xcc, 0xcc, 0xcc);
+my $bg_color = SDL::Color->new(0x00, 0x00, 0x00);
 
 event_loop() while 1;
 
@@ -80,6 +81,7 @@ sub event_loop {
 sub draw_screen { 
     SDL::Video::fill_rect($app, $back, map_color( $bg_color) );
     SDL::Video::fill_rect($app, $player, map_color( $fg_color));
+    SDL::Video::fill_rect($app, $nemesis, map_color( $fg_color));
     $app->sync();
 }
 
