@@ -49,11 +49,6 @@
 #include <SDL_image.h>
 #endif 
 
-#ifdef HAVE_SDL_MIXER
-#include <SDL_mixer.h>
-void (*mix_music_finished_cv)();
-#endif
-
 #ifdef HAVE_SDL_SOUND
 #include <SDL_sound.h>
 #endif
@@ -62,11 +57,16 @@ void (*mix_music_finished_cv)();
 #include <SDL_net.h>
 #endif
 
+//#ifdef HAVE_SDL_MIXER
+//#include <SDL_mixer.h>
+//void (*mix_music_finished_cv)();
+//#endif
+
 #ifdef HAVE_SMPEG
 #include <smpeg/smpeg.h>
-#ifdef HAVE_SDL_MIXER
-static int sdl_perl_use_smpeg_audio = 0;
-#endif
+//#ifdef HAVE_SDL_MIXER
+//static int sdl_perl_use_smpeg_audio = 0;
+//#endif
 #endif
 
 #ifdef HAVE_SDL_GFX
@@ -109,6 +109,59 @@ extern PerlInterpreter *parent_perl;
 #endif
 
 #endif
+
+/*
+#ifdef HAVE_SDL_MIXER
+
+void
+sdl_perl_music_callback ( void ) 
+{
+	SV *cmd;
+	ENTER_TLS_CONTEXT
+	dSP;
+
+	cmd = (SV*)Mix_GetMusicHookData();
+
+	ENTER;
+	SAVETMPS;
+	PUSHMARK(SP);
+	PUTBACK;
+	
+	call_sv(cmd,G_VOID|G_DISCARD);
+
+	PUTBACK;
+	FREETMPS;
+	LEAVE;
+
+	LEAVE_TLS_CONTEXT
+}
+
+void
+sdl_perl_music_finished_callback ( void )
+{
+	SV *cmd;
+	ENTER_TLS_CONTEXT
+	dSP;
+
+	cmd = (SV*)mix_music_finished_cv;
+	if ( cmd == NULL ) return;
+
+	ENTER;
+	SAVETMPS;
+	PUSHMARK(SP);
+	PUTBACK;
+	
+	call_sv(cmd,G_VOID|G_DISCARD);
+	
+	PUTBACK;
+	FREETMPS;
+	LEAVE;
+
+	LEAVE_TLS_CONTEXT
+}
+
+#endif
+*/
 
 void
 windows_force_driver ()
@@ -181,57 +234,6 @@ sdl_perl_audio_callback ( void* data, Uint8 *stream, int len )
 
 	LEAVE_TLS_CONTEXT	
 }
-
-#ifdef HAVE_SDL_MIXER
-
-void
-sdl_perl_music_callback ( void ) 
-{
-	SV *cmd;
-	ENTER_TLS_CONTEXT
-	dSP;
-
-	cmd = (SV*)Mix_GetMusicHookData();
-
-	ENTER;
-	SAVETMPS;
-	PUSHMARK(SP);
-	PUTBACK;
-	
-	call_sv(cmd,G_VOID|G_DISCARD);
-
-	PUTBACK;
-	FREETMPS;
-	LEAVE;
-
-	LEAVE_TLS_CONTEXT
-}
-
-void
-sdl_perl_music_finished_callback ( void )
-{
-	SV *cmd;
-	ENTER_TLS_CONTEXT
-	dSP;
-
-	cmd = (SV*)mix_music_finished_cv;
-	if ( cmd == NULL ) return;
-
-	ENTER;
-	SAVETMPS;
-	PUSHMARK(SP);
-	PUTBACK;
-	
-	call_sv(cmd,G_VOID|G_DISCARD);
-	
-	PUTBACK;
-	FREETMPS;
-	LEAVE;
-
-	LEAVE_TLS_CONTEXT
-}
-
-#endif
 
 #define INIT_NS_APPLICATION
 #define QUIT_NS_APPLICATION
@@ -415,433 +417,6 @@ RemoveTimer ( id )
 	OUTPUT:
 		RETVAL
 
-
-#ifdef HAVE_SDL_MIXER
-
-void
-MixAudio ( dst, src, len, volume )
-	Uint8 *dst
-	Uint8 *src
-	Uint32 len
-	int volume
-	CODE:
-		SDL_MixAudio(dst,src,len,volume);
-
-int
-MixOpenAudio ( frequency, format, channels, chunksize )
-	int frequency
-	Uint16 format
-	int channels
-	int chunksize	
-	CODE:
-		RETVAL = Mix_OpenAudio(frequency, format, channels, chunksize);
-	OUTPUT:
-		RETVAL
-
-int
-MixAllocateChannels ( number )
-	int number
-	CODE:
-		RETVAL = Mix_AllocateChannels(number);
-	OUTPUT:
-		RETVAL
-
-AV *
-MixQuerySpec ()
-	CODE:
-		int freq, channels, status;
-		Uint16 format;
-		status = Mix_QuerySpec(&freq,&format,&channels);
-		RETVAL = newAV();
-		av_push(RETVAL,newSViv(status));
-		av_push(RETVAL,newSViv(freq));
-		av_push(RETVAL,newSViv(format));
-		av_push(RETVAL,newSViv(channels));
-	OUTPUT:
-		RETVAL
-
-Mix_Chunk *
-MixLoadWAV ( filename )
-	char *filename
-	PREINIT:
-		char * CLASS = "SDL::Mixer::MixChunk";
-	CODE:
-		Mix_Chunk * mixchunk;
-		mixchunk = Mix_LoadWAV(filename);
-		if (mixchunk == NULL) {
-		  fprintf(stderr, "Could not load %s\n", filename);
-		}
-		RETVAL = mixchunk;
-	OUTPUT:
-		RETVAL
-
-Mix_Music *
-MixLoadMUS ( filename )
-	char *filename
-	PREINIT:
-		char * CLASS = "SDL::Mixer::MixMusic";
-	CODE:
-		Mix_Music * mixmusic;
-		mixmusic = Mix_LoadMUS(filename);
-		if (mixmusic == NULL) {
-		  fprintf(stderr, "Could not load %s\n", filename);
-		}
-		RETVAL = mixmusic;
-	OUTPUT:
-		RETVAL
-
-Mix_Chunk *
-MixQuickLoadWAV ( buf )
-	Uint8 *buf
-	PREINIT:
-		char * CLASS = "SDL::Mixer::MixChunk";
-	CODE:
-		RETVAL = Mix_QuickLoad_WAV(buf);
-	OUTPUT:
-		RETVAL
-
-void
-MixFreeChunk( chunk )
-	Mix_Chunk *chunk
-	CODE:
-		Mix_FreeChunk(chunk);
-
-void
-MixFreeMusic ( music )
-	Mix_Music *music
-	CODE:
-		Mix_FreeMusic(music);
-
-void
-MixSetPostMixCallback ( func, arg )
-	void *func
-	void *arg
-	CODE:
-		Mix_SetPostMix(func,arg);
-
-void*
-PerlMixMusicHook ()
-	CODE:
-		RETVAL = sdl_perl_music_callback;
-	OUTPUT:
-		RETVAL
-
-void
-MixSetMusicHook ( func, arg )
-	void *func
-	void *arg
-	CODE:
-		Mix_HookMusic(func,arg);
-
-void
-MixSetMusicFinishedHook ( func )
-	void *func
-	CODE:
-		mix_music_finished_cv = func;
-		Mix_HookMusicFinished(sdl_perl_music_finished_callback);
-
-void *
-MixGetMusicHookData ()
-	CODE:
-		RETVAL = Mix_GetMusicHookData();
-	OUTPUT:
-		RETVAL
-
-int
-MixReverseChannels ( number )
-	int number
-	CODE:
-		RETVAL = Mix_ReserveChannels ( number );
-	OUTPUT:
-		RETVAL
-
-int
-MixGroupChannel ( which, tag )
-	int which
-	int tag
-	CODE:
-		RETVAL = Mix_GroupChannel(which,tag);
-	OUTPUT:
-		RETVAL
-
-int
-MixGroupChannels ( from, to, tag )
-	int from
-	int to
-	int tag
-	CODE:
-		RETVAL = Mix_GroupChannels(from,to,tag);
-	OUTPUT:
-		RETVAL
-
-int
-MixGroupAvailable ( tag )
-	int tag
-	CODE:
-		RETVAL = Mix_GroupAvailable(tag);
-	OUTPUT:
-		RETVAL
-
-int
-MixGroupCount ( tag )
-	int tag
-	CODE:
-		RETVAL = Mix_GroupCount(tag);
-	OUTPUT:
-		RETVAL
-
-int
-MixGroupOldest ( tag )
-	int tag
-	CODE:
-		RETVAL = Mix_GroupOldest(tag);
-	OUTPUT:
-		RETVAL
-
-int
-MixGroupNewer ( tag )
-	int tag
-	CODE:
-		RETVAL = Mix_GroupNewer(tag);
-	OUTPUT:
-		RETVAL
-
-int
-MixPlayChannel ( channel, chunk, loops )
-	int channel
-	Mix_Chunk *chunk
-	int loops
-	CODE:
-		RETVAL = Mix_PlayChannel(channel,chunk,loops);
-	OUTPUT:
-		RETVAL
-
-int
-MixPlayChannelTimed ( channel, chunk, loops, ticks )
-	int channel
-	Mix_Chunk *chunk
-	int loops
-	int ticks
-	CODE:
-		RETVAL = Mix_PlayChannelTimed(channel,chunk,loops,ticks);
-	OUTPUT:
-		RETVAL
-
-int
-MixPlayMusic ( music, loops )
-	Mix_Music *music
-	int loops
-	CODE:
-		RETVAL = Mix_PlayMusic(music,loops);
-	OUTPUT:
-		RETVAL
-
-int
-MixFadeInChannel ( channel, chunk, loops, ms )
-	int channel
-	Mix_Chunk *chunk
-	int loops
-	int ms
-	CODE:
-		RETVAL = Mix_FadeInChannel(channel,chunk,loops,ms);
-	OUTPUT:
-		RETVAL
-
-int
-MixFadeInChannelTimed ( channel, chunk, loops, ms, ticks )
-	int channel
-	Mix_Chunk *chunk
-	int loops
-	int ticks
-	int ms
-	CODE:
-		RETVAL = Mix_FadeInChannelTimed(channel,chunk,loops,ms,ticks);
-	OUTPUT:
-		RETVAL
-
-int
-MixFadeInMusic ( music, loops, ms )
-	Mix_Music *music
-	int loops
-	int ms
-	CODE:
-		RETVAL = Mix_FadeInMusic(music,loops,ms);
-	OUTPUT:
-		RETVAL
-
-int
-MixVolume ( channel, volume )
-	int channel
-	int volume
-	CODE:	
-		RETVAL = Mix_Volume(channel,volume);
-	OUTPUT:
-		RETVAL
-
-int
-MixVolumeChunk ( chunk, volume )
-	Mix_Chunk *chunk
-	int volume
-	CODE:
-		RETVAL = Mix_VolumeChunk(chunk,volume);
-	OUTPUT:
-		RETVAL
-
-int
-MixVolumeMusic ( volume )
-	int volume
-	CODE:
-		RETVAL = Mix_VolumeMusic(volume);
-	OUTPUT:
-		RETVAL
-
-int
-MixHaltChannel ( channel )
-	int channel
-	CODE:
-		RETVAL = Mix_HaltChannel(channel);
-	OUTPUT:
-		RETVAL
-
-int
-MixHaltGroup ( tag )
-	int tag
-	CODE:
-		RETVAL = Mix_HaltGroup(tag);
-	OUTPUT:
-		RETVAL
-
-int
-MixHaltMusic ()
-	CODE:
-		RETVAL = Mix_HaltMusic();
-	OUTPUT:
-		RETVAL
-
-int
-MixExpireChannel ( channel, ticks )
-	int channel
-	int ticks
-	CODE:
-		RETVAL = Mix_ExpireChannel ( channel,ticks);
-	OUTPUT:
-		RETVAL
-
-int
-MixFadeOutChannel ( which, ms )
-	int which
-	int ms
-	CODE:
-		RETVAL = Mix_FadeOutChannel(which,ms);
-	OUTPUT:
-		RETVAL
-
-int
-MixFadeOutGroup ( which, ms )
-	int which
-	int ms
-	CODE:
-		RETVAL = Mix_FadeOutGroup(which,ms);
-	OUTPUT:
-		RETVAL
-
-int
-MixFadeOutMusic ( ms )
-	int ms
-	CODE:
-		RETVAL = Mix_FadeOutMusic(ms);
-	OUTPUT:
-		RETVAL
-
-Mix_Fading
-MixFadingMusic()
-	CODE:
-		RETVAL = Mix_FadingMusic();
-	OUTPUT:
-		RETVAL
-
-Mix_Fading
-MixFadingChannel( which )
-	int which
-	CODE:
-		RETVAL = Mix_FadingChannel(which);
-	OUTPUT:
-		RETVAL
-
-void
-MixPause ( channel )
-	int channel
-	CODE:
-		Mix_Pause(channel);
-
-void
-MixResume ( channel )
-	int channel
-	CODE:
-		Mix_Resume(channel);
-
-int
-MixPaused ( channel )
-	int channel
-	CODE:
-		RETVAL = Mix_Paused(channel);
-	OUTPUT:
-		RETVAL
-
-void
-MixPauseMusic ()
-	CODE:
-		Mix_PauseMusic();
-
-void
-MixResumeMusic ()
-	CODE:
-		Mix_ResumeMusic();
-
-void
-MixRewindMusic ()
-	CODE:
-		Mix_RewindMusic();
-
-int
-MixPausedMusic ()
-	CODE:
-		RETVAL = Mix_PausedMusic();
-	OUTPUT:
-		RETVAL
-
-int
-MixPlaying( channel )
-	int channel	
-	CODE:
-		RETVAL = Mix_Playing(channel);
-	OUTPUT:
-		RETVAL
-
-int
-MixPlayingMusic()
-	CODE:
-		RETVAL = Mix_PlayingMusic();
-	OUTPUT:
-		RETVAL
-
-int
-MixSetPanning ( channel, left, right )
-	int channel
-	int left
-	int right
-	CODE:
-		RETVAL = Mix_SetPanning(channel, left, right);
-	OUTPUT:
-		RETVAL
-
-void
-MixCloseAudio ()
-	CODE:
-		Mix_CloseAudio();
-
-#endif
-
 char*
 AudioDriverName ()
 	CODE:
@@ -967,11 +542,11 @@ NewSMPEG ( filename, info, use_audio )
 	SMPEG_Info* info
 	int use_audio
 	CODE:	
-#ifdef HAVE_SDL_MIXER
-		RETVAL = SMPEG_new(filename,info,0);
-#else
+//#ifdef HAVE_SDL_MIXER
+//		RETVAL = SMPEG_new(filename,info,0);
+//#else
 		RETVAL = SMPEG_new(filename,info,use_audio);
-#endif
+//#endif
 	OUTPUT:
 		RETVAL
 
@@ -987,9 +562,9 @@ SMPEGEnableAudio ( mpeg , flag )
 	int flag
 	CODE:	
 		SMPEG_enableaudio(mpeg,flag);
-#ifdef HAVE_SDL_MIXER
-		sdl_perl_use_smpeg_audio = flag;
-#endif
+//#ifdef HAVE_SDL_MIXER
+//		sdl_perl_use_smpeg_audio = flag;
+//#endif
 
 void
 SMPEGEnableVideo ( mpeg , flag )
@@ -1035,18 +610,18 @@ SMPEGPlay ( mpeg )
                 SDL_AudioSpec audiofmt;
                 Uint16 format;
                 int freq, channels;
-#ifdef HAVE_SDL_MIXER
-		if  (sdl_perl_use_smpeg_audio ) {
-       			SMPEG_enableaudio(mpeg, 0);
-			Mix_QuerySpec(&freq, &format, &channels);
-			audiofmt.format = format;
-			audiofmt.freq = freq;
-			audiofmt.channels = channels;
-			SMPEG_actualSpec(mpeg, &audiofmt);
-			Mix_HookMusic(SMPEG_playAudioSDL, mpeg);
-			SMPEG_enableaudio(mpeg, 1);
-		}
-#endif
+//#ifdef HAVE_SDL_MIXER
+//		if  (sdl_perl_use_smpeg_audio ) {
+//       			SMPEG_enableaudio(mpeg, 0);
+//			Mix_QuerySpec(&freq, &format, &channels);
+//			audiofmt.format = format;
+//			audiofmt.freq = freq;
+//			audiofmt.channels = channels;
+//			SMPEG_actualSpec(mpeg, &audiofmt);
+//			Mix_HookMusic(SMPEG_playAudioSDL, mpeg);
+//			SMPEG_enableaudio(mpeg, 1);
+//		}
+//#endif
 	        SMPEG_play(mpeg);
 
 SMPEGstatus
@@ -1075,9 +650,9 @@ SMPEGStop ( mpeg )
 	SMPEG* mpeg
 	CODE:
 		SMPEG_stop(mpeg);
-#ifdef HAVE_SDL_MIXER
-        	Mix_HookMusic(NULL, NULL);
-#endif
+//#ifdef HAVE_SDL_MIXER
+//        	Mix_HookMusic(NULL, NULL);
+//#endif
 
 void
 SMPEGRewind ( mpeg )
@@ -1121,9 +696,19 @@ SMPEGGetInfo ( mpeg )
 		SMPEG_getinfo(mpeg,RETVAL);
 	OUTPUT:
 		RETVAL
-	
 
 #endif
+
+//#ifdef HAVE_SDL_MIXER
+//
+//void*
+//PerlMixMusicHook ()
+//	CODE:
+//		RETVAL = sdl_perl_music_callback;
+//	OUTPUT:
+//		RETVAL
+//
+//#endif
 
 #ifdef HAVE_SDL_GFX
 
