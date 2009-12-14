@@ -29,7 +29,7 @@ sub init {
 	    return ;
     }
 
-    if( $init == SDL_INIT_TIMER and $^O =~ /bsd|solaris/i )
+    if( $init == SDL_INIT_TIMER and !$ENV{SDL_BSD_TEST} and $^O =~ /bsd|solaris/i )
     {
 	    warn ' Timer is REALLY experimental with BSD environments';
 	    return ;
