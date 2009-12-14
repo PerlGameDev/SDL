@@ -9,6 +9,7 @@ Revision history for Perl extension SDL_perl.
 	- Added condition compile for mixer and ttf [kthakore]
 	- Replaced test file for MixMusic (proper file format) [FROGGS]
 	- Added license information file (README) for test/data [FROGGS]
+	- Moved mixer stuff from SDL:: to SDL::Mixer:: [FROGGS]
 
 * 2.3_1 
 	- General fixup for CPAN

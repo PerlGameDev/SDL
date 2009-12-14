@@ -1,0 +1,48 @@
+=head1 NAME
+
+SDL::GFX::Primitives - framerate calculating functions
+
+=head1 CATEGORY
+
+GFX, Framerate
+
+=head1	METHODS
+
+=head2	init
+
+void
+gfx_frame_init(manager)
+	FPSmanager * manager
+	CODE:
+		SDL_initFramerate(manager);
+
+=head2	set
+
+int
+gfx_frame_set(manager, rate)
+	FPSmanager * manager
+	int rate
+	CODE:
+		RETVAL = SDL_setFramerate(manager, rate);
+	OUTPUT:
+		RETVAL
+
+=head2	get
+
+int
+gfx_frame_get(manager)
+	FPSmanager * manager
+	CODE:
+		RETVAL = SDL_getFramerate(manager);
+	OUTPUT:
+		RETVAL
+
+=head2	delay
+
+void
+gfx_frame_delay(manager)
+	FPSmanager * manager
+	CODE:
+		SDL_framerateDelay(manager);
+
+

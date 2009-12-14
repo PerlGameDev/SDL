@@ -7,17 +7,19 @@
 # Usage: testsprite.pl [-bpp N] [-hw] [-flip] [-fast] [-fullscreen] [numsprites]
 
 use strict;
+use warnings;
 use Getopt::Long;
 use Data::Dumper;
-
+use Carp;
 use SDL;
 use SDL::App;
+use SDL::Video;
 use SDL::Event;
+use SDL::Events;
 use SDL::Surface;
 use SDL::Color;
 use SDL::Rect;
 
-#use base "../";
 
 use vars qw/ $app $app_rect $background $event $sprite $sprite_rect $videoflags /;
 
@@ -64,7 +66,7 @@ sub set_app_args
 
 sub  init_game_context
 {
-  $app = new SDL::App (
+  $app =SDL::App->new (
 		       -width => $settings{screen_width}, 
 		       -height=> $settings{screen_height}, 
 		       -title => "testsprite",
@@ -73,24 +75,26 @@ sub  init_game_context
 			);
 
   $app_rect= SDL::Rect->new(0,0,
-			   $settings{screen_height}, 
-			   $settings{screen_width}
+			   $app->w, 
+			   $app->h
 			  );
 
-  $background = $SDL::Color::black;
+  $background = SDL::Video::map_RGB($app->format, 0x00, 0x00, 0x00);
 
-  $sprite = new SDL::Surface(-name =>"data/icon.bmp"); 
+  $sprite = SDL::Video::load_BMP("data/icon.bmp"); 
+  
+  croak 'Cannot make sprite:'.SDL::get_error() if !$sprite;
 
   # Set transparent pixel as the pixel at (0,0) 
   
-  $sprite->display_format();
+  SDL::Video::display_format($sprite);
+  my $pixel = SDL::Color->new(0xff, 0xff, 0xff );
+  SDL::Video::set_color_key($sprite, SDL_SRCCOLORKEY,$pixel);	# sets the transparent color to that at (0,0)
 
-  $sprite->set_color_key(SDL_SRCCOLORKEY,$sprite->pixel(0,0));	# sets the transparent color to that at (0,0)
 
-
-  $sprite_rect = SDL::Rect->new(0, 0, $sprite->width, $sprite->height);
+  $sprite_rect = SDL::Rect->new(0, 0, $sprite->w, $sprite->h);
   
-  $event = new SDL::Event();
+  $event = SDL::Event->new();
 }
 
 ## Prints diagnostics
@@ -133,8 +137,8 @@ sub put_sprite
 {
   my ($x,$y) = @_;
 
-  my $dest_rect = SDL::Rect->new($x, $y, $sprite->width, $sprite->height);
-  $sprite->blit($sprite_rect, $app, $dest_rect);  
+  my $dest_rect = SDL::Rect->new($x, $y, $sprite->w, $sprite->h);
+  SDL::Video::blit_surface($sprite, $sprite_rect, $app, $dest_rect);  
 }
 
 
@@ -148,21 +152,22 @@ sub game_loop
   while (1) 
   {
     # process event queue
-    $event->pump;
-    $event->poll;
+    SDL::Events::pump_events();
+    if( SDL::Events::poll_event($event))
+    {
     my $etype=$event->type;      
 
     # handle user events
     last if ($etype eq SDL_QUIT );
-    last if (SDL::GetKeyState(SDLK_ESCAPE));
-
+    #last if (SDL::Events::get_key_state() );
+    }
     #$app->lock() if $app->lockp();  
 
     # page flip
 
     # __draw gfx
     
-    $app->fill($app_rect, $background);
+    SDL::Video::fill_rect($app, $app_rect, $background);
 
     foreach (1..$settings{numsprites})
     {
@@ -172,7 +177,7 @@ sub game_loop
 
     # __graw gfx end
     #$app->unlock();
-    $app->flip if $settings{flip};
+    SDL::Video::flip($app) if $settings{flip};
   }
 }
 

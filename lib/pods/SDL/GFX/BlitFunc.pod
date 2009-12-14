@@ -1,0 +1,7 @@
+=head1 NAME
+
+SDL::GFX::BlitFunc - blitting functions
+
+=head1 CATEGORY
+
+TODO, GFX, BlitFunc

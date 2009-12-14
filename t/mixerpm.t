@@ -15,17 +15,12 @@ elsif( !SDL::Config->has('SDL_mixer') )
 }
 else
 {
-    plan( tests => 3 );
+    plan( tests => 2 );
 }
-
-
-
-
 
 use_ok( 'SDL::Mixer' ); 
   
 can_ok ('SDL::Mixer', qw/
-	new
 	query_spec
 	reserve_channels
 	allocate_channels
@@ -39,12 +34,12 @@ can_ok ('SDL::Mixer', qw/
 	play_music
 	fade_in_channel
 	fade_in_music
-	channel_volume
-	music_volume
+	volume
+	volume_music
 	halt_channel
 	halt_group
 	halt_music
-	channel_expire
+	expire_channel
 	fade_out_channel
 	fade_out_group
 	fade_out_music
@@ -56,13 +51,9 @@ can_ok ('SDL::Mixer', qw/
 	pause_music
 	resume_music
 	rewind_music
-	music_paused
+	paused_music
 	playing
 	playing_music
 	/);
 
-
-# these are exported by default, so main:: should know them:
-my $mixer = SDL::Mixer->new();
-isa_ok($mixer, 'SDL::Mixer', 'Checking if mixer can be build');
 sleep(2);

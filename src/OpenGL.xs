@@ -37,6 +37,8 @@
 
 #include <SDL.h>
 
+#ifdef HAVE_GL
+
 #ifdef PERL_DARWIN
 #include <gl.h>
 #include <glu.h>
@@ -306,6 +308,8 @@ sdl_perl_tess_combine_callback ( GLdouble coords[3], double *vd[4], GLfloat weig
         LEAVE;
         LEAVE_TLS_CONTEXT
 }
+
+#endif
 
 MODULE = SDL::OpenGL		PACKAGE = SDL::OpenGL
 PROTOTYPES : DISABLE

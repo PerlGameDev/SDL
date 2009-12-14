@@ -1,16 +1,12 @@
-#!perl
 use strict;
-use warnings;
 use SDL;
 use SDL::Config;
-use SDL::Mixer::MixMusic;
 use Test::More;
 
 use lib 't/lib';
-
 use SDL::TestTool;
 
-if (! SDL::TestTool->init(SDL_INIT_AUDIO) ) {
+if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
 }
 elsif( !SDL::Config->has('SDL_mixer') )
@@ -19,16 +15,16 @@ elsif( !SDL::Config->has('SDL_mixer') )
 }
 else
 {
-    plan( tests => 3 );
+    plan( tests => 5 );
 }
 
-is( SDL::MixOpenAudio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ),
-    0, 'MixOpenAudio passed' );
+use_ok( 'SDL::Mixer' ); 
+use_ok( 'SDL::Mixer::MixMusic' ); 
 
-my $mix_music = SDL::MixLoadMUS('test/data/tribe_i.wav'); # from Matthew Newman, http://opengameart.org/content/vocal-grunts-tribeiwav
+is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ), 0, 'open_audio passed' );
+
+my $mix_music = SDL::Mixer::load_MUS('test/data/tribe_i.wav'); # from Matthew Newman, http://opengameart.org/content/vocal-grunts-tribeiwav
 #warn 'Error:'. SDL::get_error() if (!$mix_music);
-
-
 
 {
     local $TODO = 1;
@@ -37,11 +33,11 @@ my $mix_music = SDL::MixLoadMUS('test/data/tribe_i.wav'); # from Matthew Newman,
     isa_ok( $mix_music, 'SDL::Mixer::MixMusic' );
 };
 
-SDL::MixPlayMusic( $mix_music, 0 );
+SDL::Mixer::play_music( $mix_music, 0 );
 
 # we close straight away so no audio is actually played
 
-SDL::MixCloseAudio;
+SDL::Mixer::close_audio();
 
 ok( 1, 'Got to the end' );
 SDL::quit;
