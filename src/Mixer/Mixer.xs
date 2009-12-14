@@ -12,6 +12,100 @@
 #include <SDL_mixer.h>
 #endif
 
+
+#ifdef HAVE_SDL_MIXER
+#include <SDL_mixer.h>
+void (*mix_music_finished_cv)();
+#endif
+
+#ifdef HAVE_SMPEG
+#include <smpeg/smpeg.h>
+#ifdef HAVE_SDL_MIXER
+static int sdl_perl_use_smpeg_audio = 0;
+#endif
+#endif
+
+#ifdef USE_THREADS
+#define HAVE_TLS_CONTEXT
+#endif
+
+/* For windows  */
+#ifndef SDL_PERL_DEFINES_H
+#define SDL_PERL_DEFINES_H
+
+#ifdef HAVE_TLS_CONTEXT
+PerlInterpreter *parent_perl = NULL;
+extern PerlInterpreter *parent_perl;
+#define GET_TLS_CONTEXT parent_perl =  PERL_GET_CONTEXT;
+#define ENTER_TLS_CONTEXT \
+        PerlInterpreter *current_perl = PERL_GET_CONTEXT; \
+	        PERL_SET_CONTEXT(parent_perl); { \
+			                PerlInterpreter *my_perl = parent_perl;
+#define LEAVE_TLS_CONTEXT \
+					        } PERL_SET_CONTEXT(current_perl);
+#else
+#define GET_TLS_CONTEXT         /* TLS context not enabled */
+#define ENTER_TLS_CONTEXT       /* TLS context not enabled */
+#define LEAVE_TLS_CONTEXT       /* TLS context not enabled */
+#endif
+
+#endif
+
+
+#ifdef HAVE_SDL_MIXER
+
+void
+sdl_perl_music_callback ( void ) 
+{
+	SV *cmd;
+	ENTER_TLS_CONTEXT
+	dSP;
+
+	cmd = (SV*)Mix_GetMusicHookData();
+
+	ENTER;
+	SAVETMPS;
+	PUSHMARK(SP);
+	PUTBACK;
+	
+	call_sv(cmd,G_VOID|G_DISCARD);
+
+	PUTBACK;
+	FREETMPS;
+	LEAVE;
+
+	LEAVE_TLS_CONTEXT
+}
+
+void
+sdl_perl_music_finished_callback ( void )
+{
+	SV *cmd;
+	ENTER_TLS_CONTEXT
+	dSP;
+
+	cmd = (SV*)mix_music_finished_cv;
+	if ( cmd == NULL ) return;
+
+	ENTER;
+	SAVETMPS;
+	PUSHMARK(SP);
+	PUTBACK;
+	
+	call_sv(cmd,G_VOID|G_DISCARD);
+	
+	PUTBACK;
+	FREETMPS;
+	LEAVE;
+
+	LEAVE_TLS_CONTEXT
+}
+
+#endif
+
+
+
+
 MODULE = SDL::Mixer 	PACKAGE = SDL::Mixer    PREFIX = mixer_
 
 =for documentation
@@ -35,6 +129,14 @@ mixer_init(flags)
 		RETVAL
 
 #endif
+
+
+void*
+PerlMixMusicHook ()
+	CODE:
+		RETVAL = sdl_perl_music_callback;
+	OUTPUT:
+		RETVAL
 
 void
 mixer_mix_audio ( dst, src, len, volume )
@@ -148,8 +250,8 @@ void
 mixer_hook_music_finished ( func )
 	void *func
 	CODE:
-		//mix_music_finished_cv = func;
-		//Mix_HookMusicFinished(sdl_perl_music_finished_callback);
+		mix_music_finished_cv = func;
+		Mix_HookMusicFinished(sdl_perl_music_finished_callback);
 
 void *
 mixer_get_music_hook_data ()
