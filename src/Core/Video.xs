@@ -89,6 +89,7 @@ video_list_modes ( format, flags )
 	CODE:
 		SDL_Rect **mode;
 		RETVAL = newAV();
+		sv_2mortal((SV*)RETVAL);
 		mode = SDL_ListModes(format,flags);
 		if (mode == (SDL_Rect**)-1 ) {
 			av_push(RETVAL,newSVpv("all",0));
@@ -365,6 +366,7 @@ video_get_RGB ( pixel_format, pixel )
 		Uint8 r,g,b;
 		SDL_GetRGB(pixel,pixel_format,&r,&g,&b);
 		RETVAL = newAV();
+		sv_2mortal((SV*)RETVAL);
 		av_push(RETVAL,newSViv(r));
 		av_push(RETVAL,newSViv(g));
 		av_push(RETVAL,newSViv(b));
@@ -379,6 +381,7 @@ video_get_RGBA ( pixel_format, pixel )
 		Uint8 r,g,b,a;
 		SDL_GetRGBA(pixel,pixel_format,&r,&g,&b,&a);
 		RETVAL = newAV();
+		sv_2mortal((SV*)RETVAL);
 		av_push(RETVAL,newSViv(r));
 		av_push(RETVAL,newSViv(g));
 		av_push(RETVAL,newSViv(b));
@@ -497,6 +500,7 @@ video_GL_get_attribute ( attr )
 	CODE:
 		int value;
 		RETVAL = newAV();
+		sv_2mortal((SV*)RETVAL);
 		av_push(RETVAL,newSViv(SDL_GL_GetAttribute(attr, &value)));
 		av_push(RETVAL,newSViv(value));
 	OUTPUT:
@@ -520,6 +524,7 @@ video_wm_get_caption ()
 		char *title,*icon;
 		SDL_WM_GetCaption(&title,&icon);
 		RETVAL = newAV();
+		sv_2mortal((SV*)RETVAL);
 		av_push(RETVAL,newSVpv(title,0));
 		av_push(RETVAL,newSVpv(icon,0));
 	OUTPUT:
@@ -561,6 +566,3 @@ video_MUSTLOCK ( surface )
 		RETVAL = SDL_MUSTLOCK(surface);
 	OUTPUT:
 		RETVAL		
-
-
-

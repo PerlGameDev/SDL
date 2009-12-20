@@ -172,7 +172,7 @@ mixer_query_spec ()
 		int freq, channels, status;
 		Uint16 format;
 		status = Mix_QuerySpec(&freq,&format,&channels);
-		RETVAL = newAV();
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		av_push(RETVAL,newSViv(status));
 		av_push(RETVAL,newSViv(freq));
 		av_push(RETVAL,newSViv(format));

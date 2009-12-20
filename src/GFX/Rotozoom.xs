@@ -62,6 +62,7 @@ gfx_roto_surface_size(width, height, angle, zoom)
 		int dstwidth,dstheight;
 		rotozoomSurfaceSize(width, height, angle, zoom, &dstwidth, &dstheight);
 		RETVAL = newAV();
+		sv_2mortal((SV*)RETVAL);
 		av_push(RETVAL,newSViv(dstwidth));
 		av_push(RETVAL,newSViv(dstheight));
 	OUTPUT:
@@ -78,6 +79,7 @@ gfx_roto_surface_size_xy(width, height, angle, zoomx, zoomy)
 		int dstwidth,dstheight;
 		rotozoomSurfaceSizeXY(width, height, angle, zoomx, zoomy, &dstwidth, &dstheight);
 		RETVAL = newAV();
+		sv_2mortal((SV*)RETVAL);
 		av_push(RETVAL,newSViv(dstwidth));
 		av_push(RETVAL,newSViv(dstheight));
 	OUTPUT:
@@ -107,6 +109,7 @@ gfx_roto_zoom_surface_size(width, height, zoomx, zoomy)
 		int dstwidth,dstheight;
 		zoomSurfaceSize(width, height, zoomx, zoomy, &dstwidth, &dstheight);
 		RETVAL = newAV();
+		sv_2mortal((SV*)RETVAL);
 		av_push(RETVAL,newSViv(dstwidth));
 		av_push(RETVAL,newSViv(dstheight));
 	OUTPUT:

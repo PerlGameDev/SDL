@@ -70,7 +70,7 @@ TTFGlyphMetrics ( font, ch )
 	Uint16 ch
 	CODE:
 		int minx, miny, maxx, maxy, advance;
-		RETVAL = newAV();
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		TTF_GlyphMetrics(font, ch, &minx, &miny, &maxx, &maxy, &advance);
 		av_push(RETVAL,newSViv(minx));
 		av_push(RETVAL,newSViv(miny));
@@ -87,13 +87,11 @@ TTFSizeUTF8 ( font, text )
 	char *text
 	CODE:
 		int w,h;
-		RETVAL = newAV();
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		if(TTF_SizeUTF8(font,text,&w,&h))
 		{
 			av_push(RETVAL,newSViv(w));
 			av_push(RETVAL,newSViv(h));
-			sv_2mortal((SV*)RETVAL);
-
 		}
 		else
 		{
@@ -110,13 +108,11 @@ TTFSizeUNICODE ( font, text )
 	const Uint16 *text
 	CODE:
 		int w,h;
-		RETVAL = newAV();
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		if(TTF_SizeUNICODE(font,text,&w,&h))
 		{
 			av_push(RETVAL,newSViv(w));
 			av_push(RETVAL,newSViv(h));
-			sv_2mortal((SV*)RETVAL);
-
 		}
 		else
 		{

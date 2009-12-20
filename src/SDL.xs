@@ -763,6 +763,7 @@ SoundDecoderInfoExtensions ( decoderinfo )
 	Sound_DecoderInfo* decoderinfo
 	CODE:
 		const char **ext;
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		for ( ext = decoderinfo->extensions; *ext != NULL; ext++ ){
 			av_push(RETVAL,newSVpv(*ext,0));
 		}
@@ -858,12 +859,12 @@ Sound_Quit ( )
 AV*
 Sound_AvailableDecoders ( )
 	CODE:
-		RETVAL = newAV();
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		const Sound_DecoderInfo** sdi;
 		sdi = Sound_AvailableDecoders();
 		if (sdi != NULL)  {
 			for (;*sdi != NULL; ++sdi) {
-				av_push(RETVAL,sv_2mortal(newSViv(PTR2IV(*sdi))));
+				av_push(RETVAL,newSViv(PTR2IV(*sdi)));
 			}
 		}
 	OUTPUT:
@@ -1002,7 +1003,7 @@ TTF_SizeText ( font, text )
 	char *text
 	CODE:
 		int w,h;
-		RETVAL = newAV();
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		if(TTF_SizeText(font,text,&w,&h))
 		{
 			printf("TTF error at TTFSizeText: %s \n", TTF_GetError());
@@ -1012,7 +1013,6 @@ TTF_SizeText ( font, text )
 		{
 			av_push(RETVAL,newSViv(w));
 			av_push(RETVAL,newSViv(h));
-			sv_2mortal((SV*)RETVAL);
 		}
 	OUTPUT:
 		RETVAL

@@ -117,18 +117,15 @@ events_get_key_state()
 	PREINIT:
 	int value;
 	CODE:
-
-	Uint8* KeyArray = SDL_GetKeyState(&value);
-	RETVAL = newAV();
-	sv_2mortal((SV*)RETVAL);	
-	int i;
-	for( i = 0; i <value; i++)
-	{
-		SV* scalar = newSViv( KeyArray[i]  );
-		av_push( RETVAL, scalar);
-	
-	}
-	
+		Uint8* KeyArray = SDL_GetKeyState(&value);
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
+		int i;
+		for( i = 0; i <value; i++)
+		{
+			SV* scalar = newSViv( KeyArray[i]  );
+			av_push( RETVAL, scalar);
+		
+		}
 	OUTPUT:
 		RETVAL
 	 
@@ -187,8 +184,7 @@ events_get_mouse_state ()
 		int x;
 		int y;
 		mask = SDL_GetMouseState(&x,&y);
-		RETVAL = newAV();
-		sv_2mortal((SV*)RETVAL);
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		av_push(RETVAL,newSViv(mask));
 		av_push(RETVAL,newSViv(x));
 		av_push(RETVAL,newSViv(y));
@@ -202,8 +198,7 @@ events_get_relative_mouse_state ()
 		int x;
 		int y;
 		mask = SDL_GetRelativeMouseState(&x,&y);
-		RETVAL = newAV();
-		sv_2mortal((SV*)RETVAL);
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		av_push(RETVAL,newSViv(mask));
 		av_push(RETVAL,newSViv(x));
 		av_push(RETVAL,newSViv(y));

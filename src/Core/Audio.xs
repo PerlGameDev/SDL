@@ -60,7 +60,7 @@ audio_load_wav ( filename, spec )
 		}
 		else
 		{	
-			RETVAL = newAV();
+			RETVAL = (AV*)sv_2mortal((SV*)newAV());
 			av_push(RETVAL, sv_setref_pv( asref, "SDL::AudioSpec", (void *)temp));
 			av_push(RETVAL,newSViv(PTR2IV(buf)));
 			av_push(RETVAL,newSViv(len));

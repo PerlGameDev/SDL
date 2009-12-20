@@ -1347,7 +1347,7 @@ glReadPixel ( x, y )
                 int rgba[4];    /* r,g,b,a */
                 int i;
                 glReadPixels(x,y,1,1,GL_RGBA,GL_UNSIGNED_INT,rgba);
-                RETVAL = newAV();
+                RETVAL = (AV*)sv_2mortal((SV*)newAV());
                 for ( i = 0; i < 4; i++ ) {
                         av_push(RETVAL,newSViv(rgba[i]));
                 }
@@ -1775,7 +1775,7 @@ glGenTextures ( n )
 		GLsizei i;
 		GLuint* names;
 		names = (GLuint*)safemalloc(sizeof(GLuint)*n);
-		RETVAL = newAV();
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		glGenTextures(n,names);
 		for ( i = 0; i < n; i++ ) {
 			av_push(RETVAL,newSViv(names[i]));
@@ -1819,7 +1819,7 @@ glAreTexturesResident ( ... )
 		GLuint* textures;
 		GLboolean *homes;
 		int i;
-		RETVAL = newAV();
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		textures = (GLuint*)safemalloc(sizeof(GLuint) * items);
 		homes = (GLboolean*)safemalloc(sizeof(GLboolean) * items);
 		if ( textures ) {
@@ -2588,7 +2588,7 @@ gluUnProject ( winx, winy, winz, mm, pm, vp )
 	char *vp
 	CODE:
 		GLdouble objx, objy, objz;
-		RETVAL = newAV();
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		av_push(RETVAL,newSViv(gluUnProject(winx,winy,winz,(GLdouble*)mm,
 			(GLdouble*)pm,(GLint*)vp,&objx,&objy,&objz)));
 		av_push(RETVAL,newSVnv((double)objx));
@@ -2613,7 +2613,7 @@ gluUnProject4 ( winx, winy, winz, clipw, mm, pm, vp, n, f )
 	double f
         CODE:
                 GLdouble objx, objy, objz, objw;
-                RETVAL = newAV();
+                RETVAL = (AV*)sv_2mortal((SV*)newAV());
                 av_push(RETVAL,newSViv(gluUnProject4(winx,winy,winz,clipw,(GLdouble*)mm,
                         (GLdouble*)pm,(GLint*)vp,(GLclampd)n,(GLclampd)f,
 			&objx,&objy,&objz,&objw)));
@@ -2636,12 +2636,12 @@ gluProject ( objx, objy, objz, mm, pm, vp )
 	char *vp
 	CODE:
 		GLdouble winx, winy, winz;
-		RETVAL = newAV();
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		av_push(RETVAL,newSViv(gluUnProject(objx,objy,objz,(GLdouble*)mm,
 			(GLdouble*)pm,(GLint*)vp,&winx,&winy,&winz)));
-                av_push(RETVAL,newSVnv((double)winx));
-                av_push(RETVAL,newSVnv((double)winy));
-                av_push(RETVAL,newSVnv((double)winz));
+		av_push(RETVAL,newSVnv((double)winx));
+		av_push(RETVAL,newSVnv((double)winy));
+		av_push(RETVAL,newSVnv((double)winz));
 	OUTPUT:
 		RETVAL
 
