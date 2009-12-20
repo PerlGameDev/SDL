@@ -29,7 +29,9 @@ See: L<http://www.ferzkopp.net/joomla/content/view/19/14/>
 int
 gfx_image_MMX_detect()
 	CODE:
-		SDL_imageFilterMMXdetect();
+		RETVAL = SDL_imageFilterMMXdetect();
+	OUTPUT:
+		RETVAL
 
 void
 gfx_image_MMX_off()

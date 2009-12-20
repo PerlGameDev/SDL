@@ -52,28 +52,36 @@ gfx_roto_surface_xy(src, angle, zoomx, zoomy, smooth)
 	OUTPUT:
 		RETVAL
 
-void 
-gfx_roto_surface_size(width, height, angle, zoom, dstwidth, dstheight)
+AV *
+gfx_roto_surface_size(width, height, angle, zoom)
 	int width
 	int height
 	double angle
 	double zoom
-	int *dstwidth
-	int *dstheight
 	CODE:
-		rotozoomSurfaceSize(width, height, angle, zoom, dstwidth, dstheight);
+		int dstwidth,dstheight;
+		rotozoomSurfaceSize(width, height, angle, zoom, &dstwidth, &dstheight);
+		RETVAL = newAV();
+		av_push(RETVAL,newSViv(dstwidth));
+		av_push(RETVAL,newSViv(dstheight));
+	OUTPUT:
+		RETVAL
 
-void 
-gfx_roto_surface_size_xy(width, height, angle, zoomx, zoomy, dstwidth, dstheight)
+AV *
+gfx_roto_surface_size_xy(width, height, angle, zoomx, zoomy)
 	int width
 	int height
 	double angle
 	double zoomx
 	double zoomy
-	int *dstwidth
-	int *dstheight
 	CODE:
-		rotozoomSurfaceSizeXY(width, height, angle, zoomx, zoomy, dstwidth, dstheight);
+		int dstwidth,dstheight;
+		rotozoomSurfaceSizeXY(width, height, angle, zoomx, zoomy, &dstwidth, &dstheight);
+		RETVAL = newAV();
+		av_push(RETVAL,newSViv(dstwidth));
+		av_push(RETVAL,newSViv(dstheight));
+	OUTPUT:
+		RETVAL
 	
 
 SDL_Surface *
@@ -89,16 +97,20 @@ gfx_roto_zoom_surface(src, zoomx, zoomy, smooth)
 	OUTPUT:
 		RETVAL
 
-void
-gfx_roto_zoom_surface_size(width, height, zoomx, zoomy, dstwidth, dstheight)
+AV *
+gfx_roto_zoom_surface_size(width, height, zoomx, zoomy)
 	int width
 	int height
 	double zoomx
 	double zoomy
-	int *dstwidth
-	int *dstheight
 	CODE:
-		zoomSurfaceSize(width, height, zoomx, zoomy, dstwidth, dstheight);
+		int dstwidth,dstheight;
+		zoomSurfaceSize(width, height, zoomx, zoomy, &dstwidth, &dstheight);
+		RETVAL = newAV();
+		av_push(RETVAL,newSViv(dstwidth));
+		av_push(RETVAL,newSViv(dstheight));
+	OUTPUT:
+		RETVAL
 
 SDL_Surface *
 gfx_roto_shrink_surface(src, factorx, factory)
