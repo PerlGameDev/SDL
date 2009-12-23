@@ -50,16 +50,6 @@ sub new {
 	my $class = ref($proto) || $proto;
 	my %options = @_;
 
-	verify (%options, qw/	-opengl -gl -fullscreen -full -resizeable
-				-title -t -icon_title -it -icon -i 
-				-width -w -height -h -depth -d -flags -f 
-				-red_size -r -blue_size -b -green_size -g -alpha_size -a
-				-red_accum_size -ras -blue_accum_size -bas 
-				-green_accum_sizee -gas -alpha_accum_size -aas
-				-double_buffer -db -buffer_size -bs -stencil_size -st
-				-asyncblit -init
-		/ ) if ($SDL::DEBUG);
-
 	 # SDL_INIT_VIDEO() is 0, so check defined instead of truth.
 	 my $init = defined $options{-init} ? $options{-init} :
 	SDL_INIT_EVERYTHING();

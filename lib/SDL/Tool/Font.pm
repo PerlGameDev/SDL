@@ -44,9 +44,6 @@ sub new {
 	my $self = {};
 	my %option = @_;
 
-	verify (%option, qw/ -sfont -ttfont -size -fg -bg -foreground -background
-			  	-normal -bold -italic -underline / ) if $SDL::DEBUG;
-
 	if ($option{-sfont}) {
 		$$self{-font} = new SDL::Font $option{-sfont};
 	} elsif ($option{-ttfont} || $option{-t}) {

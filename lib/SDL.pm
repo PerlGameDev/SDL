@@ -44,7 +44,7 @@ use SDL::Constants;
 
 BEGIN {
 	@ISA = qw(Exporter DynaLoader);
-	@EXPORT = qw( in verify &NULL );
+	@EXPORT = qw( in &NULL );
 };
 
 # Give our caller SDL::Constant's stuff as well as ours.
@@ -72,13 +72,6 @@ sub in {
 	return 0 if $r eq '';
 	return $r;
 
-} 
-
-sub verify (\%@) {
-	my ($options,@valid_options) = @_;
-	for (keys %$options) {
-		croak "Invalid option $_\n" unless in ($_, @valid_options);
-	}
 }
 
 # workaround as:

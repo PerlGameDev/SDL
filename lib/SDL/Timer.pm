@@ -42,8 +42,6 @@ sub new {
 	my $func = shift;
 	my (%options) = @_;
 
-	verify(%options,qw/ -delay -times -d -t /);
-
 	croak "SDL::Timer::new no delay specified\n"
 		unless ($options{-delay});
 	$$self{-delay} = $options{-delay} || $options{-d} || 0;

@@ -44,7 +44,7 @@ plan ( tests => 9 );
 
 use_ok( 'SDL' ); 
   
-can_ok ('SDL', qw/in verify/);
+can_ok ('SDL', qw/in/);
 
 is (SDL::in('foo','bar'), 0, "foo isn't in ('bar')");
 is (SDL::in('foo','foo'), 1, "foo is in ('foo')");

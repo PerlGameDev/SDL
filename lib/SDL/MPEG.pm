@@ -40,8 +40,6 @@ sub new {
 	my $class = ref($proto) || $proto;
 	my %options = @_;
 
-	verify (%options, qw/ -from / ) if $SDL::DEBUG;
-
 	my $self;
 	if ( $options{-from} ) {
 		croak "SDL::MPEG::new -from requires a SDL::Video object\n"

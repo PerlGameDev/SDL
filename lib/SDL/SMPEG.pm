@@ -13,8 +13,6 @@ sub new {
 	my $class = ref($proto) || $proto;
 	my %options = @_;
 
-	verify (%options, qw/ -name -audio / ) if $SDL::DEBUG;
-
 	my $n = $options{-name} || die "SDL::SMPEG must supply a filename to SDL::SMPEG::new\n";
 	my $a = $options{'-audio'} ? 1 : 0;
 	my $info = new SDL::MPEG();
