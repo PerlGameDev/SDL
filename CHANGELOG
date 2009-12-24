@@ -1,5 +1,11 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.3_4 (WIP)
+        - Fixed serious XS mem leaks in AV* [FROGGS]
+        - Removed usless verify method in SDL.pm [J_King]
+        - GFX rotozoom started [FROGGS]
+        - More docs for GFX [FROGGS]
+
 * 2.3_3
 	- SDL::Image implemented and tested [#72] [kthakore]
 	- FreeBSD SDL test clean up [#75] [kthakore]
