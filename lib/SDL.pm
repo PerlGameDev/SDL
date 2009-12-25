@@ -65,15 +65,6 @@ sub NULL {
 	return 0;
 }
 
-sub in {
-	my ($k,@t) = @_;
-	return 0 unless defined $k;
-	my $r = ((scalar grep { defined $_ && $_ eq $k } @t) <=> 0);
-	return 0 if $r eq '';
-	return $r;
-
-}
-
 # workaround as:
 # extern DECLSPEC void SDLCALL SDL_SetError(const char *fmt, ...);
 sub set_error {
