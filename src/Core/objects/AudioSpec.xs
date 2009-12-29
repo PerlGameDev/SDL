@@ -50,19 +50,32 @@ sdl_perl_audio_callback ( void* data, Uint8 *stream, int len )
 	SV *cmd;
 	ENTER_TLS_CONTEXT
 	dSP;
-
-	cmd = (SV*)data;
-
+	int count;
+	int i;
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
 	XPUSHs(sv_2mortal(newSViv(PTR2IV(data))));
-	XPUSHs(sv_2mortal(newSViv(PTR2IV(stream))));
-	XPUSHs(sv_2mortal(newSViv(len)));
+ 
+	for(i = 0; i < len; i++)
+	{
+	 XPUSHs(sv_2mortal(newSViv(stream[i])));
+	}
+
 	PUTBACK;
 
-	call_sv(callbacksv,G_VOID|G_DISCARD);
-	
+	call_sv(callbacksv,G_ARRAY);
+
+	SPAGAIN;
+
+	if(count != len)
+		croak( "You cannot modify stream array lenght");	
+
+	for(i = 0; i < count; i++)
+	{
+		stream[i] = POPi;
+	}
+
 	PUTBACK;
 	FREETMPS;
 	LEAVE;
