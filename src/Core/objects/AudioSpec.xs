@@ -44,6 +44,18 @@ extern PerlInterpreter *parent_perl;
 
 static SV * callbacksv;
 
+SV* packed_stream(Uint8 *stream , int len)
+{
+ 
+  char* string = (char *) stream;
+  SV* sv = newSVpv("a", 1);
+  SvCUR_set(sv, len);
+  SvLEN_set(sv, len);
+  SvPV_set(sv,string);
+  return sv;
+
+}
+
 void
 sdl_perl_audio_callback ( void* data, Uint8 *stream, int len )
 {
@@ -55,26 +67,16 @@ sdl_perl_audio_callback ( void* data, Uint8 *stream, int len )
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
-	XPUSHs(sv_2mortal(newSViv(PTR2IV(data))));
- 
-	for(i = 0; i < len; i++)
-	{
-	 XPUSHs(sv_2mortal(newSViv(stream[i])));
-	}
+	XPUSHs(sv_2mortal(newSViv(sizeof(int))));
+	XPUSHs(sv_2mortal(newSViv(len)));
+	XPUSHs( packed_stream(stream, len) );
 
 	PUTBACK;
 
-	call_sv(callbacksv,G_ARRAY);
+	call_sv(callbacksv,G_VOID|G_DISCARD);
 
 	SPAGAIN;
 
-	if(count != len)
-		croak( "You cannot modify stream array lenght");	
-
-	for(i = 0; i < count; i++)
-	{
-		stream[i] = POPi;
-	}
 
 	PUTBACK;
 	FREETMPS;

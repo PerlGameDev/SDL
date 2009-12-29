@@ -12,7 +12,7 @@ use SDL::TestTool;
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
 } else {
-    plan( tests => 18);
+    plan( tests => 17);
 }
 my @done = qw/
     audio_spec
@@ -36,10 +36,6 @@ is( $desired->channels, 2, '[audiospec] can set channels' );
 $desired->samples(4096);
 is( $desired->samples, 4096, '[audiospec] can set samples' );
 
-my $p = 1;
-#my $r = sub { warn $p };
-$desired->callback( sub { my $data = shift; my @stream = @_; $stream[0] = 0; $p++; return @stream   });
-isnt( $p , 1 ,'[callback] ran');
 is( SDL::Audio::get_status, SDL_AUDIO_STOPPED, '[get_status stopped]' );
 
 my $obtained = SDL::AudioSpec->new;
@@ -60,7 +56,6 @@ SDL::Audio::close();
 
 is( SDL::Audio::get_status, SDL_AUDIO_STOPPED, '[get_status stopped]' );
 
-isnt( $p, 1 ,'[audiospec] callback seems to work. Data = '.$p);
 
 
     # I'm not sure why this does give us the correct params
