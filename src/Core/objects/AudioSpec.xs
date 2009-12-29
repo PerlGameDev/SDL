@@ -6,8 +6,69 @@
 #define aTHX_
 #endif
 
+
+#ifdef HAVE_SDL_TTF
+#include <SDL_ttf.h>
+#endif
+
+#ifdef USE_THREADS
+#define HAVE_TLS_CONTEXT
+#endif
+
+/* For windows  */
+#ifndef SDL_PERL_DEFINES_H
+#define SDL_PERL_DEFINES_H
+
+#ifdef HAVE_TLS_CONTEXT
+PerlInterpreter *parent_perl = NULL;
+extern PerlInterpreter *parent_perl;
+#define GET_TLS_CONTEXT parent_perl =  PERL_GET_CONTEXT;
+#define ENTER_TLS_CONTEXT \
+        PerlInterpreter *current_perl = PERL_GET_CONTEXT; \
+	        PERL_SET_CONTEXT(parent_perl); { \
+			                PerlInterpreter *my_perl = parent_perl;
+#define LEAVE_TLS_CONTEXT \
+					        } PERL_SET_CONTEXT(current_perl);
+#else
+#define GET_TLS_CONTEXT         /* TLS context not enabled */
+#define ENTER_TLS_CONTEXT       /* TLS context not enabled */
+#define LEAVE_TLS_CONTEXT       /* TLS context not enabled */
+#endif
+
+#endif
+
+
+
 #include <SDL.h>
 #include <SDL_audio.h>
+
+static SV * callbacksv;
+
+void
+sdl_perl_audio_callback ( void* data, Uint8 *stream, int len )
+{
+	SV *cmd;
+	ENTER_TLS_CONTEXT
+	dSP;
+
+	cmd = (SV*)data;
+
+	ENTER;
+	SAVETMPS;
+	PUSHMARK(SP);
+	XPUSHs(sv_2mortal(newSViv(PTR2IV(data))));
+	XPUSHs(sv_2mortal(newSViv(PTR2IV(stream))));
+	XPUSHs(sv_2mortal(newSViv(len)));
+	PUTBACK;
+
+	call_sv(callbacksv,G_VOID|G_DISCARD);
+	
+	PUTBACK;
+	FREETMPS;
+	LEAVE;
+
+	LEAVE_TLS_CONTEXT	
+}
 
 MODULE = SDL::AudioSpec 	PACKAGE = SDL::AudioSpec    PREFIX = audiospec_
 
@@ -79,6 +140,15 @@ audiospec_samples ( audiospec, ... )
 		RETVAL = audiospec->samples;
 	OUTPUT:
 		RETVAL
+		
+void
+audiospec_callback( audiospec, cb )
+	SDL_AudioSpec *audiospec
+	SV* cb
+	CODE:
+		callbacksv = cb;
+		audiospec->callback = sdl_perl_audio_callback;
+		
 
 void
 audiospec_DESTROY(self)
