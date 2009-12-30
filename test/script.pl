@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#CREDIT TO ruosco
+#CREDIT TO ruoso http://daniel.ruoso.com/ 
 
 use strict;
 use warnings;
@@ -11,8 +11,6 @@ use 5.01000;
 # and the SDL binding doesn't take care of that...
 use Time::HiRes;
 use Event qw<loop unloop>;
-
-
 
 use SDL;
 use SDL::App;
@@ -25,41 +23,37 @@ use SDL::Events;
 use Devel::Peek;
 
 our $FPS = 40;
-our $width = 1280;
-our $height = 800;
 our $bg_color = SDL::Color->new( 0,  0, 0);
 our @objects;
 
 our $app = SDL::App->new
-  ( -width => $width,
-    -height => $height,
-    -depth => 16,
-    -resizeable => 1,
-    -title => 'Tecla',
-  #  -fullscreen => 1
+  (
+   -depth => 16,
+   -resizeable => 1,
+   -title => 'Tecla',
   );
 
 SDL::Mouse::show_cursor(0);
 
-   sub callback{
-   my ($int_size, $len, $stream) = @_;
+my $p = 0;
+my $f = 0;
 
-   #warn "call back is running $len \n";
-   #Dump $stream;
-   my @stream = unpack('c*', $stream);
-   #warn "Unpacked is: ", join ', ', @stream , "\n";
-#=pod
-   foreach my $i (0..$len)
-   {
-	my $new = rand()*127;
-	$stream[$i] = int($new);
- 	 	
+sub callback{
+  my ($int_size, $len, $streamref) = @_;
 
-   }
-    #warn "new is: ", join ', ', @stream , "\n";
-   $stream = pack ( 'c*x', @stream);
-#=cut 
-   }
+  for (my $i = 0; $i < $len; $i++) {
+    use bytes;
+    substr($$streamref, $i, 1, chr($p));
+
+    if ($f && $p++ > 200) {
+      $f = 0;
+    } elsif (!$f && $p-- < 0) {
+      $f = 1;
+    }
+  }
+
+
+}
 
 sub setup_audio
 {
@@ -68,20 +62,19 @@ sub setup_audio
     $desired->freq ( 44100 );
     $desired->format ( AUDIO_U8 );
     $desired->samples ( 4096 );
-  
-    #$desired->userdata ( NULL );
     $desired->callback( 'main::callback'); #canno
     $desired->channels ( 1 );
-
-    
+   
     die('AudioMixer, Unable to open audio: '.SDL::get_error."\n" ) if ( SDL::Audio::open($desired, $obtained) < 0 );
-    
+
 
     SDL::Audio::pause(0);
 
   
 }
+
 setup_audio();
 
 sleep(4);
+
 SDL::quit();

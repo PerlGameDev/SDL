@@ -55,23 +55,31 @@ audio_callback ( void* data, Uint8 *stream, int len )
 	PerlInterpreter *my_perl = perl_c;
 	
 	dSP;
+
+        char* string = (char*)stream;
+
 	SV* sv = newSVpv("a",1);
-	SvCUR_set(sv,len);
-	SvLEN_set(sv,len);
-	SvPV_set(sv,(char*)stream);
- 
+        SvCUR_set(sv,len * sizeof(Uint8));
+	SvLEN_set(sv,len * sizeof(Uint8));
+        void* old = SvPVX(sv);
+        SvPV_set(sv,string);
+
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
-
  
-	XPUSHs(sv_2mortal(newSViv(sizeof(int))));
+	XPUSHs(sv_2mortal(newSViv(sizeof(Uint8))));
 	XPUSHs(sv_2mortal(newSViv(len)));
-	XPUSHs( sv );
+	XPUSHs(sv_2mortal(newRV_inc(sv)));
  
 	PUTBACK;
 
  	call_pv(callbacksv,G_VOID|G_DISCARD);
+
+        SvPV_set(sv,old);
+        SvCUR_set(sv,1);
+	SvLEN_set(sv,1);
+        sv_2mortal(sv);
 
 	FREETMPS;
 	LEAVE;
