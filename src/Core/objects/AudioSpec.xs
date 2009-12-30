@@ -42,19 +42,8 @@ extern PerlInterpreter *parent_perl;
 #include <SDL.h>
 #include <SDL_audio.h>
 
-static SV * callbacksv;
+SV * callbacksv;
 
-SV* packed_stream(Uint8 *stream , int len)
-{
- 
-  char* string = (char *) stream;
-  SV* sv = newSVpv("a", 1);
-  SvCUR_set(sv, len);
-  SvLEN_set(sv, len);
-  SvPV_set(sv,string);
-  return sv;
-
-}
 
 void
 sdl_perl_audio_callback ( void* data, Uint8 *stream, int len )
@@ -62,18 +51,26 @@ sdl_perl_audio_callback ( void* data, Uint8 *stream, int len )
 	SV *cmd;
 	ENTER_TLS_CONTEXT
 	dSP;
-	int count;
-	int i;
+
+	cmd = (SV*)callbacksv;
+
+	 char* string = (char *) stream;
+	 SV* sv = newSVpv("a", 1);
+	 SvCUR_set(sv, len);
+	 SvLEN_set(sv, len);
+	 SvPV_set(sv,string);
+
+
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
 	XPUSHs(sv_2mortal(newSViv(sizeof(int))));
 	XPUSHs(sv_2mortal(newSViv(len)));
-	XPUSHs( packed_stream(stream, len) );
+	XPUSHs( (SV *)string );
 
 	PUTBACK;
 
-	call_sv(callbacksv,G_VOID|G_DISCARD);
+	call_sv(cmd,G_VOID|G_DISCARD);
 
 	SPAGAIN;
 
@@ -162,6 +159,7 @@ audiospec_callback( audiospec, cb )
 	SV* cb
 	CODE:
 		callbacksv = cb;
+		audiospec->userdata = NULL;
 		audiospec->callback = sdl_perl_audio_callback;
 		
 
