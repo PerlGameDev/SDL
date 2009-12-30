@@ -38,6 +38,21 @@ our $app = SDL::App->new
 
 SDL::Mouse::show_cursor(0);
 
+   sub callback{
+   my ($int_size, $len, $stream) = @_;
+
+   warn "call back is running \n";
+   warn "Unpacked is: ", join ', ', unpack('i*', $stream), "\n";
+   foreach(0..$len)
+   {
+	my $new = rand()*120;
+ 	substr($stream, $_*$int_size, $int_size, pack('i', $new));
+ 	
+
+   }
+
+   }
+
 sub setup_audio
 {
     my $desired = SDL::AudioSpec->new;
@@ -47,20 +62,7 @@ sub setup_audio
     $desired->samples ( 4096 );
   
     #$desired->userdata ( NULL );
-    $desired->callback(
-  
-   sub{
-   my ($int_size, $len, $stream) = @_;
-
-   warn "got $int_size $len $stream";
-   foreach(0..$len)
-   {
-	my $new = rand()*120;
- 	substr($stream, $_*$int_size, $int_size, pack('i', $new));
-
-   }
-
-   });
+    $desired->callback( 'main::callback'); #canno
     $desired->channels ( 1 );
 
     
@@ -72,8 +74,7 @@ sub setup_audio
   
 }
 setup_audio();
-sleep (10);
-die();
+
 our $time = $app->ticks;
 our $sevent = SDL::Event->new();
 our $timer = Event->timer

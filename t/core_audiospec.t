@@ -4,7 +4,7 @@ use SDL;
 use SDL::Audio;
 use SDL::AudioSpec;
 use Test::More;
-use Devel::Peek;
+
 
 use lib 't/lib';
 use SDL::TestTool;
@@ -20,34 +20,33 @@ my $desired = SDL::AudioSpec->new;
    $desired->format(SDL::Constants::AUDIO_S8);
    $desired->channels(1);
    $desired->samples(4096);
-   $desired->callback(
+   $desired->callback('main::callback');
+my $pass = 0;
   
-   sub{
+  sub callback
+  {
    my ($int_size, $len, $stream) = @_;
 
-   warn "got $int_size $len $stream";
-   foreach(0..$len)
-   {
-	my $new = rand()*120;
- 	substr($stream, $_*$int_size, $int_size, pack('i', $new));
+   $pass = 1 if $pass == 0;
+   #foreach(0..$len)
+   #{
+#	my $new = rand()*120;
+# 	substr($stream, $_*$int_size, $int_size, pack('i', $new));
 
-   }
+ #  } 
+ #pack needs to be fixed
 
-   }
-
-  
-
-   );
+  }
    
    die 'AudioMixer, Unable to open audio: '. SDL::get_error() if( SDL::Audio::open($desired, $obtained) <0 );
    
    
    SDL::Audio::pause(0);
 
-#	sleep(4);
+	sleep(1);
 
-#   SDL::Audio::close();
+   SDL::Audio::close();
 
-   pass '[callback] tested';
+   is $pass, 1,  '[callback] tested';
 
 
