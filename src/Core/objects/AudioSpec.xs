@@ -42,44 +42,34 @@ extern PerlInterpreter *parent_perl;
 #include <SDL.h>
 #include <SDL_audio.h>
 
-SV * callbacksv;
-
+static SV * callbacksv;
 
 void
 sdl_perl_audio_callback ( void* data, Uint8 *stream, int len )
 {
-	SV *cmd;
-	ENTER_TLS_CONTEXT
+ 
 	dSP;
-
-	cmd = (SV*)callbacksv;
-
-	 char* string = (char *) stream;
-	 SV* sv = newSVpv("a", 1);
-	 SvCUR_set(sv, len);
-	 SvLEN_set(sv, len);
-	 SvPV_set(sv,string);
-
+	SV* sv = newSVpv("a",1);
+	SvCUR_set(sv,len);
+	SvLEN_set(sv,len);
+	SvPV_set(sv,(char*)stream);
 
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
+
+
 	XPUSHs(sv_2mortal(newSViv(sizeof(int))));
 	XPUSHs(sv_2mortal(newSViv(len)));
-	XPUSHs( (SV *)string );
+	XPUSHs( sv );
 
 	PUTBACK;
 
-	call_sv(cmd,G_VOID|G_DISCARD);
+ 	call_sv(callbacksv,G_VOID|G_DISCARD);
 
-	SPAGAIN;
-
-
-	PUTBACK;
 	FREETMPS;
 	LEAVE;
 
-	LEAVE_TLS_CONTEXT	
 }
 
 MODULE = SDL::AudioSpec 	PACKAGE = SDL::AudioSpec    PREFIX = audiospec_
@@ -159,7 +149,6 @@ audiospec_callback( audiospec, cb )
 	SV* cb
 	CODE:
 		callbacksv = cb;
-		audiospec->userdata = NULL;
 		audiospec->callback = sdl_perl_audio_callback;
 		
 
