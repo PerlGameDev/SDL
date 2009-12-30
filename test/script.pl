@@ -20,6 +20,7 @@ use SDL::Audio;
 use SDL::AudioSpec;
 use SDL::Event;
 use SDL::Events;
+use Devel::Peek;
 
 our $FPS = 40;
 our $width = 1280;
@@ -41,16 +42,21 @@ SDL::Mouse::show_cursor(0);
    sub callback{
    my ($int_size, $len, $stream) = @_;
 
-   warn "call back is running \n";
-   warn "Unpacked is: ", join ', ', unpack('i*', $stream), "\n";
-   foreach(0..$len)
+   #warn "call back is running $len \n";
+   #Dump $stream;
+   my @stream = unpack('c*', $stream);
+   #warn "Unpacked is: ", join ', ', @stream , "\n";
+#=pod
+   foreach my $i (0..$len)
    {
-	my $new = rand()*120;
- 	substr($stream, $_*$int_size, $int_size, pack('i', $new));
- 	
+	my $new = rand()*127;
+	$stream[$i] = int($new);
+ 	 	
 
    }
-
+    #warn "new is: ", join ', ', @stream , "\n";
+   $stream = pack ( 'c*x', @stream);
+#=cut 
    }
 
 sub setup_audio
@@ -58,7 +64,7 @@ sub setup_audio
     my $desired = SDL::AudioSpec->new;
     my $obtained = SDL::AudioSpec->new;
     $desired->freq ( 44100 );
-    $desired->format ( AUDIO_S8 );
+    $desired->format ( AUDIO_U8 );
     $desired->samples ( 4096 );
   
     #$desired->userdata ( NULL );

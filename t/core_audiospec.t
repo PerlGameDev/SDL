@@ -4,7 +4,7 @@ use SDL;
 use SDL::Audio;
 use SDL::AudioSpec;
 use Test::More;
-
+use Devel::Peek;
 
 use lib 't/lib';
 use SDL::TestTool;

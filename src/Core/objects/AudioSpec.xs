@@ -42,8 +42,9 @@ extern PerlInterpreter *parent_perl;
 #include <SDL.h>
 #include <SDL_audio.h>
 
-static int perl_c;
+static PerlInterpreter * perl_c;
 static char* callbacksv;
+static 
 
 void
 audio_callback ( void* data, Uint8 *stream, int len )
