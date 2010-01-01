@@ -10,7 +10,6 @@ use 5.01000;
 # we shouldn't use SDL::Timer, because it starts a different thread,
 # and the SDL binding doesn't take care of that...
 use Time::HiRes;
-use Event qw<loop unloop>;
 
 use SDL;
 use SDL::App;
@@ -21,20 +20,6 @@ use SDL::AudioSpec;
 use SDL::Event;
 use SDL::Events;
 use Devel::Peek;
-
-our $FPS = 40;
-our $bg_color = SDL::Color->new( 0,  0, 0);
-our @objects;
-
-our $app = SDL::App->new
-  (
-   -depth => 16,
-   -resizeable => 1,
-   -title => 'Tecla',
-  );
-
-SDL::Mouse::show_cursor(0);
-
 my $p = 0;
 my $f = 0;
 

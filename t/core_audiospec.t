@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
+use threads;
+use threads::shared;
 use SDL;
 use SDL::Audio;
 use SDL::AudioSpec;
@@ -21,24 +23,25 @@ my $desired = SDL::AudioSpec->new;
    $desired->channels(1);
    $desired->samples(4096);
    $desired->callback('main::callback');
-my $pass = 0;
-  
-  sub callback
-  {
-   my ($int_size, $len, $stream) = @_;
+my $p :shared = 0;
+my $f :shared = 0;
 
-   $pass = 1 if $pass == 0;
-   #foreach(0..$len)
-   #{
-#	my $new = rand()*120;
-# 	substr($stream, $_*$int_size, $int_size, pack('i', $new));
+sub callback{
+  my ($int_size, $len, $streamref) = @_;
 
- #  } 
- #pack needs to be fixed
+  for (my $i = 0; $i < $len; $i++) {
+    use bytes;
+    substr($$streamref, $i, 1, chr($p));
 
+    if ($f && $p++ > 200) {
+      $f = 0;
+    } elsif (!$f && $p-- < 0) {
+      $f = 1;
+    }
   }
-   
-   die 'AudioMixer, Unable to open audio: '. SDL::get_error() if( SDL::Audio::open($desired, $obtained) <0 );
+
+
+}   die 'AudioMixer, Unable to open audio: '. SDL::get_error() if( SDL::Audio::open($desired, $obtained) <0 );
    
    
    SDL::Audio::pause(0);
@@ -47,6 +50,6 @@ my $pass = 0;
 
    SDL::Audio::close();
 
-   is $pass, 1,  '[callback] tested';
+   isnt $p, 0,  '[callback] tested';
 
 

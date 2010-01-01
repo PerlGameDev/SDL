@@ -86,9 +86,9 @@ audio_callback ( void* data, Uint8 *stream, int len )
 	FREETMPS;
 	LEAVE;
 	
-	perl_free(perl_for_cb);
 	PERL_SET_CONTEXT(orig_perl); 
-	
+	perl_free(perl_for_cb);
+
 }
 
 MODULE = SDL::AudioSpec 	PACKAGE = SDL::AudioSpec    PREFIX = audiospec_
@@ -180,9 +180,5 @@ audiospec_DESTROY(self)
 	SDL_AudioSpec *self
 	CODE:
 
-	if(perl_for_cb != NULL)
-	{	
-	perl_free(perl_for_cb);	
-	}
 	safefree( (char *)self );
 
