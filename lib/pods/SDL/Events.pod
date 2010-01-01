@@ -123,6 +123,31 @@ As this function implicitly calls SDL_PumpEvents, you can only call this functio
 
 0 if there was an error while waiting for events, 1 otherwise
 
+=head2 set_event_filter
+
+=head2 get_key_state
+
+=head2 get_mod_state
+
+=head2 set_mod_state
+
+=head2 event_state 
+
+=head2 get_key_name
+
+=head2 enable_unicode 
+
+=head2 enable_key_repeat 
+
+=head2 get_mouse_state 
+
+=head2 get_relative_mouse_state 
+
+=head2 get_app_state 
+
+=head2 joystick_event_state 
+
+
 =head1 SEE ALSO
 
 L<SDL::Event>, L<SDL::Video>
