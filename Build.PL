@@ -411,8 +411,9 @@ $arch->write_sdl_config( $build_systems );
 
 # and fetch all of the information needed to compile
 my $defines       = $arch->build_defines( \%libraries, $build_systems );
-my $includes      = $arch->build_includes( \%libraries, $build_systems );
+my $includes      = $arch->build_includes( \%libraries, $build_systems);
 my $links         = $arch->build_links( \%libraries, $build_systems );
+
 
 # mangle the compilable files into a format Module::Build can understand
 my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
@@ -457,6 +458,7 @@ if($arch eq 'Darwin')
 }
 
 # and here's where the real (and ugly) magic works... see SDL::Build
+
 $build->set_flags(
 	\%subsystems,
 	$build_systems,

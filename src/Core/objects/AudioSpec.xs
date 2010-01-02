@@ -37,25 +37,17 @@ extern PerlInterpreter *parent_perl;
 
 #endif
 
-
+PerlInterpreter * perl_for_audio_cb = NULL;
 
 #include <SDL.h>
 #include <SDL_audio.h>
-
-
-static char* callbacksv;
-
-static PerlInterpreter * orig_perl=NULL;
-static PerlInterpreter * perl_for_cb=NULL;
 
 
 void
 audio_callback ( void* data, Uint8 *stream, int len )
 {
 
-	PERL_SET_CONTEXT(orig_perl);
-	perl_for_cb = perl_clone(orig_perl, CLONEf_KEEP_PTR_TABLE);
-	PERL_SET_CONTEXT(perl_for_cb); 
+	PERL_SET_CONTEXT(perl_for_audio_cb); 
 	
 	dSP;
 
@@ -76,7 +68,7 @@ audio_callback ( void* data, Uint8 *stream, int len )
 	XPUSHs(sv_2mortal(newRV_inc(sv)));
  
 	PUTBACK;
- 	call_pv(callbacksv,G_VOID|G_DISCARD);
+ 	call_pv(data,G_VOID|G_DISCARD);
 
         SvPV_set(sv,old);
         SvCUR_set(sv,1);
@@ -86,8 +78,6 @@ audio_callback ( void* data, Uint8 *stream, int len )
 	FREETMPS;
 	LEAVE;
 	
-	PERL_SET_CONTEXT(orig_perl); 
-	perl_free(perl_for_cb);
 
 }
 
@@ -123,7 +113,6 @@ audiospec_new (CLASS)
 	char* CLASS
 	CODE:
 		RETVAL = safemalloc(sizeof(SDL_AudioSpec));
-		orig_perl = PERL_GET_CONTEXT;
 	
 	OUTPUT:
 		RETVAL
@@ -169,11 +158,15 @@ audiospec_callback( audiospec, cb )
 	SDL_AudioSpec *audiospec
 	char* cb
 	CODE:
-		 
-		callbacksv = cb;
+		// the audio callback will happen in a different thread.
+                // so we're going to leave a cloned interpreter available
+                // but still remain in the current one.
+		if (perl_for_audio_cb == NULL) {
+		  perl_for_audio_cb = perl_clone(my_perl, CLONEf_KEEP_PTR_TABLE);
+                  PERL_SET_CONTEXT(my_perl);
+                }
+		audiospec->userdata = cb;
 		audiospec->callback = audio_callback;
-		
-		
 
 void
 audiospec_DESTROY(self)
