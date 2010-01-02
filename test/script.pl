@@ -28,7 +28,7 @@ sub callback{
 
   for (my $i = 0; $i < $len; $i++) {
     use bytes;
-    substr($$streamref, $i, 1, chr($p));
+    substr($$streamref, $i, 1, chr(sin($p)));
 
     if ($f && $p++ > 200) {
       $f = 0;
