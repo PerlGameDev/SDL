@@ -17,14 +17,15 @@ if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( tests => 1);
 }
 my $obtained = SDL::AudioSpec->new;   
+my $p :shared = 0;
+my $f :shared = 0;
+
 my $desired = SDL::AudioSpec->new;
    $desired->freq(44100);
    $desired->format(SDL::Constants::AUDIO_S8);
    $desired->channels(1);
    $desired->samples(4096);
    $desired->callback('main::callback');
-my $p :shared = 0;
-my $f :shared = 0;
 
 sub callback{
   my ($int_size, $len, $streamref) = @_;
@@ -50,6 +51,6 @@ sub callback{
 
    SDL::Audio::close();
 
-   isnt $p, 0,  '[callback] tested';
+   isnt $p, 0,  '[callback] tested ';
 
 
