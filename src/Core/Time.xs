@@ -35,9 +35,8 @@ extern PerlInterpreter *parent_perl;
 
 #include <SDL.h>
 
-static SV* cb; 
+static char* cb; 
 
-static PerlInterpreter * orig_perl=NULL;
 static PerlInterpreter * perl_for_cb=NULL;
 
 
@@ -45,8 +44,6 @@ static PerlInterpreter * perl_for_cb=NULL;
 Uint32 add_timer_cb (Uint32 interval, void* param )
 {
 
-	PERL_SET_CONTEXT(orig_perl);
-	perl_for_cb = perl_clone(orig_perl, CLONEf_KEEP_PTR_TABLE);
 	PERL_SET_CONTEXT(perl_for_cb); 
 	
 	dSP;
@@ -69,7 +66,7 @@ Uint32 add_timer_cb (Uint32 interval, void* param )
 	XPUSHs(sv_2mortal(newSViv( *((int *)param)) ));
  
 	PUTBACK;
- 	count = call_sv(cb,G_SCALAR);
+ 	count = call_pv(cb,G_SCALAR);
 
 	if (count != 1 ) croak("callback returned more than 1 value\n");	
 
@@ -78,8 +75,6 @@ Uint32 add_timer_cb (Uint32 interval, void* param )
 	FREETMPS;
 	LEAVE;
 	
-	PERL_SET_CONTEXT(orig_perl); 
-	perl_free(perl_for_cb);
 	return ret_interval;
 
 }
@@ -91,13 +86,15 @@ MODULE = SDL::Time 	PACKAGE = SDL::Time    PREFIX = time_
 SDL_TimerID
 time_add_timer ( interval, cmd )
 	Uint32 interval
-	SV *cmd
+	char *cmd
 	CODE:
-	  orig_perl = PERL_GET_CONTEXT;
- 	  cb = newSVsv(cmd);
+ 	  cb = cmd;
+	if (perl_for_cb == NULL) {
+		  perl_for_cb = perl_clone(my_perl, CLONEf_KEEP_PTR_TABLE);
+                  PERL_SET_CONTEXT(my_perl);
+                }
 
 		RETVAL = SDL_AddTimer(interval,add_timer_cb,(void *)cmd);
-		//fprintf( stderr, "Timer %d  \n Return = %x \n error = %s \n ", interval, (int)RETVAL, SDL_GetError() );
 
 	OUTPUT:
 		RETVAL
@@ -108,6 +105,7 @@ time_remove_timer ( id)
 	int id
 	CODE:
 		RETVAL = SDL_RemoveTimer((SDL_TimerID) id);
+	
 	OUTPUT:
 		RETVAL
 

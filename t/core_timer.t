@@ -15,7 +15,7 @@ if( !SDL::TestTool->init(SDL_INIT_TIMER) )
 }
 else
 {
-    plan( tests => 5 );
+    plan( tests => 6 );
 }
 
 my @done = qw/get_ticks
@@ -31,19 +31,16 @@ like( $after, qr/^\d+$/, '[get_ticks] returns a number again' );
 my $diff = $after - $before;
 ok( $diff > 50 && $diff < 300, '[delay](250) delayed for ' . $diff . 'ms' );
 
-
-SKIP:
-{
-# local $TODO = 'Multithreaded callback almost working';
-# skip 'segfault', 1;
  my $fired :shared = 0;
- my $id = SDL::Time::add_timer( 101, sub {  $fired++;  return $_[0] } );
+
+sub fire{  $fired++;  return $_[0] }
+
+ my $id = SDL::Time::add_timer( 101, 'main::fire');
 
  sleep(2);
  is(  SDL::Time::remove_timer($id) , 1, "[remove_timer] removed $id timer");
 
  isnt( $fired  , 0, '[add_timer] ran '.$fired );
-}
 
 my @left = qw/set_timer new_timer_callback add_timer remove_timer/;
 
