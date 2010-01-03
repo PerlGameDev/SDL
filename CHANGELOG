@@ -5,6 +5,7 @@ Revision history for Perl extension SDL_perl.
         - Removed usless verify method in SDL.pm [J_King]
         - GFX rotozoom started [FROGGS]
         - More docs for GFX [FROGGS]
+        - ithreads support for audio and timer callback [kthakore, ruoso]
 
 * 2.3_3
 	- SDL::Image implemented and tested [#72] [kthakore]
