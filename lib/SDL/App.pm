@@ -15,7 +15,7 @@ use SDL::Video;
 use SDL::Event;
 use SDL::Events;
 use SDL::Surface;
-
+use SDL::PixelFormat;
 our @ISA = qw(SDL::Surface);
 sub DESTROY {
 
@@ -98,8 +98,8 @@ sub resize ($$$) {
 	my ($self,$w,$h) = @_;
 	my $flags = $self->flags;
 	if ( $flags & SDL_RESIZABLE) {
-		my $bpp = $self->bpp;
-		$self = SDL::set_video_mode($w,$h,$bpp,$flags) or die "SDL cannot set video:".SDL::get_error;
+		my $bpp = $self->format->BitsPerPixel;
+		$self = SDL::Video::set_video_mode($w,$h,$bpp,$flags) or die "SDL cannot set video:".SDL::get_error;
 	}
 }
 
