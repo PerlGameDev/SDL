@@ -49,6 +49,7 @@ Uint32 add_timer_cb (Uint32 interval, void* param )
 
 	ENTER;
 	SAVETMPS;
+
 	PUSHMARK(SP);
  
 	XPUSHs(sv_2mortal(newSViv(interval)));
@@ -57,10 +58,13 @@ Uint32 add_timer_cb (Uint32 interval, void* param )
 
  	count = call_pv(param,G_SCALAR);
 
+        SPAGAIN;
+
 	if (count != 1 ) croak("callback returned more than 1 value\n");	
 
-	ret_interval = POPi;
+        ret_interval = POPi;
 
+        PUTBACK;
 	FREETMPS;
 	LEAVE;
 	
