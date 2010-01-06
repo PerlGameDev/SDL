@@ -6,6 +6,7 @@ Revision history for Perl extension SDL_perl.
         - GFX rotozoom started [FROGGS]
         - More docs for GFX [FROGGS]
         - ithreads support for audio and timer callback [kthakore, ruoso]
+	- SDL::App resize fixed [kthakore, TonyC] {http://rt.cpan.org/Public/Bug/Display.html?id=16984}
 
 * 2.3_3
 	- SDL::Image implemented and tested [#72] [kthakore]

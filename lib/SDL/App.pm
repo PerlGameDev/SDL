@@ -100,6 +100,8 @@ sub resize ($$$) {
 	if ( $flags & SDL_RESIZABLE) {
 		my $bpp = $self->format->BitsPerPixel;
 		$self = SDL::Video::set_video_mode($w,$h,$bpp,$flags) or die "SDL cannot set video:".SDL::get_error;
+	} else {
+		die "Application surface not resizable";
 	}
 }
 

@@ -39,7 +39,7 @@ use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
 
-    plan( tests => 3 );
+    plan( tests => 8 );
 use_ok( 'SDL::App' ); 
   
 can_ok ('SDL::App', qw/
@@ -59,13 +59,24 @@ can_ok ('SDL::App', qw/
 
 SKIP:
 {
-	skip 'Video not avaiable', 1 unless SDL::TestTool->init(SDL_INIT_VIDEO);
+	skip 'Video not avaiable', 6 unless SDL::TestTool->init(SDL_INIT_VIDEO);
 
 	my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
 
 	$app->sync;
 	sleep(1);
 	pass 'App inited';
+	ok(!eval { $app->resize(640, 480); 1 }, "can't resize with no -resizeable");
+	like($@, qr/not resizable/, "check for error message");
+	SDL::quit;
+
+	my $app2 = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO, -resizeable => 1);
+	$app2->sync;
+	ok(eval { $app2->resize(640, 480); 1 }, "succeed at resize");
+	ok(!eval { $app2->resize(-1, -1); 1 }, "fail to resize to bad size");
+	like($@, qr/cannot set video/, "check error message");
   }
+
+
 
 sleep(2);
