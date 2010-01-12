@@ -103,13 +103,19 @@ isa_ok( $image_format_alpha, 'SDL::Surface' );
 
 my $app_pixel_format = $app->format;
 
+
 my $rect = SDL::Rect->new( 0, 0, $app->w, $app->h );
 
-my $blue_pixel = SDL::Video::map_RGB( $app_pixel_format, 0x00, 0x00, 0xff );
-SDL::Video::fill_rect( $app, $rect, $blue_pixel );
-SDL::Video::update_rect( $app, 0, 0, 0, 0 );
-SDL::Video::update_rects( $app, $small_rect );
 
+my $blue_pixel = SDL::Video::map_RGB( $app_pixel_format, 0x00, 0x00, 0xff );
+
+
+SDL::Video::fill_rect( $app, $rect, $blue_pixel );
+
+
+SDL::Video::update_rect( $app, 0, 0, 0, 0 );
+
+SDL::Video::update_rects( $app, $small_rect );
 
 my $other_surface =  SDL::Surface->new_from( $surface->get_pixels_ptr, 640, 320, 8, $surface->pitch, 0, 0, 0, 0 ); 
 
