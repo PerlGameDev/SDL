@@ -102,11 +102,14 @@ OUTPUT
 # The Perl object is blessed into 'CLASS', which should be a
 # char* having the name of the package for the blessing.
 O_OBJECT
-        void** pointers = malloc(2 * sizeof(void*));
-        pointers[0] = (void*)$var;
-        pointers[1] = (void*)my_perl;
-	sv_setref_pv( $arg, CLASS, (void*)pointers );
-
+        if ($var) {
+          void** pointers = malloc(2 * sizeof(void*));
+          pointers[0] = (void*)$var;
+          pointers[1] = (void*)my_perl;
+  	  sv_setref_pv( $arg, CLASS, (void*)pointers );
+        } else {
+          XSRETURN_UNDEF;
+        }
 
 INPUT
 

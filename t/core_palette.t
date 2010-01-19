@@ -27,7 +27,7 @@ my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 
 isa_ok($display->format, 'SDL::PixelFormat', 'Are we a SDL::PixelFormat?');
 
-is( !defined $display->format->palette , 1, 'Palette is not defined as BitPerPixels is greater then 8');
+ok( ! defined $display->format->palette , 'Palette is not defined as BitPerPixels is greater then 8');
 
 
 my $disp = SDL::Video::set_video_mode(640,480,8, SDL_SWSURFACE );
