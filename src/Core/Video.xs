@@ -200,14 +200,15 @@ video_set_palette ( surface, flags, start, ... )
 	CODE:
 		SDL_Color *colors;
                 SDL_Color *temp;
-		int i;
+		int i,length;
 
 		if ( items < 4 ) { 
                   RETVAL = 0;
 
-                } else {		
-                  colors = (SDL_Color *)safemalloc(sizeof(SDL_Color)*(items - 3));
-                  for ( i = 0; i < items - 3 ; i++ ){ 
+                } else {
+		  length = items - 3;		
+                  colors = (SDL_Color *)safemalloc(sizeof(SDL_Color)*(length+1));
+                  for ( i = 0; i < length; i++ ){ 
 
                      void** pointers = (void**)(SvIV(ST(i+3))); 
                      temp = (SDL_Color *)pointers[0];
@@ -216,7 +217,7 @@ video_set_palette ( surface, flags, start, ... )
                      colors[i].b = temp->b;
 		  }
 
-		  RETVAL = SDL_SetPalette(surface, flags, colors, start, items - 3 );
+		  RETVAL = SDL_SetPalette(surface, flags, colors, start, length);
 	  	  safefree(colors);
 		}
 	OUTPUT:	
