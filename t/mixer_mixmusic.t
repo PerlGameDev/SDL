@@ -27,8 +27,6 @@ my $mix_music = SDL::Mixer::load_MUS('test/data/tribe_i.wav'); # from Matthew Ne
 #warn 'Error:'. SDL::get_error() if (!$mix_music);
 
 {
-    local $TODO = 1;
-
     # I'm not sure why this fails
     isa_ok( $mix_music, 'SDL::Mixer::MixMusic' );
 };
