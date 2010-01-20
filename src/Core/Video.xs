@@ -207,9 +207,9 @@ video_set_palette ( surface, flags, start, ... )
 
                 } else {		
                   colors = (SDL_Color *)safemalloc(sizeof(SDL_Color)*(items - 3));
-                  for ( i = 3; i < items ; i++ ){ 
+                  for ( i = 0; i < items - 3 ; i++ ){ 
 
-                     void** pointers = (void**)(SvIV(ST(i))); 
+                     void** pointers = (void**)(SvIV(ST(i+3))); 
                      temp = (SDL_Color *)pointers[0];
                      colors[i].r = temp->r;
                      colors[i].g = temp->g;
