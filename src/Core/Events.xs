@@ -9,7 +9,7 @@
 #include <SDL.h>
 #include <SDL_events.h>
 
-
+PerlInterpreter * perl_for_cb=NULL;
 /* Static Memory for event filter call back */
 static SV * eventfiltersv;
 
@@ -26,8 +26,11 @@ int eventfilter_cb( const void * event)
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
-	
-	XPUSHs( sv_setref_pv( eventref, "SDL::Event", (void *)copyEvent) );
+			 void** pointers = malloc(2 * sizeof(void*));
+		  pointers[0] = (void*)copyEvent;
+		  pointers[1] = (void*)perl_for_cb;
+
+	XPUSHs( sv_setref_pv( eventref, "SDL::Event", (void *)pointers) );
 	PUTBACK;
 
 //	printf ( "Eventref is %p. Event is %p. CopyEvent is %p \n", eventref, event, copyEvent);
@@ -108,6 +111,7 @@ events_set_event_filter(callback)
 	SV* callback
 	CODE:
 	eventfiltersv = callback;
+	perl_for_cb = my_perl;
 	
 	SDL_SetEventFilter((SDL_EventFilter) eventfilter_cb);
 
