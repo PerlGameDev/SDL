@@ -43,11 +43,22 @@ is( SDL::Audio::open( $desired, $obtained ),
     0, '[open returned success]' );
 isa_ok( $obtained, 'SDL::AudioSpec', 'Created a new AudioSpec' );
 
+
+
+    my $wav_ref =  SDL::Audio::load_wav( 'test/data/sample.wav', $obtained ); 
+    isa_ok( $wav_ref, 'ARRAY', "Got and Array Out of load_wav. $wav_ref");
+    my ( $wav_spec, $audio_buf, $audio_len ) = @{$wav_ref};
+    isa_ok( $wav_spec,  'SDL::AudioSpec', '[load_wav] got Audio::Spec back out ');
+    is( $audio_len, 481712, '[load_wav] length is correct' );
+    SDL::Audio::free_wav($audio_buf);
+
+
+
 is( SDL::Audio::get_status, SDL_AUDIO_PAUSED, '[get_status paused]' );
 
 SDL::Audio::pause(0);
-is( SDL::Audio::get_status, SDL_AUDIO_PLAYING, '[get_status playing]' );
 
+is( SDL::Audio::get_status, SDL_AUDIO_PLAYING, '[get_status playing]' );
 
 SDL::Audio::lock();
 pass ('Audio locked');
@@ -56,8 +67,6 @@ pass ('Audio unlocked');
 SDL::Audio::close();
 pass ('Audio Closed');
 is( SDL::Audio::get_status, SDL_AUDIO_STOPPED, '[get_status stopped]' );
-
-
 
 
 
