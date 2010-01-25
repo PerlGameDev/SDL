@@ -12,7 +12,7 @@ use SDL::TestTool;
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
 } else {
-    plan( tests => 17);
+    plan( tests => 20);
 }
 my @done = qw/
     audio_spec
@@ -50,18 +50,16 @@ SDL::Audio::pause(0);
 is( SDL::Audio::get_status, SDL_AUDIO_PLAYING, '[get_status playing]' );
 
 SDL::Audio::lock();
+pass ('Audio locked');
 SDL::Audio::unlock();
-
+pass ('Audio unlocked');
 SDL::Audio::close();
-
+pass ('Audio Closed');
 is( SDL::Audio::get_status, SDL_AUDIO_STOPPED, '[get_status stopped]' );
 
 
 
-    # I'm not sure why this does give us the correct params
     my $wav_ref =  SDL::Audio::load_wav( 'test/data/sample.wav', $obtained ); 
-    #printf Dump  @wav_ref;
-
     isa_ok( $wav_ref, 'ARRAY', "Got and Array Out of load_wav. $wav_ref");
     my ( $wav_spec, $audio_buf, $audio_len ) = @{$wav_ref};
     isa_ok( $wav_spec,  'SDL::AudioSpec', '[load_wav] got Audio::Spec back out ');
@@ -90,4 +88,4 @@ TODO:
 
 }
 diag $why;
-sleep(2);
+sleep(1);
