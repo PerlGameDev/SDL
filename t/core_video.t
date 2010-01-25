@@ -203,6 +203,11 @@ TODO:
 
 local $TODO =  "These test case test a very specific test scenario which might need to be re tought out ...";
 
+$display = SDL::Surface->new(SDL_SWSURFACE, 10, 10, 8, 0,0,0,0);
+
+SDL::Video::set_colors($display, 0, @b_w_colors);
+warn SDL::get_error();
+
 isa_ok(SDL::Video::convert_surface( $display , $hwdisplay->format, SDL_SRCALPHA), 'SDL::Surface', '[convert_surface] Checking if we get a surface ref back'); 
 isa_ok(SDL::Video::display_format( $display ), 'SDL::Surface', '[display_format] Returns a SDL::Surface');
 isa_ok(SDL::Video::display_format_alpha( $display ), 'SDL::Surface', '[display_format_alpha] Returns a SDL::Surface');
