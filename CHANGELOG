@@ -8,6 +8,7 @@ Revision history for Perl extension SDL_perl.
         - ithreads support for audio and timer callback [kthakore, ruoso]
 	- SDL::App resize fixed [kthakore, TonyC] {http://rt.cpan.org/Public/Bug/Display.html?id=16984}
 	- Migrated O_OBJECT to thread safe bag [ruoso, kthakore]
+	- Update time docs [kthakore]
 
 * 2.3_3
 	- SDL::Image implemented and tested [#72] [kthakore]
