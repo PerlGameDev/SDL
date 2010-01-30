@@ -8,6 +8,25 @@ SDL::Time - a SDL perl extension for managing timers.
 =head1 SYNOPSIS
 
 
+	package Foo;
+
+	use SDL;
+	use SDL::Time;
+
+	use threads;
+	use threads::shared;
+
+	SDL::init(SDL_INIT_TIMER);
+
+	my $callback_count :shared = 0;	
+
+	sub callback { $callback_count++;  return 100};
+	
+	my $timer_id = SDL::Time::add_timer(100, 'Foo::callback'); 
+
+	sleep(2); # The callback is running in a seperate thread
+	
+	SDL::Time::remove_timer($timer_id);
 
 
 =head1 METHODS
@@ -15,15 +34,22 @@ SDL::Time - a SDL perl extension for managing timers.
 
 =head2 get_ticks()
 
+This will be move to SDL::Time.
+
+
 Returns the number of milliseconds since SDL library initialization. This value wraps around if the program runs for more than 49.7 days
 
 
 =head2 delay(ms)
 
-This function waits a specified number of milliseconds before returning. It waits at least the specified time, but possible longer due to OS scheduling. The delay granularity is at least 10 ms. Some platforms have shorter clock ticks but this is the most common.
-SDL::delay doesn't returns anything.
+This will be move to SDL::Time.
 
-=head2 add_timer(interval,callback,param)
+This function waits a specified number of milliseconds before returning. It waits at least the specified time, but possible longer due to OS scheduling. The delay granularity is at least 10 ms. Some platforms have shorter clock ticks but this is the most common.
+SDL::delay doesn't returns anything. 
+
+=head2 add_timer(interval,callback)
+
+This runs in a seperate thread and a cloned perl thread.
 
 Adds a callback function to be run after the specified number of milliseconds has elapsed. 
 The callback function is passed the current timer interval and the user supplied parameter from the SDL::add_timer call and returns the next timer interval.
@@ -48,27 +74,10 @@ Note : If you use this function, you need to pass SDL_INIT_TIMER to SDL::init.
 
 	callback [in]   The SDL timer callback function which is called when the specified interval elapses. 
 
-	param [in]	The user parameter which is passed to the callback function 
-
 
 =head2 remove_timer( id )
 
 Removes a timer callback previously added with SDL::add_timer. 
 It returns 0 on succés or -1 on error.
-
-=head2 set_timer( interval,callback )
-
-Set a callback to run after the specified number of milliseconds has elapsed.
-The callback function is passed the current timer interval and returns the next timer interval. 
-If the returned value is the same as the one passed in, the periodic alarm continues, otherwise a new alarm is scheduled.
-
-To cancel a currently running timer, call SDL::set_timer(0, NULL);
-
-The timer callback function may run in a different thread than your main constant, and so shouldn't call any functions from within itself.
-
-The maximum resolution of this timer is 10 ms, which means that if you request a 16 ms timer, your callback will run approximately 20 ms later on an unloaded system. If you wanted to set a flag signaling a frame update at 30 frames per second (every 33 ms), you might set a timer for 30 ms (see example below).
-
-If you use this function, you need to pass SDL_INIT_TIMER to SDL::init(). 
-Note: This function is kept for compatibility but has been superseded by the new timer functions SDL::add_timer and SDL::remove_timer which support multiple timers.
 
 
