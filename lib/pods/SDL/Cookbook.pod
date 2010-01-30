@@ -8,6 +8,12 @@ Cookbook
 
 =head2 First Steps
 
+=head3 Overview
+
+=head3 Installation
+
+=head3 Tutorial
+
 =head2 Core SDL Layer
 
 =head3 Video
