@@ -7,27 +7,28 @@ SDL::Time - a SDL perl extension for managing timers.
 
 =head1 SYNOPSIS
 
-
-	package Foo;
+	package foo;
+	use threads;
+	use threads::shared;
 
 	use SDL;
 	use SDL::Time;
 
-	use threads;
-	use threads::shared;
-
 	SDL::init(SDL_INIT_TIMER);
 
-	my $callback_count :shared = 0;	
+	my $tick :shared = 0;
 
-	sub callback { $callback_count++;  return 100};
-	
-	my $timer_id = SDL::Time::add_timer(100, 'Foo::callback'); 
+	sub ticker { $tick++; warn $tick; return 100 };
 
-	sleep(2); # The callback is running in a seperate thread
-	
-	SDL::Time::remove_timer($timer_id);
+	package main;
 
+	my $id = SDL::Time::add_timer(100, 'foo::ticker');
+
+	sleep(2);
+
+	SDL::Time::remove_timer($id);
+
+	SDL::quit();
 
 =head1 METHODS
 
