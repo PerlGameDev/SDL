@@ -137,7 +137,7 @@ mixer_quit()
 #endif
 
 const SDL_version *
-mixer_link_version ()
+mixer_linked_version ()
 	PREINIT:
 		char* CLASS = "SDL::Version";
 	CODE:

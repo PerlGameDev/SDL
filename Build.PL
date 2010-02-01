@@ -192,6 +192,14 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_mixer )],
 	},
+	MixerSamples => {
+		file      => {
+			from  => 'src/Mixer/Samples.xs',
+			to    => 'lib/SDL/Mixer/Samples.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+
 	MixChunk => {
 		file      => {
 			from  => 'src/Mixer/objects/MixChunk.xs',
