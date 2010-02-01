@@ -128,8 +128,55 @@ mixer_init(flags)
 	OUTPUT:
 		RETVAL
 
+
+void
+mixer_quit()
+	CODE:
+		Mix_Quit();
+
 #endif
 
+const SDL_version *
+mixer_link_version ()
+	PREINIT:
+		char* CLASS = "SDL::Version";
+	CODE:
+		RETVAL = Mix_Linked_Version();
+	OUTPUT:
+		RETVAL
+
+
+int
+mixer_open_audio ( frequency, format, channels, chunksize )
+	int frequency
+	Uint16 format
+	int channels
+	int chunksize	
+	CODE:
+		RETVAL = Mix_OpenAudio(frequency, format, channels, chunksize);
+	OUTPUT:
+		RETVAL
+
+void
+mixer_close_audio ()
+	CODE:
+		Mix_CloseAudio();
+
+
+
+AV *
+mixer_query_spec ()
+	CODE:
+		int freq, channels, status;
+		Uint16 format;
+		status = Mix_QuerySpec(&freq,&format,&channels);
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
+		av_push(RETVAL,newSViv(status));
+		av_push(RETVAL,newSViv(freq));
+		av_push(RETVAL,newSViv(format));
+		av_push(RETVAL,newSViv(channels));
+	OUTPUT:
+		RETVAL
 
 void*
 PerlMixMusicHook ()
@@ -148,17 +195,6 @@ mixer_mix_audio ( dst, src, len, volume )
 		SDL_MixAudio(dst,src,len,volume);
 
 int
-mixer_open_audio ( frequency, format, channels, chunksize )
-	int frequency
-	Uint16 format
-	int channels
-	int chunksize	
-	CODE:
-		RETVAL = Mix_OpenAudio(frequency, format, channels, chunksize);
-	OUTPUT:
-		RETVAL
-
-int
 mixer_allocate_channels ( number )
 	int number
 	CODE:
@@ -166,19 +202,7 @@ mixer_allocate_channels ( number )
 	OUTPUT:
 		RETVAL
 
-AV *
-mixer_query_spec ()
-	CODE:
-		int freq, channels, status;
-		Uint16 format;
-		status = Mix_QuerySpec(&freq,&format,&channels);
-		RETVAL = (AV*)sv_2mortal((SV*)newAV());
-		av_push(RETVAL,newSViv(status));
-		av_push(RETVAL,newSViv(freq));
-		av_push(RETVAL,newSViv(format));
-		av_push(RETVAL,newSViv(channels));
-	OUTPUT:
-		RETVAL
+
 
 Mix_Chunk *
 mixer_load_WAV ( filename )
@@ -209,6 +233,7 @@ mixer_load_MUS ( filename )
 		RETVAL = mixmusic;
 	OUTPUT:
 		RETVAL
+
 
 Mix_Chunk *
 mixer_quick_load_WAV ( buf )
@@ -547,10 +572,5 @@ mixer_set_panning ( channel, left, right )
 		RETVAL = Mix_SetPanning(channel, left, right);
 	OUTPUT:
 		RETVAL
-
-void
-mixer_close_audio ()
-	CODE:
-		Mix_CloseAudio();
 
 #endif
