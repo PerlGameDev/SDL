@@ -22,7 +22,7 @@ elsif( !SDL::Config->has('SDL_mixer') )
 }
 else
 {
-    plan( tests => 3 );
+    plan( tests => 6 );
 }
 
 
@@ -42,6 +42,14 @@ SKIP:
  is( defined $stream, 1, '[get_chunk_decoder] found decoder '.$stream);
 
 }
+
+my $sample_chunk = SDL::Mixer::Samples::load_WAV('test/data/sample.wav');
+ isa_ok( $sample_chunk,  'SDL::Mixer::MixChunk', '[load_WAV] Can Load a wav file to MixChunk');
+
+ is (SDL::Mixer::Samples::volume_chunk($sample_chunk, 10), 128 ,'[volume_chunk] was at max 128 volume on start');
+ is (SDL::Mixer::Samples::volume_chunk($sample_chunk, 10), 10 ,'[volume_chunk] is now at 10 volume');
+
+
 
 pass 'Checking for segfaults';
 
