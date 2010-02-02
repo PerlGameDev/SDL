@@ -22,7 +22,7 @@ elsif( !SDL::Config->has('SDL_mixer') )
 }
 else
 {
-    plan( tests => 2 );
+    plan( tests => 3 );
 }
 
 
@@ -33,9 +33,13 @@ my $version =  SDL::Mixer::linked_version();
 
 SKIP:
 {
- skip  'Need version 1.2.10', 1 unless ( $version->major > 1 || $version->minor > 2 || $version->patch >= 10);
+ skip  'Need version 1.2.10', 2 unless ( $version->major > 1 || $version->minor > 2 || $version->patch >= 10);
  
-is(SDL::Mixer::Samples::get_num_chunk_decoders() >= 0, 1 , '[get_num_chunk_decoders] passed');
+ is(SDL::Mixer::Samples::get_num_chunk_decoders() >= 0, 1 , '[get_num_chunk_decoders] passed');
+
+ my $stream = SDL::Mixer::Samples::get_chunk_decoder(0);
+
+ is( defined $stream, 1, '[get_chunk_decoder] found decoder '.$stream);
 
 }
 

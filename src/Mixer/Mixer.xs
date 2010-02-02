@@ -204,21 +204,6 @@ mixer_allocate_channels ( number )
 
 
 
-Mix_Chunk *
-mixer_load_WAV ( filename )
-	char *filename
-	PREINIT:
-		char * CLASS = "SDL::Mixer::MixChunk";
-	CODE:
-		Mix_Chunk * mixchunk;
-		mixchunk = Mix_LoadWAV(filename);
-		if (mixchunk == NULL) {
-		  fprintf(stderr, "Could not load %s\n", filename);
-		}
-		RETVAL = mixchunk;
-	OUTPUT:
-		RETVAL
-
 Mix_Music *
 mixer_load_MUS ( filename )
 	char *filename
@@ -235,21 +220,6 @@ mixer_load_MUS ( filename )
 		RETVAL
 
 
-Mix_Chunk *
-mixer_quick_load_WAV ( buf )
-	Uint8 *buf
-	PREINIT:
-		char * CLASS = "SDL::Mixer::MixChunk";
-	CODE:
-		RETVAL = Mix_QuickLoad_WAV(buf);
-	OUTPUT:
-		RETVAL
-
-void
-mixer_free_chunk( chunk )
-	Mix_Chunk *chunk
-	CODE:
-		Mix_FreeChunk(chunk);
 
 void
 mixer_free_music ( music )
@@ -413,15 +383,6 @@ mixer_volume ( channel, volume )
 	int volume
 	CODE:	
 		RETVAL = Mix_Volume(channel,volume);
-	OUTPUT:
-		RETVAL
-
-int
-mixer_volume_chunk ( chunk, volume )
-	Mix_Chunk *chunk
-	int volume
-	CODE:
-		RETVAL = Mix_VolumeChunk(chunk,volume);
 	OUTPUT:
 		RETVAL
 
