@@ -4,6 +4,7 @@ use warnings;
 use SDL;
 use SDL::Config;
 use SDL::Mixer;
+use SDL::Mixer::Samples;
 use SDL::Mixer::MixChunk;
 use Test::More;
 
@@ -26,7 +27,7 @@ else
 
 is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ), 0, 'open_audio passed' );
 
-my $mix_chunk = SDL::Mixer::load_WAV('test/data/sample.wav');
+my $mix_chunk = SDL::Mixer::Samples::load_WAV('test/data/sample.wav');
 isa_ok( $mix_chunk, 'SDL::Mixer::MixChunk' );
 
 is( $mix_chunk->volume, 128, 'Default volume is 128' );
