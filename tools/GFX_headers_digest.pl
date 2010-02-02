@@ -1,7 +1,5 @@
 use strict;
 use warnings;
-use Data::Dumper;
-use C::Scan;
 
 my $head_loc = `sdl-config --cflags`;
    $head_loc = (split ' ', $head_loc)[0];
@@ -18,11 +16,13 @@ foreach my $header (@headers)
   
   my $file = '/usr/include/SDL/'.$header;
 print " ################## $file ####################\n";
-  my $c = C::Scan->new('filename' => $file);
+ # my $c = C::Scan->new('filename' => $file);
   
-   my $fdec = $c->get('fdecls');
+  # my $fdec = $c->get('fdecls');
    
-   grep { my @line = split ' ', $_ ; print STDERR $line[2]."\n" if $line[2] !~ /__/; } @{$fdec};
+   open my $FH, '<'.$file or die $!;
+   
+   grep { $_ =~ /^(\s+|)(\S+) (\S+) (\*|)(\S+)(\()/; print "$5 \n" if $5 } <$FH>;
 
 }
 
