@@ -12,7 +12,7 @@ my @headers = qw/ SDL_gfxPrimitives.h SDL_rotozoom.h SDL_framerate.h SDL_imageFi
 #check to see we have a different path set for SDL_gfx
 #
 
-if ( -d $ENV{SDL_GFX_LOC})
+if ( $ENV{SDL_GFX_LOC} && -d $ENV{SDL_GFX_LOC})
 {
 	warn 'Using user defined location for SDL_GFX and not '.$head_loc;
 	$head_loc = $ENV{SDL_GFX_LOC};
@@ -24,11 +24,18 @@ foreach my $header (@headers)
   
   
   my $file = File::Spec->catfile($head_loc, $header);
-print " ################## $file ####################\n";
 
-   open my $FH, '<'.$file or warn "Cannot find $file please set \$ENV{SDL_GFX_LOC} to point to a different location  : $!";
    
+  warn " Creating Config for: $file at \n";
+
+   my $FH;
+   open $FH, '<'.$file or warn "Cannot find $file please set \$ENV{SDL_GFX_LOC} to point to a different location  : $!";
+   
+   next if !$FH;
+
    grep { $_ =~ /^(\s+|)(\S+) (\S+) (\*|)(\S+)(\()/; print "$5 \n" if $5 } <$FH>;
+
+   close $FH
 
 }
 
