@@ -2,22 +2,31 @@
 use strict;
 use SDL;
 use SDL::Config;
-use Test::More;
+
+BEGIN
+{
+	use Test::More;
+	use lib 't/lib';
+	use SDL::TestTool;
+
+	if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
+	    plan( skip_all => 'Failed to init sound' );
+	}
+	elsif( !SDL::Config->has('SDL_mixer') )
+	{
+	    plan( skip_all => 'SDL_mixer support not compiled' );
+	}
+} #SDL_init(SDL_INIT_AUDIO) + Version bootstrap conflict prevention in windows
+#
+# To reproduce this bug do 
+#
+# use SDL; use SDL::Version; SDL::init(SDL_INIT_AUDIO);
+#
 use SDL::Mixer;
 use SDL::Mixer::MixChunk;
 use SDL::Mixer::Samples;
 use SDL::Version;
 
-use lib 't/lib';
-use SDL::TestTool;
-
-if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
-    plan( skip_all => 'Failed to init sound' );
-}
-elsif( !SDL::Config->has('SDL_mixer') )
-{
-    plan( skip_all => 'SDL_mixer support not compiled' );
-}
 my @done = qw/
 get_num_chunk_decoders
 get_chunk_decoder
