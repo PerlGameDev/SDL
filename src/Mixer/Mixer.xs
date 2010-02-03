@@ -248,65 +248,6 @@ mixer_get_music_hook_data ()
 		RETVAL
 
 int
-mixer_reserve_channels ( number )
-	int number
-	CODE:
-		RETVAL = Mix_ReserveChannels ( number );
-	OUTPUT:
-		RETVAL
-
-int
-mixer_group_channel ( which, tag )
-	int which
-	int tag
-	CODE:
-		RETVAL = Mix_GroupChannel(which,tag);
-	OUTPUT:
-		RETVAL
-
-int
-mixer_group_channels ( from, to, tag )
-	int from
-	int to
-	int tag
-	CODE:
-		RETVAL = Mix_GroupChannels(from,to,tag);
-	OUTPUT:
-		RETVAL
-
-int
-mixer_group_available ( tag )
-	int tag
-	CODE:
-		RETVAL = Mix_GroupAvailable(tag);
-	OUTPUT:
-		RETVAL
-
-int
-mixer_group_count ( tag )
-	int tag
-	CODE:
-		RETVAL = Mix_GroupCount(tag);
-	OUTPUT:
-		RETVAL
-
-int
-mixer_group_oldest ( tag )
-	int tag
-	CODE:
-		RETVAL = Mix_GroupOldest(tag);
-	OUTPUT:
-		RETVAL
-
-int
-mixer_group_newer ( tag )
-	int tag
-	CODE:
-		RETVAL = Mix_GroupNewer(tag);
-	OUTPUT:
-		RETVAL
-
-int
 mixer_play_music ( music, loops )
 	Mix_Music *music
 	int loops
@@ -335,13 +276,6 @@ mixer_volume_music ( volume )
 		RETVAL
 
 
-int
-mixer_halt_group ( tag )
-	int tag
-	CODE:
-		RETVAL = Mix_HaltGroup(tag);
-	OUTPUT:
-		RETVAL
 
 int
 mixer_halt_music ()
@@ -350,14 +284,6 @@ mixer_halt_music ()
 	OUTPUT:
 		RETVAL
 
-int
-mixer_fade_out_group ( which, ms )
-	int which
-	int ms
-	CODE:
-		RETVAL = Mix_FadeOutGroup(which,ms);
-	OUTPUT:
-		RETVAL
 
 int
 mixer_fade_out_music ( ms )

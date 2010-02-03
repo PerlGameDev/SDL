@@ -33,6 +33,7 @@ SDL::Version
 SDL::Mixer
 SDL::Mixer::Samples
 SDL::Mixer::Channels
+SDL::Mixer::Groups
 SDL::Mixer::MixChunk
 SDL::Mixer::MixMusic
 

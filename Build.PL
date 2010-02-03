@@ -206,6 +206,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_mixer )],
 	},
+	MixerGroups => {
+		file      => {
+			from  => 'src/Mixer/Groups.xs',
+			to    => 'lib/SDL/Mixer/Groups.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
 
 	MixChunk => {
 		file      => {
