@@ -14,6 +14,7 @@ SDL::Surface
 SDL::Config
 SDL::Overlay
 SDL::Rect
+SDL::Time
 SDL::Events 
 SDL::Event 
 SDL::Mouse
@@ -28,6 +29,7 @@ SDL::MultiThread
 SDL::PixelFormat
 SDL::VideoInfo
 SDL::Mixer
+SDL::Mixer::Samples
 SDL::Mixer::MixChunk
 SDL::Mixer::MixMusic
 SDL::Version
