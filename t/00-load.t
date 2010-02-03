@@ -34,6 +34,8 @@ SDL::Mixer
 SDL::Mixer::Samples
 SDL::Mixer::Channels
 SDL::Mixer::Groups
+SDL::Mixer::Music
+SDL::Mixer::Effects
 SDL::Mixer::MixChunk
 SDL::Mixer::MixMusic
 
