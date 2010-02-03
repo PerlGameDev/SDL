@@ -38,6 +38,7 @@ SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 );
 
 my $version =  SDL::Mixer::linked_version();
 
+diag 'got version :'.$version->major.'.'.$version->minor.'.'.$version->patch;
 
 SKIP:
 {

@@ -33,6 +33,9 @@ See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
 
 #ifdef HAVE_SDL_MIXER
 
+
+#if SDL_MIXER_MAJOR_VERSION >	1 || SDL_MIXER_MINOR_VERSION > 2 || (  SDL_MIXER_MAJOR_VERSION == 1 && SDL_MIXER_MINOR_VERSION == 2 && SDL_MIXER_PATCHLEVEL >= 10 )
+
 int 
 mixsam_get_num_chunk_decoders ()
 	CODE:
@@ -47,6 +50,9 @@ mixsam_get_chunk_decoder (idecoder)
 		RETVAL = (char *)Mix_GetChunkDecoder(idecoder);
 	OUTPUT:
 		RETVAL
+
+#endif
+
 
 Mix_Chunk *
 mixsam_load_WAV ( filename )
