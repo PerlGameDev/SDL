@@ -42,7 +42,7 @@ mixgrp_set_post_mix ( func, arg )
 
 
 int
-mixer_set_panning ( channel, left, right )
+mixeff_set_panning ( channel, left, right )
 	int channel
 	int left
 	int right

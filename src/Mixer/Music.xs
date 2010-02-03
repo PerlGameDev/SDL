@@ -123,7 +123,7 @@ PerlMixMusicHook ()
 		RETVAL
 
 void
-mixer_mix_audio ( dst, src, len, volume )
+mixmus_mix_audio ( dst, src, len, volume )
 	Uint8 *dst
 	Uint8 *src
 	Uint32 len
@@ -134,7 +134,7 @@ mixer_mix_audio ( dst, src, len, volume )
 
 
 Mix_Music *
-mixer_load_MUS ( filename )
+mixmus_load_MUS ( filename )
 	char *filename
 	PREINIT:
 		char * CLASS = "SDL::Mixer::MixMusic";
@@ -151,34 +151,34 @@ mixer_load_MUS ( filename )
 
 
 void
-mixer_free_music ( music )
+mixmus_free_music ( music )
 	Mix_Music *music
 	CODE:
 		Mix_FreeMusic(music);
 
 void
-mixer_hook_music ( func, arg )
+mixmus_hook_music ( func, arg )
 	void *func
 	void *arg
 	CODE:
 		Mix_HookMusic(func,arg);
 
 void
-mixer_hook_music_finished ( func )
+mixmus_hook_music_finished ( func )
 	void *func
 	CODE:
 		mix_music_finished_cv = func;
 		Mix_HookMusicFinished(sdl_perl_music_finished_callback);
 
 void *
-mixer_get_music_hook_data ()
+mixmus_get_music_hook_data ()
 	CODE:
 		RETVAL = Mix_GetMusicHookData();
 	OUTPUT:
 		RETVAL
 
 int
-mixer_play_music ( music, loops )
+mixmus_play_music ( music, loops )
 	Mix_Music *music
 	int loops
 	CODE:
@@ -188,7 +188,7 @@ mixer_play_music ( music, loops )
 
 
 int
-mixer_fade_in_music ( music, loops, ms )
+mixmus_fade_in_music ( music, loops, ms )
 	Mix_Music *music
 	int loops
 	int ms
@@ -198,7 +198,7 @@ mixer_fade_in_music ( music, loops, ms )
 		RETVAL
 
 int
-mixer_volume_music ( volume )
+mixmus_volume_music ( volume )
 	int volume
 	CODE:
 		RETVAL = Mix_VolumeMusic(volume);
@@ -208,7 +208,7 @@ mixer_volume_music ( volume )
 
 
 int
-mixer_halt_music ()
+mixmus_halt_music ()
 	CODE:
 		RETVAL = Mix_HaltMusic();
 	OUTPUT:
@@ -216,7 +216,7 @@ mixer_halt_music ()
 
 
 int
-mixer_fade_out_music ( ms )
+mixmus_fade_out_music ( ms )
 	int ms
 	CODE:
 		RETVAL = Mix_FadeOutMusic(ms);
@@ -224,36 +224,36 @@ mixer_fade_out_music ( ms )
 		RETVAL
 
 Mix_Fading
-mixer_fading_music()
+mixmus_fading_music()
 	CODE:
 		RETVAL = Mix_FadingMusic();
 	OUTPUT:
 		RETVAL
 
 void
-mixer_pause_music ()
+mixmus_pause_music ()
 	CODE:
 		Mix_PauseMusic();
 
 void
-mixer_resume_music ()
+mixmus_resume_music ()
 	CODE:
 		Mix_ResumeMusic();
 
 void
-mixer_rewind_music ()
+mixmus_rewind_music ()
 	CODE:
 		Mix_RewindMusic();
 
 int
-mixer_paused_music ()
+mixmus_paused_music ()
 	CODE:
 		RETVAL = Mix_PausedMusic();
 	OUTPUT:
 		RETVAL
 
 int
-mixer_playing_music()
+mixmus_playing_music()
 	CODE:
 		RETVAL = Mix_PlayingMusic();
 	OUTPUT:
