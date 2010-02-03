@@ -28,11 +28,13 @@ SDL::CD
 SDL::MultiThread
 SDL::PixelFormat
 SDL::VideoInfo
+SDL::Version
+
 SDL::Mixer
 SDL::Mixer::Samples
+SDL::Mixer::Channels
 SDL::Mixer::MixChunk
 SDL::Mixer::MixMusic
-SDL::Version
 
 SDL::GFX::BlitFunc
 SDL::GFX::Framerate

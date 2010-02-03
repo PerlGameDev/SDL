@@ -194,14 +194,6 @@ mixer_mix_audio ( dst, src, len, volume )
 	CODE:
 		SDL_MixAudio(dst,src,len,volume);
 
-int
-mixer_allocate_channels ( number )
-	int number
-	CODE:
-		RETVAL = Mix_AllocateChannels(number);
-	OUTPUT:
-		RETVAL
-
 
 
 Mix_Music *
@@ -315,27 +307,6 @@ mixer_group_newer ( tag )
 		RETVAL
 
 int
-mixer_play_channel ( channel, chunk, loops )
-	int channel
-	Mix_Chunk *chunk
-	int loops
-	CODE:
-		RETVAL = Mix_PlayChannel(channel,chunk,loops);
-	OUTPUT:
-		RETVAL
-
-int
-mixer_play_channel_timed ( channel, chunk, loops, ticks )
-	int channel
-	Mix_Chunk *chunk
-	int loops
-	int ticks
-	CODE:
-		RETVAL = Mix_PlayChannelTimed(channel,chunk,loops,ticks);
-	OUTPUT:
-		RETVAL
-
-int
 mixer_play_music ( music, loops )
 	Mix_Music *music
 	int loops
@@ -344,28 +315,6 @@ mixer_play_music ( music, loops )
 	OUTPUT:
 		RETVAL
 
-int
-mixer_fade_in_channel ( channel, chunk, loops, ms )
-	int channel
-	Mix_Chunk *chunk
-	int loops
-	int ms
-	CODE:
-		RETVAL = Mix_FadeInChannel(channel,chunk,loops,ms);
-	OUTPUT:
-		RETVAL
-
-int
-mixer_fade_in_channel_timed ( channel, chunk, loops, ms, ticks )
-	int channel
-	Mix_Chunk *chunk
-	int loops
-	int ticks
-	int ms
-	CODE:
-		RETVAL = Mix_FadeInChannelTimed(channel,chunk,loops,ms,ticks);
-	OUTPUT:
-		RETVAL
 
 int
 mixer_fade_in_music ( music, loops, ms )
@@ -374,15 +323,6 @@ mixer_fade_in_music ( music, loops, ms )
 	int ms
 	CODE:
 		RETVAL = Mix_FadeInMusic(music,loops,ms);
-	OUTPUT:
-		RETVAL
-
-int
-mixer_volume ( channel, volume )
-	int channel
-	int volume
-	CODE:	
-		RETVAL = Mix_Volume(channel,volume);
 	OUTPUT:
 		RETVAL
 
