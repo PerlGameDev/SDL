@@ -26,7 +26,7 @@ See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
 #ifdef HAVE_SDL_MIXER
 
 int
-mixer_allocate_channels ( number )
+mixchan_allocate_channels ( number )
 	int number
 	CODE:
 		RETVAL = Mix_AllocateChannels(number);
@@ -35,7 +35,7 @@ mixer_allocate_channels ( number )
 
 
 int
-mixer_volume ( channel, volume )
+mixchan_volume ( channel, volume )
 	int channel
 	int volume
 	CODE:	
@@ -44,7 +44,7 @@ mixer_volume ( channel, volume )
 		RETVAL
 
 int
-mixer_play_channel ( channel, chunk, loops )
+mixchan_play_channel ( channel, chunk, loops )
 	int channel
 	Mix_Chunk *chunk
 	int loops
@@ -54,7 +54,7 @@ mixer_play_channel ( channel, chunk, loops )
 		RETVAL
 
 int
-mixer_play_channel_timed ( channel, chunk, loops, ticks )
+mixchan_play_channel_timed ( channel, chunk, loops, ticks )
 	int channel
 	Mix_Chunk *chunk
 	int loops
@@ -66,7 +66,7 @@ mixer_play_channel_timed ( channel, chunk, loops, ticks )
 
 
 int
-mixer_fade_in_channel ( channel, chunk, loops, ms )
+mixchan_fade_in_channel ( channel, chunk, loops, ms )
 	int channel
 	Mix_Chunk *chunk
 	int loops
@@ -77,7 +77,7 @@ mixer_fade_in_channel ( channel, chunk, loops, ms )
 		RETVAL
 
 int
-mixer_fade_in_channel_timed ( channel, chunk, loops, ms, ticks )
+mixchan_fade_in_channel_timed ( channel, chunk, loops, ms, ticks )
 	int channel
 	Mix_Chunk *chunk
 	int loops
@@ -85,6 +85,87 @@ mixer_fade_in_channel_timed ( channel, chunk, loops, ms, ticks )
 	int ms
 	CODE:
 		RETVAL = Mix_FadeInChannelTimed(channel,chunk,loops,ms,ticks);
+	OUTPUT:
+		RETVAL
+
+void
+mixchan_pause ( channel )
+	int channel
+	CODE:
+		Mix_Pause(channel);
+
+void
+mixchan_resume ( channel )
+	int channel
+	CODE:
+		Mix_Resume(channel);
+
+int
+mixchan_halt_channel ( channel )
+	int channel
+	CODE:
+		RETVAL = Mix_HaltChannel(channel);
+	OUTPUT:
+		RETVAL
+
+int
+mixchan_expire_channel ( channel, ticks )
+	int channel
+	int ticks
+	CODE:
+		RETVAL = Mix_ExpireChannel ( channel,ticks);
+	OUTPUT:
+		RETVAL
+
+int
+mixchan_fade_out_channel ( which, ms )
+	int which
+	int ms
+	CODE:
+		RETVAL = Mix_FadeOutChannel(which,ms);
+	OUTPUT:
+		RETVAL
+
+void
+mixchan_channel_finished( cb )
+	SV* cb
+	CODE:
+		//Mix_ChannelFinished(callback);
+		warn ("Todo: implement");
+
+
+int
+mixchan_playing( channel )
+	int channel	
+	CODE:
+		RETVAL = Mix_Playing(channel);
+	OUTPUT:
+		RETVAL
+
+int
+mixchan_paused ( channel )
+	int channel
+	CODE:
+		RETVAL = Mix_Paused(channel);
+	OUTPUT:
+		RETVAL
+
+Mix_Fading
+mixchan_fading_channel( which )
+	int which
+	CODE:
+		RETVAL = Mix_FadingChannel(which);
+	OUTPUT:
+		RETVAL
+
+
+Mix_Chunk *
+mixchan_get_chunk(chan)
+	int chan
+	PREINIT:
+		char* CLASS = "SDL::Mixer::MixChunk";
+	CODE:
+		RETVAL = Mix_GetChunk(chan);
 	OUTPUT:
 		RETVAL
 

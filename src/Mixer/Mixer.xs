@@ -334,13 +334,6 @@ mixer_volume_music ( volume )
 	OUTPUT:
 		RETVAL
 
-int
-mixer_halt_channel ( channel )
-	int channel
-	CODE:
-		RETVAL = Mix_HaltChannel(channel);
-	OUTPUT:
-		RETVAL
 
 int
 mixer_halt_group ( tag )
@@ -354,24 +347,6 @@ int
 mixer_halt_music ()
 	CODE:
 		RETVAL = Mix_HaltMusic();
-	OUTPUT:
-		RETVAL
-
-int
-mixer_expire_channel ( channel, ticks )
-	int channel
-	int ticks
-	CODE:
-		RETVAL = Mix_ExpireChannel ( channel,ticks);
-	OUTPUT:
-		RETVAL
-
-int
-mixer_fade_out_channel ( which, ms )
-	int which
-	int ms
-	CODE:
-		RETVAL = Mix_FadeOutChannel(which,ms);
 	OUTPUT:
 		RETVAL
 
@@ -399,34 +374,6 @@ mixer_fading_music()
 	OUTPUT:
 		RETVAL
 
-Mix_Fading
-mixer_fading_channel( which )
-	int which
-	CODE:
-		RETVAL = Mix_FadingChannel(which);
-	OUTPUT:
-		RETVAL
-
-void
-mixer_pause ( channel )
-	int channel
-	CODE:
-		Mix_Pause(channel);
-
-void
-mixer_resume ( channel )
-	int channel
-	CODE:
-		Mix_Resume(channel);
-
-int
-mixer_paused ( channel )
-	int channel
-	CODE:
-		RETVAL = Mix_Paused(channel);
-	OUTPUT:
-		RETVAL
-
 void
 mixer_pause_music ()
 	CODE:
@@ -446,14 +393,6 @@ int
 mixer_paused_music ()
 	CODE:
 		RETVAL = Mix_PausedMusic();
-	OUTPUT:
-		RETVAL
-
-int
-mixer_playing( channel )
-	int channel	
-	CODE:
-		RETVAL = Mix_Playing(channel);
 	OUTPUT:
 		RETVAL
 
