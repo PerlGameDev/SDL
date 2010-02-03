@@ -1,29 +1,37 @@
-#!perl
+#!/usr/bin/perl -w
 use strict;
-use warnings;
 use SDL;
 use SDL::Config;
-use SDL::Version;
-use SDL::Mixer;
-use SDL::Mixer::Samples;
-use SDL::Mixer::MixChunk;
 use Test::More;
+use SDL::Mixer;
+use SDL::Mixer::MixChunk;
+use SDL::Mixer::Samples;
+use SDL::Version;
 
 use lib 't/lib';
-
 use SDL::TestTool;
 
-if (! SDL::TestTool->init(SDL_INIT_AUDIO) ) {
+if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
 }
 elsif( !SDL::Config->has('SDL_mixer') )
 {
     plan( skip_all => 'SDL_mixer support not compiled' );
 }
-else
-{
-    plan( tests => 6 );
-}
+my @done = qw/
+get_num_chunk_decoders
+get_chunk_decoder
+load_WAV
+volume_chunk
+/;
+
+my @left =qw/
+loadwav_rw
+quickload_wav
+quickload_raw
+freechunk 
+/	
+;
 
 
 SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 );
@@ -51,6 +59,20 @@ my $sample_chunk = SDL::Mixer::Samples::load_WAV('test/data/sample.wav');
 
 
 
+
+my $why
+    = '[Percentage Completion] '
+    . int( 100 * ( $#done + 1 ) / ( $#done + $#left + 2 ) )
+    . "\% implementation. "
+    . ( $#done + 1 ) . " / "
+    . ( $#done + $#left + 2 );
+
+TODO:
+{
+    local $TODO = $why;
+    fail "Not Implmented SDL::Mixer::*::$_" foreach(@left)
+    
+}
+diag $why;
 pass 'Checking for segfaults';
-
-
+done_testing();
