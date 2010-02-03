@@ -17,14 +17,14 @@ elsif( !SDL::Config->has('SDL_mixer') )
 my @done = qw//;
 
 my @left = qw/
-linked_version	  	
-init	  	
-quit	  	
-openaudio	  	
-closeaudio	  	
-seterror	  	
-geterror	  	
-queryspec	  	
+registereffect	  	
+unregistereffect	  	
+unregisteralleffects	  	
+setpostmix	  	
+setpanning	  	
+setdistance	  	
+setposition	  	
+setreversestereo	  
 /	
 ;
 
@@ -38,7 +38,7 @@ my $why
 TODO:
 {
     local $TODO = $why;
-    fail "Not Implmented SDL::Mixer::*::$_" foreach(@left)
+    fail "Not Implmented SDL::Mixer::Effects::$_" foreach(@left)
     
 }
 diag $why;

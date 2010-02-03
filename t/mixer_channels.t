@@ -17,14 +17,22 @@ elsif( !SDL::Config->has('SDL_mixer') )
 my @done = qw//;
 
 my @left = qw/
-linked_version	  	
-init	  	
-quit	  	
-openaudio	  	
-closeaudio	  	
-seterror	  	
-geterror	  	
-queryspec	  	
+allocatechannels	  	
+volume	  	
+playchannel	  	
+playchanneltimed	  	
+fadeinchannel	  	
+fadeinchanneltimed	  	
+pause	  	
+resume	  	
+haltchannel	  	
+expirechannel	  	
+fadeoutchannel	  	
+channelfinished	  	
+playing	  	
+paused	  	
+fadingchannel	  	
+getchunk	  	
 /	
 ;
 

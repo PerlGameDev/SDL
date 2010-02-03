@@ -17,14 +17,28 @@ elsif( !SDL::Config->has('SDL_mixer') )
 my @done = qw//;
 
 my @left = qw/
-linked_version	  	
-init	  	
-quit	  	
-openaudio	  	
-closeaudio	  	
-seterror	  	
-geterror	  	
-queryspec	  	
+getnummusicdecoders	  	
+getmusicdecoder	  	
+loadmus	  	
+freemusic	  	
+playmusic	  	
+fadeinmusic	  	
+fadeinmusicpos	  	
+hookmusic	  	
+volumemusic	  	
+pausemusic	  	
+resumemusic	  	
+rewindmusic	  	
+setmusicposition	  	
+setmusiccmd	  	
+haltmusic	  	
+fadeoutmusic	  	
+hookmusicfinished	  	
+getmusictype	  	
+playingmusic	  	
+pausedmusic	  	
+fadingmusic	  	
+getmusichookdata	  	
 /	
 ;
 
