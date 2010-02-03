@@ -4,6 +4,9 @@
 
 SDL::Time - a SDL perl extension for managing timers.
 
+=head1 CATEGORY
+
+Core
 
 =head1 SYNOPSIS
 
