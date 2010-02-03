@@ -12,6 +12,12 @@
 #include <SDL_mixer.h>
 #endif
 
+#ifdef HAVE_SMPEG
+#include <smpeg/smpeg.h>
+#ifdef HAVE_SDL_MIXER
+static int sdl_perl_use_smpeg_audio = 0;
+#endif
+#endif
 
 MODULE = SDL::Mixer::Channels 	PACKAGE = SDL::Mixer::Channels    PREFIX = mixchan_
 
