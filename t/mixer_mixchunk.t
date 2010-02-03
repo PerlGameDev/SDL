@@ -4,6 +4,7 @@ use warnings;
 use SDL;
 use SDL::Config;
 use SDL::Mixer;
+use SDL::Mixer::Channels;
 use SDL::Mixer::Samples;
 use SDL::Mixer::MixChunk;
 use Test::More;
@@ -36,7 +37,7 @@ is( $mix_chunk->volume, 100, 'Can change volume to 100' );
 
 is( $mix_chunk->alen, 1926848, 'Alen is 1926848' );
 
-SDL::Mixer::play_channel( -1, $mix_chunk, 0 );
+SDL::Mixer::Channels::play_channel( -1, $mix_chunk, 0 );
 
 # we close straight away so no audio is actually played
 
