@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::Mixer::Groups -- SDL_Mixer groups functions and bindings
+
+=head1 CATEGORY
+
+TODO, Mixer
+
+=cut

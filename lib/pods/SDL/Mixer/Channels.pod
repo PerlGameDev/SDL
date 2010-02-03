@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::Mixer::Channels -- SDL_Mixer channel functions and bindings
+
+=head1 CATEGORY
+
+TODO, Mixer
+
+=cut

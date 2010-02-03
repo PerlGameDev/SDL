@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::Mixer::Effects -- SDL_Mixer sound effect functions and bindings
+
+=head1 CATEGORY
+
+TODO, Mixer
+
+=cut
