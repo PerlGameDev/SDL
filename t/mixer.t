@@ -2,6 +2,7 @@
 use strict;
 use SDL;
 use SDL::Config;
+use SDL::Mixer;
 use Test::More;
 
 use lib 't/lib';
@@ -14,14 +15,27 @@ elsif( !SDL::Config->has('SDL_mixer') )
 {
     plan( skip_all => 'SDL_mixer support not compiled' );
 }
-my @done = qw//;
+my @done = qw/
+linked_version	  	
+open_audio	  	
+close_audio	  	
+/;
+
+my $v = SDL::Mixer::linked_version();
+
+isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::verion object');
+
+is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ), 0, '[open_audio] ran');
+
+SDL::Mixer::close_audio();
+
+pass '[close_audio]  ran';
+
+
 
 my @left = qw/
-linked_version	  	
 init	  	
 quit	  	
-openaudio	  	
-closeaudio	  	
 seterror	  	
 geterror	  	
 queryspec	  	
