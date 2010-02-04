@@ -33,8 +33,17 @@ See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
 
 #ifdef HAVE_SDL_MIXER
 
+#if SDL_MIXER_MAJOR_VERSION >	1 || SDL_MIXER_MINOR_VERSION > 2 || (  SDL_MIXER_MAJOR_VERSION == 1 && SDL_MIXER_MINOR_VERSION == 2 && SDL_MIXER_PATCHLEVEL >= 10 )
+
 void
-mixgrp_set_post_mix ( func, arg )
+mixeff_register_effect()
+	CODE:
+		warn ("Todo: Add 1.2.10 methods here");
+
+#endif
+
+void
+mixeff_set_post_mix ( func, arg )
 	void *func
 	void *arg
 	CODE:
