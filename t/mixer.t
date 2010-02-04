@@ -4,6 +4,7 @@ use SDL;
 use SDL::Config;
 use SDL::Mixer;
 use Test::More;
+use Data::Dumper;
 
 use lib 't/lib';
 use SDL::TestTool;
@@ -26,6 +27,15 @@ my $v = SDL::Mixer::linked_version();
 isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::verion object');
 
 is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ), 0, '[open_audio] ran');
+
+my $data = SDL::Mixer::query_spec();
+
+my( $status, $freq, $format, $chan ) = @{$data};
+
+isnt ($status, 0,  '[query_spec] ran' );
+isnt ($freq, 0,  '[query_spec] got frequency '. $freq );
+isnt ($format, 0,  '[query_spec] got format ');
+isnt ($chan, 0, '[query_spec] got channels '.$chan);
 
 SDL::Mixer::close_audio();
 
