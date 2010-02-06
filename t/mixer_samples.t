@@ -64,8 +64,8 @@ SKIP:
 my $sample_chunk = SDL::Mixer::Samples::load_WAV('test/data/sample.wav');
  isa_ok( $sample_chunk,  'SDL::Mixer::MixChunk', '[load_WAV] Can Load a wav file to MixChunk');
 
- is (SDL::Mixer::Samples::volume_chunk($sample_chunk, 10), 128 ,'[volume_chunk] was at max 128 volume on start');
- is (SDL::Mixer::Samples::volume_chunk($sample_chunk, 10), 10 ,'[volume_chunk] is now at 10 volume');
+ is (SDL::Mixer::Samples::volume_chunk($sample_chunk, 120), 128 ,'[volume_chunk] was at max 128 volume on start');
+ is (SDL::Mixer::Samples::volume_chunk($sample_chunk, 10), 120 ,'[volume_chunk] is now at 120 volume');
 
 
 
