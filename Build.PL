@@ -192,6 +192,43 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_mixer )],
 	},
+	MixerSamples => {
+		file      => {
+			from  => 'src/Mixer/Samples.xs',
+			to    => 'lib/SDL/Mixer/Samples.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixerChannels => {
+		file      => {
+			from  => 'src/Mixer/Channels.xs',
+			to    => 'lib/SDL/Mixer/Channels.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixerGroups => {
+		file      => {
+			from  => 'src/Mixer/Groups.xs',
+			to    => 'lib/SDL/Mixer/Groups.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixerMusic => {
+		file      => {
+			from  => 'src/Mixer/Music.xs',
+			to    => 'lib/SDL/Mixer/Music.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixerEffects => {
+		file      => {
+			from  => 'src/Mixer/Effects.xs',
+			to    => 'lib/SDL/Mixer/Effects.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+
+
 	MixChunk => {
 		file      => {
 			from  => 'src/Mixer/objects/MixChunk.xs',

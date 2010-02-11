@@ -1,0 +1,11 @@
+=pod
+
+=head1 NAME
+
+SDL::Mixer::Music -- SDL_Mixer music functions and bindings
+
+=head1 CATEGORY
+
+TODO, Mixer
+
+=cut

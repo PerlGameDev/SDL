@@ -11,9 +11,15 @@ use Devel::Peek;
 use lib 't/lib';
 use SDL::TestTool;
 
+unless ( $ENV{AUTOMATED_TESTING} or $ENV{RELEASE_TESTING} ) {
+	plan( skip_all => "author tests not required for installation" );
+}
+
+
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
-} else {
+}
+else {
     plan( tests => 1);
 }
 my $obtained = SDL::AudioSpec->new;   

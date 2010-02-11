@@ -33,7 +33,7 @@ pixelformat_palette( pixelformat )
 	PREINIT:
 		char* CLASS = "SDL::Palette";
 	CODE:
-		RETVAL = pixelformat->palette;
+                RETVAL = pixelformat->palette;
 	OUTPUT:
 		RETVAL
 

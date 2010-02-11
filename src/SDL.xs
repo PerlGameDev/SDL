@@ -99,15 +99,13 @@ extern PerlInterpreter *parent_perl;
 void
 windows_force_driver ()
 {
-   const SDL_version *version =  SDL_Linked_Version();
-	if(version->patch == 14)
-	{
+
+#if  SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION == 2 &&  SDL_PATCHLEVEL >= 14
 		putenv("SDL_VIDEODRIVER=directx");
-	}
-	else
-	{
+#else
 		putenv("SDL_VIDEODRIVER=windib");
-	}
+#endif
+
 }
 
 Uint32 

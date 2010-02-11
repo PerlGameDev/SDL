@@ -144,9 +144,20 @@ surface_set_pixels(surface, index, value)
 	((unsigned int*)surface->pixels)[index] = value;
 
 void
-surface_DESTROY(surface)
-	SDL_Surface *surface
+surface_DESTROY(bag)
+	SV* bag
 	CODE:
-		//warn("Freed surface %p and pixels %p \n", surface, surface->pixels);
-		SDL_FreeSurface(surface);
+               if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
+                   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
+                   SDL_Surface* surface = (SDL_Surface*)(pointers[0]);
+                   if (my_perl == pointers[1]) {
+                       //warn("Freed surface %p and pixels %p \n", surface, surface->pixels);
+                       SDL_FreeSurface(surface);
+                       free(pointers);
+                   }
+               } else if (bag == 0) {
+                   XSRETURN(0);
+               } else {
+                   XSRETURN_UNDEF;
+               }
 		

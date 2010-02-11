@@ -14,5 +14,5 @@ SDL_perl.xs
 stage
 MANIFEST
 !MANIFEST.skip
-META.yml
+*META.yml
 *.tar.gz

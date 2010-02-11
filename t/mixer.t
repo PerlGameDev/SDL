@@ -2,7 +2,9 @@
 use strict;
 use SDL;
 use SDL::Config;
+use SDL::Mixer;
 use Test::More;
+use Data::Dumper;
 
 use lib 't/lib';
 use SDL::TestTool;
@@ -14,80 +16,39 @@ elsif( !SDL::Config->has('SDL_mixer') )
 {
     plan( skip_all => 'SDL_mixer support not compiled' );
 }
-my @done = qw//;
+my @done = qw/
+linked_version	  	
+open_audio	  	
+close_audio	  	
+/;
+
+my $v = SDL::Mixer::linked_version();
+
+isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::verion object');
+
+is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ), 0, '[open_audio] ran');
+
+my $data = SDL::Mixer::query_spec();
+
+my( $status, $freq, $format, $chan ) = @{$data};
+
+isnt ($status, 0,  '[query_spec] ran' );
+isnt ($freq, 0,  '[query_spec] got frequency '. $freq );
+isnt ($format, 0,  '[query_spec] got format ');
+isnt ($chan, 0, '[query_spec] got channels '.$chan);
+
+SDL::Mixer::close_audio();
+
+pass '[close_audio]  ran';
+
+
 
 my @left = qw/
-linked_version	  	
 init	  	
 quit	  	
-openaudio	  	
-closeaudio	  	
 seterror	  	
 geterror	  	
 queryspec	  	
-getnumchunkdecoders	  	
-getchunkdecoder	  	
-loadwav	  	
-loadwav_rw	  	
-quickload_wav	  	
-quickload_raw	  	
-volumechunk	  	
-freechunk	  	
-allocatechannels	  	
-volume	  	
-playchannel	  	
-playchanneltimed	  	
-fadeinchannel	  	
-fadeinchanneltimed	  	
-pause	  	
-resume	  	
-haltchannel	  	
-expirechannel	  	
-fadeoutchannel	  	
-channelfinished	  	
-playing	  	
-paused	  	
-fadingchannel	  	
-getchunk	  	
-reservechannels	  	
-groupchannel	  	
-groupchannels	  	
-groupcount	  	
-groupavailable	  	
-groupoldest	  	
-groupnewer	  	
-fadeoutgroup	  	
-haltgroup	  	
-getnummusicdecoders	  	
-getmusicdecoder	  	
-loadmus	  	
-freemusic	  	
-playmusic	  	
-fadeinmusic	  	
-fadeinmusicpos	  	
-hookmusic	  	
-volumemusic	  	
-pausemusic	  	
-resumemusic	  	
-rewindmusic	  	
-setmusicposition	  	
-setmusiccmd	  	
-haltmusic	  	
-fadeoutmusic	  	
-hookmusicfinished	  	
-getmusictype	  	
-playingmusic	  	
-pausedmusic	  	
-fadingmusic	  	
-getmusichookdata	  	
-registereffect	  	
-unregistereffect	  	
-unregisteralleffects	  	
-setpostmix	  	
-setpanning	  	
-setdistance	  	
-setposition	  	
-setreversestereo	  
 /	
 ;
 
@@ -107,4 +68,4 @@ TODO:
 diag $why;
 
 done_testing();
-sleep(2);
+

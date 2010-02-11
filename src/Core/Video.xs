@@ -144,13 +144,14 @@ void
 video_update_rects ( surface, ... )
 	SDL_Surface *surface
 	CODE:
-		SDL_Rect *rects;
+		SDL_Rect* rects;
 		int num_rects,i;
 		if ( items < 2 ) return;
 		num_rects = items - 1;
 		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
 		for(i=0;i<num_rects;i++) {
-			rects[i] = *(SDL_Rect *)SvIV((SV*)SvRV( ST(i + 1) ));
+                        void** pointers = (void**)(SvIV((SV*)SvRV( ST(i+1) ))); 
+			rects[i] = *(SDL_Rect *)(pointers[0]);
 		}
 		SDL_UpdateRects(surface,num_rects,rects);
 		safefree(rects);
@@ -177,7 +178,8 @@ video_set_colors ( surface, start, ... )
 		length = items - 2;
 		colors = (SDL_Color *)safemalloc(sizeof(SDL_Color)*(length+1));
 		for ( i = 0; i < length ; i++ ) {
-			temp = (SDL_Color *)SvIV(ST(i+2));
+                        void** pointers = (void**)(SvIV(ST(i+2))); 
+			temp = (SDL_Color *)pointers[0];
 			colors[i].r = temp->r;
 			colors[i].g = temp->g;
 			colors[i].b = temp->b;
@@ -196,23 +198,27 @@ video_set_palette ( surface, flags, start, ... )
 	int start
 
 	CODE:
-		SDL_Color *colors,*temp;
-		int i, length;
+		SDL_Color *colors;
+                SDL_Color *temp;
+		int i,length;
+
 		if ( items < 4 ) { 
-		RETVAL = 0;
-			}
-		else
-		{		
-		length = items - 3;
-		colors = (SDL_Color *)safemalloc(sizeof(SDL_Color)*(length+1));
-		for ( i = 0; i < length ; i++ ){ 
-			temp = (SDL_Color *)SvIV(ST(i+3));
-			colors[i].r = temp->r;
-			colors[i].g = temp->g;
-			colors[i].b = temp->b;
-		}
-		RETVAL = SDL_SetPalette(surface, flags, colors, start, length );
-	  	safefree(colors);
+                  RETVAL = 0;
+
+                } else {
+		  length = items - 3;		
+                  colors = (SDL_Color *)safemalloc(sizeof(SDL_Color)*(length+1));
+                  for ( i = 0; i < length; i++ ){ 
+
+                     void** pointers = (void**)(SvIV(ST(i+3))); 
+                     temp = (SDL_Color *)pointers[0];
+                     colors[i].r = temp->r;
+                     colors[i].g = temp->g;
+                     colors[i].b = temp->b;
+		  }
+
+		  RETVAL = SDL_SetPalette(surface, flags, colors, start, length);
+	  	  safefree(colors);
 		}
 	OUTPUT:	
 		RETVAL

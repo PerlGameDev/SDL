@@ -31,6 +31,7 @@ use warnings;
 # - actual physics handling
 package Walker;
 use SDL;
+use SDL::Image;
 use SDL::Rect;
 use SDL::Video;
 use SDL::Surface;
@@ -50,8 +51,8 @@ sub new {
     my $class = shift;
     my ($width, $height) = (48, 48);
    
-    my $sprite = SDL::IMG_Load( 'data/hero.png');
-#    wtf($sprite);
+    my $sprite = SDL::Image::load( 'data/hero.png');
+    die 'SDL::Image::load of data/hero.png fail'. SDL::get_error if !($sprite);
     $sprite =SDL::Video::display_format($sprite);
     my $pixel = SDL::Color->new(0xfc, 0x00, 0xff );
 	SDL::Video::set_color_key($sprite, SDL_SRCCOLORKEY, $pixel);

@@ -7,8 +7,8 @@ use SDL;
 
 # Don't run tests for installs
 use Test::More;
-unless ( $ENV{AUTOMATED_TESTING} or $ENV{RELEASE_TESTING} ) {
-	plan( skip_all => "Author tests not required for installation" );
+unless ( $env{automated_testing} or $env{release_testing} ) {
+	plan( skip_all => "author tests not required for installation" );
 }
 
 sub overlay_leak()

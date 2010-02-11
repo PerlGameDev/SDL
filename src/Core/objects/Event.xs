@@ -963,17 +963,26 @@ event_syswm_msg ( event, ... )
 		RETVAL
 
 void
-event_DESTROY(self)
-	SDL_Event *self
+event_DESTROY(bag)
+	SV* bag
 	CODE:
-		if(self->type == SDL_USEREVENT)
-		{
-		if( (self->user).data1 != NULL )
-		  SvREFCNT_dec( (self->user).data1);
-		if( (self->user).data2 != NULL )
-		  SvREFCNT_dec( (self->user).data2);
-		}
-		safefree(self);
-
-
+               if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
+                   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
+                   SDL_Event* self = (SDL_Event*)(pointers[0]);
+                   if (my_perl == pointers[1]) {
+                       //warn("Freed surface %p and pixels %p \n", surface, surface->pixels);
+                       if(self->type == SDL_USEREVENT) {
+                           if( (self->user).data1 != NULL )
+                              SvREFCNT_dec( (self->user).data1);
+                           if( (self->user).data2 != NULL )
+                              SvREFCNT_dec( (self->user).data2);
+                       }
+                       safefree(self);
+                       free(pointers);
+                   }
+               } else if (bag == 0) {
+                   XSRETURN(0);
+               } else {
+                   XSRETURN_UNDEF;
+               }
 		
