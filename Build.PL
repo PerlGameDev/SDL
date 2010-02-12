@@ -41,8 +41,7 @@ my %subsystems =
 			from  => 'src/SDL.xs',
 			to    => 'lib/SDL_perl.xs',
 		},
-		libraries => [qw( SDL SDL_image SDL_mixer SDL_net SDL_ttf SDL_gfx
-		                  png jpeg smpeg )],
+		libraries => [qw( SDL )],
 	},
 	Time => {
 		file      => {
@@ -333,7 +332,7 @@ my %subsystems =
 			from => 'src/Image.xs',
 			to   =>	'lib/SDL/Image.xs',
 		},
-		libraries => [qw( SDL SDL_image )],
+		libraries => [qw( SDL SDL_image jpeg png )],
 	},	
 	Net => {
 		file      => {
