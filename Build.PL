@@ -7,33 +7,28 @@
 use strict;
 use warnings;
 use Carp;
-use lib  'make/lib';
 
-use Data::Dumper;
-use SDL::Build;
-use SDL::Utility;
-use YAML;
-use YAML::Node;
+use lib 'inc';
+use Alien::SDL;
 
-print STDERR <<BROKENWIN if ($^O =~ /bsd|solaris/i );
+print STDERR <<BROKENMSG if ($^O =~ /bsd|solaris/i );
 *************************** !!!WARNING!!! *****************************
 BSD support is currently experimental - you can continue, but 
 you've been warned! If you are interested in helping please contact us 
 at sdl-devel\@perl.org, or join us on #sdl in irc.perl.org
 ***********************************************************************
-BROKENWIN
+BROKENMSG
 
+### we need the platform-specific module
+my $package = 'My::Builder::' . ucfirst( $^O );
+eval "require $package" or croak "No module for '$^O' platform: $@\n";
 
-
-my $sdl_compile_flags = SDL::Utility->sdl_c_flags();
-my $sdl_link_flags    = SDL::Utility->sdl_libs();
-# subsystem to build
-#	file
-#		location of source file => location of build file to get name right
-#	libraries
-#		name of shared library (soname)
-#			preprocessor definition
-#			name of header file
+### subsystems to build
+#    <subsystem>
+#        <file> = hash of the following 2 values:
+#	     <from> = location of source file
+#            <to>   = location of build file to get name right
+#        <libraries> = list reqiured libraries, names the same as keys to hash %libraries
 my %subsystems =
 (
 	SDL => {
@@ -367,95 +362,99 @@ my %subsystems =
 
 );
 
+### external libraries
+#    <library name> = symbolic library name
+#        <define> = value that will be used as -D<value> option when compiling XS code
+#	 <header> = header related to the library that will be used for avalability detection
+#        <lib>    = value that will be used as -l<value> option when linking XS code
 my %libraries = (
 	SDL         => {
 		define => 'HAVE_SDL', 
 		header => 'SDL.h',
+		lib    => 'SDL',
 	},
 	SDL_image   => {
 		define => 'HAVE_SDL_IMAGE',   
-		header => 'SDL_image.h'
+		header => 'SDL_image.h',
+		lib    => 'SDL_image',
 	},
 	SDL_mixer   => {
 		define => 'HAVE_SDL_MIXER',   
-		header => 'SDL_mixer.h'
+		header => 'SDL_mixer.h',
+		lib    => 'SDL_mixer',
 	},
 	SDL_net     => {
 		define => 'HAVE_SDL_NET',     
-		header => 'SDL_net.h'
+		header => 'SDL_net.h',
+		lib    => 'SDL_net',
 	},
 	SDL_ttf     => {
 		define => 'HAVE_SDL_TTF',     
-		header => 'SDL_ttf.h'
+		header => 'SDL_ttf.h',
+		lib    => 'SDL_ttf',
 	},
 	SDL_gfx     => {
 		define => 'HAVE_SDL_GFX',     
-		header => 'SDL_gfxPrimitives.h'
+		header => 'SDL_gfxPrimitives.h',
+		lib    => 'SDL_gfx',
 	},
 	SDL_gfx_blitfunc    => {
 		define => 'HAVE_SDL_GFX_BLITFUNC',     
-		header => 'SDL_gfxBlitFunc.h'
+		header => 'SDL_gfxBlitFunc.h',
+		lib    => 'SDL_gfx',
 	},
 	SDL_gfx_framerate   => {
 		define => 'HAVE_SDL_GFX_FRAMERATE',     
-		header => 'SDL_framerate.h'
+		header => 'SDL_framerate.h',
+		lib    => 'SDL_gfx',
 	},
 	SDL_gfx_imagefilter => {
 		define => 'HAVE_SDL_GFX_IMAGEFILTER',     
-		header => 'SDL_imageFilter.h'
+		header => 'SDL_imageFilter.h',
+		lib    => 'SDL_gfx',
 	},
 	SDL_gfx_primitives  => {
 		define => 'HAVE_SDL_GFX_PRIMITIVES',     
-		header => 'SDL_gfxPrimitives.h'
+		header => 'SDL_gfxPrimitives.h',
+		lib    => 'SDL_gfx',
 	},
 	SDL_gfx_rotozoom    => {
 		define => 'HAVE_SDL_GFX_ROTOZOOM',     
-		header => 'SDL_rotozoom.h'
+		header => 'SDL_rotozoom.h',
+		lib    => 'SDL_gfx',
 	},
 	png         => {
-		define    => 'HAVE_PNG',
-		header    => 'png.h',
+		define => 'HAVE_PNG',
+		header => 'png.h',
+		lib    => 'png',
 	},
 	jpeg        => {	
-		define    => 'HAVE_JPEG',
-		header    => 'jpeglib.h',
+		define => 'HAVE_JPEG',
+		header => 'jpeglib.h',
+		lib    => 'jpeg',
 	},
 	smpeg       => {
-		define    => 'HAVE_SMPEG',
-		header    => 'smpeg.h',
+		define => 'HAVE_SMPEG',
+		header => 'smpeg.h',
+		lib    => 'smpeg',
 	},
 	GL          => {
 		define => 'HAVE_GL',  
-		header => 'gl.h'
+		header => 'GL/gl.h',
+		lib    => 'GL',
 	},
 	GLU         => {
 		define => 'HAVE_GLU', 
-		header => 'glu.h'
+		header => 'GL/glu.h',
+		lib    => 'GLU',
 	},
 );
 
-# need the platform-specific module to find include paths correctly
-# see build/lib/SDL/Build/*pm
-my $arch          = SDL::Build->get_arch( $^O );
+### mangle the compilable files into a format Module::Build can understand
+my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} } keys %subsystems;
 
-# see which subsystems can be built -- do we have headers for them?
-my $build_systems = $arch->find_subsystems( \%subsystems, \%libraries );
-# This is called in make/lib/SDL/Build.pm as it is the base of arch
-
-
-# now write SDL::Config
-$arch->write_sdl_config( $build_systems );
-
-# and fetch all of the information needed to compile
-my $defines       = $arch->build_defines( \%libraries, $build_systems );
-my $includes      = $arch->build_includes( \%libraries, $build_systems);
-my $links         = $arch->build_links( \%libraries, $build_systems );
-
-
-# mangle the compilable files into a format Module::Build can understand
-my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
-	     keys %subsystems;
-my $build   = SDL::Build->new(
+### stadard Module::Build stuff
+my $build = $package->new(
 	module_name          => 'SDL',
 	dist_name            => 'SDL', 
 	license		     => 'lgpl',
@@ -464,13 +463,14 @@ my $build   = SDL::Build->new(
 	{
 		'YAML'	=> '0.68',
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL' => '0.07.2',
+		'Alien::SDL' => '0.8.0',
 	},
 	build_requires =>
 	{
 		'Test::Simple' => '0.88',
 		'IO::CaptureOutput' => '0',
 		'Test::Most' => '0.21',
+		'Alien::SDL' => '0.8.0',
 	},
 	build_recommends     =>
 	{
@@ -480,30 +480,33 @@ my $build   = SDL::Build->new(
 	xs_files             => \%xs,
 	meta_add	     =>	     
 	{
-		no_index =>  { file => [ <make/lib/SDL/*.pm>, <make/lib/SDL/Build/*.pm>, <make/lib/ExtUtils/CBuilder/*>, <make/lib/ExtUtils/*>, <make/lib/ExtUtils/CBuilder/Platform/Windows.pm> ] },
 	},
 	dist_abstract => 'SDL bindings to Perl',
 	dist_author	     => 'Kartik Thakore <KTHAKORE@cpan.org>',
 );
 
-if($arch eq 'Darwin')
-{
-	$build->{c_source} = $arch->build_c_source( \%libraries, $build_systems );
-	$build->{c_sources} = $arch->build_c_sources( \%libraries, $build_systems );
-	$build->{install_base} = $arch->build_install_base( \%libraries, $build_systems );
+### see which subsystems can be built -- do we have headers for them?
+print "Gonna autodetect available libraries ...\n";
+my $build_systems = $build->find_subsystems( \%subsystems, \%libraries );
 
-}
+### save info about available subsystems for future SDL::ConfigData
+print "Gonna write config_data ...\n";
+$build->config_data('SDL_cfg', $build_systems );
 
-# and here's where the real (and ugly) magic works... see SDL::Build
+### something that was originally special to MacOS/Darwin
+# somebody MacOS/Darwin friendly should review whether it is still necessary
+# xxx TODO xxx
+$build->special_build_settings();
 
-$build->set_flags(
-	\%subsystems,
-	$build_systems,
-	$defines,
-	$includes,
-	$links,
-	$sdl_compile_flags,
-	$sdl_link_flags,
-);
+### get some info into M::B notes
+print "Gonna save some info to 'notes' ...\n";
+$build->notes('subsystems', \%subsystems);
+$build->notes('libraries', \%libraries);
+$build->notes('build_systems', $build_systems);
+$build->notes('sdl_cflags', Alien::SDL->config('cflags'));
+$build->notes('sdl_libs', Alien::SDL->config('libs'));
+$build->set_build_opts();   # creates notes('defines') and notes('links')
+$build->set_file_flags();   # creates notes('file_flags')
+
 # now we're ready to go!
 $build->create_build_script();

@@ -45,7 +45,9 @@ use SDL::Constants;
 BEGIN {
 	@ISA = qw(Exporter DynaLoader);
 	@EXPORT = qw( in &NULL );
+	local $DynaLoader::dl_library_path = 'd:\strawberry\perl\site\lib\auto\share\dist\Alien-SDL\v0.8.0_16142bf4\c\bin';
 };
+
 
 # Give our caller SDL::Constant's stuff as well as ours.
 sub import {
