@@ -77,7 +77,7 @@ SKIP:
 
 	my $driver = SDL::Video::video_driver_name();
 	#should really check for all drivers that don't support resize
-	skip "Video driver $driver doesn't support resize", 2 unless $driver ne 'fbcon';
+	skip "Video driver $driver doesn't support resize", 1 unless $driver ne 'fbcon';
 
 	ok(eval { $app2->resize(640, 480); 1 }, "succeed at resize with $driver");
 	ok(!eval { $app2->resize(-1, -1); 1 }, "fail to resize to bad size with $driver");
