@@ -47,9 +47,6 @@ BEGIN {
 	@EXPORT = qw( in &NULL );
 };
 
-use SDL::Internal::Loader;
-internal_load_dlls(__PACKAGE__);
-
 # Give our caller SDL::Constant's stuff as well as ours.
 sub import {
   my $self = shift;
