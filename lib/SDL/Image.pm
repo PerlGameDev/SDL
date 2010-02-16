@@ -10,6 +10,9 @@ BEGIN {
   @EXPORT = qw( IMG_INIT_JPG IMG_INIT_PNG IMG_INIT_TIF);      
 }
 
+use SDL::Internal::Loader;
+internal_load_dlls(__PACKAGE__);
+
 bootstrap SDL::Image;
 
 use constant

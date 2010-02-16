@@ -20,8 +20,21 @@ at sdl-devel\@perl.org, or join us on #sdl in irc.perl.org
 BROKENMSG
 
 ### we need the platform-specific module
-my $package = 'My::Builder::' . ucfirst( $^O );
-eval "require $package" or croak "No module for '$^O' platform: $@\n";
+my %platforms =(
+	MSWin32      => 'Windows',
+	MacOS        => 'MacOS',
+	darwin       => 'Darwin',
+	cygwin       => 'Unix',
+	freebsd      => 'Unix',
+	gnukfreebsd  => 'Unix',
+	linux        => 'Unix',
+	netbsd       => 'Unix',
+	openbsd      => 'Unix',
+	solaris      => 'Unix',
+);
+my $package = 'My::Builder::' . ($platforms{$^O} || 'Unix');
+print "Gonna use '$package' class ...\n";
+eval "require $package" or croak "Require '$package' failed: $@\n";
 
 ### subsystems to build
 #    <subsystem>
@@ -441,12 +454,12 @@ my %libraries = (
 	GL          => {
 		define => 'HAVE_GL',  
 		header => 'GL/gl.h',
-		lib    => 'GL',
+		lib    => ($^O eq 'MSWin32') ? 'opengl32' : 'GL', # xxx not nice
 	},
 	GLU         => {
 		define => 'HAVE_GLU', 
 		header => 'GL/glu.h',
-		lib    => 'GLU',
+		lib    => ($^O eq 'MSWin32') ? 'glu32' : 'GLU', # xxx not nice
 	},
 );
 
@@ -492,6 +505,9 @@ my $build_systems = $build->find_subsystems( \%subsystems, \%libraries );
 ### save info about available subsystems for future SDL::ConfigData
 print "Gonna write config_data ...\n";
 $build->config_data('SDL_cfg', $build_systems );
+$build->config_data('subsystems', \%subsystems);
+$build->config_data('libraries', \%libraries);
+$build->config_data('sdl_ld_shlib_map', Alien::SDL->config('ld_shlib_map'));
 
 ### something that was originally special to MacOS/Darwin
 # somebody MacOS/Darwin friendly should review whether it is still necessary

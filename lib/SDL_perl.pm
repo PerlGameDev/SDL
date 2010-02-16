@@ -30,11 +30,11 @@
 
 package SDL_perl;
 
-BEGIN {
-	require DynaLoader;
-	@ISA = qw/ DynaLoader /;
-	local @DynaLoader::dl_library_path = [ 'd:\strawberry\perl\site\lib\auto\share\dist\Alien-SDL\v0.8.0_bb9c3714\c\bin' ];
-}
+@ISA = qw/ DynaLoader /;
+require DynaLoader;
+
+use SDL::Internal::Loader;
+internal_load_dlls(__PACKAGE__);
 
 bootstrap SDL_perl;
 

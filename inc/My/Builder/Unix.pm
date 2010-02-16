@@ -1,4 +1,4 @@
-package My::Builder::Linux;
+package My::Builder::Unix;
 use base 'My::Builder';
 
 1;
