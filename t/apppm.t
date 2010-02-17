@@ -34,7 +34,7 @@
 use strict;
 use SDL;
 use SDL::Config;
-
+use SDL::Video;
 use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
@@ -61,6 +61,7 @@ SKIP:
 {
 	skip 'Video not avaiable', 6 unless SDL::TestTool->init(SDL_INIT_VIDEO);
 
+
 	my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
 
 	$app->sync;
@@ -70,10 +71,16 @@ SKIP:
 	like($@, qr/not resizable/, "check for error message");
 	SDL::quit;
 
+
 	my $app2 = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO, -resizeable => 1);
 	$app2->sync;
-	ok(eval { $app2->resize(640, 480); 1 }, "succeed at resize");
-	ok(!eval { $app2->resize(-1, -1); 1 }, "fail to resize to bad size");
+
+	my $driver = SDL::Video::video_driver_name();
+	#should really check for all drivers that don't support resize
+	skip "Video driver $driver doesn't support resize", 3 unless $driver ne 'fbcon';
+
+	ok(eval { $app2->resize(640, 480); 1 }, "succeed at resize with $driver");
+	ok(!eval { $app2->resize(-1, -1); 1 }, "fail to resize to bad size with $driver");
 	like($@, qr/cannot set video/, "check error message");
   }
 

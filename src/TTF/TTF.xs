@@ -7,7 +7,13 @@
 #endif
 
 #include <SDL.h>
+
+
+#ifdef HAVE_SDL_TTF
 #include <SDL_ttf.h>
+#endif
+
+
 
 MODULE = SDL	PACKAGE = SDL
 PROTOTYPES : DISABLE
@@ -16,6 +22,63 @@ PROTOTYPES : DISABLE
 =for comment
 
 These are here right now to keep them around with using the code.
+
+#ifdef HAVE_SDL_TTF
+
+int
+TTF_Init ()
+	CODE:
+		RETVAL = TTF_Init();
+	OUTPUT:
+		RETVAL
+
+void
+TTF_Quit ()
+	CODE:
+		TTF_Quit();
+
+TTF_Font*
+TTF_OpenFont ( file, ptsize )
+	char *file
+	int ptsize
+	CODE:
+		char* CLASS = "SDL::TTF_Font";
+		RETVAL = TTF_OpenFont(file,ptsize);
+	OUTPUT:
+		RETVAL
+
+AV*
+TTF_SizeText ( font, text )
+	TTF_Font *font
+	char *text
+	CODE:
+		int w,h;
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
+		if(TTF_SizeText(font,text,&w,&h))
+		{
+			printf("TTF error at TTFSizeText: %s \n", TTF_GetError());
+			Perl_croak (aTHX_ "TTF error \n");
+		}
+		else
+		{
+			av_push(RETVAL,newSViv(w));
+			av_push(RETVAL,newSViv(h));
+		}
+	OUTPUT:
+		RETVAL
+
+SDL_Surface*
+TTF_RenderText_Blended ( font, text, fg )
+	TTF_Font *font
+	char *text
+	SDL_Color *fg
+	CODE:
+		char* CLASS = "SDL::Surface";
+		RETVAL = TTF_RenderText_Blended(font,text,*fg);
+	OUTPUT:
+		RETVAL
+
+
 
 int
 TTFGetFontStyle ( font )
@@ -345,5 +408,8 @@ TTFPutString ( font, mode, surface, x, y, fg, bg, text )
 		}
 	OUTPUT:
 		RETVAL
+
+#endif
+
 
 =cut
