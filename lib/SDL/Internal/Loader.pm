@@ -7,7 +7,24 @@ our @EXPORT = qw(internal_load_dlls);
 
 use SDL::ConfigData;
 
-# xxx TODO xxx some doc saying what is this good for
+# SDL::Internal::Loader is a king of "Dynaloader kung-fu" that is
+# necessary in situations when you install Allien::SDL from sources
+# or from prebuilt binaries as in these scenarios the SDL stuff is
+# installed into so called 'sharedir' somewhere in perl/lib/ tree
+# on Windows box it is e.g.
+# C:\strawberry\perl\site\lib\auto\share\dist\Alien-SDL...
+#
+# What happens is that for example XS module "SDL::Video" is linked
+# with -lSDL library which means that resulting "Video.(so|dll)" has
+# a dependency on "libSDL.(so|dll)" - however "libSDL.(so|dll)" is
+# neither in PATH (Win) or in LD_LIBRARY_PATH (Unix) so Dynaloader
+# will fail to load "Video.(so|dll)".
+#
+# To handle this we have internal_load_dlls() which has to be called
+# from XS modules (e.g. SDL::Video) linked with SDL libs like this:
+#
+# use SDL::Internal::Loader;
+# internal_load_dlls(PACKAGE);
 
 sub internal_load_dlls($) {
   my $package = shift;
