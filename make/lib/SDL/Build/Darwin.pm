@@ -117,11 +117,11 @@ sub build_bundle
 	mkdir "$bundle_contents/MacOS",0755;
 	$cflags = `sdl-config --cflags`;
 	chomp($cflags);
-	$cflags .= ' ' . `perl -MExtUtils::Embed -e ccopts`;
+	$cflags .= ' ' . `$^X -MExtUtils::Embed -e ccopts`;
 	chomp($cflags);
 	$libs = `sdl-config  --libs`;
 	chomp($libs);
-	$libs .= ' ' . `perl -MExtUtils::Embed -e ldopts`;
+	$libs .= ' ' . `$^X -MExtUtils::Embed -e ldopts`;
 	chomp($libs);
 	$libs =~ s/-lSDLmain//g;
 	print STDERR "gcc $cflags MacOSX/launcher.m $libs -framework Cocoa -o \"$bundle_contents/MacOS/SDLPerl\"";

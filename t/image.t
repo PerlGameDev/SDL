@@ -93,7 +93,10 @@ is( IMG_INIT_TIF , 0x00000004, '[IMG_INIT_TIF] constant loaded properly');
 SKIP:
 {
 	skip ' This is only for version >= 1.2.10', 2 unless !( $lver->major == 1 && $lver->minor ==2 &&  $lver->patch < 10);
-	is (SDL::Image::init( IMG_INIT_JPG ), 0 , '[init] Inited jpg');
+	is (SDL::Image::init( IMG_INIT_JPG ), IMG_INIT_JPG , '[init] Inited jpg');
+	is (SDL::Image::init( IMG_INIT_TIF ), IMG_INIT_TIF , '[init] Inited TIFF');
+	is (SDL::Image::init( IMG_INIT_PNG ), IMG_INIT_PNG , '[init] Inited PNG');
+
 	can_ok('SDL::Image', qw/
 		load_ICO_rw
 		load_CUR_rw
