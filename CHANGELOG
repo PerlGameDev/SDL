@@ -1,5 +1,11 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.3_7 
+	- Moved mixer code into correct locations [kthakore]
+	- Cleaned up last of SDL xs [kthakore]
+	- Update Build system [kmx]
+	- Minor bug fixes
+
 * 2.3_5 
         - Fixed serious XS mem leaks in AV* [FROGGS]
         - Removed usless verify method in SDL.pm [J_King]
