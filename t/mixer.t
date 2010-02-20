@@ -31,7 +31,15 @@ my $v = SDL::Mixer::linked_version();
 
 isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::verion object');
 
-SDL::Mixer::init(MIX_INIT_MP3);
+my @flags = qw /MIX_INIT_MP3 MIX_INIT_MOD MIX_INIT_FLAC MIX_INIT_OGG/;
+my @names = qw/MP3 MOD FLAC OGG/;
+foreach (0...3)
+{
+	my $f = $flags[$_];
+	my $n = $names[$_];
+( SDL::Mixer::init($f) != $f)?diag "Tried to init $n". SDL::get_error() : diag "You have $n support"; 
+SDL::Mixer::quit();
+}
 pass 'Init ran';
 
 
