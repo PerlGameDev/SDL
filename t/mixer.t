@@ -31,7 +31,7 @@ my $v = SDL::Mixer::linked_version();
 
 isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::verion object');
 
-my @flags = qw /MIX_INIT_MP3 MIX_INIT_MOD MIX_INIT_FLAC MIX_INIT_OGG/;
+my @flags = (MIX_INIT_MP3, MIX_INIT_MOD, MIX_INIT_FLAC, MIX_INIT_OGG);
 my @names = qw/MP3 MOD FLAC OGG/;
 foreach (0...3)
 {
