@@ -20,26 +20,23 @@ elsif( !SDL::Config->has('SDL_gfx_framerate') )
 }
 else
 {
-    plan( tests => 10 );
+    plan( tests => 5 );
 }
 
+# init
 my $fps = SDL::GFX::FPSManager->new(0, 0, 0, 0);
+is( SDL::GFX::Framerate::init($fps), undef, '[init] returns undef' );
 
-isa_ok( $fps, 'SDL::GFX::FPSManager' );
-is( $fps->framecount, 0, 'fps has framecount' );
-is( $fps->rateticks,  0, 'fps has rateticks' );
-is( $fps->lastticks,  0, 'fps has lastticks' );
-is( $fps->rate,       0, 'fps has rate' );
+# get
+my $rate = SDL::GFX::Framerate::get($fps);
+is( $rate, 30, "[rate] is 30 by default" );
 
-$fps->framecount(1);
-$fps->rateticks(2);
-$fps->lastticks(3);
-$fps->rate(4);
+# set
+SDL::GFX::Framerate::set($fps, 60);
+is( SDL::GFX::Framerate::get($fps), 60, "[rate] successfully set to 60" );
 
-is( $fps->framecount, 1, 'fps has framecount' );
-is( $fps->rateticks,  2, 'fps has rateticks' );
-is( $fps->lastticks,  3, 'fps has lastticks' );
-is( $fps->rate,       4, 'fps has rate' );
+# delay
+is( SDL::GFX::Framerate::delay($fps), undef, "[delay] return undef" );
 
 SDL::delay(100);
 
