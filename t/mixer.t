@@ -17,14 +17,23 @@ elsif( !SDL::Config->has('SDL_mixer') )
     plan( skip_all => 'SDL_mixer support not compiled' );
 }
 my @done = qw/
+init	  	
+quit	
 linked_version	  	
 open_audio	  	
-close_audio	  	
+close_audio
+queryspec	  	
 /;
+
+
 
 my $v = SDL::Mixer::linked_version();
 
 isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::verion object');
+
+SDL::Mixer::init(MIX_INIT_MP3);
+pass 'Init ran';
+
 
 is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ), 0, '[open_audio] ran');
 
@@ -41,16 +50,15 @@ SDL::Mixer::close_audio();
 
 pass '[close_audio]  ran';
 
+SDL::Mixer::quit();
+pass 'Quit ran';
 
 
-my @left = qw/
-init	  	
-quit	  	
-seterror	  	
-geterror	  	
-queryspec	  	
-/	
-;
+my @left = qw/  /;
+#seterror	  	
+#geterror	  		  	
+#/	
+
 
 my $why
     = '[Percentage Completion] '
