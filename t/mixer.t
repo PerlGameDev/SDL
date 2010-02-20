@@ -2,20 +2,30 @@
 use strict;
 use SDL;
 use SDL::Config;
-use SDL::Mixer;
-use Test::More;
-use Data::Dumper;
 
-use lib 't/lib';
-use SDL::TestTool;
-
-if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
-    plan( skip_all => 'Failed to init sound' );
-}
-elsif( !SDL::Config->has('SDL_mixer') )
+BEGIN
 {
-    plan( skip_all => 'SDL_mixer support not compiled' );
-}
+	use Test::More;
+	use lib 't/lib';
+	use SDL::TestTool;
+
+	if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
+	    plan( skip_all => 'Failed to init sound' );
+	}
+	elsif( !SDL::Config->has('SDL_mixer') )
+	{
+	    plan( skip_all => 'SDL_mixer support not compiled' );
+	}
+} #SDL_init(SDL_INIT_AUDIO) + Version bootstrap conflict prevention in windows
+#
+# To reproduce this bug do 
+#
+# use SDL; use SDL::Version; SDL::init(SDL_INIT_AUDIO);
+#
+
+use SDL::Mixer;
+use SDL::Version;
+
 my @done = qw/
 init	  	
 quit	
@@ -26,11 +36,14 @@ queryspec
 /;
 
 
-
 my $v = SDL::Mixer::linked_version();
 
 isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::verion object');
 
+
+SKIP:
+{
+	skip ( 'Version 1.2.11 needed' , 1)  unless ( $v->major > 1 || $v->minor > 2 || $v->patch >= 11); 
 my @flags = (MIX_INIT_MP3, MIX_INIT_MOD, MIX_INIT_FLAC, MIX_INIT_OGG);
 my @names = qw/MP3 MOD FLAC OGG/;
 foreach (0...3)
@@ -38,10 +51,14 @@ foreach (0...3)
 	my $f = $flags[$_];
 	my $n = $names[$_];
 ( SDL::Mixer::init($f) != $f)?diag "Tried to init $n". SDL::get_error() : diag "You have $n support"; 
-SDL::Mixer::quit();
-}
 pass 'Init ran';
 
+}
+SDL::Mixer::quit();
+
+pass 'Quit ran';
+
+}
 
 is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ), 0, '[open_audio] ran');
 
@@ -58,8 +75,6 @@ SDL::Mixer::close_audio();
 
 pass '[close_audio]  ran';
 
-SDL::Mixer::quit();
-pass 'Quit ran';
 
 
 my @left = qw/  /;
