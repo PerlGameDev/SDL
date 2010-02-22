@@ -61,7 +61,7 @@ extern PerlInterpreter *parent_perl;
 #define ENTER_TLS_CONTEXT \
         PerlInterpreter *current_perl = PERL_GET_CONTEXT; \
 	        PERL_SET_CONTEXT(parent_perl); { \
-			                PerlInterpreter *PERL_GET_CONTEXT = parent_perl;
+			                PerlInterpreter *my_perl = parent_perl;
 #define LEAVE_TLS_CONTEXT \
 					        } PERL_SET_CONTEXT(current_perl);
 #else
