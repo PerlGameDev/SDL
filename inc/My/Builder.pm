@@ -10,12 +10,12 @@
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -43,13 +43,13 @@ use Config;
 sub process_xs
 {
 	my ($self, $file) = @_;
-	
+
 	#TODO: call this in MSWin32::process_xs
 	$file =~ s/\\/\//g if( $^O eq 'MSWin32' );
 
 	my $properties                   = $self->{properties};
 	my $file_args                    = $self->notes( 'file_flags' )->{$file};
-	
+
 	my @old_values                   = @$properties{ keys %$file_args };
 	@$properties{ keys %$file_args } = values %$file_args;
 
@@ -61,17 +61,18 @@ sub process_xs
 sub find_subsystems
 {
 	my ($self, $subsystems, $libraries) = @_;
+	my %found;
 	my %enabled;
 	while ( my ($name, $subsystem) = each %$subsystems )
 	{
 		for my $library (@{ $subsystem->{libraries} })
 		{
-			print "CHECKING subsystem=$name library=$library ...\n";
 			my $lib = $libraries->{$library}
 				or croak "Unknown library '$library' for '$name'\n";
-			if (Alien::SDL->check_header($lib->{header})) {
-			  $enabled{$name}{$library} = 1;
+			unless (defined($found{$lib->{header}})) {
+				$found{$lib->{header}} = Alien::SDL->check_header($lib->{header}) ? 1 : 0;
 			}
+			$enabled{$name}{$library} = 1 if $found{$lib->{header}};
 		}
 	}
 	return \%enabled;
@@ -104,7 +105,7 @@ sub set_file_flags
 {
 	my $self = shift;
 	my %file_flags;
-	
+
 	while (my ($subsystem, $buildable) = each %{$self->notes('build_systems')} )
 	{
 		my $sub_file = $self->notes('subsystems')->{$subsystem}{file}{to};
@@ -115,7 +116,7 @@ sub set_file_flags
 				@{$self->notes('defines')->{$subsystem}},
 				( defined $Config{usethreads} ? ('-DUSE_THREADS', '-fPIC') : ('-fPIC' )),
 			],
-			extra_linker_flags => 
+			extra_linker_flags =>
 			[
 				(split(' ', $self->notes('sdl_libs'))),
 				@{$self->notes('links')->{$subsystem}},
