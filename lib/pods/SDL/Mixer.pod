@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-SDL::Mixer - a SDL perl extension
+SDL::Mixer - Sound and music functions
 
 =head1 CATEGORY
 
@@ -10,166 +10,53 @@ Mixer
 
 =head1 DESCRIPTION
 
-SDL::Mixer allows you access to the SDL mixer library, enablig sound and
-music volume setting, playing, pausing and resuming, as well as fading
-the sound and music in and out.
+SDL::Mixer allows you to enable sound, alter music volume settings, and lets you play, pause and resume, as well as fading the sound and music 
+in and out.
 
 =head1 METHODS
   
-=head2 query_spec()
+=head2 init
 
-	my $specs = SDL::Mixer::query_spec();
+ int SDL::Mixer::init(flags)
 
-Returns a hash reference, containing the following keys and their respective
-values:
+B<Note>: Only available for SDL::Mixer >= 1.2.10
 
-	-status
-	-frequency
-	-channels
-	-format
+=head2 quit
 
-=head2 reserve_channels
+ void SDL::Mixer::quit()
 
-	$mixer->reserve_channels(4);
+B<Note>: Only available for SDL::Mixer >= 1.2.10
 
-Reserve so many channels.
+=head2 linked_version
 
-=head2 allocate_channels()
+ const SDL_version * SDL::Mixer::linked_version ()
 
-	$mixer->reserve_channels(2);
+=head2 open_audio
 
-Allocate so many channels.
+ int SDL::Mixer::open_audio ( frequency, format, channels, chunksize )
 
-=head2 group_channel(channel,group)
+=head2 close_audio
 
-Group the channel number C<$channel> into group C<$group>.
+ void SDL::Mixer::close_audio ()
 
-=head2 group_channels(from,to,group)
+=head2 query_spec
 
-Groups a range of channels
-
-=head2 group_available(group)
-
-Return true when the group is available.
-
-=head2 group_count(group)
-
-Returns the number of channels in the group
-
-=head2 group_oldest()
-
-
-=head2 group_newer()
-
-
-=head2 play_channel()
-
-
-=head2 play_music()
-
-Play C<$music> C<$loop> times.
-
-=head2 fade_in_channel(channel,chunk,loops,ms,ticks)
-
-Fades a channel in
-
-=head2 fade_in_music(music,loops,ms)
-
-Fades the music in over a number of ms, looping as it does
-
-=head2 channel_volume(channel,volume)
-
-Sets the volume for a single channel
-
-=head2 mucis_volume(volume)
-
-Set the volume for the music.
-
-=head2 halt_channel(channel)
-
-Stops a specific channel
-
-=head2 halt_group(group)
-
-Stops a group of channels
-
-=head2 halt_music()
-
-Stops the music
-
-=head2 expire_channel(channel,ticks)
-
-Ignores the channel after C<ticks> has expired
-
-=head2 fade_out_channel(channel,ms)
-
-Fade the channel number C<$channel> in C<$ms> ms out.
-
-=head2 fade_out_group(group,ms)
-	
-Fade the channel group C<$group> in C<$ms> ms out.
-
-=head2 fade_out_music(ms)
-	
-Fade the music in C<$ms> ms out.
-
-=head2 fading_music()
-
-Return true when the music is currently fading in or out.
-
-=head2 fading_channel()
-
-Return true when the channel number C<$channel> is currently fading in or out.
-
-=head2 pause(channel)
-
-Pause the channel C<$channel>.
-
-=head2 resume(channel)
-
-Resume the channel C<$channel>.
-
-=head2 paused()
-
-Return true when the channel is currently paused.
-
-=head2 pause_music()
-
-Pause the music play.
-
-=head2 resume_music()
-	
-Resume the music play.
-
-=head2 rewind_music()
-
-Resets the music file to the beginning
-
-=head2 music_paused()
-
-Return true when the music is currently paused.
-
-=head2 playing()
-
-Return true when the channel is currently playing.
-
-=head2 playing_music ()
-
-Return true when the music is currently playing.
-
-=head1 set_panning($channel, $left, $right)
-
-Sets the volume for the left or right channels. To do true panning:
-
-=begin verbatim
-
-  $mixer->set_panning($channel, $left, 254 - $left);
-
-=end verbatim
+ AV * SDL::Mixer::query_spec ()
+	CODE:
+		int freq, channels, status;
+		Uint16 format;
+		status = Mix_QuerySpec(&freq,&format,&channels);
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
+		av_push(RETVAL,newSViv(status));
+		av_push(RETVAL,newSViv(freq));
+		av_push(RETVAL,newSViv(format));
+		av_push(RETVAL,newSViv(channels));
+	OUTPUT:
+		RETVAL
 
 =head1 AUTHORS 
 
-David J. Goehrig, basic doc added by Tels <http://bloodgate.com>.
+Tobias Leich [FROGGS]
 
 =head1 SEE ALSO
 

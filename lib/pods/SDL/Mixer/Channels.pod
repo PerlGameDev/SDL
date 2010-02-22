@@ -2,10 +2,46 @@
 
 =head1 NAME
 
-SDL::Mixer::Channels -- SDL_Mixer channel functions and bindings
+SDL::Mixer::Channels -- SDL::Mixer channel functions and bindings
 
 =head1 CATEGORY
 
-TODO, Mixer
+Mixer
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 allocate_channels
+
+=head2 volume
+
+=head2 play_channel
+
+=head2 play_channel_timed
+
+=head2 fade_in_channel
+
+=head2 fade_in_channel_timed
+
+=head2 pause
+
+=head2 resume
+
+=head2 halt_channel
+
+=head2 expire_channel
+
+=head2 fade_out_channel
+
+=head2 channel_finished
+
+=head2 playing
+
+=head2 paused
+
+=head2 fading_channel
+
+=head2 get_chunk
 
 =cut

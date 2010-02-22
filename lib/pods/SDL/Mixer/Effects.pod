@@ -6,6 +6,18 @@ SDL::Mixer::Effects -- SDL_Mixer sound effect functions and bindings
 
 =head1 CATEGORY
 
-TODO, Mixer
+Mixer
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 register_effect()
+
+B<Note>: >= 1.2.10
+
+=head2 set_post_mix
+
+=head2 set_panning
 
 =cut

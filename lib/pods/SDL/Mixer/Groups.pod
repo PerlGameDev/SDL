@@ -6,6 +6,28 @@ SDL::Mixer::Groups -- SDL_Mixer groups functions and bindings
 
 =head1 CATEGORY
 
-TODO, Mixer
+Mixer
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 reserve_channels
+
+=head2 group_channel
+
+=head2 group_channels
+
+=head2 group_available
+
+=head2 group_count
+
+=head2 group_oldest
+
+=head2 group_newer
+
+=head2 fade_out_group
+
+=head2 halt_group
 
 =cut

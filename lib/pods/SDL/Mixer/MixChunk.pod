@@ -13,7 +13,7 @@ Mixer, Structure
  use SDL;
  use SDL::Mixer::MixChunk;
 
- my $mix_chunk = SDL::MixLoadWAV('sample.wav');
+ my $mix_chunk = SDL::Mixer::Music::load_WAV('sample.wav');
 
  printf("length of audio data is %d bytes\n", $mix_chunk->alen);
  printf("volume is %d\n",                     $mix_chunk->volume);
