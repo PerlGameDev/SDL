@@ -475,7 +475,7 @@ my $build = $package->new(
 	{
 		'YAML'	=> '0.68',
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL' => '0.8.0',
+		'Alien::SDL' => '0.8.2',
 	},
 	build_requires =>
 	{
