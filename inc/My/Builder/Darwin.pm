@@ -39,7 +39,7 @@ sub special_build_settings
 	my $self = shift;
 	$self->{c_source} = ['launcher.m'];
 	$self->{c_sources} = 'MacOSX';
-	$self->{install_base} "SDLPerl.app/Contents/Resources";	
+	$self->{install_base} = "SDLPerl.app/Contents/Resources";	
 }
 
 sub build_bundle
@@ -47,11 +47,11 @@ sub build_bundle
 	my $bundle_contents="SDLPerl.app/Contents";
 	system "mkdir -p \"$bundle_contents\"";
 	mkdir "$bundle_contents/MacOS",0755;
-	$cflags = `sdl-config --cflags`;
+	my $cflags = `sdl-config --cflags`;
 	chomp($cflags);
 	$cflags .= ' ' . `$^X -MExtUtils::Embed -e ccopts`;
 	chomp($cflags);
-	$libs = `sdl-config  --libs`;
+	my $libs = `sdl-config  --libs`;
 	chomp($libs);
 	$libs .= ' ' . `$^X -MExtUtils::Embed -e ldopts`;
 	chomp($libs);
