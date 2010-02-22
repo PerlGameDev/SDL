@@ -4,7 +4,7 @@ SDL::GFX::Primitives - basic drawing functions
 
 =head1 CATEGORY
 
-GFX, Primitives
+GFX
 
 =head1	DESCRIPTION
 

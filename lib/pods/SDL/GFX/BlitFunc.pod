@@ -4,4 +4,7 @@ SDL::GFX::BlitFunc - blitting functions
 
 =head1 CATEGORY
 
-TODO, GFX, BlitFunc
+TODO, GFX
+
+=head1 METHODS
+

@@ -4,7 +4,7 @@ SDL::GFX::Rotozoom - rotation and zooming functions for surfaces
 
 =head1 CATEGORY
 
-TODO, GFX, Rotozoom
+TODO, GFX
 
 =head1 METHODS
 
