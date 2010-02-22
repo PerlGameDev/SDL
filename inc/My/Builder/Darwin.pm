@@ -32,6 +32,7 @@ package My::Builder::Darwin;
 
 use strict;
 use warnings;
+use Alien::SDL;
 use base 'My::Builder';
 
 sub special_build_settings
@@ -47,11 +48,11 @@ sub build_bundle
 	my $bundle_contents="SDLPerl.app/Contents";
 	system "mkdir -p \"$bundle_contents\"";
 	mkdir "$bundle_contents/MacOS",0755;
-	my $cflags = `sdl-config --cflags`;
+	my $cflags = Alien::SDL->config('cflags');
 	chomp($cflags);
 	$cflags .= ' ' . `$^X -MExtUtils::Embed -e ccopts`;
 	chomp($cflags);
-	my $libs = `sdl-config  --libs`;
+	my $libs = Alien::SDL->config('libs');
 	chomp($libs);
 	$libs .= ' ' . `$^X -MExtUtils::Embed -e ldopts`;
 	chomp($libs);
