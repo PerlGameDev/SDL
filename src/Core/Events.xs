@@ -111,7 +111,7 @@ events_set_event_filter(callback)
 	SV* callback
 	CODE:
 	eventfiltersv = callback;
-	perl_for_cb = my_perl;
+	perl_for_cb = PERL_GET_CONTEXT;
 	
 	SDL_SetEventFilter((SDL_EventFilter) eventfilter_cb);
 

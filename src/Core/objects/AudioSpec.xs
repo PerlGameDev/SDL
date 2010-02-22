@@ -15,27 +15,7 @@
 #define HAVE_TLS_CONTEXT
 #endif
 
-/* For windows  */
-#ifndef SDL_PERL_DEFINES_H
-#define SDL_PERL_DEFINES_H
-
-#ifdef HAVE_TLS_CONTEXT
-PerlInterpreter *parent_perl = NULL;
-extern PerlInterpreter *parent_perl;
-#define GET_TLS_CONTEXT parent_perl =  PERL_GET_CONTEXT;
-#define ENTER_TLS_CONTEXT \
-        PerlInterpreter *current_perl = PERL_GET_CONTEXT; \
-	        PERL_SET_CONTEXT(parent_perl); { \
-			                PerlInterpreter *my_perl = parent_perl;
-#define LEAVE_TLS_CONTEXT \
-					        } PERL_SET_CONTEXT(current_perl);
-#else
-#define GET_TLS_CONTEXT         /* TLS context not enabled */
-#define ENTER_TLS_CONTEXT       /* TLS context not enabled */
-#define LEAVE_TLS_CONTEXT       /* TLS context not enabled */
-#endif
-
-#endif
+PerlInterpreter * perl_my = NULL;
 
 PerlInterpreter * perl_for_audio_cb = NULL;
 
@@ -162,8 +142,9 @@ audiospec_callback( audiospec, cb )
                 // so we're going to leave a cloned interpreter available
                 // but still remain in the current one.
 		if (perl_for_audio_cb == NULL) {
-		  perl_for_audio_cb = perl_clone(my_perl, CLONEf_KEEP_PTR_TABLE);
-                  PERL_SET_CONTEXT(my_perl);
+		  perl_my = PERL_GET_CONTEXT;
+		  perl_for_audio_cb = perl_clone(perl_my, CLONEf_KEEP_PTR_TABLE);
+                  PERL_SET_CONTEXT(perl_my);
                 }
 		audiospec->userdata = cb;
 		audiospec->callback = audio_callback;

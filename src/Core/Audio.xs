@@ -62,7 +62,7 @@ audio_load_wav ( filename, spec )
 		{	
 		 void** pointers = malloc(2 * sizeof(void*));
 		  pointers[0] = (void*)temp;
-		  pointers[1] = (void*)my_perl;
+		  pointers[1] = (void*)PERL_GET_CONTEXT;
 
 		
 			RETVAL = (AV*)sv_2mortal((SV*)newAV());
