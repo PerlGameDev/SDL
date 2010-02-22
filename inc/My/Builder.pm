@@ -66,6 +66,7 @@ sub find_subsystems
 	{
 		for my $library (@{ $subsystem->{libraries} })
 		{
+			print "CHECKING subsystem=$name library=$library ...\n";
 			my $lib = $libraries->{$library}
 				or croak "Unknown library '$library' for '$name'\n";
 			if (Alien::SDL->check_header($lib->{header})) {
