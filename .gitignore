@@ -15,3 +15,4 @@ MANIFEST
 !MANIFEST.skip
 *META.yml
 *.tar.gz
+*.swp
