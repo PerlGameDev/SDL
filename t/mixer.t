@@ -43,7 +43,7 @@ isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::verion object');
 
 SKIP:
 {
-	skip ( 'Version 1.2.11 needed' , 1)  unless ( $v->major >= 1 && $v->minor >= 2 && $v->patch >= 11); 
+	skip ( 'Version 1.2.10 needed' , 1) unless ( $v->major >= 1 && $v->minor >= 2 && $v->patch >= 10); 
 my @flags = (MIX_INIT_MP3, MIX_INIT_MOD, MIX_INIT_FLAC, MIX_INIT_OGG);
 my @names = qw/MP3 MOD FLAC OGG/;
 foreach (0...3)
