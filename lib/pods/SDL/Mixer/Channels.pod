@@ -64,6 +64,10 @@ Example:
 
 =head2 play_channel_timed
 
+ my $channel = SDL::Mixer::Channels::play_channel_timed( $channel, $chunk, $loops, $ticks );
+
+Same as L<play_channel> but you can specify the time it will play by C<$ticks>.
+
 =head2 fade_in_channel
 
  my $channel = SDL::Mixer::Channels::fade_in_channel( $channel, $chunk, $loops, $ms );
