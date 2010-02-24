@@ -1,6 +1,6 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.3_7 
+* 2.3_6 
 	- Moved mixer code into correct locations [kthakore]
 	- Cleaned up last of SDL xs [kthakore]
 	- Update Build system [kmx]
