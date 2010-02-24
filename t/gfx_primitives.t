@@ -265,6 +265,15 @@ is( SDL::GFX::Primitives::filled_polygon_color_MT($display, [304, 308, 306, 308,
 is( SDL::GFX::Primitives::filled_polygon_RGBA_MT( $display, [310, 314, 312, 314, 310], [243, 243, 245, 247, 247], 5, 0x00, 0xFF, 0x00, 0xFF, 0, 0),       0, 'filled_polygon_RGBA_MT' );  # green
 is( SDL::GFX::Primitives::textured_polygon_MT(    $display, [316, 320, 318, 320, 316], [243, 243, 245, 247, 247], 5, $surf,                  0, 0, 0, 0), 1, 'textured_polygon_MT' );     # texture
 
+# polygon demo
+SDL::GFX::Primitives::filled_polygon_color(   $display, [311, 331, 381, 301, 311, 351], [293, 293, 378, 378, 361, 361], 6, 0xFF000080);    # red
+SDL::GFX::Primitives::filled_polygon_color(   $display, [381, 371, 271, 311, 321, 301], [378, 395, 395, 327, 344, 378], 6, 0x00FF0080);    # green
+SDL::GFX::Primitives::filled_polygon_color(   $display, [271, 261, 311, 351, 331, 311], [395, 378, 293, 361, 361, 327], 6, 0x0000FF80);    # blue
+
+
+
+
+
 # bezier test
 is( SDL::GFX::Primitives::bezier_color( $display, [390, 392, 394, 396], [243, 255, 235, 247], 4, 20, 0xFF00FFFF),             0, 'polygon_color' );        # red
 is( SDL::GFX::Primitives::bezier_RGBA(  $display, [398, 400, 402, 404], [243, 255, 235, 247], 4, 20, 0x00, 0xFF, 0x00, 0xFF), 0, 'polygon_RGBA' );         # green
@@ -294,7 +303,7 @@ SDL::Video::unlock_surface($display) if(SDL::Video::MUSTLOCK($display));
 
 SDL::Video::update_rect($display, 0, 0, 640, 480); 
 
-SDL::delay(5000);
+SDL::delay(10000);
 
 pass 'Are we still alive? Checking for segfaults';
 
