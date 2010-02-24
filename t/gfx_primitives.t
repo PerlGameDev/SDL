@@ -303,7 +303,7 @@ SDL::Video::unlock_surface($display) if(SDL::Video::MUSTLOCK($display));
 
 SDL::Video::update_rect($display, 0, 0, 640, 480); 
 
-SDL::delay(10000);
+SDL::delay(5000);
 
 pass 'Are we still alive? Checking for segfaults';
 
