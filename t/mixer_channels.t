@@ -23,7 +23,8 @@ is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ),  0, '[o
 
 is( SDL::Mixer::Channels::allocate_channels( 4 ),                         4, "[allocate_channels] 4 channels allocated" );
 
-my $callback = sub{ printf("[channel_finished] callback called for channel %d\n", shift); };
+my $finished = 0;
+my $callback = sub{ printf("[channel_finished] callback called for channel %d\n", shift); $finished++; };
 SDL::Mixer::Channels::channel_finished( $callback ); pass '[channel_finished] ran';
 
     SDL::Mixer::Channels::volume( -1, 10 );
@@ -55,6 +56,7 @@ is( SDL::Mixer::Channels::paused( $playing_channel ), 1, "[paused] channel $play
 
 SDL::delay(500);
 
+
 SDL::Mixer::Channels::resume(-1); pass '[resume] ran';
 
 SDL::delay($delay);
@@ -81,4 +83,5 @@ SDL::delay($delay * 4);
 
 SDL::Mixer::close_audio(); pass '[close_audio] ran';
 
+isnt ( $finished , 0 , '[callback_finished] called the callback got '. $finished);
 done_testing();
