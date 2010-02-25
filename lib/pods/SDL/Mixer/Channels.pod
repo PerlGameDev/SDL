@@ -116,7 +116,26 @@ Returns the the number of channels that will be faded out.
 
 =head2 channel_finished
 
-TODO
+ SDL::Mixer::Channels::channel_finished( $callback );
+
+Add your own callback when a channel has finished playing. C<NULL> to disable callback. The callback may be called from the mixer's audio 
+callback or it could be called as a result of L<halt_channel>, etc. do not call C<lock_audio> from this callback; you will either be inside 
+the audio callback, or SDL_mixer will explicitly lock the audio before calling your callback.
+
+Example 1:
+
+ my $callback = sub{ printf("[channel_finished] callback called for channel %d\n", shift); };
+ 
+ SDL::Mixer::Channels::channel_finished( $callback );
+
+Example 2:
+
+ sub callback
+ {
+     ...
+ }
+ 
+ SDL::Mixer::Channels::channel_finished( \&callback );
 
 =head2 playing
 
