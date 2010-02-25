@@ -45,7 +45,7 @@ isnt( SDL::was_init( 0 ), SDL_INIT_VIDEO, '[was_init] recognizes turned off flag
 
 SKIP:
 {
-  skip 2, 'perl compiled with -DPERL_USE_SAFE_PUTENV' if $Config{'config_args'} =~ /PERL_USE_SAFE_PUTEV/;
+  skip 'perl compiled with -DPERL_USE_SAFE_PUTENV', 2 if $Config{'config_args'} =~ /PERL_USE_SAFE_PUTENV/;
 is(SDL::putenv('PERLSDL_TEST=hello'), 0, '[putenv] returns 0');
 is(SDL::getenv('PERLSDL_TEST'), 'hello', '[getenv] returns hello');
 
