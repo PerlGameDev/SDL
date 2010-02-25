@@ -153,7 +153,7 @@ surface_DESTROY(bag)
                    if (PERL_GET_CONTEXT == pointers[1]) {
                        //warn("Freed surface %p and pixels %p \n", surface, surface->pixels);
                        SDL_FreeSurface(surface);
-                       free(pointers);
+                       safefree(pointers);
                    }
                } else if (bag == 0) {
                    XSRETURN(0);
