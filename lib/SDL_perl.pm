@@ -30,9 +30,11 @@
 
 package SDL_perl;
 
+@ISA = qw/ DynaLoader /;
 require DynaLoader;
 
-@ISA = qw/ DynaLoader /;
+use SDL::Internal::Loader;
+internal_load_dlls(__PACKAGE__);
 
 bootstrap SDL_perl;
 

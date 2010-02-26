@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-SDL::Mixer - a SDL perl extension
+SDL::Mixer - Sound and music functions
 
 =head1 CATEGORY
 
@@ -10,169 +10,131 @@ Mixer
 
 =head1 DESCRIPTION
 
-SDL::Mixer allows you access to the SDL mixer library, enablig sound and
-music volume setting, playing, pausing and resuming, as well as fading
-the sound and music in and out.
+SDL::Mixer allows you to enable sound, alter music volume settings, and lets you play, pause and resume, as well as fading the sound and music 
+in and out.
 
 =head1 METHODS
   
-=head2 query_spec()
+=head2 init
 
-	my $specs = SDL::Mixer::query_spec();
+ my $init_flags = SDL::Mixer::init( $flags );
 
-Returns a hash reference, containing the following keys and their respective
-values:
+Loads dynamic libraries and prepares them for use. Flags should be one or more flags from init flags OR'd together.
+It returns the flags successfully initialized, or 0 on failure.
 
-	-status
-	-frequency
-	-channels
-	-format
+Example:
 
-=head2 reserve_channels
+ use SDL::Mixer;
+ 
+ my $init_flags = SDL::Mixer::init( MIX_INIT_MP3 | MIX_INIT_MOD | MIX_INIT_FLAC | MIX_INIT_OGG );
+ 
+ print("We have MP3 support!\n")  if $init_flags & MIX_INIT_MP3;
+ print("We have MOD support!\n")  if $init_flags & MIX_INIT_MOD;
+ print("We have FLAC support!\n") if $init_flags & MIX_INIT_FLAC;
+ print("We have OGG support!\n")  if $init_flags & MIX_INIT_OGG;
 
-	$mixer->reserve_channels(4);
+Flags:
 
-Reserve so many channels.
+=over 4
 
-=head2 allocate_channels()
+=item *
 
-	$mixer->reserve_channels(2);
+MIX_INIT_MP3
 
-Allocate so many channels.
+=item *
 
-=head2 group_channel(channel,group)
+MIX_INIT_MOD
 
-Group the channel number C<$channel> into group C<$group>.
+=item *
 
-=head2 group_channels(from,to,group)
+MIX_INIT_FLAC
 
-Groups a range of channels
+=item *
 
-=head2 group_available(group)
+MIX_INIT_OGG
 
-Return true when the group is available.
+=back
 
-=head2 group_count(group)
+B<Note>: Only available for SDL_mixer >= 1.2.10
 
-Returns the number of channels in the group
+=head2 quit
 
-=head2 group_oldest()
+ SDL::Mixer::quit();
 
+This function unloads the liraries previously loaded with L<init()|/init>.
 
-=head2 group_newer()
+B<Note>: Only available for SDL_mixer >= 1.2.10
 
+=head2 linked_version
 
-=head2 play_channel()
+ $version = SDL::Mixer::linked_version();
 
+C<linked_version> gives you the major-, minor-, and patchlevel for SDL_mixer. This way you can check if e.g. L<init()|/init> and L<quit()|/quit> 
+are available.
+ 
+Example:
 
-=head2 play_music()
+ use SDL::Mixer;
+ use SDL::Version;
+ 
+ my $version = SDL::Mixer::linked_version();
 
-Play C<$music> C<$loop> times.
+ printf("%d.%d.%d\n", $version->major, $version->minor, $version->patch); # prints "1.2.8" for me
 
-=head2 fade_in_channel(channel,chunk,loops,ms,ticks)
+=head2 open_audio
 
-Fades a channel in
+ my $audio_opened = SDL::Mixer::open_audio( $frequency, $format, $channels, $chunksize );
 
-=head2 fade_in_music(music,loops,ms)
+C<open_audio> will initialize SDL_mixer if it is not yet initialized, see note. SDL_mixer may not be able to provide the exact specifications 
+your provided, however it will automatically translate between the expected format and the real one. You can retrieve the real format using 
+L<query_spec>. 
 
-Fades the music in over a number of ms, looping as it does
+Returns 0 on success, -1 on error.
 
-=head2 channel_volume(channel,volume)
+B<Note>: You must not use C<AUDIO_S16>, C<AUDIO_U16>, C<AUDIO_S16LSB>, or C<AUDIO_U16LSB.> They are not portable, and SDL will not return an 
+error code when they fail. The result will be a horrible staticy noise. You can usually use C<AUDIO_S16SYS>, though not always. Future versions 
+of SDL should take this parameter only as a hint, then read back the value that the OS (for example, OSS or ALSA) has chosen to use in case the 
+desired audio type is not supported. 
 
-Sets the volume for a single channel
+B<Note>: When already initialized, this function will not re-initialize SDL_mixer, nor fail. It will merely increment the number of times 
+L<SDL::Mixer::close_audio> must be called to actually get it to uninitialize. This serves as a very simplistic method for multiple application 
+components to use SDL_mixer without necessitating a great deal of inter-component awareness. Be warned however that in such a situation, the 
+latest components to initialize SDL_mixer will probably not get the SDL_mixer settings they're expecting. 
 
-=head2 mucis_volume(volume)
+Example:
 
-Set the volume for the music.
+ use SDL;
+ use SDL::Mixer;
+ 
+ printf("Error initializing SDL_mixer: %s\n", SDL::get_error()) unless SDL::Mixer::open_audio(44100, AUDIO_S16, 2, 1024) == 0;
 
-=head2 halt_channel(channel)
+=head2 close_audio
 
-Stops a specific channel
+ SDL::Mixer::close_audio();
 
-=head2 halt_group(group)
+Close the mixer and halting all playing audio. This function does not return anything.
 
-Stops a group of channels
+=head2 query_spec
 
-=head2 halt_music()
+ my @query_spec = @{ SDL::Mixer::query_spec() };
 
-Stops the music
+Find out what the actual audio device parameters are.
+This function returns 1 as first array element (status) if the audio has been opened, 0 otherwise.
 
-=head2 expire_channel(channel,ticks)
+Example:
 
-Ignores the channel after C<ticks> has expired
-
-=head2 fade_out_channel(channel,ms)
-
-Fade the channel number C<$channel> in C<$ms> ms out.
-
-=head2 fade_out_group(group,ms)
-	
-Fade the channel group C<$group> in C<$ms> ms out.
-
-=head2 fade_out_music(ms)
-	
-Fade the music in C<$ms> ms out.
-
-=head2 fading_music()
-
-Return true when the music is currently fading in or out.
-
-=head2 fading_channel()
-
-Return true when the channel number C<$channel> is currently fading in or out.
-
-=head2 pause(channel)
-
-Pause the channel C<$channel>.
-
-=head2 resume(channel)
-
-Resume the channel C<$channel>.
-
-=head2 paused()
-
-Return true when the channel is currently paused.
-
-=head2 pause_music()
-
-Pause the music play.
-
-=head2 resume_music()
-	
-Resume the music play.
-
-=head2 rewind_music()
-
-Resets the music file to the beginning
-
-=head2 music_paused()
-
-Return true when the music is currently paused.
-
-=head2 playing()
-
-Return true when the channel is currently playing.
-
-=head2 playing_music ()
-
-Return true when the music is currently playing.
-
-=head1 set_panning($channel, $left, $right)
-
-Sets the volume for the left or right channels. To do true panning:
-
-=begin verbatim
-
-  $mixer->set_panning($channel, $left, 254 - $left);
-
-=end verbatim
+ use SDL::Mixer;
+ 
+ my ($status, $freq, $format, $channels) = @{ SDL::Mixer::query_spec() };
+ 
+ printf("%s, %s, %s, %s\n", $status, $freq, $format, $channels);
 
 =head1 AUTHORS 
 
-David J. Goehrig, basic doc added by Tels <http://bloodgate.com>.
+Tobias Leich [FROGGS]
 
 =head1 SEE ALSO
 
-L<perl>, L<SDL::Music> and L<SDL::Sound>.
+L<perl>, L<SDL::Mixer::Channels>, L<SDL::Mixer::Effects>, L<SDL::Mixer::Groups>, L<SDL::Mixer::Music>.
 
 =cut

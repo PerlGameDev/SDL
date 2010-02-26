@@ -19,6 +19,31 @@ static int sdl_perl_use_smpeg_audio = 0;
 #endif
 #endif
 
+PerlInterpreter * perl_for_cb = NULL;
+static SV * cb                = (SV*)NULL;
+
+void callback(int channel)
+{
+	if(NULL == perl_for_cb)
+		return;
+	
+	PERL_SET_CONTEXT(perl_for_cb);
+
+	dSP;
+	ENTER;
+	SAVETMPS;
+
+	PUSHMARK(SP);
+	XPUSHs(sv_2mortal(newSViv(channel)));
+	PUTBACK;
+
+	if(cb != (SV*)NULL)
+		call_sv(cb, G_VOID);
+
+	FREETMPS;
+	LEAVE;
+}
+
 MODULE = SDL::Mixer::Channels 	PACKAGE = SDL::Mixer::Channels    PREFIX = mixchan_
 
 =for documentation
@@ -133,12 +158,17 @@ mixchan_fade_out_channel ( which, ms )
 		RETVAL
 
 void
-mixchan_channel_finished( cb )
-	SV* cb
+mixchan_channel_finished( fn )
+	SV* fn
 	CODE:
-		//Mix_ChannelFinished(callback);
-		warn ("Todo: implement");
-
+		perl_for_cb = PERL_GET_CONTEXT;
+	
+		if (cb == (SV*)NULL)
+            cb = newSVsv(fn);
+        else
+            SvSetSV(cb, fn);
+			
+		Mix_ChannelFinished(&callback);
 
 int
 mixchan_playing( channel )

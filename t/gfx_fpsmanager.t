@@ -20,12 +20,8 @@ elsif( !SDL::Config->has('SDL_gfx_framerate') )
 }
 else
 {
-    plan( tests => 11 );
+    plan( tests => 10 );
 }
-
-my @done =qw/
-framecount
-/;
 
 my $fps = SDL::GFX::FPSManager->new(0, 0, 0, 0);
 
@@ -45,21 +41,7 @@ is( $fps->rateticks,  2, 'fps has rateticks' );
 is( $fps->lastticks,  3, 'fps has lastticks' );
 is( $fps->rate,       4, 'fps has rate' );
 
-
-
 SDL::delay(100);
-
-my @left = qw/
-/;
-
-my $why = '[Percentage Completion] '.int( 100 * ($#done +1 ) / ($#done + $#left + 2  ) ) .'% implementation. '.($#done +1 ).'/'.($#done+$#left + 2 ); 
-
-TODO:
-{
-	local $TODO = $why;
-	pass "\nThe following functions:\n".join ",", @left; 
-}
-if( $done[0] eq 'none'){ diag '0% done 0/'.$#left } else { diag  $why} 
 
 pass 'Are we still alive? Checking for segfaults';
 

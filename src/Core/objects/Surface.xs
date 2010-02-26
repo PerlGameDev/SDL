@@ -150,10 +150,12 @@ surface_DESTROY(bag)
                if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
                    void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
                    SDL_Surface* surface = (SDL_Surface*)(pointers[0]);
-                   if (my_perl == pointers[1]) {
+                   if (PERL_GET_CONTEXT == pointers[1]) {
                        //warn("Freed surface %p and pixels %p \n", surface, surface->pixels);
+                       pointers[0] = NULL;
+                       safefree( pointers );
+
                        SDL_FreeSurface(surface);
-                       free(pointers);
                    }
                } else if (bag == 0) {
                    XSRETURN(0);

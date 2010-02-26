@@ -4,7 +4,7 @@ SDL::GFX::ImageFilter - image filtering functions
 
 =head1 CATEGORY
 
-TODO, GFX, ImageFilter
+TODO, GFX
 
 =head1 METHODS
 

@@ -1,5 +1,16 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.3_6 
+	- Moved mixer code into correct locations [kthakore]
+	- Cleaned up last of SDL xs [kthakore]
+	- Update Build system [kmx]
+	- Fixed up my_perl assumption for non threaded perl [kthakore, ruoso]
+	- 64 bit and MacOSX fixes in builds[ kmx, kthakore ]
+	- Prepared XS to build when no threading available [kthakore]
+	- More Mixer Tests [kthakore]
+	- Mixer docs [FROGGS]
+	- Minor bug fixes in test for core.t with PERL_SAFE_PUTENV [kthakore]
+
 * 2.3_5 
         - Fixed serious XS mem leaks in AV* [FROGGS]
         - Removed usless verify method in SDL.pm [J_King]

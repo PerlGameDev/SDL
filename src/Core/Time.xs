@@ -4,7 +4,7 @@
 
 
 #include <SDL.h>
-
+PerlInterpreter * perl_my=NULL;
 PerlInterpreter * perl_for_cb=NULL;
 
 Uint32 add_timer_cb (Uint32 interval, void* param )
@@ -52,8 +52,9 @@ time_add_timer ( interval, cmd )
 	char *cmd
 	CODE:
  	 if (perl_for_cb == NULL) {
-	   perl_for_cb = perl_clone(my_perl, CLONEf_KEEP_PTR_TABLE);
-           PERL_SET_CONTEXT(my_perl);
+	   perl_my = PERL_GET_CONTEXT;
+	   perl_for_cb = perl_clone(perl_my, CLONEf_KEEP_PTR_TABLE);
+           PERL_SET_CONTEXT(perl_my);
          }
 	 RETVAL = SDL_AddTimer(interval,add_timer_cb,(void *)cmd);
 	OUTPUT:

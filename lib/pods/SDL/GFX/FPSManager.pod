@@ -1,73 +1,44 @@
 =head1 NAME
 
-SDL::GFX::FPSManager - blitting functions
+SDL::GFX::FPSManager - data structure used by SDL::GFX::Framerate
 
 =head1 CATEGORY
 
-TODO, GFX, FPSManager
+GFX, Structure
 
 =head1 METHODS
 
 =head2 new
 
- FPSmanager *
- gfx_fps_new (CLASS, framecount, rateticks, lastticks, rate)
- 	char *CLASS
- 	Uint32 framecount
- 	float rateticks
- 	Uint32 lastticks
-	Uint32 rate
- 	CODE:
- 		RETVAL = (FPSmanager *) safemalloc(sizeof(FPSmanager));
- 		RETVAL->framecount = framecount;
- 		RETVAL->rateticks  = rateticks;
- 		RETVAL->lastticks  = lastticks;
- 		RETVAL->rate       = rate;
- 	OUTPUT:
- 		RETVAL
+ use SDL;
+ use SDL::GFX::Framerate;
+ use SDL::GFX::FPSManager;
+
+ my $fps = SDL::GFX::FPSManager->new(0, 0, 0, 0);
+
+Initialize the framerate manager object. Arguments: framecount, rateticks, lastticks, rate.
 
 =head2 framecount
 
- Uint32
- gfx_fps_framecount ( fps, ... )
- 	FPSmanager *fps
- 	CODE:
- 		if (items > 1 ) fps->framecount = SvIV(ST(1)); 
- 		RETVAL = fps->framecount;
- 	OUTPUT:
- 		RETVAL
+ my $fc = $fps->framecount;
+
+Returns the C<framecount>.
 
 =head2 rateticks
 
- float
- gfx_fps_rateticks ( fps, ... )
- 	FPSmanager *fps
- 	CODE:
- 		if (items > 1 ) fps->rateticks = SvNV(ST(1)); 
- 		RETVAL = fps->rateticks;
- 	OUTPUT:
- 		RETVAL
+ my $rt = $fps->rateticks;
+
+Returns the C<rateticks>.
 
 =head2 lastticks
 
- Uint32
- gfx_fps_lastticks ( fps, ... )
- 	FPSmanager *fps
- 	CODE:
- 		if (items > 1 ) fps->lastticks = SvIV(ST(1)); 
- 		RETVAL = fps->lastticks;
- 	OUTPUT:
- 		RETVAL
+ my $lt = $fps->lastticks;
+
+Returns the C<lastticks>.
 
 =head2 rate
 
- Uint32
- gfx_fps_rate ( fps, ... )
- 	FPSmanager *fps
- 	CODE:
- 		if (items > 1 ) fps->rate = SvIV(ST(1)); 
- 		RETVAL = fps->rate;
- 	OUTPUT:
- 		RETVAL
+ my $r = $fps->rate;
 
+Returns the C<rate>.
 

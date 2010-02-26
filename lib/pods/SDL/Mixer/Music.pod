@@ -6,6 +6,52 @@ SDL::Mixer::Music -- SDL_Mixer music functions and bindings
 
 =head1 CATEGORY
 
-TODO, Mixer
+Mixer
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 PerlMixMusicHook
+
+=head2 mix_audio
+
+Same as SDL::Audio::mix()
+
+=head2 load_WAV
+
+has to be implemented
+
+=head2 load_MUS
+
+=head2 free_music
+
+=head2 hook_music
+
+=head2 hook_music_finished
+
+=head2 get_music_hook_data
+
+=head2 play_music
+
+=head2 fade_in_music
+
+=head2 volume_music
+
+=head2 halt_music
+
+=head2 fade_out_music
+
+=head2 fading_music
+
+=head2 pause_music
+
+=head2 resume_music
+
+=head2 rewind_music
+
+=head2 paused_music
+
+=head2 playing_music
 
 =cut

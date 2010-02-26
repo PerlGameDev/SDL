@@ -2,7 +2,6 @@ _build/
 *.o
 Build
 blib
-lib/SDL/Config.pm
 lib/SDL/*.c
 lib/SDL/*.xs
 lib/SDL/Mixer/*.c
@@ -16,3 +15,4 @@ MANIFEST
 !MANIFEST.skip
 *META.yml
 *.tar.gz
+*.swp

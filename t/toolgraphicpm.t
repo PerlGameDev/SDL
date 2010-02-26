@@ -31,20 +31,11 @@
 #
 # basic testing of SDL::Tool::Graphic
 
-BEGIN {
-	unshift @INC, 'blib/lib','blib/arch';
-}
-
 use strict;
-use SDL::Config;
-
 use Test::More;
 
-if ( SDL::Config->has('SDL_gfx') ) {
-	plan ( tests => 3 );
-} else {
-	plan ( skip_all => 'SDL_gfx support not compiled' );
-}
+plan ( skip_all => 'Old test TBD' );
+
 
 use_ok( 'SDL::Tool::Graphic' ); 
   
@@ -55,4 +46,4 @@ can_ok ('SDL::Tool::Graphic', qw/
 my $gtool = SDL::Tool::Graphic->new();
 isa_ok ($gtool, 'SDL::Tool::Graphic');
 
-sleep(2);
+

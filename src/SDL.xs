@@ -84,63 +84,6 @@ windows_force_driver ()
 
 }
 
-Uint32 
-sdl_perl_timer_callback ( Uint32 interval, void* param )
-{
-	Uint32 retval;
-	int back;
-	SV* cmd;
-	ENTER_TLS_CONTEXT
-	dSP;
-
-	cmd = (SV*)param;
-
-	ENTER;
-	SAVETMPS;
-	PUSHMARK(SP);
-	XPUSHs(sv_2mortal(newSViv(interval)));
-	PUTBACK;
-
-	if (0 != (back = call_sv(cmd,G_SCALAR))) {
-		SPAGAIN;
-		if (back != 1 ) Perl_croak (aTHX_ "Timer Callback failed!");
-		retval = POPi;	
-	} else {
-		Perl_croak(aTHX_ "Timer Callback failed!");
-	}
-
-	FREETMPS;
-	LEAVE;
-
-	LEAVE_TLS_CONTEXT
-	
-	return retval;
-}
-
-void
-sdl_perl_audio_callback ( void* data, Uint8 *stream, int len )
-{
-	SV *cmd;
-	ENTER_TLS_CONTEXT
-	dSP;
-
-	cmd = (SV*)data;
-
-	ENTER;
-	SAVETMPS;
-	PUSHMARK(SP);
-	XPUSHs(sv_2mortal(newSViv(PTR2IV(stream))));
-	XPUSHs(sv_2mortal(newSViv(len)));
-	PUTBACK;
-
-	call_sv(cmd,G_VOID|G_DISCARD);
-	
-	PUTBACK;
-	FREETMPS;
-	LEAVE;
-
-	LEAVE_TLS_CONTEXT	
-}
 
 #define INIT_NS_APPLICATION
 #define QUIT_NS_APPLICATION
@@ -280,59 +223,6 @@ get_ticks ()
 		RETVAL = SDL_GetTicks();
 	OUTPUT:
 		RETVAL
-
-int
-set_timer ( interval, callback )
-	Uint32 interval
-	SDL_TimerCallback callback
-	CODE:
-		RETVAL = SDL_SetTimer(interval,callback);
-	OUTPUT:
-		RETVAL
-
-SDL_TimerID
-AddTimer ( interval, callback, param )
-	Uint32 interval
-	SDL_NewTimerCallback callback
-	void *param
-	CODE:
-		RETVAL = SDL_AddTimer(interval,callback,param);
-	OUTPUT:
-		RETVAL
-
-SDL_NewTimerCallback
-PerlTimerCallback ()
-	CODE:
-		RETVAL = sdl_perl_timer_callback;
-	OUTPUT:
-		RETVAL  
-
-SDL_TimerID
-NewTimer ( interval, cmd )
-	Uint32 interval
-	void *cmd
-	CODE:
-		RETVAL = SDL_AddTimer(interval,sdl_perl_timer_callback,cmd);
-	OUTPUT:
-		RETVAL
-
-Uint32
-RemoveTimer ( id )
-	SDL_TimerID id
-	CODE:
-		RETVAL = SDL_RemoveTimer(id);
-	OUTPUT:
-		RETVAL
-
-char*
-AudioDriverName ()
-	CODE:
-		char name[32];
-		RETVAL = SDL_AudioDriverName(name,32);
-	OUTPUT:
-		RETVAL
-
-
 
 
 
