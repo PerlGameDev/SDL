@@ -96,12 +96,43 @@ sdl_perl_music_finished_callback ( void )
 	LEAVE_TLS_CONTEXT
 }
 
+PerlInterpreter * perl_for_cb = NULL;
+static SV       * cb          = (SV*)NULL;
+
+void mix_func(void *udata, Uint8 *stream, int len)
+{
+	PERL_SET_CONTEXT(perl_for_cb);
+	dSP;
+	ENTER;
+	SAVETMPS;
+
+	PUSHMARK(SP);
+	XPUSHs(sv_2mortal(newSViv(*(int*)udata)));
+	XPUSHs(sv_2mortal(newSViv(len)));
+	*(int*)udata = *(int*)udata + len;
+	PUTBACK;
+
+	if(cb != (SV*)NULL)
+	{
+        int count = perl_call_sv(cb, G_ARRAY);
+		
+		SPAGAIN;
+		
+		if(count == len + 1)
+		{
+			int i;
+			for(i=0; i<len; i++)
+				stream[i] = POPi;
+		}
+	}
+
+	PUTBACK;
+
+	FREETMPS;
+	LEAVE;
+}
+
 #endif
-
-
-
-
-
 
 MODULE = SDL::Mixer::Music 	PACKAGE = SDL::Mixer::Music    PREFIX = mixmus_
 
@@ -148,8 +179,6 @@ mixmus_load_MUS ( filename )
 	OUTPUT:
 		RETVAL
 
-
-
 void
 mixmus_free_music ( music )
 	Mix_Music *music
@@ -158,10 +187,19 @@ mixmus_free_music ( music )
 
 void
 mixmus_hook_music ( func, arg )
-	void *func
-	void *arg
+	SV *func
+	int arg
 	CODE:
-		Mix_HookMusic(func,arg);
+		perl_for_cb = PERL_GET_CONTEXT;
+	
+		if (cb == (SV*)NULL)
+            cb = newSVsv(func);
+        else
+            SvSetSV(cb, func);
+
+		void *arg2   = safemalloc(sizeof(int));
+		*(int*) arg2 = arg;
+		Mix_HookMusic(&mix_func, arg2);
 
 void
 mixmus_hook_music_finished ( func )
