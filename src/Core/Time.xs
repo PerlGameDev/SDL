@@ -63,7 +63,7 @@ time_add_timer ( interval, cmd )
 
 int
 time_remove_timer ( id)
-	int id
+	SDL_TimerID id
 	CODE:
 		RETVAL = SDL_RemoveTimer((SDL_TimerID) id);
 	
