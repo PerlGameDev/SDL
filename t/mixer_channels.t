@@ -97,7 +97,7 @@ SDL::delay($delay * 4);
 
 SDL::Mixer::close_audio(); pass '[close_audio] ran';
 
-isnt ( $finished > 0, 1, '[callback_finished] called the callback got '. $finished);
+is ( $finished > 0, 1, '[callback_finished] called the callback got '. $finished);
 
 SDL::quit();
 
