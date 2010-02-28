@@ -24,6 +24,10 @@ has to be implemented
 
 =head2 load_MUS
 
+ my $music = SDL::Mixer::Music::load_MUS( $file );
+
+C<load_MUS> loads a music file into a C<SDL::Music::MixMusic> structure. This can be passed to L<play_music>.
+
 =head2 free_music
 
 =head2 hook_music
@@ -34,24 +38,85 @@ has to be implemented
 
 =head2 play_music
 
+ my $play_music = SDL::Mixer::Music::play_music( $mix_music, $repeats );
+
+C<play_music> plays a given C<SDL::Mixer::MixMusic>.
+Passing -1 to C<$repeats> will loop the music infinitely. 
+
+Example:
+
+ my $music = SDL::Mixer::Music::load_MUS( 'music.mp3' );
+ 
+ unless(SDL::Mixer::Music::play_music($sample_music, -1))
+ {
+     print("Something went wrong!\n");
+ }
+
+
 =head2 fade_in_music
 
 =head2 volume_music
 
 =head2 halt_music
 
+ SDL::Mixer::Music::halt_music();
+
+Halts the music.
+
 =head2 fade_out_music
 
 =head2 fading_music
 
+ my $fading_music = SDL::Mixer::Channels::fading_music();
+
+Returns one of the following:
+
+=over 4
+
+=item *
+
+MIX_NO_FADING
+
+=item *
+
+MIX_FADING_OUT
+
+=item *
+
+MIX_FADING_IN
+
+=back
+
 =head2 pause_music
+
+ SDL::Mixer::Music::pause_music();
+
+Pauses the music.
 
 =head2 resume_music
 
+
+ SDL::Mixer::Music::resume_music();
+
+Resumes the music.
+
 =head2 rewind_music
+
+
+ SDL::Mixer::Music::rewind_music();
+
+Rewinds the music.
 
 =head2 paused_music
 
+ my $paused = SDL::Mixer::Music::paused_music();
+
+Returns C<1> if the music is paused, otherwise C<0>.
+
 =head2 playing_music
+
+ my $playing_music = SDL::Mixer::Music::playing_music();
+
+Returns C<1> if the music is playing sound, otherwise C<0>. It does'nt check if the music is paused.
 
 =cut

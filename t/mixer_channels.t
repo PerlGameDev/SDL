@@ -28,7 +28,7 @@ is( SDL::Mixer::Channels::allocate_channels( 4 ),                         4, "[a
 
 my $finished = 0;
 my $callback = sub{ printf("[channel_finished] callback called for channel %d\n", shift); $finished++; };
-SDL::Mixer::Channels::channel_finished( $callback ); pass '[channel_finished] ran';
+SDL::Mixer::Channels::channel_finished( $callback ); pass '[channel_finished] registered callback';
 
 my $delay           = 100;
 my $audio_test_file = 'test/data/silence.wav';
@@ -48,7 +48,7 @@ else
 
 my $sample_chunk    = SDL::Mixer::Samples::load_WAV($audio_test_file);
 my $playing_channel = SDL::Mixer::Channels::play_channel( -1, $sample_chunk, -1 );
-isnt( $playing_channel,   -1, "[play_channel] plays sample.wav on channel " . $playing_channel );
+isnt( $playing_channel,   -1, "[play_channel] plays $audio_test_file on channel " . $playing_channel );
 is( SDL::Mixer::Channels::fading_channel( $playing_channel ), MIX_NO_FADING, "[fading_channel] channel $playing_channel is not fading" );
 is( SDL::Mixer::Channels::playing( $playing_channel ), 1, "[playing] channel $playing_channel is playing" );
 is( SDL::Mixer::Channels::paused( $playing_channel ), 0, "[paused] channel $playing_channel is not paused" );
@@ -97,7 +97,7 @@ SDL::delay($delay * 4);
 
 SDL::Mixer::close_audio(); pass '[close_audio] ran';
 
-isnt ( $finished , 0 , '[callback_finished] called the callback got '. $finished);
+isnt ( $finished > 0, 1, '[callback_finished] called the callback got '. $finished);
 
 SDL::quit();
 
