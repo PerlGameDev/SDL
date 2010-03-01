@@ -38,10 +38,10 @@ C<load_MUS> loads a music file into a C<SDL::Music::MixMusic> structure. This ca
 
 =head2 play_music
 
- my $play_music = SDL::Mixer::Music::play_music( $mix_music, $repeats );
+ my $play_music = SDL::Mixer::Music::play_music( $mix_music, $loops );
 
 C<play_music> plays a given C<SDL::Mixer::MixMusic>.
-Passing -1 to C<$repeats> will loop the music infinitely. 
+Passing -1 to C<$loops> will loop the music infinitely. 
 
 Example:
 
@@ -52,22 +52,23 @@ Example:
      print("Something went wrong!\n");
  }
 
-
 =head2 fade_in_music
 
-=head2 volume_music
+ my $music = SDL::Mixer::Music::fade_in_music( $mix_music, $loops, $ms );
 
-=head2 halt_music
-
- SDL::Mixer::Music::halt_music();
-
-Halts the music.
+Same as L<play_music> but you can specify the fade-in time by C<$ms>.
 
 =head2 fade_out_music
 
+ my $fading_music = SDL::Mixer::Music::fade_out_music( $ms );
+
+C<fade_out_music> fades out the music with a duration specified in C<ms> in milliseconds.
+
+Returns the the number of channels that will be faded out.
+
 =head2 fading_music
 
- my $fading_music = SDL::Mixer::Channels::fading_music();
+ my $fading_music = SDL::Mixer::Music::fading_music();
 
 Returns one of the following:
 
@@ -87,6 +88,14 @@ MIX_FADING_IN
 
 =back
 
+=head2 volume_music
+
+=head2 halt_music
+
+ SDL::Mixer::Music::halt_music();
+
+Halts the music.
+
 =head2 pause_music
 
  SDL::Mixer::Music::pause_music();
@@ -95,17 +104,41 @@ Pauses the music.
 
 =head2 resume_music
 
-
  SDL::Mixer::Music::resume_music();
 
 Resumes the music.
 
 =head2 rewind_music
 
-
  SDL::Mixer::Music::rewind_music();
 
 Rewinds the music.
+
+=head2 set_music_position
+
+ SDL::Mixer::Music::set_music_position( $position );
+
+Set the position of the currently playing music. The position takes different meanings for different music sources. It only works on the 
+music sources listed below.
+
+=over 4
+
+=item MOD
+
+The double is cast to Uint16 and used for a pattern number in the module.
+Passing zero is similar to rewinding the song. 
+
+=item OGG
+
+Jumps to position seconds from the beginning of the song. 
+
+=item MP3
+
+Jumps to position seconds from the current position in the stream.
+So you may want to call L<rewind_music> before this.
+Does not go in reverse... negative values do nothing. 
+
+Returns: C<0> on success, or C<-1> if the codec doesn't support this function. 
 
 =head2 paused_music
 

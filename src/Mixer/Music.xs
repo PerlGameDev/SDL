@@ -224,7 +224,6 @@ mixmus_play_music ( music, loops )
 	OUTPUT:
 		RETVAL
 
-
 int
 mixmus_fade_in_music ( music, loops, ms )
 	Mix_Music *music
@@ -236,6 +235,17 @@ mixmus_fade_in_music ( music, loops, ms )
 		RETVAL
 
 int
+mixmus_fade_in_music_pos ( music, loops, ms, position )
+	Mix_Music *music
+	int loops
+	int ms
+	double position
+	CODE:
+		RETVAL = Mix_FadeInMusicPos(music,loops,ms,position);
+	OUTPUT:
+		RETVAL
+
+int
 mixmus_volume_music ( volume )
 	int volume
 	CODE:
@@ -243,15 +253,12 @@ mixmus_volume_music ( volume )
 	OUTPUT:
 		RETVAL
 
-
-
 int
 mixmus_halt_music ()
 	CODE:
 		RETVAL = Mix_HaltMusic();
 	OUTPUT:
 		RETVAL
-
 
 int
 mixmus_fade_out_music ( ms )
@@ -297,7 +304,12 @@ mixmus_playing_music()
 	OUTPUT:
 		RETVAL
 
-
-
+int
+mixmus_set_music_position( position )
+	double position
+	CODE:
+		RETVAL = Mix_SetMusicPosition(position);
+	OUTPUT:
+		RETVAL
 
 #endif
