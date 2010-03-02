@@ -96,40 +96,56 @@ sdl_perl_music_finished_callback ( void )
 	LEAVE_TLS_CONTEXT
 }
 
-PerlInterpreter * perl_for_cb = NULL;
-static SV       * cb          = (SV*)NULL;
+PerlInterpreter *perl_for_cb  = NULL;
+PerlInterpreter *perl_for_fcb = NULL;
+static SV       *cb           = (SV*)NULL;
+static SV       *fcb          = (SV*)NULL;
 
 void mix_func(void *udata, Uint8 *stream, int len)
 {
 	PERL_SET_CONTEXT(perl_for_cb);
-	dSP;
-	ENTER;
-	SAVETMPS;
+	
+	dSP;                                       /* initialize stack pointer          */
+	ENTER;                                     /* everything created after here     */
+	SAVETMPS;                                  /* ...is a temporary variable.       */
 
-	PUSHMARK(SP);
-	XPUSHs(sv_2mortal(newSViv(*(int*)udata)));
+	PUSHMARK(SP);                              /* remember the stack pointer        */
+	XPUSHs(sv_2mortal(newSViv(*(int*)udata))); /* push something onto the stack     */
 	XPUSHs(sv_2mortal(newSViv(len)));
 	*(int*)udata = *(int*)udata + len;
-	PUTBACK;
+	PUTBACK;                                   /* make local stack pointer global   */
 
 	if(cb != (SV*)NULL)
 	{
-        int count = perl_call_sv(cb, G_ARRAY);
-		
-		SPAGAIN;
+        int count = perl_call_sv(cb, G_ARRAY); /* call the function                 */
+		SPAGAIN;                               /* refresh stack pointer             */
 		
 		if(count == len + 1)
 		{
 			int i;
+			
 			for(i=0; i<len; i++)
-				stream[i] = POPi;
+				stream[i] = POPi;              /* pop the return value from stack   */
 		}
+
+		PUTBACK;
 	}
 
-	PUTBACK;
+	FREETMPS;                                  /* free that return value            */
+	LEAVE;                                     /* ...and the XPUSHed "mortal" args. */
+}
 
-	FREETMPS;
-	LEAVE;
+void mix_finished(void)
+{
+	PERL_SET_CONTEXT(perl_for_fcb);
+	
+	dSP;                                       /* initialize stack pointer          */
+	PUSHMARK(SP);                              /* remember the stack pointer        */
+
+	if(fcb != (SV*)NULL)
+	{
+        perl_call_sv(fcb, G_DISCARD|G_VOID);          /* call the function                 */
+	}
 }
 
 #endif
@@ -147,7 +163,7 @@ See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
 #ifdef HAVE_SDL_MIXER
 
 void *
-PerlMixMusicHook ()
+PerlMixMusicHook()
 	CODE:
 		RETVAL = sdl_perl_music_callback;
 	OUTPUT:
@@ -191,19 +207,8 @@ mixmus_get_music_decoder( index )
 
 #endif
 
-void
-mixmus_mix_audio ( dst, src, len, volume )
-	Uint8 *dst
-	Uint8 *src
-	Uint32 len
-	int volume
-	CODE:
-		SDL_MixAudio(dst,src,len,volume);
-
-
-
 Mix_Music *
-mixmus_load_MUS ( filename )
+mixmus_load_MUS( filename )
 	char *filename
 	PREINIT:
 		char * CLASS = "SDL::Mixer::MixMusic";
@@ -218,33 +223,49 @@ mixmus_load_MUS ( filename )
 		RETVAL
 
 void
-mixmus_free_music ( music )
+mixmus_free_music( music )
 	Mix_Music *music
 	CODE:
 		Mix_FreeMusic(music);
 
 void
-mixmus_hook_music ( func, arg )
+mixmus_hook_music( func = NULL, arg = 0 )
 	SV *func
 	int arg
 	CODE:
-		perl_for_cb = PERL_GET_CONTEXT;
-	
-		if (cb == (SV*)NULL)
-            cb = newSVsv(func);
-        else
-            SvSetSV(cb, func);
+		if(func != NULL)
+		{
+			perl_for_cb = PERL_GET_CONTEXT;
+		
+			if (cb == (SV*)NULL)
+				cb = newSVsv(func);
+			else
+				SvSetSV(cb, func);
 
-		void *arg2   = safemalloc(sizeof(int));
-		*(int*) arg2 = arg;
-		Mix_HookMusic(&mix_func, arg2);
+			void *arg2   = safemalloc(sizeof(int));
+			*(int*) arg2 = arg;
+			Mix_HookMusic(&mix_func, arg2);
+		}
+		else
+			Mix_HookMusic(NULL, NULL);
 
 void
-mixmus_hook_music_finished( func )
-	void *func
+mixmus_hook_music_finished( func = NULL )
+	SV *func
 	CODE:
-		mix_music_finished_cv = func;
-		Mix_HookMusicFinished(sdl_perl_music_finished_callback);
+		//if(func != NULL)
+		//{
+			perl_for_fcb = PERL_GET_CONTEXT;
+		
+			if (fcb == (SV*)NULL)
+				fcb = newSVsv(func);
+			else
+				SvSetSV(fcb, func);
+
+			Mix_HookMusicFinished(&mix_finished);
+		//}
+		//else
+		//	Mix_HookMusicFinished(NULL);
 
 int
 mixmus_get_music_hook_data()
@@ -254,7 +275,7 @@ mixmus_get_music_hook_data()
 		RETVAL
 
 int
-mixmus_play_music ( music, loops )
+mixmus_play_music( music, loops )
 	Mix_Music *music
 	int loops
 	CODE:
@@ -263,7 +284,7 @@ mixmus_play_music ( music, loops )
 		RETVAL
 
 int
-mixmus_fade_in_music ( music, loops, ms )
+mixmus_fade_in_music( music, loops, ms )
 	Mix_Music *music
 	int loops
 	int ms
@@ -273,7 +294,7 @@ mixmus_fade_in_music ( music, loops, ms )
 		RETVAL
 
 int
-mixmus_fade_in_music_pos ( music, loops, ms, position )
+mixmus_fade_in_music_pos( music, loops, ms, position )
 	Mix_Music *music
 	int loops
 	int ms
@@ -284,7 +305,7 @@ mixmus_fade_in_music_pos ( music, loops, ms, position )
 		RETVAL
 
 int
-mixmus_volume_music ( volume )
+mixmus_volume_music( volume = -1 )
 	int volume
 	CODE:
 		RETVAL = Mix_VolumeMusic(volume);
@@ -292,7 +313,7 @@ mixmus_volume_music ( volume )
 		RETVAL
 
 int
-mixmus_halt_music ()
+mixmus_halt_music()
 	CODE:
 		RETVAL = Mix_HaltMusic();
 	OUTPUT:

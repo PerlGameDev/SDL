@@ -35,28 +35,17 @@ my $mix_func        = sub
 	my $length   = shift; # length of bytes we have to put in stream
 	my @stream   = '';
 
-	printf("[hook_music] called: position=%8s, stream length=%6s\n", $position, $length);
 	$mix_func_called++;
 	
-	if($ENV{'RELEASE_TESTING'})
+	# printf("[hook_music] callback: position=%8s, stream length=%6s\n", $position, $length);
+
+	for(my $i = 0; $i < $length / 2; $i++)
 	{
-		for(my $i = 0; $i < $length; $i++)
-		{
-			push(@stream, (($i + $position) & 0xFF));
-		}
+		push(@stream, (($i + $position) & 0xFF));
 	}
 
 	return @stream;
 };
-
-SKIP:
-{
-	skip ('[hook_music] leaks mem', 2);
-	SDL::Mixer::Music::hook_music( $mix_func, 0 ); pass '[hook_music] registered custom music player';
-	is( SDL::Mixer::Music::get_music_hook_data(), 0,    "[get_music_hook_data] should return 0" );
-}
-my $callback  = sub{ printf("[hook_music_finished] callback called\n", shift); $finished++; };
-SDL::Mixer::Music::hook_music_finished( $callback ); pass '[hook_music_finished] registered callback';
 
 my $delay           = 100;
 my $audio_test_file = 'test/data/silence.wav';
@@ -70,6 +59,22 @@ if($ENV{'RELEASE_TESTING'})
 	$volume1         = 20;
 	$volume2         = 10;
 }
+
+my $callback  = sub
+{
+	# printf("[hook_music_finished] callback called\n", shift);
+	$finished++;
+};
+SDL::Mixer::Music::hook_music_finished( $callback ); pass '[hook_music_finished] registered callback';
+
+SDL::Mixer::Music::hook_music( $mix_func, 0 ); pass '[hook_music] registered custom music player';
+is( SDL::Mixer::Music::get_music_hook_data(), 0,    "[get_music_hook_data] should return 0" );
+
+SDL::delay(1000);
+
+SDL::Mixer::Music::hook_music( );              pass '[hook_music] unregistered custom music player';
+SDL::delay($delay);
+is ( $mix_func_called > 0,                    1,    "[hook_music] called $mix_func_called times" );
 
 SDL::Mixer::Music::volume_music($volume1);
 is( SDL::Mixer::Music::volume_music($volume2),                $volume1,       "[volume_music] was $volume1, now set to $volume2" );
@@ -112,7 +117,7 @@ SDL::delay($delay);
 is( SDL::Mixer::Music::fade_out_music(2000),                  1,              "[fade_out_music] $delay ms" );
 is( SDL::Mixer::Music::fading_music(),                        MIX_FADING_OUT, "[fading_music] music is fading out" );
 
-SDL::delay($delay);
+SDL::delay(3000);
 
 is( SDL::Mixer::Music::halt_music(),                          0,              '[halt_music]' );
 is( SDL::Mixer::Music::set_music_cmd("mpeg123 -q"),           0,              '[set_music_cmd] we can specify an external player' );
@@ -129,56 +134,15 @@ SKIP:
 	skip('We need an MOD/OGG/MP3 for positioning', 2) unless $audio_test_file =~ /\.(ogg|mod|mp3)$/;
 	is( SDL::Mixer::Music::fade_in_music_pos($sample_music, 0, 2000, 2.5), 0,     "[fade_in_music_pos] $delay ms, beginning at 2.5 ms" );
 	is( SDL::Mixer::Music::set_music_position(2.5),                        0,     "[set_music_position] skipping 2.5 ms" );
+	SDL::Mixer::Music::halt_music();
 }
+
+is ( $finished        > 0,                                    1,                  "[hook_music_finished] called the callback $finished times");
+SDL::Mixer::Music::hook_music_finished();                                    pass '[hook_music_finished] unregistered callback';
 
 SDL::delay($delay);
 
 SDL::Mixer::close_audio(); pass '[close_audio] ran';
-
-SKIP:
-{
-	skip ('[hook_music] leaks mem', 1);
-	is ( $mix_func_called > 0, 1 , "[hook_music] called $mix_func_called times" );
-}
-
-# I dont know how the callback will ever be called.
-#is ( $finished        > 0, 1 , "[hook_music_finished] called the callback $finished times");
-
-my @done = qw/
-load_MUS
-play_music
-halt_music
-playing_music
-pause_music
-paused_music
-resume_music
-hook_music
-fade_out_music
-fade_in_music
-fading_music
-rewind_music
-fade_in_music_position
-set_music_position
-get_num_music_decoders
-get_music_decoder
-volumemusic
-get_music_type
-set_music_cmd
-get_music_hook_data
-/;
-
-my @left = qw/
-hook_music_finished
-/;
-
-my $why
-    = '[Percentage Completion] '
-    . int( 100 * ( $#done + 1 ) / ( $#done + $#left + 2 ) )
-    . "\% implementation. "
-    . ( $#done + 1 ) . " / "
-    . ( $#done + $#left + 2 );
-
-diag $why;
 
 SDL::quit();
 
