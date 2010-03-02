@@ -28,8 +28,6 @@ has to be implemented
 
 C<load_MUS> loads a music file into a C<SDL::Music::MixMusic> structure. This can be passed to L<play_music>.
 
-=head2 free_music
-
 =head2 hook_music
 
 =head2 hook_music_finished

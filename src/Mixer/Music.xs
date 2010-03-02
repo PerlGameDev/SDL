@@ -146,12 +146,50 @@ See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
 
 #ifdef HAVE_SDL_MIXER
 
-void*
+void *
 PerlMixMusicHook ()
 	CODE:
 		RETVAL = sdl_perl_music_callback;
 	OUTPUT:
 		RETVAL
+
+#if (SDL_MIXER_MAJOR_VERSION >= 1) && (SDL_MIXER_MINOR_VERSION >= 2) && (SDL_MIXER_PATCHLEVEL >= 9)
+
+int
+mixmus_get_num_music_decoders( )
+	CODE:
+		RETVAL = Mix_GetNumMusicDecoders();
+	OUTPUT:
+		RETVAL
+
+const char *
+mixmus_get_music_decoder( index )
+	int index
+	CODE:
+		RETVAL = Mix_GetMusicDecoder(index);
+	OUTPUT:
+		RETVAL
+
+#else
+
+int
+mixmus_get_num_music_decoders( )
+	CODE:
+		warn("SDL_mixer >= 1.2.9 needed for getnum_music_decoders()");
+		RETVAL = -1;
+	OUTPUT:
+		RETVAL
+
+const char *
+mixmus_get_music_decoder( index )
+	int index
+	CODE:
+		warn("SDL_mixer >= 1.2.9 needed for get_music_decoder( index )");
+		RETVAL = "";
+	OUTPUT:
+		RETVAL
+
+#endif
 
 void
 mixmus_mix_audio ( dst, src, len, volume )
@@ -202,16 +240,16 @@ mixmus_hook_music ( func, arg )
 		Mix_HookMusic(&mix_func, arg2);
 
 void
-mixmus_hook_music_finished ( func )
+mixmus_hook_music_finished( func )
 	void *func
 	CODE:
 		mix_music_finished_cv = func;
 		Mix_HookMusicFinished(sdl_perl_music_finished_callback);
 
-void *
-mixmus_get_music_hook_data ()
+int
+mixmus_get_music_hook_data()
 	CODE:
-		RETVAL = Mix_GetMusicHookData();
+		RETVAL = *(int*)Mix_GetMusicHookData();
 	OUTPUT:
 		RETVAL
 
@@ -309,6 +347,22 @@ mixmus_set_music_position( position )
 	double position
 	CODE:
 		RETVAL = Mix_SetMusicPosition(position);
+	OUTPUT:
+		RETVAL
+
+int
+mixmus_get_music_type( music = NULL )
+	Mix_Music * music
+	CODE:
+		RETVAL = Mix_GetMusicType( music );
+	OUTPUT:
+		RETVAL
+
+int
+mixmus_set_music_cmd( cmd = NULL )
+	char *cmd
+	CODE:
+		RETVAL = Mix_SetMusicCMD( cmd );
 	OUTPUT:
 		RETVAL
 

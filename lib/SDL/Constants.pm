@@ -74,6 +74,15 @@ our @EXPORT=qw(
 	MIX_FADING_OUT
 	MIX_MAX_VOLUME
 	MIX_NO_FADING
+	MUS_NONE
+	MUS_CMD
+	MUS_WAV
+	MUS_MOD
+	MUS_MID
+	MUS_OGG
+	MUS_MP3
+	MUS_MP3_MAD
+	MUS_FLAC
 	SDLK_0
 	SDLK_1
 	SDLK_2
@@ -618,9 +627,6 @@ use constant {
 }; # SDL_EventType
 
 use constant {
-};
-
-use constant {
 	SDL_ACTIVEEVENTMASK                                 => SDL_EVENTMASK(1),
 	SDL_KEYDOWNMASK                                     => SDL_EVENTMASK(2),
 	SDL_KEYUPMASK                                       => SDL_EVENTMASK(3),
@@ -919,9 +925,6 @@ use constant {
 }; # SDLKey
 
 use constant {
-};
-
-use constant {
 	KMOD_NONE                                           => 0x0000,
 	KMOD_LSHIFT                                         => 0x0001,
 	KMOD_RSHIFT                                         => 0x0002,
@@ -961,9 +964,6 @@ use constant {
 }; # Mix_Fading
 
 use constant {
-};
-
-use constant {
 	MUS_NONE                                            => 0,
 	MUS_CMD                                             => 1,
 	MUS_WAV                                             => 2,
@@ -972,6 +972,7 @@ use constant {
 	MUS_OGG                                             => 5,
 	MUS_MP3                                             => 6,
 	MUS_MP3_MAD                                         => 7,
+	MUS_MP3_FLAC                                        => 8,
 }; # Mix_MusicType
 
 use constant {
@@ -3469,9 +3470,6 @@ use constant {
 }; # SDL_bool
 
 use constant {
-};
-
-use constant {
 	DUMMY_ENUM_VALUE                                    => 0,
 }; # SDL_DUMMY_ENUM
 
@@ -3565,7 +3563,6 @@ use constant {
 	SDL_GRAB_ON                                         => 1,
 	SDL_GRAB_FULLSCREEN                                 => 2,
 };
-
 
 # manual added!!
 use constant {

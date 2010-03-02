@@ -21,6 +21,9 @@ BEGIN
 use SDL::Mixer;
 use SDL::Mixer::Music;
 use SDL::Mixer::Samples;
+use SDL::Version;
+
+my $v = SDL::Mixer::linked_version();
 
 is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ),  0, '[open_audio] ran');
 
@@ -48,28 +51,49 @@ my $mix_func        = sub
 
 SKIP:
 {
-	skip ('[hook_music] leaks mem', 1);
-	SDL::Mixer::Music::hook_music( $mix_func, 0 );       pass '[hook_music] registered custom music player';
+	skip ('[hook_music] leaks mem', 2);
+	SDL::Mixer::Music::hook_music( $mix_func, 0 ); pass '[hook_music] registered custom music player';
+	is( SDL::Mixer::Music::get_music_hook_data(), 0,    "[get_music_hook_data] should return 0" );
 }
-#my $callback  = sub{ printf("[channel_finished] callback called for channel %d\n", shift); $finished++; };
-#SDL::Mixer::Music::hook_music_finished( $callback ); pass '[hook_music_finished] registered callback';
+my $callback  = sub{ printf("[hook_music_finished] callback called\n", shift); $finished++; };
+SDL::Mixer::Music::hook_music_finished( $callback ); pass '[hook_music_finished] registered callback';
 
 my $delay           = 100;
 my $audio_test_file = 'test/data/silence.wav';
+my $volume1         = 2;
+my $volume2         = 1;
 
 if($ENV{'RELEASE_TESTING'})
 {
 	$delay           = 2000;
 	$audio_test_file = 'test/data/sample.wav';
+	$volume1         = 20;
+	$volume2         = 10;
 }
 
+SDL::Mixer::Music::volume_music($volume1);
+is( SDL::Mixer::Music::volume_music($volume2),                $volume1,       "[volume_music] was $volume1, now set to $volume2" );
 my $sample_music = SDL::Mixer::Music::load_MUS($audio_test_file);
 isa_ok( $sample_music, 'SDL::Mixer::MixMusic', '[load_MUS]' );
 is( SDL::Mixer::Music::play_music($sample_music, 0),          0,              "[play_music] plays $audio_test_file" );
 
+SKIP:
+{
+	skip ( 'Version 1.2.9 needed', 2) unless ($v->major >= 1 && $v->minor >= 2 && $v->patch >= 9);
+	
+	my $num_decoders = SDL::Mixer::Music::get_num_music_decoders();
+	is( $num_decoders >= 0, 1,     "[get_num_music_decoders] $num_decoders decoders available" );
+	
+	my $decoder = SDL::Mixer::Music::get_music_decoder(0);
+	isnt( $decoder,         undef, "[get_music_decoder] got $decoder" );
+}
+
 SDL::delay($delay);
 
 is( SDL::Mixer::Music::playing_music(),                       1,              "[playing_music] music is playing" );
+is( SDL::Mixer::Music::get_music_type($sample_music),         MUS_WAV,        "[get_music_type] $audio_test_file is MUS_WAV" );
+is( SDL::Mixer::Music::get_music_type(),                      MUS_WAV,        "[get_music_type] currently playing MUS_WAV" );
+
 
 SDL::delay($delay);
 
@@ -91,11 +115,13 @@ is( SDL::Mixer::Music::fading_music(),                        MIX_FADING_OUT, "[
 SDL::delay($delay);
 
 is( SDL::Mixer::Music::halt_music(),                          0,              '[halt_music]' );
+is( SDL::Mixer::Music::set_music_cmd("mpeg123 -q"),           0,              '[set_music_cmd] we can specify an external player' );
+is( SDL::Mixer::Music::set_music_cmd(),                       0,              '[set_music_cmd] return to the internal player' );
 is( SDL::Mixer::Music::fade_in_music($sample_music, 0, 2000), 0,              "[fade_in_music] $delay ms" );
 
 SDL::delay(100);
 
-is( SDL::Mixer::Music::fading_music(),                        MIX_FADING_IN,  "[fading_music] music is fading out" );
+is( SDL::Mixer::Music::fading_music(),                        MIX_FADING_IN,  "[fading_music] music is fading in" );
 is( SDL::Mixer::Music::halt_music(),                          0,              '[halt_music]' );
 
 SKIP:
@@ -106,6 +132,17 @@ SKIP:
 }
 
 SDL::delay($delay);
+
+SDL::Mixer::close_audio(); pass '[close_audio] ran';
+
+SKIP:
+{
+	skip ('[hook_music] leaks mem', 1);
+	is ( $mix_func_called > 0, 1 , "[hook_music] called $mix_func_called times" );
+}
+
+# I dont know how the callback will ever be called.
+#is ( $finished        > 0, 1 , "[hook_music_finished] called the callback $finished times");
 
 my @done = qw/
 load_MUS
@@ -122,19 +159,17 @@ fading_music
 rewind_music
 fade_in_music_position
 set_music_position
+get_num_music_decoders
+get_music_decoder
+volumemusic
+get_music_type
+set_music_cmd
+get_music_hook_data
 /;
 
 my @left = qw/
-getnummusicdecoders	  	
-getmusicdecoder	  	
-freemusic	  	
-volumemusic	  	
-setmusiccmd	  	
-hookmusicfinished	  	
-getmusictype	  	
-getmusichookdata	  	
-/	
-;
+hook_music_finished
+/;
 
 my $why
     = '[Percentage Completion] '
@@ -143,21 +178,7 @@ my $why
     . ( $#done + 1 ) . " / "
     . ( $#done + $#left + 2 );
 
-#TODO:
-#{
-#    local $TODO = $why;
-#    fail "Not Implmented SDL::Mixer::*::$_" foreach(@left)
-#}
 diag $why;
-
-SDL::Mixer::close_audio(); pass '[close_audio] ran';
-
-SKIP:
-{
-	skip ('hook_music leaks mem', 1);
-	is ( $mix_func_called > 0, 1 , "[hook_music] called $mix_func_called times" );
-}
-#is ( $finished        > 0, 1 , "[hook_music_finished] called the callback $finished times");
 
 SDL::quit();
 
