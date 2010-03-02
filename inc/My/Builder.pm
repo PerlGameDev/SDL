@@ -50,6 +50,8 @@ sub process_xs
 	my $properties                   = $self->{properties};
 	my $file_args                    = $self->notes( 'file_flags' )->{$file};
 
+	return unless defined($file_args);
+
 	my @old_values                   = @$properties{ keys %$file_args };
 	@$properties{ keys %$file_args } = values %$file_args;
 
@@ -65,39 +67,31 @@ sub find_subsystems
 	my %enabled;
 	while ( my ($name, $subsystem) = each %$subsystems )
 	{
+		my $param;
 		for my $library (@{ $subsystem->{libraries} })
 		{
 			my $lib = $libraries->{$library}
 				or croak "Unknown library '$library' for '$name'\n";
-			unless (defined($found{$lib->{header}})) {
-				$found{$lib->{header}} = Alien::SDL->check_header($lib->{header}) ? 1 : 0;
+			my $h = ref($lib->{header}) eq 'ARRAY' ? $lib->{header} : [ $lib->{header} ];
+			my $need_check = 0;
+			foreach (@$h) {
+				$need_check = 1 unless $found{$_};
+			}			
+			if ( !$need_check || Alien::SDL->check_header(@$h)) {
+				$found{$_} = 1 foreach (@$h);
+				$param->{libs}->{$library} = 1;
+				push @{ $param->{defines} }, "-D$libraries->{$library}{define}";
+				push @{ $param->{links} }, "-l$libraries->{$library}{lib}";
 			}
-			$enabled{$name}{$library} = 1 if $found{$lib->{header}};
+			else {
+				$param = undef;
+				print "###WARNING### Disabling subsystem '$name'\n";
+				last;
+			}
 		}
+		$enabled{$name} = $param if $param;
 	}
 	return \%enabled;
-}
-
-# set the define flags and flags for the libraries we have
-sub set_build_opts
-{
-	my $self = shift;
-	my $libraries = $self->notes('libraries');
-	my $build_systems = $self->notes('build_systems');
-	my %defines;
-	my %links;
-
-	while (my ($subsystem, $buildable) = each %$build_systems)
-	{
-		for my $build (grep { $buildable->{ $_ } } keys %$buildable)
-		{
-			push @{ $defines{$subsystem} }, "-D$libraries->{$build}{define}";
-                        push @{ $links{$subsystem} }, "-l$libraries->{$build}{lib}";
-		}
-	}
-
-	$self->notes('defines' => \%defines);
-	$self->notes('links' => \%links);
 }
 
 # save this all in a format process_xs() can understand
@@ -105,31 +99,30 @@ sub set_file_flags
 {
 	my $self = shift;
 	my %file_flags;
+	my %build_systems = %{$self->notes('build_systems')};
 
-	while (my ($subsystem, $buildable) = each %{$self->notes('build_systems')} )
+	while (my ($subsystem, $param) = each %build_systems )
 	{
 		my $sub_file = $self->notes('subsystems')->{$subsystem}{file}{to};
 		$file_flags{$sub_file} = {
 			extra_compiler_flags =>
 			[
 				(split(' ', $self->notes('sdl_cflags'))),
-				@{$self->notes('defines')->{$subsystem}},
+				@{$param->{defines}},
 				( defined $Config{usethreads} ? ('-DUSE_THREADS', '-fPIC') : ('-fPIC' )),
 			],
 			extra_linker_flags =>
 			[
 				(split(' ', $self->notes('sdl_libs'))),
-				@{$self->notes('links')->{$subsystem}},
+				@{$param->{links}},
 			],
 		},
 	}
-
 	$self->notes('file_flags' => \%file_flags);
 }
 
 # override the following functions in My::Builder::<platform> if necessary
 # both special to MacOS/Darwin, somebody should review whether it is still necessary
-# xxx TODO xxx
 sub special_build_settings { }
 sub build_bundle { }
 
