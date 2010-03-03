@@ -8,8 +8,6 @@ SDL::Mixer::Music - functions for music
 
 Mixer
 
-=head1 DESCRIPTION
-
 =head1 METHODS
 
 =head2 load_MUS
@@ -20,9 +18,76 @@ C<load_MUS> loads a music file into a C<SDL::Music::MixMusic> structure. This ca
 
 =head2 hook_music
 
+ SDL::Mixer::Music::hook_music( $callback, $position );
+ 
+ or
+ 
+ SDL::Mixer::Music::hook_music( &callback, $position );
+
+This sets up a custom music player function, so you can pass your own audio stream data into the SDL::Mixer.
+The function will be called with C<position> passed into the first parameter when the C<callback> is called.
+The audio stream buffer has to be filled with length bytes of music (2nd parameter).
+The music player will then be called automatically when the mixer needs it. Music playing will start as soon as this is called. 
+All the music playing and stopping functions have no effect on music after this. Pause and resume will work. 
+Using a custom music player and the internal music player is not possible, the custom music player takes priority. 
+
+To stop the custom music player call C<hook_music()> without arguments.
+
+B<Note>: NEVER call C<SDL::Mixer> functions, nor L<SDL::Audio::lock>, from a callback function.
+
+B<Note>: At program termination also call C<SDL::Mixer::Music::hook_music()> to stop this callback.
+
+Example:
+
+ my $callback = sub
+ {
+     my $position = shift; # position (first time its 0, on each call $length is added)
+     my $length   = shift; # length of bytes we have to put in stream
+     my @stream   = '';
+ 
+     printf("position=%8d, stream length=%6d\n", $position, $length);
+ 
+     for(my $i = 0; $i < $length; $i++)
+     {
+         push(@stream, (($i + $position) & 0xFF));
+     }
+ 
+     return @stream;
+ };
+ 
+ SDL::Mixer::Music::hook_music( $callback, 0 );
+
 =head2 hook_music_finished
 
+ SDL::Mixer::Music::hook_music_finished( $callback );
+
+This callback is called when music called by e.g. L<play_music> or L<fade_in_music> stops naturally. This happens when the music is over or is 
+fading out.
+
+B<Note>: If you play music via L<hook_music>, this callback will never be called.
+
+Example:
+
+ my $music_is_playing = 0;
+ my @music            = qw(first.mp3 next.mp3 other.mp3 last.mp3);
+ my $callback         = sub{ $music_is_playing = 0; };
+ SDL::Mixer::Music::hook_music_finished( $callback );
+ 
+ foreach my $this_song ( @music )
+ {
+     SDL::Mixer::Music::play_music( $this_song, 0 );
+     $music_is_playing = 1;
+ 
+     SDL::delay( 100 ) while( $music_is_playing );
+ }
+ 
+ SDL::Mixer::Music::hook_music_finished(); # cleanup
+
 =head2 get_music_hook_data
+
+ my $position = SDL::Mixer::Music::get_music_hook_data();
+
+Returns the C<position> (first) parameter that will be passed to L<hook_music>'s callback.
 
 =head2 play_music
 
@@ -152,5 +217,9 @@ Returns C<1> if the music is paused, otherwise C<0>.
  my $playing_music = SDL::Mixer::Music::playing_music();
 
 Returns C<1> if the music is playing sound, otherwise C<0>. It does'nt check if the music is paused.
+
+=head1 AUTHOR
+
+Tobias Leich [FROGGS]
 
 =cut

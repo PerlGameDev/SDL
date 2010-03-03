@@ -39,7 +39,7 @@ my $mix_func        = sub
 	
 	# printf("[hook_music] callback: position=%8s, stream length=%6s\n", $position, $length);
 
-	for(my $i = 0; $i < $length / 2; $i++)
+	for(my $i = 0; $i < $length; $i++)
 	{
 		push(@stream, (($i + $position) & 0xFF));
 	}
