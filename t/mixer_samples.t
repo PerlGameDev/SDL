@@ -21,10 +21,12 @@ BEGIN
 # To reproduce this bug do 
 #
 # use SDL; use SDL::Version; SDL::init(SDL_INIT_AUDIO);
-#
+
 use SDL::Mixer;
 use SDL::Mixer::MixChunk;
 use SDL::Mixer::Samples;
+use SDL::Mixer::Channels;
+use SDL::RWOps;
 use SDL::Version;
 
 my @done = qw/
@@ -32,43 +34,37 @@ get_num_chunk_decoders
 get_chunk_decoder
 load_WAV
 volume_chunk
+load_WAV_RW
 /;
 
-my @left =qw/
-loadwav_rw
-quickload_wav
-quickload_raw
-freechunk 
-/	
-;
-
+my @left = qw/
+quick_load_WAV
+quick_load_RAW
+/;
 
 SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 );
 
-my $version =  SDL::Mixer::linked_version();
-
-diag 'got version :'.$version->major.'.'.$version->minor.'.'.$version->patch;
+my $version = SDL::Mixer::linked_version();
+diag sprintf("got version: %d.%d.%d", $version->major, $version->minor, $version->patch);
 
 SKIP:
 {
- skip  'Need version 1.2.10', 2 unless ( $version->major > 1 || $version->minor > 2 || $version->patch >= 10);
- 
- is(SDL::Mixer::Samples::get_num_chunk_decoders() >= 0, 1 , '[get_num_chunk_decoders] passed');
-
- my $stream = SDL::Mixer::Samples::get_chunk_decoder(0);
-
- is( defined $stream, 1, '[get_chunk_decoder] found decoder '.$stream);
-
+	skip  'Need version 1.2.10', 2 unless( $version->major >= 1 && $version->minor >= 2 && $version->patch >= 10 );
+	
+	is(SDL::Mixer::Samples::get_num_chunk_decoders() >= 0, 1, '[get_num_chunk_decoders] passed');
+	my $stream = SDL::Mixer::Samples::get_chunk_decoder(0);
+	is( defined $stream,                                   1, "[get_chunk_decoder] found decoder $stream" );
 }
 
 my $sample_chunk = SDL::Mixer::Samples::load_WAV('test/data/sample.wav');
- isa_ok( $sample_chunk,  'SDL::Mixer::MixChunk', '[load_WAV] Can Load a wav file to MixChunk');
+isa_ok( $sample_chunk, 'SDL::Mixer::MixChunk', '[load_WAV]' );
 
- is (SDL::Mixer::Samples::volume_chunk($sample_chunk, 120), 128 ,'[volume_chunk] was at max 128 volume on start');
- is (SDL::Mixer::Samples::volume_chunk($sample_chunk, 10), 120 ,'[volume_chunk] is now at 120 volume');
+is( SDL::Mixer::Samples::volume_chunk($sample_chunk, 120), 128, '[volume_chunk] was at max 128 volume on start' );
+is( SDL::Mixer::Samples::volume_chunk($sample_chunk, 10),  120, '[volume_chunk] is now at 120 volume' );
 
-
-
+my $file = SDL::RWOps->new_file('test/data/sample.wav', 'r');
+isa_ok( $file,                                      'SDL::RWOps',           '[new_file]');
+isa_ok( SDL::Mixer::Samples::load_WAV_RW($file, 0), 'SDL::Mixer::MixChunk', '[load_WAV_RW]' );
 
 my $why
     = '[Percentage Completion] '
@@ -80,9 +76,11 @@ my $why
 TODO:
 {
     local $TODO = $why;
-    fail "Not Implmented SDL::Mixer::*::$_" foreach(@left)
-    
+    fail "Not Implmented SDL::Mixer::*::$_" foreach(@left);
 }
+
 diag $why;
+
 pass 'Checking for segfaults';
+
 done_testing();

@@ -34,7 +34,7 @@ See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
 #ifdef HAVE_SDL_MIXER
 
 
-#if SDL_MIXER_MAJOR_VERSION >	1 || SDL_MIXER_MINOR_VERSION > 2 || (  SDL_MIXER_MAJOR_VERSION == 1 && SDL_MIXER_MINOR_VERSION == 2 && SDL_MIXER_PATCHLEVEL >= 10 )
+#if (SDL_MIXER_MAJOR_VERSION >= 1 && SDL_MIXER_MINOR_VERSION >= 2 && SDL_MIXER_PATCHLEVEL >= 10)
 
 int 
 mixsam_get_num_chunk_decoders ()
@@ -53,7 +53,6 @@ mixsam_get_chunk_decoder (idecoder)
 
 #endif
 
-
 Mix_Chunk *
 mixsam_load_WAV ( filename )
 	char *filename
@@ -65,7 +64,6 @@ mixsam_load_WAV ( filename )
 		RETVAL = mixchunk;
 	OUTPUT:
 		RETVAL
-
 
 Mix_Chunk *
 mixsam_load_WAV_RW ( src, freesrc)
@@ -80,7 +78,6 @@ mixsam_load_WAV_RW ( src, freesrc)
 	OUTPUT:
 		RETVAL
 
-
 Mix_Chunk *
 mixsam_quick_load_WAV ( buf )
 	Uint8 *buf
@@ -90,7 +87,6 @@ mixsam_quick_load_WAV ( buf )
 		RETVAL = Mix_QuickLoad_WAV(buf);
 	OUTPUT:
 		RETVAL
-
 
 Mix_Chunk *
 mixsam_quick_load_RAW ( buf , len)
@@ -103,7 +99,6 @@ mixsam_quick_load_RAW ( buf , len)
 	OUTPUT:
 		RETVAL
 
-
 int
 mixsam_volume_chunk ( chunk, volume )
 	Mix_Chunk *chunk
@@ -113,13 +108,10 @@ mixsam_volume_chunk ( chunk, volume )
 	OUTPUT:
 		RETVAL
 
-
 void
 mixsam_free_chunk( chunk )
 	Mix_Chunk *chunk
 	CODE:
 		Mix_FreeChunk(chunk);
-
-
 
 #endif
