@@ -2,32 +2,103 @@
 
 =head1 NAME
 
-SDL::Mixer::Groups -- SDL_Mixer groups functions and bindings
+SDL::Mixer::Groups - Audio channel group functions
 
 =head1 CATEGORY
 
 Mixer
 
-=head1 DESCRIPTION
-
 =head1 METHODS
 
 =head2 reserve_channels
 
+ my $reserved = SDL::Mixer::Groups::reserve_channels( $num );
+
+C<$num> is the number of channels to reserve from default mixing. Zero removes all reservations. 
+
+Reserve C<$num> channels from being used when playing samples when passing in C<-1> as a channel number to playback functions. 
+The channels are reserved starting from channel C<0> to C<$num-1>. Passing in zero will unreserve all channels. Normally SDL_mixer starts 
+without any channels reserved.
+
+The following functions are affected by this setting: 
+
+=over 4
+
+=item *
+
+L<SDL::Mixer::Channels::play_channel>
+
+=item *
+
+L<SDL::Mixer::Channels::play_channel_timed>
+
+=item *
+
+L<SDL::Mixer::Channels::fade_in_channel>
+
+=item *
+
+L<SDL::Mixer::Channels::fade_in_channel_timed>
+
+=back
+
+Returns: The number of channels reserved. Never fails, but may return less channels than you ask for, depending on the number of channels 
+previously allocated (see L<SDL::Mixer::Channels::allocate_channels>).
+
 =head2 group_channel
+
+ my $grouped = SDL::Mixer::Groups::group_channel( $channel, $group );
+
+Add a channel to group id (any positive integer), or reset it's group to the default group by passing (-1).
+
+Returns: True(1) on success. False(0) is returned when the channel specified is invalid.
 
 =head2 group_channels
 
+ my $grouped = SDL::Mixer::Groups::group_channels( $from_channel, $to_channel, $group );
+
+Add a range of channels to group id (any positive integer), or reset their group to the default group by passing (-1).
+
+Returns: The number of affected channels.
+
 =head2 group_available
+
+ my $channel = SDL::Mixer::Groups::group_count( $group );
+
+C<group_newer> returns the first available channel of this group.
 
 =head2 group_count
 
+ my $channels = SDL::Mixer::Groups::group_count( $group );
+
+C<group_newer> returns the number of channels in this group.
+
 =head2 group_oldest
+
+ my $channel = SDL::Mixer::Groups::group_oldest( $group );
+
+C<group_newer> returns the channel number which started to play at first.
 
 =head2 group_newer
 
+ my $channel = SDL::Mixer::Groups::group_newer( $group );
+
+C<group_newer> returns the channel number which started to play at last.
+
 =head2 fade_out_group
 
+ SDL::Mixer::Groups::fade_out_group( $group, $ms );
+
+Fades out the channels by the given group id. The fade-out-time is specified by C<$ms>.
+
+Retuns the number of affected channels.
+
 =head2 halt_group
+
+ SDL::Mixer::Groups::hals_group( $group );
+
+Halts the channels by the given group id.
+
+Retuns C<0>.
 
 =cut
