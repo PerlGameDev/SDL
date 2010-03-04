@@ -29,7 +29,7 @@
 #
 
 package SDL::Constants;
-#use strict;
+
 use warnings;
 use base 'Exporter';
 use SDL::Events;
@@ -67,6 +67,7 @@ our @EXPORT=qw(
 	KMOD_RMETA
 	KMOD_RSHIFT
 	KMOD_SHIFT
+	MIX_CHANNEL_POST
 	MIX_DEFAULT_CHANNELS
 	MIX_DEFAULT_FORMAT
 	MIX_DEFAULT_FREQUENCY
@@ -508,60 +509,6 @@ use constant {
 use constant {
 	CD_FPS                                              => 75,
 	SDL_HAS_64BIT_TYPE                                  => 1,
-	HAVE_LIBC                                           => 1,
-	HAVE_SYS_TYPES_H                                    => 1,
-	HAVE_STDIO_H                                        => 1,
-	STDC_HEADERS                                        => 1,
-	HAVE_STDLIB_H                                       => 1,
-	HAVE_STDARG_H                                       => 1,
-	HAVE_MALLOC_H                                       => 1,
-	HAVE_MEMORY_H                                       => 1,
-	HAVE_STRING_H                                       => 1,
-	HAVE_STRINGS_H                                      => 1,
-	HAVE_INTTYPES_H                                     => 1,
-	HAVE_STDINT_H                                       => 1,
-	HAVE_CTYPE_H                                        => 1,
-	HAVE_MATH_H                                         => 1,
-	HAVE_SIGNAL_H                                       => 1,
-	HAVE_MALLOC                                         => 1,
-	HAVE_CALLOC                                         => 1,
-	HAVE_REALLOC                                        => 1,
-	HAVE_FREE                                           => 1,
-	HAVE_GETENV                                         => 1,
-	HAVE_PUTENV                                         => 1,
-	HAVE_QSORT                                          => 1,
-	HAVE_ABS                                            => 1,
-	HAVE_MEMSET                                         => 1,
-	HAVE_MEMCPY                                         => 1,
-	HAVE_MEMMOVE                                        => 1,
-	HAVE_STRLEN                                         => 1,
-	HAVE_STRDUP                                         => 1,
-	HAVE__STRREV                                        => 1,
-	HAVE__STRUPR                                        => 1,
-	HAVE__STRLWR                                        => 1,
-	HAVE_STRCHR                                         => 1,
-	HAVE_STRRCHR                                        => 1,
-	HAVE_STRSTR                                         => 1,
-	HAVE_ITOA                                           => 1,
-	HAVE__LTOA                                          => 1,
-	HAVE__ULTOA                                         => 1,
-	HAVE_STRTOL                                         => 1,
-	HAVE_STRTOUL                                        => 1,
-	HAVE__I64TOA                                        => 1,
-	HAVE__UI64TOA                                       => 1,
-	HAVE_STRTOLL                                        => 1,
-	HAVE_STRTOULL                                       => 1,
-	HAVE_ATOI                                           => 1,
-	HAVE_ATOF                                           => 1,
-	HAVE_STRCMP                                         => 1,
-	HAVE_STRNCMP                                        => 1,
-	HAVE__STRICMP                                       => 1,
-	HAVE_STRCASECMP                                     => 1,
-	HAVE__STRNICMP                                      => 1,
-	HAVE_STRNCASECMP                                    => 1,
-	HAVE_SSCANF                                         => 1,
-	HAVE_SNPRINTF                                       => 1,
-	HAVE_VSNPRINTF                                      => 1,
 	SDL_AUDIO_DRIVER_DISK                               => 1,
 	SDL_AUDIO_DRIVER_DUMMY                              => 1,
 	SDL_AUDIO_DRIVER_DSOUND                             => 1,
@@ -665,12 +612,6 @@ use constant {
 	FPS_UPPER_LIMIT                                     => 200,
 	FPS_LOWER_LIMIT                                     => 1,
 	FPS_DEFAULT                                         => 30,
-	SDL_GFXPRIMITIVES_MAJOR                             => 2,
-	SDL_GFXPRIMITIVES_MINOR                             => 0,
-	SDL_GFXPRIMITIVES_MICRO                             => 19,
-	SDL_IMAGE_MAJOR_VERSION                             => 1,
-	SDL_IMAGE_MINOR_VERSION                             => 2,
-	SDL_IMAGE_PATCHLEVEL                                => 7,
 	IMG_SetError                                        => SDL_SetError,
 	IMG_GetError                                        => SDL_GetError,
 	SDL_HAT_CENTERED                                    => 0x00,
@@ -945,12 +886,6 @@ use constant {
 	KMOD_SHIFT                                          => (0x0001|0x0002),
 	KMOD_ALT                                            => (0x0100|0x0200),
 	KMOD_META                                           => (0x0400|0x0800),
-	SDL_MIXER_MAJOR_VERSION                             => 1,
-	SDL_MIXER_MINOR_VERSION                             => 2,
-	SDL_MIXER_PATCHLEVEL                                => 8,
-	MIX_MAJOR_VERSION                                   => 1,
-	MIX_MINOR_VERSION                                   => 2,
-	MIX_PATCHLEVEL                                      => 8,
 	MIX_CHANNELS                                        => 8,
 	MIX_DEFAULT_FREQUENCY                               => 22050,
 	MIX_DEFAULT_CHANNELS                                => 2,
@@ -977,8 +912,6 @@ use constant {
 
 use constant {
 	MIX_CHANNEL_POST                                    => -2,
-	Mix_SetError                                        => SDL_SetError,
-	Mix_GetError                                        => SDL_GetError,
 	SDL_BUTTON_LEFT                                     => 1,
 	SDL_BUTTON_MIDDLE                                   => 2,
 	SDL_BUTTON_RIGHT                                    => 3,
