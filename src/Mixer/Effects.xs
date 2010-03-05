@@ -2,24 +2,72 @@
 #include "perl.h"
 #include "XSUB.h"
 
-#ifndef aTHX_
-#define aTHX_
-#endif
-
 #include <SDL.h>
 
 #ifdef HAVE_SDL_MIXER
 #include <SDL_mixer.h>
-#endif
 
-#ifdef HAVE_SMPEG
-#include <smpeg/smpeg.h>
-#ifdef HAVE_SDL_MIXER
-static int sdl_perl_use_smpeg_audio = 0;
-#endif
-#endif
+PerlInterpreter *perl_for_cb  = NULL;
+static SV       *cb           = (SV*)NULL;
+static SV       *fcb          = (SV*)NULL;
 
+void effect_func(int chan, void *stream, int len, void *udata)
+{
+	PERL_SET_CONTEXT(perl_for_cb);
+	Sint16 *buf = (Sint16 *)stream;
+	len /= 2;            // 2 bytes ber sample
 
+	dSP;                                       /* initialize stack pointer          */
+	ENTER;                                     /* everything created after here     */
+	SAVETMPS;                                  /* ...is a temporary variable.       */
+
+	PUSHMARK(SP);                              /* remember the stack pointer        */
+	XPUSHs(sv_2mortal(newSViv(chan)));
+	//XPUSHs(sv_2mortal(newSVpv((Sint16*)stream, len)));
+	XPUSHs(sv_2mortal(newSViv(len)));
+	XPUSHs(sv_2mortal(newSViv(*(int*)udata))); /* push something onto the stack     */
+	int i;
+	for(i = 0; i < len; i++)
+		XPUSHs(sv_2mortal(newSVnv((Sint16)buf[i])));
+	*(int*)udata = *(int*)udata + len * 2;
+	PUTBACK;                                   /* make local stack pointer global   */
+
+	if(cb != (SV*)NULL)
+	{
+        int count = perl_call_sv(cb, G_ARRAY); /* call the function                 */
+		SPAGAIN;                               /* refresh stack pointer             */
+		
+		if(count > 0)
+		{
+			memset(buf, 0, len*2); // clear the buffer
+			
+			for(i = len - 1; i > 0; i--)
+			{
+				buf[i]     = (Sint16)POPi;
+			}
+		}
+
+		PUTBACK;
+	}
+
+	FREETMPS;                                  /* free that return value            */
+	LEAVE;                                     /* ...and the XPUSHed "mortal" args. */
+}
+
+void effect_done(int chan, void *udata)
+{
+	PERL_SET_CONTEXT(perl_for_cb);
+	
+	dSP;                                       /* initialize stack pointer          */
+	PUSHMARK(SP);                              /* remember the stack pointer        */
+
+	if(fcb != (SV*)NULL)
+	{
+        perl_call_sv(fcb, G_DISCARD|G_VOID);   /* call the function                 */
+	}
+}
+
+#endif
 
 MODULE = SDL::Mixer::Effects 	PACKAGE = SDL::Mixer::Effects    PREFIX = mixeff_
 
@@ -29,21 +77,56 @@ SDL_mixer bindings
 
 See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
 
+Examples: http://olofson.net/examples.html
+
 =cut
 
 #ifdef HAVE_SDL_MIXER
 
-#if SDL_MIXER_MAJOR_VERSION >	1 || SDL_MIXER_MINOR_VERSION > 2 || (  SDL_MIXER_MAJOR_VERSION == 1 && SDL_MIXER_MINOR_VERSION == 2 && SDL_MIXER_PATCHLEVEL >= 10 )
-
-void
-mixeff_register_effect()
+int
+mixeff_register(channel, func, done, arg)
+	int channel
+	SV *func
+	SV *done
+	int arg
 	CODE:
-		warn ("Todo: Add 1.2.10 methods here");
+		perl_for_cb = PERL_GET_CONTEXT;
+	
+		if (cb == (SV*)NULL)
+			cb = newSVsv(func);
+		else
+			SvSetSV(cb, func);
 
-#endif
+		if (fcb == (SV*)NULL)
+			fcb = newSVsv(done);
+		else
+			SvSetSV(fcb, done);
+
+		void *arg2   = safemalloc(sizeof(int));
+		*(int*) arg2 = arg;
+		RETVAL = Mix_RegisterEffect(channel, &effect_func, &effect_done, arg2);
+	OUTPUT:
+		RETVAL
+
+int
+mixeff_unregister( channel, func )
+	int channel
+	SV *func
+	CODE:
+		RETVAL = Mix_UnregisterEffect(channel, &effect_func);
+	OUTPUT:
+		RETVAL
+
+int
+mixeff_unregister_all( channel )
+	int channel
+	CODE:
+		RETVAL = Mix_UnregisterAllEffects(channel);
+	OUTPUT:
+		RETVAL
 
 void
-mixeff_set_post_mix ( func, arg )
+mixeff_set_post_mix( func, arg )
 	void *func
 	void *arg
 	CODE:
@@ -51,7 +134,7 @@ mixeff_set_post_mix ( func, arg )
 
 
 int
-mixeff_set_panning ( channel, left, right )
+mixeff_set_panning( channel, left, right )
 	int channel
 	int left
 	int right

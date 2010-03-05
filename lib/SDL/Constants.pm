@@ -29,7 +29,7 @@
 #
 
 package SDL::Constants;
-#use strict;
+
 use warnings;
 use base 'Exporter';
 use SDL::Events;
@@ -67,6 +67,7 @@ our @EXPORT=qw(
 	KMOD_RMETA
 	KMOD_RSHIFT
 	KMOD_SHIFT
+	MIX_CHANNEL_POST
 	MIX_DEFAULT_CHANNELS
 	MIX_DEFAULT_FORMAT
 	MIX_DEFAULT_FREQUENCY
@@ -74,6 +75,15 @@ our @EXPORT=qw(
 	MIX_FADING_OUT
 	MIX_MAX_VOLUME
 	MIX_NO_FADING
+	MUS_NONE
+	MUS_CMD
+	MUS_WAV
+	MUS_MOD
+	MUS_MID
+	MUS_OGG
+	MUS_MP3
+	MUS_MP3_MAD
+	MUS_FLAC
 	SDLK_0
 	SDLK_1
 	SDLK_2
@@ -499,60 +509,6 @@ use constant {
 use constant {
 	CD_FPS                                              => 75,
 	SDL_HAS_64BIT_TYPE                                  => 1,
-	HAVE_LIBC                                           => 1,
-	HAVE_SYS_TYPES_H                                    => 1,
-	HAVE_STDIO_H                                        => 1,
-	STDC_HEADERS                                        => 1,
-	HAVE_STDLIB_H                                       => 1,
-	HAVE_STDARG_H                                       => 1,
-	HAVE_MALLOC_H                                       => 1,
-	HAVE_MEMORY_H                                       => 1,
-	HAVE_STRING_H                                       => 1,
-	HAVE_STRINGS_H                                      => 1,
-	HAVE_INTTYPES_H                                     => 1,
-	HAVE_STDINT_H                                       => 1,
-	HAVE_CTYPE_H                                        => 1,
-	HAVE_MATH_H                                         => 1,
-	HAVE_SIGNAL_H                                       => 1,
-	HAVE_MALLOC                                         => 1,
-	HAVE_CALLOC                                         => 1,
-	HAVE_REALLOC                                        => 1,
-	HAVE_FREE                                           => 1,
-	HAVE_GETENV                                         => 1,
-	HAVE_PUTENV                                         => 1,
-	HAVE_QSORT                                          => 1,
-	HAVE_ABS                                            => 1,
-	HAVE_MEMSET                                         => 1,
-	HAVE_MEMCPY                                         => 1,
-	HAVE_MEMMOVE                                        => 1,
-	HAVE_STRLEN                                         => 1,
-	HAVE_STRDUP                                         => 1,
-	HAVE__STRREV                                        => 1,
-	HAVE__STRUPR                                        => 1,
-	HAVE__STRLWR                                        => 1,
-	HAVE_STRCHR                                         => 1,
-	HAVE_STRRCHR                                        => 1,
-	HAVE_STRSTR                                         => 1,
-	HAVE_ITOA                                           => 1,
-	HAVE__LTOA                                          => 1,
-	HAVE__ULTOA                                         => 1,
-	HAVE_STRTOL                                         => 1,
-	HAVE_STRTOUL                                        => 1,
-	HAVE__I64TOA                                        => 1,
-	HAVE__UI64TOA                                       => 1,
-	HAVE_STRTOLL                                        => 1,
-	HAVE_STRTOULL                                       => 1,
-	HAVE_ATOI                                           => 1,
-	HAVE_ATOF                                           => 1,
-	HAVE_STRCMP                                         => 1,
-	HAVE_STRNCMP                                        => 1,
-	HAVE__STRICMP                                       => 1,
-	HAVE_STRCASECMP                                     => 1,
-	HAVE__STRNICMP                                      => 1,
-	HAVE_STRNCASECMP                                    => 1,
-	HAVE_SSCANF                                         => 1,
-	HAVE_SNPRINTF                                       => 1,
-	HAVE_VSNPRINTF                                      => 1,
 	SDL_AUDIO_DRIVER_DISK                               => 1,
 	SDL_AUDIO_DRIVER_DUMMY                              => 1,
 	SDL_AUDIO_DRIVER_DSOUND                             => 1,
@@ -618,9 +574,6 @@ use constant {
 }; # SDL_EventType
 
 use constant {
-};
-
-use constant {
 	SDL_ACTIVEEVENTMASK                                 => SDL_EVENTMASK(1),
 	SDL_KEYDOWNMASK                                     => SDL_EVENTMASK(2),
 	SDL_KEYUPMASK                                       => SDL_EVENTMASK(3),
@@ -659,12 +612,6 @@ use constant {
 	FPS_UPPER_LIMIT                                     => 200,
 	FPS_LOWER_LIMIT                                     => 1,
 	FPS_DEFAULT                                         => 30,
-	SDL_GFXPRIMITIVES_MAJOR                             => 2,
-	SDL_GFXPRIMITIVES_MINOR                             => 0,
-	SDL_GFXPRIMITIVES_MICRO                             => 19,
-	SDL_IMAGE_MAJOR_VERSION                             => 1,
-	SDL_IMAGE_MINOR_VERSION                             => 2,
-	SDL_IMAGE_PATCHLEVEL                                => 7,
 	IMG_SetError                                        => SDL_SetError,
 	IMG_GetError                                        => SDL_GetError,
 	SDL_HAT_CENTERED                                    => 0x00,
@@ -919,9 +866,6 @@ use constant {
 }; # SDLKey
 
 use constant {
-};
-
-use constant {
 	KMOD_NONE                                           => 0x0000,
 	KMOD_LSHIFT                                         => 0x0001,
 	KMOD_RSHIFT                                         => 0x0002,
@@ -942,12 +886,6 @@ use constant {
 	KMOD_SHIFT                                          => (0x0001|0x0002),
 	KMOD_ALT                                            => (0x0100|0x0200),
 	KMOD_META                                           => (0x0400|0x0800),
-	SDL_MIXER_MAJOR_VERSION                             => 1,
-	SDL_MIXER_MINOR_VERSION                             => 2,
-	SDL_MIXER_PATCHLEVEL                                => 8,
-	MIX_MAJOR_VERSION                                   => 1,
-	MIX_MINOR_VERSION                                   => 2,
-	MIX_PATCHLEVEL                                      => 8,
 	MIX_CHANNELS                                        => 8,
 	MIX_DEFAULT_FREQUENCY                               => 22050,
 	MIX_DEFAULT_CHANNELS                                => 2,
@@ -961,9 +899,6 @@ use constant {
 }; # Mix_Fading
 
 use constant {
-};
-
-use constant {
 	MUS_NONE                                            => 0,
 	MUS_CMD                                             => 1,
 	MUS_WAV                                             => 2,
@@ -972,12 +907,11 @@ use constant {
 	MUS_OGG                                             => 5,
 	MUS_MP3                                             => 6,
 	MUS_MP3_MAD                                         => 7,
+	MUS_MP3_FLAC                                        => 8,
 }; # Mix_MusicType
 
 use constant {
 	MIX_CHANNEL_POST                                    => -2,
-	Mix_SetError                                        => SDL_SetError,
-	Mix_GetError                                        => SDL_GetError,
 	SDL_BUTTON_LEFT                                     => 1,
 	SDL_BUTTON_MIDDLE                                   => 2,
 	SDL_BUTTON_RIGHT                                    => 3,
@@ -3469,9 +3403,6 @@ use constant {
 }; # SDL_bool
 
 use constant {
-};
-
-use constant {
 	DUMMY_ENUM_VALUE                                    => 0,
 }; # SDL_DUMMY_ENUM
 
@@ -3565,7 +3496,6 @@ use constant {
 	SDL_GRAB_ON                                         => 1,
 	SDL_GRAB_FULLSCREEN                                 => 2,
 };
-
 
 # manual added!!
 use constant {

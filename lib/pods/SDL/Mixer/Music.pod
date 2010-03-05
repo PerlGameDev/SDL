@@ -2,56 +2,224 @@
 
 =head1 NAME
 
-SDL::Mixer::Music -- SDL_Mixer music functions and bindings
+SDL::Mixer::Music - functions for music
 
 =head1 CATEGORY
 
 Mixer
 
-=head1 DESCRIPTION
-
 =head1 METHODS
-
-=head2 PerlMixMusicHook
-
-=head2 mix_audio
-
-Same as SDL::Audio::mix()
-
-=head2 load_WAV
-
-has to be implemented
 
 =head2 load_MUS
 
-=head2 free_music
+ my $music = SDL::Mixer::Music::load_MUS( $file );
+
+C<load_MUS> loads a music file into a C<SDL::Mixer::MixMusic> structure. This can be passed to L<SDL::Mixer::Music::play_music>.
 
 =head2 hook_music
 
+ SDL::Mixer::Music::hook_music( $callback, $position );
+ 
+ or
+ 
+ SDL::Mixer::Music::hook_music( &callback, $position );
+
+This sets up a custom music player function, so you can pass your own audio stream data into the SDL::Mixer.
+The function will be called with C<position> passed into the first parameter when the C<callback> is called.
+The audio stream buffer has to be filled with length bytes of music (2nd parameter).
+The music player will then be called automatically when the mixer needs it. Music playing will start as soon as this is called. 
+All the music playing and stopping functions have no effect on music after this. Pause and resume will work. 
+Using a custom music player and the internal music player is not possible, the custom music player takes priority. 
+
+To stop the custom music player call C<hook_music()> without arguments.
+
+B<Note>: NEVER call C<SDL::Mixer> functions, nor L<SDL::Audio::lock>, from a callback function.
+
+B<Note>: At program termination also call C<SDL::Mixer::Music::hook_music()> to stop this callback.
+
+Example:
+
+ my $callback = sub
+ {
+     my $position = shift; # position (first time its 0, on each call $length is added)
+     my $length   = shift; # length of bytes we have to put in stream
+     my @stream   = '';
+ 
+     printf("position=%8d, stream length=%6d\n", $position, $length);
+ 
+     for(my $i = 0; $i < $length; $i++)
+     {
+         push(@stream, (($i + $position) & 0xFF));
+     }
+ 
+     return @stream;
+ };
+ 
+ SDL::Mixer::Music::hook_music( $callback, 0 );
+
 =head2 hook_music_finished
+
+ SDL::Mixer::Music::hook_music_finished( $callback );
+
+This callback is called when music called by e.g. L<SDL::Mixer::Music::play_music> or L<SDL::Mixer::Music::fade_in_music> stops naturally. 
+This happens when the music is over or is fading out.
+
+B<Note>: If you play music via L<SDL::Mixer::Music::hook_music>, this callback will never be called.
+
+Example:
+
+ my $music_is_playing = 0;
+ my @music            = qw(first.mp3 next.mp3 other.mp3 last.mp3);
+ my $callback         = sub{ $music_is_playing = 0; };
+ SDL::Mixer::Music::hook_music_finished( $callback );
+ 
+ foreach my $this_song ( @music )
+ {
+     SDL::Mixer::Music::play_music( $this_song, 0 );
+     $music_is_playing = 1;
+ 
+     SDL::delay( 100 ) while( $music_is_playing );
+ }
+ 
+ SDL::Mixer::Music::hook_music_finished(); # cleanup
 
 =head2 get_music_hook_data
 
+ my $position = SDL::Mixer::Music::get_music_hook_data();
+
+Returns the C<position> (first) parameter that will be passed to L<SDL::Mixer::Music::hook_music>'s callback.
+
 =head2 play_music
+
+ my $play_music = SDL::Mixer::Music::play_music( $mix_music, $loops );
+
+C<play_music> plays a given C<SDL::Mixer::MixMusic>.
+Passing -1 to C<$loops> will loop the music infinitely. 
+
+Example:
+
+ my $music = SDL::Mixer::Music::load_MUS( 'music.mp3' );
+ 
+ unless(SDL::Mixer::Music::play_music($sample_music, -1))
+ {
+     print("Something went wrong!\n");
+ }
 
 =head2 fade_in_music
 
-=head2 volume_music
+ my $music = SDL::Mixer::Music::fade_in_music( $mix_music, $loops, $ms );
 
-=head2 halt_music
+Same as L<SDL::Mixer::Music::play_music> but you can specify the fade-in time by C<$ms>.
 
 =head2 fade_out_music
 
+ my $fading_music = SDL::Mixer::Music::fade_out_music( $ms );
+
+C<fade_out_music> fades out the music with a duration specified in C<ms> in milliseconds.
+
+Returns the the number of channels that will be faded out.
+
 =head2 fading_music
+
+ my $fading_music = SDL::Mixer::Music::fading_music();
+
+Returns one of the following:
+
+=over 4
+
+=item *
+
+MIX_NO_FADING
+
+=item *
+
+MIX_FADING_OUT
+
+=item *
+
+MIX_FADING_IN
+
+=back
+
+=head2 volume_music
+
+ my $volume_before = SDL::Mixer::Music::volume_music( $new_volume );
+
+C<volume_music> set the volume in C<$new_volume> and returns the volume that was set before.
+Passing C<-1> as argument causes only to return the current volume.
+
+Volume is between C<0> (silence) and C<MIX_MAX_VOLUME = 128>.
+
+Example:
+
+ # set the music volume to 1/2 maximum, and then check it
+ printf( "volume was    : %d\n", SDL::Mixer::Music::volume_music( MIX_MAX_VOLUME / 2 ) );
+ printf( "volume is now : %d\n", SDL::Mixer::Music::volume_music( -1 ) );
+
+=head2 halt_music
+
+ SDL::Mixer::Music::halt_music();
+
+Halts the music.
 
 =head2 pause_music
 
+ SDL::Mixer::Music::pause_music();
+
+Pauses the music.
+
 =head2 resume_music
+
+ SDL::Mixer::Music::resume_music();
+
+Resumes the music.
 
 =head2 rewind_music
 
+ SDL::Mixer::Music::rewind_music();
+
+Rewinds the music.
+
+=head2 set_music_position
+
+ SDL::Mixer::Music::set_music_position( $position );
+
+Set the position of the currently playing music. The position takes different meanings for different music sources. It only works on the 
+music sources listed below.
+
+=over 4
+
+=item MOD
+
+The double is cast to Uint16 and used for a pattern number in the module.
+Passing zero is similar to rewinding the song. 
+
+=item OGG
+
+Jumps to position seconds from the beginning of the song. 
+
+=item MP3
+
+Jumps to position seconds from the current position in the stream.
+So you may want to call L<SDL::Mixer::Music::rewind_music> before this.
+Does not go in reverse... negative values do nothing. 
+
+Returns: C<0> on success, or C<-1> if the codec doesn't support this function. 
+
 =head2 paused_music
 
+ my $paused = SDL::Mixer::Music::paused_music();
+
+Returns C<1> if the music is paused, otherwise C<0>.
+
 =head2 playing_music
+
+ my $playing_music = SDL::Mixer::Music::playing_music();
+
+Returns C<1> if the music is playing sound, otherwise C<0>. It does'nt check if the music is paused.
+
+=head1 AUTHOR
+
+Tobias Leich [FROGGS]
 
 =cut

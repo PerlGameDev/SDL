@@ -8,92 +8,76 @@ SDL::Mixer::Samples - functions for loading sound samples
 
 Mixer
 
-=head1 DESCRIPTION
-
 =head1 METHODS
 
-=head2 int 
-mixsam_get_num_chunk_decoders ()
-	CODE:
-		RETVAL = Mix_GetNumChunkDecoders();
-	OUTPUT:
-		RETVAL
+=head2 get_num_chunk_decoders
 
-char* 
-mixsam_get_chunk_decoder (idecoder)
-	int idecoder
-	CODE:
-		RETVAL = (char *)Mix_GetChunkDecoder(idecoder);
-	OUTPUT:
-		RETVAL
+ my $num_decoders = SDL::Mixer::Samples::get_num_chunk_decoders();
 
-#endif
+Returns the number of available decoders.
 
+=head2 get_chunk_decoder
 
-Mix_Chunk *
-mixsam_load_WAV ( filename )
-	char *filename
-	PREINIT:
-		char * CLASS = "SDL::Mixer::MixChunk";
-	CODE:
-		Mix_Chunk * mixchunk;
-		mixchunk = Mix_LoadWAV(filename);
-		RETVAL = mixchunk;
-	OUTPUT:
-		RETVAL
+ my $decoder = SDL::Mixer::Samples::get_chunk_decoder( $num_decoder );
 
+Returns the decoder for the given id.
 
-Mix_Chunk *
-mixsam_load_WAV_RW ( src, freesrc)
-	SDL_RWops * src
-	int freesrc
-	PREINIT:
-		char * CLASS = "SDL::Mixer::MixChunk";
-	CODE:
-		Mix_Chunk * mixchunk;
-		mixchunk = Mix_LoadWAV_RW(src, freesrc);
-		RETVAL = mixchunk;
-	OUTPUT:
-		RETVAL
+=head2 load_WAV
 
+ my $mix_chunk = SDL::Mixer::Samples::load_WAV( $file );
 
-Mix_Chunk *
-mixsam_quick_load_WAV ( buf )
-	Uint8 *buf
-	PREINIT:
-		char * CLASS = "SDL::Mixer::MixChunk";
-	CODE:
-		RETVAL = Mix_QuickLoad_WAV(buf);
-	OUTPUT:
-		RETVAL
+C<load_WAV> reads a file and passes it to L<SDL::Mixer::Samples::load_WAV_RW>. SO this is a quick way to load a file into a chunk.
 
+Example:
 
-Mix_Chunk *
-mixsam_quick_load_RAW ( buf , len)
-	Uint8 *buf
-	int len
-	PREINIT:
-		char * CLASS = "SDL::Mixer::MixChunk";
-	CODE:
-		RETVAL = Mix_QuickLoad_RAW( buf, len );
-	OUTPUT:
-		RETVAL
+ my $chunk = SDL::Mixer::Samples::load_WAV('sample.wav');
+ 
+ SDL::Mixer::Channels::play_channel(-1, $chunk, -1);
+ SDL::delay(2000);
 
+=head2 load_WAV_RW
 
-int
-mixsam_volume_chunk ( chunk, volume )
-	Mix_Chunk *chunk
-	int volume
-	CODE:
-		RETVAL = Mix_VolumeChunk(chunk,volume);
-	OUTPUT:
-		RETVAL
+ my $mix_chunk = SDL::Mixer::Samples::load_WAV_RW( $rwops, $free );
 
+C<load_WAV_RW> is a macro that loads a sound sample from a a block of memory. It supports WAVE-, MOD-, MIDI-, OGG- and MP3 files (sometimes 
+depends on compilation options). It accepts two arguments, the first being a RWops object from which to read and the second being a flag to 
+free the source memory after loading is complete or not.
 
-void
-mixsam_free_chunk( chunk )
-	Mix_Chunk *chunk
-	CODE:
-		Mix_FreeChunk(chunk);
+Returns a Mix_Chunk containing the whole sample on success, or C<undef> on error.
+
+B<Note>: Do not reuse the RWops-object for another call to this function!
+
+Example:
+
+ my $rwops = SDL::RWOps->new_file('sample.wav', 'r');
+ 
+ my $chunk = SDL::Mixer::Samples::load_WAV_RW($rwops, 0);
+ 
+ SDL::Mixer::Channels::play_channel(-1, $chunk, -1);
+ SDL::delay(2000);
+
+=head2 quick_load_WAV
+
+ SDL::Mixer::Samples::quick_load_WAV( $buf );
+
+to be documented.
+
+=head2 quick_load_RAW
+
+ SDL::Mixer::Samples::quick_load_RAW( $buf, $len );
+
+to be documented.
+
+=head2 volume_chunk
+
+ my $volume_before = SDL::Mixer::Samples::volume_chunk( $chunk, $new_volume );
+
+C<volume_chunk> let you set and get the volume of a chunk. When a chunk is created is volume is C<MIX_MAX_VOLUME> (C<128>).
+
+If you pass C<-1> as C<$new_volume> you just get its volume without changing it.
+
+=head1 AUTHOR
+
+Tobias Leich [FROGGS]
 
 =cut

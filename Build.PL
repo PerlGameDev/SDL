@@ -377,7 +377,8 @@ my %subsystems =
 ### external libraries
 #    <library name> = symbolic library name
 #        <define> = value that will be used as -D<value> option when compiling XS code
-#	 <header> = header related to the library that will be used for avalability detection
+#        <header> = header related to the library that will be used for avalability detection,
+#                   could be a sigle value or an array of values                  
 #        <lib>    = value that will be used as -l<value> option when linking XS code
 my %libraries = (
 	SDL         => {
@@ -452,7 +453,7 @@ my %libraries = (
 	},
 	GL          => {
 		define => 'HAVE_GL',  
-		header => 'GL/gl.h',
+		header => [ 'GL/gl.h', 'GL/glext.h' ],
 		lib    => ($^O eq 'MSWin32') ? 'opengl32' : 'GL', # xxx not nice
 	},
 	GLU         => {
@@ -494,9 +495,13 @@ my $build = $package->new(
 	meta_add	     =>	     
 	{
 	},
+	create_readme => 1,
 	dist_abstract => 'SDL bindings to Perl',
 	dist_author	     => 'Kartik Thakore <KTHAKORE@cpan.org>',
 );
+
+### Alien::SDL quick check
+warn "###WARNING### Alien::SDL seems to be broken" unless Alien::SDL->config('prefix');
 
 ### see which subsystems can be built -- do we have headers for them?
 print "Gonna autodetect available libraries ...\n";
@@ -511,7 +516,6 @@ $build->config_data('sdl_ld_shlib_map', Alien::SDL->config('ld_shlib_map'));
 
 ### something that was originally special to MacOS/Darwin
 # somebody MacOS/Darwin friendly should review whether it is still necessary
-# xxx TODO xxx
 $build->special_build_settings();
 
 ### get some info into M::B notes
@@ -521,7 +525,6 @@ $build->notes('libraries', \%libraries);
 $build->notes('build_systems', $build_systems);
 $build->notes('sdl_cflags', Alien::SDL->config('cflags'));
 $build->notes('sdl_libs', Alien::SDL->config('libs'));
-$build->set_build_opts();   # creates notes('defines') and notes('links')
 $build->set_file_flags();   # creates notes('file_flags')
 
 # now we're ready to go!
