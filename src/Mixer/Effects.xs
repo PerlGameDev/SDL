@@ -14,34 +14,37 @@ static SV       *fcb          = (SV*)NULL;
 void effect_func(int chan, void *stream, int len, void *udata)
 {
 	PERL_SET_CONTEXT(perl_for_cb);
-	
+	Sint16 *buf = (Sint16 *)stream;
+	len /= 2;            // 2 bytes ber sample
+
 	dSP;                                       /* initialize stack pointer          */
 	ENTER;                                     /* everything created after here     */
 	SAVETMPS;                                  /* ...is a temporary variable.       */
 
 	PUSHMARK(SP);                              /* remember the stack pointer        */
 	XPUSHs(sv_2mortal(newSViv(chan)));
-	XPUSHs(sv_2mortal(newSVpv((Uint8*)stream, len)));
+	//XPUSHs(sv_2mortal(newSVpv((Sint16*)stream, len)));
 	XPUSHs(sv_2mortal(newSViv(len)));
 	XPUSHs(sv_2mortal(newSViv(*(int*)udata))); /* push something onto the stack     */
-	*(int*)udata = *(int*)udata + len;
+	int i;
+	for(i = 0; i < len; i++)
+		XPUSHs(sv_2mortal(newSVnv((Sint16)buf[i])));
+	*(int*)udata = *(int*)udata + len * 2;
 	PUTBACK;                                   /* make local stack pointer global   */
 
 	if(cb != (SV*)NULL)
 	{
-        int count = perl_call_sv(cb, G_SCALAR); /* call the function                 */
+        int count = perl_call_sv(cb, G_ARRAY); /* call the function                 */
 		SPAGAIN;                               /* refresh stack pointer             */
 		
 		if(count > 0)
 		{
-			//int i;
+			memset(buf, 0, len*2); // clear the buffer
 			
-			
-			//for(i=0; i<len; i++)
-			//stream__[i] = 0;
-			//	*(Uint8*)stream[i] = 0;              /* pop the return value from stack   */
-				
-			//*(Uint8*)stream = (Uint8*)POPp;
+			for(i = len - 1; i > 0; i--)
+			{
+				buf[i]     = (Sint16)POPi;
+			}
 		}
 
 		PUTBACK;
@@ -73,6 +76,8 @@ MODULE = SDL::Mixer::Effects 	PACKAGE = SDL::Mixer::Effects    PREFIX = mixeff_
 SDL_mixer bindings
 
 See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
+
+Examples: http://olofson.net/examples.html
 
 =cut
 
