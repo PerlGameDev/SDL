@@ -454,12 +454,12 @@ my %libraries = (
 	GL          => {
 		define => 'HAVE_GL',  
 		header => [ 'GL/gl.h', 'GL/glext.h' ],
-		lib    => ($^O eq 'MSWin32') ? 'opengl32' : 'GL', # xxx not nice
+		lib    => ($^O =~ /^(MSWin32|cygwin)$/) ? 'opengl32' : 'GL', # xxx not nice
 	},
 	GLU         => {
 		define => 'HAVE_GLU', 
 		header => 'GL/glu.h',
-		lib    => ($^O eq 'MSWin32') ? 'glu32' : 'GLU', # xxx not nice
+		lib    => ($^O =~ /^(MSWin32|cygwin)$/) ? 'glu32' : 'GLU', # xxx not nice
 	},
 );
 
