@@ -2,22 +2,187 @@
 
 =head1 NAME
 
-SDL::Mixer::Effects -- SDL_Mixer sound effect functions and bindings
+SDL::Mixer::Effects - sound effect functions
 
 =head1 CATEGORY
 
 Mixer
 
-=head1 DESCRIPTION
-
 =head1 METHODS
 
-=head2 register_effect()
+=head2 register
 
-B<Note>: >= 1.2.10
+ SDL::Mixer::Effects::register( $channel, $effect_callback, $done_callback, $arg );
+
+Hook a processor function into a channel for post processing effects. You may just be reading the data and displaying it, or you may be altering 
+the stream to add an echo. Most processors also have state data that they allocate as they are in use, this would be stored in the C<$arg> data 
+space. When a processor is finished being used, any function passed into C<$done_callback> will be called.
+
+The effects are put into a linked list, and always appended to the end, meaning they always work on previously registered effects output.
+
+Returns: Zero on errors, such as a nonexisting channel.
+
+B<Note>: Passing MIX_CHANNEL_POST will register the C<$effect_callback> as an postmix effect.
+
+B<Note>: Do not use this on a threaded perl. This will crash.
+
+Example:
+
+ use SDL;
+ use SDL::Mixer;
+ use SDL::Mixer::Channels;
+ use SDL::Mixer::Effects;
+ use SDL::Mixer::Samples;
+ 
+ my @last_stream        = ();
+ my $echo_effect_func   = sub
+ {
+     my $channel  = shift;
+     my $samples  = shift;
+     my $position = shift;
+     my @stream   = @_;
+ 
+     my @stream2 = @stream;
+     my $offset  = $samples / 2;
+     for(my $i = 0; $i < $samples; $i+=2)
+     {
+         if($i < $offset)
+         {
+             if(scalar(@last_stream) == $samples)
+             {
+                 $stream2[$i]     = $stream[$i]     * 0.6 + $last_stream[$samples + $i - $offset]     * 0.4; # left
+                 $stream2[$i + 1] = $stream[$i + 1] * 0.6 + $last_stream[$samples + $i - $offset + 1] * 0.4; # right
+             }
+         }
+         else
+         {
+             $stream2[$i]     = $stream[$i]     * 0.6 + $stream[$i - $offset]     * 0.4; # left
+             $stream2[$i + 1] = $stream[$i + 1] * 0.6 + $stream[$i - $offset + 1] * 0.4; # right
+         }
+     }
+ 
+     @last_stream = @stream;
+     return @stream2;
+ };
+ 
+ my $effect_done = sub
+ {
+     # you may do something here
+ };
+ 
+ SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 1024 );
+ 
+ my $playing_channel = SDL::Mixer::Channels::play_channel( -1, SDL::Mixer::Samples::load_WAV('test/data/sample.wav'), -1 );
+ SDL::Mixer::Effects::register($playing_channel, $echo_effect_func, $effect_done, 0);
+ SDL::delay(2000);
+ SDL::Mixer::Effects::unregister($playing_channel, $echo_effect_func);
+ 
+ SDL::Mixer::close_audio();
+ SDL::quit();
+
+=head2 unregister
+
+ SDL::Mixer::Effects::unregister( $channel, $effect_callback );
+
+Remove the registered effect function from the effect list for channel.
+If the channel is active the registered effect will have its C<$done_callback> function called, if it was specified in 
+L<SDL::Mixer::Effects::register>.
+
+Returns: Zero on errors, such as invalid channel, or effect function not registered on channel. 
+
+B<Note>: Do not use this on a threaded perl. This will crash.
+
+=head2 unregister_all
+
+ SDL::Mixer::Effects::unregister_all( $channel );
+
+This removes all effects registered to C<$channel>. If the channel is active all the registered effects will have their C<$done_callback> 
+functions called, if they were specified in L<SDL::Mixer::Effects::register>.
+
+Returns: Zero on errors, such as channel not existing. 
+
+B<Note>: Do not use this on a threaded perl. This will crash.
 
 =head2 set_post_mix
 
+ SDL::Mixer::Effects::set_post_mix( $effect_callback, $arg );
+
+Hook a processor function to the postmix stream for post processing effects. You may just be reading the data and displaying it, or you may be 
+altering the stream to add an echo. This processor is never really finished, until you call it without arguments.
+There can only be one postmix function used at a time through this method. Use L<SDL::Mixer::Effects::register> with MIX_CHANNEL_POST to use multiple postmix processors.
+This postmix processor is run AFTER all the registered postmixers set up by L<SDL::Mixer::Effects::register>. 
+
+B<Note>: Do not use this on a threaded perl. This will crash.
+
+=head2 set_distance
+
+ SDL::Mixer::Effects::set_distance( $channel, $distance );
+
+This effect simulates a simple attenuation of volume due to distance. The volume never quite reaches silence, even at max distance (C<255>).
+
+NOTE: Using a distance of C<0> will cause the effect to unregister itself from channel. You cannot unregister it any other way, unless you use 
+L<SDL::Mixer::Effects::unregister_all> on the channel.
+
+Returns: Zero on errors, such as an invalid channel, or if Mix_RegisterEffect failed. 
+
 =head2 set_panning
+
+ SDL::Mixer::Effects::set_panning( $channel, $left, $right );
+
+This effect will only work on stereo audio. Meaning you called L<SDL::Mixer::open_audio> with 2 channels. 
+
+B<Note>: Setting both left and right to 255 will unregister the effect from channel. You cannot unregister it any other way, unless you use 
+L<SDL::Mixer::Effects::unregister_all> on the channel.
+
+B<Note>: Using this function on a mono audio device will not register the effect, nor will it return an error status.
+
+Returns: Zero on errors, such as bad channel, or if L<SDL::Mixer::Effects::register> failed. 
+
+=head2 set_position
+
+ SDL::Mixer::Effects::set_position( $channel, $angle, $distance );
+
+This effect emulates a simple 3D audio effect. It's not all that realistic, but it can help improve some level of realism. By giving it the 
+angle and distance from the camera's point of view, the effect pans and attenuates volumes.
+
+C<$angle> is the direction in relation to forward from 0 to 360 degrees. Larger angles will be reduced to this range using angles % 360.
+
+=over 4
+
+=item *
+
+0 = directly in front.
+
+=item *
+
+90 = directly to the right.
+
+=item *
+
+180 = directly behind.
+
+=item *
+
+270 = directly to the left.
+
+=back
+
+So you can see it goes clockwise starting at directly in front.
+
+C<$distance> is C<0>(close/loud) to C<255>(far/quiet).
+
+B<Note>: Using angle and distance of C<0>, will cause the effect to unregister itself from channel. You cannot unregister it any other way, 
+unless you use L<SDL::Mixer::Effects::unregister_all> on the channel.
+
+Returns: Zero on errors, such as an invalid channel, or if C<SDL::Mixer::Effects::register> failed. 
+
+=head2 set_reverse_stereo
+
+ SDL::Mixer::Effects::set_reverse_stereo( $channel, $flip );
+
+If you pass C<1> to C<$flip> it simple reverse stereo, swaps left and right channel sound.
+
+B<Note>: Using a flip of C<0>, will cause the effect to unregister itself from channel. You cannot unregister it any other way, unless you use 
+L<SDL::Mixer::Effects::register> on the channel. 
 
 =cut
