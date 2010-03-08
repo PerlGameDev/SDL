@@ -236,7 +236,7 @@ mixeff_set_reverse_stereo( channel, flip )
 		RETVAL
 
 void
-mixeff_set_post_mix(func = NULL, arg = NULL)
+mixeff_set_post_mix(func = NULL, arg = 0)
 	SV *func
 	int arg
 	CODE:
@@ -252,7 +252,7 @@ mixeff_set_post_mix(func = NULL, arg = NULL)
 			Mix_SetPostMix(&effect_pm_func, arg2);
 		}
 		else
-			Mix_SetPostMix(NULL, NULL);
+			Mix_SetPostMix(NULL, 0);
 
 #endif
 
