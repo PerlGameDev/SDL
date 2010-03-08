@@ -1,7 +1,5 @@
 TODO for SDL_perl
 
-Release 2.3_7
-- Mixer Docs, tests, and XS
 Release 2.3_8
 - TTF Docs, tests and XS
 Release 2.3_9
