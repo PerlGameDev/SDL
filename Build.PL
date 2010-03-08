@@ -476,7 +476,7 @@ my $build = $package->new(
 	{
 		'YAML'	=> '0.68',
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL' => '0.8.2',
+		'Alien::SDL' => '0.9.1',
 		'File::Find' => '2.07'
 	},
 	build_requires =>
@@ -484,7 +484,7 @@ my $build = $package->new(
 		'Test::Simple' => '0.88',
 		'IO::CaptureOutput' => '0',
 		'Test::Most' => '0.21',
-		'Alien::SDL' => '0.8.2',
+		'Alien::SDL' => '0.9.1',
 	},
 	build_recommends     =>
 	{
