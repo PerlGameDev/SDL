@@ -1,29 +1,50 @@
 #!/usr/bin/perl -w
 use strict;
 use SDL;
-use Test::More;
+use SDL::Config;
 
-my @done = qw//;
-
-TODO:
+BEGIN
 {
-  local $TODO = "Tests for SDL::TTF::Font object";
-  my $font; #uncomment the next line after we get TTF::Font
+	use Test::More;
+	use lib 't/lib';
+	use SDL::TestTool;
+
+	if( !SDL::Config->has('SDL_ttf') )
+	{
+	    plan( skip_all => 'SDL_ttf support not compiled' );
+	}
+}
+
+use SDL::TTF;
+use SDL::Version;
+
+my $v = SDL::TTF::linked_version();
+
+isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::Version object');
+
+diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
+
+#TODO:
+#{
+  #local $TODO = "Tests for SDL::TTF::Font object";
+  #my $font; #uncomment the next line after we get TTF::Font
  # my $font = TTF::Font->new(); #use TTF_OpenFont
 
-  isa_ok( $font, 'TTF::Font', '[Font] Constructs');
-  my $rwops; #uncomment next line after we get RWops
+  #isa_ok( $font, 'TTF::Font', '[Font] Constructs');
+  #my $rwops; #uncomment next line after we get RWops
   # my $rwops = SDL::RWops->new_from_file('../test/data/aircut3.ttf');  
   #$font = TTF::Font->new_rw($rwops, 1, 16); #use TTF_OpenFontRW
-  isa_ok( $font, 'TTF::Font', '[Font] Constructs from RWops');
+  #isa_ok( $font, 'TTF::Font', '[Font] Constructs from RWops');
 
   #$font = TTF::Font->new_index('../test/data/aircut3.ttf', 16, 0); #use TTF_OpenFontIndex
-  isa_ok( $font, 'TTF::Font', '[Font] Constructs from file with index');
+  #isa_ok( $font, 'TTF::Font', '[Font] Constructs from file with index');
 
   #$font = TTF::Font->new_rw_index($rwops, 1, 16, 0); #use TTF_OpenFontIndexRW
-  isa_ok( $font, 'TTF::Font', '[Font] Constructs from file with index with RW');
+  #isa_ok( $font, 'TTF::Font', '[Font] Constructs from file with index with RW');
+#}
 
-}
+my @done = qw/
+/;
 
 my @left = qw/
 linked_version	  	
@@ -74,12 +95,11 @@ my $why
     . ( $#done + 1 ) . " / "
     . ( $#done + $#left + 2 );
 
-TODO:
-{
-    local $TODO = $why;
-    fail "Not Implmented $_" foreach(@left)
-    
-}
+#TODO:
+#{
+#    local $TODO = $why;
+#    fail "Not Implmented $_" foreach(@left)
+#}
 diag $why;
 
 done_testing;

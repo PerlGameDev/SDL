@@ -2,86 +2,88 @@
 #include "perl.h"
 #include "XSUB.h"
 
-#ifndef aTHX_
-#define aTHX_
-#endif
-
 #include <SDL.h>
-
 
 #ifdef HAVE_SDL_TTF
 #include <SDL_ttf.h>
 #endif
 
-
-
-MODULE = SDL	PACKAGE = SDL
-PROTOTYPES : DISABLE
-
-
-=for comment
-
-These are here right now to keep them around with using the code.
+MODULE = SDL::TTF	PACKAGE = SDL::TTF	PREFIX = ttf_
 
 #ifdef HAVE_SDL_TTF
 
+const SDL_version *
+ttf_linked_version()
+	PREINIT:
+		char* CLASS = "SDL::Version";
+	CODE:
+		RETVAL = TTF_Linked_Version();
+	OUTPUT:
+		RETVAL
+
+void
+ttf_byte_swapped_unicode(swapped)
+	int swapped
+	CODE:
+		TTF_ByteSwappedUNICODE(swapped);
+
 int
-TTF_Init ()
+ttt_Init()
 	CODE:
 		RETVAL = TTF_Init();
 	OUTPUT:
 		RETVAL
 
-void
-TTF_Quit ()
+TTF_Font *
+ttf_open_font(file, ptsize)
+	const char *file
+	int ptsize
+	PREINIT:
+		char* CLASS = "SDL::TTF_Font";
 	CODE:
-		TTF_Quit();
+		RETVAL = TTF_OpenFont(file, ptsize);
+	OUTPUT:
+		RETVAL
 
-TTF_Font*
-TTF_OpenFont ( file, ptsize )
+TTF_Font *
+TTF_OpenFontIndex(file, ptsize, index)
 	char *file
 	int ptsize
-	CODE:
+	long index
+	PREINIT:
 		char* CLASS = "SDL::TTF_Font";
-		RETVAL = TTF_OpenFont(file,ptsize);
-	OUTPUT:
-		RETVAL
-
-AV*
-TTF_SizeText ( font, text )
-	TTF_Font *font
-	char *text
 	CODE:
-		int w,h;
-		RETVAL = (AV*)sv_2mortal((SV*)newAV());
-		if(TTF_SizeText(font,text,&w,&h))
-		{
-			printf("TTF error at TTFSizeText: %s \n", TTF_GetError());
-			Perl_croak (aTHX_ "TTF error \n");
-		}
-		else
-		{
-			av_push(RETVAL,newSViv(w));
-			av_push(RETVAL,newSViv(h));
-		}
+		RETVAL = TTF_OpenFontIndex(file, ptsize, index);
 	OUTPUT:
 		RETVAL
 
-SDL_Surface*
-TTF_RenderText_Blended ( font, text, fg )
-	TTF_Font *font
-	char *text
-	SDL_Color *fg
+TTF_Font *
+TTF_OpenFontRW(src, freesrc, ptsize)
+	SDL_RWops *src
+	int freesrc
+	int ptsize
+	PREINIT:
+		char* CLASS = "SDL::TTF_Font";
 	CODE:
-		char* CLASS = "SDL::Surface";
-		RETVAL = TTF_RenderText_Blended(font,text,*fg);
+		RETVAL = TTF_OpenFontRW(src, freesrc, ptsize);
 	OUTPUT:
 		RETVAL
 
-
+TTF_Font *
+TTF_OpenFontIndexRW(src, freesrc, ptsize, index)
+	SDL_RWops *src
+	int freesrc
+	int ptsize
+	long index
+	PREINIT:
+		char* CLASS = "SDL::TTF_Font";
+	CODE:
+		RETVAL = TTF_OpenFontIndexRW(src, freesrc, ptsize, index);
+	OUTPUT:
+		RETVAL
 
 int
-TTFGetFontStyle ( font )
+TTF_GetFontStyle(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_GetFontStyle(font);
@@ -89,14 +91,14 @@ TTFGetFontStyle ( font )
 		RETVAL
 
 void
-TTFSetFontStyle ( font, style )
+TTF_SetFontStyle(font, style)
 	TTF_Font *font
 	int style
 	CODE:
-		TTF_SetFontStyle(font,style);
-	
+		TTF_SetFontStyle(font, style);
+
 int
-TTFFontHeight ( font )
+TTF_FontHeight(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontHeight(font);
@@ -104,7 +106,7 @@ TTFFontHeight ( font )
 		RETVAL
 
 int
-TTFFontAscent ( font )
+TTF_FontAscent(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontAscent(font);
@@ -112,7 +114,7 @@ TTFFontAscent ( font )
 		RETVAL
 
 int
-TTFFontDescent ( font )
+TTF_FontDescent(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontDescent(font);
@@ -120,296 +122,295 @@ TTFFontDescent ( font )
 		RETVAL
 
 int
-TTFFontLineSkip ( font )
+TTF_FontLineSkip(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontLineSkip(font);
 	OUTPUT:
 		RETVAL
 
-AV*
-TTFGlyphMetrics ( font, ch )
+long
+TTF_FontFaces(font)
+	TTF_Font *font
+	CODE:
+		RETVAL = TTF_FontFaces(font);
+	OUTPUT:
+		RETVAL
+
+int
+TTF_FontFaceIsFixedWidth(font)
+	TTF_Font *font
+	CODE:
+		RETVAL = TTF_FontFaceIsFixedWidth(font);
+	OUTPUT:
+		RETVAL
+
+char *
+TTF_FontFaceFamilyName(font)
+	TTF_Font *font
+	CODE:
+		RETVAL = TTF_FontFaceFamilyName(font);
+	OUTPUT:
+		RETVAL
+
+char *
+TTF_FontFaceStyleName(font)
+	TTF_Font *font
+	CODE:
+		RETVAL = TTF_FontFaceStyleName(font);
+	OUTPUT:
+		RETVAL
+
+int
+TTF_GlyphMetrics(font, ch, minx, maxx, miny, maxy, advance)
 	TTF_Font *font
 	Uint16 ch
+	int *minx
+	int *maxx
+	int *miny
+	int *maxy
+	int *advance
 	CODE:
-		int minx, miny, maxx, maxy, advance;
-		RETVAL = (AV*)sv_2mortal((SV*)newAV());
-		TTF_GlyphMetrics(font, ch, &minx, &miny, &maxx, &maxy, &advance);
-		av_push(RETVAL,newSViv(minx));
-		av_push(RETVAL,newSViv(miny));
-		av_push(RETVAL,newSViv(maxx));
-		av_push(RETVAL,newSViv(maxy));
-		av_push(RETVAL,newSViv(advance));
+		RETVAL = TTF_GlyphMetrics(font, ch, minx, maxx, miny, maxy, advance);
 	OUTPUT:
 		RETVAL
 
-
-AV*
-TTFSizeUTF8 ( font, text )
+int
+TTF_SizeText(font, text, w, h)
 	TTF_Font *font
-	char *text
+	const char *text
+	int *w
+	int *h
 	CODE:
-		int w,h;
-		RETVAL = (AV*)sv_2mortal((SV*)newAV());
-		if(TTF_SizeUTF8(font,text,&w,&h))
-		{
-			av_push(RETVAL,newSViv(w));
-			av_push(RETVAL,newSViv(h));
-		}
-		else
-		{
-			printf("TTF error at TTFSizeUTF8 with : %s \n", TTF_GetError());
-			Perl_croak (aTHX_ "TTF error \n");
-		}
-		
+		RETVAL = TTF_SizeText(font, text, w, h);
 	OUTPUT:
 		RETVAL
 
-AV*
-TTFSizeUNICODE ( font, text )
+int
+TTF_SizeUTF8(font, text, w, h)
+	TTF_Font *font
+	const char *text
+	int *w
+	int *h
+	CODE:
+		RETVAL = TTF_SizeUTF8(font, text, w, h);
+	OUTPUT:
+		RETVAL
+
+int
+TTF_SizeUNICODE(font, text, w, h)
 	TTF_Font *font
 	const Uint16 *text
+	int *w
+	int *h
 	CODE:
-		int w,h;
-		RETVAL = (AV*)sv_2mortal((SV*)newAV());
-		if(TTF_SizeUNICODE(font,text,&w,&h))
-		{
-			av_push(RETVAL,newSViv(w));
-			av_push(RETVAL,newSViv(h));
-		}
-		else
-		{
-			printf("TTF error at TTFSizeUNICODE : %s \n", TTF_GetError()); 
-			Perl_croak (aTHX_ "TTF error \n");
-		}
-
+		RETVAL = TTF_SizeUNICODE(font, text, w, h);
 	OUTPUT:
 		RETVAL
 
-SDL_Surface*
-TTFRenderTextSolid ( font, text, fg )
+SDL_Surface *
+TTF_RenderText_Solid(font, text, fg)
 	TTF_Font *font
-	char *text
+	const char *text
 	SDL_Color *fg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderText_Solid(font,text,*fg);
+		RETVAL = TTF_RenderText_Solid(font, text, *fg);
 	OUTPUT:
 		RETVAL
 
-SDL_Surface*
-TTFRenderUTF8Solid ( font, text, fg )
+SDL_Surface *
+TTF_RenderUTF8_Solid(font, text, fg)
 	TTF_Font *font
-	char *text
+	const char *text
 	SDL_Color *fg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderUTF8_Solid(font,text,*fg);
+		RETVAL = TTF_RenderUTF8_Solid(font, text, *fg);
 	OUTPUT:
 		RETVAL
 
-SDL_Surface*
-TTFRenderUNICODESolid ( font, text, fg )
-	TTF_Font *font
-	const Uint16 *text
-	SDL_Color *fg
-	CODE:
-		RETVAL = TTF_RenderUNICODE_Solid(font,text,*fg);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface*
-TTFRenderGlyphSolid ( font, ch, fg )
-	TTF_Font *font
-	Uint16 ch
-	SDL_Color *fg
-	CODE:
-		RETVAL = TTF_RenderGlyph_Solid(font,ch,*fg);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface*
-TTFRenderTextShaded ( font, text, fg, bg )
-	TTF_Font *font
-	char *text
-	SDL_Color *fg
-	SDL_Color *bg
-	CODE:
-		RETVAL = TTF_RenderText_Shaded(font,text,*fg,*bg);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface*
-TTFRenderUTF8Shaded( font, text, fg, bg )
-	TTF_Font *font
-	char *text
-	SDL_Color *fg
-	SDL_Color *bg
-	CODE:
-		RETVAL = TTF_RenderUTF8_Shaded(font,text,*fg,*bg);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface*
-TTFRenderUNICODEShaded( font, text, fg, bg )
+SDL_Surface *
+TTF_RenderUNICODE_Solid(font, text, fg)
 	TTF_Font *font
 	const Uint16 *text
 	SDL_Color *fg
-	SDL_Color *bg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderUNICODE_Shaded(font,text,*fg,*bg);
+		RETVAL = TTF_RenderUNICODE_Solid(font, text, *fg);
 	OUTPUT:
 		RETVAL
 
-SDL_Surface*
-TTFRenderGlyphShaded ( font, ch, fg, bg )
+SDL_Surface *
+TTF_RenderGlyph_Solid(font, ch, fg)
 	TTF_Font *font
 	Uint16 ch
 	SDL_Color *fg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = TTF_RenderGlyph_Solid(font, ch, *fg);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+TTF_RenderText(font, text, fg, bg)
+	TTF_Font *font
+	const char *text
+	SDL_Color *fg
 	SDL_Color *bg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderGlyph_Shaded(font,ch,*fg,*bg);
+		RETVAL = TTF_RenderText(font, text, *fg, *bg);
 	OUTPUT:
 		RETVAL
 
-SDL_Surface*
-TTFRenderTextBlended( font, text, fg )
+SDL_Surface *
+TTF_RenderText_Shaded(font, text, fg, bg)
 	TTF_Font *font
-	char *text
+	const char *text
 	SDL_Color *fg
+	SDL_Color *bg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderText_Blended(font,text,*fg);
+		RETVAL = TTF_RenderText_Shaded(font, text, *fg, *bg);
 	OUTPUT:
 		RETVAL
 
-SDL_Surface*
-TTFRenderUTF8Blended( font, text, fg )
+SDL_Surface *
+TTF_RenderUTF8(font, text, fg, bg)
 	TTF_Font *font
-	char *text
+	const char *text
 	SDL_Color *fg
+	SDL_Color *bg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderUTF8_Blended(font,text,*fg);
+		RETVAL = TTF_RenderUTF8(font, text, *fg, *bg);
 	OUTPUT:
 		RETVAL
 
-SDL_Surface*
-TTFRenderUNICODEBlended( font, text, fg )
+SDL_Surface *
+TTF_RenderUTF8_Shaded(font, text, fg, bg)
+	TTF_Font *font
+	const char *text
+	SDL_Color *fg
+	SDL_Color *bg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = TTF_RenderUTF8_Shaded(font, text, *fg, *bg);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+TTF_RenderUNICODE(font, text, fg, bg)
 	TTF_Font *font
 	const Uint16 *text
 	SDL_Color *fg
+	SDL_Color *bg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderUNICODE_Blended(font,text,*fg);
+		RETVAL = TTF_RenderUNICODE(font, text, *fg, *bg);
 	OUTPUT:
 		RETVAL
 
-SDL_Surface*
-TTFRenderGlyphBlended( font, ch, fg )
+SDL_Surface *
+TTF_RenderUNICODE_Shaded(font, text, fg, bg)
+	TTF_Font *font
+	const Uint16 *text
+	SDL_Color *fg
+	SDL_Color *bg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = TTF_RenderUNICODE_Shaded(font, text, *fg, *bg);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+TTF_RenderGlyph_Shaded(font, ch, fg, bg)
 	TTF_Font *font
 	Uint16 ch
 	SDL_Color *fg
+	SDL_Color *bg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderGlyph_Blended(font,ch,*fg);
+		RETVAL = TTF_RenderGlyph_Shaded(font, ch, *fg, *bg);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+TTF_RenderText_Blended(font, text, fg)
+	TTF_Font *font
+	const char *text
+	SDL_Color *fg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = TTF_RenderText_Blended(font, text, *fg);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+TTF_RenderUTF8_Blended(font, text, fg)
+	TTF_Font *font
+	const char *text
+	SDL_Color *fg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = TTF_RenderUTF8_Blended(font, text, *fg);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+TTF_RenderUNICODE_Blended(font, text, fg)
+	TTF_Font *font
+	const Uint16 *text
+	SDL_Color *fg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = TTF_RenderUNICODE_Blended(font, text, *fg);
+	OUTPUT:
+		RETVAL
+
+SDL_Surface *
+TTF_RenderGlyph_Blended(font, ch, fg)
+	TTF_Font *font
+	Uint16 ch
+	SDL_Color *fg
+	PREINIT:
+		char* CLASS = "SDL::Surface";
+	CODE:
+		RETVAL = TTF_RenderGlyph_Blended(font, ch, *fg);
 	OUTPUT:
 		RETVAL
 
 void
-TTFCloseFont ( font )
+ttf_close_font(font)
 	TTF_Font *font
 	CODE:
 		TTF_CloseFont(font);
-		font=NULL; //to be safe http://sdl.beuc.net/sdl.wiki/SDL_ttf_copy_Functions_Management_TTF_CloseFont
 
-SDL_Surface*
-TTFPutString ( font, mode, surface, x, y, fg, bg, text )
-	TTF_Font *font
-	int mode
-	SDL_Surface *surface
-	int x
-	int y
-	SDL_Color *fg
-	SDL_Color *bg
-	char *text
+void
+ttf_quit()
 	CODE:
-		SDL_Surface *img;
-		SDL_Rect dest;
-		int w,h;
-		dest.x = x;
-		dest.y = y;
-		RETVAL = NULL;
-		switch (mode) {
-			case TEXT_SOLID:
-				img = TTF_RenderText_Solid(font,text,*fg);
-				TTF_SizeText(font,text,&w,&h);
-				dest.w = w;
-				dest.h = h;
-				break;
-			case TEXT_SHADED:
-				img = TTF_RenderText_Shaded(font,text,*fg,*bg);
-				TTF_SizeText(font,text,&w,&h);
-				dest.w = w;
-				dest.h = h;
-				break;
-			case TEXT_BLENDED:
-				img = TTF_RenderText_Blended(font,text,*fg);
-				TTF_SizeText(font,text,&w,&h);
-				dest.w = w;
-				dest.h = h;
-				break;
-			case UTF8_SOLID:
-				img = TTF_RenderUTF8_Solid(font,text,*fg);
-				TTF_SizeUTF8(font,text,&w,&h);
-				dest.w = w;
-				dest.h = h;
-				break;
-			case UTF8_SHADED:
-				img = TTF_RenderUTF8_Shaded(font,text,*fg,*bg);
-				TTF_SizeUTF8(font,text,&w,&h);
-				dest.w = w;
-				dest.h = h;
-				break;
-			case UTF8_BLENDED:
-				img = TTF_RenderUTF8_Blended(font,text,*fg);
-				TTF_SizeUTF8(font,text,&w,&h);
-				dest.w = w;
-				dest.h = h;
-				break;
-			case UNICODE_SOLID:
-				img = TTF_RenderUNICODE_Solid(font,(Uint16*)text,*fg);
-				TTF_SizeUNICODE(font,(Uint16*)text,&w,&h);
-				dest.w = w;
-				dest.h = h;
-				break;
-			case UNICODE_SHADED:
-				img = TTF_RenderUNICODE_Shaded(font,(Uint16*)text,*fg,*bg);
-				TTF_SizeUNICODE(font,(Uint16*)text,&w,&h);
-				dest.w = w;
-				dest.h = h;
-				break;
-			case UNICODE_BLENDED:
-				img = TTF_RenderUNICODE_Blended(font,(Uint16*)text,*fg);
-				TTF_SizeUNICODE(font,(Uint16*)text,&w,&h);
-				dest.w = w;
-				dest.h = h;
-				break;
-			default:
-				img = TTF_RenderText_Shaded(font,text,*fg,*bg);
-				TTF_SizeText(font,text,&w,&h);
-				dest.w = w;
-				dest.h = h;
-		}
-		if ( img && img->format && img->format->palette ) {
-			SDL_Color *c = &img->format->palette->colors[0];
-			Uint32 key = SDL_MapRGB( img->format, c->r, c->g, c->b );
-			SDL_SetColorKey(img,SDL_SRCCOLORKEY,key );
-			if (0 > SDL_BlitSurface(img,NULL,surface,&dest)) {
-				SDL_FreeSurface(img);
-				RETVAL = NULL;	
-			} else {
-				RETVAL = img;
-			}
-		}
+		TTF_Quit();
+
+int
+ttf_was_init()
+	CODE:
+		RETVAL = TTF_WasInit();
 	OUTPUT:
 		RETVAL
 
 #endif
-
-
-=cut
