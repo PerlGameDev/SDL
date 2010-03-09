@@ -7,9 +7,13 @@
 #ifdef HAVE_SDL_MIXER
 #include <SDL_mixer.h>
 
+#define MAX_EFFECTS 31
+
 PerlInterpreter *perl    = NULL;
 PerlInterpreter *perl_cb = NULL;
 int registered_effects   = 0;
+
+void** effects = NULL;
 
 char* effect_func_cb = NULL;
 
@@ -91,6 +95,10 @@ mixeff_register(channel, func, done, arg)
 	SV *done
 	SV *arg
 	CODE:
+		if(effects == NULL)
+		{
+			effects = malloc(MAX_EFFECTS* sizeof(void*));
+		}
 		if(perl_cb == NULL)
 		{
 			perl    = PERL_GET_CONTEXT;
@@ -100,10 +108,29 @@ mixeff_register(channel, func, done, arg)
 
 		effect_func_cb = func;
 		
-		if(0 != Mix_RegisterEffect(channel, &effect_func, &effect_done, arg))
-			RETVAL = ++registered_effects;
+		if(registered_effects <= MAX_EFFECTS )
+		{
+		
+			if(0 != Mix_RegisterEffect(channel, &effect_func, &effect_done, arg))
+			{
+				
+				effects[registered_effects] = (void*)&effect_func;	
+				RETVAL = ++registered_effects;
+							
+			}
+			else	
+			{
+			   warn( "Maximum effects allowed is 32 " );
+			   RETVAL = -1;
+			}
+		}
 		else
-			RETVAL = 0;
+		{
+			RETVAL = -1;
+		}
+				
+		
+		
 		
 	OUTPUT:
 		RETVAL
@@ -111,7 +138,7 @@ mixeff_register(channel, func, done, arg)
 int
 mixeff_unregister( channel, func )
 	int channel
-	SV *func
+	int func
 	CODE:
 		if(perl_cb == NULL)
 		{
@@ -119,7 +146,14 @@ mixeff_unregister( channel, func )
 			perl_cb = perl_clone(perl, CLONEf_KEEP_PTR_TABLE);
 			PERL_SET_CONTEXT(perl);
 		}
-		RETVAL = Mix_UnregisterEffect(channel, &effect_func);
+		if( func <= registered_effects)
+		{
+			RETVAL = Mix_UnregisterEffect(channel, effects[func]);
+		}
+		else
+		{
+			warn (" Invalid effect id %d, currently %d effects registered", func, registered_effects);
+		}
 	OUTPUT:
 		RETVAL
 

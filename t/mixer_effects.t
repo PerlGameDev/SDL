@@ -81,16 +81,18 @@ my $playing_channel = SDL::Mixer::Channels::play_channel( -1, $sample_chunk, -1 
 is( $playing_channel >= 0, 1, "[play_channel] playing $audio_test_file");
 
 SDL::delay($delay);
-isnt( SDL::Mixer::Effects::register($playing_channel, "main::echo_effect_func", "main::effect_done", 0), 0, '[register] registerering echo effect callback' );
+my $effect_id = SDL::Mixer::Effects::register($playing_channel, "main::echo_effect_func", "main::effect_done", 0);
+isnt( $effect_id, -1, '[register] registerering echo effect callback' );
 SDL::delay($delay);
-isnt( SDL::Mixer::Effects::unregister($playing_channel, "main::echo_effect_func"),                0, '[unregister] unregistering effect_func will call effect_done' );
+isnt( SDL::Mixer::Effects::unregister($playing_channel, $effect_id),                0, '[unregister] unregistering effect_func will call effect_done' );
 SDL::delay(200);
 is( $effect_func_called > 0,                                                          1, "[effect_func] called $effect_func_called times" );
 is( $effect_done_called > 0,                                                          1, "[effect_done] called $effect_done_called times" );
 
 $effect_func_called = 0;
 $effect_done_called = 0;
-isnt( SDL::Mixer::Effects::register(MIX_CHANNEL_POST, "main::echo_effect_func", "main::effect_done", 0), 0, '[register] registerering echo effect callback' );
+my $effect_id_all = SDL::Mixer::Effects::register(MIX_CHANNEL_POST, "main::echo_effect_func", "main::effect_done", 0);
+isnt( $effect_id_all, -1, '[register] registerering echo effect callback' );
 SDL::delay($delay);
 isnt( SDL::Mixer::Effects::unregister_all(MIX_CHANNEL_POST),                          0, '[unregister_all] unregistering all will call effect_done' );
 SDL::delay(200);
