@@ -41,6 +41,7 @@ ttf_open_font(file, ptsize)
 	PREINIT:
 		char* CLASS = "SDL::TTF_Font";
 	CODE:
+		RETVAL = safemalloc(sizeof(TTF_Font *));
 		RETVAL = TTF_OpenFont(file, ptsize);
 	OUTPUT:
 		RETVAL
@@ -161,7 +162,7 @@ ttf_font_face_style_name(font)
 	OUTPUT:
 		RETVAL
 
-AV*
+AV *
 ttf_glyph_metrics(font, ch)
 	TTF_Font *font
 	char ch
@@ -182,36 +183,57 @@ ttf_glyph_metrics(font, ch)
 	OUTPUT:
 		RETVAL
 
-int
-ttf_size_text(font, text, w, h)
+AV *
+ttf_size_text(font, text)
 	TTF_Font *font
 	const char *text
-	int *w
-	int *h
 	CODE:
-		RETVAL = TTF_SizeText(font, text, w, h);
+		int w, h;
+		if(0 == TTF_SizeText(font, text, &w, &h))
+		{
+			RETVAL = newAV();
+			sv_2mortal((SV*)RETVAL);
+			av_push(RETVAL,newSViv(w));
+			av_push(RETVAL,newSViv(h));
+		}
+		else
+			XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
 
-int
-ttf_size_utf8(font, text, w, h)
+AV *
+ttf_size_utf8(font, text)
 	TTF_Font *font
 	const char *text
-	int *w
-	int *h
 	CODE:
-		RETVAL = TTF_SizeUTF8(font, text, w, h);
+		int w, h;
+		if(0 == TTF_SizeUTF8(font, text, &w, &h))
+		{
+			RETVAL = newAV();
+			sv_2mortal((SV*)RETVAL);
+			av_push(RETVAL,newSViv(w));
+			av_push(RETVAL,newSViv(h));
+		}
+		else
+			XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
 
-int
-ttf_size_unicode(font, text, w, h)
+AV *
+ttf_size_unicode(font, text)
 	TTF_Font *font
 	const Uint16 *text
-	int *w
-	int *h
 	CODE:
-		RETVAL = TTF_SizeUNICODE(font, text, w, h);
+		int w, h;
+		if(0 == TTF_SizeUNICODE(font, text, &w, &h))
+		{
+			RETVAL = newAV();
+			sv_2mortal((SV*)RETVAL);
+			av_push(RETVAL,newSViv(w));
+			av_push(RETVAL,newSViv(h));
+		}
+		else
+			XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
 
@@ -254,7 +276,7 @@ ttf_render_unicode_solid(font, text, fg)
 SDL_Surface *
 ttf_render_glyph_solid(font, ch, fg)
 	TTF_Font *font
-	Uint16 ch
+	char ch
 	SDL_Color *fg
 	PREINIT:
 		char* CLASS = "SDL::Surface";
@@ -344,7 +366,7 @@ ttf_render_unicode_shaded(font, text, fg, bg)
 SDL_Surface *
 ttf_render_glyph_shaded(font, ch, fg, bg)
 	TTF_Font *font
-	Uint16 ch
+	char ch
 	SDL_Color *fg
 	SDL_Color *bg
 	PREINIT:
@@ -393,7 +415,7 @@ ttf_render_unicode_blended(font, text, fg)
 SDL_Surface *
 ttf_render_glyph_blended(font, ch, fg)
 	TTF_Font *font
-	Uint16 ch
+	char ch
 	SDL_Color *fg
 	PREINIT:
 		char* CLASS = "SDL::Surface";
