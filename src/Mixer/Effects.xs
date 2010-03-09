@@ -2,42 +2,18 @@
 #include "perl.h"
 #include "XSUB.h"
 
-#ifndef aTHX_
-#define aTHX_
-#endif
-
-#ifdef USE_THREADS
-#define HAVE_TLS_CONTEXT
-#endif
-
 #include <SDL.h>
 
 #ifdef HAVE_SDL_MIXER
 #include <SDL_mixer.h>
 
-#ifdef HAVE_TLS_CONTEXT
-PerlInterpreter *parent_perl = NULL;
-extern PerlInterpreter *parent_perl;
-#define GET_TLS_CONTEXT parent_perl = PERL_GET_CONTEXT;
-#define ENTER_TLS_CONTEXT \
-        PerlInterpreter *current_perl = PERL_GET_CONTEXT; \
-			PERL_SET_CONTEXT(parent_perl); { \
-			PerlInterpreter *my_perl = parent_perl;
-#define LEAVE_TLS_CONTEXT \
-					        } PERL_SET_CONTEXT(current_perl);
-#else
-#define GET_TLS_CONTEXT         /* TLS context not enabled */
-#define ENTER_TLS_CONTEXT       /* TLS context not enabled */
-#define LEAVE_TLS_CONTEXT       /* TLS context not enabled */
-#endif
-
-static SV *cb   = (SV*)NULL; // effect callback for register()
-static SV *pmcb = (SV*)NULL; // effect callback for set_post_mix()
-static SV *fcb  = (SV*)NULL; // callback when register()-effect has finished
+PerlInterpreter *perl    = NULL;
+PerlInterpreter *perl_cb = NULL;
+int registered_effects   = 0;
 
 void effect_func(int chan, void *stream, int len, void *udata)
 {
-	ENTER_TLS_CONTEXT
+	PERL_SET_CONTEXT(perl_cb);
 	Sint16 *buf = (Sint16 *)stream;
 
 	len /= 2;            // 2 bytes ber sample
@@ -50,24 +26,26 @@ void effect_func(int chan, void *stream, int len, void *udata)
 	PUSHMARK(SP);                              /* remember the stack pointer        */
 	XPUSHs(sv_2mortal(newSViv(chan)));
 	XPUSHs(sv_2mortal(newSViv(len)));
-	XPUSHs(sv_2mortal(newSViv(*(int*)udata))); /* push something onto the stack     */
+	XPUSHs(sv_2mortal(newSVsv(udata))); /* push something onto the stack     */
 	int i;
 	for(i = 0; i < len; i++)
 		XPUSHs(sv_2mortal(newSViv(buf[i])));
 	
-	*(int*)udata = *(int*)udata + len * 2;
 	PUTBACK;                                   /* make local stack pointer global   */
 
-	if(cb != (SV*)NULL)
+	//if(cb != (SV*)NULL)
 	{
-        int count = call_sv(cb, G_ARRAY); /* call the function                 */
+        int count = call_pv("main::echo_effect_func", G_ARRAY); /* call the function                 */
 		SPAGAIN;                               /* refresh stack pointer             */
 		
-		if(count > 0)
+		if(count == len + 1)
+			*(SV *)udata = *sv_2mortal(newSVsv(POPs));
+		
+		if(count)
 		{
 			memset(buf, 0, len * 2); // clear the buffer
 			
-			for(i = len - 1; i > 0; i--)
+			for(i = len - 1; i >= 0; i--)
 			{
 				buf[i] = POPi;
 			}
@@ -78,82 +56,29 @@ void effect_func(int chan, void *stream, int len, void *udata)
 
 	FREETMPS;                                  /* free that return value            */
 	LEAVE;                                     /* ...and the XPUSHed "mortal" args. */
-	LEAVE_TLS_CONTEXT
 }
 
 void effect_pm_func(void *udata, Uint8 *stream, int len)
 {
-	ENTER_TLS_CONTEXT
-	Sint16 *buf = (Sint16 *)stream;
-
-	len /= 2;            // 2 bytes ber sample
-
-	dSP;                                       /* initialize stack pointer          */
-	
-	ENTER;                                     /* everything created after here     */
-	SAVETMPS;                                  /* ...is a temporary variable.       */
-
-	PUSHMARK(SP);                              /* remember the stack pointer        */
-	XPUSHs(sv_2mortal(newSViv(MIX_CHANNEL_POST)));
-	XPUSHs(sv_2mortal(newSViv(len)));
-	XPUSHs(sv_2mortal(newSViv(*(int*)udata))); /* push something onto the stack     */
-	int i;
-	for(i = 0; i < len; i++)
-		XPUSHs(sv_2mortal(newSViv(buf[i])));
-	
-	*(int*)udata = *(int*)udata + len * 2;
-	PUTBACK;                                   /* make local stack pointer global   */
-
-	if(pmcb != (SV*)NULL)
-	{
-        int count = call_sv(pmcb, G_ARRAY);    /* call the function                 */
-		SPAGAIN;                               /* refresh stack pointer             */
-		
-		if(count > 0)
-		{
-			memset(buf, 0, len * 2); // clear the buffer
-			
-			for(i = len - 1; i > 0; i--)
-			{
-				buf[i] = POPi;
-			}
-		}
-
-		PUTBACK;
-	}
-
-	FREETMPS;                                  /* free that return value            */
-	LEAVE;                                     /* ...and the XPUSHed "mortal" args. */
-	LEAVE_TLS_CONTEXT
+	effect_func(-2, (void *)stream, len, udata);
 }
 
 void effect_done(int chan, void *udata)
 {
-	ENTER_TLS_CONTEXT
+	PERL_SET_CONTEXT(perl_cb);
 
 	dSP;                                       /* initialize stack pointer          */
 	PUSHMARK(SP);                              /* remember the stack pointer        */
 
-	if(fcb != (SV*)NULL)
+	//if(fcb != (SV*)NULL)
 	{
-        call_sv(fcb, G_DISCARD|G_VOID);   /* call the function                 */
+        call_pv("main::effect_done", G_DISCARD|G_VOID);   /* call the function                 */
 	}
-	
-	LEAVE_TLS_CONTEXT
 }
 
 #endif
 
-void boot_SDL__Mixer__Effects_perl();
-
-XS(boot_SDL__Mixer__Effects)
-{
-	GET_TLS_CONTEXT
-	boot_SDL__Mixer__Effects_perl();
-}
-
 MODULE = SDL::Mixer::Effects 	PACKAGE = SDL::Mixer::Effects    PREFIX = mixeff_
-PROTOTYPES: DISABLE
 
 #ifdef HAVE_SDL_MIXER
 
@@ -162,21 +87,20 @@ mixeff_register(channel, func, done, arg)
 	int channel
 	SV *func
 	SV *done
-	int arg
+	SV *arg
 	CODE:
-		if (cb == (SV*)NULL)
-			cb = newSVsv(func);
+		if(perl_cb == NULL)
+		{
+			perl    = PERL_GET_CONTEXT;
+			perl_cb = perl_clone(perl, CLONEf_KEEP_PTR_TABLE);
+			PERL_SET_CONTEXT(perl);
+		}
+		
+		if(0 != Mix_RegisterEffect(channel, &effect_func, &effect_done, arg))
+			RETVAL = ++registered_effects;
 		else
-			SvSetSV(cb, func);
-
-		if (fcb == (SV*)NULL)
-			fcb = newSVsv(done);
-		else
-			SvSetSV(fcb, done);
-
-		void *arg2   = safemalloc(sizeof(int));
-		*(int*) arg2 = arg;
-		RETVAL = Mix_RegisterEffect(channel, &effect_func, &effect_done, arg2);
+			RETVAL = 0;
+		
 	OUTPUT:
 		RETVAL
 
@@ -185,6 +109,12 @@ mixeff_unregister( channel, func )
 	int channel
 	SV *func
 	CODE:
+		if(perl_cb == NULL)
+		{
+			perl    = PERL_GET_CONTEXT;
+			perl_cb = perl_clone(perl, CLONEf_KEEP_PTR_TABLE);
+			PERL_SET_CONTEXT(perl);
+		}
 		RETVAL = Mix_UnregisterEffect(channel, &effect_func);
 	OUTPUT:
 		RETVAL
@@ -236,25 +166,22 @@ mixeff_set_reverse_stereo( channel, flip )
 		RETVAL
 
 void
-mixeff_set_post_mix(func = NULL, arg = 0)
+mixeff_set_post_mix(func = NULL, arg = NULL)
 	SV *func
-	int arg
+	SV *arg
 	CODE:
+		if(perl_cb == NULL)
+		{
+			perl    = PERL_GET_CONTEXT;
+			perl_cb = perl_clone(perl, CLONEf_KEEP_PTR_TABLE);
+			PERL_SET_CONTEXT(perl);
+		}
+
 		if(func != (SV *)NULL)
 		{
-			if (pmcb == (SV *)NULL)
-				pmcb = newSVsv(func);
-			else
-				SvSetSV(pmcb, func);
-
-			void *arg2   = safemalloc(sizeof(int));
-			*(int*) arg2 = arg;
-			Mix_SetPostMix(&effect_pm_func, arg2);
+			Mix_SetPostMix(&effect_pm_func, arg);
 		}
 		else
-			Mix_SetPostMix(NULL, 0);
+			Mix_SetPostMix(NULL, NULL);
 
 #endif
-
-MODULE = SDL::Mixer::Effects_perl 	PACKAGE = SDL::Mixer::Effects    PREFIX = mixeff_
-PROTOTYPES: DISABLE
