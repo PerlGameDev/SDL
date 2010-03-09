@@ -14,8 +14,10 @@ PerlInterpreter *perl_cb = NULL;
 int registered_effects   = 0;
 
 void** effects = NULL;
+void** effects_done = NULL;
 
 char* effect_func_cb = NULL;
+char* effect_func_done_cb = NULL;
 
 void effect_func(int chan, void *stream, int len, void *udata)
 {
@@ -77,9 +79,10 @@ void effect_done(int chan, void *udata)
 	PUSHMARK(SP);                              /* remember the stack pointer        */
 
 	//if(fcb != (SV*)NULL)
-	{
-        call_pv("main::effect_done", G_DISCARD|G_VOID);   /* call the function                 */
-	}
+	//warn ( "Called %s", effect_func_done_cb );
+	
+        call_pv(effect_func_done_cb, G_DISCARD|G_VOID);   /* call the function                 */
+	
 }
 
 #endif
@@ -92,12 +95,16 @@ int
 mixeff_register(channel, func, done, arg)
 	int channel
 	char *func
-	SV *done
+	char *done
 	SV *arg
 	CODE:
 		if(effects == NULL)
 		{
 			effects = malloc(MAX_EFFECTS* sizeof(void*));
+		}
+		if(effects_done == NULL)
+		{
+			effects_done = malloc(MAX_EFFECTS* sizeof(void*));
 		}
 		if(perl_cb == NULL)
 		{
@@ -107,15 +114,17 @@ mixeff_register(channel, func, done, arg)
 		}
 
 		effect_func_cb = func;
-		
+		effect_func_done_cb = done;
 		if(registered_effects <= MAX_EFFECTS )
 		{
-		
-			if(0 != Mix_RegisterEffect(channel, &effect_func, &effect_done, arg))
+			effects[registered_effects] = (void*)&effect_func;
+			effects_done[registered_effects] = (void*)&effect_done;
+			if(0 != Mix_RegisterEffect(channel, effects[registered_effects], effects_done[registered_effects], arg))
 			{
+				//warn( "Registered %d %p %p", registered_effects, effects[registered_effects], effects_done[registered_effects]);
 				
-				effects[registered_effects] = (void*)&effect_func;	
-				RETVAL = ++registered_effects;
+				RETVAL = registered_effects;
+				registered_effects++;
 							
 			}
 			else	
@@ -140,20 +149,20 @@ mixeff_unregister( channel, func )
 	int channel
 	int func
 	CODE:
-		if(perl_cb == NULL)
-		{
-			perl    = PERL_GET_CONTEXT;
-			perl_cb = perl_clone(perl, CLONEf_KEEP_PTR_TABLE);
-			PERL_SET_CONTEXT(perl);
-		}
+		int check;
 		if( func <= registered_effects)
 		{
-			RETVAL = Mix_UnregisterEffect(channel, effects[func]);
+			check = Mix_UnregisterEffect(channel, effects[func]);			
+			warn ("[unregister] returning %d", check);		
 		}
 		else
 		{
 			warn (" Invalid effect id %d, currently %d effects registered", func, registered_effects);
+			check = -1;
 		}
+		
+		RETVAL = check;
+		
 	OUTPUT:
 		RETVAL
 
