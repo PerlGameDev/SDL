@@ -514,7 +514,6 @@ print "Gonna write config_data ...\n";
 $build->config_data('SDL_cfg', $build_systems );
 $build->config_data('subsystems', \%subsystems);
 $build->config_data('libraries', \%libraries);
-$build->config_data('sdl_ld_shlib_map', Alien::SDL->config('ld_shlib_map'));
 
 ### something that was originally special to MacOS/Darwin
 # somebody MacOS/Darwin friendly should review whether it is still necessary

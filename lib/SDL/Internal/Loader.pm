@@ -6,6 +6,7 @@ our @ISA = qw(Exporter);
 our @EXPORT = qw(internal_load_dlls);
 
 use SDL::ConfigData;
+use Alien::SDL;
 
 # SDL::Internal::Loader is a king of "Dynaloader kung-fu" that is
 # necessary in situations when you install Allien::SDL from sources
@@ -30,7 +31,7 @@ sub internal_load_dlls($) {
   my $package = shift;
 
   ### check if some ld_shlib_map is defined
-  my $shlib_map = SDL::ConfigData->config('sdl_ld_shlib_map');  
+  my $shlib_map = Alien::SDL->config('ld_shlib_map');
   return unless $shlib_map; # empty shlib_map, nothing to do
 
   ### get list of lib nicknames based on packagename
