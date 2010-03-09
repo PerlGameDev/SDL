@@ -85,7 +85,6 @@ my $effect_id = SDL::Mixer::Effects::register($playing_channel, "main::echo_effe
 isnt( $effect_id, -1, '[register] registerering echo effect callback' );
 SDL::delay($delay);
 my $check = SDL::Mixer::Effects::unregister($playing_channel, $effect_id);
-warn '[unregister] got check = '.$check;
 isnt( $check,                0, '[unregister] unregistering effect_func will call effect_done' );
 SDL::delay(200);
 is( $effect_func_called > 0,                                                          1, "[effect_func] called $effect_func_called times" );

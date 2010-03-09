@@ -73,15 +73,16 @@ void effect_pm_func(void *udata, Uint8 *stream, int len)
 
 void effect_done(int chan, void *udata)
 {
-	PERL_SET_CONTEXT(perl_cb);
+	//PERL_SET_CONTEXT(perl_cb);
 
-	dSP;                                       /* initialize stack pointer          */
+	dSP;     /* initialize stack pointer          */
 	PUSHMARK(SP);                              /* remember the stack pointer        */
 
 	//if(fcb != (SV*)NULL)
 	//warn ( "Called %s", effect_func_done_cb );
 	
         call_pv(effect_func_done_cb, G_DISCARD|G_VOID);   /* call the function                 */
+        
 	
 }
 
@@ -149,20 +150,24 @@ mixeff_unregister( channel, func )
 	int channel
 	int func
 	CODE:
+		
+
 		int check;
 		if( func <= registered_effects)
 		{
 			check = Mix_UnregisterEffect(channel, effects[func]);			
-			warn ("[unregister] returning %d", check);		
+			if (check == 0 )	
+			{
+			  warn ("Error unregistering: %s", Mix_GetError() );
+			}
 		}
 		else
 		{
 			warn (" Invalid effect id %d, currently %d effects registered", func, registered_effects);
-			check = -1;
+			check = 0;
 		}
 		
-		RETVAL = check;
-		
+		RETVAL = check;		
 	OUTPUT:
 		RETVAL
 
