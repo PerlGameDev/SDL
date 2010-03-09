@@ -28,7 +28,7 @@ ttf_byte_swapped_unicode(swapped)
 		TTF_ByteSwappedUNICODE(swapped);
 
 int
-ttt_Init()
+ttf_init()
 	CODE:
 		RETVAL = TTF_Init();
 	OUTPUT:
@@ -46,7 +46,7 @@ ttf_open_font(file, ptsize)
 		RETVAL
 
 TTF_Font *
-TTF_OpenFontIndex(file, ptsize, index)
+ttf_open_font_index(file, ptsize, index)
 	char *file
 	int ptsize
 	long index
@@ -58,7 +58,7 @@ TTF_OpenFontIndex(file, ptsize, index)
 		RETVAL
 
 TTF_Font *
-TTF_OpenFontRW(src, freesrc, ptsize)
+ttf_open_font_RW(src, freesrc, ptsize)
 	SDL_RWops *src
 	int freesrc
 	int ptsize
@@ -70,7 +70,7 @@ TTF_OpenFontRW(src, freesrc, ptsize)
 		RETVAL
 
 TTF_Font *
-TTF_OpenFontIndexRW(src, freesrc, ptsize, index)
+ttf_open_font_index_RW(src, freesrc, ptsize, index)
 	SDL_RWops *src
 	int freesrc
 	int ptsize
@@ -83,7 +83,7 @@ TTF_OpenFontIndexRW(src, freesrc, ptsize, index)
 		RETVAL
 
 int
-TTF_GetFontStyle(font)
+ttf_get_font_style(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_GetFontStyle(font);
@@ -91,14 +91,14 @@ TTF_GetFontStyle(font)
 		RETVAL
 
 void
-TTF_SetFontStyle(font, style)
+ttf_set_font_style(font, style)
 	TTF_Font *font
 	int style
 	CODE:
 		TTF_SetFontStyle(font, style);
 
 int
-TTF_FontHeight(font)
+ttf_font_height(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontHeight(font);
@@ -106,7 +106,7 @@ TTF_FontHeight(font)
 		RETVAL
 
 int
-TTF_FontAscent(font)
+ttf_font_ascent(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontAscent(font);
@@ -114,7 +114,7 @@ TTF_FontAscent(font)
 		RETVAL
 
 int
-TTF_FontDescent(font)
+ttf_font_descent(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontDescent(font);
@@ -122,7 +122,7 @@ TTF_FontDescent(font)
 		RETVAL
 
 int
-TTF_FontLineSkip(font)
+ttf_font_line_skip(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontLineSkip(font);
@@ -130,7 +130,7 @@ TTF_FontLineSkip(font)
 		RETVAL
 
 long
-TTF_FontFaces(font)
+ttf_font_faces(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontFaces(font);
@@ -138,7 +138,7 @@ TTF_FontFaces(font)
 		RETVAL
 
 int
-TTF_FontFaceIsFixedWidth(font)
+ttf_font_face_is_fixed_width(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontFaceIsFixedWidth(font);
@@ -146,7 +146,7 @@ TTF_FontFaceIsFixedWidth(font)
 		RETVAL
 
 char *
-TTF_FontFaceFamilyName(font)
+ttf_font_face_family_name(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontFaceFamilyName(font);
@@ -154,29 +154,36 @@ TTF_FontFaceFamilyName(font)
 		RETVAL
 
 char *
-TTF_FontFaceStyleName(font)
+ttf_font_face_style_name(font)
 	TTF_Font *font
 	CODE:
 		RETVAL = TTF_FontFaceStyleName(font);
 	OUTPUT:
 		RETVAL
 
-int
-TTF_GlyphMetrics(font, ch, minx, maxx, miny, maxy, advance)
+AV*
+ttf_glyph_metrics(font, ch)
 	TTF_Font *font
-	Uint16 ch
-	int *minx
-	int *maxx
-	int *miny
-	int *maxy
-	int *advance
+	char ch
 	CODE:
-		RETVAL = TTF_GlyphMetrics(font, ch, minx, maxx, miny, maxy, advance);
+		int minx, maxx, miny, maxy, advance;
+		if(TTF_GlyphMetrics(font, ch, &minx, &maxx, &miny, &maxy, &advance) == 0)
+		{
+			RETVAL = newAV();
+			sv_2mortal((SV*)RETVAL);
+			av_push(RETVAL,newSViv(minx));
+			av_push(RETVAL,newSViv(maxx));
+			av_push(RETVAL,newSViv(miny));
+			av_push(RETVAL,newSViv(maxy));
+			av_push(RETVAL,newSViv(advance));
+		}
+		else
+			XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
 
 int
-TTF_SizeText(font, text, w, h)
+ttf_size_text(font, text, w, h)
 	TTF_Font *font
 	const char *text
 	int *w
@@ -187,7 +194,7 @@ TTF_SizeText(font, text, w, h)
 		RETVAL
 
 int
-TTF_SizeUTF8(font, text, w, h)
+ttf_size_utf8(font, text, w, h)
 	TTF_Font *font
 	const char *text
 	int *w
@@ -198,7 +205,7 @@ TTF_SizeUTF8(font, text, w, h)
 		RETVAL
 
 int
-TTF_SizeUNICODE(font, text, w, h)
+ttf_size_unicode(font, text, w, h)
 	TTF_Font *font
 	const Uint16 *text
 	int *w
@@ -209,7 +216,7 @@ TTF_SizeUNICODE(font, text, w, h)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderText_Solid(font, text, fg)
+ttf_render_text_solid(font, text, fg)
 	TTF_Font *font
 	const char *text
 	SDL_Color *fg
@@ -221,7 +228,7 @@ TTF_RenderText_Solid(font, text, fg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderUTF8_Solid(font, text, fg)
+ttf_render_utf8_solid(font, text, fg)
 	TTF_Font *font
 	const char *text
 	SDL_Color *fg
@@ -233,7 +240,7 @@ TTF_RenderUTF8_Solid(font, text, fg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderUNICODE_Solid(font, text, fg)
+ttf_render_unicode_solid(font, text, fg)
 	TTF_Font *font
 	const Uint16 *text
 	SDL_Color *fg
@@ -245,7 +252,7 @@ TTF_RenderUNICODE_Solid(font, text, fg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderGlyph_Solid(font, ch, fg)
+ttf_render_glyph_solid(font, ch, fg)
 	TTF_Font *font
 	Uint16 ch
 	SDL_Color *fg
@@ -257,7 +264,7 @@ TTF_RenderGlyph_Solid(font, ch, fg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderText(font, text, fg, bg)
+ttf_render_text(font, text, fg, bg)
 	TTF_Font *font
 	const char *text
 	SDL_Color *fg
@@ -270,7 +277,7 @@ TTF_RenderText(font, text, fg, bg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderText_Shaded(font, text, fg, bg)
+ttf_render_text_shaded(font, text, fg, bg)
 	TTF_Font *font
 	const char *text
 	SDL_Color *fg
@@ -283,7 +290,7 @@ TTF_RenderText_Shaded(font, text, fg, bg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderUTF8(font, text, fg, bg)
+ttf_render_utf8(font, text, fg, bg)
 	TTF_Font *font
 	const char *text
 	SDL_Color *fg
@@ -296,7 +303,7 @@ TTF_RenderUTF8(font, text, fg, bg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderUTF8_Shaded(font, text, fg, bg)
+ttf_render_utf8_shaded(font, text, fg, bg)
 	TTF_Font *font
 	const char *text
 	SDL_Color *fg
@@ -309,7 +316,7 @@ TTF_RenderUTF8_Shaded(font, text, fg, bg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderUNICODE(font, text, fg, bg)
+ttf_render_unicode(font, text, fg, bg)
 	TTF_Font *font
 	const Uint16 *text
 	SDL_Color *fg
@@ -322,7 +329,7 @@ TTF_RenderUNICODE(font, text, fg, bg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderUNICODE_Shaded(font, text, fg, bg)
+ttf_render_unicode_shaded(font, text, fg, bg)
 	TTF_Font *font
 	const Uint16 *text
 	SDL_Color *fg
@@ -335,7 +342,7 @@ TTF_RenderUNICODE_Shaded(font, text, fg, bg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderGlyph_Shaded(font, ch, fg, bg)
+ttf_render_glyph_shaded(font, ch, fg, bg)
 	TTF_Font *font
 	Uint16 ch
 	SDL_Color *fg
@@ -348,7 +355,7 @@ TTF_RenderGlyph_Shaded(font, ch, fg, bg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderText_Blended(font, text, fg)
+ttf_render_text_blended(font, text, fg)
 	TTF_Font *font
 	const char *text
 	SDL_Color *fg
@@ -360,7 +367,7 @@ TTF_RenderText_Blended(font, text, fg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderUTF8_Blended(font, text, fg)
+ttf_render_utf8_blended(font, text, fg)
 	TTF_Font *font
 	const char *text
 	SDL_Color *fg
@@ -372,7 +379,7 @@ TTF_RenderUTF8_Blended(font, text, fg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderUNICODE_Blended(font, text, fg)
+ttf_render_unicode_blended(font, text, fg)
 	TTF_Font *font
 	const Uint16 *text
 	SDL_Color *fg
@@ -384,7 +391,7 @@ TTF_RenderUNICODE_Blended(font, text, fg)
 		RETVAL
 
 SDL_Surface *
-TTF_RenderGlyph_Blended(font, ch, fg)
+ttf_render_glyph_blended(font, ch, fg)
 	TTF_Font *font
 	Uint16 ch
 	SDL_Color *fg
@@ -394,12 +401,6 @@ TTF_RenderGlyph_Blended(font, ch, fg)
 		RETVAL = TTF_RenderGlyph_Blended(font, ch, *fg);
 	OUTPUT:
 		RETVAL
-
-void
-ttf_close_font(font)
-	TTF_Font *font
-	CODE:
-		TTF_CloseFont(font);
 
 void
 ttf_quit()
