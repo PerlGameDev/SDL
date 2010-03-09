@@ -11,6 +11,8 @@ PerlInterpreter *perl    = NULL;
 PerlInterpreter *perl_cb = NULL;
 int registered_effects   = 0;
 
+char* effect_func_cb = NULL;
+
 void effect_func(int chan, void *stream, int len, void *udata)
 {
 	PERL_SET_CONTEXT(perl_cb);
@@ -35,7 +37,7 @@ void effect_func(int chan, void *stream, int len, void *udata)
 
 	//if(cb != (SV*)NULL)
 	{
-        int count = call_pv("main::echo_effect_func", G_ARRAY); /* call the function                 */
+        int count = call_pv(effect_func_cb, G_ARRAY); /* call the function                 */
 		SPAGAIN;                               /* refresh stack pointer             */
 		
 		if(count == len + 1)
@@ -85,7 +87,7 @@ MODULE = SDL::Mixer::Effects 	PACKAGE = SDL::Mixer::Effects    PREFIX = mixeff_
 int
 mixeff_register(channel, func, done, arg)
 	int channel
-	SV *func
+	char *func
 	SV *done
 	SV *arg
 	CODE:
@@ -95,6 +97,8 @@ mixeff_register(channel, func, done, arg)
 			perl_cb = perl_clone(perl, CLONEf_KEEP_PTR_TABLE);
 			PERL_SET_CONTEXT(perl);
 		}
+
+		effect_func_cb = func;
 		
 		if(0 != Mix_RegisterEffect(channel, &effect_func, &effect_done, arg))
 			RETVAL = ++registered_effects;
