@@ -2,6 +2,7 @@ Revision history for Perl extension SDL_perl.
 
 * 2.3_7
 	- Mixer XS/tests and docs done [kthakore, FROGGS]
+	- Fixes for Build system on cygwin [kmx]
 
 * 2.3_6 
 	- Moved mixer code into correct locations [kthakore]
