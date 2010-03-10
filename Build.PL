@@ -170,7 +170,6 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
-
 	PixelFormat => {
 		file      => {
 			from  => 'src/Core/objects/PixelFormat.xs',
@@ -234,8 +233,6 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_mixer )],
 	},
-
-
 	MixChunk => {
 		file      => {
 			from  => 'src/Mixer/objects/MixChunk.xs',
@@ -306,7 +303,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
-
+	TTF => {
+		file      => {
+			from  => 'src/TTF/TTF.xs',
+			to    => 'lib/SDL/TTF.xs',
+		},
+		libraries => [qw( SDL SDL_ttf )],
+	},
 	TTF_Font => {
 		file      => {
 			from  => 'src/TTF/objects/TTF_Font.xs',
@@ -363,7 +366,6 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_net )],
 	},
-
 	IPaddress => {
 		file      => {
 			from  => 'src/Net/objects/IPaddress.xs',
@@ -454,12 +456,12 @@ my %libraries = (
 	GL          => {
 		define => 'HAVE_GL',  
 		header => [ 'GL/gl.h', 'GL/glext.h' ],
-		lib    => ($^O eq 'MSWin32') ? 'opengl32' : 'GL', # xxx not nice
+		lib    => ($^O =~ /^(MSWin32|cygwin)$/) ? 'opengl32' : 'GL', # xxx not nice
 	},
 	GLU         => {
 		define => 'HAVE_GLU', 
 		header => 'GL/glu.h',
-		lib    => ($^O eq 'MSWin32') ? 'glu32' : 'GLU', # xxx not nice
+		lib    => ($^O =~ /^(MSWin32|cygwin)$/) ? 'glu32' : 'GLU', # xxx not nice
 	},
 );
 
@@ -476,7 +478,7 @@ my $build = $package->new(
 	{
 		'YAML'	=> '0.68',
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL' => '0.8.2',
+		'Alien::SDL' => '0.9.1',
 		'File::Find' => '2.07'
 	},
 	build_requires =>
@@ -484,7 +486,7 @@ my $build = $package->new(
 		'Test::Simple' => '0.88',
 		'IO::CaptureOutput' => '0',
 		'Test::Most' => '0.21',
-		'Alien::SDL' => '0.8.2',
+		'Alien::SDL' => '0.9.1',
 	},
 	build_recommends     =>
 	{
@@ -512,7 +514,6 @@ print "Gonna write config_data ...\n";
 $build->config_data('SDL_cfg', $build_systems );
 $build->config_data('subsystems', \%subsystems);
 $build->config_data('libraries', \%libraries);
-$build->config_data('sdl_ld_shlib_map', Alien::SDL->config('ld_shlib_map'));
 
 ### something that was originally special to MacOS/Darwin
 # somebody MacOS/Darwin friendly should review whether it is still necessary

@@ -1,5 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.3_7
+	- Mixer XS/tests and docs done [kthakore, FROGGS]
+	- Fixes for Build system on cygwin [kmx]
+
 * 2.3_6 
 	- Moved mixer code into correct locations [kthakore]
 	- Cleaned up last of SDL xs [kthakore]
@@ -7,16 +11,14 @@ Revision history for Perl extension SDL_perl.
 	- Fixed up my_perl assumption for non threaded perl [kthakore, ruoso]
 	- 64 bit and MacOSX fixes in builds[ kmx, kthakore ]
 	- Prepared XS to build when no threading available [kthakore]
-	- More Mixer Tests [kthakore]
-	- Mixer docs [FROGGS]
 	- Minor bug fixes in test for core.t with PERL_SAFE_PUTENV [kthakore]
 
 * 2.3_5 
-        - Fixed serious XS mem leaks in AV* [FROGGS]
-        - Removed usless verify method in SDL.pm [J_King]
-        - GFX rotozoom started [FROGGS]
-        - More docs for GFX [FROGGS]
-        - ithreads support for audio and timer callback [kthakore, ruoso]
+	- Fixed serious XS mem leaks in AV* [FROGGS]
+	- Removed usless verify method in SDL.pm [J_King]
+	- GFX rotozoom started [FROGGS]
+	- More docs for GFX [FROGGS]
+	- ithreads support for audio and timer callback [kthakore, ruoso]
 	- SDL::App resize fixed [kthakore, TonyC] {http://rt.cpan.org/Public/Bug/Display.html?id=16984}
 	- Migrated O_OBJECT to thread safe bag [ruoso, kthakore]
 	- Update time docs [kthakore]

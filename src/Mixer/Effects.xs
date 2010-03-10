@@ -7,43 +7,55 @@
 #ifdef HAVE_SDL_MIXER
 #include <SDL_mixer.h>
 
-PerlInterpreter *perl_for_cb  = NULL;
-static SV       *cb           = (SV*)NULL;
-static SV       *fcb          = (SV*)NULL;
+#define MAX_EFFECTS 31
+
+PerlInterpreter *perl    = NULL;
+PerlInterpreter *perl_cb = NULL;
+int registered_effects   = 0;
+
+void** effects = NULL;
+void** effects_done = NULL;
+
+char* effect_func_cb = NULL;
+char* effect_func_done_cb = NULL;
 
 void effect_func(int chan, void *stream, int len, void *udata)
 {
-	PERL_SET_CONTEXT(perl_for_cb);
+	PERL_SET_CONTEXT(perl_cb);
 	Sint16 *buf = (Sint16 *)stream;
-	len /= 2;            // 2 bytes ber sample
 
+	len /= 2;            // 2 bytes ber sample
+	
 	dSP;                                       /* initialize stack pointer          */
+	
 	ENTER;                                     /* everything created after here     */
 	SAVETMPS;                                  /* ...is a temporary variable.       */
 
 	PUSHMARK(SP);                              /* remember the stack pointer        */
 	XPUSHs(sv_2mortal(newSViv(chan)));
-	//XPUSHs(sv_2mortal(newSVpv((Sint16*)stream, len)));
 	XPUSHs(sv_2mortal(newSViv(len)));
-	XPUSHs(sv_2mortal(newSViv(*(int*)udata))); /* push something onto the stack     */
+	XPUSHs(sv_2mortal(newSVsv(udata))); /* push something onto the stack     */
 	int i;
 	for(i = 0; i < len; i++)
-		XPUSHs(sv_2mortal(newSVnv((Sint16)buf[i])));
-	*(int*)udata = *(int*)udata + len * 2;
+		XPUSHs(sv_2mortal(newSViv(buf[i])));
+	
 	PUTBACK;                                   /* make local stack pointer global   */
 
-	if(cb != (SV*)NULL)
+	//if(cb != (SV*)NULL)
 	{
-        int count = perl_call_sv(cb, G_ARRAY); /* call the function                 */
+        int count = call_pv(effect_func_cb, G_ARRAY); /* call the function                 */
 		SPAGAIN;                               /* refresh stack pointer             */
 		
-		if(count > 0)
+		if(count == len + 1)
+			*(SV *)udata = *sv_2mortal(newSVsv(POPs));
+		
+		if(count)
 		{
-			memset(buf, 0, len*2); // clear the buffer
+			memset(buf, 0, len * 2); // clear the buffer
 			
-			for(i = len - 1; i > 0; i--)
+			for(i = len - 1; i >= 0; i--)
 			{
-				buf[i]     = (Sint16)POPi;
+				buf[i] = POPi;
 			}
 		}
 
@@ -54,66 +66,108 @@ void effect_func(int chan, void *stream, int len, void *udata)
 	LEAVE;                                     /* ...and the XPUSHed "mortal" args. */
 }
 
+void effect_pm_func(void *udata, Uint8 *stream, int len)
+{
+	effect_func(-2, (void *)stream, len, udata);
+}
+
 void effect_done(int chan, void *udata)
 {
-	PERL_SET_CONTEXT(perl_for_cb);
-	
-	dSP;                                       /* initialize stack pointer          */
+	//PERL_SET_CONTEXT(perl_cb);
+
+	dSP;     /* initialize stack pointer          */
 	PUSHMARK(SP);                              /* remember the stack pointer        */
 
-	if(fcb != (SV*)NULL)
-	{
-        perl_call_sv(fcb, G_DISCARD|G_VOID);   /* call the function                 */
-	}
+	//if(fcb != (SV*)NULL)
+	//warn ( "Called %s", effect_func_done_cb );
+	
+        call_pv(effect_func_done_cb, G_DISCARD|G_VOID);   /* call the function                 */
+        
+	
 }
 
 #endif
 
 MODULE = SDL::Mixer::Effects 	PACKAGE = SDL::Mixer::Effects    PREFIX = mixeff_
 
-=for documentation
-
-SDL_mixer bindings
-
-See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
-
-Examples: http://olofson.net/examples.html
-
-=cut
-
 #ifdef HAVE_SDL_MIXER
 
 int
 mixeff_register(channel, func, done, arg)
 	int channel
-	SV *func
-	SV *done
-	int arg
+	char *func
+	char *done
+	SV *arg
 	CODE:
-		perl_for_cb = PERL_GET_CONTEXT;
-	
-		if (cb == (SV*)NULL)
-			cb = newSVsv(func);
-		else
-			SvSetSV(cb, func);
+		if(effects == NULL)
+		{
+			effects = malloc(MAX_EFFECTS* sizeof(void*));
+		}
+		if(effects_done == NULL)
+		{
+			effects_done = malloc(MAX_EFFECTS* sizeof(void*));
+		}
+		if(perl_cb == NULL)
+		{
+			perl    = PERL_GET_CONTEXT;
+			perl_cb = perl_clone(perl, CLONEf_KEEP_PTR_TABLE);
+			PERL_SET_CONTEXT(perl);
+		}
 
-		if (fcb == (SV*)NULL)
-			fcb = newSVsv(done);
+		effect_func_cb = func;
+		effect_func_done_cb = done;
+		if(registered_effects <= MAX_EFFECTS )
+		{
+			effects[registered_effects] = (void*)&effect_func;
+			effects_done[registered_effects] = (void*)&effect_done;
+			if(0 != Mix_RegisterEffect(channel, effects[registered_effects], effects_done[registered_effects], arg))
+			{
+				//warn( "Registered %d %p %p", registered_effects, effects[registered_effects], effects_done[registered_effects]);
+				
+				RETVAL = registered_effects;
+				registered_effects++;
+							
+			}
+			else	
+			{
+			   warn( "Maximum effects allowed is 32 " );
+			   RETVAL = -1;
+			}
+		}
 		else
-			SvSetSV(fcb, done);
-
-		void *arg2   = safemalloc(sizeof(int));
-		*(int*) arg2 = arg;
-		RETVAL = Mix_RegisterEffect(channel, &effect_func, &effect_done, arg2);
+		{
+			RETVAL = -1;
+		}
+				
+		
+		
+		
 	OUTPUT:
 		RETVAL
 
 int
 mixeff_unregister( channel, func )
 	int channel
-	SV *func
+	int func
 	CODE:
-		RETVAL = Mix_UnregisterEffect(channel, &effect_func);
+		
+
+		int check;
+		if( func <= registered_effects)
+		{
+			check = Mix_UnregisterEffect(channel, effects[func]);			
+			if (check == 0 )	
+			{
+			  warn ("Error unregistering: %s", Mix_GetError() );
+			}
+		}
+		else
+		{
+			warn (" Invalid effect id %d, currently %d effects registered", func, registered_effects);
+			check = 0;
+		}
+		
+		RETVAL = check;		
 	OUTPUT:
 		RETVAL
 
@@ -125,14 +179,6 @@ mixeff_unregister_all( channel )
 	OUTPUT:
 		RETVAL
 
-void
-mixeff_set_post_mix( func, arg )
-	void *func
-	void *arg
-	CODE:
-		Mix_SetPostMix(func,arg);
-
-
 int
 mixeff_set_panning( channel, left, right )
 	int channel
@@ -143,5 +189,51 @@ mixeff_set_panning( channel, left, right )
 	OUTPUT:
 		RETVAL
 
+int
+mixeff_set_position( channel, angle, distance )
+	int channel
+	Sint16 angle
+	Uint8 distance
+	CODE:
+		RETVAL = Mix_SetPosition(channel, angle, distance);
+	OUTPUT:
+		RETVAL
+
+int
+mixeff_set_distance( channel, distance )
+	int channel
+	Uint8 distance
+	CODE:
+		RETVAL = Mix_SetDistance(channel, distance);
+	OUTPUT:
+		RETVAL
+
+int
+mixeff_set_reverse_stereo( channel, flip )
+	int channel
+	Uint8 flip
+	CODE:
+		RETVAL = Mix_SetReverseStereo(channel, flip);
+	OUTPUT:
+		RETVAL
+
+void
+mixeff_set_post_mix(func = NULL, arg = NULL)
+	SV *func
+	SV *arg
+	CODE:
+		if(perl_cb == NULL)
+		{
+			perl    = PERL_GET_CONTEXT;
+			perl_cb = perl_clone(perl, CLONEf_KEEP_PTR_TABLE);
+			PERL_SET_CONTEXT(perl);
+		}
+
+		if(func != (SV *)NULL)
+		{
+			Mix_SetPostMix(&effect_pm_func, arg);
+		}
+		else
+			Mix_SetPostMix(NULL, NULL);
 
 #endif
