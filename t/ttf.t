@@ -22,6 +22,7 @@ BEGIN
 
 use SDL::TTF;
 use SDL::TTF_Font;
+use SDL::RWOps;
 use SDL::Version;
 use Encode;
 
@@ -36,9 +37,12 @@ is( SDL::TTF::byte_swapped_unicode(0),                    undef,               "
 is( SDL::TTF::byte_swapped_unicode(1),                    undef,               "[ttf_byte_swapped_unicode] off" );
 my $font = SDL::TTF::open_font('test/data/arialuni.ttf', 24);
 isa_ok( $font,                                           'SDL::TTF_Font',      "[open_font]" );
-#is( SDL::TTF::open_font_index(file, ptsize, index), 0, "[open_font_index] " );
-#is( SDL::TTF::open_font_RW(src, freesrc, ptsize), 0, "[open_font_RW] " );
-#is( SDL::TTF::open_font_index_RW(src, freesrc, ptsize, index), 0, "[open_font_index_RW] " );
+isa_ok( SDL::TTF::open_font_index('test/data/arial.ttf', 8, 0), 'SDL::TTF_Font', "[open_font_index]" );
+my $file = SDL::RWOps->new_file('test/data/arial.ttf', 'r');
+isa_ok( $file,                                            'SDL::RWOps',        "[new_file]");
+isa_ok( SDL::TTF::open_font_RW($file, 0, 12),             'SDL::TTF_Font',     "[open_font_RW]" );
+$file = SDL::RWOps->new_file('test/data/arial.ttf', 'r');
+isa_ok( SDL::TTF::open_font_index_RW($file, 0, 16, 0),    'SDL::TTF_Font',     "[open_font_index_RW]" );
 is( SDL::TTF::get_font_style($font),                      TTF_STYLE_NORMAL,    "[get_font_style] returns TTF_STYLE_NORMAL" );
 is( SDL::TTF::set_font_style($font, TTF_STYLE_BOLD),      undef,               "[set_font_style] to TTF_STYLE_BOLD" );
 is( SDL::TTF::get_font_style($font),                      TTF_STYLE_BOLD,      "[get_font_style] returns TTF_STYLE_BOLD" );
@@ -166,56 +170,6 @@ SKIP:
 is( SDL::TTF::was_init(),                  1, "[was_init] returns true" );
 is( SDL::TTF::quit(),                  undef, "[quit] ran" );
 is( SDL::TTF::was_init(),                  0, "[was_init] returns false" );
-
-my @done = qw/
-linked_version
-init
-byte_swapped_unicode
-open_font
-was_init
-get_font_style
-set_font_style
-font_height
-font_ascent
-font_descent
-font_line_skip
-font_faces
-font_face_is_fixed_width
-font_face_family_Name
-font_face_style_name
-glyph_metrics
-size_text
-size_utf8
-size_unicode
-render_text_solid
-render_text_shaded
-render_text_blended
-render_utf8_solid
-render_utf8_shaded
-render_utf8_blended
-render_glyph_solid
-render_glyph_shaded
-render_glyph_blended
-render_unicode_solid
-render_unicode_shaded
-render_unicode_blended
-quit
-/;
-
-my @left = qw/
-open_font_index
-open_font_RW
-open_font_index_RW
-/;
-
-my $why
-    = '[Percentage Completion] '
-    . int( 100 * ( $#done + 1 ) / ( $#done + $#left + 2 ) )
-    . "\% implementation. "
-    . ( $#done + 1 ) . " / "
-    . ( $#done + $#left + 2 );
-
-diag $why;
 
 SDL::quit();
 
