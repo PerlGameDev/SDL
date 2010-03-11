@@ -7,6 +7,11 @@
 #ifdef HAVE_SDL_TTF
 #include <SDL_ttf.h>
 
+static char *utf8_to_UTF8(char *s)
+{
+	return s;
+}
+
 static Uint16 *utf16be_to_UNICODE(SV *sv)
 {
 	STRLEN len;
@@ -276,7 +281,9 @@ ttf_render_utf8_solid(font, text, fg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderUTF8_Solid(font, text, *fg);
+		//STRLEN len;
+		//utf8_to_bytes(text, &len);
+		RETVAL = TTF_RenderUTF8_Solid(font, utf8_to_UTF8(text), *fg);
 	OUTPUT:
 		RETVAL
 

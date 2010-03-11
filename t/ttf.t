@@ -34,7 +34,7 @@ is( SDL::TTF::init(),                                     0,                   "
 is( SDL::TTF::was_init(),                                 1,                   "[was_init] returns true" );
 is( SDL::TTF::byte_swapped_unicode(0),                    undef,               "[ttf_byte_swapped_unicode] on" );
 is( SDL::TTF::byte_swapped_unicode(1),                    undef,               "[ttf_byte_swapped_unicode] off" );
-my $font = SDL::TTF::open_font('test/data/arial.ttf', 24);
+my $font = SDL::TTF::open_font('test/data/aircut3.ttf', 24);
 #my $font = SDL::TTF::open_font('test/data/electrohar.ttf', 24);
 isa_ok( $font,                                           'SDL::TTF_Font',      "[open_font]" );
 #is( SDL::TTF::open_font_index(file, ptsize, index), 0, "[open_font_index] " );
@@ -80,13 +80,13 @@ is( scalar @glyph_metrics,                                5,                   "
 my ($width, $height) = @{ SDL::TTF::size_text($font, 'Hallo World!') };
 ok( $width > 0 && $height > 0,                                                 "[size_text] width=$width height=$height" );
 
-($width, $height) = @{ SDL::TTF::size_utf8($font, 'Hallo World!') };
-ok( $width > 0 && $height > 0,                                                 "[size_utf8] width=$width height=$height" );
-
 SKIP:
 {
-	skip('Unicode::String is needed for this', 4) unless eval 'use Unicode::String qw(latin1); 1';
+	skip('Unicode::String is needed for this', 2) unless eval 'use Unicode::String qw(latin1); 1';
 	my $unicode = latin1("Hallo World!");
+	($width, $height) = @{ SDL::TTF::size_utf8($font, $unicode->utf8) };
+	ok( $width > 0 && $height > 0,                                                 "[size_utf8] width=$width height=$height" );
+
 	($width, $height) = @{ SDL::TTF::size_unicode($font, $unicode->utf16be) };
 	ok( $width > 0 && $height > 0,                                                 "[size_unicode] width=$width height=$height" );
 }
@@ -119,7 +119,8 @@ SKIP:
 	isa_ok( $render_text_blended , 'SDL::Surface', "[render_text_blended]" );
 	SDL::Video::blit_surface( $render_text_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, 'render_utf8_solid', $utf8_fg);
+	my $unicode = latin1("Hallo World!");
+	my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, $unicode->utf8, $utf8_fg);
 	isa_ok( $render_utf8_solid, 'SDL::Surface', "[render_utf8_solid]" );
 	SDL::Video::blit_surface( $render_utf8_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
@@ -145,7 +146,7 @@ SKIP:
 	
 	SKIP:
 	{
-		skip('Unicode::String is needed for this', 4) unless eval 'use Unicode::String qw(latin1); 1';
+		skip('Unicode::String is needed for this', 3) unless eval 'use Unicode::String qw(latin1); 1';
 		my $unicode = latin1("render_unicode_solid");
 		my $render_unicode_solid = SDL::TTF::render_unicode_solid($font, $unicode->utf16be, $unicode_fg);
 		isa_ok( $render_unicode_solid, 'SDL::Surface', "[render_unicode_solid]" );
