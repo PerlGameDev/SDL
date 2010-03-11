@@ -4,8 +4,46 @@
 
 #include <SDL.h>
 
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #ifdef HAVE_SDL_TTF
+#ifdef HAVE_ALLOCA_H
+#include <alloca.h>
+#endif
+
+#ifdef HAVE_ALLOCA
+#define ALLOCA(n) ((void*)alloca(n))
+#define FREEA(p)
+#else
+#define ALLOCA(n) malloc(n)
+#define FREEA(p) free(p)
+#endif
+
+#include "SDL.h"
+#include "SDL_endian.h"
 #include <SDL_ttf.h>
+
+static Uint16 *utf16be_to_UNICODE(SV *sv)
+{
+	STRLEN len;
+	char *text      = SvPV(sv, len);
+	len            /= 2;
+	Uint16 *unicode = safemalloc((len + 2) * sizeof(Uint16));
+	int i;
+
+	unicode[0] = UNICODE_BOM_NATIVE;
+	for( i = 0; i <= len; i++ )
+	{
+		unicode[i + 1] = (((const unsigned char *)text)[i * 2] << 2) | ((const unsigned char *)text)[i * 2 + 1];
+	}
+	unicode[i] = 0;
+
+	return unicode;
+}
+
 #endif
 
 MODULE = SDL::TTF	PACKAGE = SDL::TTF	PREFIX = ttf_
@@ -222,10 +260,10 @@ ttf_size_utf8(font, text)
 AV *
 ttf_size_unicode(font, text)
 	TTF_Font *font
-	const Uint16 *text
+	SV *text
 	CODE:
 		int w, h;
-		if(0 == TTF_SizeUNICODE(font, text, &w, &h))
+		if(0 == TTF_SizeUNICODE(font, utf16be_to_UNICODE(text), &w, &h))
 		{
 			RETVAL = newAV();
 			sv_2mortal((SV*)RETVAL);
@@ -252,7 +290,7 @@ ttf_render_text_solid(font, text, fg)
 SDL_Surface *
 ttf_render_utf8_solid(font, text, fg)
 	TTF_Font *font
-	const char *text
+	char *text
 	SDL_Color *fg
 	PREINIT:
 		char* CLASS = "SDL::Surface";
@@ -264,12 +302,12 @@ ttf_render_utf8_solid(font, text, fg)
 SDL_Surface *
 ttf_render_unicode_solid(font, text, fg)
 	TTF_Font *font
-	const Uint16 *text
+	SV *text
 	SDL_Color *fg
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderUNICODE_Solid(font, text, *fg);
+		RETVAL = TTF_RenderUNICODE_Solid(font, utf16be_to_UNICODE(text), *fg);
 	OUTPUT:
 		RETVAL
 
@@ -282,19 +320,6 @@ ttf_render_glyph_solid(font, ch, fg)
 		char* CLASS = "SDL::Surface";
 	CODE:
 		RETVAL = TTF_RenderGlyph_Solid(font, ch, *fg);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface *
-ttf_render_text(font, text, fg, bg)
-	TTF_Font *font
-	const char *text
-	SDL_Color *fg
-	SDL_Color *bg
-	PREINIT:
-		char* CLASS = "SDL::Surface";
-	CODE:
-		RETVAL = TTF_RenderText(font, text, *fg, *bg);
 	OUTPUT:
 		RETVAL
 
@@ -312,22 +337,9 @@ ttf_render_text_shaded(font, text, fg, bg)
 		RETVAL
 
 SDL_Surface *
-ttf_render_utf8(font, text, fg, bg)
-	TTF_Font *font
-	const char *text
-	SDL_Color *fg
-	SDL_Color *bg
-	PREINIT:
-		char* CLASS = "SDL::Surface";
-	CODE:
-		RETVAL = TTF_RenderUTF8(font, text, *fg, *bg);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface *
 ttf_render_utf8_shaded(font, text, fg, bg)
 	TTF_Font *font
-	const char *text
+	char *text
 	SDL_Color *fg
 	SDL_Color *bg
 	PREINIT:
@@ -338,28 +350,15 @@ ttf_render_utf8_shaded(font, text, fg, bg)
 		RETVAL
 
 SDL_Surface *
-ttf_render_unicode(font, text, fg, bg)
-	TTF_Font *font
-	const Uint16 *text
-	SDL_Color *fg
-	SDL_Color *bg
-	PREINIT:
-		char* CLASS = "SDL::Surface";
-	CODE:
-		RETVAL = TTF_RenderUNICODE(font, text, *fg, *bg);
-	OUTPUT:
-		RETVAL
-
-SDL_Surface *
 ttf_render_unicode_shaded(font, text, fg, bg)
 	TTF_Font *font
-	const Uint16 *text
+	SV *text
 	SDL_Color *fg
 	SDL_Color *bg
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderUNICODE_Shaded(font, text, *fg, *bg);
+		RETVAL = TTF_RenderUNICODE_Shaded(font, utf16be_to_UNICODE(text), *fg, *bg);
 	OUTPUT:
 		RETVAL
 
@@ -403,12 +402,12 @@ ttf_render_utf8_blended(font, text, fg)
 SDL_Surface *
 ttf_render_unicode_blended(font, text, fg)
 	TTF_Font *font
-	const Uint16 *text
+	SV *text
 	SDL_Color *fg
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderUNICODE_Blended(font, text, *fg);
+		RETVAL = TTF_RenderUNICODE_Blended(font, utf16be_to_UNICODE(text), *fg);
 	OUTPUT:
 		RETVAL
 

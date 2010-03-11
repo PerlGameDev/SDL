@@ -34,7 +34,8 @@ is( SDL::TTF::init(),                                     0,                   "
 is( SDL::TTF::was_init(),                                 1,                   "[was_init] returns true" );
 is( SDL::TTF::byte_swapped_unicode(0),                    undef,               "[ttf_byte_swapped_unicode] on" );
 is( SDL::TTF::byte_swapped_unicode(1),                    undef,               "[ttf_byte_swapped_unicode] off" );
-my $font = SDL::TTF::open_font('test/data/aircut3.ttf', 24);
+my $font = SDL::TTF::open_font('test/data/arial.ttf', 24);
+#my $font = SDL::TTF::open_font('test/data/electrohar.ttf', 24);
 isa_ok( $font,                                           'SDL::TTF_Font',      "[open_font]" );
 #is( SDL::TTF::open_font_index(file, ptsize, index), 0, "[open_font_index] " );
 #is( SDL::TTF::open_font_RW(src, freesrc, ptsize), 0, "[open_font_RW] " );
@@ -82,8 +83,13 @@ ok( $width > 0 && $height > 0,                                                 "
 ($width, $height) = @{ SDL::TTF::size_utf8($font, 'Hallo World!') };
 ok( $width > 0 && $height > 0,                                                 "[size_utf8] width=$width height=$height" );
 
-#($width, $height) = @{ SDL::TTF::size_unicode($font, 'Hallo World!') };
-#ok( $width > 0 && $height > 0,                                                 "[size_unicode] width=$width height=$height" );
+SKIP:
+{
+	skip('Unicode::String is needed for this', 4) unless eval 'use Unicode::String qw(latin1); 1';
+	my $unicode = latin1("Hallo World!");
+	($width, $height) = @{ SDL::TTF::size_unicode($font, $unicode->utf16be) };
+	ok( $width > 0 && $height > 0,                                                 "[size_unicode] width=$width height=$height" );
+}
 
 SKIP:
 {
@@ -91,72 +97,70 @@ SKIP:
 	
 	my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 
-	my $fg    = SDL::Color->new( 0xFF,0xFF,0xFF );
-	my $bg    = SDL::Color->new( 0x80,0x80,0x80 );
-	my $black = SDL::Video::map_RGB( $display->format, 0x00,0x00,0x00 );
+	my $text_fg    = SDL::Color->new( 0xFF,0xFF,0xFF );
+	my $utf8_fg    = SDL::Color->new( 0x80,0x80,0xFF );
+	my $glyph_fg   = SDL::Color->new( 0x80,0xFF,0x80 );
+	my $unicode_fg = SDL::Color->new( 0xFF,0x80,0x80 );
+	my $bg         = SDL::Color->new( 0x80,0x80,0x80 );
+	my $black      = SDL::Video::map_RGB( $display->format, 0x00,0x00,0x00 );
 	SDL::Video::fill_rect( $display, SDL::Rect->new(0, 0, 640, 480), $black );
 	
 	my $y     = 0;
 
-	my $render_text_solid = SDL::TTF::render_text_solid($font, 'render_text_solid', $fg);
+	my $render_text_solid = SDL::TTF::render_text_solid($font, 'render_text_solid', $text_fg);
 	isa_ok( $render_text_solid, 'SDL::Surface', "[render_text_solid]" );
 	SDL::Video::blit_surface( $render_text_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, 'render_utf8_solid', $fg);
-	isa_ok( $render_utf8_solid, 'SDL::Surface', "[render_utf8_solid]" );
-	SDL::Video::blit_surface( $render_utf8_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
-
-	#my $render_unicode_solid = SDL::TTF::render_unicode_solid($font, 'render_unicode_solid', $fg);
-	#isa_ok( $render_unicode_solid, 'SDL::Surface', "[render_unicode_solid]" );
-	#SDL::Video::blit_surface( $render_unicode_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
-
-	my $render_glyph_solid = SDL::TTF::render_glyph_solid($font, 'r', $fg);
-	isa_ok( $render_glyph_solid, 'SDL::Surface', "[render_glyph_solid] " );
-	SDL::Video::blit_surface( $render_glyph_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
-
-	my $render_text = SDL::TTF::render_text($font, 'render_text', $fg, $bg);
-	isa_ok( $render_text, 'SDL::Surface', "[render_text]" );
-	SDL::Video::blit_surface( $render_text, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
-
-	my $render_text_shaded = SDL::TTF::render_text_shaded($font, 'render_text_shaded', $fg, $bg);
+	my $render_text_shaded = SDL::TTF::render_text_shaded($font, 'render_text_shaded', $text_fg, $bg);
 	isa_ok( $render_text_shaded, 'SDL::Surface', "[render_text_shaded]" );
 	SDL::Video::blit_surface( $render_text_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8 = SDL::TTF::render_utf8($font, 'render_utf8', $fg, $bg);
-	isa_ok( $render_utf8, 'SDL::Surface', "[render_utf8]" );
-	SDL::Video::blit_surface( $render_utf8, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
-
-	my $render_utf8_shaded = SDL::TTF::render_utf8_shaded($font, 'render_utf8_shaded', $fg, $bg);
-	isa_ok( $render_utf8_shaded, 'SDL::Surface', "[render_utf8_shaded]" );
-	SDL::Video::blit_surface( $render_utf8_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
-
-	#my $render_unicode = SDL::TTF::render_unicode($font, 'render_unicode', $fg, $bg);
-	#isa_ok( $render_unicode, 'SDL::Surface', "[render_unicode]" );
-	#SDL::Video::blit_surface( $render_unicode, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
-
-	#my $render_unicode_shaded = SDL::TTF::render_unicode_shaded($font, 'render_unicode_shaded', $fg, $bg);
-	#isa_ok( $render_unicode_shaded, 'SDL::Surface', "[render_unicode_shaded]" );
-	#SDL::Video::blit_surface( $render_unicode_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
-
-	my $render_glyph_shaded = SDL::TTF::render_glyph_shaded($font, 'render_glyph_shaded', $fg, $bg);
-	isa_ok( $render_glyph_shaded, 'SDL::Surface', "[render_glyph_shaded]" );
-	SDL::Video::blit_surface( $render_glyph_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
-
-	my $render_text_blended = SDL::TTF::render_text_blended($font, 'render_text_blended', $fg);
+	my $render_text_blended = SDL::TTF::render_text_blended($font, 'render_text_blended', $text_fg);
 	isa_ok( $render_text_blended , 'SDL::Surface', "[render_text_blended]" );
 	SDL::Video::blit_surface( $render_text_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8_blended = SDL::TTF::render_utf8_blended($font, 'render_utf8_blended', $fg);
+	my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, 'render_utf8_solid', $utf8_fg);
+	isa_ok( $render_utf8_solid, 'SDL::Surface', "[render_utf8_solid]" );
+	SDL::Video::blit_surface( $render_utf8_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+
+	my $render_utf8_shaded = SDL::TTF::render_utf8_shaded($font, 'render_utf8_shaded', $utf8_fg, $bg);
+	isa_ok( $render_utf8_shaded, 'SDL::Surface', "[render_utf8_shaded]" );
+	SDL::Video::blit_surface( $render_utf8_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+
+	my $render_utf8_blended = SDL::TTF::render_utf8_blended($font, 'render_utf8_blended', $utf8_fg);
 	isa_ok( $render_utf8_blended, 'SDL::Surface', "[render_utf8_blended]" );
 	SDL::Video::blit_surface( $render_utf8_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	#my $render_unicode_blended = SDL::TTF::render_unicode_blended($font, 'render_unicode_blended', $fg);
-	#isa_ok( $render_unicode_blended, 'SDL::Surface', "[render_unicode_blended]" );
-	#SDL::Video::blit_surface( $render_unicode_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+	my $render_glyph_solid = SDL::TTF::render_glyph_solid($font, 'r', $glyph_fg);
+	isa_ok( $render_glyph_solid, 'SDL::Surface', "[render_glyph_solid] " );
+	SDL::Video::blit_surface( $render_glyph_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_glyph_blended = SDL::TTF::render_glyph_blended($font, 'r', $fg);
+	my $render_glyph_shaded = SDL::TTF::render_glyph_shaded($font, 'r', $glyph_fg, $bg);
+	isa_ok( $render_glyph_shaded, 'SDL::Surface', "[render_glyph_shaded]" );
+	SDL::Video::blit_surface( $render_glyph_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+
+	my $render_glyph_blended = SDL::TTF::render_glyph_blended($font, 'r', $glyph_fg);
 	isa_ok( $render_glyph_blended, 'SDL::Surface', "[render_glyph_blended]" );
 	SDL::Video::blit_surface( $render_glyph_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+	
+	SKIP:
+	{
+		skip('Unicode::String is needed for this', 4) unless eval 'use Unicode::String qw(latin1); 1';
+		my $unicode = latin1("render_unicode_solid");
+		my $render_unicode_solid = SDL::TTF::render_unicode_solid($font, $unicode->utf16be, $unicode_fg);
+		isa_ok( $render_unicode_solid, 'SDL::Surface', "[render_unicode_solid]" );
+		SDL::Video::blit_surface( $render_unicode_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+
+		$unicode = latin1("render_unicode_shaded");
+		my $render_unicode_shaded = SDL::TTF::render_unicode_shaded($font, $unicode->utf16be, $unicode_fg, $bg);
+		isa_ok( $render_unicode_shaded, 'SDL::Surface', "[render_unicode_shaded]" );
+		SDL::Video::blit_surface( $render_unicode_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+
+		$unicode = latin1("render_unicode_blended");
+		my $render_unicode_blended = SDL::TTF::render_unicode_blended($font, $unicode->utf16be, $unicode_fg);
+		isa_ok( $render_unicode_blended, 'SDL::Surface', "[render_unicode_blended]" );
+		SDL::Video::blit_surface( $render_unicode_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+	}
 	
 	SDL::Video::update_rect( $display, 0, 0, 0, 0 );
 
@@ -185,17 +189,19 @@ font_face_style_name
 glyph_metrics
 size_text
 size_utf8
+size_unicode
 render_text_solid
-render_utf8_solid
-render_glyph_solid
-render_text
 render_text_shaded
-render_utf8
-render_utf8_shaded
-render_glyph_shaded
 render_text_blended
+render_utf8_solid
+render_utf8_shaded
 render_utf8_blended
+render_glyph_solid
+render_glyph_shaded
 render_glyph_blended
+render_unicode_solid
+render_unicode_shaded
+render_unicode_blended
 quit
 /;
 
@@ -203,11 +209,6 @@ my @left = qw/
 open_font_index
 open_font_RW
 open_font_index_RW
-size_unicode
-render_unicode_solid
-render_unicode
-render_unicode_shaded
-render_unicode_blended
 /;
 
 my $why
@@ -217,11 +218,6 @@ my $why
     . ( $#done + 1 ) . " / "
     . ( $#done + $#left + 2 );
 
-#TODO:
-#{
-#    local $TODO = $why;
-#    fail "Not Implmented $_" foreach(@left)
-#}
 diag $why;
 
 SDL::quit();
