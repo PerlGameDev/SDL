@@ -7,6 +7,35 @@
 #ifdef HAVE_SDL_TTF
 #include <SDL_ttf.h>
 
+static Uint16 *UTF8_to_UNICODE(Uint16 *unicode, const char *utf8, int len)
+{
+	int i, j;
+	Uint16 ch;
+
+	for ( i=0, j=0; i < len; ++i, ++j ) {
+		ch = ((const unsigned char *)utf8)[i];
+		if ( ch >= 0xF0 ) {
+			ch  =  (Uint16)(utf8[i]&0x07) << 18;
+			ch |=  (Uint16)(utf8[++i]&0x3F) << 12;
+			ch |=  (Uint16)(utf8[++i]&0x3F) << 6;
+			ch |=  (Uint16)(utf8[++i]&0x3F);
+		} else
+		if ( ch >= 0xE0 ) {
+			ch  =  (Uint16)(utf8[i]&0x0F) << 12;
+			ch |=  (Uint16)(utf8[++i]&0x3F) << 6;
+			ch |=  (Uint16)(utf8[++i]&0x3F);
+		} else
+		if ( ch >= 0xC0 ) {
+			ch  =  (Uint16)(utf8[i]&0x1F) << 6;
+			ch |=  (Uint16)(utf8[++i]&0x3F);
+		}
+		unicode[j] = ch;
+	}
+	unicode[j] = 0;
+	
+	return unicode;
+}
+
 static Uint16 *utf16_to_UNICODE(SV *sv)
 {
 	STRLEN len;
@@ -300,7 +329,18 @@ ttf_render_utf8_solid(font, text, fg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
-		RETVAL = TTF_RenderUTF8_Solid(font, SvPV(text, PL_na), *fg);
+		// this is buggy, see: http://bugzilla.libsdl.org/show_bug.cgi?id=970
+		//RETVAL = TTF_RenderUTF8_Solid(font, text, *fg);
+		
+		STRLEN len;
+		
+		unsigned char *utf8_text = SvPV(text, len);
+		Uint16        *unicode   = safemalloc((len + 2) * sizeof(Uint16));
+		
+		unicode[0] = 0xFEFF;
+		UTF8_to_UNICODE(unicode+1, utf8_text, len);
+
+		RETVAL = TTF_RenderUNICODE_Solid(font, unicode, *fg);
 	OUTPUT:
 		RETVAL
 

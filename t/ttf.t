@@ -34,9 +34,7 @@ is( SDL::TTF::init(),                                     0,                   "
 is( SDL::TTF::was_init(),                                 1,                   "[was_init] returns true" );
 is( SDL::TTF::byte_swapped_unicode(0),                    undef,               "[ttf_byte_swapped_unicode] on" );
 is( SDL::TTF::byte_swapped_unicode(1),                    undef,               "[ttf_byte_swapped_unicode] off" );
-my $font = SDL::TTF::open_font('test/data/aircut3.ttf', 24);
-#my $font = SDL::TTF::open_font('test/data/arial.ttf', 24);
-#my $font = SDL::TTF::open_font('test/data/electrohar.ttf', 24);
+my $font = SDL::TTF::open_font('test/data/arialuni.ttf', 24);
 isa_ok( $font,                                           'SDL::TTF_Font',      "[open_font]" );
 #is( SDL::TTF::open_font_index(file, ptsize, index), 0, "[open_font_index] " );
 #is( SDL::TTF::open_font_RW(src, freesrc, ptsize), 0, "[open_font_RW] " );
@@ -81,24 +79,12 @@ is( scalar @glyph_metrics,                                5,                   "
 my ($width, $height) = @{ SDL::TTF::size_text($font, 'Hallo World!') };
 ok( $width > 0 && $height > 0,                                                 "[size_text] width=$width height=$height" );
 
+($width, $height) = @{ SDL::TTF::size_utf8($font, "\xE4\xBB\x8A\xE6\x97\xA5\xE3\x81\xAF\xE4\xB8\x96\xE7\x95\x8C") };
+ok( $width > 0 && $height > 0,                                                 "[size_utf8] width=$width height=$height" );
 SKIP:
 {
 	skip('Unicode::String is needed for this', 2) unless eval 'use Unicode::String qw(latin1 utf8); 1';
-    # none of the below worked for me :(
-    # my $unicode = utf8("\xE4\xBB\x8A\xE6\x97\xA5\xE3\x81\xAF\xE4\xB8\x96\xE7\x95\x8C");
-
-# use utf8;
-# my $unicode = utf8("今日は世界");
-
-# my $unicode = latin1("Olá, Mundo!");
-
-#    use Encode;
-#    my $unicode = utf8(decode('UTF-8', "\xE4\xBB\x8A\xE6\x97\xA5\xE3\x81\xAF\xE4\xB8\x96\xE7\x95\x8C"));
-
 	my $unicode = latin1("Hallo World!");
-	($width, $height) = @{ SDL::TTF::size_utf8($font, $unicode->utf8) };
-	ok( $width > 0 && $height > 0,                                                 "[size_utf8] width=$width height=$height" );
-
 	($width, $height) = @{ SDL::TTF::size_unicode($font, $unicode->utf16be) };
 	ok( $width > 0 && $height > 0,                                                 "[size_unicode] width=$width height=$height" );
 }
@@ -109,6 +95,7 @@ SKIP:
 	
 	my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 
+	my $y          = 0;
 	my $text_fg    = SDL::Color->new( 0xFF,0xFF,0xFF );
 	my $utf8_fg    = SDL::Color->new( 0x80,0x80,0xFF );
 	my $glyph_fg   = SDL::Color->new( 0x80,0xFF,0x80 );
@@ -116,8 +103,6 @@ SKIP:
 	my $bg         = SDL::Color->new( 0x80,0x80,0x80 );
 	my $black      = SDL::Video::map_RGB( $display->format, 0x00,0x00,0x00 );
 	SDL::Video::fill_rect( $display, SDL::Rect->new(0, 0, 640, 480), $black );
-	
-	my $y     = 0;
 
 	my $render_text_solid = SDL::TTF::render_text_solid($font, 'render_text_solid', $text_fg);
 	isa_ok( $render_text_solid, 'SDL::Surface', "[render_text_solid]" );
@@ -131,24 +116,17 @@ SKIP:
 	isa_ok( $render_text_blended , 'SDL::Surface', "[render_text_blended]" );
 	SDL::Video::blit_surface( $render_text_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	SKIP:
-	{
-		skip('Unicode::String is needed for this', 3) unless eval 'use Unicode::String qw(latin1); 1';
-		my $unicode = latin1("render_utf8_solid");
-		my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, $unicode->utf8, $utf8_fg);
-		isa_ok( $render_utf8_solid, 'SDL::Surface', "[render_utf8_solid]" );
-		SDL::Video::blit_surface( $render_utf8_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+	my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, "render_utf8_solid: 今日は世界", $utf8_fg);
+	isa_ok( $render_utf8_solid, 'SDL::Surface', "[render_utf8_solid]" );
+	SDL::Video::blit_surface( $render_utf8_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-		$unicode = latin1("render_utf8_shaded");
-		my $render_utf8_shaded = SDL::TTF::render_utf8_shaded($font, $unicode->utf8, $utf8_fg, $bg);
-		isa_ok( $render_utf8_shaded, 'SDL::Surface', "[render_utf8_shaded]" );
-		SDL::Video::blit_surface( $render_utf8_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+	my $render_utf8_shaded = SDL::TTF::render_utf8_shaded($font, "render_utf8_shaded: 今日は世界", $utf8_fg, $bg);
+	isa_ok( $render_utf8_shaded, 'SDL::Surface', "[render_utf8_shaded]" );
+	SDL::Video::blit_surface( $render_utf8_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-		$unicode = latin1("render_utf8_blended");
-		my $render_utf8_blended = SDL::TTF::render_utf8_blended($font, $unicode->utf8, $utf8_fg);
-		isa_ok( $render_utf8_blended, 'SDL::Surface', "[render_utf8_blended]" );
-		SDL::Video::blit_surface( $render_utf8_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
-	}
+	my $render_utf8_blended = SDL::TTF::render_utf8_blended($font, "render_utf8_blended: \xE4\xBB\x8A\xE6\x97\xA5\xE3\x81\xAF\xE4\xB8\x96\xE7\x95\x8C", $utf8_fg);
+	isa_ok( $render_utf8_blended, 'SDL::Surface', "[render_utf8_blended]" );
+	SDL::Video::blit_surface( $render_utf8_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 	
 	my $render_glyph_solid = SDL::TTF::render_glyph_solid($font, 'r', $glyph_fg);
 	isa_ok( $render_glyph_solid, 'SDL::Surface', "[render_glyph_solid]" );
