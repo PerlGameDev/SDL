@@ -35,6 +35,7 @@ is( SDL::TTF::was_init(),                                 1,                   "
 is( SDL::TTF::byte_swapped_unicode(0),                    undef,               "[ttf_byte_swapped_unicode] on" );
 is( SDL::TTF::byte_swapped_unicode(1),                    undef,               "[ttf_byte_swapped_unicode] off" );
 my $font = SDL::TTF::open_font('test/data/aircut3.ttf', 24);
+#my $font = SDL::TTF::open_font('test/data/arial.ttf', 24);
 #my $font = SDL::TTF::open_font('test/data/electrohar.ttf', 24);
 isa_ok( $font,                                           'SDL::TTF_Font',      "[open_font]" );
 #is( SDL::TTF::open_font_index(file, ptsize, index), 0, "[open_font_index] " );
@@ -119,21 +120,27 @@ SKIP:
 	isa_ok( $render_text_blended , 'SDL::Surface', "[render_text_blended]" );
 	SDL::Video::blit_surface( $render_text_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $unicode = latin1("Hallo World!");
-	my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, $unicode->utf8, $utf8_fg);
-	isa_ok( $render_utf8_solid, 'SDL::Surface', "[render_utf8_solid]" );
-	SDL::Video::blit_surface( $render_utf8_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+	SKIP:
+	{
+		skip('Unicode::String is needed for this', 3) unless eval 'use Unicode::String qw(latin1); 1';
+		my $unicode = latin1("render_utf8_solid");
+		my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, $unicode->utf8, $utf8_fg);
+		isa_ok( $render_utf8_solid, 'SDL::Surface', "[render_utf8_solid]" );
+		SDL::Video::blit_surface( $render_utf8_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8_shaded = SDL::TTF::render_utf8_shaded($font, 'render_utf8_shaded', $utf8_fg, $bg);
-	isa_ok( $render_utf8_shaded, 'SDL::Surface', "[render_utf8_shaded]" );
-	SDL::Video::blit_surface( $render_utf8_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+		$unicode = latin1("render_utf8_shaded");
+		my $render_utf8_shaded = SDL::TTF::render_utf8_shaded($font, $unicode->utf8, $utf8_fg, $bg);
+		isa_ok( $render_utf8_shaded, 'SDL::Surface', "[render_utf8_shaded]" );
+		SDL::Video::blit_surface( $render_utf8_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8_blended = SDL::TTF::render_utf8_blended($font, 'render_utf8_blended', $utf8_fg);
-	isa_ok( $render_utf8_blended, 'SDL::Surface', "[render_utf8_blended]" );
-	SDL::Video::blit_surface( $render_utf8_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
-
+		$unicode = latin1("render_utf8_blended");
+		my $render_utf8_blended = SDL::TTF::render_utf8_blended($font, $unicode->utf8, $utf8_fg);
+		isa_ok( $render_utf8_blended, 'SDL::Surface', "[render_utf8_blended]" );
+		SDL::Video::blit_surface( $render_utf8_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
+	}
+	
 	my $render_glyph_solid = SDL::TTF::render_glyph_solid($font, 'r', $glyph_fg);
-	isa_ok( $render_glyph_solid, 'SDL::Surface', "[render_glyph_solid] " );
+	isa_ok( $render_glyph_solid, 'SDL::Surface', "[render_glyph_solid]" );
 	SDL::Video::blit_surface( $render_glyph_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
 	my $render_glyph_shaded = SDL::TTF::render_glyph_shaded($font, 'r', $glyph_fg, $bg);
@@ -153,7 +160,7 @@ SKIP:
 		SDL::Video::blit_surface( $render_unicode_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
 		$unicode = latin1("render_unicode_shaded");
-		my $render_unicode_shaded = SDL::TTF::render_unicode_shaded($font, $unicode->utf16be, $unicode_fg, $bg);
+		my $render_unicode_shaded = SDL::TTF::render_unicode_shaded($font, "\xFF\xFE" . $unicode->utf16le, $unicode_fg, $bg);
 		isa_ok( $render_unicode_shaded, 'SDL::Surface', "[render_unicode_shaded]" );
 		SDL::Video::blit_surface( $render_unicode_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
