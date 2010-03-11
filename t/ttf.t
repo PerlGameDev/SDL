@@ -83,7 +83,18 @@ ok( $width > 0 && $height > 0,                                                 "
 
 SKIP:
 {
-	skip('Unicode::String is needed for this', 2) unless eval 'use Unicode::String qw(latin1); 1';
+	skip('Unicode::String is needed for this', 2) unless eval 'use Unicode::String qw(latin1 utf8); 1';
+    # none of the below worked for me :(
+    # my $unicode = utf8("\xE4\xBB\x8A\xE6\x97\xA5\xE3\x81\xAF\xE4\xB8\x96\xE7\x95\x8C");
+
+# use utf8;
+# my $unicode = utf8("今日は世界");
+
+# my $unicode = latin1("Olá, Mundo!");
+
+#    use Encode;
+#    my $unicode = utf8(decode('UTF-8', "\xE4\xBB\x8A\xE6\x97\xA5\xE3\x81\xAF\xE4\xB8\x96\xE7\x95\x8C"));
+
 	my $unicode = latin1("Hallo World!");
 	($width, $height) = @{ SDL::TTF::size_utf8($font, $unicode->utf8) };
 	ok( $width > 0 && $height > 0,                                                 "[size_utf8] width=$width height=$height" );
