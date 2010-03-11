@@ -4,26 +4,7 @@
 
 #include <SDL.h>
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #ifdef HAVE_SDL_TTF
-#ifdef HAVE_ALLOCA_H
-#include <alloca.h>
-#endif
-
-#ifdef HAVE_ALLOCA
-#define ALLOCA(n) ((void*)alloca(n))
-#define FREEA(p)
-#else
-#define ALLOCA(n) malloc(n)
-#define FREEA(p) free(p)
-#endif
-
-#include "SDL.h"
-#include "SDL_endian.h"
 #include <SDL_ttf.h>
 
 static Uint16 *utf16be_to_UNICODE(SV *sv)
