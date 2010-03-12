@@ -1,4 +1,4 @@
-package SDL::TTF_Font;
+package SDL::TTF::Font;
 use strict;
 use warnings;
 require Exporter;
@@ -8,6 +8,6 @@ our @ISA = qw(Exporter DynaLoader);
 use SDL::Internal::Loader;
 internal_load_dlls(__PACKAGE__);
 
-bootstrap SDL::TTF_Font;
+bootstrap SDL::TTF::Font;
 
 1;

@@ -21,7 +21,7 @@ BEGIN
 }
 
 use SDL::TTF;
-use SDL::TTF_Font;
+use SDL::TTF::Font;
 use SDL::RWOps;
 use SDL::Version;
 use Encode;

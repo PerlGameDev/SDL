@@ -95,8 +95,8 @@ mixmus_get_music_decoder( index )
 int
 mixmus_get_num_music_decoders( )
 	CODE:
-		warn("SDL_mixer >= 1.2.9 needed for getnum_music_decoders()");
-		RETVAL = -1;
+		warn("SDL_mixer >= 1.2.9 needed for SDL::Mixer::Music::getnum_music_decoders()");
+		XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
 
@@ -104,8 +104,8 @@ const char *
 mixmus_get_music_decoder( index )
 	int index
 	CODE:
-		warn("SDL_mixer >= 1.2.9 needed for get_music_decoder( index )");
-		RETVAL = "";
+		warn("SDL_mixer >= 1.2.9 needed for SDL::Mixer::Music::get_music_decoder( index )");
+		XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
 

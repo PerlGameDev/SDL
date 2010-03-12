@@ -14,25 +14,25 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 }
 
 my @done =qw/
-pump_events 
-peep_events 
+pump_events
+peep_events
 push_event
 poll_event
 wait_event
-set_event_filter 
+set_event_filter
 event_state
 get_key_state
 get_key_name
 get_mod_state
 set_mod_state
-enable_unicode 
-enable_key_repeat 
-get_mouse_state 
-get_relative_mouse_state 
-get_app_state 
-joystick_event_state 
+enable_unicode
+enable_key_repeat
+get_mouse_state
+get_relative_mouse_state
+get_app_state
+joystick_event_state
 /;
-
+ 
 my @done_event =qw/
 type
 active
@@ -49,10 +49,9 @@ quit
 user
 syswm
 /;
-
-can_ok( 'SDL::Events',           @done); 
-can_ok( 'SDL::Event',            @done_event);
-
+ 
+can_ok( 'SDL::Events', @done);
+can_ok( 'SDL::Event',  @done_event);
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE);
 
@@ -160,8 +159,7 @@ SDL::Events::pump_events();
 my $got = 0; 
 while( SDL::Events::poll_event($nevent)) 
 {
-	$got = 1 if  $nevent->type == SDL_ACTIVEEVENT;
-
+	$got = 1 if $nevent->type == SDL_ACTIVEEVENT;
 }
 is ( $got, 0, '[event_state] works with SDL_IGNORE on SDL_ACTIVEEVENT');
 
@@ -173,11 +171,9 @@ SDL::Events::pump_events();
 my $atleast = 0;
 while( SDL::Events::poll_event($nevent)) 
 {
-	$atleast = 1 if ( $nevent->type == SDL_ACTIVEEVENT)
-
+	$atleast = 1 if $nevent->type == SDL_ACTIVEEVENT;
 }
-is ( $atleast, 1,  '[event_state] works with SDL_ENABLE on SDL_ACTIVEEVENT');
-
+is( $atleast, 1,  '[event_state] works with SDL_ENABLE on SDL_ACTIVEEVENT');
 
 is( SDL::Events::enable_unicode(1), 0, '[enable_unicode] return 0 took 1');
 is( SDL::Events::enable_unicode(-1), 1, '[enable_unicode] return 1 took -1');
@@ -209,8 +205,6 @@ is( SDL::Events::joystick_event_state(SDL_QUERY), SDL_ENABLE, '[joystick_event_s
 is( SDL::Events::joystick_event_state(SDL_IGNORE),  SDL_IGNORE,  '[joystick_event_state] return SDL_IGNORE correctly');
 is( SDL::Events::joystick_event_state(SDL_QUERY), SDL_IGNORE, '[joystick_event_state] return  SDL_IGNORE took SDL_QUERY ');
 
-
-
 SDL::quit();
 
 SKIP:
@@ -228,7 +222,6 @@ SKIP:
 
 	while(1)
 	{
-
 		SDL::Events::pump_events();
 		if(SDL::Events::poll_event($event))
 		{
@@ -246,19 +239,6 @@ SKIP:
 
 	SDL::quit();
 }
-
-my @left = qw/
-/;
-
-my $why = '[Percentage Completion] '.int( 100 * ($#done +1 ) / ($#done + $#left + 2  ) ) .'% implementation. '.($#done +1 ).'/'.($#done+$#left + 2 ); 
-
-TODO:
-{
-	local $TODO = $why;
-	pass "\nThe following functions:\n".join ",", @left; 
-}
-if( $done[0] eq 'none'){ diag '0% done 0/'.$#left } else { diag  $why} 
-
 
 pass 'Are we still alive? Checking for segfaults';
 

@@ -37,17 +37,36 @@ See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
 #if (SDL_MIXER_MAJOR_VERSION >= 1 && SDL_MIXER_MINOR_VERSION >= 2 && SDL_MIXER_PATCHLEVEL >= 10)
 
 int 
-mixsam_get_num_chunk_decoders ()
+mixsam_get_num_chunk_decoders()
 	CODE:
 		RETVAL = Mix_GetNumChunkDecoders();
 	OUTPUT:
 		RETVAL
 
-char* 
-mixsam_get_chunk_decoder (idecoder)
-	int idecoder
+char * 
+mixsam_get_chunk_decoder( index )
+	int index
 	CODE:
-		RETVAL = (char *)Mix_GetChunkDecoder(idecoder);
+		RETVAL = (char *)Mix_GetChunkDecoder(index);
+	OUTPUT:
+		RETVAL
+
+#else
+
+int
+mixsam_get_num_chunk_decoders( )
+	CODE:
+		warn("SDL_mixer >= 1.2.10 needed for SDL::Mixer::Samples::get_num_chunk_decoders()");
+		XSRETURN_UNDEF;
+	OUTPUT:
+		RETVAL
+
+char *
+mixsam_get_chunk_decoder( index )
+	int index
+	CODE:
+		warn("SDL_mixer >= 1.2.10 needed for SDL::Mixer::Samples::get_chunk_decoder( index )");
+		XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
 

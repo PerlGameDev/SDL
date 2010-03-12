@@ -5,6 +5,7 @@ use SDL;
 use SDL::Rect;
 use SDL::Config;
 use SDL::Video;
+use SDL::Version;
 use SDL::Surface;
 use SDL::GFX::Primitives;
 use Test::More;
@@ -20,6 +21,10 @@ elsif( !SDL::Config->has('SDL_gfx_primitives') )
 {
     plan( skip_all => 'SDL_gfx_primitives support not compiled' );
 }
+
+my $v       = SDL::GFX::Primitives::linked_version();
+isa_ok($v, 'SDL::Version', '[linked_version]');
+diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 my $pixel   = SDL::Video::map_RGB( $display->format, 0, 0, 0 );
@@ -204,8 +209,12 @@ is( SDL::GFX::Primitives::aacircle_color(     $display, 534, 5, 2, 0x00FF00FF), 
 is( SDL::GFX::Primitives::aacircle_RGBA(      $display, 541, 5, 2, 0xFF, 0xFF, 0x00, 0xFF), 0, 'aacircle_RGBA' );  # yellow
 is( SDL::GFX::Primitives::filled_circle_color($display, 548, 5, 2, 0x00FF00FF),             0, 'filled_circle_color' ); # green
 is( SDL::GFX::Primitives::filled_circle_RGBA( $display, 555, 5, 2, 0xFF, 0xFF, 0x00, 0xFF), 0, 'filled_circle_RGBA' );  # yellow
-is( SDL::GFX::Primitives::arc_color(          $display, 562, 5, 2,   5, 175, 0x00FF00FF),             0, 'arc_color' ); # green
-is( SDL::GFX::Primitives::arc_RGBA(           $display, 569, 5, 2, 185, 355, 0xFF, 0xFF, 0x00, 0xFF), 0, 'arc_RGBA' );  # yellow
+SKIP:
+{
+	skip ( 'Version 2.0.17 needed' , 2) unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 17 ); 
+	is( SDL::GFX::Primitives::arc_color(          $display, 562, 5, 2,   5, 175, 0x00FF00FF),             0, 'arc_color' ); # green
+	is( SDL::GFX::Primitives::arc_RGBA(           $display, 569, 5, 2, 185, 355, 0xFF, 0xFF, 0x00, 0xFF), 0, 'arc_RGBA' );  # yellow
+}
 is( SDL::GFX::Primitives::pie_color(          $display, 576, 7, 5, 270, 0, 0xFF0000FF),             0, 'pie_color' ); # red
 is( SDL::GFX::Primitives::pie_RGBA(           $display, 583, 7, 5, 270, 0, 0x00, 0x00, 0xFF, 0xFF), 0, 'pie_RGBA' );  # blue
 is( SDL::GFX::Primitives::filled_pie_color(   $display, 590, 7, 5, 270, 0, 0xFF0000FF),             0, 'filled_pie_color' ); # red
@@ -215,13 +224,15 @@ is( SDL::GFX::Primitives::filled_pie_RGBA(    $display, 597, 7, 5, 270, 0, 0x00,
 SDL::GFX::Primitives::filled_circle_color($display, 553, 137, 36, 0x00FF0080);
 SDL::GFX::Primitives::filled_circle_color($display, 601, 137, 36, 0x0000FF80);
 SDL::GFX::Primitives::filled_circle_color($display, 577,  87, 36, 0xFF000080);
-SDL::GFX::Primitives::arc_color(          $display, 553, 137, 36, 310, 335, 0xFFFFFF80);
-SDL::GFX::Primitives::arc_color(          $display, 601, 137, 36, 205, 230, 0xFFFFFF80);
-SDL::GFX::Primitives::arc_color(          $display, 577,  87, 36,  75, 105, 0xFFFFFF80);
-SDL::GFX::Primitives::arc_color(          $display, 553, 137, 36,  48, 255, 0xFFFFFF80);
-SDL::GFX::Primitives::arc_color(          $display, 601, 137, 36, 285, 132, 0xFFFFFF80);
-SDL::GFX::Primitives::arc_color(          $display, 577,  87, 36, 155,  25, 0xFFFFFF80);
-
+if( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 17 )
+{
+	SDL::GFX::Primitives::arc_color(          $display, 553, 137, 36, 310, 335, 0xFFFFFF80);
+	SDL::GFX::Primitives::arc_color(          $display, 601, 137, 36, 205, 230, 0xFFFFFF80);
+	SDL::GFX::Primitives::arc_color(          $display, 577,  87, 36,  75, 105, 0xFFFFFF80);
+	SDL::GFX::Primitives::arc_color(          $display, 553, 137, 36,  48, 255, 0xFFFFFF80);
+	SDL::GFX::Primitives::arc_color(          $display, 601, 137, 36, 285, 132, 0xFFFFFF80);
+	SDL::GFX::Primitives::arc_color(          $display, 577,  87, 36, 155,  25, 0xFFFFFF80);
+}
 SDL::Video::unlock_surface($display) if(SDL::Video::MUSTLOCK($display));
 
 SDL::Video::update_rect($display, 0, 0, 640, 480); 

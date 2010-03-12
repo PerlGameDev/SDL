@@ -22,21 +22,8 @@ elsif( !SDL::Config->has('SDL_gfx_rotozoom') )
 }
 else
 {
-    plan( tests => 19 );
+    plan( tests => 18 );
 }
-
-my @done =qw/
-surface
-surface_size
-surface_xy
-surface_size_xy
-zoom_surface
-zoom_surface_size
-shrink_surface
-rotate_surface_90_degrees
-/;
-
-
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 my $pixel   = SDL::Video::map_RGB( $display->format, 0, 0, 0 );
@@ -100,17 +87,6 @@ sub draw
 
 
 SDL::delay(1000);
-
-my @left = qw/
-/;
-
-my $why = '[Percentage Completion] '.int( 100 * ($#done +1 ) / ($#done + $#left + 2  ) ) .'% implementation. '.($#done +1 ).'/'.($#done+$#left + 2 ); 
-TODO:
-{
-	local $TODO = $why;
-	pass "\nThe following functions:\n".join ",", @left; 
-}
-if( $done[0] eq 'none'){ diag '0% done 0/'.$#left } else { diag  $why} 
 
 pass 'Are we still alive? Checking for segfaults';
 

@@ -312,8 +312,8 @@ my %subsystems =
 	},
 	TTF_Font => {
 		file      => {
-			from  => 'src/TTF/objects/TTF_Font.xs',
-			to    => 'lib/SDL/TTF_Font.xs',
+			from  => 'src/TTF/objects/Font.xs',
+			to    => 'lib/SDL/TTF/Font.xs',
 		},
 		libraries => [qw( SDL SDL_ttf )],
 	},

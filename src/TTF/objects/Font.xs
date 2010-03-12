@@ -13,7 +13,7 @@
 #endif
 
 
-MODULE = SDL::TTF_Font 	PACKAGE = SDL::TTF_Font    PREFIX = ttf_font_
+MODULE = SDL::TTF::Font 	PACKAGE = SDL::TTF::Font    PREFIX = ttf_font_
 
 =for documentation
 

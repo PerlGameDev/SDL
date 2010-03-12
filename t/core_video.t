@@ -17,7 +17,7 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 }
 else
 {
-	  plan( tests => 64);
+	  plan( tests => 63);
 }
 
 my @done =
@@ -281,20 +281,6 @@ SDL::Video::wm_toggle_fullscreen($display);
 pass '[wm_toggle_fullscreen] ran';
 }
 
-my @left = qw/
-/;
-
-my $why = '[Percentage Completion] '.int( 100 * ($#done +1) / ($#done + $#left + 2) ) ."\% implementation. ". ($#done +1)." / ".($#done+$#left + 2); 
-
-TODO:
-{
-	local $TODO = $why;
-	pass "\nThe following functions:\n".join ",", @left; 
-}
-	diag  $why;
-
-
 pass 'Are we still alive? Checking for segfaults';
 
 sleep(2);
-

@@ -5,6 +5,7 @@ use SDL;
 use SDL::Rect;
 use SDL::Config;
 use SDL::Video;
+use SDL::Version;
 use SDL::Surface;
 use SDL::GFX::Primitives;
 use Test::More;
@@ -20,6 +21,10 @@ elsif( !SDL::Config->has('SDL_gfx_primitives') )
 {
     plan( skip_all => 'SDL_gfx_primitives support not compiled' );
 }
+
+my $v       = SDL::GFX::Primitives::linked_version();
+isa_ok($v, 'SDL::Version', '[linked_version]');
+diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 my $pixel   = SDL::Video::map_RGB( $display->format, 0, 0, 0 );
@@ -64,10 +69,13 @@ is( SDL::GFX::Primitives::filled_polygon_color(   $display, [286, 290, 288, 290,
 is( SDL::GFX::Primitives::filled_polygon_RGBA(    $display, [292, 296, 294, 296, 292], [243, 243, 245, 247, 247], 5, 0xFF, 0x00, 0xFF, 0xFF),             0, 'filled_polygon_RGBA' );     # magenta
 
 is( SDL::GFX::Primitives::textured_polygon(       $display, [298, 302, 300, 302, 298], [243, 243, 245, 247, 247], 5, $surf,                  0, 0),       1, 'textured_polygon' );        # texture
-is( SDL::GFX::Primitives::filled_polygon_color_MT($display, [304, 308, 306, 308, 304], [243, 243, 245, 247, 247], 5, 0xFF0000FF,             0, 0),       0, 'filled_polygon_color_MT' ); # red
-is( SDL::GFX::Primitives::filled_polygon_RGBA_MT( $display, [310, 314, 312, 314, 310], [243, 243, 245, 247, 247], 5, 0x00, 0xFF, 0x00, 0xFF, 0, 0),       0, 'filled_polygon_RGBA_MT' );  # green
-is( SDL::GFX::Primitives::textured_polygon_MT(    $display, [316, 320, 318, 320, 316], [243, 243, 245, 247, 247], 5, $surf,                  0, 0, 0, 0), 1, 'textured_polygon_MT' );     # texture
-
+SKIP:
+{
+	skip ( 'Version 2.0.17 needed' , 3) unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 17 ); 
+	is( SDL::GFX::Primitives::filled_polygon_color_MT($display, [304, 308, 306, 308, 304], [243, 243, 245, 247, 247], 5, 0xFF0000FF,             0, 0),       0, 'filled_polygon_color_MT' ); # red
+	is( SDL::GFX::Primitives::filled_polygon_RGBA_MT( $display, [310, 314, 312, 314, 310], [243, 243, 245, 247, 247], 5, 0x00, 0xFF, 0x00, 0xFF, 0, 0),       0, 'filled_polygon_RGBA_MT' );  # green
+	is( SDL::GFX::Primitives::textured_polygon_MT(    $display, [316, 320, 318, 320, 316], [243, 243, 245, 247, 247], 5, $surf,                  0, 0, 0, 0), 1, 'textured_polygon_MT' );     # texture
+}
 # polygon demo
 SDL::GFX::Primitives::filled_polygon_color(   $display, [311, 331, 381, 301, 311, 351], [293, 293, 378, 378, 361, 361], 6, 0xFF000080);    # red
 SDL::GFX::Primitives::filled_polygon_color(   $display, [381, 371, 271, 311, 321, 301], [378, 395, 395, 327, 344, 378], 6, 0x00FF0080);    # green

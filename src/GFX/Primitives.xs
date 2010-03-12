@@ -9,6 +9,26 @@
 #include <SDL.h>
 #ifdef HAVE_SDL_GFX_PRIMITIVES
 #include <SDL_gfxPrimitives.h>
+
+#ifndef SDL_GFXPRIMITIVES_MAJOR
+#define SDL_GFXPRIMITIVES_MAJOR 0
+#endif
+
+#ifndef SDL_GFXPRIMITIVES_MINOR
+#define SDL_GFXPRIMITIVES_MINOR 0
+#endif
+
+#ifndef SDL_GFXPRIMITIVES_MICRO
+#define SDL_GFXPRIMITIVES_MICRO 0
+#endif
+
+#define SDL_GFXPRIMITEVES_VERSION(X)      \
+{                                         \
+	(X)->major = SDL_GFXPRIMITIVES_MAJOR; \
+	(X)->minor = SDL_GFXPRIMITIVES_MINOR; \
+	(X)->patch = SDL_GFXPRIMITIVES_MICRO; \
+}
+
 #endif
 
 static Sint16* av_to_sint16 (AV* av)
@@ -48,6 +68,18 @@ See: L<http://www.ferzkopp.net/joomla/content/view/19/14/>
 =cut
 
 #ifdef HAVE_SDL_GFX_PRIMITIVES
+
+const SDL_version *
+gfx_prim_linked_version()
+	PREINIT:
+		char* CLASS = "SDL::Version";
+	CODE:
+		SDL_version *linked_version = safemalloc( sizeof( SDL_version) );
+		SDL_GFXPRIMITEVES_VERSION(linked_version);
+		
+		RETVAL = linked_version;
+	OUTPUT:
+		RETVAL
 
 int
 gfx_prim_pixel_color(dst, x, y, color)
@@ -274,7 +306,7 @@ gfx_prim_circle_RGBA(dst, x, y, rad, r, g, b, a)
 #if (SDL_GFXPRIMITIVES_MAJOR >= 2) && (SDL_GFXPRIMITIVES_MINOR >= 0) && (SDL_GFXPRIMITIVES_MICRO >= 17)
 
 int
-gfx_prim_arc_color(dst, x, y, r, start, end, color)
+gfx_prim_arc_color( dst, x, y, r, start, end, color )
 	SDL_Surface * dst
 	Sint16 x
 	Sint16 y
@@ -288,7 +320,7 @@ gfx_prim_arc_color(dst, x, y, r, start, end, color)
 		RETVAL
 
 int
-gfx_prim_arc_RGBA(dst, x, y, rad, start, end, r, g, b, a)
+gfx_prim_arc_RGBA( dst, x, y, rad, start, end, r, g, b, a )
 	SDL_Surface * dst
 	Sint16 x
 	Sint16 y
@@ -301,6 +333,41 @@ gfx_prim_arc_RGBA(dst, x, y, rad, start, end, r, g, b, a)
 	Uint8 a
 	CODE:
 		RETVAL = arcRGBA(dst, x, y, rad, start, end, r, g, b, a);
+	OUTPUT:
+		RETVAL
+
+#else
+
+int
+gfx_prim_arc_color( dst, x, y, r, start, end, color )
+	SDL_Surface * dst
+	Sint16 x
+	Sint16 y
+	Sint16 r
+	Sint16 start
+	Sint16 end
+	Uint32 color
+	CODE:
+		warn("SDL_gfxPrimitives >= 2.0.17 needed for SDL::GFX::Primitives::arc_color( dst, x, y, r, start, end, color )");
+		XSRETURN_UNDEF;
+	OUTPUT:
+		RETVAL
+
+int
+gfx_prim_arc_RGBA( dst, x, y, rad, start, end, r, g, b, a )
+	SDL_Surface * dst
+	Sint16 x
+	Sint16 y
+	Sint16 rad
+	Sint16 start
+	Sint16 end
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	CODE:
+		warn("SDL_gfxPrimitives >= 2.0.17 needed for SDL::GFX::Primitives::arc_RGBA( dst, x, y, rad, start, end, r, g, b, a )");
+		XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
 
@@ -769,6 +836,58 @@ gfx_prim_textured_polygon_MT(dst, vx, vy, n, texture, texture_dx, texture_dy, po
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = texturedPolygonMT(dst, _vx, _vy, n, texture, texture_dx, texture_dy, polyInts, polyAllocated);
+	OUTPUT:
+		RETVAL
+
+#else
+
+int
+gfx_prim_filled_polygon_color_MT(dst, vx, vy, n, color, polyInts, polyAllocated)
+	SDL_Surface * dst
+	AV* vx
+	AV* vy
+	int n
+	Uint32 color
+	int **polyInts
+	int *polyAllocated
+	CODE:
+		warn("SDL_gfxPrimitives >= 2.0.17 needed for SDL::GFX::Primitives::filled_polygon_color_MT( dst, vx, vy, n, color, polyInts, polyAllocated )");
+		XSRETURN_UNDEF;
+	OUTPUT:
+		RETVAL
+
+int
+gfx_prim_filled_polygon_RGBA_MT(dst, vx, vy, n, r, g, b, a, polyInts, polyAllocated)
+	SDL_Surface * dst
+	AV* vx
+	AV* vy
+	int n
+	Uint8 r
+	Uint8 g
+	Uint8 b
+	Uint8 a
+	int **polyInts
+	int *polyAllocated
+	CODE:
+		warn("SDL_gfxPrimitives >= 2.0.17 needed for SDL::GFX::Primitives::filled_polygon_RGBA_MT( dst, vx, vy, n, r, g, b, a, polyInts, polyAllocated )");
+		XSRETURN_UNDEF;
+	OUTPUT:
+		RETVAL
+
+int
+gfx_prim_textured_polygon_MT(dst, vx, vy, n, texture, texture_dx, texture_dy, polyInts, polyAllocated)
+	SDL_Surface * dst
+	AV* vx
+	AV* vy
+	int n
+	SDL_Surface * texture
+	int texture_dx
+	int texture_dy
+	int **polyInts
+	int *polyAllocated
+	CODE:
+		warn("SDL_gfxPrimitives >= 2.0.17 needed for SDL::GFX::Primitives::textured_polygon_MT( dst, vx, vy, n, texture, texture_dx, texture_dy, polyInts, polyAllocated )");
+		XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
 
