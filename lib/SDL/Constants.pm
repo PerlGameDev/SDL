@@ -3419,12 +3419,6 @@ use constant {
 use constant {
 	SDL_TIMESLICE                                       => 10,
 	TIMER_RESOLUTION                                    => 10,
-	SDL_TTF_MAJOR_VERSION                               => 2,
-	SDL_TTF_MINOR_VERSION                               => 0,
-	SDL_TTF_PATCHLEVEL                                  => 9,
-	TTF_MAJOR_VERSION                                   => 2,
-	TTF_MINOR_VERSION                                   => 0,
-	TTF_PATCHLEVEL                                      => 9,
 	UNICODE_BOM_NATIVE                                  => 0xFEFF,
 	UNICODE_BOM_SWAPPED                                 => 0xFFFE,
 	TTF_STYLE_NORMAL                                    => 0x00,
