@@ -101,17 +101,7 @@ my $playing_channel = SDL::Mixer::Channels::play_channel( -1, $sample_chunk, -1 
 is( $playing_channel >= 0, 1, "[play_channel] playing $audio_test_file");
 
 SDL::delay($delay);
-my $effect_id = SDL::Mixer::Effects::register($playing_channel, "main::echo_effect_func", "main::effect_done", 0);
-isnt( $effect_id, -1, '[register] registerering echo effect callback' );
-SDL::delay($delay);
-
-is( $effect_func_called > 0,                                                          1, "[effect_func] called $effect_func_called times" );
-
-
-$effect_func_called = 0;
-$effect_done_called = 0;
-SDL::delay($delay);
-$effect_id = SDL::Mixer::Effects::register($playing_channel, "main::echo_effect_func2", "main::effect_done2", 0);
+my $effect_id = SDL::Mixer::Effects::register($playing_channel, "main::echo_effect_func2", "main::effect_done2", 0);
 isnt( $effect_id, -1, '[register] registerering echo effect callback' );
 SDL::delay($delay);
 my $check = SDL::Mixer::Effects::unregister($playing_channel, $effect_id);
@@ -120,9 +110,17 @@ SDL::delay(200);
 is( $effect_func_called > 0,                                                          1, "[effect_func] called $effect_func_called times" );
 is( $effect_done_called > 0,                                                          1, "[effect_done] called $effect_done_called times" );
 
+SDL::delay($delay);
+$effect_func_called = 0;
+$effect_done_called = 0;
+
+$effect_id = SDL::Mixer::Effects::register($playing_channel, "main::echo_effect_func2", "main::effect_done2", 0);
+isnt( $effect_id, -1, '[register] registerering echo effect callback' );
+SDL::delay($delay);
 $check = SDL::Mixer::Effects::unregister($playing_channel, $effect_id);
 isnt( $check,                0, '[unregister] unregistering effect_func will call effect_done' );
 SDL::delay(200);
+is( $effect_func_called > 0,                                                          1, "[effect_func] called $effect_func_called times" );
 is( $effect_done_called > 0,                                                          1, "[effect_done] called $effect_done_called times" );
 
 $effect_func_called = 0;
