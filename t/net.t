@@ -2,6 +2,7 @@
 use strict;
 use SDL;
 use SDL::Config;
+use SDL::Version;
 use SDL::Net;
 use Test::More;
 
@@ -23,6 +24,9 @@ my @done =qw/
 
 can_ok ('SDL::Net', @done); 
  
+my $v       = SDL::Net::linked_version();
+isa_ok($v, 'SDL::Version', '[linked_version]');
+diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
 
 is( 0, SDL::Net::init(), '[init] SDL net is inited');
 SDL::Net::quit();

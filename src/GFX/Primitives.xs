@@ -22,12 +22,14 @@
 #define SDL_GFXPRIMITIVES_MICRO 0
 #endif
 
+#ifndef SDL_GFXPRIMITEVES_VERSION
 #define SDL_GFXPRIMITEVES_VERSION(X)      \
 {                                         \
 	(X)->major = SDL_GFXPRIMITIVES_MAJOR; \
 	(X)->minor = SDL_GFXPRIMITIVES_MINOR; \
 	(X)->patch = SDL_GFXPRIMITIVES_MICRO; \
 }
+#endif
 
 #endif
 

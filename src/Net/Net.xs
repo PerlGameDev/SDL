@@ -10,6 +10,31 @@
 
 #ifdef HAVE_SDL_NET
 #include <SDL_net.h>
+
+#ifndef SDL_NET_MAJOR_VERSION
+#define SDL_NET_MAJOR_VERSION	0
+#endif
+
+#ifndef SDL_NET_MINOR_VERSION
+#define SDL_NET_MINOR_VERSION	0
+#endif
+
+#ifndef SDL_NET_PATCHLEVEL
+#define SDL_NET_PATCHLEVEL	0
+#endif
+
+/* This macro can be used to fill a version structure with the compile-time
+ * version of the SDL_net library.
+ */
+#ifndef SDL_NET_VERSION(X)
+#define SDL_NET_VERSION(X)              \
+{                                       \
+	(X)->major = SDL_NET_MAJOR_VERSION; \
+	(X)->minor = SDL_NET_MINOR_VERSION; \
+	(X)->patch = SDL_NET_PATCHLEVEL;    \
+}
+#endif
+
 #endif
 
 
@@ -23,6 +48,18 @@ net_big_endian ()
 		RETVAL
 
 #ifdef HAVE_SDL_NET
+
+const SDL_version *
+net_linked_version()
+	PREINIT:
+		char* CLASS = "SDL::Version";
+	CODE:
+		SDL_version *linked_version = safemalloc( sizeof( SDL_version) );
+		SDL_NET_VERSION(linked_version);
+		
+		RETVAL = linked_version;
+	OUTPUT:
+		RETVAL
 
 int
 net_init ()
