@@ -26,7 +26,8 @@
 /* This macro can be used to fill a version structure with the compile-time
  * version of the SDL_net library.
  */
-#ifndef SDL_NET_VERSION(X)
+#ifndef SDL_NET_VERSION
+
 #define SDL_NET_VERSION(X)              \
 {                                       \
 	(X)->major = SDL_NET_MAJOR_VERSION; \
