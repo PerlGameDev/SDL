@@ -99,6 +99,4 @@ SDL::Mixer::close_audio(); pass '[close_audio] ran';
 
 is ( $finished > 0, 1, '[callback_finished] called the callback got '. $finished);
 
-SDL::quit();
-
 done_testing();

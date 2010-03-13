@@ -153,6 +153,4 @@ SDL::delay($delay);
 
 SDL::Mixer::close_audio(); pass '[close_audio] ran';
 
-SDL::quit();
-
 done_testing();

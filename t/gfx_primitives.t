@@ -241,8 +241,6 @@ SDL::Video::update_rect($display, 0, 0, 640, 480);
 
 SDL::delay(3000);
 
-SDL::quit();
-
 pass 'Are we still alive? Checking for segfaults';
 
 done_testing;

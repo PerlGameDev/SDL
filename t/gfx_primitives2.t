@@ -107,13 +107,9 @@ SKIP:
 #chracater demo
 SDL::GFX::Primitives::character_RGBA( $display, 518 + ($_ % 17) * 7, 251 + int($_ / 17) * 8, chr($_), 0x80 + $_ / 2, 0xFF, 0x00, 0xFF) for(0..255);
 
-SDL::Video::unlock_surface($display) if(SDL::Video::MUSTLOCK($display));
-
 SDL::Video::update_rect($display, 0, 0, 640, 480); 
 
 SDL::delay(3000);
-
-SDL::quit();
 
 pass 'Are we still alive? Checking for segfaults';
 

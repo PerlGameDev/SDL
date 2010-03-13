@@ -171,8 +171,6 @@ is( SDL::TTF::was_init(),                  1, "[was_init] returns true" );
 is( SDL::TTF::quit(),                  undef, "[quit] ran" );
 is( SDL::TTF::was_init(),                  0, "[was_init] returns false" );
 
-SDL::quit();
-
 done_testing;
 
 sleep(1);

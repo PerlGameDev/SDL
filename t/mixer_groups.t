@@ -76,6 +76,4 @@ is( SDL::Mixer::Groups::halt_group( 1 ),                                  0, "[h
 
 SDL::Mixer::close_audio(); pass '[close_audio] ran';
 
-SDL::quit();
-
 done_testing();

@@ -44,5 +44,5 @@ SDL::Mixer::Channels::play_channel( -1, $mix_chunk, 0 );
 SDL::Mixer::close_audio();
 
 ok( 1, 'Got to the end' );
-SDL::quit;
+
 sleep(2);

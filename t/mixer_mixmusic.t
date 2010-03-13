@@ -39,5 +39,5 @@ SDL::Mixer::Music::play_music( $mix_music, 0 );
 SDL::Mixer::close_audio();
 
 ok( 1, 'Got to the end' );
-SDL::quit;
+
 sleep(2);
