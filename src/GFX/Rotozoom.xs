@@ -9,6 +9,23 @@
 #include <SDL.h>
 #ifdef HAVE_SDL_GFX_ROTOZOOM
 #include <SDL_rotozoom.h>
+
+#ifndef _SDL_gfxPrimitives_h
+#include <SDL_gfxPrimitives.h>
+#endif
+
+#ifndef SDL_GFXPRIMITIVES_MAJOR
+#define SDL_GFXPRIMITIVES_MAJOR 0
+#endif
+
+#ifndef SDL_GFXPRIMITIVES_MINOR
+#define SDL_GFXPRIMITIVES_MINOR 0
+#endif
+
+#ifndef SDL_GFXPRIMITIVES_MICRO
+#define SDL_GFXPRIMITIVES_MICRO 0
+#endif
+
 #endif 
 
 MODULE = SDL::GFX::Rotozoom 	PACKAGE = SDL::GFX::Rotozoom    PREFIX = gfx_roto_
@@ -38,6 +55,8 @@ gfx_roto_surface(src, angle, zoom, smooth)
 	OUTPUT:
 		RETVAL
 
+#if (SDL_GFXPRIMITIVES_MAJOR >= 2) && (SDL_GFXPRIMITIVES_MINOR >= 0) && (SDL_GFXPRIMITIVES_MICRO >= 13)
+
 SDL_Surface *
 gfx_roto_surface_xy(src, angle, zoomx, zoomy, smooth)
 	SDL_Surface * src
@@ -51,6 +70,25 @@ gfx_roto_surface_xy(src, angle, zoomx, zoomy, smooth)
 		RETVAL = rotozoomSurfaceXY(src, angle, zoomx, zoomy, smooth);
 	OUTPUT:
 		RETVAL
+
+#else
+
+SDL_Surface *
+gfx_roto_surface_xy(src, angle, zoomx, zoomy, smooth)
+	SDL_Surface * src
+	double angle
+	double zoomx
+	double zoomy
+	int smooth
+	PREINIT:
+		char *CLASS = "SDL::Surface";
+	CODE:
+		warn("SDL_gfx >= 2.0.14 needed for SDL::GFX::Rotozoom::surface_xy( src, angle, zoomx, zoomy, smooth )");
+		XSRETURN_UNDEF;
+	OUTPUT:
+		RETVAL
+
+#endif
 
 AV *
 gfx_roto_surface_size(width, height, angle, zoom)
@@ -115,6 +153,8 @@ gfx_roto_zoom_surface_size(width, height, zoomx, zoomy)
 	OUTPUT:
 		RETVAL
 
+#if (SDL_GFXPRIMITIVES_MAJOR >= 2) && (SDL_GFXPRIMITIVES_MINOR >= 0) && (SDL_GFXPRIMITIVES_MICRO >= 14)
+
 SDL_Surface *
 gfx_roto_shrink_surface(src, factorx, factory)
 	SDL_Surface * src
@@ -126,6 +166,23 @@ gfx_roto_shrink_surface(src, factorx, factory)
 		RETVAL = shrinkSurface(src, factorx, factory);
 	OUTPUT:
 		RETVAL
+
+#else
+
+SDL_Surface *
+gfx_roto_shrink_surface(src, factorx, factory)
+	SDL_Surface * src
+	int factorx
+	int factory
+	PREINIT:
+		char *CLASS = "SDL::Surface";
+	CODE:
+		warn("SDL_gfx >= 2.0.14 needed for SDL::GFX::Rotozoom::shrink_surface( src, factorx, factory )");
+		XSRETURN_UNDEF;
+	OUTPUT:
+		RETVAL
+
+#endif
 
 SDL_Surface *
 gfx_roto_rotate_surface_90_degrees(pSurf, numClockwiseTurns)

@@ -34,8 +34,8 @@ Ver 2.0.17 - Sun Jun  1 15:39:38 EDT 2008
 * TestFonts program updated
 * Updated documentation on cross-compilation, AMD64
 * Fixed circleColor overdraw
-+ Added arcColor routine
-+ Added polygonColorMT and polygonTextureMT routines
++ [version check done] Added arcColor routine
++ [version check done] Added polygonColorMT and polygonTextureMT routines
 * Updated 32bit alpha blending routine 
 
 Ver 2.0.16 - Mon Feb  5 19:03:31 AST 2007
@@ -62,7 +62,7 @@ Ver 2.0.15 - Fri Dec 22 08:44:31 AST 2006
 Ver 2.0.14 - Tue Dec 19 08:49:02 AST 2006 (SDL_GFXPRIMITIVES_MICRO is 13!)
 + added texturedPolygon routine to library (thanks Jees)
 * changed iterator condition in aaellipse to add some overdraw to smooth circle
-+ added ShrinkImage routine to rotozoom code
++ [version check done] added ShrinkImage routine to rotozoom code
 * added TestABGR Test program (bug in SDL_gfx or SDL??)
 * improved TestImageFilter program (bug in Uint filters)
 * changed .so versioning from .so.13.0.0 to .so.0.0.14
@@ -79,7 +79,7 @@ Ver 2.0.13 - Tue Dec 21 08:41:25 EST 2004
 * changed include back to "SDL.h"
 * compile fixes for OSX fink  (thanks (Michael)
 * compile fixes for gcc3.4 (thanks Dries)
-* support vertical and horizontal flipping of axis in new rotozoomSurfaceXY function (thanks Victor)
++ [version check done] support vertical and horizontal flipping of axis in new rotozoomSurfaceXY function (thanks Victor)
 * updated TestRotozoom program 
 
 Ver 2.0.12 - Mon Aug 30 09:04:11 EDT 2004

@@ -53,8 +53,12 @@ is($dest_h > 200,                                              1,              '
 is($dest_w < 100,                                              1,              'surface_size, resulting width decreases at zoom 0.3');
 is($dest_h < 200,                                              1,              'surface_size, resulting height decreases at zoom 0.3');
 
-isa_ok(SDL::GFX::Rotozoom::surface_xy($src, 1, 1, 1, 1),       'SDL::Surface', 'surface_xy');
-draw();
+SKIP:
+{
+	skip ( 'Version 2.0.13 needed' , 1) unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 13 ); 
+	isa_ok(SDL::GFX::Rotozoom::surface_xy($src, 1, 1, 1, 1),       'SDL::Surface', 'surface_xy');
+	draw();
+}
 ($dest_w, $dest_h) = @{ SDL::GFX::Rotozoom::surface_size_xy(100, 200, 45, 1.3, 1.7) };
 is($dest_w > 100,                                              1,              'surface_size_xy, resulting width raises at zoom 1.3 and angle 45');
 is($dest_h > 200,                                              1,              'surface_size_xy, resulting height raises at zoom 1.7 ans angle 45');
@@ -71,8 +75,12 @@ is($dest_h < 200,                                              1,              '
 is($dest_w > 100,                                              1,              'zoom_surface_size, resulting width raises at zoom 1.2');
 is($dest_h > 200,                                              1,              'zoom_surface_size, resulting height raises at zoom 7.7');
 
-isa_ok(SDL::GFX::Rotozoom::shrink_surface($src, 1, 1),         'SDL::Surface', 'shrink_surface');
-draw();
+SKIP:
+{
+	skip ( 'Version 2.0.14 needed' , 1) unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 14 ); 
+	isa_ok(SDL::GFX::Rotozoom::shrink_surface($src, 1, 1),         'SDL::Surface', 'shrink_surface');
+	draw();
+}
 $src = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 100, 200, 32, 0, 0, 0, 0 );
 isa_ok(SDL::GFX::Rotozoom::rotate_surface_90_degrees($src, 1), 'SDL::Surface', 'rotate_surface_90_degrees');
 # Note: everything but 32bit surface will crash

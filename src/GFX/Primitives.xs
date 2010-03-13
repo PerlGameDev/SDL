@@ -350,7 +350,7 @@ gfx_prim_arc_color( dst, x, y, r, start, end, color )
 	Sint16 end
 	Uint32 color
 	CODE:
-		warn("SDL_gfxPrimitives >= 2.0.17 needed for SDL::GFX::Primitives::arc_color( dst, x, y, r, start, end, color )");
+		warn("SDL_gfx >= 2.0.17 needed for SDL::GFX::Primitives::arc_color( dst, x, y, r, start, end, color )");
 		XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
@@ -368,7 +368,7 @@ gfx_prim_arc_RGBA( dst, x, y, rad, start, end, r, g, b, a )
 	Uint8 b
 	Uint8 a
 	CODE:
-		warn("SDL_gfxPrimitives >= 2.0.17 needed for SDL::GFX::Primitives::arc_RGBA( dst, x, y, rad, start, end, r, g, b, a )");
+		warn("SDL_gfx >= 2.0.17 needed for SDL::GFX::Primitives::arc_RGBA( dst, x, y, rad, start, end, r, g, b, a )");
 		XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
@@ -853,7 +853,7 @@ gfx_prim_filled_polygon_color_MT(dst, vx, vy, n, color, polyInts, polyAllocated)
 	int **polyInts
 	int *polyAllocated
 	CODE:
-		warn("SDL_gfxPrimitives >= 2.0.17 needed for SDL::GFX::Primitives::filled_polygon_color_MT( dst, vx, vy, n, color, polyInts, polyAllocated )");
+		warn("SDL_gfx >= 2.0.17 needed for SDL::GFX::Primitives::filled_polygon_color_MT( dst, vx, vy, n, color, polyInts, polyAllocated )");
 		XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
@@ -871,7 +871,7 @@ gfx_prim_filled_polygon_RGBA_MT(dst, vx, vy, n, r, g, b, a, polyInts, polyAlloca
 	int **polyInts
 	int *polyAllocated
 	CODE:
-		warn("SDL_gfxPrimitives >= 2.0.17 needed for SDL::GFX::Primitives::filled_polygon_RGBA_MT( dst, vx, vy, n, r, g, b, a, polyInts, polyAllocated )");
+		warn("SDL_gfx >= 2.0.17 needed for SDL::GFX::Primitives::filled_polygon_RGBA_MT( dst, vx, vy, n, r, g, b, a, polyInts, polyAllocated )");
 		XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
@@ -888,7 +888,7 @@ gfx_prim_textured_polygon_MT(dst, vx, vy, n, texture, texture_dx, texture_dy, po
 	int **polyInts
 	int *polyAllocated
 	CODE:
-		warn("SDL_gfxPrimitives >= 2.0.17 needed for SDL::GFX::Primitives::textured_polygon_MT( dst, vx, vy, n, texture, texture_dx, texture_dy, polyInts, polyAllocated )");
+		warn("SDL_gfx >= 2.0.17 needed for SDL::GFX::Primitives::textured_polygon_MT( dst, vx, vy, n, texture, texture_dx, texture_dy, polyInts, polyAllocated )");
 		XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
