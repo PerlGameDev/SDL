@@ -72,6 +72,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	GFX => {
+		file      => {
+			from  => 'src/GFX/GFX.xs',
+			to    => 'lib/SDL/GFX.xs',
+		},
+		libraries => [qw( SDL SDL_gfx_primitives )],
+	},
 	BlitFunc => {
 		file      => {
 			from  => 'src/GFX/BlitFunc.xs',

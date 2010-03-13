@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use SDL;
 use SDL::Config;
+use SDL::Version;
+use SDL::GFX;
 use SDL::GFX::Framerate;
 use SDL::GFX::FPSManager;
 use Test::More;
@@ -20,8 +22,12 @@ elsif( !SDL::Config->has('SDL_gfx_framerate') )
 }
 else
 {
-    plan( tests => 10 );
+    plan( tests => 11 );
 }
+
+my $v       = SDL::GFX::linked_version();
+isa_ok($v, 'SDL::Version', '[linked_version]');
+diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
 
 my $fps = SDL::GFX::FPSManager->new(0, 0, 0, 0);
 

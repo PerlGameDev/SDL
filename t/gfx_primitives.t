@@ -7,6 +7,7 @@ use SDL::Config;
 use SDL::Video;
 use SDL::Version;
 use SDL::Surface;
+use SDL::GFX;
 use SDL::GFX::Primitives;
 use Test::More;
 
@@ -22,7 +23,7 @@ elsif( !SDL::Config->has('SDL_gfx_primitives') )
     plan( skip_all => 'SDL_gfx_primitives support not compiled' );
 }
 
-my $v       = SDL::GFX::Primitives::linked_version();
+my $v       = SDL::GFX::linked_version();
 isa_ok($v, 'SDL::Version', '[linked_version]');
 diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
 

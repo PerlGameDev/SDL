@@ -5,7 +5,9 @@ use SDL;
 use SDL::Rect;
 use SDL::Config;
 use SDL::Video;
+use SDL::Version;
 use SDL::Surface;
+use SDL::GFX;
 use SDL::GFX::ImageFilter;
 use Test::More;
 
@@ -22,8 +24,12 @@ elsif( !SDL::Config->has('SDL_gfx_imagefilter') )
 }
 else
 {
-    plan( tests => 7 );
+    plan( tests => 8 );
 }
+
+my $v       = SDL::GFX::linked_version();
+isa_ok($v, 'SDL::Version', '[linked_version]');
+diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
 
 my @done =qw/
 MMX_detect
