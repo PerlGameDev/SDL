@@ -119,7 +119,9 @@ SDL::quit_subsystem doesn't returns any value.
 
 =head2 quit
 
-Shuts down all SDL subsystems, unloads the dynamically linked library and frees the allocated resources. This should always be called before you exit.
+Shuts down all SDL subsystems, unloads the dynamically linked library and frees the allocated resources.
+
+B<Note>: This will be called automatically when perl exits. You don't need to call this, except you want to initialize SDL after this again.
 
 SDL::quit doesn't returns any value.
 
