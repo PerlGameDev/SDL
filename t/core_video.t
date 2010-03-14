@@ -169,116 +169,119 @@ SDL::Video::unlock_YUV_overlay($overlay); pass '[unlock_YUV_overlay] ran';
 my $display_at_rect = SDL::Rect->new(0, 0, 100, 100);
 is( SDL::Video::display_YUV_overlay( $overlay, $display_at_rect), 0 ,'[display_YUV_overlay] returns 0 on success'); 
 
-
-my $hwdisplay = SDL::Video::set_video_mode(640,480,8, SDL_HWSURFACE );
-
-if(!$hwdisplay){
-	 plan skip_all => 'Couldn\'t set video mode: '. SDL::get_error();
-    }
-
-$value = SDL::Video::set_colors($hwdisplay, 0);
-is(  $value , 0,  '[set_colors] returns 0 trying to send empty colors to 8 bit surface'  );
-
-$value = SDL::Video::set_palette($hwdisplay, SDL_LOGPAL|SDL_PHYSPAL, 0);
-
-is(  $value , 0,  '[set_palette] returns 0 trying to send empty colors to 8 bit surface'  );
-
-
-$value = SDL::Video::set_colors($hwdisplay, 0, @b_w_colors);
-is( $value , 1,  '[set_colors] returns '.$value  );
-
-$value = SDL::Video::set_palette($hwdisplay, SDL_LOGPAL|SDL_PHYSPAL, 0, @b_w_colors );
-
-is(  $value , 1,  '[set_palette] returns 1'  );
-
-$value = SDL::Video::lock_surface($hwdisplay); pass '[lock_surface] ran returned: '.$value;
-
-SDL::Video::unlock_surface($hwdisplay); pass '[unlock_surface] ran';
-
-is( SDL::Video::map_RGB($hwdisplay->format, 10, 10 ,10) >= 0 , 1, '[map_RGB] maps correctly to 8-bit surface');
-is( SDL::Video::map_RGBA($hwdisplay->format, 10, 10 ,10, 10) >= 0 , 1, '[map_RGBA] maps correctly to 8-bit surface');
-
-TODO:
-{
-
-local $TODO =  "These test case test a very specific test scenario which might need to be re tought out ...";
-
-isa_ok(SDL::Video::convert_surface( $display , $hwdisplay->format, SDL_SRCALPHA), 'SDL::Surface', '[convert_surface] Checking if we get a surface ref back'); 
-isa_ok(SDL::Video::display_format( $display ), 'SDL::Surface', '[display_format] Returns a SDL::Surface');
-isa_ok(SDL::Video::display_format_alpha( $display ), 'SDL::Surface', '[display_format_alpha] Returns a SDL::Surface');
-
-}
-
-is(  SDL::Video::set_color_key($display, SDL_SRCCOLORKEY, SDL::Color->new( 0, 10, 0 ) ),
-   0,  '[set_color_key] Returns 0 on success' 
-   ) ;
-
-is(  SDL::Video::set_alpha($display, SDL_SRCALPHA, 100 ),
-   0,  '[set_alpha] Returns 0 on success' 
-   ) ;
-
-is_deeply(SDL::Video::get_RGB($display->format, 0), [0,0,0], '[get_RGB] returns r,g,b');
-
-is_deeply(SDL::Video::get_RGBA($display->format, 0), [0,0,0,255], '[get_RGBA] returns r,g,b,a');
-
-my $bmp = 't/core_video.bmp';
-unlink($bmp) if -f $bmp;
-SDL::Video::save_BMP($display, $bmp);
-ok(-f $bmp, '[save_BMP] creates a file');
-my $bmp_surface = SDL::Video::load_BMP($bmp);
-isa_ok($bmp_surface, 'SDL::Surface', '[load_BMP] returns an SDL::Surface');
-unlink($bmp) if -f $bmp;
-
-my $pixel = SDL::Video::map_RGB( $display->format, 255, 127, 0 );
-SDL::Video::fill_rect( $display, SDL::Rect->new( 0, 0, 32, 32 ), $pixel );
-ok( 1, '[fill_rect] filled rect' );
-
-my $clip_rect = SDL::Rect->new(0, 0, 10, 20);
-SDL::Video::get_clip_rect($display, $clip_rect);
-is($clip_rect->x, 0, '[get_clip_rect] returns a rect with x 0');
-is($clip_rect->y, 0, '[get_clip_rect] returns a rect with y 0');
-is($clip_rect->w, 640, '[get_clip_rect] returns a rect with w 640');
-is($clip_rect->h, 480, '[get_clip_rect] returns a rect with h 480');
-SDL::Video::set_clip_rect($display, SDL::Rect->new(10, 20, 100, 200));
-SDL::Video::get_clip_rect($display, $clip_rect);
-is($clip_rect->x, 10, '[get_clip_rect] returns a rect with x 10');
-is($clip_rect->y, 20, '[get_clip_rect] returns a rect with y 20');
-is($clip_rect->w, 100, '[get_clip_rect] returns a rect with w 100');
-is($clip_rect->h, 200, '[get_clip_rect] returns a rect with h 200');
-
-my($title, $icon) = @{SDL::Video::wm_get_caption()};
-is($title, undef, '[wm_get_caption] title is undef');
-is($icon, undef, '[wm_get_caption] icon is undef');
-SDL::Video::wm_set_caption('Title text', 'Icon text');
-($title, $icon) = @{SDL::Video::wm_get_caption()};
-is($title, 'Title text', '[wm_set_caption set title]');
-is($icon, 'Icon text', '[wm_set_caption set icon]');
-
-SDL::Video::wm_set_icon($bmp_surface);
-pass '[wm_set_icon] ran';
-
-
-
 SKIP:
 {
-	skip 'Turn on SDL_GUI_TEST', 6 unless $ENV{SDL_GUI_TEST};
-SDL::Video::wm_grab_input(SDL_GRAB_ON);
-pass '[wm_grab_input] ran with SDL_GRAB_ON';
+	skip("Video driver $driver_name has problems with hardware surfaces", 37) if $driver_name =~ /^(fbcon)$/;
+	my $hwdisplay = SDL::Video::set_video_mode(640,480,8, SDL_HWSURFACE );
 
-is( SDL::Video::wm_grab_input(SDL_GRAB_QUERY), SDL_GRAB_ON, 
-    '[wm_grab_input] Got Correct grab mode back');
+	if(!$hwdisplay){
+		 plan skip_all => 'Couldn\'t set video mode: '. SDL::get_error();
+		}
 
-SDL::Video::wm_grab_input(SDL_GRAB_OFF);
-pass '[wm_grab_input] ran with SDL_GRAB_OFF';
+	$value = SDL::Video::set_colors($hwdisplay, 0);
+	is(  $value , 0,  '[set_colors] returns 0 trying to send empty colors to 8 bit surface'  );
 
-is( SDL::Video::wm_grab_input(SDL_GRAB_QUERY), SDL_GRAB_OFF, 
-    '[wm_grab_input] Got Correct grab mode back');
+	$value = SDL::Video::set_palette($hwdisplay, SDL_LOGPAL|SDL_PHYSPAL, 0);
 
-my $ic = SDL::Video::wm_iconify_window();
-is( $ic, 1,'[wm_iconify_window] ran');
+	is(  $value , 0,  '[set_palette] returns 0 trying to send empty colors to 8 bit surface'  );
 
-SDL::Video::wm_toggle_fullscreen($display);
-pass '[wm_toggle_fullscreen] ran';
+
+	$value = SDL::Video::set_colors($hwdisplay, 0, @b_w_colors);
+	is( $value , 1,  '[set_colors] returns '.$value  );
+
+	$value = SDL::Video::set_palette($hwdisplay, SDL_LOGPAL|SDL_PHYSPAL, 0, @b_w_colors );
+
+	is(  $value , 1,  '[set_palette] returns 1'  );
+
+	$value = SDL::Video::lock_surface($hwdisplay); pass '[lock_surface] ran returned: '.$value;
+
+	SDL::Video::unlock_surface($hwdisplay); pass '[unlock_surface] ran';
+
+	is( SDL::Video::map_RGB($hwdisplay->format, 10, 10 ,10) >= 0 , 1, '[map_RGB] maps correctly to 8-bit surface');
+	is( SDL::Video::map_RGBA($hwdisplay->format, 10, 10 ,10, 10) >= 0 , 1, '[map_RGBA] maps correctly to 8-bit surface');
+
+	TODO:
+	{
+
+	local $TODO =  "These test case test a very specific test scenario which might need to be re tought out ...";
+
+	isa_ok(SDL::Video::convert_surface( $display , $hwdisplay->format, SDL_SRCALPHA), 'SDL::Surface', '[convert_surface] Checking if we get a surface ref back'); 
+	isa_ok(SDL::Video::display_format( $display ), 'SDL::Surface', '[display_format] Returns a SDL::Surface');
+	isa_ok(SDL::Video::display_format_alpha( $display ), 'SDL::Surface', '[display_format_alpha] Returns a SDL::Surface');
+
+	}
+
+	is(  SDL::Video::set_color_key($display, SDL_SRCCOLORKEY, SDL::Color->new( 0, 10, 0 ) ),
+	   0,  '[set_color_key] Returns 0 on success' 
+	   ) ;
+
+	is(  SDL::Video::set_alpha($display, SDL_SRCALPHA, 100 ),
+	   0,  '[set_alpha] Returns 0 on success' 
+	   ) ;
+
+	is_deeply(SDL::Video::get_RGB($display->format, 0), [0,0,0], '[get_RGB] returns r,g,b');
+
+	is_deeply(SDL::Video::get_RGBA($display->format, 0), [0,0,0,255], '[get_RGBA] returns r,g,b,a');
+
+	my $bmp = 't/core_video.bmp';
+	unlink($bmp) if -f $bmp;
+	SDL::Video::save_BMP($display, $bmp);
+	ok(-f $bmp, '[save_BMP] creates a file');
+	my $bmp_surface = SDL::Video::load_BMP($bmp);
+	isa_ok($bmp_surface, 'SDL::Surface', '[load_BMP] returns an SDL::Surface');
+	unlink($bmp) if -f $bmp;
+
+	my $pixel = SDL::Video::map_RGB( $display->format, 255, 127, 0 );
+	SDL::Video::fill_rect( $display, SDL::Rect->new( 0, 0, 32, 32 ), $pixel );
+	ok( 1, '[fill_rect] filled rect' );
+
+	my $clip_rect = SDL::Rect->new(0, 0, 10, 20);
+	SDL::Video::get_clip_rect($display, $clip_rect);
+	is($clip_rect->x, 0, '[get_clip_rect] returns a rect with x 0');
+	is($clip_rect->y, 0, '[get_clip_rect] returns a rect with y 0');
+	is($clip_rect->w, 640, '[get_clip_rect] returns a rect with w 640');
+	is($clip_rect->h, 480, '[get_clip_rect] returns a rect with h 480');
+	SDL::Video::set_clip_rect($display, SDL::Rect->new(10, 20, 100, 200));
+	SDL::Video::get_clip_rect($display, $clip_rect);
+	is($clip_rect->x, 10, '[get_clip_rect] returns a rect with x 10');
+	is($clip_rect->y, 20, '[get_clip_rect] returns a rect with y 20');
+	is($clip_rect->w, 100, '[get_clip_rect] returns a rect with w 100');
+	is($clip_rect->h, 200, '[get_clip_rect] returns a rect with h 200');
+
+	my($title, $icon) = @{SDL::Video::wm_get_caption()};
+	is($title, undef, '[wm_get_caption] title is undef');
+	is($icon, undef, '[wm_get_caption] icon is undef');
+	SDL::Video::wm_set_caption('Title text', 'Icon text');
+	($title, $icon) = @{SDL::Video::wm_get_caption()};
+	is($title, 'Title text', '[wm_set_caption set title]');
+	is($icon, 'Icon text', '[wm_set_caption set icon]');
+
+	SDL::Video::wm_set_icon($bmp_surface);
+	pass '[wm_set_icon] ran';
+
+
+
+	SKIP:
+	{
+		skip 'Turn on SDL_GUI_TEST', 6 unless $ENV{SDL_GUI_TEST};
+	SDL::Video::wm_grab_input(SDL_GRAB_ON);
+	pass '[wm_grab_input] ran with SDL_GRAB_ON';
+
+	is( SDL::Video::wm_grab_input(SDL_GRAB_QUERY), SDL_GRAB_ON, 
+		'[wm_grab_input] Got Correct grab mode back');
+
+	SDL::Video::wm_grab_input(SDL_GRAB_OFF);
+	pass '[wm_grab_input] ran with SDL_GRAB_OFF';
+
+	is( SDL::Video::wm_grab_input(SDL_GRAB_QUERY), SDL_GRAB_OFF, 
+		'[wm_grab_input] Got Correct grab mode back');
+
+	my $ic = SDL::Video::wm_iconify_window();
+	is( $ic, 1,'[wm_iconify_window] ran');
+
+	SDL::Video::wm_toggle_fullscreen($display);
+	pass '[wm_toggle_fullscreen] ran';
+	}
 }
 
 pass 'Are we still alive? Checking for segfaults';
