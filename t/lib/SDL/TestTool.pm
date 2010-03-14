@@ -37,7 +37,7 @@ sub init {
 
     if( $init == SDL_INIT_VIDEO)
     {
-	    if( $^O !~ /win/i && !$ENV{DISPLAY} )
+	    if( $^O !~ /win/i && !$ENV{DISPLAY} && !$ENV{SDL_VIDEODRIVER})
 	    {
 		    warn '$DISPLAY is not set! Cannot Init Video';
 		    return ;
