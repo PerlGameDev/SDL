@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+﻿#!/usr/bin/perl -w
 use strict;
 use SDL;
 use SDL::Config;
@@ -30,6 +30,7 @@ my $v = SDL::TTF::linked_version();
 
 isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::Version object');
 diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
+
 is( SDL::TTF::was_init(),                                 0,                   "[was_init] returns false" );
 is( SDL::TTF::init(),                                     0,                   "[init] succeeded" );
 is( SDL::TTF::was_init(),                                 1,                   "[was_init] returns true" );
@@ -120,15 +121,15 @@ SKIP:
 	isa_ok( $render_text_blended , 'SDL::Surface', "[render_text_blended]" );
 	SDL::Video::blit_surface( $render_text_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, "render_utf8_solid: 今日は世界", $utf8_fg);
+	my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, "render_utf8_solid:今日は世界", $utf8_fg);
 	isa_ok( $render_utf8_solid, 'SDL::Surface', "[render_utf8_solid]" );
 	SDL::Video::blit_surface( $render_utf8_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8_shaded = SDL::TTF::render_utf8_shaded($font, "render_utf8_shaded: 今日は世界", $utf8_fg, $bg);
+	my $render_utf8_shaded = SDL::TTF::render_utf8_shaded($font, "render_utf8_shaded:今日は世界", $utf8_fg, $bg);
 	isa_ok( $render_utf8_shaded, 'SDL::Surface', "[render_utf8_shaded]" );
 	SDL::Video::blit_surface( $render_utf8_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8_blended = SDL::TTF::render_utf8_blended($font, "render_utf8_blended: \xE4\xBB\x8A\xE6\x97\xA5\xE3\x81\xAF\xE4\xB8\x96\xE7\x95\x8C", $utf8_fg);
+	my $render_utf8_blended = SDL::TTF::render_utf8_blended($font, "render_utf8_blended:\xE4\xBB\x8A\xE6\x97\xA5\xE3\x81\xAF\xE4\xB8\x96\xE7\x95\x8C", $utf8_fg);
 	isa_ok( $render_utf8_blended, 'SDL::Surface', "[render_utf8_blended]" );
 	SDL::Video::blit_surface( $render_utf8_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 	
