@@ -35,6 +35,7 @@ $desired->channels(2);
 is( $desired->channels, 2, '[audiospec] can set channels' );
 $desired->samples(4096);
 is( $desired->samples, 4096, '[audiospec] can set samples' );
+$desired->callback('main::audio_callback');
 
 is( SDL::Audio::get_status, SDL_AUDIO_STOPPED, '[get_status stopped]' );
 
@@ -92,3 +93,8 @@ TODO:
 }
 diag $why;
 sleep(1);
+
+sub audio_callback
+{
+
+}

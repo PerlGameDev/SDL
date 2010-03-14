@@ -44,15 +44,15 @@ sub init {
 	    }
     }
 
-    if( $init == SDL_INIT_AUDIO)
-    {
-	 if (test_audio_open() != 0) 
-	 {
-		 warn "Couldn't use a valid audio device";
-		 return ;
-	 }
-	SDL::quit();
-    }
+	if( $init == SDL_INIT_AUDIO)
+	{
+		if (test_audio_open() != 0) 
+		{
+			warn "Couldn't use a valid audio device: " . SDL::get_error();
+			return ;
+		}
+		SDL::quit();
+	}
 
     capture { SDL::init($init) } \$stdout, \$stderr;
     if ( $stderr ne '' )
@@ -65,16 +65,20 @@ sub init {
 
 sub test_audio_open
 {
-my $desired = SDL::AudioSpec->new;
-$desired->freq(44100);
-$desired->format(SDL::Constants::AUDIO_S16);
-$desired->channels(2);
-$desired->samples(4096);
+	my $desired = SDL::AudioSpec->new;
+	$desired->freq(44100);
+	$desired->format(SDL::Constants::AUDIO_S16MSB);
+	$desired->channels(2);
+	$desired->samples(4096);
+	$desired->callback('main::audio_callback');
 
+	my $obtained = SDL::AudioSpec->new;
+	return  SDL::Audio::open( $desired, $obtained );
+}
 
-my $obtained = SDL::AudioSpec->new;
-return  SDL::Audio::open( $desired, $obtained );
-
+sub audio_callback
+{
 
 }
+
 1;
