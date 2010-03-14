@@ -37,7 +37,7 @@ sub init {
 
     if( $init == SDL_INIT_VIDEO)
     {
-	    if( $^O !~ /win/i && !$ENV{DISPLAY} )
+	    if( $^O !~ /win/i && !$ENV{DISPLAY}  && !$ENV{SDL_VIDEODRIVER})
 	    {
 		    warn '$DISPLAY is not set! Cannot Init Video';
 		    return ;
@@ -46,13 +46,15 @@ sub init {
 
     if( $init == SDL_INIT_AUDIO)
     {
-	 if (test_audio_open() != 0) 
-	 {
-		 warn "Couldn't use a valid audio device";
-		 return ;
-	 }
-	SDL::quit();
-    }
+		capture { SDL::init($init) } \$stdout, \$stderr;
+		warn 'Init ' . $inits{$init} . ' failed with SDL error: '. SDL::get_error() . "\nand stderr $stderr\n" if $stderr ne '';
+
+		if (test_audio_open() != 0) 
+		{
+			warn "Couldn't use a valid audio device";
+			return;
+		}
+	}
 
     capture { SDL::init($init) } \$stdout, \$stderr;
     if ( $stderr ne '' )
@@ -65,16 +67,13 @@ sub init {
 
 sub test_audio_open
 {
-my $desired = SDL::AudioSpec->new;
-$desired->freq(44100);
-$desired->format(SDL::Constants::AUDIO_S16);
-$desired->channels(2);
-$desired->samples(4096);
+	my $desired = SDL::AudioSpec->new;
+	$desired->freq(44100);
+	$desired->format(SDL::Constants::AUDIO_S16);
+	$desired->channels(2);
+	$desired->samples(4096);
 
-
-my $obtained = SDL::AudioSpec->new;
-return  SDL::Audio::open( $desired, $obtained );
-
-
+	my $obtained = SDL::AudioSpec->new;
+	return  SDL::Audio::open( $desired, $obtained );
 }
 1;
