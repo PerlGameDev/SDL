@@ -46,7 +46,7 @@ sub init {
 
     if( $init == SDL_INIT_AUDIO)
     {
-		capture { SDL::init($init) } \$stdout, \$stderr;
+		capture { SDL::init(SDL_INIT_AUDIO) } \$stdout, \$stderr;
 		warn 'Init ' . $inits{$init} . ' failed with SDL error: '. SDL::get_error() . "\nand stderr $stderr\n" if $stderr ne '';
 
 		if (test_audio_open() != 0) 
@@ -54,14 +54,12 @@ sub init {
 			warn "Couldn't use a valid audio device";
 			return;
 		}
+		SDL::quit;
 	}
+	
+	capture { SDL::init($init ^ SDL_INIT_AUDIO) } \$stdout, \$stderr;
+	warn 'Init ' . $inits{$init} . ' failed with SDL error: '. SDL::get_error() . "\nand stderr $stderr\n" if $stderr ne '';
 
-    capture { SDL::init($init) } \$stdout, \$stderr;
-    if ( $stderr ne '' )
-    {
-	    warn 'Init '.$inits{$init}.' failed with SDL error: '. SDL::get_error()."\nand stderr $stderr\n";
-    }
-    
     return !($stderr ne '');
 }
 
