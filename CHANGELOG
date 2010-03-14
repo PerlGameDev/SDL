@@ -1,5 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.3_8 
+	- TTF XS/Test [FROGGS]
+	- Minor fixes and cleanup [ kthakore, kmx ]
+
 * 2.3_7
 	- Mixer XS/tests and docs done [kthakore, FROGGS]
 	- Fixes for Build system on cygwin [kmx]
