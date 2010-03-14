@@ -333,11 +333,9 @@ ttf_render_utf8_solid(font, text, fg)
 		//RETVAL = TTF_RenderUTF8_Solid(font, text, *fg);
 		
 		STRLEN len;
-		
-		unsigned char *utf8_text = SvPV(text, len);
-		Uint16        *unicode   = safemalloc((len + 2) * sizeof(Uint16));
-		
-		unicode[0] = 0xFEFF;
+		unsigned char*utf8_text = SvPV(text, len);
+		Uint16 *unicode         = safemalloc((sv_len_utf8(text) + 2) * sizeof(Uint16));
+		*unicode                = 0xFEFF;
 		UTF8_to_UNICODE(unicode+1, utf8_text, len);
 
 		RETVAL = TTF_RenderUNICODE_Solid(font, unicode, *fg);
