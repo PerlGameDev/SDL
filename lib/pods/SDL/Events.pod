@@ -125,7 +125,23 @@ As this function implicitly calls SDL_PumpEvents, you can only call this functio
 
 =head2 set_event_filter
 
+Sets up a filter to process all events 
+
+	my $filter = sub { if($_[0]->type == SDL_ACTIVEEVENT){ return 0} else{ return 1; }};
+
+	SDL::Events::set_event_filter($filter);
+
+=head3 PARAMETER
+
+set_event_filter takes a coderef that it checks all events again. The callback gets a event in the stack
+
+	sub { my $event_to_test = shift; ...}
+
+to filter the event return a 0, to pass the filter return a 1.
+
 =head2 get_key_state
+
+
 
 =head2 get_mod_state
 
