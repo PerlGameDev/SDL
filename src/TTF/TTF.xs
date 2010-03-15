@@ -93,6 +93,17 @@ ttf_linked_version()
 	OUTPUT:
 		RETVAL
 
+const SDL_version *
+ttf_compile_time_version()
+	PREINIT:
+		char* CLASS = "SDL::Version";
+	CODE:
+		SDL_version *compile_time_version = safemalloc(sizeof(SDL_version));
+		SDL_TTF_VERSION(compile_time_version);
+		RETVAL = compile_time_version;
+	OUTPUT:
+		RETVAL
+
 void
 ttf_byte_swapped_unicode(swapped)
 	int swapped
