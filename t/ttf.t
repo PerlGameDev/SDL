@@ -26,10 +26,12 @@ use SDL::RWOps;
 use SDL::Version;
 use Encode;
 
-my $v = SDL::TTF::linked_version();
+my $lv = SDL::TTF::linked_version();
+my $cv = SDL::TTF::compile_time_version();
 
-isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::Version object');
-diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
+isa_ok($lv, 'SDL::Version', '[linked_version] returns a SDL::Version object');
+isa_ok($cv, 'SDL::Version', '[compile_time_version] returns a SDL::Version object');
+diag sprintf("got version: %d.%d.%d/%d.%d.%d", $lv->major, $lv->minor, $lv->patch, $cv->major, $cv->minor, $cv->patch);
 
 is( SDL::TTF::was_init(),                                 0,                   "[was_init] returns false" );
 is( SDL::TTF::init(),                                     0,                   "[init] succeeded" );
