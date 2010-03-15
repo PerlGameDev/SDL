@@ -125,28 +125,79 @@ As this function implicitly calls SDL_PumpEvents, you can only call this functio
 
 =head2 set_event_filter
 
+Sets up a filter to process all events 
+
+	my $filter = sub { if($_[0]->type == SDL_ACTIVEEVENT){ return 0} else{ return 1; }};
+
+	SDL::Events::set_event_filter($filter);
+
+=head3 PARAMETER
+
+set_event_filter takes a coderef that it checks all events again. The callback gets a event in the stack
+
+	sub { my $event_to_test = shift; ...}
+
+to filter the event return a 0, to pass the filter return a 1. 
+
+One B<Caveat> is if you are filterign SDL_QUITEVENT the event will be filtered if it is non-intterupt call ( Window closes normally ). If it is a interrupt SDL_QUITEVENT it will be process on the next event poll. 
+
+Events pushed onto to the queue with L<SDL::Events::push_events> or L<SDL::Events::peep_events> do not get filtered.
+
+This callback may run in a different thread. 
+
 =head2 get_key_state
+
+Get a snapshot of the current keyboard state
+
+	my $keys_ref = SDL::Events::get_key_state();
+
+	print $keys_ref->[SDLK_RETURN]; # 1 if pressed , 0 if not pressed
+
+Use L<SDL::Events::pump_events> to update the state array.
+
+This function gives you the current state after all events have been processed, so if a key or button has been pressed and released before you process events, then the pressed state will never show up in the get_key_state call.
+
+This function doesn't take into account whether shift has been pressed or not.
 
 =head2 get_mod_state
 
+Get the state of the modifier keys
+
 =head2 set_mod_state
+
+Get the state of the modifier keys
 
 =head2 event_state 
 
+Allows you to set the state of processing certain events
+
 =head2 get_key_name
+
+Gets the name of the a SDL virtual keysym
 
 =head2 enable_unicode 
 
+Enable UNICODE translation
+
 =head2 enable_key_repeat 
+
+Sets keyboard repeat rate
 
 =head2 get_mouse_state 
 
+Retrives the current state of the mouse
+
 =head2 get_relative_mouse_state 
+
+Retrives the current relative state of the mouse
 
 =head2 get_app_state 
 
+Gets the state of the application
+
 =head2 joystick_event_state 
 
+Enable/disable joystick event polling
 
 =head1 SEE ALSO
 

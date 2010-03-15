@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 
+die "Usage file.pod NAME DESC \@CATEGORY" if $#ARGV < 3;
+
 my ($file, $name, $desc, @category) = @ARGV;
 
 open FH,'>',  $file;
