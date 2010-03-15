@@ -161,24 +161,43 @@ This function doesn't take into account whether shift has been pressed or not.
 
 =head2 get_mod_state
 
+Get the state of the modifier keys
+
 =head2 set_mod_state
+
+Get the state of the modifier keys
 
 =head2 event_state 
 
+Allows you to set the state of processing certain events
+
 =head2 get_key_name
+
+Gets the name of the a SDL virtual keysym
 
 =head2 enable_unicode 
 
+Enable UNICODE translation
+
 =head2 enable_key_repeat 
+
+Sets keyboard repeat rate
 
 =head2 get_mouse_state 
 
+Retrives the current state of the mouse
+
 =head2 get_relative_mouse_state 
+
+Retrives the current relative state of the mouse
 
 =head2 get_app_state 
 
+Gets the state of the application
+
 =head2 joystick_event_state 
 
+Enable/disable joystick event polling
 
 =head1 SEE ALSO
 
