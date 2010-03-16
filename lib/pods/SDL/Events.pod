@@ -175,11 +175,11 @@ Return value is an OR'd combination of  KMOD_*
 
  # no mod pressed?
  
- print 'no_mod' if  $mod_state == KMOD_NONE;
+ print 'no_mod' if  ( $mod_state & KMOD_NONE );
 
- # CTRL ALT ?
+ # CTRL or ALT 
 
- print 'ctrl alt' if $mod_state == KMOD_CTRL | KMOD_ALT ;
+ print 'ctrl alt' if ($mod_state & KMOD_CTRL || $mod_state & KMOD_ALT );
 
 =head3 MOD VALUES
 
