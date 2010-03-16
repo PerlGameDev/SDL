@@ -163,6 +163,64 @@ This function doesn't take into account whether shift has been pressed or not.
 
 Get the state of the modifier keys
 
+Returns the current state of modifier keys
+
+Return value is an OR'd combination of  KMOD_*
+
+ my $mod_state = SDL::Events::get_mod_state();
+
+ # Check which ones are pressed with 
+
+ # no mod pressed?
+ 
+ print 'no_mod' if  $mod_state == KMOD_NONE;
+
+ # CTRL ALT ?
+
+ print 'ctrl alt' if $mod_state == KMOD_CTRL | KMOD_ALT ;
+
+=head3 MOD VALUES
+
+=item KMOD_NONE
+
+=item KMOD_LSHIFT
+
+=item KMOD_RSHIFT
+
+=item KMOD_LCTRL
+
+=item KMOD_RCTRL
+
+=item KMOD_LALT
+
+=item KMOD_RALT
+
+=item KMOD_LMETA
+
+=item KMOD_RMETA
+
+=item KMOD_NUM
+
+=item KMOD_CAPS
+
+=item KMOD_MODE
+
+=item KMOD_CTRL 
+
+same as KMOD_LCTRL|KMOD_RCTRL
+
+=item KMOD_SHIFT
+
+same as KMOD_LSHIFT|KMOD_RSHIFT
+
+=item KMOD_ALT
+
+same as KMOD_LALT|KMOD_RALT
+
+=item KMOD_META
+
+same as KMOD_LMETA|KMOD_RMETA
+
 =head2 set_mod_state
 
 Get the state of the modifier keys
