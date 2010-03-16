@@ -9,10 +9,11 @@ Core, Events
 =head1 SYNOPSIS
 
 Most likely you just want to know how to get events for you app.
+
   use SDL;
   use SDL::Event;
   use SDL::Events;
-  
+
   SDL::init(SDL_INIT_VIDEO); # Event can only be grabbed in the same thread as this 
 
   ...
@@ -239,6 +240,24 @@ Any KMOD_* constant see L<SDL::Events::get_mod_state> for constants.
 =head2 event_state 
 
 Allows you to set the state of processing certain events
+
+ SDL::Events::event_state( $type, $state );
+
+A list of $type(s) can be found in L<SDL::Event>
+
+=head3 STATES
+
+=item SDL_IGNORE
+
+The event of $type will be automatically dropper from the event queue and will not be filtered.
+
+=item SDL_ENABLE
+
+The event of $type will be processed normally. This is default.
+
+=item SDL_QUERY
+
+The current processing state of the $type will be returned
 
 =head2 get_key_name
 
