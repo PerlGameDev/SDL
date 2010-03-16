@@ -167,6 +167,8 @@ Returns the current state of modifier keys
 
 Return value is an OR'd combination of  KMOD_*
 
+ SDL::Events::pump_events; #get latest mod_state in buffers
+
  my $mod_state = SDL::Events::get_mod_state();
 
  # Check which ones are pressed with 
