@@ -263,9 +263,30 @@ The current processing state of the $type will be returned
 
 Gets the name of the a SDL virtual keysym
 
+ my $event = SDL::Event->new();
+
+ while( SDL::Events::poll_event($event) )
+ {
+   my $key = $event->key_sym;
+   $key_str = SDL::Events::get_key_name($key);
+ }
+
+Returns a string with the name of the key sym.
+
 =head2 enable_unicode 
 
-Enable UNICODE translation
+Enable/Disable UNICODE translation
+
+  my $previous_translation_mode = SDL::Events::enable_unicode( 1 ); #enable
+     $previous_translation_mode = SDL::Events::enable_unicode( 0 ); #disables
+
+To obtain the character codes corresponding to received keyboard events, Unicode translation must first be turned on using this function. The translation incurs a slight overhead for each keyboard event and is therefore disabled by default. For each subsequently recieved key down event, the unicode member of the L<SDL::Event::key_sym> provided structure will be then contain the corresponding character code, or otherwise zero.
+
+A value of 1 for enabling, 0 for disabling and -1 for unchanged. -1 is usefull for querying the current translation mode.
+
+Only key press events will be translated not release events.
+
+Returns the previous translation mode as (1,0).
 
 =head2 enable_key_repeat 
 
