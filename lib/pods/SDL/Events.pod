@@ -304,15 +304,34 @@ Return 0 on success and -1 on fail.
 
 Retrives the current state of the mouse
 
-  my ( $bitmask, $x, $y ) = SDL::Events::get_mouse_state();
+	my ($mask,$x,$y) = @{ SDL::Events::get_mouse_state( ) };
+       
+        print 'Button Left pressed' if ($mask & SDL_BUTTON_LMASK);    
+       
+        print 'Button Right pressed' if ($mask & SDL_BUTTON_RMASK);   
+        
+        print 'Button Middle pressed' if ($mask & SDL_BUTTON_MMASK);  
+        
+        print $x.','.$y;
 
-  warn '
-
-The current button state is returned as a button $bitmask, which can be tested using the 
+The current button state is returned as a button $bitmask, which can be tested using the the above constants 
 
 =head2 get_relative_mouse_state 
 
 Retrives the current relative state of the mouse
+
+	my ($mask,$x,$y) = @{ SDL::Events::get_mouse_state( ) };
+       
+        print 'Button Left pressed' if ($mask & SDL_BUTTON_LMASK);    
+       
+        print 'Button Right pressed' if ($mask & SDL_BUTTON_RMASK);   
+        
+        print 'Button Middle pressed' if ($mask & SDL_BUTTON_MMASK);  
+        
+        print $x.','.$y; # this is relative to the last postion of the mouse
+
+The current button state is returned as a button $bitmask, which can be tested using the the above constants 
+
 
 =head2 get_app_state 
 
