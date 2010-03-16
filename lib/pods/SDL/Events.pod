@@ -292,6 +292,14 @@ Returns the previous translation mode as (1,0).
 
 Sets keyboard repeat rate
 
+ my $success = SDL::Events::enable_key_repeat( $delay, $interval );
+
+Enables or disables the keyboard repeat rate. $delay specifies how long the key must be pressed before it begins repeating, it then repleats at the speed specified by $interval. Both $delay and $interval are expressed in milliseconds.
+
+Setting $delay to 0 disables key repeating completely. Good default values are SDL_DEFAULT_REPEAT_DELAY and SDL_DEFAULT_REPEAT_INTERVAL.
+
+Return 0 on success and -1 on fail.
+
 =head2 get_mouse_state 
 
 Retrives the current state of the mouse
