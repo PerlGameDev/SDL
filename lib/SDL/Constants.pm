@@ -909,6 +909,7 @@ use constant {
 	MUS_MP3_MAD                                         => 7,
 	MUS_MP3_FLAC                                        => 8,
 }; # Mix_MusicType
+sub SDL_BUTTON{ return	(1 << (($_[0])-1)) };
 
 use constant {
 	MIX_CHANNEL_POST                                    => -2,
@@ -919,11 +920,11 @@ use constant {
 	SDL_BUTTON_WHEELDOWN                                => 5,
 	SDL_BUTTON_X1                                       => 6,
 	SDL_BUTTON_X2                                       => 7,
-#	SDL_BUTTON_LMASK                                    => SDL_BUTTON(1),
-#	SDL_BUTTON_MMASK                                    => SDL_BUTTON(2),
-#	SDL_BUTTON_RMASK                                    => SDL_BUTTON(3),
-#	SDL_BUTTON_X1MASK                                   => SDL_BUTTON(6),
-#	SDL_BUTTON_X2MASK                                   => SDL_BUTTON(7),
+	SDL_BUTTON_LMASK                                    => SDL_BUTTON(1),
+	SDL_BUTTON_MMASK                                    => SDL_BUTTON(2),
+	SDL_BUTTON_RMASK                                    => SDL_BUTTON(3),
+	SDL_BUTTON_X1MASK                                   => SDL_BUTTON(6),
+	SDL_BUTTON_X2MASK                                   => SDL_BUTTON(7),
 	SDL_MUTEX_TIMEDOUT                                  => 1,
 	NeedFunctionPrototypes                              => 1,
 	SDL_NET_MAJOR_VERSION                               => 1,

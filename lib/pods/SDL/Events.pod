@@ -304,6 +304,12 @@ Return 0 on success and -1 on fail.
 
 Retrives the current state of the mouse
 
+  my ( $bitmask, $x, $y ) = SDL::Events::get_mouse_state();
+
+  warn '
+
+The current button state is returned as a button $bitmask, which can be tested using the 
+
 =head2 get_relative_mouse_state 
 
 Retrives the current relative state of the mouse
