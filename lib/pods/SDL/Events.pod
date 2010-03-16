@@ -225,6 +225,15 @@ same as KMOD_LMETA|KMOD_RMETA
 
 Get the state of the modifier keys
 
+The inverse of L<SDL::Events::get_mod_state> allows you to impose modifier key states on your application.
+
+Simply pass your desired modifier states into $modstate. This value can be a OR'd combination of any KMOD* constant.
+
+ my $modstate = KMOD_LMETA | KMOD_LSHIFT;
+
+Any KMOD_* constant see L<SDL::Events::get_mod_state> for constants.
+ SDL::Events::set_mod_state( $modstate );
+
 =head2 event_state 
 
 Allows you to set the state of processing certain events
