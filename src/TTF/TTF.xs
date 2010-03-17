@@ -7,6 +7,25 @@
 #ifdef HAVE_SDL_TTF
 #include <SDL_ttf.h>
 
+#ifndef SDL_TTF_MAJOR_VERSION
+#define SDL_TTF_MAJOR_VERSION	0
+#endif
+
+#ifndef SDL_TTF_MINOR_VERSION
+#define SDL_TTF_MINOR_VERSION	0
+#endif
+
+#ifndef SDL_TTF_PATCHLEVEL
+#define SDL_TTF_PATCHLEVEL	0
+#endif
+
+#define SDL_TTF_VERSION(X)						\
+{									\
+	(X)->major = SDL_TTF_MAJOR_VERSION;				\
+	(X)->minor = SDL_TTF_MINOR_VERSION;				\
+	(X)->patch = SDL_TTF_PATCHLEVEL;				\
+}
+
 static Uint16 *UTF8_to_UNICODE(Uint16 *unicode, const char *utf8, int len)
 {
 	int i, j;
@@ -488,5 +507,39 @@ ttf_was_init()
 		RETVAL = TTF_WasInit();
 	OUTPUT:
 		RETVAL
+
+#if SDL_TTF_MAJOR_VERSION >= 2 && SDL_TTF_MINOR_VERSION >= 0 && SDL_TTF_PATCHLEVEL >= 10
+
+int
+ttf_get_font_hinting(font)
+	TTF_Font *font
+	CODE:
+		RETVAL = TTF_GetFontHinting(font);
+	OUTPUT:
+		RETVAL
+
+void
+ttf_set_font_hinting(font, hinting)
+	TTF_Font *font
+	int hinting
+	CODE:
+		TTF_SetFontHinting(font, hinting);
+
+int
+ttf_get_font_kerning(font)
+	TTF_Font *font
+	CODE:
+		RETVAL = TTF_GetFontKerning(font);
+	OUTPUT:
+		RETVAL
+
+void
+ttf_set_font_kerning(font, allowed)
+	TTF_Font *font
+	int allowed
+	CODE:
+		TTF_SetFontKerning(font, allowed);
+
+#endif
 
 #endif

@@ -56,6 +56,20 @@ is( SDL::TTF::get_font_style($font),                      TTF_STYLE_UNDERLINE, "
 is( SDL::TTF::set_font_style($font, TTF_STYLE_NORMAL),    undef,               "[set_font_style] to TTF_STYLE_NORMAL" );
 is( SDL::TTF::get_font_style($font),                      TTF_STYLE_NORMAL,    "[get_font_style] returns TTF_STYLE_NORMAL" );
 
+SKIP:
+{
+	skip("Version 2.0.10 (or better) needed", 6) unless $cv->major >= 2 && $cv->minor >= 0 && $cv->patch >= 10
+	                                                 && $lv->major >= 2 && $lv->minor >= 0 && $lv->patch >= 10;
+	is( SDL::TTF::get_font_hinting($font),                TTF_HINTING_NORMAL,  "[get_font_hinting] is TTF_HINTING_NORMAL" );
+	SDL::TTF::set_font_hinting($font, TTF_HINTING_LIGHT);                 pass "[set_font_hinting] to TTF_HINTING_LIGHT";
+	is( SDL::TTF::get_font_hinting($font),                TTF_HINTING_LIGHT,   "[get_font_hinting] is TTF_HINTING_LIGHT" );
+	my $kerning_allowed = SDL::TTF::get_font_kerning($font);
+	like( $kerning_allowed,                               '/^[01]$/',          "[get_font_kerning] is " . ($kerning_allowed ? 'allowed' : 'not allowed'));
+	SDL::TTF::set_font_kerning($font, 0);                                 pass "[set_font_kerning to not allowed] ";
+	$kerning_allowed = SDL::TTF::get_font_kerning($font);
+	is( $kerning_allowed,                                 0,                   "[get_font_kerning] is " . ($kerning_allowed ? 'allowed' : 'not allowed'));
+}
+
 my $font_height = SDL::TTF::font_height($font);
 ok( $font_height,                                                              "[font_height] is $font_height" );
 
