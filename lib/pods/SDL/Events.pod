@@ -184,6 +184,8 @@ Return value is an OR'd combination of  KMOD_*
 
 =head3 MOD VALUES
 
+=over *
+
 =item KMOD_NONE
 
 =item KMOD_LSHIFT
@@ -223,6 +225,8 @@ same as KMOD_LALT|KMOD_RALT
 =item KMOD_META
 
 same as KMOD_LMETA|KMOD_RMETA
+
+=back
 
 =head2 set_mod_state
 
@@ -341,6 +345,8 @@ Gets the state of the application
 
 The $app_state is a bitwise combination of:
 
+=over 4
+
 =item SDL_APPMOUSEFOCUS
 
 Application has mouse focus
@@ -376,6 +382,8 @@ This function is used to enable or disable joystick event processing. With joyst
 =item SDL_IGNORE
 
 Joystick event handling is default. Even if joystick event processing is enabled, individual joysticks must be opened before they generate events
+
+=back
 
 B<Warning:> Calling this function may delete all events currently in SDL's event queue.
 
