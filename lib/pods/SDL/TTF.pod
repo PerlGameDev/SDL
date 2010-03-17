@@ -228,7 +228,7 @@ B<Note>: at least SDL_ttf 2.0.10 needed
 
 =head4 set_font_kerning
 
- SDL::TTF::get_font_kerning($font, $kerning_enabled);
+ SDL::TTF::set_font_kerning($font, $kerning_enabled);
 
 Set whether to use kerning when rendering the loaded font. This has no effect on individual glyphs, but rather when rendering whole strings of 
 characters, at least a word at a time. Perhaps the only time to disable this is when kerning is not working for a specific font, resulting in 
