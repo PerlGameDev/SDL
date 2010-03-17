@@ -218,9 +218,23 @@ Example:
 
 =head4 get_font_kerning
 
+ my $kerning_enabled = SDL::TTF::get_font_kerning($font);
+
+Get the current kerning setting of the loaded font.
+
+Returns: C<0>(zero) if kerning is disabled. A non-zero value is returned when enabled. The default for a newly loaded font is enabled(C<1>). 
+
 B<Note>: at least SDL_ttf 2.0.10 needed
 
 =head4 set_font_kerning
+
+ SDL::TTF::get_font_kerning($font, $kerning_enabled);
+
+Set whether to use kerning when rendering the loaded font. This has no effect on individual glyphs, but rather when rendering whole strings of 
+characters, at least a word at a time. Perhaps the only time to disable this is when kerning is not working for a specific font, resulting in 
+overlapping glyphs or abnormal spacing within words.
+
+Pass C<0> to disable kerning, 1 to enable.
 
 B<Note>: at least SDL_ttf 2.0.10 needed
 
