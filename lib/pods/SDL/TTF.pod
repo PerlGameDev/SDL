@@ -175,19 +175,54 @@ this case, you should probably turn off these styles and draw your own strikethr
 
 =head4 get_font_hinting
 
-(since SDL_ttf 2.0.10)
+ my $hinting = SDL::TTF::get_font_hinting($font);
+
+Get the current hinting setting of the loaded font.
+
+B<Note>: at least SDL_ttf 2.0.10 needed
+
+Returns the hinting type matching one of the following defined values:
+
+=over 4
+
+=item *
+
+TTF_HINTING_NORMAL
+
+=item *
+
+TTF_HINTING_LIGHT
+
+=item *
+
+TTF_HINTING_MONO
+
+=item *
+
+TTF_HINTING_NONE
+
+=back
 
 =head4 set_font_hinting
 
-(since SDL_ttf 2.0.10)
+ SDL::TTF::set_font_hinting($font, $hinting);
+
+Set the hinting of the loaded font. You should experiment with this setting if you know which font you are using beforehand, especially when 
+using smaller sized fonts. If the user is selecting a font, you may wish to let them select the hinting mode for that font as well.
+
+B<Note>: at least SDL_ttf 2.0.10 needed
+
+Example:
+
+ SDL::TTF::set_font_hinting($font, TTF_HINTING_LIGHT);
 
 =head4 get_font_kerning
 
-(since SDL_ttf 2.0.10)
+B<Note>: at least SDL_ttf 2.0.10 needed
 
 =head4 set_font_kerning
 
-(since SDL_ttf 2.0.10)
+B<Note>: at least SDL_ttf 2.0.10 needed
 
 =head3 Font metrics
 
