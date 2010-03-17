@@ -59,11 +59,3 @@ gfx_linked_version()
 		RETVAL
 
 
-gfx_DESTROY()
-	CODE:
-		if( linked_version != NULL)
-		{
-			safefree( linked_version );
-		}
-}
-
