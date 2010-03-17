@@ -9,6 +9,7 @@
 
 #ifndef SDL_GFXPRIMITIVES_MAJOR
 #define SDL_GFXPRIMITIVES_MAJOR 0
+        SDL_GFXPRIMITIVES_MAJOR
 #endif
 
 #ifndef SDL_GFXPRIMITIVES_MINOR
@@ -19,8 +20,8 @@
 #define SDL_GFXPRIMITIVES_MICRO 0
 #endif
 
-#ifndef SDL_GFXPRIMITEVES_VERSION
-#define SDL_GFXPRIMITEVES_VERSION(X)      \
+#ifndef SDL_GFXPRIMITIVES_VERSION
+#define SDL_GFXPRIMITIVES_VERSION(X)      \
 {                                         \
 	(X)->major = SDL_GFXPRIMITIVES_MAJOR; \
 	(X)->minor = SDL_GFXPRIMITIVES_MINOR; \
@@ -45,9 +46,10 @@ gfx_linked_version()
 	PREINIT:
 		char* CLASS = "SDL::Version";
 	CODE:
-		SDL_version *linked_version = safemalloc( sizeof( SDL_version) );
-		SDL_GFXPRIMITEVES_VERSION(linked_version);
+		SDL_version *linked_version = safemalloc(sizeof(SDL_version));
+		SDL_GFXPRIMITIVES_VERSION(linked_version);
 		
 		RETVAL = linked_version;
+		safefree(linked_version);
 	OUTPUT:
 		RETVAL
