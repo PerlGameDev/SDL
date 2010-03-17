@@ -165,8 +165,11 @@ Set the rendering style of the loaded font.
 B<Note>: C<TTF_STYLE_UNDERLINE> may cause surfaces created by C<SDL::TTF::render_glyph_*> functions to be extended vertically, downward only, 
 to encompass the underline if the original glyph metrics didn't allow for the underline to be drawn below. This does not change the math used 
 to place a glyph using glyph metrics.
-On the other hand TTF_STYLE_STRIKETHROUGH doesn't extend the glyph, since this would invalidate the metrics used to position the glyph when blitting, because they would likely be extended vertically upward. There is perhaps a workaround, but it would require programs to be smarter about glyph blitting math than they are currently designed for.
-Still, sometimes the underline or strikethrough may be outside of the generated surface, and thus not visible when blitted to the screen. In this case, you should probably turn off these styles and draw your own strikethroughs and underlines. 
+On the other hand C<TTF_STYLE_STRIKETHROUGH> doesn't extend the glyph, since this would invalidate the metrics used to position the glyph when 
+blitting, because they would likely be extended vertically upward. There is perhaps a workaround, but it would require programs to be smarter 
+about glyph blitting math than they are currently designed for.
+Still, sometimes the underline or strikethrough may be outside of the generated surface, and thus not visible when blitted to the screen. In 
+this case, you should probably turn off these styles and draw your own strikethroughs and underlines. 
 
 =head3 Font settings
 
