@@ -171,6 +171,22 @@ about glyph blitting math than they are currently designed for.
 Still, sometimes the underline or strikethrough may be outside of the generated surface, and thus not visible when blitted to the screen. In 
 this case, you should probably turn off these styles and draw your own strikethroughs and underlines. 
 
+=head4 get_font_outline
+
+ my $outline = SDL::TTF::get_font_outline($font);
+
+Get the current outline of the font, in pixels.
+
+B<Note>: at least SDL_ttf 2.0.10 needed
+
+=head4 set_font_outline
+
+ SDL::TTF::get_font_outline($font, $outline);
+
+Set the outline pixel width of the loaded font. Use C<0>(zero) to turn off outlining.
+
+B<Note>: at least SDL_ttf 2.0.10 needed
+
 =head3 Font settings
 
 =head4 get_font_hinting
@@ -243,7 +259,6 @@ B<Note>: at least SDL_ttf 2.0.10 needed
 =head4 font_height
 
  my $font_height = SDL::TTF::font_height($font);
- ok( $font_height,                                                              "[font_height] is $font_height" );
 
 =head4 font_ascent
 
