@@ -251,6 +251,8 @@ A list of $type(s) can be found in L<SDL::Event>
 
 =head3 STATES
 
+=over 4
+
 =item SDL_IGNORE
 
 The event of $type will be automatically dropper from the event queue and will not be filtered.
@@ -262,6 +264,8 @@ The event of $type will be processed normally. This is default.
 =item SDL_QUERY
 
 The current processing state of the $type will be returned
+
+=back
 
 =head2 get_key_name
 
