@@ -184,7 +184,7 @@ Return value is an OR'd combination of  KMOD_*
 
 =head3 MOD VALUES
 
-=over *
+=over 
 
 =item KMOD_NONE
 
@@ -349,7 +349,7 @@ Gets the state of the application
 
 The $app_state is a bitwise combination of:
 
-=over 4
+=over 
 
 =item SDL_APPMOUSEFOCUS
 
@@ -370,6 +370,7 @@ Application is visible
 
 	warn 'Application Visible' if $app_state & SDL_APPACTIVE
 
+=back 
 
 =head2 joystick_event_state 
 
@@ -378,6 +379,8 @@ Enable/disable joystick event polling
 	my $status = SDL::Events::joystick_event_state( $state );
 
 This function is used to enable or disable joystick event processing. With joystick event processing disabled you will have to update joystick states with SDL_JoystickUpdate and read the joystick information manually. $state can be:
+
+=over 
 
 =item SDL_QUERY
 
