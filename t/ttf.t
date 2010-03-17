@@ -58,8 +58,13 @@ is( SDL::TTF::get_font_style($font),                      TTF_STYLE_NORMAL,    "
 
 SKIP:
 {
-	skip("Version 2.0.10 (or better) needed", 6) unless $cv->major >= 2 && $cv->minor >= 0 && $cv->patch >= 10
+	skip("Version 2.0.10 (or better) needed", 9) unless $cv->major >= 2 && $cv->minor >= 0 && $cv->patch >= 10
 	                                                 && $lv->major >= 2 && $lv->minor >= 0 && $lv->patch >= 10;
+	my $font_outline = SDL::TTF::get_font_outline($font);
+	ok( $font_outline >= 0,                                                    "[get_font_outline] is $font_outline" );
+	$font_outline++;
+	SDL::TTF::set_font_outline($font, $font_outline);                     pass "[set_font_outline] to $font_outline";
+	is( SDL::TTF::get_font_outline($font),                $font_outline,       "[get_font_outline] is $font_outline" );
 	is( SDL::TTF::get_font_hinting($font),                TTF_HINTING_NORMAL,  "[get_font_hinting] is TTF_HINTING_NORMAL" );
 	SDL::TTF::set_font_hinting($font, TTF_HINTING_LIGHT);                 pass "[set_font_hinting] to TTF_HINTING_LIGHT";
 	is( SDL::TTF::get_font_hinting($font),                TTF_HINTING_LIGHT,   "[get_font_hinting] is TTF_HINTING_LIGHT" );

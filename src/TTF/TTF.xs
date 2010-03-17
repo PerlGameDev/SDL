@@ -518,6 +518,21 @@ ttf_was_init()
 #if SDL_TTF_MAJOR_VERSION >= 2 && SDL_TTF_MINOR_VERSION >= 0 && SDL_TTF_PATCHLEVEL >= 10
 
 int
+ttf_get_font_outline(font)
+	TTF_Font *font
+	CODE:
+		RETVAL = TTF_GetFontOutline(font);
+	OUTPUT:
+		RETVAL
+
+void
+ttf_set_font_outline(font, outline)
+	TTF_Font *font
+	int outline
+	CODE:
+		RETVAL = TTF_SetFontOutline(font, outline);
+
+int
 ttf_get_font_hinting(font)
 	TTF_Font *font
 	CODE:
