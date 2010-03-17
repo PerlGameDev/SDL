@@ -9,10 +9,11 @@ Core, Events
 =head1 SYNOPSIS
 
 Most likely you just want to know how to get events for you app.
+
   use SDL;
   use SDL::Event;
   use SDL::Events;
-  
+
   SDL::init(SDL_INIT_VIDEO); # Event can only be grabbed in the same thread as this 
 
   ...
@@ -163,41 +164,222 @@ This function doesn't take into account whether shift has been pressed or not.
 
 Get the state of the modifier keys
 
+Returns the current state of modifier keys
+
+Return value is an OR'd combination of  KMOD_*
+
+ SDL::Events::pump_events; #get latest mod_state in buffers
+
+ my $mod_state = SDL::Events::get_mod_state();
+
+ # Check which ones are pressed with 
+
+ # no mod pressed?
+ 
+ print 'no_mod' if  ( $mod_state & KMOD_NONE );
+
+ # CTRL or ALT 
+
+ print 'ctrl alt' if ($mod_state & KMOD_CTRL || $mod_state & KMOD_ALT );
+
+=head3 MOD VALUES
+
+=item KMOD_NONE
+
+=item KMOD_LSHIFT
+
+=item KMOD_RSHIFT
+
+=item KMOD_LCTRL
+
+=item KMOD_RCTRL
+
+=item KMOD_LALT
+
+=item KMOD_RALT
+
+=item KMOD_LMETA
+
+=item KMOD_RMETA
+
+=item KMOD_NUM
+
+=item KMOD_CAPS
+
+=item KMOD_MODE
+
+=item KMOD_CTRL 
+
+same as KMOD_LCTRL|KMOD_RCTRL
+
+=item KMOD_SHIFT
+
+same as KMOD_LSHIFT|KMOD_RSHIFT
+
+=item KMOD_ALT
+
+same as KMOD_LALT|KMOD_RALT
+
+=item KMOD_META
+
+same as KMOD_LMETA|KMOD_RMETA
+
 =head2 set_mod_state
 
 Get the state of the modifier keys
+
+The inverse of L<SDL::Events::get_mod_state> allows you to impose modifier key states on your application.
+
+Simply pass your desired modifier states into $modstate. This value can be a OR'd combination of any KMOD* constant.
+
+ my $modstate = KMOD_LMETA | KMOD_LSHIFT;
+
+Any KMOD_* constant see L<SDL::Events::get_mod_state> for constants.
+ SDL::Events::set_mod_state( $modstate );
 
 =head2 event_state 
 
 Allows you to set the state of processing certain events
 
+ SDL::Events::event_state( $type, $state );
+
+A list of $type(s) can be found in L<SDL::Event>
+
+=head3 STATES
+
+=item SDL_IGNORE
+
+The event of $type will be automatically dropper from the event queue and will not be filtered.
+
+=item SDL_ENABLE
+
+The event of $type will be processed normally. This is default.
+
+=item SDL_QUERY
+
+The current processing state of the $type will be returned
+
 =head2 get_key_name
 
 Gets the name of the a SDL virtual keysym
 
+ my $event = SDL::Event->new();
+
+ while( SDL::Events::poll_event($event) )
+ {
+   my $key = $event->key_sym;
+   $key_str = SDL::Events::get_key_name($key);
+ }
+
+Returns a string with the name of the key sym.
+
 =head2 enable_unicode 
 
-Enable UNICODE translation
+Enable/Disable UNICODE translation
+
+  my $previous_translation_mode = SDL::Events::enable_unicode( 1 ); #enable
+     $previous_translation_mode = SDL::Events::enable_unicode( 0 ); #disables
+
+To obtain the character codes corresponding to received keyboard events, Unicode translation must first be turned on using this function. The translation incurs a slight overhead for each keyboard event and is therefore disabled by default. For each subsequently recieved key down event, the unicode member of the L<SDL::Event::key_sym> provided structure will be then contain the corresponding character code, or otherwise zero.
+
+A value of 1 for enabling, 0 for disabling and -1 for unchanged. -1 is usefull for querying the current translation mode.
+
+Only key press events will be translated not release events.
+
+Returns the previous translation mode as (1,0).
 
 =head2 enable_key_repeat 
 
 Sets keyboard repeat rate
 
+ my $success = SDL::Events::enable_key_repeat( $delay, $interval );
+
+Enables or disables the keyboard repeat rate. $delay specifies how long the key must be pressed before it begins repeating, it then repleats at the speed specified by $interval. Both $delay and $interval are expressed in milliseconds.
+
+Setting $delay to 0 disables key repeating completely. Good default values are SDL_DEFAULT_REPEAT_DELAY and SDL_DEFAULT_REPEAT_INTERVAL.
+
+Return 0 on success and -1 on fail.
+
 =head2 get_mouse_state 
 
 Retrives the current state of the mouse
+
+	my ($mask,$x,$y) = @{ SDL::Events::get_mouse_state( ) };
+       
+        print 'Button Left pressed' if ($mask & SDL_BUTTON_LMASK);    
+       
+        print 'Button Right pressed' if ($mask & SDL_BUTTON_RMASK);   
+        
+        print 'Button Middle pressed' if ($mask & SDL_BUTTON_MMASK);  
+        
+        print $x.','.$y;
+
+The current button state is returned as a button $bitmask, which can be tested using the the above constants 
 
 =head2 get_relative_mouse_state 
 
 Retrives the current relative state of the mouse
 
+	my ($mask,$x,$y) = @{ SDL::Events::get_mouse_state( ) };
+       
+        print 'Button Left pressed' if ($mask & SDL_BUTTON_LMASK);    
+       
+        print 'Button Right pressed' if ($mask & SDL_BUTTON_RMASK);   
+        
+        print 'Button Middle pressed' if ($mask & SDL_BUTTON_MMASK);  
+        
+        print $x.','.$y; # this is relative to the last postion of the mouse
+
+The current button state is returned as a button $bitmask, which can be tested using the the above constants 
+
+
 =head2 get_app_state 
 
 Gets the state of the application
 
+	my $app_state = SDL::Events::get_app_state();
+
+The $app_state is a bitwise combination of:
+
+=item SDL_APPMOUSEFOCUS
+
+Application has mouse focus
+
+	warn 'mouse focus' if $app_state & SDL_APPMOUSEFOCUS
+
+=item SDL_APPINPUTFOCUS
+
+Application has keyboard focus
+
+	warn 'keyboard focus' if $app_state & SDL_APPINPUTFOCUS
+
+
+=item SDL_APPACTIVE
+
+Application is visible
+
+	warn 'Application Visible' if $app_state & SDL_APPACTIVE
+
+
 =head2 joystick_event_state 
 
 Enable/disable joystick event polling
+
+	my $status = SDL::Events::joystick_event_state( $state );
+
+This function is used to enable or disable joystick event processing. With joystick event processing disabled you will have to update joystick states with SDL_JoystickUpdate and read the joystick information manually. $state can be:
+
+=item SDL_QUERY
+
+=item SDL_ENABLE 
+
+=item SDL_IGNORE
+
+Joystick event handling is default. Even if joystick event processing is enabled, individual joysticks must be opened before they generate events
+
+B<Warning:> Calling this function may delete all events currently in SDL's event queue.
+
+If $state is SDL_QUERY then the current state is returned, otherwise the new processing state is returned.
 
 =head1 SEE ALSO
 

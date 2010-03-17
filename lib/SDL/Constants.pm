@@ -2,32 +2,7 @@
 #
 # Constants.pm
 #
-# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
 #
-# ------------------------------------------------------------------------------
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-# 
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
-# 
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-#
-# ------------------------------------------------------------------------------
-#
-# Please feel free to send questions, suggestions or improvements to:
-#
-#	David J. Goehrig
-#	dgoehrig@cpan.org
-#
-
 package SDL::Constants;
 
 use warnings;
@@ -459,6 +434,20 @@ our @EXPORT=qw(
 	SDL_SAMPLEFLAG_EOF
 	SDL_SAMPLEFLAG_ERROR
 	SDL_SAMPLEFLAG_EAGAIN
+	SDL_BUTTON
+	SDL_BUTTON_LEFT                                     
+	SDL_BUTTON_MIDDLE                                   
+	SDL_BUTTON_RIGHT                                    
+	SDL_BUTTON_WHEELUP                                  
+	SDL_BUTTON_WHEELDOWN                                
+	SDL_BUTTON_X1                                       
+	SDL_BUTTON_X2                                       
+	SDL_BUTTON_LMASK                                    
+	SDL_BUTTON_MMASK                                    
+	SDL_BUTTON_RMASK                                    
+	SDL_BUTTON_X1MASK                                   
+	SDL_BUTTON_X2MASK                                  
+
 );
 
 # Getting header constants from C:\strawberry\c\bin\..\include\SDL
@@ -909,6 +898,7 @@ use constant {
 	MUS_MP3_MAD                                         => 7,
 	MUS_MP3_FLAC                                        => 8,
 }; # Mix_MusicType
+sub SDL_BUTTON{ return	(1 << (($_[0])-1)); }
 
 use constant {
 	MIX_CHANNEL_POST                                    => -2,
@@ -919,11 +909,11 @@ use constant {
 	SDL_BUTTON_WHEELDOWN                                => 5,
 	SDL_BUTTON_X1                                       => 6,
 	SDL_BUTTON_X2                                       => 7,
-#	SDL_BUTTON_LMASK                                    => SDL_BUTTON(1),
-#	SDL_BUTTON_MMASK                                    => SDL_BUTTON(2),
-#	SDL_BUTTON_RMASK                                    => SDL_BUTTON(3),
-#	SDL_BUTTON_X1MASK                                   => SDL_BUTTON(6),
-#	SDL_BUTTON_X2MASK                                   => SDL_BUTTON(7),
+	SDL_BUTTON_LMASK                                    => SDL_BUTTON(1),
+	SDL_BUTTON_MMASK                                    => SDL_BUTTON(2),
+	SDL_BUTTON_RMASK                                    => SDL_BUTTON(3),
+	SDL_BUTTON_X1MASK                                   => SDL_BUTTON(6),
+	SDL_BUTTON_X2MASK                                   => SDL_BUTTON(7),
 	SDL_MUTEX_TIMEDOUT                                  => 1,
 	NeedFunctionPrototypes                              => 1,
 	SDL_NET_MAJOR_VERSION                               => 1,

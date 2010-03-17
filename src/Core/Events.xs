@@ -133,10 +133,10 @@ events_get_key_state()
 	OUTPUT:
 		RETVAL
 	 
-int
+SDLMod
 events_get_mod_state()
 	CODE:
-		RETVAL = (int)SDL_GetModState();
+		RETVAL = SDL_GetModState();
 	OUTPUT:
 		RETVAL
 
