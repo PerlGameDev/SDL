@@ -337,6 +337,30 @@ The current button state is returned as a button $bitmask, which can be tested u
 
 Gets the state of the application
 
+	my $app_state = SDL::Events::get_app_state();
+
+The $app_state is a bitwise combination of:
+
+=item SDL_APPMOUSEFOCUS
+
+Application has mouse focus
+
+	warn 'mouse focus' if $app_state & SDL_APPMOUSEFOCUS
+
+=item SDL_APPINPUTFOCUS
+
+Application has keyboard focus
+
+	warn 'keyboard focus' if $app_state & SDL_APPINPUTFOCUS
+
+
+=item SDL_APPACTIVE
+
+Application is visible
+
+	warn 'Application Visible' if $app_state & SDL_APPACTIVE
+
+
 =head2 joystick_event_state 
 
 Enable/disable joystick event polling
