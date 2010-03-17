@@ -190,8 +190,15 @@ SDL_version *
 linked_version ()
 	PREINIT:
 		char * CLASS = "SDL::Version";
+		SDL_version *version;
 	CODE:
-		RETVAL = (SDL_version *) SDL_Linked_Version();
+		version = (SDL_version *) safemalloc ( sizeof(SDL_version) );
+		SDL_version* version_dont_free = (SDL_version *) SDL_Linked_Version();
+
+		version->major = version_dont_free->major;
+		version->minor = version_dont_free->minor;
+		version->patch = version_dont_free->patch;
+		RETVAL = version;
 	OUTPUT:
 		RETVAL
 

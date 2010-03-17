@@ -56,4 +56,9 @@ version_patch ( version, ... )
 	OUTPUT:
 		RETVAL
 
-
+void
+version_DESTROY ( version, ... )
+	SDL_version *version
+	CODE:
+		if( version != NULL)
+		  safefree(version);	
