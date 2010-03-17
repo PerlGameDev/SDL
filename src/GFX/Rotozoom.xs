@@ -158,8 +158,8 @@ gfx_roto_zoom_surface_size(width, height, zoomx, zoomy)
 SDL_Surface *
 gfx_roto_shrink_surface(src, factorx, factory)
 	SDL_Surface * src
-	int factorx
-	int factory
+	float factorx
+	float factory
 	PREINIT:
 		char *CLASS = "SDL::Surface";
 	CODE:

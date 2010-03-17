@@ -5,6 +5,8 @@
 #include <SDL.h>
 #ifdef HAVE_SDL_GFX_PRIMITIVES
 #include <SDL_gfxPrimitives.h>
+
+	SDL_version *linked_version = NULL; 
 #endif
 
 #ifndef SDL_GFXPRIMITIVES_MAJOR
@@ -46,10 +48,22 @@ gfx_linked_version()
 	PREINIT:
 		char* CLASS = "SDL::Version";
 	CODE:
-		SDL_version *linked_version = safemalloc(sizeof(SDL_version));
+		if(linked_version == NULL)
+		{
+			linked_version = safemalloc(sizeof(SDL_version));
+		}
 		SDL_GFXPRIMITIVES_VERSION(linked_version);
 		
 		RETVAL = linked_version;
-		safefree(linked_version);
 	OUTPUT:
 		RETVAL
+
+
+gfx_DESTROY()
+	CODE:
+		if( linked_version != NULL)
+		{
+			safefree( linked_version );
+		}
+}
+
