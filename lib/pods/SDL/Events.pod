@@ -365,6 +365,22 @@ Application is visible
 
 Enable/disable joystick event polling
 
+	my $status = SDL::Events::joystick_event_state( $state );
+
+This function is used to enable or disable joystick event processing. With joystick event processing disabled you will have to update joystick states with SDL_JoystickUpdate and read the joystick information manually. $state can be:
+
+=item SDL_QUERY
+
+=item SDL_ENABLE 
+
+=item SDL_IGNORE
+
+Joystick event handling is default. Even if joystick event processing is enabled, individual joysticks must be opened before they generate events
+
+B<Warning:> Calling this function may delete all events currently in SDL's event queue.
+
+If $state is SDL_QUERY then the current state is returned, otherwise the new processing state is returned.
+
 =head1 SEE ALSO
 
 L<SDL::Event>, L<SDL::Video>
