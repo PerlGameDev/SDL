@@ -421,6 +421,11 @@ our @EXPORT=qw(
 	TTF_STYLE_ITALIC
 	TTF_STYLE_NORMAL
 	TTF_STYLE_UNDERLINE
+	TTF_STYLE_STRIKETHROUGH
+	TTF_HINTING_NORMAL
+	TTF_HINTING_LIGHT
+	TTF_HINTING_MONO
+	TTF_HINTING_NONE
 	UNICODE_BLENDED
 	UNICODE_SHADED
 	UNICODE_SOLID
@@ -916,9 +921,6 @@ use constant {
 	SDL_BUTTON_X2MASK                                   => SDL_BUTTON(7),
 	SDL_MUTEX_TIMEDOUT                                  => 1,
 	NeedFunctionPrototypes                              => 1,
-	SDL_NET_MAJOR_VERSION                               => 1,
-	SDL_NET_MINOR_VERSION                               => 2,
-	SDL_NET_PATCHLEVEL                                  => 7,
 	INADDR_ANY                                          => 0x00000000,
 	INADDR_NONE                                         => 0xFFFFFFFF,
 	INADDR_BROADCAST                                    => 0xFFFFFFFF,
@@ -3415,14 +3417,13 @@ use constant {
 	TTF_STYLE_BOLD                                      => 0x01,
 	TTF_STYLE_ITALIC                                    => 0x02,
 	TTF_STYLE_UNDERLINE                                 => 0x04,
-	TTF_SetError                                        => SDL_SetError,
-	TTF_GetError                                        => SDL_GetError,
-	SDL_MAJOR_VERSION                                   => 1,
-	SDL_MINOR_VERSION                                   => 2,
-	SDL_PATCHLEVEL                                      => 14,
+	TTF_STYLE_STRIKETHROUGH                             => 0x08,
+	TTF_HINTING_NORMAL                                  => 0,
+	TTF_HINTING_LIGHT                                   => 1,
+	TTF_HINTING_MONO                                    => 2,
+	TTF_HINTING_NONE                                    => 3,
 	SDL_ALPHA_OPAQUE                                    => 255,
 	SDL_ALPHA_TRANSPARENT                               => 0,
-	SDL_Colour                                          => SDL_Color,
 	SDL_SWSURFACE                                       => 0x00000000,
 	SDL_HWSURFACE                                       => 0x00000001,
 	SDL_ASYNCBLIT                                       => 0x00000004,
