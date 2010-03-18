@@ -28,7 +28,15 @@ SDL::CD
 SDL::MultiThread
 SDL::PixelFormat
 SDL::VideoInfo
-SDL::Version
+
+SDL::GFX::BlitFunc
+SDL::GFX::Framerate
+SDL::GFX::FPSManager
+SDL::GFX::ImageFilter
+SDL::GFX::Primitives
+SDL::GFX::Rotozoom
+
+SDL::Image
 
 SDL::Mixer
 SDL::Mixer::Samples
@@ -39,18 +47,15 @@ SDL::Mixer::Effects
 SDL::Mixer::MixChunk
 SDL::Mixer::MixMusic
 
-SDL::GFX::BlitFunc
-SDL::GFX::Framerate
-SDL::GFX::FPSManager
-SDL::GFX::ImageFilter
-SDL::GFX::Primitives
-SDL::GFX::Rotozoom
-SDL::Image
-
 SDL::Net
 SDL::Net::TCP
 SDL::Net::UDP
 SDL::Net::IPaddress
+
+SDL::TTF
+SDL::TTF::Font
+
+SDL::Version
 /;
     plan tests => scalar @modules;
 
