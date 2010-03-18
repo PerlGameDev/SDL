@@ -275,7 +275,7 @@ of the rectangle used when blitting the glyph on the screen.
 
 Example:
 
- my ($minx, $maxx, $miny, $maxy, $advance) = @{ SDL::TTF::glyph_metrics($font, 'M') };
+ my ($minx, $maxx, $miny, $maxy, $advance) = @{ SDL::TTF::glyph_metrics($font, "\0M") };
 
  $rect->y( $top + SDL::TTF::font_ascent($font) - $maxy );
 
@@ -290,7 +290,7 @@ of the rectangle used when blitting the glyph on the screen.
 
 Example:
 
- my ($minx, $maxx, $miny, $maxy, $advance) = @{ SDL::TTF::glyph_metrics($font, 'M') };
+ my ($minx, $maxx, $miny, $maxy, $advance) = @{ SDL::TTF::glyph_metrics($font, "\0M") };
 
  $rect->y( $bottom - SDL::TTF::font_descent($font) - $maxy );
 
@@ -347,9 +347,33 @@ Example:
 
 =head4 glyph_is_provided
 
+ my $glyph_is_provided = SDL::TTF::glyph_is_provided($font, $unicode_char);
+
+Get the status of the availability of the glyph from the loaded font.
+
+Returns: the index of the glyph in font, or 0 for an undefined character code.
+
+B<Note>: You have to pass this unicode character either as UTF16/UCS-2 big endian without BOM, or with BOM as UTF16/UCS-2 big/little endian.
+
+B<Note>: at least SDL_ttf 2.0.10 needed
+
+Example:
+
+ print("We have this char!\n") if SDL::TTF::glyph_is_provided($font, "\0M");
+
 =head4 glyph_metrics
 
- my @glyph_metrics = @{ SDL::TTF::glyph_metrics($font, 'M') };
+ my @glyph_metrics = @{ SDL::TTF::glyph_metrics($font, $unicode_char) };
+
+Get desired glyph metrics of the UNICODE char from the loaded font.
+
+See also: L<The FreeType2 Documentation Tutorial|http://freetype.sourceforge.net/freetype2/docs/tutorial/step2.html>
+
+B<Note>: You have to pass this unicode character either as UTF16/UCS-2 big endian without BOM, or with BOM as UTF16/UCS-2 big/little endian.
+
+Example:
+
+ my ($minx, $maxx, $miny, $maxy, $advance) = @{ SDL::TTF::glyph_metrics($font, "\0M") };
 
 =head3 Text metrics
 
