@@ -28,7 +28,8 @@ use SDL::Version;
 
 my $v = SDL::Mixer::linked_version();
 
-isa_ok($v, 'SDL::Version', '[linked_version] returns a SDL::verion object');
+isa_ok($v, 'SDL::Version', '[linked_version]');
+diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
 
 SKIP:
 {
@@ -42,10 +43,6 @@ SKIP:
 		( SDL::Mixer::init($f) != $f) ? diag "Tried to init $n". SDL::get_error() : diag "You have $n support"; 
 		pass 'Init ran';
 	}
-
-	SDL::Mixer::quit();
-
-	pass 'Quit ran';
 }
 
 is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ), 0, '[open_audio] ran');
@@ -59,8 +56,12 @@ isnt ($freq,   0, '[query_spec] got frequency '. $freq );
 isnt ($format, 0, '[query_spec] got format ');
 isnt ($chan,   0, '[query_spec] got channels '.$chan);
 
-SDL::Mixer::close_audio();
+SDL::Mixer::close_audio(); pass '[close_audio]  ran';
 
-pass '[close_audio]  ran';
+SKIP:
+{
+	skip ( 'Version 1.2.10 needed' , 1) unless ( $v->major >= 1 && $v->minor >= 2 && $v->patch >= 10); 
+	SDL::Mixer::quit(); pass '[quit] ran';
+}
 
 done_testing();
