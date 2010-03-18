@@ -305,23 +305,43 @@ font.
 
 =head4 font_faces
 
-my $font_faces = SDL::TTF::font_faces($font);
-ok( $font_faces,                                                               "[font_faces] font has $font_faces faces" );
+ my $font_faces = SDL::TTF::font_faces($font);
+
+Get the number of faces ("sub-fonts") available in the loaded font. This is a count of the number of specific fonts (based on size and style 
+and other typographical features perhaps) contained in the font itself.
 
 =head4 font_face_is_fixed_width
 
-my $font_face_is_fixed_width = SDL::TTF::font_face_is_fixed_width($font);
-like( $font_face_is_fixed_width,                          '/^[01]$/',          "[font_face_is_fixed_width] is $font_face_is_fixed_width" );
+ my $font_face_is_fixed_width = SDL::TTF::font_face_is_fixed_width($font);
+
+Test if the current font face of the loaded font is a fixed width font. Fixed width fonts are monospace, meaning every character that exists 
+in the font is the same width, thus you can assume that a rendered string's width is going to be the result of C<glyph_width * string_length>.
+
+Returns: C<E<gt>0> if font is a fixed width font. C<0> if not a fixed width font. 
 
 =head4 font_face_family_name
 
-my $font_face_family_name = SDL::TTF::font_face_family_name($font);
-ok( $font_face_family_name,                                                    "[font_face_family_name] is $font_face_family_name" );
+ my $font_face_family_name = SDL::TTF::font_face_family_name($font);
+
+Get the current font face family name from the loaded font. This information is not for every font available.
+
+Example:
+
+ my $font = SDL::TTF::open_font('arialuni.ttf', 8);
+ 
+ printf("%s\n", SDL::TTF::font_face_family_name($font)); # will print "Arial Unicode MS"
 
 =head4 font_face_style_name
 
-my $font_face_style_name = SDL::TTF::font_face_style_name($font);
-ok( $font_face_style_name,                                                     "[font_face_style_name] is $font_face_style_name" );
+ my $font_face_style_name = SDL::TTF::font_face_style_name($font);
+
+Get the current font face style name from the loaded font. This information is not for every font available. 
+
+Example:
+
+ my $font = SDL::TTF::open_font('arialuni.ttf', 8);
+ 
+ printf("%s\n", SDL::TTF::font_face_style_name($font)); # will print "Regular"
 
 =head3 Glyphs
 
@@ -330,7 +350,6 @@ ok( $font_face_style_name,                                                     "
 =head4 glyph_metrics
 
  my @glyph_metrics = @{ SDL::TTF::glyph_metrics($font, 'M') };
-is( scalar @glyph_metrics,                                5,                   "[glyph_metrics] (minx, maxx, miny, maxy, advance) = (" . join(', ', @glyph_metrics) . ")" );
 
 =head3 Text metrics
 
