@@ -274,10 +274,11 @@ ttf_font_face_style_name(font)
 AV *
 ttf_glyph_metrics(font, ch)
 	TTF_Font *font
-	char ch
+	SV *ch
 	CODE:
 		int minx, maxx, miny, maxy, advance;
-		if(TTF_GlyphMetrics(font, ch, &minx, &maxx, &miny, &maxy, &advance) == 0)
+		
+		if(TTF_GlyphMetrics(font, *(utf16_to_UNICODE(ch)+1), &minx, &maxx, &miny, &maxy, &advance) == 0)
 		{
 			RETVAL = newAV();
 			sv_2mortal((SV*)RETVAL);
@@ -561,6 +562,15 @@ ttf_set_font_kerning(font, allowed)
 	int allowed
 	CODE:
 		TTF_SetFontKerning(font, allowed);
+
+int
+ttf_glyph_is_provided(font, ch);
+	TTF_Font *font
+	SV *ch
+	CODE:
+		RETVAL = TTF_GlyphIsProvided(font, *(utf16_to_UNICODE(ch)+1));
+	OUTPUT:
+		RETVAL
 
 #endif
 

@@ -58,8 +58,8 @@ is( SDL::TTF::get_font_style($font),                      TTF_STYLE_NORMAL,    "
 
 SKIP:
 {
-	skip("Version 2.0.10 (or better) needed", 9) unless $cv->major >= 2 && $cv->minor >= 0 && $cv->patch >= 10
-	                                                 && $lv->major >= 2 && $lv->minor >= 0 && $lv->patch >= 10;
+	skip("Version 2.0.10 (or better) needed", 10) unless $cv->major >= 2 && $cv->minor >= 0 && $cv->patch >= 10
+	                                                  && $lv->major >= 2 && $lv->minor >= 0 && $lv->patch >= 10;
 	my $font_outline = SDL::TTF::get_font_outline($font);
 	ok( $font_outline >= 0,                                                    "[get_font_outline] is $font_outline" );
 	$font_outline++;
@@ -73,6 +73,7 @@ SKIP:
 	SDL::TTF::set_font_kerning($font, 0);                                 pass "[set_font_kerning to not allowed] ";
 	$kerning_allowed = SDL::TTF::get_font_kerning($font);
 	is( $kerning_allowed,                                 0,                   "[get_font_kerning] is " . ($kerning_allowed ? 'allowed' : 'not allowed'));
+	is( SDL::TTF::glyph_is_provided($font, "\0M"),        1,                   "[glyph_is_provided] is true for character 'M'");
 }
 
 my $font_height = SDL::TTF::font_height($font);
@@ -99,7 +100,7 @@ ok( $font_face_family_name,                                                    "
 my $font_face_style_name = SDL::TTF::font_face_style_name($font);
 ok( $font_face_style_name,                                                     "[font_face_style_name] is $font_face_style_name" );
 
-my @glyph_metrics = @{ SDL::TTF::glyph_metrics($font, 'M') };
+my @glyph_metrics = @{ SDL::TTF::glyph_metrics($font, "\0M") };
 is( scalar @glyph_metrics,                                5,                   "[glyph_metrics] (minx, maxx, miny, maxy, advance) = (" . join(', ', @glyph_metrics) . ")" );
 
 my ($width, $height) = @{ SDL::TTF::size_text($font, 'Hallo World!') };
