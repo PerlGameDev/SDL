@@ -106,7 +106,7 @@ is( scalar @glyph_metrics,                                5,                   "
 my ($width, $height) = @{ SDL::TTF::size_text($font, 'Hallo World!') };
 ok( $width > 0 && $height > 0,                                                 "[size_text] width=$width height=$height" );
 
-($width, $height) = @{ SDL::TTF::size_utf8($font, "\xE4\xBB\x8A\xE6\x97\xA5\xE3\x81\xAF\xE4\xB8\x96\xE7\x95\x8C") };
+($width, $height) = @{ SDL::TTF::size_utf8($font, "Hallo World!") };
 ok( $width > 0 && $height > 0,                                                 "[size_utf8] width=$width height=$height" );
 SKIP:
 {
