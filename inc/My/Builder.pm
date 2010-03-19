@@ -94,6 +94,22 @@ sub find_subsystems
 	return \%enabled;
 }
 
+# create mapping table: { SDL::Any::Lib => [ list of libs ], SDL::Any::OtherLib => [ list of libs ] ... }
+# to keep information what libs (.dll|.so) to load via Dynaloader for which module
+sub translate_table
+{
+	my ($self, $subsystems, $libraries) = @_;
+	my %ret;
+	foreach my $m (keys %$subsystems) {
+		my $p = $subsystems->{$m}->{file}->{to};
+		$p =~ s|^lib/(.*)\.xs|$1|;
+		$p =~ s|/|::|g;
+		my @list = map ( $libraries->{$_}->{lib}, @{$subsystems->{$m}->{libraries}});
+		$ret{$p} = \@list;
+	}
+	return \%ret;
+}
+
 # save this all in a format process_xs() can understand
 sub set_file_flags
 {

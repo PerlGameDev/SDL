@@ -514,11 +514,13 @@ warn "###WARNING### Alien::SDL seems to be broken" unless Alien::SDL->config('pr
 
 ### see which subsystems can be built -- do we have headers for them?
 print "Gonna autodetect available libraries ...\n";
-my $build_systems = $build->find_subsystems( \%subsystems, \%libraries );
+my $build_systems = $build->find_subsystems(\%subsystems, \%libraries);
+my $lib_translate = $build->translate_table(\%subsystems, \%libraries);
 
 ### save info about available subsystems for future SDL::ConfigData
 print "Gonna write config_data ...\n";
-$build->config_data('SDL_cfg', $build_systems );
+$build->config_data('SDL_cfg', $build_systems);
+$build->config_data('SDL_lib_translate', $lib_translate);
 $build->config_data('subsystems', \%subsystems);
 $build->config_data('libraries', \%libraries);
 
