@@ -379,15 +379,60 @@ Example:
 
 =head4 size_text
 
- my ($width, $height) = @{ SDL::TTF::size_text($font, 'Hallo World!') };
+ my ($width, $height) = @{ SDL::TTF::size_text($font, $text) };
+
+Calculate the resulting surface size of the LATIN1 encoded text rendered using C<$font>. No actual rendering is done, however correct kerning 
+is done to get the actual width. The height returned is the same as you can get using L<SDL::TTF::font_height>.
 
 =head4 size_utf8
 
- my ($width, $height) = @{ SDL::TTF::size_utf8($font, 'Hallo World!') };
+ my ($width, $height) = @{ SDL::TTF::size_utf8($font, $text) };
+
+Calculate the resulting surface size of the UTF8 encoded text rendered using C<$font>. No actual rendering is done, however correct kerning is 
+done to get the actual width. The height returned in h is the same as you can get using L<SDL::TTF::font_height>.
+
+Note that the first example uses the same text as in the LATIN1 example, that is because plain ASCII is UTF8 compatible.
+
+Examples:
+
+ ($width, $height) = @{ SDL::TTF::size_utf8($font, 'Hallo World!') }; # plain text, if your script is in utf8 or ansi-format
+ 
+ # or
+ 
+ ($width, $height) = @{ SDL::TTF::size_utf8($font, "\xE4\xBB\x8A\xE6\x97\xA5\xE3\x81\xAF") }; # utf8 hex-data
+ 
+ # or
+ 
+ use Unicode::String;
+ my $unicode       = utf8($data_from_somwhere);
+ ($width, $height) = @{ SDL::TTF::size_utf8($font, $unicode->utf8) }; # utf8 via Unicode::String
 
 =head4 size_unicode
 
- my ($width, $height) = @{ SDL::TTF::size_unicode($font, 'Hallo World!') };
+ my ($width, $height) = @{ SDL::TTF::size_unicode($font, $text) };
+
+Calculate the resulting surface size of the UNICODE encoded text rendered using C<$font>. No actual rendering is done, however correct kerning 
+is done to get the actual width. The height returned in h is the same as you can get using L<SDL::TTF::font_height>.
+
+C<$text> has to be:
+
+=over 4
+
+=item UTF16BE without BOM
+
+"hallo" will look like "\0h\0a\0l\0l\0o"
+
+=item UTF16BE with BOM
+
+"hallo" will look like "\xFE\xFF\0h\0a\0l\0l\0o"
+
+=item UTF16LE with BOM
+
+"hallo" will look like "\xFF\xFEh\0a\0l\0l\0o\0"
+
+=back
+
+You may use Unicode::String for this.
 
 =head2 Font Rendering
 
