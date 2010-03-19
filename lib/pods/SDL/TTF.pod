@@ -436,31 +436,41 @@ You may use Unicode::String for this.
 
 =head2 Font Rendering
 
-=head3 render_glyph_solid
+=head3 Solid
 
-=head3 render_glyph_shaded
+=head4 render_glyph_solid
 
-=head3 render_glyph_blended
+=head4 render_text_solid
 
-=head3 render_text_solid
+ my $surface = SDL::TTF::render_text_solid($font, $text, $color);
 
-B<Note>: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=374062
+Render the LATIN1 encoded text onto a new surface, using the Solid mode.
 
-=head3 render_text_shaded
+B<Note>: L<Space character bug|http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=374062> So you have to upgrade libfreetype2 to at least version 2.3.5
 
-=head3 render_text_blended
+=head4 render_utf8_solid
 
-=head3 render_utf8_solid
+=head4 render_unicode_solid
 
-=head3 render_utf8_shaded
+=head3 Shaded
 
-=head3 render_utf8_blended
+=head4 render_glyph_shaded
 
-=head3 render_unicode_solid
+=head4 render_text_shaded
 
-=head3 render_unicode_shaded
+=head4 render_utf8_shaded
 
-=head3 render_unicode_blended
+=head4 render_unicode_shaded
+
+=head3 Blended
+
+=head4 render_glyph_blended
+
+=head4 render_text_blended
+
+=head4 render_utf8_blended
+
+=head4 render_unicode_blended
 
 =head1 AUTHOR
 
