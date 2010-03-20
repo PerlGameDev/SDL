@@ -352,34 +352,34 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_image jpeg png )],
 	},	
-	Net => {
-		file      => {
-			from  => 'src/Net/Net.xs',
-			to    => 'lib/SDL/Net.xs',
-		},
-		libraries => [qw( SDL SDL_net )],
-	},
-	TCP => {
-		file      => {
-			from  => 'src/Net/TCP.xs',
-			to    => 'lib/SDL/Net/TCP.xs',
-		},
-		libraries => [qw( SDL SDL_net )],
-	},
-	UDP => {
-		file      => {
-			from  => 'src/Net/UDP.xs',
-			to    => 'lib/SDL/Net/UDP.xs',
-		},
-		libraries => [qw( SDL SDL_net )],
-	},
-	IPaddress => {
-		file      => {
-			from  => 'src/Net/objects/IPaddress.xs',
-			to    => 'lib/SDL/Net/IPaddress.xs',
-		},
-		libraries => [qw( SDL SDL_net )],
-	},
+#	Net => {
+#		file      => {
+#			from  => 'src/Net/Net.xs',
+#			to    => 'lib/SDL/Net.xs',
+#		},
+#		libraries => [qw( SDL SDL_net )],
+#	},
+#	TCP => {
+#		file      => {
+#			from  => 'src/Net/TCP.xs',
+#			to    => 'lib/SDL/Net/TCP.xs',
+#		},
+#		libraries => [qw( SDL SDL_net )],
+#	},
+#	UDP => {
+#		file      => {
+#			from  => 'src/Net/UDP.xs',
+#			to    => 'lib/SDL/Net/UDP.xs',
+#		},
+#		libraries => [qw( SDL SDL_net )],
+#	},
+#	IPaddress => {
+#		file      => {
+#			from  => 'src/Net/objects/IPaddress.xs',
+#			to    => 'lib/SDL/Net/IPaddress.xs',
+#		},
+#		libraries => [qw( SDL SDL_net )],
+#	},
 
 );
 
@@ -405,11 +405,11 @@ my %libraries = (
 		header => 'SDL_mixer.h',
 		lib    => 'SDL_mixer',
 	},
-	SDL_net     => {
-		define => 'HAVE_SDL_NET',     
-		header => 'SDL_net.h',
-		lib    => 'SDL_net',
-	},
+#	SDL_net     => {
+#		define => 'HAVE_SDL_NET',     
+#		header => 'SDL_net.h',
+#		lib    => 'SDL_net',
+#	},
 	SDL_ttf     => {
 		define => 'HAVE_SDL_TTF',     
 		header => 'SDL_ttf.h',
