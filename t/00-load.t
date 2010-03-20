@@ -47,11 +47,6 @@ SDL::Mixer::Effects
 SDL::Mixer::MixChunk
 SDL::Mixer::MixMusic
 
-SDL::Net
-SDL::Net::TCP
-SDL::Net::UDP
-SDL::Net::IPaddress
-
 SDL::TTF
 SDL::TTF::Font
 
