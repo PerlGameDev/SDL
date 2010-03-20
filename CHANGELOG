@@ -8,6 +8,7 @@ Revision history for Perl extension SDL_perl.
 	- Build fixes for mac [kmx]
 	- Directory clean up [FROGGS]
 	- Surface double free fix for picky kernel [kthakore]
+	- SDL::Events documentation [kthakore]
 
 * 2.3_7
 	- Mixer XS/tests/docs [kthakore, FROGGS]
