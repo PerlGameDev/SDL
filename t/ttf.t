@@ -38,13 +38,13 @@ is( SDL::TTF::init(),                                     0,                   "
 is( SDL::TTF::was_init(),                                 1,                   "[was_init] returns true" );
 is( SDL::TTF::byte_swapped_unicode(0),                    undef,               "[ttf_byte_swapped_unicode] on" );
 is( SDL::TTF::byte_swapped_unicode(1),                    undef,               "[ttf_byte_swapped_unicode] off" );
-my $font = SDL::TTF::open_font('test/data/arialuni.ttf', 24);
+my $font = SDL::TTF::open_font('test/data/aircut3.ttf', 24);
 isa_ok( $font,                                           'SDL::TTF_Font',      "[open_font]" );
-isa_ok( SDL::TTF::open_font_index('test/data/arial.ttf', 8, 0), 'SDL::TTF_Font', "[open_font_index]" );
-my $file = SDL::RWOps->new_file('test/data/arial.ttf', 'r');
+isa_ok( SDL::TTF::open_font_index('test/data/aircut3.ttf', 8, 0), 'SDL::TTF_Font', "[open_font_index]" );
+my $file = SDL::RWOps->new_file('test/data/aircut3.ttf', 'r');
 isa_ok( $file,                                            'SDL::RWOps',        "[new_file]");
 isa_ok( SDL::TTF::open_font_RW($file, 0, 12),             'SDL::TTF_Font',     "[open_font_RW]" );
-$file = SDL::RWOps->new_file('test/data/arial.ttf', 'r');
+$file = SDL::RWOps->new_file('test/data/aircut3.ttf', 'r');
 isa_ok( SDL::TTF::open_font_index_RW($file, 0, 16, 0),    'SDL::TTF_Font',     "[open_font_index_RW]" );
 is( SDL::TTF::get_font_style($font),                      TTF_STYLE_NORMAL,    "[get_font_style] returns TTF_STYLE_NORMAL" );
 is( SDL::TTF::set_font_style($font, TTF_STYLE_BOLD),      undef,               "[set_font_style] to TTF_STYLE_BOLD" );
@@ -143,15 +143,15 @@ SKIP:
 	isa_ok( $render_text_blended , 'SDL::Surface', "[render_text_blended]" );
 	SDL::Video::blit_surface( $render_text_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, "render_utf8_solid:今日は世界", $utf8_fg);
+	my $render_utf8_solid = SDL::TTF::render_utf8_solid($font, "render_utf8_solid", $utf8_fg);
 	isa_ok( $render_utf8_solid, 'SDL::Surface', "[render_utf8_solid]" );
 	SDL::Video::blit_surface( $render_utf8_solid, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8_shaded = SDL::TTF::render_utf8_shaded($font, "render_utf8_shaded:今日は世界", $utf8_fg, $bg);
+	my $render_utf8_shaded = SDL::TTF::render_utf8_shaded($font, "render_utf8_shaded", $utf8_fg, $bg);
 	isa_ok( $render_utf8_shaded, 'SDL::Surface', "[render_utf8_shaded]" );
 	SDL::Video::blit_surface( $render_utf8_shaded, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 
-	my $render_utf8_blended = SDL::TTF::render_utf8_blended($font, "render_utf8_blended:\xE4\xBB\x8A\xE6\x97\xA5\xE3\x81\xAF\xE4\xB8\x96\xE7\x95\x8C", $utf8_fg);
+	my $render_utf8_blended = SDL::TTF::render_utf8_blended($font, "render_utf8_blended", $utf8_fg);
 	isa_ok( $render_utf8_blended, 'SDL::Surface', "[render_utf8_blended]" );
 	SDL::Video::blit_surface( $render_utf8_blended, SDL::Rect->new(0, 0,640, 480), $display, SDL::Rect->new(5, $y += 27, 640, 480) );
 	
