@@ -4,6 +4,10 @@ Revision history for Perl extension SDL_perl.
 	- TTF XS/Test/docs [#85] [FROGGS]
 	- Minor fixes and cleanup [ kthakore, kmx ]
 	- added more version checks to SDL::GFX XS [#79] [FROGGS]
+	- SDL::Version memory management [kthakore]
+	- Build fixes for mac [kmx]
+	- Directory clean up [FROGGS]
+	- Surface double free fix for picky kernel [kthakore]
 
 * 2.3_7
 	- Mixer XS/tests/docs [kthakore, FROGGS]
