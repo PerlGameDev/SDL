@@ -6,7 +6,7 @@ SDL::TTF - True Type Font functions (libfreetype)
 
 =head1 CATEGORY
 
-TODO, TTF
+TTF
 
 =head1 METHODS
 
@@ -440,37 +440,165 @@ You may use Unicode::String for this.
 
 =head4 render_glyph_solid
 
+ my $surface = SDL::TTF::render_glyph_solid($font, $char, $color);
+
+Render the unicode encoded char onto a new surface, using the Solid mode. After that you can blit this surface to your display-surface.
+
+B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode>.
+
+B<Note>: L<See space-character bug|http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=374062>. You have to upgrade libfreetype2 to at least version 2.3.5
+
 =head4 render_text_solid
 
  my $surface = SDL::TTF::render_text_solid($font, $text, $color);
 
-Render the LATIN1 encoded text onto a new surface, using the Solid mode.
+Render the LATIN1 encoded text onto a new surface, using the Solid mode. After that you can blit this surface to your display-surface.
 
-B<Note>: L<Space character bug|http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=374062> So you have to upgrade libfreetype2 to at least version 2.3.5
+B<Note>: L<See space-character bug|http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=374062>. You have to upgrade libfreetype2 to at least 
+version 2.3.5
+
+Example:
+
+ use SDL;
+ use SDL::Video;
+ use SDL::Color;
+ use SDL::TTF;
+ use SDL::TTF::Font;
+ 
+ SDL::init(SDL_INIT_VIDEO);
+ 
+ my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
+ my $font    = SDL::TTF::open_font('arial.ttf', '24);
+ my $surface = SDL::TTF::render_text_solid($font, 'Hallo!', SDL::Color->new(0xFF,0xFF,0xFF));
+ 
+ SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(10, 10, 640, 480));
+ SDL::Video::update_rect($display, 0, 0, 0, 0);
+ 
+ SDL::delay(5000);
 
 =head4 render_utf8_solid
 
+ my $surface = SDL::TTF::render_utf8_solid($font, $text, $color);
+
+Render the UTF8 encoded text onto a new surface, using the Solid mode. After that you can blit this surface to your display-surface.
+
+B<Note>: L<See space-character bug|http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=374062>. You have to upgrade libfreetype2 to at least 
+version 2.3.5
+
 =head4 render_unicode_solid
+
+ my $surface = SDL::TTF::render_unicode_solid($font, $text, $color);
+
+Render the unicode encoded text onto a new surface, using the Solid mode. After that you can blit this surface to your display-surface.
+
+B<Note>: The unicode test has to be passed exactly like for L<SDL::TTF::size_unicode>.
+
+B<Note>: L<See space-character bug|http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=374062>. You have to upgrade libfreetype2 to at least 
+version 2.3.5
 
 =head3 Shaded
 
 =head4 render_glyph_shaded
 
+ my $surface = SDL::TTF::render_glyph_shaded($font, $char, $color, $background_color);
+
+Render the unicode encoded char onto a new surface. The surface is filled with C<$background_color>. After that you can blit this surface to 
+your display-surface.
+
+B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode>.
+
 =head4 render_text_shaded
+
+ my $surface = SDL::TTF::render_text_shaded($font, $text, $color, $background_color);
+
+Render the LATIN1 encoded text onto a new surface. The surface is filled with C<$background_color>. After that you can blit this surface to 
+your display-surface.
+
+Example:
+
+ use SDL;
+ use SDL::Video;
+ use SDL::Color;
+ use SDL::TTF;
+ use SDL::TTF::Font;
+ 
+ SDL::init(SDL_INIT_VIDEO);
+ 
+ my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
+ my $font    = SDL::TTF::open_font('arial.ttf', '24);
+ my $white   = SDL::Color->new(0xFF, 0xFF, 0xFF);
+ my $black   = SDL::Color->new(0x00, 0x00, 0x00);
+ my $surface = SDL::TTF::render_text_solid($font, 'Hallo!', $white, $black);
+ 
+ SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(10, 10, 640, 480));
+ SDL::Video::update_rect($display, 0, 0, 0, 0);
+ 
+ SDL::delay(5000);
 
 =head4 render_utf8_shaded
 
+ my $surface = SDL::TTF::render_utf8_shaded($font, $text, $color, $background_color);
+
+Render the UTF8 encoded text onto a new surface. The surface is filled with C<$background_color>. After that you can blit this surface to 
+your display-surface.
+
 =head4 render_unicode_shaded
+
+ my $surface = SDL::TTF::render_unicode_shaded($font, $text, $color, $background_color);
+
+Render the unicode encoded text onto a new surface. The surface is filled with C<$background_color>. After that you can blit this surface to 
+your display-surface.
+
+B<Note>: The unicode text has to be passed exactly like for L<SDL::TTF::size_unicode>.
 
 =head3 Blended
 
 =head4 render_glyph_blended
 
+ my $surface = SDL::TTF::render_glyph_blended($font, $char, $color);
+
+Render the unicode encoded char onto a new surface. After that you can blit this surface to your display-surface.
+
+B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode>.
+
 =head4 render_text_blended
+
+ my $surface = SDL::TTF::render_text_blended($font, $text, $color);
+
+Render the LATIN1 encoded text onto a new surface. After that you can blit this surface to your display-surface.
+
+Example:
+
+ use SDL;
+ use SDL::Video;
+ use SDL::Color;
+ use SDL::TTF;
+ use SDL::TTF::Font;
+ 
+ SDL::init(SDL_INIT_VIDEO);
+ 
+ my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
+ my $font    = SDL::TTF::open_font('arial.ttf', '24);
+ my $surface = SDL::TTF::render_text_blended($font, 'Hallo!', SDL::Color->new(0xFF,0xFF,0xFF));
+ 
+ SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(10, 10, 640, 480));
+ SDL::Video::update_rect($display, 0, 0, 0, 0);
+ 
+ SDL::delay(5000);
 
 =head4 render_utf8_blended
 
+ my $surface = SDL::TTF::render_utf8_blended($font, $text, $color);
+
+Render the UTF8 encoded text onto a new surface. After that you can blit this surface to your display-surface.
+
 =head4 render_unicode_blended
+
+ my $surface = SDL::TTF::render_unicode_blended($font, $text, $color);
+
+Render the unicode encoded text onto a new surface. After that you can blit this surface to your display-surface.
+
+B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode>.
 
 =head1 AUTHOR
 
