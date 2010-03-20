@@ -1,8 +1,13 @@
 Revision history for Perl extension SDL_perl.
 
 * 2.3_8 
-	- TTF XS/Test [FROGGS]
+	- TTF XS/Test/Docs [FROGGS]
 	- Minor fixes and cleanup [ kthakore, kmx ]
+	- Events documentation [kthakore]
+	- SDL::Version memory management [kthakore]
+	- Build fixes for mac [kmx]
+	- Directory clean up [FROGGS]
+	- Surface double free fix for picky kernel [kthakore]
 
 * 2.3_7
 	- Mixer XS/tests and docs done [kthakore, FROGGS]
