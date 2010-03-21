@@ -34,7 +34,7 @@ my $context = new SDL::Pango::Context; isa_ok($context, 'SDL::Pango::Context',  
 SDL::Pango::set_default_color($context, 0xA7C344FF, 0);                                   pass "[set_default_color] ran";
 SDL::Pango::set_default_color($context, 0xA7, 0xC3, 0x44, 0xFF, 0, 0, 0, 0x00);           pass "[set_default_color] ran";
 SDL::Pango::set_minimum_size($context, 640, 0);                                           pass "[set_minimum_size] ran";
-SDL::Pango::set_markup($context, 'Hi <b><i>k</i>thakore</b> its me, <u>Pango</u>!!', -1); pass "[set_markup] ran";
+SDL::Pango::set_markup($context, 'Hi <b><span foreground="red"><i>k</i></span>thakore</b> its me, <u>Pango</u>!!', -1); pass "[set_markup] ran";
 
 my $w = SDL::Pango::get_layout_width($context);  ok( $w >= 0,                                  "[get_layout_width] width is $w" );
 my $h = SDL::Pango::get_layout_height($context); ok( $h >= 0,                                  "[get_layout_height] height is $h" );
