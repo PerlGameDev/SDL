@@ -65,15 +65,19 @@ SKIP:
 	$font_outline++;
 	SDL::TTF::set_font_outline($font, $font_outline);                     pass "[set_font_outline] to $font_outline";
 	is( SDL::TTF::get_font_outline($font),                $font_outline,       "[get_font_outline] is $font_outline" );
-	is( SDL::TTF::get_font_hinting($font),                TTF_HINTING_NORMAL,  "[get_font_hinting] is TTF_HINTING_NORMAL" );
-	SDL::TTF::set_font_hinting($font, TTF_HINTING_LIGHT);                 pass "[set_font_hinting] to TTF_HINTING_LIGHT";
-	is( SDL::TTF::get_font_hinting($font),                TTF_HINTING_LIGHT,   "[get_font_hinting] is TTF_HINTING_LIGHT" );
+	SKIP:
+	{
+		skip("Font hinting is buggy in SDL_ttf", 3);
+		is( SDL::TTF::get_font_hinting($font),                TTF_HINTING_NORMAL,  "[get_font_hinting] is TTF_HINTING_NORMAL" );
+		SDL::TTF::set_font_hinting($font, TTF_HINTING_LIGHT);                 pass "[set_font_hinting] to TTF_HINTING_LIGHT";
+		is( SDL::TTF::get_font_hinting($font),                TTF_HINTING_LIGHT,   "[get_font_hinting] is TTF_HINTING_LIGHT" );
+	}
 	my $kerning_allowed = SDL::TTF::get_font_kerning($font);
 	like( $kerning_allowed,                               '/^[01]$/',          "[get_font_kerning] is " . ($kerning_allowed ? 'allowed' : 'not allowed'));
 	SDL::TTF::set_font_kerning($font, 0);                                 pass "[set_font_kerning to not allowed] ";
 	$kerning_allowed = SDL::TTF::get_font_kerning($font);
 	is( $kerning_allowed,                                 0,                   "[get_font_kerning] is " . ($kerning_allowed ? 'allowed' : 'not allowed'));
-	is( SDL::TTF::glyph_is_provided($font, "\0M"),        1,                   "[glyph_is_provided] is true for character 'M'");
+	ok( SDL::TTF::glyph_is_provided($font, "\0M") > 0,                         "[glyph_is_provided] is true for character 'M'");
 }
 
 my $font_height = SDL::TTF::font_height($font);

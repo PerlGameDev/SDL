@@ -531,7 +531,7 @@ ttf_set_font_outline(font, outline)
 	TTF_Font *font
 	int outline
 	CODE:
-		RETVAL = TTF_SetFontOutline(font, outline);
+		TTF_SetFontOutline(font, outline);
 
 int
 ttf_get_font_hinting(font)

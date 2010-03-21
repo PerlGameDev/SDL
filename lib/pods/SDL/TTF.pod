@@ -242,6 +242,8 @@ Returns: C<0>(zero) if kerning is disabled. A non-zero value is returned when en
 
 B<Note>: at least SDL_ttf 2.0.10 needed
 
+B<Note>: This function returns wrong values: See L<http://bugzilla.libsdl.org/show_bug.cgi?id=973>
+
 =head4 set_font_kerning
 
  SDL::TTF::set_font_kerning($font, $kerning_enabled);
