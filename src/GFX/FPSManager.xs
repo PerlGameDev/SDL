@@ -86,9 +86,22 @@ gfx_fps_rate ( fps, ... )
 		RETVAL
 
 void
-gfx_fps_DESTROY(self)
-	FPSmanager *self
+gfx_fps_DESTROY(bag)
+	SV *bag
 	CODE:
-		safefree( (char *)self );
+		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
+			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
+			   FPSmanager * fps = (FPSmanager*)(pointers[0]);
+			   if (PERL_GET_CONTEXT == pointers[1]) {
+			       pointers[0] = NULL;
+			       safefree( pointers );
+
+			       safefree(fps);
+			   }
+		       } else if (bag == 0) {
+			   XSRETURN(0);
+		       } else {
+			   XSRETURN_UNDEF;
+		       }
 
 #endif
