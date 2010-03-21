@@ -75,7 +75,7 @@ Example:
  use SDL::TTF;
  use SDL::TTF::Font;
  
- my $font = SDL::TTF::open_font('arial.ttf', '24);
+ my $font = SDL::TTF::open_font('arial.ttf', 24);
 
 =head3 open_font_index
 
