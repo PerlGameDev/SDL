@@ -1,0 +1,144 @@
+=pod
+
+=head1 NAME
+
+SDL::Pango - Text rendering engine
+
+=head1 CATEGORY
+
+TODO, Pango
+
+=head1 SYNOPSIS
+
+ use SDL;
+ use SDL::Color;
+ use SDL::Surface;
+ use SDL::Overlay;
+ use SDL::Rect;
+ use SDL::Video;
+ use SDL::PixelFormat;
+ use SDL::Pango;
+ use SDL::Pango::Context;
+ 
+ SDL::Pango::init();
+ 
+ my $context = new SDL::Pango::Context;
+ SDL::Pango::set_default_color($context, 0xA7C344FF, 0);
+ SDL::Pango::set_markup($context, 'Hallo <b>W<span foreground="red">o</span><i>r</i><u>l</u>d</b>!', -1);
+
+ SDL::init(SDL_INIT_VIDEO);
+ 
+ my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
+ my $bg      = SDL::Video::map_RGB($display->format, 0x12, 0x22, 0x45);
+ SDL::Video::fill_rect($display, SDL::Rect->new(0, 0, 640, 480), $bg);
+
+ my $surface = SDL::Pango::create_surface_draw($context);
+ SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(0, 0, 640, 480));
+ 
+ SDL::Video::update_rect($display, 0, 0, 0, 0);
+ SDL::delay(2000);
+
+=head1 CONSTANTS
+
+The constants are not exported by default. You can export them into your namespace by doing:
+
+ use SDL::Pango ':constants';
+
+or access them directly:
+
+ SDL::Pango::SDLPANGO_DIRECTION_NEUTRAL;
+
+Available constants:
+
+=over 4
+
+=item SDLPANGO_DIRECTION_LTR
+
+Left to right
+
+=item SDLPANGO_DIRECTION_RTL
+
+Right to left
+
+=item SDLPANGO_DIRECTION_WEAK_LTR
+
+Left to right (weak)
+
+=item SDLPANGO_DIRECTION_WEAK_RTL
+
+Right to left (weak)
+
+=item SDLPANGO_DIRECTION_NEUTRAL
+
+Neutral
+
+=back
+
+=head1 METHODS
+
+=head2 init
+
+ SDL::Pango::init();
+
+=head2 was_init
+
+ my $was_init = SDL::Pango::was_init();
+ 
+=head2 set_default_color
+
+ SDL::Pango::set_default_color($context, 0xA7C344FF, 0);
+ SDL::Pango::set_default_color($context, 0xA7, 0xC3, 0x44, 0xFF, 0, 0, 0, 0x00);
+
+=head2 set_minimum_size
+
+ SDL::Pango::set_minimum_size($context, 640, 0);
+
+=head2 set_text
+
+ SDL::Pango::set_text($context, $text, 20);
+
+=head2 set_markup
+
+ SDL::Pango::set_markup($context, $text, -1);
+
+=head2 get_layout_width
+
+ my $w = SDL::Pango::get_layout_width($context);
+
+=head2 get_layout_height
+
+ my $h = SDL::Pango::get_layout_height($context);
+
+=head2 set_base_direction
+
+ SDL::Pango::set_base_direction($context, SDLPANGO_DIRECTION_LTR);
+
+=head2 set_dpi
+
+ SDL::Pango::set_dpi($context, 48, 48);
+
+=head2 set_language
+
+ SDL::Pango::set_language($context, "en");
+
+=head2 draw
+
+ SDL::Pango::draw($context, $display, (640 - $w) / 2, (480 - $h) / 2);
+
+=head2 set_surface_create_args
+
+ SDL::Pango::set_surface_create_args($context, SDL_SWSURFACE, 32, 255<<24, 255<<16, 255<<8, 255);
+
+=head2 create_surface_draw
+
+ my $surface = SDL::Pango::create_surface_draw($context);
+
+=head1 AUTHOR
+
+Tobias Leich [FROGGS]
+
+=head1 SEE ALSO
+
+L<SDL::Pango::Context>, L<SDL::Video>, L<SDL::Surface>, L<SDL::TTF>
+
+=cut
