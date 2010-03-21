@@ -75,7 +75,22 @@ rect_h ( rect, ... )
 
 
 void
-rect_DESTROY(self)
-	SDL_Rect *self
+rect_DESTROY(bag)
+	SV *bag
 	CODE:
-		safefree( (char *)self );
+		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
+			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
+			   SDL_Rect * rect = (SDL_Rect*)(pointers[0]);
+			   if (PERL_GET_CONTEXT == pointers[1]) {
+			       //warn("Freed surface %p and pixels %p \n", surface, surface->pixels);
+			       pointers[0] = NULL;
+			       safefree( pointers );
+
+			       safefree(rect);
+			   }
+		       } else if (bag == 0) {
+			   XSRETURN(0);
+		       } else {
+			   XSRETURN_UNDEF;
+		       }
+		
