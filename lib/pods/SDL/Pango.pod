@@ -6,7 +6,7 @@ SDL::Pango - Text rendering engine
 
 =head1 CATEGORY
 
-TODO, Pango
+Pango
 
 =head1 SYNOPSIS
 
@@ -158,17 +158,39 @@ Sets the language name for this context.
 
 See L<ISO639-2|http://www.loc.gov/standards/iso639-2/php/code_list.php>.
 
+Example:
+
+ SDL::Pango::set_language($context, "en");
+
 =head2 draw
 
- SDL::Pango::draw($context, $display, (640 - $w) / 2, (480 - $h) / 2);
+ SDL::Pango::draw($context, $display, $x, $y);
+
+Draws the text or markup to an existing surface at position C<$x>/C<$y>.
 
 =head2 set_surface_create_args
 
- SDL::Pango::set_surface_create_args($context, SDL_SWSURFACE, 32, 255<<24, 255<<16, 255<<8, 255);
+ SDL::Pango::set_surface_create_args($context, $flags, $bits, $r_mask, $g_mask, $b_mask, $a_mask);
+
+Sets the argumet that are used when creating a surface via L<SDL::Pango::create_surface_draw>.
+
+Example:
+
+ SDL::Pango::set_surface_create_args(
+     $context, 
+     SDL_SWSURFACE, 
+     32, 
+     0xFF000000, 
+     0x00FF0000, 
+     0x0000FF00, 
+     0x000000FF
+ );
 
 =head2 create_surface_draw
 
  my $surface = SDL::Pango::create_surface_draw($context);
+
+Creates a new surface and draws the text/markup. You can specify the attributes of the surfaces using L<SDL::Pango::set_surface_create_args>.
 
 =head1 AUTHOR
 
