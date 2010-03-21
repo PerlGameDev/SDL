@@ -106,15 +106,23 @@ background.
 
 =head2 set_minimum_size
 
- SDL::Pango::set_minimum_size($context, 640, 0);
+ SDL::Pango::set_minimum_size($context, $width, $height);
+
+Sets the minimum size of the drawing rectangle.
 
 =head2 set_text
 
- SDL::Pango::set_text($context, $text, 20);
+ SDL::Pango::set_text($context, $text, $length);
+
+Set plain text to context. Text must be utf-8. C<$length> chars will be rendered, pass C<-1> to render the whole text.
 
 =head2 set_markup
 
- SDL::Pango::set_markup($context, $text, -1);
+ SDL::Pango::set_markup($context, $text, $length);
+
+Set markup text to context. Text must be utf-8. C<$length> chars will be rendered, pass C<-1> to render the whole text.
+
+See L<PangoMarkupFormat|http://library.gnome.org/devel/pango/unstable/PangoMarkupFormat.html> for a description about the markup format.
 
 =head2 get_layout_width
 
