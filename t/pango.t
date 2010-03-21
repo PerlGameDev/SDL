@@ -55,10 +55,11 @@ SKIP:
 {
 	skip('We need video support for this', 2) unless SDL::TestTool->init(SDL_INIT_VIDEO);
 	
-	my $display = SDL::Video::set_video_mode(640, 480, 16, SDL_SWSURFACE);
+	my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
 	SDL::Pango::draw($context, $display, (640 - $w) / 2, (480 - $h) / 2);                 pass "[draw] ran";
 	my $bg      = SDL::Video::map_RGB($display->format, 0x12, 0x22, 0x45);
 	SDL::Video::fill_rect($display, SDL::Rect->new(0, 0, 640, 480), $bg);
+	SDL::Pango::set_surface_create_args($context, SDL_SWSURFACE, 32, 255<<24, 255<<16, 255<<8, 255); pass "[set_surface_create_args] ran";
 	my $surface = SDL::Pango::create_surface_draw($context); isa_ok( $surface, 'SDL::Surface', "[create_surface_draw]");
 	SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new((640 - $w) / 2, (480 - $h) / 2, $w, $h));
 
