@@ -80,9 +80,22 @@ overlay_format( overlay )
 
 
 void
-overlay_DESTROY(overlay)
-	SDL_Overlay *overlay
+overlay_DESTROY(bag)
+	SV *bag
 	CODE:
-		SDL_FreeYUVOverlay(overlay);
+		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
+			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
+			   SDL_Overlay * overlay = (SDL_Overlay*)(pointers[0]);
+			   if (PERL_GET_CONTEXT == pointers[1]) {
+			       pointers[0] = NULL;
+			       safefree( pointers );
+
+			       SDL_FreeYUVOverlay(overlay);
+			   }
+		       } else if (bag == 0) {
+			   XSRETURN(0);
+		       } else {
+			   XSRETURN_UNDEF;
+		       }
 
 
