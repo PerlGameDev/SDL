@@ -39,13 +39,13 @@ is( SDL::TTF::was_init(),                                 1,                   "
 is( SDL::TTF::byte_swapped_unicode(0),                    undef,               "[ttf_byte_swapped_unicode] on" );
 is( SDL::TTF::byte_swapped_unicode(1),                    undef,               "[ttf_byte_swapped_unicode] off" );
 my $font = SDL::TTF::open_font('test/data/aircut3.ttf', 24);
-isa_ok( $font,                                           'SDL::TTF_Font',      "[open_font]" );
-isa_ok( SDL::TTF::open_font_index('test/data/aircut3.ttf', 8, 0), 'SDL::TTF_Font', "[open_font_index]" );
+isa_ok( $font,                                           'SDL::TTF::Font',     "[open_font]" );
+isa_ok( SDL::TTF::open_font_index('test/data/aircut3.ttf', 8, 0), 'SDL::TTF::Font', "[open_font_index]" );
 my $file = SDL::RWOps->new_file('test/data/aircut3.ttf', 'r');
 isa_ok( $file,                                            'SDL::RWOps',        "[new_file]");
-isa_ok( SDL::TTF::open_font_RW($file, 0, 12),             'SDL::TTF_Font',     "[open_font_RW]" );
+isa_ok( SDL::TTF::open_font_RW($file, 0, 12),             'SDL::TTF::Font',    "[open_font_RW]" );
 $file = SDL::RWOps->new_file('test/data/aircut3.ttf', 'r');
-isa_ok( SDL::TTF::open_font_index_RW($file, 0, 16, 0),    'SDL::TTF_Font',     "[open_font_index_RW]" );
+isa_ok( SDL::TTF::open_font_index_RW($file, 0, 16, 0),    'SDL::TTF::Font',    "[open_font_index_RW]" );
 is( SDL::TTF::get_font_style($font),                      TTF_STYLE_NORMAL,    "[get_font_style] returns TTF_STYLE_NORMAL" );
 is( SDL::TTF::set_font_style($font, TTF_STYLE_BOLD),      undef,               "[set_font_style] to TTF_STYLE_BOLD" );
 is( SDL::TTF::get_font_style($font),                      TTF_STYLE_BOLD,      "[get_font_style] returns TTF_STYLE_BOLD" );
