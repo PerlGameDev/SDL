@@ -96,8 +96,13 @@ Returns: Non-zero when already initialized. Zero when not initialized.
  
 =head2 set_default_color
 
- SDL::Pango::set_default_color($context, 0xA7C344FF, 0);
- SDL::Pango::set_default_color($context, 0xA7, 0xC3, 0x44, 0xFF, 0, 0, 0, 0x00);
+ SDL::Pango::set_default_color($context, $foreground, $background);
+ SDL::Pango::set_default_color($context, $r1, $g1, $b1, $a1, $r2, $g2, $b2, $a2);
+
+Sets default foreground and background color when rendering text and markup.
+
+You can call it with either 2 color-parameters (32-bit RRGGBBAA values), or with 4 separate values for foreground and 4 separate values for 
+background.
 
 =head2 set_minimum_size
 
