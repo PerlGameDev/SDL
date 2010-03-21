@@ -1,1 +1,33 @@
-=pod=head1 NAMESDL::TTF::Font - Font object type for SDL_ttf=head1 CATEGORYTTF, Structure=head1 CONSTRUCTOR my $font = SDL::TTF::Font->new($font_file, $point_size);  my $font = SDL::TTF::Font->new($font_file, $point_size, $face_index);Load file for use as a font, at the given size. This can load TTF and FON files.You can specify the face index of a font file containing multiple faces.Returns: a L<SDL::TTF::Font> object. C<undef> is returned on errors.Example: use SDL::TTF::Font;  my $font = SDL::TTF::Font->new('arial.ttf', '24);=head1 AUTHORTobias Leich [FROGGS]=head1 SEE ALSOL<SDL::TTF>=cut
+=pod
+
+=head1 NAME
+
+SDL::TTF::Font - Font object type for SDL_ttf
+
+=head1 CATEGORY
+
+TTF, Structure
+
+=head1 CONSTRUCTOR
+
+  my $font = SDL::TTF::Font->new($font_file, $point_size);
+  my $font = SDL::TTF::Font->new($font_file, $point_size, $face_index);
+
+Load file for use as a font, at the given size. This can load TTF and FON files. You can specify the face index of a font file containing multiple faces.
+
+Returns: a L<SDL::TTF::Font> object. C<undef> is returned on errors.
+
+Example:
+
+ use SDL::TTF::Font;
+ my $font = SDL::TTF::Font->new('arial.ttf', '24);
+
+=head1 AUTHOR
+
+Tobias Leich [FROGGS]
+
+=head1 SEE ALSO
+
+L<SDL::TTF>
+
+=cut
