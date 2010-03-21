@@ -80,9 +80,19 @@ Neutral
 
  SDL::Pango::init();
 
+Initialize the Glib and Pango API. This must be called before using other functions in this library, excepting L<SDL::Pango::was_init>. 
+SDL does not have to be initialized before this call.
+
+Returns: always C<0>. 
+
 =head2 was_init
 
  my $was_init = SDL::Pango::was_init();
+
+Query the initilization status of the Glib and Pango API. You may, of course, use this before L<SDL::Pango::init> to avoid initilizing twice 
+in a row.
+
+Returns: Non-zero when already initialized. Zero when not initialized.
  
 =head2 set_default_color
 
