@@ -21,7 +21,7 @@ BEGIN
 	}
 }
 
-use SDL::Pango;
+use SDL::Pango ':constants';
 use SDL::Pango::Context;
 use SDL::Version;
 
@@ -30,14 +30,22 @@ is( SDL::Pango::init(),                                 0,                      
 isnt( SDL::Pango::was_init(),                           0,                                     "[was_init] returns true" );
 
 my $context = new SDL::Pango::Context; isa_ok($context, 'SDL::Pango::Context',                 "[new SDL::Pango::Context]");
+my $text    = 'Hi <b><span foreground="red"><i>k</i></span>thakore</b> its me, <u>Pango</u>!!';
 
 SDL::Pango::set_default_color($context, 0xA7C344FF, 0);                                   pass "[set_default_color] ran";
 SDL::Pango::set_default_color($context, 0xA7, 0xC3, 0x44, 0xFF, 0, 0, 0, 0x00);           pass "[set_default_color] ran";
 SDL::Pango::set_minimum_size($context, 640, 0);                                           pass "[set_minimum_size] ran";
-SDL::Pango::set_markup($context, 'Hi <b><span foreground="red"><i>k</i></span>thakore</b> its me, <u>Pango</u>!!', -1); pass "[set_markup] ran";
+SDL::Pango::set_text($context, $text, 20);                                                pass "[set_text] ran";
+SDL::Pango::set_markup($context, $text, -1);                                              pass "[set_markup] ran";
 
 my $w = SDL::Pango::get_layout_width($context);  ok( $w >= 0,                                  "[get_layout_width] width is $w" );
 my $h = SDL::Pango::get_layout_height($context); ok( $h >= 0,                                  "[get_layout_height] height is $h" );
+
+is( SDLPANGO_DIRECTION_LTR,                             0,                                     "constant: SDLPANGO_DIRECTION_LTR" );
+is( SDLPANGO_DIRECTION_RTL,                             1,                                     "constant: SDLPANGO_DIRECTION_RTL" );
+is( SDLPANGO_DIRECTION_WEAK_LTR,                        2,                                     "constant: SDLPANGO_DIRECTION_WEAK_LTR" );
+is( SDLPANGO_DIRECTION_WEAK_RTL,                        3,                                     "constant: SDLPANGO_DIRECTION_WEAK_RTL" );
+is( SDLPANGO_DIRECTION_NEUTRAL,                         4,                                     "constant: SDLPANGO_DIRECTION_NEUTRAL" );
 
 SKIP:
 {
@@ -70,11 +78,11 @@ set_markup
 set_minimum_size
 set_surface_create_args
 create_surface_draw
+set_text
 /;
 
 my @left =qw/
 set_dpi
-set_text
 set_language
 set_base_direction
 /;
