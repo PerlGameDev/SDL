@@ -47,9 +47,13 @@ is( SDLPANGO_DIRECTION_WEAK_LTR,                        2,                      
 is( SDLPANGO_DIRECTION_WEAK_RTL,                        3,                                     "constant: SDLPANGO_DIRECTION_WEAK_RTL" );
 is( SDLPANGO_DIRECTION_NEUTRAL,                         4,                                     "constant: SDLPANGO_DIRECTION_NEUTRAL" );
 
+SDL::Pango::set_base_direction($context, SDLPANGO_DIRECTION_LTR);                         pass "[set_base_direction] to SDLPANGO_DIRECTION_LTR";
+SDL::Pango::set_dpi($context, 48, 48);                                                    pass "[set_dpi] to x=48 and y=48";
+SDL::Pango::set_language($context, "en");                                                 pass "[set_language] to 'en'";
+
 SKIP:
 {
-	skip('We need video support for this', 1) unless SDL::TestTool->init(SDL_INIT_VIDEO);
+	skip('We need video support for this', 2) unless SDL::TestTool->init(SDL_INIT_VIDEO);
 	
 	my $display = SDL::Video::set_video_mode(640, 480, 16, SDL_SWSURFACE);
 	SDL::Pango::draw($context, $display, (640 - $w) / 2, (480 - $h) / 2);                 pass "[draw] ran";
@@ -59,36 +63,8 @@ SKIP:
 	SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new((640 - $w) / 2, (480 - $h) / 2, $w, $h));
 
 	SDL::Video::update_rect($display, 0, 0, 0, 0);
-
-	#my $screen_shot_index  = 1;
-	#map{$screen_shot_index = $1 + 1 if $_ =~ /Shot(\d+)\.bmp/ && $1 >= $screen_shot_index} <Shot*\.bmp>;
-	#SDL::Video::save_BMP($display, sprintf("Shot%04d.bmp", $screen_shot_index ));
-
 	SDL::delay(2000);
 }
-
-my @done =qw/
-init
-was_init
-draw
-get_layout_width
-get_layout_height
-set_default_color
-set_markup
-set_minimum_size
-set_surface_create_args
-create_surface_draw
-set_text
-/;
-
-my @left =qw/
-set_dpi
-set_language
-set_base_direction
-/;
-
-my $why = '[Percentage Completion] '.int( 100 * ($#done +1 ) / ($#done + $#left + 2  ) ) .'% implementation. '.($#done +1 ).'/'.($#done+$#left + 2 ); 
-if( $done[0] eq 'none'){ diag '0% done 0/'.$#left } else { diag  $why }
 
 pass 'Are we still alive? Checking for segfaults';
 
