@@ -18,6 +18,14 @@ See L<http://sdlpango.sourceforge.net/>
 
 #ifdef HAVE_SDL_PANGO
 
+SDLPango_Context *
+context_new(CLASS)
+	char* CLASS
+	CODE:
+		RETVAL = SDLPango_CreateContext();
+	OUTPUT:
+		RETVAL
+
 void
 context_DESTROY(self)
 	SDLPango_Context *self
