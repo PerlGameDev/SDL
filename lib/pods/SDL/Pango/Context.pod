@@ -6,13 +6,15 @@ SDL::Pango::Context - Context object for SDL::Pango
 
 =head1 CATEGORY
 
-TODO, Pango, Structure
+Pango, Structure
 
 =head1 METHODS
 
 =head2 new
 
  my $context = new SDL::Pango::Context;
+
+Creates a new SDL::Pango context object. See L<SDL::Pango>.
 
 =head1 AUTHOR
 
