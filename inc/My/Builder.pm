@@ -84,7 +84,10 @@ sub find_subsystems
 				push @{ $param->{links} }, "-l$libraries->{$library}{lib}";
 			}
 			else {
-				$param = undef;
+				# I disabled that, so the libs are compiled but the HAVE_* defines are not set
+				# so we can e.g. 'use SDL::Pango;' (FROGGS)
+				# $param = undef;
+				
 				print "###WARNING### Disabling subsystem '$name'\n";
 				last;
 			}
