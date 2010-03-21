@@ -14,6 +14,7 @@ diag "Has SDL_gfx_imagefilter = " . SDL::Config->has('SDL_gfx_imagefilter');
 diag "Has SDL_gfx_primitives  = " . SDL::Config->has('SDL_gfx_primitives');
 diag "Has SDL_gfx_rotozoom    = " . SDL::Config->has('SDL_gfx_rotozoom');
 diag "Has SDL_net             = " . SDL::Config->has('SDL_net');
+diag "Has SDL_Pango           = " . SDL::Config->has('SDL_Pango');
 diag "Has SDL_sound           = " . SDL::Config->has('SDL_sound');
 diag "Has smpeg               = " . SDL::Config->has('smpeg');
 diag "Has png                 = " . SDL::Config->has('png');

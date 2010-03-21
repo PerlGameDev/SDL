@@ -47,6 +47,9 @@ SDL::Mixer::Effects
 SDL::Mixer::MixChunk
 SDL::Mixer::MixMusic
 
+SDL::Pango
+SDL::Pango::Context
+
 SDL::TTF
 SDL::TTF::Font
 

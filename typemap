@@ -53,6 +53,7 @@ Mix_Fading		T_UV
 Mix_Chunk *		O_OBJECT
 Mix_Music *		O_OBJECT
 SDL_GLattr              T_IV
+SDLPango_Context * 	O_OBJECT
 int *			T_PTR
 int **			T_PTR
 void *			T_PTR
