@@ -14,7 +14,7 @@ something for everyone.
 
 Descriptions 
 
-checkkeys.pl 		prints keys pressed to stdout
+checkkeys.pl 		prints keys pressed to stdout and change color surface
 graywin.pl		creates colored rectangles where you click
 loopwave.pl		plays a wav file using audio callback in perl!
 testconsole.pl		creates a simple console interface
