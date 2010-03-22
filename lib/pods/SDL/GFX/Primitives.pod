@@ -8,7 +8,10 @@ GFX
 
 =head1	DESCRIPTION
 
-All C<color> values for the C<_color> functions are C<0xRRGGBBAA> (32bit), even if the surface uses e. g. 8bit colors.
+All functions take an SDL::Surface object as first parameter. This can be a new surface that will be blittet afterwads, can be an surface 
+obtained by L<SDL::Video::set_video_mode> or can be an L<SDL::App>.
+
+The C<color> values for the C<_color> functions are C<0xRRGGBBAA> (32bit), even if the surface uses e. g. 8bit colors.
 
 =head1	METHODS
 
@@ -24,10 +27,10 @@ Draws a pixel at point C<x>/C<$y>. You can pass the color by C<0xRRGGBBAA> or by
  use SDL::Surface;
  use SDL::GFX::Primitives;
 
- my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
+ my $surface = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
  
- SDL::GFX::Primitives::pixel_color($display, 2, 2, 0xFF0000FF);             # red pixcel
- SDL::GFX::Primitives::pixel_RGBA( $display, 4, 4, 0x00, 0xFF, 0x00, 0xFF); # green pixel
+ SDL::GFX::Primitives::pixel_color($surface, 2, 2, 0xFF0000FF);             # red pixcel
+ SDL::GFX::Primitives::pixel_RGBA( $surface, 4, 4, 0x00, 0xFF, 0x00, 0xFF); # green pixel
 
 =head2	hline
 
