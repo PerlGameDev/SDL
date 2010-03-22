@@ -21,7 +21,7 @@ BEGIN
 	}
 }
 
-use SDL::Pango ':directions';
+use SDL::Pango ':all';
 use SDL::Pango::Context;
 use SDL::Version;
 

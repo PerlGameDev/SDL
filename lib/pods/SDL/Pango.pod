@@ -44,6 +44,10 @@ The constants are not exported by default. You can export them into your namespa
 
  use SDL::Pango ':direction';
 
+or
+
+ use SDL::Pango ':all';
+
 or access them directly:
 
  SDL::Pango::SDLPANGO_DIRECTION_NEUTRAL;
