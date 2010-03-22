@@ -14,6 +14,10 @@ The constants are not exported by default. You can export them into your namespa
 
  use SDL::TTF qw(:hinting :style);
 
+or
+
+ use SDL::TTF ':all';
+
 or access them directly:
 
  SDL::TTF::TTF_HINTING_NORMAL;

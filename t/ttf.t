@@ -20,7 +20,7 @@ BEGIN
 	}
 }
 
-use SDL::TTF qw(:hinting :style);
+use SDL::TTF ':all';
 use SDL::TTF::Font;
 use SDL::RWOps;
 use SDL::Version;
@@ -33,13 +33,32 @@ isa_ok($lv, 'SDL::Version', '[linked_version] returns a SDL::Version object');
 isa_ok($cv, 'SDL::Version', '[compile_time_version] returns a SDL::Version object');
 diag sprintf("got version: %d.%d.%d/%d.%d.%d", $lv->major, $lv->minor, $lv->patch, $cv->major, $cv->minor, $cv->patch);
 
+is( TTF_HINTING_NORMAL,                                   0, 'TTF_HINTING_NORMAL should be imported' );
+is( TTF_HINTING_NORMAL(),                                 0, 'TTF_HINTING_NORMAL() should also be available' );
+is( TTF_HINTING_LIGHT,                                    1, 'TTF_HINTING_LIGHT should be imported' );
+is( TTF_HINTING_LIGHT(),                                  1, 'TTF_HINTING_LIGHT() should also be available' );
+is( TTF_HINTING_MONO,                                     2, 'TTF_HINTING_MONO should be imported' );
+is( TTF_HINTING_MONO(),                                   2, 'TTF_HINTING_MONO() should also be available' );
+is( TTF_HINTING_NONE,                                     3, 'TTF_HINTING_NONE should be imported' );
+is( TTF_HINTING_NONE(),                                   3, 'TTF_HINTING_NONE() should also be available' );
+is( TTF_STYLE_NORMAL,                                     0, 'TTF_STYLE_NORMAL should be imported' );
+is( TTF_STYLE_NORMAL(),                                   0, 'TTF_STYLE_NORMAL() should also be available' );
+is( TTF_STYLE_BOLD,                                       1, 'TTF_STYLE_BOLD should be imported' );
+is( TTF_STYLE_BOLD(),                                     1, 'TTF_STYLE_BOLD() should also be available' );
+is( TTF_STYLE_ITALIC,                                     2, 'TTF_STYLE_ITALIC should be imported' );
+is( TTF_STYLE_ITALIC(),                                   2, 'TTF_STYLE_ITALIC() should also be available' );
+is( TTF_STYLE_UNDERLINE,                                  4, 'TTF_STYLE_UNDERLINE should be imported' );
+is( TTF_STYLE_UNDERLINE(),                                4, 'TTF_STYLE_UNDERLINE() should also be available' );
+is( TTF_STYLE_STRIKETHROUGH,                              8, 'TTF_STYLE_STRIKETHROUGH should be imported' );
+is( TTF_STYLE_STRIKETHROUGH(),                            8, 'TTF_STYLE_STRIKETHROUGH() should also be available' );
+
 is( SDL::TTF::was_init(),                                 0,                   "[was_init] returns false" );
 is( SDL::TTF::init(),                                     0,                   "[init] succeeded" );
 is( SDL::TTF::was_init(),                                 1,                   "[was_init] returns true" );
 is( SDL::TTF::byte_swapped_unicode(0),                    undef,               "[ttf_byte_swapped_unicode] on" );
 is( SDL::TTF::byte_swapped_unicode(1),                    undef,               "[ttf_byte_swapped_unicode] off" );
 my $font = SDL::TTF::open_font('test/data/aircut3.ttf', 24);
-isa_ok( $font,                                           'SDL::TTF::Font',     "[open_font]" );
+isa_ok( $font,                                            'SDL::TTF::Font',    "[open_font]" );
 isa_ok( SDL::TTF::open_font_index('test/data/aircut3.ttf', 8, 0), 'SDL::TTF::Font', "[open_font_index]" );
 my $file = SDL::RWOps->new_file('test/data/aircut3.ttf', 'r');
 isa_ok( $file,                                            'SDL::RWOps',        "[new_file]");

@@ -53,4 +53,10 @@ use constant{
 	TTF_STYLE_STRIKETHROUGH => 8,
 };
 
+# add all the other ":class" tags to the ":all" class,
+# deleting duplicates
+my %seen;
+push @{$EXPORT_TAGS{all}},
+grep {!$seen{$_}++} @{$EXPORT_TAGS{$_}} foreach keys %EXPORT_TAGS;
+
 1;
