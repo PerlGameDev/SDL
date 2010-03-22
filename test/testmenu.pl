@@ -55,7 +55,7 @@ while ( !$quit ) {
                 $sel++ if $sel < $#select;
             } elsif ( $event->key_sym == SDLK_UP ) {
                 $sel-- if $sel > 0;
-            } elsif ( $event->key_sym == 13 ) {
+            } elsif ( $event->key_sym == SDLK_RETURN ) {
                 print $item{ $select[$sel] }, "\n";
             }
         }
