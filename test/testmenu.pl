@@ -57,6 +57,7 @@ while ( !$quit ) {
                 $sel-- if $sel > 0;
             } elsif ( $event->key_sym == SDLK_RETURN ) {
                 print $item{ $select[$sel] }, "\n";
+                exit(0) if $select[$sel] eq 'giveup';
             }
         }
 
