@@ -73,15 +73,16 @@ extern PerlInterpreter *parent_perl;
 #endif
 
 void
-windows_force_driver ()
+windows_force_driver()
 {
-
-#if  SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION == 2 &&  SDL_PATCHLEVEL >= 14
+	if(0 != strcmp("dummy", getenv("SDL_VIDEODRIVER")))
+	{
+#if SDL_MAJOR_VERSION >= 1 && SDL_MINOR_VERSION >= 2 &&  SDL_PATCHLEVEL >= 14
 		putenv("SDL_VIDEODRIVER=directx");
 #else
 		putenv("SDL_VIDEODRIVER=windib");
 #endif
-
+	}
 }
 
 

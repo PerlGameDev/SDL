@@ -11,6 +11,9 @@ use SDL::Video;
 use lib 't/lib';
 use SDL::TestTool;
 
+my $videodriver       = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
     plan( skip_all => 'Failed to init video' );
 }
@@ -47,3 +50,4 @@ isa_ok( $disp->format->palette->colors(), 'ARRAY', 'Palette->colors[x] is a colo
 isa_ok( $disp->format->palette->color_index(23), 'SDL::Color', 'Palette->color_index() is a SDL::Color');
 }
 
+$ENV{SDL_VIDEODRIVER} = $videodriver;

@@ -14,6 +14,9 @@ use Devel::Peek;
 use lib 't/lib';
 use SDL::TestTool;
 
+my $videodriver       = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 	   plan( skip_all => 'Failed to init video' );
 }
@@ -37,5 +40,6 @@ isa_ok( $surface3, 'SDL::Surface', '[convert_surface] makes copy of surface conv
 
 warn 'SW->SW conversion failed: '.SDL::get_error if !$surface3;
 
+$ENV{SDL_VIDEODRIVER} = $videodriver;
 
 done_testing;

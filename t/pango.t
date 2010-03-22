@@ -25,6 +25,9 @@ use SDL::Pango ':all';
 use SDL::Pango::Context;
 use SDL::Version;
 
+my $videodriver       = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
 is( SDL::Pango::was_init(),                             0,                                     "[was_init] returns false" );
 is( SDL::Pango::init(),                                 0,                                     "[init] succeeded" );
 isnt( SDL::Pango::was_init(),                           0,                                     "[was_init] returns true" );
@@ -66,6 +69,8 @@ SKIP:
 	SDL::Video::update_rect($display, 0, 0, 0, 0);
 	SDL::delay(2000);
 }
+
+$ENV{SDL_VIDEODRIVER} = $videodriver;
 
 pass 'Are we still alive? Checking for segfaults';
 

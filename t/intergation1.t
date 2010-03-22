@@ -62,7 +62,12 @@ can_ok ('SDL::App', qw/
 	grab_input 
 	loop
 	sync 
-	attribute /);
+	attribute
+/);
+
+my $videodriver       = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
 SKIP:
 {
 	skip 'No Video', 1 unless SDL::TestTool->init(SDL_INIT_VIDEO);
@@ -89,7 +94,8 @@ SKIP:
         SDL::delay(10);
 	}
 
-	  SDL::delay(100);
-	  pass 'Ran';
-  }
+	SDL::delay(100);
+	pass 'Ran';
+}
 
+$ENV{SDL_VIDEODRIVER} = $videodriver;

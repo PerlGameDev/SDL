@@ -12,6 +12,9 @@ use SDL::Video;
 use lib 't/lib';
 use SDL::TestTool;
 
+my $videodriver       = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 	   plan( skip_all => 'Failed to init video' );
 }
@@ -283,6 +286,8 @@ SKIP:
 	pass '[wm_toggle_fullscreen] ran';
 	}
 }
+
+$ENV{SDL_VIDEODRIVER} = $videodriver;
 
 pass 'Are we still alive? Checking for segfaults';
 
