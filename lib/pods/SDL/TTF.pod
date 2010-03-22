@@ -8,6 +8,64 @@ SDL::TTF - True Type Font functions (libfreetype)
 
 TTF
 
+=head1 CONSTANTS
+
+The constants are not exported by default. You can export them into your namespace by doing:
+
+ use SDL::TTF qw(:hinting :style);
+
+or access them directly:
+
+ SDL::TTF::TTF_HINTING_NORMAL;
+
+Available constants for "hinting":
+
+=over 4
+
+=item *
+
+TTF_HINTING_NORMAL
+
+=item *
+
+TTF_HINTING_LIGHT
+
+=item *
+
+TTF_HINTING_MONO
+
+=item *
+
+TTF_HINTING_NONE
+
+=back
+
+Available constants for "style":
+
+=over 4
+
+=item *
+
+TTF_STYLE_NORMAL
+
+=item *
+
+TTF_STYLE_BOLD
+
+=item *
+
+TTF_STYLE_ITALIC
+
+=item *
+
+TTF_STYLE_UNDERLINE
+
+=item *
+
+TTF_STYLE_STRIKETHROUGH
+
+=back
+
 =head1 METHODS
 
 =head2 General methods

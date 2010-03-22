@@ -844,15 +844,6 @@ is( SMPEG_PLAYING(), 1,  'SMPEG_PLAYING() should also be available' );
 is( SMPEG_STOPPED,   0,  'SMPEG_STOPPED should be imported' );
 is( SMPEG_STOPPED(), 0,  'SMPEG_STOPPED() should also be available' );
 
-is( TTF_STYLE_BOLD,      1, 'TTF_STYLE_BOLD should be imported' );
-is( TTF_STYLE_BOLD(),    1, 'TTF_STYLE_BOLD() should also be available' );
-is( TTF_STYLE_ITALIC,    2, 'TTF_STYLE_ITALIC should be imported' );
-is( TTF_STYLE_ITALIC(),  2, 'TTF_STYLE_ITALIC() should also be available' );
-is( TTF_STYLE_NORMAL,    0, 'TTF_STYLE_NORMAL should be imported' );
-is( TTF_STYLE_NORMAL(),  0, 'TTF_STYLE_NORMAL() should also be available' );
-is( TTF_STYLE_UNDERLINE, 4, 'TTF_STYLE_UNDERLINE should be imported' );
-is( TTF_STYLE_UNDERLINE(), 4, 'TTF_STYLE_UNDERLINE() should also be available' );
-
 is( SDL_SVG_FLAG_DIRECT, 0, 'SDL_SVG_FLAG_DIRECT should be imported' );
 is( SDL_SVG_FLAG_DIRECT(), 0, 'SDL_SVG_FLAG_DIRECT() should also be available' );
 is( SDL_SVG_FLAG_COMPOSITE, 1, 'SDL_SVG_FLAG_COMPOSITE should be imported' );

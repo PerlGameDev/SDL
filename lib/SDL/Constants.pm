@@ -414,24 +414,6 @@ our @EXPORT=qw(
 	SMPEG_ERROR
 	SMPEG_PLAYING
 	SMPEG_STOPPED
-	TEXT_BLENDED
-	TEXT_SHADED
-	TEXT_SOLID
-	TTF_STYLE_BOLD
-	TTF_STYLE_ITALIC
-	TTF_STYLE_NORMAL
-	TTF_STYLE_UNDERLINE
-	TTF_STYLE_STRIKETHROUGH
-	TTF_HINTING_NORMAL
-	TTF_HINTING_LIGHT
-	TTF_HINTING_MONO
-	TTF_HINTING_NONE
-	UNICODE_BLENDED
-	UNICODE_SHADED
-	UNICODE_SOLID
-	UTF8_BLENDED
-	UTF8_SHADED
-	UTF8_SOLID
 	SDL_SVG_FLAG_DIRECT
 	SDL_SVG_FLAG_COMPOSITE
 	SDL_SAMPLEFLAG_NONE
@@ -3411,17 +3393,6 @@ use constant {
 use constant {
 	SDL_TIMESLICE                                       => 10,
 	TIMER_RESOLUTION                                    => 10,
-	UNICODE_BOM_NATIVE                                  => 0xFEFF,
-	UNICODE_BOM_SWAPPED                                 => 0xFFFE,
-	TTF_STYLE_NORMAL                                    => 0x00,
-	TTF_STYLE_BOLD                                      => 0x01,
-	TTF_STYLE_ITALIC                                    => 0x02,
-	TTF_STYLE_UNDERLINE                                 => 0x04,
-	TTF_STYLE_STRIKETHROUGH                             => 0x08,
-	TTF_HINTING_NORMAL                                  => 0,
-	TTF_HINTING_LIGHT                                   => 1,
-	TTF_HINTING_MONO                                    => 2,
-	TTF_HINTING_NONE                                    => 3,
 	SDL_ALPHA_OPAQUE                                    => 255,
 	SDL_ALPHA_TRANSPARENT                               => 0,
 	SDL_SWSURFACE                                       => 0x00000000,

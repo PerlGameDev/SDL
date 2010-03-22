@@ -20,7 +20,7 @@ BEGIN
 	}
 }
 
-use SDL::TTF;
+use SDL::TTF qw(:hinting :style);
 use SDL::TTF::Font;
 use SDL::RWOps;
 use SDL::Version;
