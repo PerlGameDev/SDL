@@ -11,10 +11,12 @@ use Test::More;
 use Data::Dumper;
 use Devel::Peek;
 
- if (SDL::init(SDL_INIT_VIDEO) > 0)
- {
-	 die 'Cannot init video'. SDL::get_error();
- }
+use lib 't/lib';
+use SDL::TestTool;
+
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
+	   plan( skip_all => 'Failed to init video' );
+}
 
 my $hwdisplay = SDL::Video::set_video_mode(640,480,8, SDL_HWSURFACE );
 
