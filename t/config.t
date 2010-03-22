@@ -22,4 +22,3 @@ diag "Has jpeg                = " . SDL::Config->has('jpeg');
 
 # we assume that the following are always present
 is( SDL::Config->has('SDL'), 1 );
-is( SDL::Config->has('SDL_mixer'), 1 );
