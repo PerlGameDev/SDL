@@ -1,7 +1,8 @@
 TODO for SDL_perl
 
 Release 2.3_10
-- Pango Docs, tests and XS
+- all constants not exported by default
+- all constants listed in documentation
 
 
 Release 2.4.5
