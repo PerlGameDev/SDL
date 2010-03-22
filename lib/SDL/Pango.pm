@@ -22,7 +22,7 @@ our @EXPORT_OK = qw(
 
 our %EXPORT_TAGS = 
 (
-	constants => [qw(
+	direction => [qw(
 		SDLPANGO_DIRECTION_LTR
 		SDLPANGO_DIRECTION_RTL
 		SDLPANGO_DIRECTION_WEAK_LTR

@@ -42,7 +42,7 @@ Pango
 
 The constants are not exported by default. You can export them into your namespace by doing:
 
- use SDL::Pango ':constants';
+ use SDL::Pango ':direction';
 
 or access them directly:
 
