@@ -11,10 +11,9 @@ use Devel::Peek;
 use lib 't/lib';
 use SDL::TestTool;
 
-unless ( $ENV{AUTOMATED_TESTING} or $ENV{RELEASE_TESTING} ) {
+unless ( $ENV{AUTOMATED_TESTING} or $ENV{SDL_RELEASE_TESTING} ) {
 	plan( skip_all => "author tests not required for installation" );
 }
-
 
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
@@ -46,17 +45,14 @@ sub callback{
       $f = 1;
     }
   }
+}
 
+die 'AudioMixer, Unable to open audio: '. SDL::get_error() if( SDL::Audio::open($desired, $obtained) <0 );
 
-}   die 'AudioMixer, Unable to open audio: '. SDL::get_error() if( SDL::Audio::open($desired, $obtained) <0 );
-   
-   
-   SDL::Audio::pause(0);
+SDL::Audio::pause(0);
 
-	sleep(1);
+sleep(1);
 
-   SDL::Audio::close();
+SDL::Audio::close();
 
-   isnt $p, 0,  '[callback] tested ';
-
-
+isnt $p, 0,  '[callback] tested ';

@@ -33,7 +33,7 @@ can_ok ('SDL', @done);
 
 my $v = SDL::linked_version();
 isa_ok($v, 'SDL::Version', '[linked_version]');
-diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
+printf("got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch);
 
 my $display =  SDL::Video::set_video_mode(640,480,232, SDL_SWSURFACE );
 
@@ -69,7 +69,7 @@ TODO:
 	local $TODO = $why;
 	pass "\nThe following functions:\n".join ",", @left; 
 }
-if( $done[0] eq 'none'){ diag '0% done 0/'.$#left } else { diag  $why} 
+if( $done[0] eq 'none'){ print '0% done 0/'.$#left."\n" } else { print "$why\n" }
 
 pass 'Are we still alive? Checking for segfaults';
 sleep(2);

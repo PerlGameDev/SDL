@@ -50,7 +50,7 @@ can_ok("SDL::Image", @done);
 
 my $lver = SDL::Image::linked_version();
 isa_ok($lver, "SDL::Version", '[linked_version] got version back!' );
-diag sprintf("got version: %d.%d.%d", $lver->major, $lver->minor, $lver->patch);
+printf("got version: %d.%d.%d\n", $lver->major, $lver->minor, $lver->patch);
 
 isa_ok( SDL::Image::load("test/data/highlight.png"), "SDL::Surface", "[load] Gets Surface"); 
 

@@ -25,7 +25,7 @@ elsif( !SDL::Config->has('SDL_gfx_primitives') )
 
 my $v       = SDL::GFX::linked_version();
 isa_ok($v, 'SDL::Version', '[linked_version]');
-diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
+printf("got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch);
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 my $pixel   = SDL::Video::map_RGB( $display->format, 0, 0, 0 );

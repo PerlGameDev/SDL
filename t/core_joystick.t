@@ -47,7 +47,7 @@ TODO:
     fail "Not Implmented $_" foreach(@left)
     
 }
-diag $why;
+print "$why\n";
 
 done_testing();
 sleep(2);

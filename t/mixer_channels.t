@@ -33,7 +33,7 @@ SDL::Mixer::Channels::channel_finished( $callback ); pass '[channel_finished] re
 my $delay           = 100;
 my $audio_test_file = 'test/data/silence.wav';
 
-if($ENV{'RELEASE_TESTING'})
+if($ENV{'SDL_RELEASE_TESTING'})
 {
 		SDL::Mixer::Channels::volume( -1, 10 );
 	is( SDL::Mixer::Channels::volume( -1, 20 ),                          10, "[volume] set to 20, previously was 10" );

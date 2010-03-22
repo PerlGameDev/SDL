@@ -55,5 +55,6 @@ TODO:
     local $TODO = $why;
     pass "\nThe following functions:\n" . join ",", @left;
 }
-diag $why;
+print "$why\n";
+
 sleep(2);

@@ -45,7 +45,7 @@ quick_load_RAW
 SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 );
 
 my $version = SDL::Mixer::linked_version();
-diag sprintf("got version: %d.%d.%d", $version->major, $version->minor, $version->patch);
+printf("got version: %d.%d.%d\n", $version->major, $version->minor, $version->patch);
 
 SKIP:
 {
@@ -79,7 +79,7 @@ TODO:
     fail "Not Implmented SDL::Mixer::*::$_" foreach(@left);
 }
 
-diag $why;
+print "$why\n";
 
 pass 'Checking for segfaults';
 

@@ -27,7 +27,7 @@ else
 
 my $v       = SDL::GFX::linked_version();
 isa_ok($v, 'SDL::Version', '[linked_version]');
-diag sprintf("got version: %d.%d.%d", $v->major, $v->minor, $v->patch);
+printf("got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch);
 
 my $fps = SDL::GFX::FPSManager->new(0, 0, 0, 0);
 

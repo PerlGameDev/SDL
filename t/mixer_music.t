@@ -52,7 +52,7 @@ my $audio_test_file = 'test/data/silence.wav';
 my $volume1         = 2;
 my $volume2         = 1;
 
-if($ENV{'RELEASE_TESTING'})
+if($ENV{'SDL_RELEASE_TESTING'})
 {
 	$delay           = 2000;
 	$audio_test_file = 'test/data/sample.wav';

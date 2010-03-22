@@ -48,7 +48,7 @@ TODO:
 	local $TODO = $why;
 	pass "\nThe following functions:\n".join ",", @left; 
 }
-	if( $done[0] eq 'none'){ diag '0% done 0/'.$#left } else { diag  $why} 
+	if( $done[0] eq 'none'){ print '0% done 0/'.$#left."\n" } else { print "$why\n" }
 
 
 pass 'Are we still alive? Checking for segfaults';

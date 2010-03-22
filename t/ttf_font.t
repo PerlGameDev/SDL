@@ -24,7 +24,7 @@ my $cv = SDL::TTF::compile_time_version();
 
 isa_ok($lv, 'SDL::Version', '[linked_version] returns a SDL::Version object');
 isa_ok($cv, 'SDL::Version', '[compile_time_version] returns a SDL::Version object');
-diag sprintf("got version: %d.%d.%d/%d.%d.%d", $lv->major, $lv->minor, $lv->patch, $cv->major, $cv->minor, $cv->patch);
+printf("got version: %d.%d.%d/%d.%d.%d\n", $lv->major, $lv->minor, $lv->patch, $cv->major, $cv->minor, $cv->patch);
 
 is( SDL::TTF::init(),                                     0,                   "[init] succeeded" );
 

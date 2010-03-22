@@ -91,7 +91,7 @@ TODO:
     fail "Not Implmented $_" foreach (@left)
 
 }
-diag $why;
+print "$why\n";
 sleep(1);
 
 sub audio_callback
