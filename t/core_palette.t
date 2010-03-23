@@ -6,7 +6,7 @@ use Test::More;
 use SDL ':init';
 use SDL::Surface;
 use SDL::PixelFormat;
-use SDL::Video ':flags';
+use SDL::Video ':all';
 
 use lib 't/lib';
 use SDL::TestTool;

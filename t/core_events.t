@@ -4,7 +4,7 @@ use SDL ':init';
 use SDL::Event;
 use SDL::Events;
 use SDL::Surface;
-use SDL::Video ':flags';
+use SDL::Video ':all';
 use Devel::Peek;
 use Test::More;
 use lib 't/lib';

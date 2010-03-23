@@ -30,11 +30,27 @@ our @EXPORT_OK = qw(
 	SDL_RLEACCEL
 	SDL_SRCALPHA
 	SDL_PREALLOC
+	SDL_YV12_OVERLAY
+	SDL_IYUV_OVERLAY
+	SDL_YUY2_OVERLAY
+	SDL_UYVY_OVERLAY
+	SDL_YVYU_OVERLAY
+	SDL_LOGPAL
+	SDL_PHYSPAL
+	SDL_GRAB_QUERY
+	SDL_GRAB_OFF
+	SDL_GRAB_ON
+	SDL_GRAB_FULLSCREEN
 );
 
 our %EXPORT_TAGS = 
 (
-	flags => [qw(
+	surface => [qw(
+		SDL_SWSURFACE
+		SDL_HWSURFACE
+		SDL_ASYNCBLIT
+	)],
+	video => [qw(
 		SDL_SWSURFACE
 		SDL_HWSURFACE
 		SDL_ASYNCBLIT
@@ -52,28 +68,59 @@ our %EXPORT_TAGS =
 		SDL_RLEACCEL
 		SDL_SRCALPHA
 		SDL_PREALLOC
-	)]
+	)],
+	overlay => [qw(
+		SDL_YV12_OVERLAY
+		SDL_IYUV_OVERLAY
+		SDL_YUY2_OVERLAY
+		SDL_UYVY_OVERLAY
+		SDL_YVYU_OVERLAY
+	)],
+	palette => [qw(
+		SDL_LOGPAL
+		SDL_PHYSPAL
+	)],
+	grab => [qw(
+		SDL_GRAB_QUERY
+		SDL_GRAB_OFF
+		SDL_GRAB_ON
+		SDL_GRAB_FULLSCREEN
+	)],
 );
 
 use constant{
-	SDL_SWSURFACE   => 0x00000000,
-	SDL_HWSURFACE   => 0x00000001,
-	SDL_ASYNCBLIT   => 0x00000004,
-	SDL_ANYFORMAT   => 0x10000000,
-	SDL_HWPALETTE   => 0x20000000,
-	SDL_DOUBLEBUF   => 0x40000000,
-	SDL_FULLSCREEN  => 0x80000000,
-	SDL_OPENGL      => 0x00000002,
-	SDL_OPENGLBLIT  => 0x0000000A,
-	SDL_RESIZABLE   => 0x00000010,
-	SDL_NOFRAME     => 0x00000020,
-	SDL_HWACCEL     => 0x00000100,
-	SDL_SRCCOLORKEY => 0x00001000,
-	SDL_RLEACCELOK  => 0x00002000,
-	SDL_RLEACCEL    => 0x00004000,
-	SDL_SRCALPHA    => 0x00010000,
-	SDL_PREALLOC    => 0x01000000,
-}; # flags
+	SDL_SWSURFACE    => 0x00000000, # for SDL::Surface->new() and set_video_mode()
+	SDL_HWSURFACE    => 0x00000001, # for SDL::Surface->new() and set_video_mode()
+	SDL_ASYNCBLIT    => 0x00000004, # for SDL::Surface->new() and set_video_mode()
+	SDL_ANYFORMAT    => 0x10000000, # set_video_mode()
+	SDL_HWPALETTE    => 0x20000000, # set_video_mode()
+	SDL_DOUBLEBUF    => 0x40000000, # set_video_mode()
+	SDL_FULLSCREEN   => 0x80000000, # set_video_mode()
+	SDL_OPENGL       => 0x00000002, # set_video_mode()
+	SDL_OPENGLBLIT   => 0x0000000A, # set_video_mode()
+	SDL_RESIZABLE    => 0x00000010, # set_video_mode()
+	SDL_NOFRAME      => 0x00000020, # set_video_mode()
+	SDL_HWACCEL      => 0x00000100, # set_video_mode()
+	SDL_SRCCOLORKEY  => 0x00001000, # set_video_mode()
+	SDL_RLEACCELOK   => 0x00002000, # set_video_mode()
+	SDL_RLEACCEL     => 0x00004000, # set_video_mode()
+	SDL_SRCALPHA     => 0x00010000, # set_video_mode()
+	SDL_PREALLOC     => 0x01000000, # set_video_mode()
+
+	SDL_YV12_OVERLAY => 0x32315659, # Planar mode: Y + V + U  (3 planes)
+	SDL_IYUV_OVERLAY => 0x56555949, # Planar mode: Y + U + V  (3 planes)
+	SDL_YUY2_OVERLAY => 0x32595559, # Packed mode: Y0+U0+Y1+V0 (1 plane)
+	SDL_UYVY_OVERLAY => 0x59565955, # Packed mode: U0+Y0+V0+Y1 (1 plane)
+	SDL_YVYU_OVERLAY => 0x55595659, # Packed mode: Y0+V0+Y1+U0 (1 plane)
+
+	SDL_LOGPAL       => 0x01,       # for set_palette()
+	SDL_PHYSPAL      => 0x02,       # for set_palette()
+	
+	SDL_GRAB_QUERY      => -1,      # SDL_GrabMode
+	SDL_GRAB_OFF        => 0,       # SDL_GrabMode
+	SDL_GRAB_ON         => 1,       # SDL_GrabMode
+	SDL_GRAB_FULLSCREEN	=> 2,       # SDL_GrabMode, used internally
+};
 
 # add all the other ":class" tags to the ":all" class,
 # deleting duplicates

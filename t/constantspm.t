@@ -638,12 +638,6 @@ is( SDL_GL_RED_SIZE(),   0, 'SDL_GL_RED_SIZE() should also be available' );
 is( SDL_GL_STENCIL_SIZE, 7, 'SDL_GL_STENCIL_SIZE should be imported' );
 is( SDL_GL_STENCIL_SIZE(), 7,'SDL_GL_STENCIL_SIZE() should also be available' );
 
-is( SDL_GRAB_OFF,     0,  'SDL_GRAB_OFF should be imported' );
-is( SDL_GRAB_OFF(),   0,  'SDL_GRAB_OFF() should also be available' );
-is( SDL_GRAB_ON,      1,  'SDL_GRAB_ON should be imported' );
-is( SDL_GRAB_ON(),    1,  'SDL_GRAB_ON() should also be available' );
-is( SDL_GRAB_QUERY,   -1, 'SDL_GRAB_QUERY should be imported' );
-is( SDL_GRAB_QUERY(), -1, 'SDL_GRAB_QUERY() should also be available' );
 
 is( SDL_HAT_CENTERED,    0,  'SDL_HAT_CENTERED should be imported' );
 is( SDL_HAT_CENTERED(),  0,  'SDL_HAT_CENTERED() should also be available' );
@@ -666,9 +660,6 @@ is( SDL_HAT_UP(),        1,  'SDL_HAT_UP() should also be available' );
 
 is( SDL_IGNORE,   0, 'SDL_IGNORE should be imported' );
 is( SDL_IGNORE(), 0, 'SDL_IGNORE() should also be available' );
-
-is( SDL_IYUV_OVERLAY, 1448433993, 'SDL_IYUV_OVERLAY should be imported' );
-is( SDL_IYUV_OVERLAY(), 1448433993, 'SDL_IYUV_OVERLAY() should also be available' );
 
 is( SDL_JOYAXISMOTION,   7,  'SDL_JOYAXISMOTION should be imported' );
 is( SDL_JOYAXISMOTION(), 7,  'SDL_JOYAXISMOTION() should also be available' );
@@ -714,9 +705,6 @@ is( SDL_KEYEVENTMASK,    SDL_EVENTMASK(SDL_KEYDOWN)|
 is( SDL_KEYEVENTMASK(),  SDL_EVENTMASK(SDL_KEYDOWN)|
                          SDL_EVENTMASK(SDL_KEYUP),   'SDL_KEYEVENTMASK() should also be available');
 
-is( SDL_LOGPAL,          0x01, 'SDL_LOGPAL should be imported' );
-is( SDL_LOGPAL(),        0x01, 'SDL_LOGPAL() should also be available' );
-
 is( SDL_MIX_MAXVOLUME,   128, 'SDL_MIX_MAXVOLUME should be imported' );
 is( SDL_MIX_MAXVOLUME(), 128, 'SDL_MIX_MAXVOLUME() should also be available' );
 
@@ -747,8 +735,6 @@ is( SDL_NUMEVENTS(),     32, 'SDL_NUMEVENTS() should also be available' );
 
 is( SDL_PEEKEVENT,     1,        'SDL_PEEKEVENT should be imported' );
 is( SDL_PEEKEVENT(),   1,        'SDL_PEEKEVENT() should also be available' );
-is( SDL_PHYSPAL,         0x02, 'SDL_PHYSPAL should be imported' );
-is( SDL_PHYSPAL(),       0x02, 'SDL_PHYSPAL() should also be available' );
 is( SDL_PRESSED,       1,        'SDL_PRESSED should be imported' );
 is( SDL_PRESSED(),     1,        'SDL_PRESSED() should also be available' );
 
@@ -769,8 +755,6 @@ is( SDL_SYSWMEVENTMASK(), SDL_EVENTMASK(SDL_SYSWMEVENT), 'SDL_SYSWMEVENTMASK() s
 
 is( SDL_USEREVENT,      24,         'SDL_USEREVENT should be imported' );
 is( SDL_USEREVENT(),    24,         'SDL_USEREVENT() should also be available' );
-is( SDL_UYVY_OVERLAY,   1498831189, 'SDL_UYVY_OVERLAY should be imported' );
-is( SDL_UYVY_OVERLAY(), 1498831189, 'SDL_UYVY_OVERLAY() should also be available' );
 
 is( SDL_VIDEOEXPOSE,       17,                             'SDL_VIDEOEXPOSE should be imported' );
 is( SDL_VIDEOEXPOSE(),     17,                             'SDL_VIDEOEXPOSE() should also be available' );
@@ -780,14 +764,6 @@ is( SDL_VIDEORESIZE,       16,                             'SDL_VIDEORESIZE shou
 is( SDL_VIDEORESIZE(),     16,                             'SDL_VIDEORESIZE() should also be available' );
 is( SDL_VIDEORESIZEMASK,   SDL_EVENTMASK(SDL_VIDEORESIZE), 'SDL_VIDEORESIZEMASK should be imported');
 is( SDL_VIDEORESIZEMASK(), SDL_EVENTMASK(SDL_VIDEORESIZE), 'SDL_VIDEORESIZEMASK() should also be available');
-
-
-is( SDL_YUY2_OVERLAY, 844715353, 'SDL_YUY2_OVERLAY should be imported' );
-is( SDL_YUY2_OVERLAY(), 844715353,'SDL_YUY2_OVERLAY() should also be available' );
-is( SDL_YV12_OVERLAY, 842094169, 'SDL_YV12_OVERLAY should be imported' );
-is( SDL_YV12_OVERLAY(), 842094169,'SDL_YV12_OVERLAY() should also be available' );
-is( SDL_YVYU_OVERLAY, 1431918169, 'SDL_YVYU_OVERLAY should be imported' );
-is( SDL_YVYU_OVERLAY(), 1431918169, 'SDL_YVYU_OVERLAY() should also be available' );
 
 is( SMPEG_ERROR,     -1, 'SMPEG_ERROR should be imported' );
 is( SMPEG_ERROR(),   -1, 'SMPEG_ERROR() should also be available' );

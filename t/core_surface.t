@@ -15,7 +15,7 @@ use SDL::Surface;
 use SDL::App;
 use SDL::Rect;
 use SDL::Color;
-use SDL::Video ':flags';
+use SDL::Video ':all';
 use SDL::PixelFormat;
 use Test::More;
 

@@ -11,7 +11,7 @@ Core, Video
 =head1 SYNOPSIS
 
  use SDL ':init';
- use SDL::Video ':flags';
+ use SDL::Video ':all';
  use SDL::Surface;
  use SDL::Rect;
 
@@ -39,74 +39,59 @@ Core, Video
 
 =head1 CONSTANTS
 
-Available flags for L<SDL::Video::set_video_mode>:
+The constants are not exported by default. You can export them into your namespace by doing:
 
-=over 4
+ use SDL::Video ':all';
 
-=item SDL_ANYFORMAT
+or access them directly:
 
-Allow any pixel-format *
+ SDL::Video::SDL_SWSURFACE;
 
-=item SDL_HWPALETTE
+or by choosing the export tags below:
 
-Have an exclusive palette
+Export tag: ':surface'
 
-=item SDL_DOUBLEBUF
+ SDL_ASYNCBLIT       Use asynchronous blit if possible
+ SDL_SWSURFACE       Stored in the system memory.
+ SDL_HWSURFACE       Stored in video memory
 
-Double buffered *
+Export tag: ':video'
 
-=item SDL_FULLSCREEN
+ SDL_ANYFORMAT       Allow any pixel-format
+ SDL_HWPALETTE       Have an exclusive palette
+ SDL_DOUBLEBUF       Double buffered
+ SDL_FULLSCREEN      Full screen surface
+ SDL_OPENGL          Have an OpenGL context
+ SDL_OPENGLBLIT      Support OpenGL blitting. 
+                     NOTE: This option is kept for compatibility only, and is not recommended for new code.
+ SDL_RESIZABLE       Resizable surface
+ SDL_NOFRAME         No window caption or edge frame
+ SDL_HWACCEL Use     Hardware acceleration blit
+ SDL_SRCCOLORKEY     Use colorkey blitting
+ SDL_RLEACCELOK      Private flag
+ SDL_RLEACCEL        Accelerated colorkey blitting with RLE
+ SDL_SRCALPHA        Use alpha blending blit
+ SDL_PREALLOC        Use preallocated memory
 
-Full screen surface *
+Export tag ':overlay'
 
-=item SDL_OPENGL
+ SDL_YV12_OVERLAY    Planar mode: Y + V + U  (3 planes)
+ SDL_IYUV_OVERLAY    Planar mode: Y + U + V  (3 planes)
+ SDL_YUY2_OVERLAY    Packed mode: Y0+U0+Y1+V0 (1 plane)
+ SDL_UYVY_OVERLAY    Packed mode: U0+Y0+V0+Y1 (1 plane)
+ SDL_YVYU_OVERLAY    Packed mode: Y0+V0+Y1+U0 (1 plane)
 
-Have an OpenGL context *
+Export tag ':palette'
 
-=item SDL_OPENGLBLIT
+ SDL_LOGPAL          Logical palette, which controls how blits are mapped to/from the surface
+ SDL_PHYSPAL         Physical palette, which controls how pixels look on the screen
+ 
+Export tag ':grab'
 
-Support OpenGL blitting *. NOTE: This option is kept for compatibility only, and is not recommended for new code.
-
-=item SDL_RESIZABLE
-
-Resizable surface *
-
-=item SDL_NOFRAME
-
-No window caption or edge frame
-
-=back
-
-Used internally
-
-=over 4
-
-=item SDL_HWACCEL
-
-Use hardware acceleration blit
-
-=item SDL_SRCCOLORKEY
-
-Use colorkey blitting
-
-=item SDL_RLEACCELOK
-
-Private flag
-
-=item SDL_RLEACCEL
-
-Accelerated colorkey blitting with RLE
-
-=item SDL_SRCALPHA
-
-Use alpha blending blit
-
-=item SDL_PREALLOC
-
-Use preallocated memory
-
-=back
-
+ SDL_GRAB_QUERY
+ SDL_GRAB_OFF
+ SDL_GRAB_ON
+ SDL_GRAB_FULLSCREEN Used interally
 
 =head1 Core Functions
 

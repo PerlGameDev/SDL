@@ -6,7 +6,7 @@ use SDL::Color;
 use SDL::Surface;
 use SDL::Overlay;
 use SDL::Rect;
-use SDL::Video ':flags';
+use SDL::Video ':all';
 use SDL::PixelFormat;
 
 BEGIN

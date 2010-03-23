@@ -10,8 +10,6 @@ use base 'Exporter';
 use SDL::Events;
 
 our @EXPORT=qw(
-	SDL_LOGPAL
-	SDL_PHYSPAL
 	AUDIO_S16
 	AUDIO_S16MSB
 	AUDIO_S8
@@ -323,9 +321,6 @@ our @EXPORT=qw(
 	SDL_GL_GREEN_SIZE
 	SDL_GL_RED_SIZE
 	SDL_GL_STENCIL_SIZE
-	SDL_GRAB_OFF
-	SDL_GRAB_ON
-	SDL_GRAB_QUERY
 	SDL_HAT_CENTERED
 	SDL_HAT_DOWN
 	SDL_HAT_LEFT
@@ -336,7 +331,6 @@ our @EXPORT=qw(
 	SDL_HAT_RIGHTUP
 	SDL_HAT_UP
 	SDL_IGNORE
-	SDL_IYUV_OVERLAY
 	SDL_JOYAXISMOTION
 	SDL_JOYAXISMOTIONMASK
 	SDL_JOYBALLMOTION
@@ -380,14 +374,10 @@ our @EXPORT=qw(
 	SDL_SYSWMEVENT
 	SDL_SYSWMEVENTMASK
 	SDL_USEREVENT
-	SDL_UYVY_OVERLAY
 	SDL_VIDEOEXPOSE
 	SDL_VIDEOEXPOSEMASK
 	SDL_VIDEORESIZE
 	SDL_VIDEORESIZEMASK
-	SDL_YUY2_OVERLAY
-	SDL_YV12_OVERLAY
-	SDL_YVYU_OVERLAY
 	SMPEG_ERROR
 	SMPEG_PLAYING
 	SMPEG_STOPPED
@@ -3364,11 +3354,6 @@ use constant {
 	TIMER_RESOLUTION                                    => 10,
 	SDL_ALPHA_OPAQUE                                    => 255,
 	SDL_ALPHA_TRANSPARENT                               => 0,
-	SDL_YV12_OVERLAY                                    => 0x32315659,
-	SDL_IYUV_OVERLAY                                    => 0x56555949,
-	SDL_YUY2_OVERLAY                                    => 0x32595559,
-	SDL_UYVY_OVERLAY                                    => 0x59565955,
-	SDL_YVYU_OVERLAY                                    => 0x55595659,
 };
 
 use constant {
@@ -3390,20 +3375,6 @@ use constant {
 	SDL_GL_ACCELERATED_VISUAL                           => 15,
 	SDL_GL_SWAP_CONTROL                                 => 16,
 }; # SDL_GLattr
-
-use constant {
-	SDL_LOGPAL                                          => 0x01,
-	SDL_PHYSPAL                                         => 0x02,
-	SDL_AllocSurface                                    => SDL_CreateRGBSurface,
-	SDL_BlitSurface                                     => SDL_UpperBlit,
-};
-
-use constant {
-	SDL_GRAB_QUERY                                      => -1,
-	SDL_GRAB_OFF                                        => 0,
-	SDL_GRAB_ON                                         => 1,
-	SDL_GRAB_FULLSCREEN                                 => 2,
-};
 
 # manual added!!
 use constant {

@@ -7,7 +7,7 @@ use SDL::Config;
 use SDL::Overlay;
 use Test::More;
 use SDL::Rect;
-use SDL::Video ':flags';
+use SDL::Video ':all';
 use SDL::Constants;
 
 use lib 't/lib';
@@ -21,7 +21,7 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 }
 else
 {
-	  plan( tests => 95);
+	  plan( tests => 115);
 }
 
 my @done =
@@ -107,6 +107,29 @@ is( SDL_HWPALETTE,     536870912,   'SDL_HWPALETTE should be imported' );
 is( SDL_HWPALETTE(),   536870912,   'SDL_HWPALETTE() should also be available' );
 is( SDL_PREALLOC,      16777216,    'SDL_PREALLOC should be imported' );
 is( SDL_PREALLOC(),    16777216,    'SDL_PREALLOC() should also be available' );
+
+is( SDL_IYUV_OVERLAY,   1448433993, 'SDL_IYUV_OVERLAY should be imported' );
+is( SDL_IYUV_OVERLAY(), 1448433993, 'SDL_IYUV_OVERLAY() should also be available' );
+is( SDL_UYVY_OVERLAY,   1498831189, 'SDL_UYVY_OVERLAY should be imported' );
+is( SDL_UYVY_OVERLAY(), 1498831189, 'SDL_UYVY_OVERLAY() should also be available' );
+is( SDL_YUY2_OVERLAY,   844715353,  'SDL_YUY2_OVERLAY should be imported' );
+is( SDL_YUY2_OVERLAY(), 844715353,  'SDL_YUY2_OVERLAY() should also be available' );
+is( SDL_YV12_OVERLAY,   842094169,  'SDL_YV12_OVERLAY should be imported' );
+is( SDL_YV12_OVERLAY(), 842094169,  'SDL_YV12_OVERLAY() should also be available' );
+is( SDL_YVYU_OVERLAY,   1431918169, 'SDL_YVYU_OVERLAY should be imported' );
+is( SDL_YVYU_OVERLAY(), 1431918169, 'SDL_YVYU_OVERLAY() should also be available' );
+
+is( SDL_LOGPAL,          0x01, 'SDL_LOGPAL should be imported' );
+is( SDL_LOGPAL(),        0x01, 'SDL_LOGPAL() should also be available' );
+is( SDL_PHYSPAL,         0x02, 'SDL_PHYSPAL should be imported' );
+is( SDL_PHYSPAL(),       0x02, 'SDL_PHYSPAL() should also be available' );
+
+is( SDL_GRAB_OFF,     0,  'SDL_GRAB_OFF should be imported' );
+is( SDL_GRAB_OFF(),   0,  'SDL_GRAB_OFF() should also be available' );
+is( SDL_GRAB_ON,      1,  'SDL_GRAB_ON should be imported' );
+is( SDL_GRAB_ON(),    1,  'SDL_GRAB_ON() should also be available' );
+is( SDL_GRAB_QUERY,   -1, 'SDL_GRAB_QUERY should be imported' );
+is( SDL_GRAB_QUERY(), -1, 'SDL_GRAB_QUERY() should also be available' );
 
 #testing get_video_surface
 #SDL::init(SDL_INIT_VIDEO);                                                                          

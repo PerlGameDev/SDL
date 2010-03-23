@@ -4,7 +4,7 @@ use warnings;
 use SDL ':init';
 use SDL::Rect;
 use SDL::Config;
-use SDL::Video ':flags';
+use SDL::Video ':all';
 use SDL::Version;
 use SDL::Surface;
 use SDL::GFX;
