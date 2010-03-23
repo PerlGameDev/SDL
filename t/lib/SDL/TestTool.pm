@@ -4,7 +4,7 @@ use warnings;
 use IO::CaptureOutput qw(capture);
 use SDL qw(:all);
 use SDL::AudioSpec;
-use SDL::Audio;
+use SDL::Audio ':all';
 my %inits =
 (
 	0x00000001 => 'SDL_INIT_TIMER',
@@ -67,7 +67,7 @@ sub test_audio_open
 {
 	my $desired = SDL::AudioSpec->new;
 	$desired->freq(44100);
-	$desired->format(SDL::Constants::AUDIO_S16MSB);
+	$desired->format(AUDIO_S16SYS);
 	$desired->channels(2);
 	$desired->samples(4096);
 	$desired->callback('main::audio_callback');

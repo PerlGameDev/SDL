@@ -22,7 +22,7 @@ use_ok( 'SDL::Mixer' );
 use_ok( 'SDL::Mixer::Music' ); 
 use_ok( 'SDL::Mixer::MixMusic' ); 
 
-is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ), 0, 'open_audio passed' );
+is( SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 ), 0, 'open_audio passed' );
 
 my $mix_music = SDL::Mixer::Music::load_MUS('test/data/tribe_i.wav'); # from Matthew Newman, http://opengameart.org/content/vocal-grunts-tribeiwav
 #warn 'Error:'. SDL::get_error() if (!$mix_music);

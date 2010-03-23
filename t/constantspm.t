@@ -6,18 +6,6 @@ use Test::More;    # use_ok + constants
 BEGIN { use_ok('SDL::Constants') }
 
 # 'use' should have imported all constants
-is( AUDIO_S16,      32784, 'AUDIO_S16 should be imported' );
-is( AUDIO_S16(),    32784, 'AUDIO_S16() should also be available' );
-is( AUDIO_S16MSB,   36880, 'AUDIO_S16MSB should be imported' );
-is( AUDIO_S16MSB(), 36880, 'AUDIO_S16MSB() should also be available' );
-is( AUDIO_S8,       32776, 'AUDIO_S8 should be imported' );
-is( AUDIO_S8(),     32776, 'AUDIO_S8() should also be available' );
-is( AUDIO_U16,      16,    'AUDIO_U16 should be imported' );
-is( AUDIO_U16(),    16,    'AUDIO_U16() should also be available' );
-is( AUDIO_U16MSB,   4112,  'AUDIO_U16MSB should be imported' );
-is( AUDIO_U16MSB(), 4112,  'AUDIO_U16MSB() should also be available' );
-is( AUDIO_U8,       8,     'AUDIO_U8 should be imported' );
-is( AUDIO_U8(),     8,     'AUDIO_U8() should also be available' );
 
 is( CD_ERROR,       -1, 'CD_ERROR should be imported' );
 is( CD_ERROR(),     -1, 'CD_ERROR() should also be available' );
@@ -49,13 +37,6 @@ is( MIX_MAX_VOLUME,   128, 'MIX_MAX_VOLUME should be imported' );
 is( MIX_MAX_VOLUME(), 128, 'MIX_MAX_VOLUME() should also be available' );
 is( MIX_NO_FADING,    0,   'MIX_NO_FADING should be imported' );
 is( MIX_NO_FADING(),  0,   'MIX_NO_FADING() should also be available' );
-
-is( SDL_AUDIO_PAUSED,    2, 'SDL_AUDIO_PAUSED should be imported' );
-is( SDL_AUDIO_PAUSED(),  2, 'SDL_AUDIO_PAUSED() should also be available' );
-is( SDL_AUDIO_PLAYING,   1, 'SDL_AUDIO_PLAYING should be imported' );
-is( SDL_AUDIO_PLAYING(), 1, 'SDL_AUDIO_PLAYING() should also be available' );
-is( SDL_AUDIO_STOPPED,   0, 'SDL_AUDIO_STOPPED should be imported' );
-is( SDL_AUDIO_STOPPED(), 0, 'SDL_AUDIO_STOPPED() should also be available' );
 
 is( SDL_GL_ACCUM_ALPHA_SIZE, 11, 'SDL_GL_ACCUM_ALPHA_SIZE should be imported' );
 is( SDL_GL_ACCUM_ALPHA_SIZE(), 11, 'SDL_GL_ACCUM_ALPHA_SIZE() should also be available' );

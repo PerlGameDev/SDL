@@ -8,6 +8,37 @@ SDL::Audio - SDL Bindings for Audio
 
 Core, Audio
 
+=head1 CONSTANTS
+
+The constants are not exported by default. You can export them into your namespace by doing:
+
+ use SDL::Audio ':all';
+
+or access them directly:
+
+ SDL::Audio::AUDIO_S16SYS;
+
+or by choosing the export tags below:
+
+Export tag: ':format'
+
+ AUDIO_U8
+ AUDIO_S8
+ AUDIO_U16LSB
+ AUDIO_S16LSB
+ AUDIO_U16MSB
+ AUDIO_S16MSB
+ AUDIO_U16
+ AUDIO_S16 
+ AUDIO_U16SYS
+ AUDIO_S16SYS
+
+Export tag: ':status'
+
+ SDL_AUDIO_STOPPED
+ SDL_AUDIO_PLAYING
+ SDL_AUDIO_PAUSED
+
 =head1 METHODS
 
 =head2 open

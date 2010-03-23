@@ -26,7 +26,7 @@ else
 }
 
 
-is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ), 0, 'open_audio passed' );
+is( SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 ), 0, 'open_audio passed' );
 
 my $mix_chunk = SDL::Mixer::Samples::load_WAV('test/data/sample.wav');
 isa_ok( $mix_chunk, 'SDL::Mixer::MixChunk' );

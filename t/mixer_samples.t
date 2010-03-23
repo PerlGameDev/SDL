@@ -42,7 +42,7 @@ quick_load_WAV
 quick_load_RAW
 /;
 
-SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 );
+SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 );
 
 my $version = SDL::Mixer::linked_version();
 printf("got version: %d.%d.%d\n", $version->major, $version->minor, $version->patch);

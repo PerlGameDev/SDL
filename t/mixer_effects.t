@@ -22,7 +22,7 @@ use SDL::Mixer::Channels;
 use SDL::Mixer::Effects;
 use SDL::Mixer::Samples;
 
-is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 1024 ),  0, '[open_audio] ran');
+is( SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 1024 ),  0, '[open_audio] ran');
 
 my $delay           = 500;
 my $audio_test_file = 'test/data/silence.wav';

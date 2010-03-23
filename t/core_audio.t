@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 use SDL ':init';
-use SDL::Audio;
+use SDL::Audio ':all';
 use SDL::AudioSpec;
 use Test::More;
 use Devel::Peek;
@@ -13,7 +13,7 @@ use SDL::TestTool;
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
 } else {
-    plan( tests => 20);
+    plan( tests => 44);
 }
 my @done = qw/
     audio_spec
@@ -25,12 +25,37 @@ my @done = qw/
     unlock
     /;
 
+is( AUDIO_S16,      32784,  'AUDIO_S16 should be imported' );
+is( AUDIO_S16(),    32784,  'AUDIO_S16() should also be available' );
+is( AUDIO_S16MSB,   36880,  'AUDIO_S16MSB should be imported' );
+is( AUDIO_S16MSB(), 36880,  'AUDIO_S16MSB() should also be available' );
+is( AUDIO_S16LSB,   0x8010, 'AUDIO_S16MSB should be imported' );
+is( AUDIO_S16LSB(), 0x8010, 'AUDIO_S16MSB() should also be available' );
+is( AUDIO_S8,       32776,  'AUDIO_S8 should be imported' );
+is( AUDIO_S8(),     32776,  'AUDIO_S8() should also be available' );
+is( AUDIO_U16,      16,     'AUDIO_U16 should be imported' );
+is( AUDIO_U16(),    16,     'AUDIO_U16() should also be available' );
+is( AUDIO_U16MSB,   4112,   'AUDIO_U16MSB should be imported' );
+is( AUDIO_U16MSB(), 4112,   'AUDIO_U16MSB() should also be available' );
+is( AUDIO_U16LSB,   0x0010, 'AUDIO_U16MSB should be imported' );
+is( AUDIO_U16LSB(), 0x0010, 'AUDIO_U16MSB() should also be available' );
+is( AUDIO_U8,       8,      'AUDIO_U8 should be imported' );
+is( AUDIO_U8(),     8,      'AUDIO_U8() should also be available' );
+ok( (AUDIO_U16SYS   == AUDIO_U16LSB)   || (AUDIO_U16SYS   == AUDIO_U16MSB),     'AUDIO_U16SYS should be imported' );
+ok( (AUDIO_U16SYS() == AUDIO_U16LSB()) || (AUDIO_U16SYS() == AUDIO_U16MSB()),   'AUDIO_U16SYS() should also be available' );
+
+is( SDL_AUDIO_PAUSED,    2, 'SDL_AUDIO_PAUSED should be imported' );
+is( SDL_AUDIO_PAUSED(),  2, 'SDL_AUDIO_PAUSED() should also be available' );
+is( SDL_AUDIO_PLAYING,   1, 'SDL_AUDIO_PLAYING should be imported' );
+is( SDL_AUDIO_PLAYING(), 1, 'SDL_AUDIO_PLAYING() should also be available' );
+is( SDL_AUDIO_STOPPED,   0, 'SDL_AUDIO_STOPPED should be imported' );
+is( SDL_AUDIO_STOPPED(), 0, 'SDL_AUDIO_STOPPED() should also be available' );
 
 my $desired = SDL::AudioSpec->new;
    $desired->freq(44100);
 is( $desired->freq, 44100, '[audiospec] can set freq' );
-$desired->format(SDL::Constants::AUDIO_S16);
-is( $desired->format, SDL::Constants::AUDIO_S16,
+$desired->format(AUDIO_S16SYS);
+is( $desired->format, AUDIO_S16SYS,
     '[audiospec] can set format' );
 $desired->channels(2);
 is( $desired->channels, 2, '[audiospec] can set channels' );

@@ -10,12 +10,6 @@ use base 'Exporter';
 use SDL::Events;
 
 our @EXPORT=qw(
-	AUDIO_S16
-	AUDIO_S16MSB
-	AUDIO_S8
-	AUDIO_U16
-	AUDIO_U16MSB
-	AUDIO_U8
 	CD_ERROR
 	CD_PAUSED
 	CD_PLAYING
@@ -40,9 +34,6 @@ our @EXPORT=qw(
 	MUS_MP3
 	MUS_MP3_MAD
 	MUS_FLAC
-	SDL_AUDIO_PAUSED
-	SDL_AUDIO_PLAYING
-	SDL_AUDIO_STOPPED
 	SDL_GL_ACCUM_ALPHA_SIZE
 	SDL_GL_ACCUM_BLUE_SIZE
 	SDL_GL_ACCUM_GREEN_SIZE
@@ -67,25 +58,6 @@ our @EXPORT=qw(
 	SDL_SAMPLEFLAG_ERROR
 	SDL_SAMPLEFLAG_EAGAIN
 );
-
-# Getting header constants from C:\strawberry\c\bin\..\include\SDL
-use constant {
-	NULL                                                => 0,
-	AUDIO_U8                                            => 0x0008,
-	AUDIO_S8                                            => 0x8008,
-	AUDIO_U16LSB                                        => 0x0010,
-	AUDIO_S16LSB                                        => 0x8010,
-	AUDIO_U16MSB                                        => 0x1010,
-	AUDIO_S16MSB                                        => 0x9010,
-	AUDIO_U16                                           => 0x0010,
-	AUDIO_S16                                           => 0x8010,
-};
-
-use constant {
-	SDL_AUDIO_STOPPED                                   => 0,
-	SDL_AUDIO_PLAYING                                   => 1,
-	SDL_AUDIO_PAUSED                                    => 2,
-}; # SDL_audiostatus
 
 use constant {
 	SDL_MIX_MAXVOLUME                                   => 128,

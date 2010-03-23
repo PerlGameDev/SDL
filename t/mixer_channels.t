@@ -23,7 +23,7 @@ use SDL::Mixer;
 use SDL::Mixer::Channels;
 use SDL::Mixer::Samples;
 
-is( SDL::Mixer::open_audio( 44100, SDL::Constants::AUDIO_S16, 2, 4096 ),  0, '[open_audio] ran');
+is( SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 ),  0, '[open_audio] ran');
 
 is( SDL::Mixer::Channels::allocate_channels( 4 ),                         4, "[allocate_channels] 4 channels allocated" );
 

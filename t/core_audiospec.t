@@ -3,7 +3,7 @@ use strict;
 use threads;
 use threads::shared;
 use SDL ':init';
-use SDL::Audio;
+use SDL::Audio ':all';
 use SDL::AudioSpec;
 use Test::More;
 use Devel::Peek;
@@ -27,7 +27,7 @@ my $f :shared = 0;
 
 my $desired = SDL::AudioSpec->new;
    $desired->freq(44100);
-   $desired->format(SDL::Constants::AUDIO_S8);
+   $desired->format(AUDIO_S8);
    $desired->channels(1);
    $desired->samples(4096);
    $desired->callback('main::callback');
