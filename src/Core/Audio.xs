@@ -92,7 +92,21 @@ audio_convert( cvt, data, len )
 		
 		
 	OUTPUT:
-		RETVAL			
+		RETVAL
+
+int
+audio_AUDIO_U16SYS()
+	CODE:
+		RETVAL = AUDIO_U16SYS;
+	OUTPUT:
+		RETVAL
+
+int
+audio_AUDIO_S16SYS()
+	CODE:
+		RETVAL = AUDIO_S16SYS;
+	OUTPUT:
+		RETVAL
 
 void
 audio_close ()
