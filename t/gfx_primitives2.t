@@ -14,6 +14,9 @@ use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
 
+my $videodriver       = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
 if( !SDL::TestTool->init(SDL_INIT_VIDEO) )
 {
     plan( skip_all => 'Failed to init video' );
@@ -110,6 +113,8 @@ SDL::GFX::Primitives::character_RGBA( $display, 518 + ($_ % 17) * 7, 251 + int($
 SDL::Video::update_rect($display, 0, 0, 640, 480); 
 
 SDL::delay(3000);
+
+$ENV{SDL_VIDEODRIVER} = $videodriver;
 
 pass 'Are we still alive? Checking for segfaults';
 

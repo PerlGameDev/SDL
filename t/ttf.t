@@ -26,6 +26,9 @@ use SDL::RWOps;
 use SDL::Version;
 use Encode;
 
+my $videodriver       = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
 my $lv = SDL::TTF::linked_version();
 my $cv = SDL::TTF::compile_time_version();
 
@@ -216,6 +219,8 @@ SKIP:
 is( SDL::TTF::was_init(),                  1, "[was_init] returns true" );
 is( SDL::TTF::quit(),                  undef, "[quit] ran" );
 is( SDL::TTF::was_init(),                  0, "[was_init] returns false" );
+
+$ENV{SDL_VIDEODRIVER} = $videodriver;
 
 done_testing;
 

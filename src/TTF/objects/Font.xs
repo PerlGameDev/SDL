@@ -30,6 +30,7 @@ ttf_font_new(CLASS, file, ptsize, index = 0)
 	int ptsize
 	long index
 	CODE:
+		RETVAL = safemalloc(sizeof(TTF_Font *));
 		RETVAL = TTF_OpenFontIndex(file, ptsize, index);
 	OUTPUT:
 		RETVAL

@@ -19,9 +19,11 @@ use SDL::Video;
 use SDL::PixelFormat;
 use Test::More;
 
-
 use lib 't/lib';
 use SDL::TestTool;
+
+my $videodriver       = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
     plan( skip_all => 'Failed to init video' );
@@ -121,8 +123,9 @@ my $other_surface =  SDL::Surface->new_from( $surface->get_pixels_ptr, 640, 320,
 
 isa_ok( $other_surface, 'SDL::Surface' );
 
+$ENV{SDL_VIDEODRIVER} = $videodriver;
+
 pass 'Final SegFault test';
 
 SDL::delay(100);
 sleep(2);
-

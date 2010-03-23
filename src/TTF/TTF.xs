@@ -163,6 +163,7 @@ ttf_open_font_index(file, ptsize, index)
 	PREINIT:
 		char* CLASS = "SDL::TTF::Font";
 	CODE:
+		RETVAL = safemalloc(sizeof(TTF_Font *));
 		RETVAL = TTF_OpenFontIndex(file, ptsize, index);
 	OUTPUT:
 		RETVAL
@@ -175,6 +176,7 @@ ttf_open_font_RW(src, freesrc, ptsize)
 	PREINIT:
 		char* CLASS = "SDL::TTF::Font";
 	CODE:
+		RETVAL = safemalloc(sizeof(TTF_Font *));
 		RETVAL = TTF_OpenFontRW(src, freesrc, ptsize);
 	OUTPUT:
 		RETVAL
@@ -188,6 +190,7 @@ ttf_open_font_index_RW(src, freesrc, ptsize, index)
 	PREINIT:
 		char* CLASS = "SDL::TTF::Font";
 	CODE:
+		RETVAL = safemalloc(sizeof(TTF_Font *));
 		RETVAL = TTF_OpenFontIndexRW(src, freesrc, ptsize, index);
 	OUTPUT:
 		RETVAL
@@ -355,6 +358,7 @@ ttf_render_text_solid(font, text, fg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderText_Solid(font, text, *fg);
 	OUTPUT:
 		RETVAL
@@ -376,6 +380,7 @@ ttf_render_utf8_solid(font, text, fg)
 		*unicode                = 0xFEFF;
 		UTF8_to_UNICODE(unicode+1, utf8_text, len);
 
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderUNICODE_Solid(font, unicode, *fg);
 	OUTPUT:
 		RETVAL
@@ -388,6 +393,7 @@ ttf_render_unicode_solid(font, text, fg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderUNICODE_Solid(font, utf16_to_UNICODE(text), *fg);
 	OUTPUT:
 		RETVAL
@@ -400,6 +406,7 @@ ttf_render_glyph_solid(font, ch, fg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderGlyph_Solid(font, ch, *fg);
 	OUTPUT:
 		RETVAL
@@ -413,6 +420,7 @@ ttf_render_text_shaded(font, text, fg, bg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderText_Shaded(font, text, *fg, *bg);
 	OUTPUT:
 		RETVAL
@@ -426,6 +434,7 @@ ttf_render_utf8_shaded(font, text, fg, bg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderUTF8_Shaded(font, SvPV(text, PL_na), *fg, *bg);
 	OUTPUT:
 		RETVAL
@@ -439,6 +448,7 @@ ttf_render_unicode_shaded(font, text, fg, bg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderUNICODE_Shaded(font, utf16_to_UNICODE(text), *fg, *bg);
 	OUTPUT:
 		RETVAL
@@ -452,6 +462,7 @@ ttf_render_glyph_shaded(font, ch, fg, bg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderGlyph_Shaded(font, ch, *fg, *bg);
 	OUTPUT:
 		RETVAL
@@ -464,6 +475,7 @@ ttf_render_text_blended(font, text, fg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderText_Blended(font, text, *fg);
 	OUTPUT:
 		RETVAL
@@ -476,6 +488,7 @@ ttf_render_utf8_blended(font, text, fg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderUTF8_Blended(font, SvPV(text, PL_na), *fg);
 	OUTPUT:
 		RETVAL
@@ -488,6 +501,7 @@ ttf_render_unicode_blended(font, text, fg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderUNICODE_Blended(font, utf16_to_UNICODE(text), *fg);
 	OUTPUT:
 		RETVAL
@@ -500,6 +514,7 @@ ttf_render_glyph_blended(font, ch, fg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
+		RETVAL = safemalloc(sizeof(SDL_Surface *));
 		RETVAL = TTF_RenderGlyph_Blended(font, ch, *fg);
 	OUTPUT:
 		RETVAL
