@@ -31,7 +31,7 @@ An C<SDL_Surface> defines a surfaceangular area of pixels.
 
 The constants are not exported by default. You can export them into your namespace by doing:
 
- use SDL::Video ':flags';
+ use SDL::Video ':surface';
 
 or
 
