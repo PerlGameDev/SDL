@@ -45,7 +45,7 @@ static Sint16* av_to_sint16 (AV* av)
 			SV ** temp = av_fetch(av,i,0);
 			if( temp != NULL )
 			{
-				table[i] = (Sint16) SvIV( *temp );
+				table[i] = (Sint16) SvIV ( *temp  );
 			}
 			else
 			{
@@ -688,6 +688,8 @@ gfx_prim_polygon_color(dst, vx, vy, n, color)
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL       = polygonColor(dst, _vx, _vy, n, color);
+		safefree( _vx );
+		safefree( _vy );
 	OUTPUT:
 		RETVAL
 
@@ -705,6 +707,9 @@ gfx_prim_polygon_RGBA(dst, vx, vy, n, r, g, b, a)
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = polygonRGBA(dst, _vx, _vy, n, r, g, b, a);
+		safefree( _vx );
+		safefree( _vy );
+
 	OUTPUT:
 		RETVAL
 
@@ -719,6 +724,9 @@ gfx_prim_aapolygon_color(dst, vx, vy, n, color)
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = aapolygonColor(dst, _vx, _vy, n, color);
+		safefree( _vx );
+		safefree( _vy );
+
 	OUTPUT:
 		RETVAL
 
@@ -736,6 +744,9 @@ gfx_prim_aapolygon_RGBA(dst, vx, vy, n, r, g, b, a)
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = aapolygonRGBA(dst, _vx, _vy, n, r, g, b, a);
+		safefree( _vx );
+		safefree( _vy );
+
 	OUTPUT:
 		RETVAL
 
@@ -750,6 +761,9 @@ gfx_prim_filled_polygon_color(dst, vx, vy, n, color)
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = filledPolygonColor(dst, _vx, _vy, n, color);
+		safefree( _vx );
+		safefree( _vy );
+
 	OUTPUT:
 		RETVAL
 
@@ -767,6 +781,9 @@ gfx_prim_filled_polygon_RGBA(dst, vx, vy, n, r, g, b, a)
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = filledPolygonRGBA(dst, _vx, _vy, n, r, g, b, a);
+		safefree( _vx );
+		safefree( _vy );
+
 	OUTPUT:
 		RETVAL
 
@@ -783,6 +800,9 @@ gfx_prim_textured_polygon(dst, vx, vy, n, texture, texture_dx, texture_dy)
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = texturedPolygon(dst, _vx, _vy, n, texture, texture_dx, texture_dy);
+		safefree( _vx );
+		safefree( _vy );
+
 	OUTPUT:
 		RETVAL
 
@@ -801,6 +821,9 @@ gfx_prim_filled_polygon_color_MT(dst, vx, vy, n, color, polyInts, polyAllocated)
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = filledPolygonColorMT(dst, _vx, _vy, n, color, polyInts, polyAllocated);
+		safefree( _vx );
+		safefree( _vy );
+
 	OUTPUT:
 		RETVAL
 
@@ -820,6 +843,9 @@ gfx_prim_filled_polygon_RGBA_MT(dst, vx, vy, n, r, g, b, a, polyInts, polyAlloca
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = filledPolygonRGBAMT(dst, _vx, _vy, n, r, g, b, a, polyInts, polyAllocated);
+		safefree( _vx );
+		safefree( _vy );
+
 	OUTPUT:
 		RETVAL
 
@@ -838,6 +864,9 @@ gfx_prim_textured_polygon_MT(dst, vx, vy, n, texture, texture_dx, texture_dy, po
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = texturedPolygonMT(dst, _vx, _vy, n, texture, texture_dx, texture_dy, polyInts, polyAllocated);
+		safefree( _vx );
+		safefree( _vy );
+
 	OUTPUT:
 		RETVAL
 
@@ -907,6 +936,9 @@ gfx_prim_bezier_color(dst, vx, vy, n, s, color)
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = bezierColor(dst, _vx, _vy, n, s, color);
+		safefree( _vx );
+		safefree( _vy );
+
 	OUTPUT:
 		RETVAL
 
@@ -925,6 +957,9 @@ gfx_prim_bezier_RGBA(dst, vx, vy, n, s, r, g, b, a)
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL = bezierRGBA(dst, _vx, _vy, n, s, r, g, b, a);
+		safefree( _vx );
+		safefree( _vy );
+
 	OUTPUT:
 		RETVAL
 
