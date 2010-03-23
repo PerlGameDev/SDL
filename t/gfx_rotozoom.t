@@ -1,12 +1,12 @@
 #!perl
 use strict;
 use warnings;
-use SDL;
+use SDL ':init';
 use SDL::Rect;
 use SDL::Config;
-use SDL::Video;
+use SDL::Video ':flags';
 use SDL::Version;
-use SDL::Surface;
+use SDL::Surface ':flags';
 use SDL::GFX;
 use SDL::GFX::Rotozoom;
 use Test::More;
@@ -34,7 +34,7 @@ my $v       = SDL::GFX::linked_version();
 isa_ok($v, 'SDL::Version', '[linked_version]');
 printf("got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch);
 
-my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
+my $display = SDL::Video::set_video_mode(640,480,32, SDL_ANYFORMAT );
 my $pixel   = SDL::Video::map_RGB( $display->format, 0, 0, 0 );
 SDL::Video::fill_rect( $display, SDL::Rect->new( 0, 0, $display->w, $display->h ), $pixel );
 
@@ -84,7 +84,7 @@ SKIP:
 	isa_ok(SDL::GFX::Rotozoom::shrink_surface($src, 1, 1),         'SDL::Surface', 'shrink_surface');
 	draw();
 }
-$src = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 100, 200, 32, 0, 0, 0, 0 );
+$src = SDL::Surface->new( SDL_SWSURFACE, 100, 200, 32, 0, 0, 0, 0 );
 isa_ok(SDL::GFX::Rotozoom::rotate_surface_90_degrees($src, 1), 'SDL::Surface', 'rotate_surface_90_degrees');
 # Note: everything but 32bit surface will crash
 

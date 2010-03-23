@@ -2,7 +2,7 @@
 use strict;
 use threads;
 use threads::shared;
-use SDL;
+use SDL ':init';
 use SDL::Audio;
 use SDL::AudioSpec;
 use Test::More;

@@ -3,8 +3,8 @@ use strict;
 use warnings;
 use Test::More;
 
-use SDL;
-use SDL::Surface;
+use SDL ':init';
+use SDL::Surface ':flags';
 use SDL::PixelFormat;
 use SDL::Video;
 

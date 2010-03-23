@@ -34,7 +34,7 @@ BEGIN {
 }
 
 use strict;
-use SDL;
+use SDL ':init';
 use SDL::Config;
 use SDL::Rect;
 use SDL::Game::Rect;

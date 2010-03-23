@@ -562,16 +562,12 @@ is( SDL_ADDEVENT,      0, 'SDL_ADDEVENT should be imported' );
 is( SDL_ADDEVENT(),    0, 'SDL_ADDEVENT() should also be available' );
 is( SDL_ALLEVENTS,     0xFFFFFFFF, 'SDL_ALLEVENTS should be imported' );
 is( SDL_ALLEVENTS(),   0xFFFFFFFF, 'SDL_ALLEVENTS() should also be available' );
-is( SDL_ANYFORMAT,     268435456, 'SDL_ANYFORMAT should be imported' );
-is( SDL_ANYFORMAT(),   268435456, 'SDL_ANYFORMAT() should also be available' );
 is( SDL_APPACTIVE,     4,         'SDL_APPACTIVE should be imported' );
 is( SDL_APPACTIVE(),   4,         'SDL_APPACTIVE() should also be available' );
 is( SDL_APPINPUTFOCUS, 2,         'SDL_APPINPUTFOCUS should be imported' );
 is( SDL_APPINPUTFOCUS(), 2, 'SDL_APPINPUTFOCUS() should also be available' );
 is( SDL_APPMOUSEFOCUS,   1, 'SDL_APPMOUSEFOCUS should be imported' );
 is( SDL_APPMOUSEFOCUS(), 1, 'SDL_APPMOUSEFOCUS() should also be available' );
-is( SDL_ASYNCBLIT,       4, 'SDL_ASYNCBLIT should be imported' );
-is( SDL_ASYNCBLIT(),     4, 'SDL_ASYNCBLIT() should also be available' );
 
 is( SDL_AUDIO_PAUSED,    2, 'SDL_AUDIO_PAUSED should be imported' );
 is( SDL_AUDIO_PAUSED(),  2, 'SDL_AUDIO_PAUSED() should also be available' );
@@ -593,8 +589,6 @@ is( SDL_BUTTON_WHEELDOWN(), 5, 'SDL_BUTTON_WHEELDOWN() should also be available'
 
 is( SDL_DISABLE,         0,  'SDL_DISABLE should be imported' );
 is( SDL_DISABLE(),       0,  'SDL_DISABLE() should also be available' );
-is( SDL_DOUBLEBUF,   1073741824,  'SDL_DOUBLEBUF should be imported' );
-is( SDL_DOUBLEBUF(), 1073741824,  'SDL_DOUBLEBUF() should also be available' );
 
 is( SDL_ENABLE,            1,  'SDL_ENABLE should be imported' );
 is( SDL_ENABLE(),          1,  'SDL_ENABLE() should also be available' );
@@ -615,8 +609,6 @@ is( SDL_EVENT_RESERVED6(), 22, 'SDL_EVENT_RESERVED6() should also be available')
 is( SDL_EVENT_RESERVED7,   23, 'SDL_EVENT_RESERVED7 should be imported');
 is( SDL_EVENT_RESERVED7(), 23, 'SDL_EVENT_RESERVED7() should also be available');
 
-is( SDL_FULLSCREEN,  0x80000000, 'SDL_FULLSCREEN should be imported' );
-is( SDL_FULLSCREEN(), 0x80000000, 'SDL_FULLSCREEN() should also be available' );
 
 is( SDL_GETEVENT,    2, 'SDL_GETEVENT should be imported' );
 is( SDL_GETEVENT(),  2, 'SDL_GETEVENT() should also be available' );
@@ -672,30 +664,8 @@ is( SDL_HAT_RIGHTUP(),   3,  'SDL_HAT_RIGHTUP() should also be available' );
 is( SDL_HAT_UP,          1,  'SDL_HAT_UP should be imported' );
 is( SDL_HAT_UP(),        1,  'SDL_HAT_UP() should also be available' );
 
-is( SDL_HWACCEL,     256,       'SDL_HWACCEL should be imported' );
-is( SDL_HWACCEL(),   256,       'SDL_HWACCEL() should also be available' );
-is( SDL_HWPALETTE,   536870912, 'SDL_HWPALETTE should be imported' );
-is( SDL_HWPALETTE(), 536870912, 'SDL_HWPALETTE() should also be available' );
-is( SDL_HWSURFACE,   1,         'SDL_HWSURFACE should be imported' );
-is( SDL_HWSURFACE(), 1,         'SDL_HWSURFACE() should also be available' );
-
 is( SDL_IGNORE,   0, 'SDL_IGNORE should be imported' );
 is( SDL_IGNORE(), 0, 'SDL_IGNORE() should also be available' );
-
-is( SDL_INIT_AUDIO,      16,    'SDL_INIT_AUDIO should be imported' );
-is( SDL_INIT_AUDIO(),    16,    'SDL_INIT_AUDIO() should also be available' );
-is( SDL_INIT_CDROM,      256,   'SDL_INIT_CDROM should be imported' );
-is( SDL_INIT_CDROM(),    256,   'SDL_INIT_CDROM() should also be available' );
-is( SDL_INIT_EVERYTHING, 65535, 'SDL_INIT_EVERYTHING should be imported' );
-is( SDL_INIT_EVERYTHING(), 65535, 'SDL_INIT_EVERYTHING() should also be available' );
-is( SDL_INIT_JOYSTICK,   512, 'SDL_INIT_JOYSTICK should be imported' );
-is( SDL_INIT_JOYSTICK(), 512, 'SDL_INIT_JOYSTICK() should also be available' );
-is( SDL_INIT_NOPARACHUTE, 1048576, 'SDL_INIT_NOPARACHUTE should be imported' );
-is( SDL_INIT_NOPARACHUTE(), 1048576, 'SDL_INIT_NOPARACHUTE() should also be available' );
-is( SDL_INIT_TIMER,   1,  'SDL_INIT_TIMER should be imported' );
-is( SDL_INIT_TIMER(), 1,  'SDL_INIT_TIMER() should also be available' );
-is( SDL_INIT_VIDEO,   32, 'SDL_INIT_VIDEO should be imported' );
-is( SDL_INIT_VIDEO(), 32, 'SDL_INIT_VIDEO() should also be available' );
 
 is( SDL_IYUV_OVERLAY, 1448433993, 'SDL_IYUV_OVERLAY should be imported' );
 is( SDL_IYUV_OVERLAY(), 1448433993, 'SDL_IYUV_OVERLAY() should also be available' );
@@ -774,17 +744,11 @@ is( SDL_NOEVENT(),       0,  'SDL_NOEVENT() should also be available' );
 is( SDL_NUMEVENTS,       32, 'SDL_NUMEVENTS should be imported' );
 is( SDL_NUMEVENTS(),     32, 'SDL_NUMEVENTS() should also be available' );
 
-is( SDL_OPENGL,       2,  'SDL_OPENGL should be imported' );
-is( SDL_OPENGL(),     2,  'SDL_OPENGL() should also be available' );
-is( SDL_OPENGLBLIT,   10, 'SDL_OPENGLBLIT should be imported' );
-is( SDL_OPENGLBLIT(), 10, 'SDL_OPENGLBLIT() should also be available' );
 
 is( SDL_PEEKEVENT,     1,        'SDL_PEEKEVENT should be imported' );
 is( SDL_PEEKEVENT(),   1,        'SDL_PEEKEVENT() should also be available' );
 is( SDL_PHYSPAL,         0x02, 'SDL_PHYSPAL should be imported' );
 is( SDL_PHYSPAL(),       0x02, 'SDL_PHYSPAL() should also be available' );
-is( SDL_PREALLOC,      16777216, 'SDL_PREALLOC should be imported' );
-is( SDL_PREALLOC(),    16777216, 'SDL_PREALLOC() should also be available' );
 is( SDL_PRESSED,       1,        'SDL_PRESSED should be imported' );
 is( SDL_PRESSED(),     1,        'SDL_PRESSED() should also be available' );
 
@@ -797,19 +761,7 @@ is( SDL_QUITMASK(),    SDL_EVENTMASK(SDL_QUIT), 'SDL_QUITMASK() should also be a
 
 is( SDL_RELEASED,      0,        'SDL_RELEASED should be imported' );
 is( SDL_RELEASED(),    0,        'SDL_RELEASED() should also be available' );
-is( SDL_RESIZABLE,     16,       'SDL_RESIZABLE should be imported' );
-is( SDL_RESIZABLE(),   16,       'SDL_RESIZABLE() should also be available' );
-is( SDL_RLEACCEL,      16384,    'SDL_RLEACCEL should be imported' );
-is( SDL_RLEACCEL(),    16384,    'SDL_RLEACCEL() should also be available' );
-is( SDL_RLEACCELOK,    8192,     'SDL_RLEACCELOK should be imported' );
-is( SDL_RLEACCELOK(),  8192,     'SDL_RLEACCELOK() should also be available' );
 
-is( SDL_SRCALPHA,      65536,    'SDL_SRCALPHA should be imported' );
-is( SDL_SRCALPHA(),    65536,    'SDL_SRCALPHA() should also be available' );
-is( SDL_SRCCOLORKEY,   4096,     'SDL_SRCCOLORKEY should be imported' );
-is( SDL_SRCCOLORKEY(), 4096,     'SDL_SRCCOLORKEY() should also be available' );
-is( SDL_SWSURFACE,     0,        'SDL_SWSURFACE should be imported' );
-is( SDL_SWSURFACE(),   0,        'SDL_SWSURFACE() should also be available' );
 is( SDL_SYSWMEVENT,    13,       'SDL_SYSWMEVENT should be imported' );
 is( SDL_SYSWMEVENT(),  13,       'SDL_SYSWMEVENT() should also be available' );
 is( SDL_SYSWMEVENTMASK,   SDL_EVENTMASK(SDL_SYSWMEVENT), 'SDL_SYSWMEVENTMASK should be imported');

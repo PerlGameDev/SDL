@@ -296,12 +296,10 @@ our @EXPORT=qw(
 	SDL_ACTIVEEVENT
 	SDL_ACTIVEEVENTMASK
 	SDL_ALLEVENTS
-	SDL_ANYFORMAT
 	SDL_ADDEVENT
 	SDL_APPACTIVE
 	SDL_APPINPUTFOCUS
 	SDL_APPMOUSEFOCUS
-	SDL_ASYNCBLIT
 	SDL_AUDIO_PAUSED
 	SDL_AUDIO_PLAYING
 	SDL_AUDIO_STOPPED
@@ -311,9 +309,7 @@ our @EXPORT=qw(
 	SDL_BUTTON_WHEELUP
 	SDL_BUTTON_WHEELDOWN
 	SDL_DISABLE
-	SDL_DOUBLEBUF
 	SDL_ENABLE
-	SDL_FULLSCREEN
 	SDL_GETEVENT
 	SDL_GL_ACCUM_ALPHA_SIZE
 	SDL_GL_ACCUM_BLUE_SIZE
@@ -339,17 +335,7 @@ our @EXPORT=qw(
 	SDL_HAT_RIGHTDOWN
 	SDL_HAT_RIGHTUP
 	SDL_HAT_UP
-	SDL_HWACCEL
-	SDL_HWPALETTE
-	SDL_HWSURFACE
 	SDL_IGNORE
-	SDL_INIT_AUDIO
-	SDL_INIT_CDROM
-	SDL_INIT_EVERYTHING
-	SDL_INIT_JOYSTICK
-	SDL_INIT_NOPARACHUTE
-	SDL_INIT_TIMER
-	SDL_INIT_VIDEO
 	SDL_IYUV_OVERLAY
 	SDL_JOYAXISMOTION
 	SDL_JOYAXISMOTIONMASK
@@ -377,10 +363,7 @@ our @EXPORT=qw(
 	SDL_MOUSEMOTIONMASK
 	SDL_NOEVENT
 	SDL_NUMEVENTS
-	SDL_OPENGL
-	SDL_OPENGLBLIT
 	SDL_PEEKEVENT
-	SDL_PREALLOC
 	SDL_PRESSED
 	SDL_QUERY
 	SDL_QUIT
@@ -394,12 +377,6 @@ our @EXPORT=qw(
 	SDL_EVENT_RESERVED5
 	SDL_EVENT_RESERVED6
 	SDL_EVENT_RESERVED7
-	SDL_RESIZABLE
-	SDL_RLEACCEL
-	SDL_RLEACCELOK
-	SDL_SRCALPHA
-	SDL_SRCCOLORKEY
-	SDL_SWSURFACE
 	SDL_SYSWMEVENT
 	SDL_SYSWMEVENTMASK
 	SDL_USEREVENT
@@ -440,14 +417,6 @@ our @EXPORT=qw(
 # Getting header constants from C:\strawberry\c\bin\..\include\SDL
 use constant {
 	NULL                                                => 0,
-	SDL_INIT_TIMER                                      => 0x00000001,
-	SDL_INIT_AUDIO                                      => 0x00000010,
-	SDL_INIT_VIDEO                                      => 0x00000020,
-	SDL_INIT_CDROM                                      => 0x00000100,
-	SDL_INIT_JOYSTICK                                   => 0x00000200,
-	SDL_INIT_NOPARACHUTE                                => 0x00100000,
-	SDL_INIT_EVENTTHREAD                                => 0x01000000,
-	SDL_INIT_EVERYTHING                                 => 0x0000FFFF,
 	SDL_APPMOUSEFOCUS                                   => 0x01,
 	SDL_APPINPUTFOCUS                                   => 0x02,
 	SDL_APPACTIVE                                       => 0x04,
@@ -3395,23 +3364,6 @@ use constant {
 	TIMER_RESOLUTION                                    => 10,
 	SDL_ALPHA_OPAQUE                                    => 255,
 	SDL_ALPHA_TRANSPARENT                               => 0,
-	SDL_SWSURFACE                                       => 0x00000000,
-	SDL_HWSURFACE                                       => 0x00000001,
-	SDL_ASYNCBLIT                                       => 0x00000004,
-	SDL_ANYFORMAT                                       => 0x10000000,
-	SDL_HWPALETTE                                       => 0x20000000,
-	SDL_DOUBLEBUF                                       => 0x40000000,
-	SDL_FULLSCREEN                                      => 0x80000000,
-	SDL_OPENGL                                          => 0x00000002,
-	SDL_OPENGLBLIT                                      => 0x0000000A,
-	SDL_RESIZABLE                                       => 0x00000010,
-	SDL_NOFRAME                                         => 0x00000020,
-	SDL_HWACCEL                                         => 0x00000100,
-	SDL_SRCCOLORKEY                                     => 0x00001000,
-	SDL_RLEACCELOK                                      => 0x00002000,
-	SDL_RLEACCEL                                        => 0x00004000,
-	SDL_SRCALPHA                                        => 0x00010000,
-	SDL_PREALLOC                                        => 0x01000000,
 	SDL_YV12_OVERLAY                                    => 0x32315659,
 	SDL_IYUV_OVERLAY                                    => 0x56555949,
 	SDL_YUY2_OVERLAY                                    => 0x32595559,

@@ -1,13 +1,15 @@
 #!/usr/bin/perl -w
 use strict;
-use SDL;
+use SDL ':init';
 use SDL::Event;
 use SDL::Events;
+use SDL::Surface ':flags';
 use SDL::Video;
 use Devel::Peek;
 use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
+use SDL::Constants;
 
 my $videodriver       = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};

@@ -1,9 +1,9 @@
 use strict;
-use SDL;
+use SDL ':init';
 use SDL::Rect;
 use SDL::Color;
 use SDL::Video;
-use SDL::Surface;
+use SDL::Surface ':flags';
 use SDL::PixelFormat;
 use SDL::Palette;
 use Test::More;

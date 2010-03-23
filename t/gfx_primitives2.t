@@ -1,12 +1,12 @@
 #!perl
 use strict;
 use warnings;
-use SDL;
+use SDL ':init';
 use SDL::Rect;
 use SDL::Config;
 use SDL::Video;
 use SDL::Version;
-use SDL::Surface;
+use SDL::Surface ':flags';
 use SDL::GFX;
 use SDL::GFX::Primitives;
 use Test::More;

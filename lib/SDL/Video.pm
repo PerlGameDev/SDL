@@ -10,4 +10,66 @@ internal_load_dlls(__PACKAGE__);
 
 bootstrap SDL::Video;
 
+use base 'Exporter';
+
+our @EXPORT_OK = qw(
+	SDL_ANYFORMAT
+	SDL_HWPALETTE
+	SDL_DOUBLEBUF
+	SDL_FULLSCREEN
+	SDL_OPENGL
+	SDL_OPENGLBLIT
+	SDL_RESIZABLE
+	SDL_NOFRAME
+	SDL_HWACCEL
+	SDL_SRCCOLORKEY
+	SDL_RLEACCELOK
+	SDL_RLEACCEL
+	SDL_SRCALPHA
+	SDL_PREALLOC
+);
+
+our %EXPORT_TAGS = 
+(
+	flags => [qw(
+		SDL_ANYFORMAT
+		SDL_HWPALETTE
+		SDL_DOUBLEBUF
+		SDL_FULLSCREEN
+		SDL_OPENGL
+		SDL_OPENGLBLIT
+		SDL_RESIZABLE
+		SDL_NOFRAME
+		SDL_HWACCEL
+		SDL_SRCCOLORKEY
+		SDL_RLEACCELOK
+		SDL_RLEACCEL
+		SDL_SRCALPHA
+		SDL_PREALLOC
+	)]
+);
+
+use constant{
+	SDL_ANYFORMAT                                       => 0x10000000,
+	SDL_HWPALETTE                                       => 0x20000000,
+	SDL_DOUBLEBUF                                       => 0x40000000,
+	SDL_FULLSCREEN                                      => 0x80000000,
+	SDL_OPENGL                                          => 0x00000002,
+	SDL_OPENGLBLIT                                      => 0x0000000A,
+	SDL_RESIZABLE                                       => 0x00000010,
+	SDL_NOFRAME                                         => 0x00000020,
+	SDL_HWACCEL                                         => 0x00000100,
+	SDL_SRCCOLORKEY                                     => 0x00001000,
+	SDL_RLEACCELOK                                      => 0x00002000,
+	SDL_RLEACCEL                                        => 0x00004000,
+	SDL_SRCALPHA                                        => 0x00010000,
+	SDL_PREALLOC                                        => 0x01000000,
+}; # flags
+
+# add all the other ":class" tags to the ":all" class,
+# deleting duplicates
+my %seen;
+push @{$EXPORT_TAGS{all}},
+grep {!$seen{$_}++} @{$EXPORT_TAGS{$_}} foreach keys %EXPORT_TAGS;
+
 1;

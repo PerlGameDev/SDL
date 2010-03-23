@@ -1,13 +1,14 @@
 #!/usr/bin/perl -w
 use strict;
-use SDL;
+use SDL ':init';
 use SDL::Color;
-use SDL::Surface;
+use SDL::Surface ':flags';
 use SDL::Config;
 use SDL::Overlay;
 use Test::More;
 use SDL::Rect;
-use SDL::Video;
+use SDL::Video ':flags';
+use SDL::Constants;
 
 use lib 't/lib';
 use SDL::TestTool;
@@ -20,7 +21,7 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 }
 else
 {
-	  plan( tests => 63);
+	  plan( tests => 89);
 }
 
 my @done =
@@ -74,6 +75,33 @@ my @done =
 
 can_ok ('SDL::Video', @done); 
 
+is( SDL_OPENGL,        2,           'SDL_OPENGL should be imported' );
+is( SDL_OPENGL(),      2,           'SDL_OPENGL() should also be available' );
+is( SDL_OPENGLBLIT,    10,          'SDL_OPENGLBLIT should be imported' );
+is( SDL_OPENGLBLIT(),  10,          'SDL_OPENGLBLIT() should also be available' );
+is( SDL_RESIZABLE,     16,          'SDL_RESIZABLE should be imported' );
+is( SDL_RESIZABLE(),   16,          'SDL_RESIZABLE() should also be available' );
+is( SDL_HWACCEL,       256,         'SDL_HWACCEL should be imported' );
+is( SDL_HWACCEL(),     256,         'SDL_HWACCEL() should also be available' );
+is( SDL_SRCCOLORKEY,   4096,        'SDL_SRCCOLORKEY should be imported' );
+is( SDL_SRCCOLORKEY(), 4096,        'SDL_SRCCOLORKEY() should also be available' );
+is( SDL_RLEACCELOK,    8192,        'SDL_RLEACCELOK should be imported' );
+is( SDL_RLEACCELOK(),  8192,        'SDL_RLEACCELOK() should also be available' );
+is( SDL_RLEACCEL,      16384,       'SDL_RLEACCEL should be imported' );
+is( SDL_RLEACCEL(),    16384,       'SDL_RLEACCEL() should also be available' );
+is( SDL_SRCALPHA,      65536,       'SDL_SRCALPHA should be imported' );
+is( SDL_SRCALPHA(),    65536,       'SDL_SRCALPHA() should also be available' );
+is( SDL_ANYFORMAT,     268435456,   'SDL_ANYFORMAT should be imported' );
+is( SDL_ANYFORMAT(),   268435456,   'SDL_ANYFORMAT() should also be available' );
+is( SDL_DOUBLEBUF,     1073741824,  'SDL_DOUBLEBUF should be imported' );
+is( SDL_DOUBLEBUF(),   1073741824,  'SDL_DOUBLEBUF() should also be available' );
+is( SDL_FULLSCREEN,    0x80000000,  'SDL_FULLSCREEN should be imported' );
+is( SDL_FULLSCREEN(),  0x80000000,  'SDL_FULLSCREEN() should also be available' );
+is( SDL_HWPALETTE,     536870912,   'SDL_HWPALETTE should be imported' );
+is( SDL_HWPALETTE(),   536870912,   'SDL_HWPALETTE() should also be available' );
+is( SDL_PREALLOC,      16777216,    'SDL_PREALLOC should be imported' );
+is( SDL_PREALLOC(),    16777216,    'SDL_PREALLOC() should also be available' );
+
 #testing get_video_surface
 #SDL::init(SDL_INIT_VIDEO);                                                                          
 
@@ -87,7 +115,7 @@ local $TODO = 'These should be tested with OS specific DLL or SO';
 is (SDL::Video::GL_load_library('t/realGL.so'), 0, '[GL_load_libary] returns 0 on success');
 # this gets set by GL_load_library => SDL_GL_LOADLIBARY. How do we get this from XS though?
 # below t/realGL.so needs to use SDL_GL_LOADLIBRARY
-isnt(SDL::Video::GL_get_proc_address('t/realGL.so'), NULL, '[GL_get_proc_address] returns not null on success');
+isnt(SDL::Video::GL_get_proc_address('t/realGL.so'), 0, '[GL_get_proc_address] returns not null on success');
 is (SDL::Video::GL_set_attribute( SDL_GL_DOUBLEBUFFER, 1) , 0 , '[GL_set_attribute] returns 0 on success');
 my $tdisplay = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 my $value = -3;

@@ -10,8 +10,8 @@ Core, Video
 
 =head1 SYNOPSIS
 
- use SDL;
- use SDL::Video;
+ use SDL ':init';
+ use SDL::Video ':flags';
  use SDL::Surface;
  use SDL::Rect;
 
@@ -22,7 +22,7 @@ Core, Video
  SDL::init(SDL_INIT_VIDEO);
 
  # setting video mode
- my $screen_surface = SDL::Video::set_video_mode($screen_width, $screen_height, 32, SDL_SWSURFACE);
+ my $screen_surface = SDL::Video::set_video_mode($screen_width, $screen_height, 32, SDL_ANYFORMAT);
  
  # drawing something somewhere
  my $mapped_color   = SDL::Video::map_RGB($screen_surface->format(), 0, 0, 255); # blue
@@ -36,6 +36,77 @@ Core, Video
  sleep(5); # just to have time to see it
  
  SDL::quit();
+
+=head1 CONSTANTS
+
+Available flags for L<SDL::Video::set_video_mode>:
+
+=over 4
+
+=item SDL_ANYFORMAT
+
+Allow any pixel-format *
+
+=item SDL_HWPALETTE
+
+Have an exclusive palette
+
+=item SDL_DOUBLEBUF
+
+Double buffered *
+
+=item SDL_FULLSCREEN
+
+Full screen surface *
+
+=item SDL_OPENGL
+
+Have an OpenGL context *
+
+=item SDL_OPENGLBLIT
+
+Support OpenGL blitting *. NOTE: This option is kept for compatibility only, and is not recommended for new code.
+
+=item SDL_RESIZABLE
+
+Resizable surface *
+
+=item SDL_NOFRAME
+
+No window caption or edge frame
+
+=back
+
+Used internally
+
+=over 4
+
+=item SDL_HWACCEL
+
+Use hardware acceleration blit
+
+=item SDL_SRCCOLORKEY
+
+Use colorkey blitting
+
+=item SDL_RLEACCELOK
+
+Private flag
+
+=item SDL_RLEACCEL
+
+Accelerated colorkey blitting with RLE
+
+=item SDL_SRCALPHA
+
+Use alpha blending blit
+
+=item SDL_PREALLOC
+
+Use preallocated memory
+
+=back
+
 
 =head1 Core Functions
 

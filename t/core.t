@@ -2,8 +2,8 @@
 use strict;
 use Config;
 
-use SDL;
-use SDL::Video;
+use SDL ':init';
+use SDL::Video ':flags';
 use SDL::Version;
 use Test::More;
 use lib 't/lib';
@@ -12,7 +12,7 @@ use SDL::TestTool;
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
     plan( skip_all => 'Failed to init video' );
 } else {
-    plan( tests => 12 );
+    plan( tests => 28 );
 }
 
 my @done =qw/ 
@@ -35,7 +35,24 @@ my $v = SDL::linked_version();
 isa_ok($v, 'SDL::Version', '[linked_version]');
 printf("got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch);
 
-my $display =  SDL::Video::set_video_mode(640,480,232, SDL_SWSURFACE );
+is( SDL_INIT_TIMER,         1,        'SDL_INIT_TIMER should be imported' );
+is( SDL_INIT_TIMER(),       1,        'SDL_INIT_TIMER() should also be available' );
+is( SDL_INIT_AUDIO,         16,       'SDL_INIT_AUDIO should be imported' );
+is( SDL_INIT_AUDIO(),       16,       'SDL_INIT_AUDIO() should also be available' );
+is( SDL_INIT_VIDEO,         32,       'SDL_INIT_VIDEO should be imported' );
+is( SDL_INIT_VIDEO(),       32,       'SDL_INIT_VIDEO() should also be available' );
+is( SDL_INIT_CDROM,         256,      'SDL_INIT_CDROM should be imported' );
+is( SDL_INIT_CDROM(),       256,      'SDL_INIT_CDROM() should also be available' );
+is( SDL_INIT_JOYSTICK,      512,      'SDL_INIT_JOYSTICK should be imported' );
+is( SDL_INIT_JOYSTICK(),    512,      'SDL_INIT_JOYSTICK() should also be available' );
+is( SDL_INIT_EVERYTHING,    65535,    'SDL_INIT_EVERYTHING should be imported' );
+is( SDL_INIT_EVERYTHING(),  65535,    'SDL_INIT_EVERYTHING() should also be available' );
+is( SDL_INIT_NOPARACHUTE,   1048576,  'SDL_INIT_NOPARACHUTE should be imported' );
+is( SDL_INIT_NOPARACHUTE(), 1048576,  'SDL_INIT_NOPARACHUTE() should also be available' );
+is( SDL_INIT_EVENTTHREAD,   16777216, 'SDL_INIT_EVENTTHREAD should be imported' );
+is( SDL_INIT_EVENTTHREAD(), 16777216, 'SDL_INIT_EVENTTHREAD() should also be available' );
+
+my $display =  SDL::Video::set_video_mode(640,480,232, SDL_ANYFORMAT );
 
 isnt( SDL::get_error(), '', '[get_error] got error '.SDL::get_error() );
 

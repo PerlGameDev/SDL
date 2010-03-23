@@ -41,19 +41,19 @@ require DynaLoader;
 
 use SDL_perl;
 use SDL::Constants;
-
-BEGIN {
-	@ISA = qw(Exporter DynaLoader);
-	@EXPORT = qw( in &NULL );
-};
+our @ISA = qw(Exporter DynaLoader);
+#BEGIN {
+#	@ISA = qw(Exporter DynaLoader);
+#	@EXPORT = qw( in &NULL );
+#};
 
 # Give our caller SDL::Constant's stuff as well as ours.
-sub import {
-  my $self = shift;
-
-  $self->export_to_level(1, @_);
-  SDL::Constants->export_to_level(1);
-}
+#sub import {
+#  my $self = shift;
+#
+#  $self->export_to_level(1, @_);
+#  SDL::Constants->export_to_level(1);
+#}
 our $VERSION = '2.3_9'; #Development Release
 $VERSION = eval $VERSION;
 
@@ -71,5 +71,49 @@ sub set_error {
 	my($format, @arguments) = @_;
 	SDL::set_error_real(sprintf($format, @arguments));
 }
+
+use base 'Exporter';
+
+our @EXPORT_OK = qw(
+	SDL_INIT_AUDIO
+	SDL_INIT_CDROM
+	SDL_INIT_EVENTTHREAD
+	SDL_INIT_EVERYTHING
+	SDL_INIT_JOYSTICK
+	SDL_INIT_NOPARACHUTE
+	SDL_INIT_TIMER
+	SDL_INIT_VIDEO
+);
+
+our %EXPORT_TAGS = 
+(
+	init => [qw(
+		SDL_INIT_AUDIO
+		SDL_INIT_CDROM
+		SDL_INIT_EVENTTHREAD
+		SDL_INIT_EVERYTHING
+		SDL_INIT_JOYSTICK
+		SDL_INIT_NOPARACHUTE
+		SDL_INIT_TIMER
+		SDL_INIT_VIDEO
+	)]
+);
+
+use constant{
+	SDL_INIT_TIMER       => 0x00000001,
+	SDL_INIT_AUDIO       => 0x00000010,
+	SDL_INIT_VIDEO       => 0x00000020,
+	SDL_INIT_CDROM       => 0x00000100,
+	SDL_INIT_JOYSTICK    => 0x00000200,
+	SDL_INIT_NOPARACHUTE => 0x00100000,
+	SDL_INIT_EVENTTHREAD => 0x01000000,
+	SDL_INIT_EVERYTHING  => 0x0000FFFF,
+};
+
+# add all the other ":class" tags to the ":all" class,
+# deleting duplicates
+my %seen;
+push @{$EXPORT_TAGS{all}},
+grep {!$seen{$_}++} @{$EXPORT_TAGS{$_}} foreach keys %EXPORT_TAGS;
 
 1;

@@ -1,10 +1,11 @@
 #!/usr/bin/perl -w
 use strict;
-use SDL;
+use SDL ':init';
 use SDL::Audio;
 use SDL::AudioSpec;
 use Test::More;
 use Devel::Peek;
+use SDL::Constants;
 
 use lib 't/lib';
 use SDL::TestTool;

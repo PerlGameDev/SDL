@@ -1,5 +1,5 @@
 use strict;
-use SDL;
+use SDL ':init';
 use SDL::Config;
 use Test::More;
 

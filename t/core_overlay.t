@@ -2,8 +2,10 @@
 use strict;
 use warnings;
 use Test::More;
-use SDL;
-use SDL::Video;
+use SDL ':init';
+use SDL::Surface;
+use SDL::Video ':flags';
+use SDL::Constants;
 
 use lib 't/lib';
 use SDL::TestTool;
@@ -22,7 +24,7 @@ else
 use_ok('SDL::Overlay');
 
 
-my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
+my $display = SDL::Video::set_video_mode(640,480,32, SDL_ANYFORMAT );
 
 my $overlay = SDL::Overlay->new( 100, 100, SDL_YV12_OVERLAY, $display);
 

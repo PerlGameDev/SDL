@@ -27,6 +27,22 @@ All surfaces constructed from now on are attached to the $display. There are two
 
 An C<SDL_Surface> defines a surfaceangular area of pixels.
 
+=head1 CONSTANTS
+
+The constants are not exported by default. You can export them into your namespace by doing:
+
+ use SDL::Surface ':flags';
+
+or
+
+ use SDL::Surface ':all';
+
+or access them directly:
+
+ SDL::Surface::SDL_SWSURFACE;
+
+Available constants: see L</flags>
+
 =head1 METHODS
 
 =head2 new ( flags, width, height, depth, Rmask, Gmask, Bmask, Amask )
@@ -46,70 +62,23 @@ The constructor creates a new surface with the specified parameter values.
 
 =head4 flags
 
-=over 
+Available for new()
 
-=item SDL_ANYFORMAT
-
-Allow any pixel-format *
+=over 4
 
 =item SDL_ASYNCBLIT
 
 Use asynchronous blit if possible
 
-=item SDL_DOUBLEBUF
+=item SDL_SWSURFACE
 
-Double buffered *
-
-=item SDL_HWACCEL
-
-Use hardware acceleration blit
-
-=item SDL_HWPALETTE
-
-Have an exclusive palette
+Stored in the system memory. SDL_SWSURFACE is not actually a flag (it is defined as 0). A lack of SDL_HWSURFACE implies SDL_SWSURFACE
 
 =item SDL_HWSURFACE
 
 Stored in video memory
 
-=item SDL_FULLSCREEN
-
-Full screen surface *
-
-=item SDL_OPENGL
-
-Have an OpenGL context *
-
-=item SDL_OPENGLBLIT
-
-Support OpenGL blitting *. NOTE: This option is kept for compatibility only, and is not recommended for new code.
-
-=item SDL_RESIZABLE
-
-Resizable surface *
-
-=item SDL_RLEACCEL
-
-Accelerated colorkey blitting with RLE
-
-=item SDL_SRCALPHA
-
-Use alpha blending blit
-
-=item SDL_SRCCOLORKEY
-
-Use colorkey blitting
-
-=item SDL_SWSURFACE
-
-Stored in the system memory. SDL_SWSURFACE is not actually a flag (it is defined as 0). A lack of SDL_HWSURFACE implies SDL_SWSURFACE
-
-=item SDL_PREALLOC
-
-Use preallocated memory
-
 =back
-
 
 =head2 w
 

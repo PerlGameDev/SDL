@@ -2,7 +2,7 @@ package SDL::TestTool;
 use strict;
 use warnings;
 use IO::CaptureOutput qw(capture);
-use SDL;
+use SDL qw(:all);
 use SDL::AudioSpec;
 use SDL::Audio;
 my %inits =
@@ -29,7 +29,7 @@ sub init {
 	    return ;
     }
 
-    if( $init == SDL_INIT_TIMER and !$ENV{SDL_BSD_TEST} and $^O =~ /bsd|solaris/i )
+    if( $init == SDL::SDL_INIT_TIMER() and !$ENV{SDL_BSD_TEST} and $^O =~ /bsd|solaris/i )
     {
 	    warn ' Timer is REALLY experimental with BSD environments';
 	    return ;

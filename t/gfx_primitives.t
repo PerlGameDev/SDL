@@ -1,12 +1,12 @@
 #!perl
 use strict;
 use warnings;
-use SDL;
+use SDL ':init';
 use SDL::Rect;
 use SDL::Config;
-use SDL::Video;
+use SDL::Video ':flags';
 use SDL::Version;
-use SDL::Surface;
+use SDL::Surface ':flags';
 use SDL::GFX;
 use SDL::GFX::Primitives;
 use Test::More;
@@ -30,7 +30,7 @@ my $v       = SDL::GFX::linked_version();
 isa_ok($v, 'SDL::Version', '[linked_version]');
 printf("got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch);
 
-my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
+my $display = SDL::Video::set_video_mode(640,480,32, SDL_ANYFORMAT );
 my $pixel   = SDL::Video::map_RGB( $display->format, 0, 0, 0 );
 
 if(!$display)
@@ -38,7 +38,7 @@ if(!$display)
 	plan skip_all => 'Couldn\'t set video mode: ' . SDL::get_error();
 }
 
-my $surface = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 640, 480, 32, 0, 0, 0, 0 );
+my $surface = SDL::Surface->new( SDL_SWSURFACE, 640, 480, 32, 0, 0, 0, 0 );
 SDL::Video::fill_rect( $surface, SDL::Rect->new( 0, 0, $surface->w, $surface->h ), $pixel );
 
 # pixel tests

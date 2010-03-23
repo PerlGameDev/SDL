@@ -3,13 +3,13 @@
 # App.pm
 #
 
-
 package SDL::App;
 
 use strict;
 use warnings;
 use Carp;
 use SDL;
+use SDL::Constants;
 use SDL::Rect;
 use SDL::Video;
 use SDL::Event;
@@ -26,56 +26,55 @@ sub new {
 	my $class = ref($proto) || $proto;
 	my %options = @_;
 
-	 # SDL_INIT_VIDEO() is 0, so check defined instead of truth.
-	 my $init = defined $options{-init} ? $options{-init} :
-	SDL_INIT_EVERYTHING();
+	# SDL_INIT_VIDEO() is 0, so check defined instead of truth.
+	my $init = defined $options{-init} 
+	         ? $options{-init}
+			 : SDL::SDL_INIT_EVERYTHING;
 	
-	 SDL::init($init);
+	SDL::init($init);
 
-	#SDL::Init(SDL::SDL_INIT_EVERYTHING());
-	
-	my $t = $options{-title} 	|| $options{-t} 	|| $0;
-	my $it = $options{-icon_title} 	|| $options{-it} 	|| $t;
-	my $ic = $options{-icon} 	|| $options{-i}		|| "";
-	my $w = $options{-width} 	|| $options{-w}		|| 800;
-	my $h = $options{-height} 	|| $options{-h}		|| 600;
-	my $d = $options{-depth} 	|| $options{-d}		|| 16;
-	my $f = $options{-flags} 	|| $options{-f}		|| SDL::SDL_ANYFORMAT();
-	my $r = $options{-red_size}	|| $options{-r}		|| 5;
-	my $g = $options{-green_size}	|| $options{-g}		|| 5;
-	my $b = $options{-blue_size}	|| $options{-b}		|| 5;
-	my $a = $options{-alpha_size}	|| $options{-a}		|| 0;
-	my $ras = $options{-red_accum_size}	|| $options{-ras}		|| 0;
-	my $gas = $options{-green_accum_size}	|| $options{-gas}		|| 0;
-	my $bas = $options{-blue_accum_size}	|| $options{-bas}		|| 0;
-	my $aas = $options{-alpha_accum_size}	|| $options{-aas}		|| 0;
-	my $db = $options{-double_buffer} 	|| $options{-db}		|| 0;
+	my $t     = $options{-title}            || $options{-t}   || $0;
+	my $it    = $options{-icon_title}       || $options{-it}  || $t;
+	my $ic    = $options{-icon}             || $options{-i}   || "";
+	my $w     = $options{-width}            || $options{-w}   || 800;
+	my $h     = $options{-height}           || $options{-h}   || 600;
+	my $d     = $options{-depth}            || $options{-d}   || 16;
+	my $f     = $options{-flags}            || $options{-f}   || SDL::Video::SDL_ANYFORMAT;
+	my $r     = $options{-red_size}         || $options{-r}   || 5;
+	my $g     = $options{-green_size}       || $options{-g}   || 5;
+	my $b     = $options{-blue_size}        || $options{-b}   || 5;
+	my $a     = $options{-alpha_size}       || $options{-a}   || 0;
+	my $ras   = $options{-red_accum_size}	|| $options{-ras} || 0;
+	my $gas   = $options{-green_accum_size}	|| $options{-gas} || 0;
+	my $bas   = $options{-blue_accum_size}	|| $options{-bas} || 0;
+	my $aas   = $options{-alpha_accum_size}	|| $options{-aas} || 0;
+	my $db    = $options{-double_buffer}    || $options{-db}  || 0;
  
-	my $bs = $options{-buffer_size}		|| $options{-bs}		|| 0;
-	my $st	= $options{-stencil_size}	|| $options{-st}		|| 0;
-	my $async = $options{-asyncblit} || 0;
+	my $bs    = $options{-buffer_size}      || $options{-bs}  || 0;
+	my $st	  = $options{-stencil_size}     || $options{-st}  || 0;
+	my $async = $options{-asyncblit}        || 0;
 
-	$f |= SDL::SDL_OPENGL() if ($options{-gl} || $options{-opengl});
-	$f |= SDL::SDL_FULLSCREEN() if ($options{-fullscreen} || $options{-full});
-	$f |= SDL::SDL_RESIZABLE() if ($options{-resizeable});
-	$f |= SDL::SDL_DOUBLEBUF() if ($db); 
-	$f |= SDL::SDL_ASYNCBLIT() if ($async);
+	$f |= SDL::Video::SDL_OPENGL       if ($options{-gl}         || $options{-opengl});
+	$f |= SDL::Video::SDL_FULLSCREEN   if ($options{-fullscreen} || $options{-full});
+	$f |= SDL::Video::SDL_RESIZABLE    if ($options{-resizeable});
+	$f |= SDL::Video::SDL_DOUBLEBUF    if ($db); 
+	$f |= SDL::Surface::SDL_ASYNCBLIT  if ($async);
 
-	if ($f & SDL::SDL_OPENGL()) { 
+	if ($f & SDL::Video::SDL_OPENGL) { 
 		$SDL::App::USING_OPENGL = 1;
-		SDL::Video::GL_set_attribute(SDL::SDL_GL_RED_SIZE(),$r) if ($r);	
-		SDL::Video::GL_set_attribute(SDL::SDL_GL_GREEN_SIZE(),$g) if ($g);	
-		SDL::Video::GL_set_attribute(SDL::SDL_GL_BLUE_SIZE(),$b) if ($b);	
-		SDL::Video::GL_set_attribute(SDL::SDL_GL_ALPHA_SIZE(),$a) if ($a);	
+		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_RED_SIZE(),$r) if ($r);	
+		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_GREEN_SIZE(),$g) if ($g);	
+		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_BLUE_SIZE(),$b) if ($b);	
+		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_ALPHA_SIZE(),$a) if ($a);	
 
-		SDL::Video::GL_set_attribute(SDL::SDL_GL_RED_ACCUM_SIZE(),$ras) if ($ras);	
-		SDL::Video::GL_set_attribute(SDL::SDL_GL_GREEN_ACCUM_SIZE(),$gas) if ($gas);	
-		SDL::Video::GL_set_attribute(SDL::SDL_GL_BLUE_ACCUM_SIZE(),$bas) if ($bas);	
-		SDL::Video::GL_set_attribute(SDL::SDL_GL_ALPHA_ACCUM_SIZE(),$aas) if ($aas);	
+		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_RED_ACCUM_SIZE(),$ras) if ($ras);	
+		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_GREEN_ACCUM_SIZE(),$gas) if ($gas);	
+		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_BLUE_ACCUM_SIZE(),$bas) if ($bas);	
+		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_ALPHA_ACCUM_SIZE(),$aas) if ($aas);	
 		
-		SDL::Video::GL_set_attribute(SDL::SDL_GL_DOUBLEBUFFER(),$db) if ($db);
-		SDL::Video::GL_set_attribute(SDL::SDL_GL_BUFFER_SIZE(),$bs) if ($bs);
-		SDL::Video::GL_set_attribute(SDL::SDL_GL_DEPTH_SIZE(),$d);
+		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_DOUBLEBUFFER(),$db) if ($db);
+		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_BUFFER_SIZE(),$bs) if ($bs);
+		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_DEPTH_SIZE(),$d);
 	} else {
 		$SDL::App::USING_OPENGL = 0;
 	}
@@ -97,7 +96,7 @@ sub new {
 sub resize ($$$) {
 	my ($self,$w,$h) = @_;
 	my $flags = $self->flags;
-	if ( $flags & SDL_RESIZABLE) {
+	if ($flags & SDL::Video::SDL_RESIZABLE) {
 		my $bpp = $self->format->BitsPerPixel;
 		$self = SDL::Video::set_video_mode($w,$h,$bpp,$flags) or die "SDL cannot set video:".SDL::get_error;
 	} else {

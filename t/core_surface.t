@@ -9,13 +9,13 @@ BEGIN {
 }
 
 use strict;
-use SDL;
+use SDL ':init';
 use SDL::Config;
-use SDL::Surface;
+use SDL::Surface ':flags';
 use SDL::App;
 use SDL::Rect;
 use SDL::Color;
-use SDL::Video;
+use SDL::Video ':flags';
 use SDL::PixelFormat;
 use Test::More;
 
@@ -30,12 +30,17 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 }
 else
 {
-    plan( tests => 36);
+    plan( tests => 42);
 }
 
+is( SDL_SWSURFACE,   0, 'SDL_SWSURFACE should be imported' );
+is( SDL_SWSURFACE(), 0, 'SDL_SWSURFACE() should also be available' );
+is( SDL_HWSURFACE,   1, 'SDL_HWSURFACE should be imported' );
+is( SDL_HWSURFACE(), 1, 'SDL_HWSURFACE() should also be available' );
+is( SDL_ASYNCBLIT,   4, 'SDL_ASYNCBLIT should be imported' );
+is( SDL_ASYNCBLIT(), 4, 'SDL_ASYNCBLIT() should also be available' );
 
-my $surface
-    = SDL::Surface->new( SDL::SDL_ANYFORMAT(), 640, 320, 8, 0, 0, 0, 0 );
+my $surface = SDL::Surface->new( SDL_ANYFORMAT, 640, 320, 8, 0, 0, 0, 0 );
 isa_ok( $surface, 'SDL::Surface' );
 is( $surface->w,     640, 'surface has width' );
 is( $surface->h,     320, 'surface has height' );

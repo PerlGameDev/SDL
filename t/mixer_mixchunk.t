@@ -1,7 +1,7 @@
 #!perl
 use strict;
 use warnings;
-use SDL;
+use SDL ':init';
 use SDL::Config;
 use SDL::Mixer;
 use SDL::Mixer::Channels;
