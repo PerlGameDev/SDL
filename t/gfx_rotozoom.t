@@ -8,7 +8,7 @@ use SDL::Video ':all';
 use SDL::Version;
 use SDL::Surface;
 use SDL::GFX;
-use SDL::GFX::Rotozoom;
+use SDL::GFX::Rotozoom ':all';
 use Test::More;
 
 use lib 't/lib';
@@ -27,12 +27,17 @@ elsif( !SDL::Config->has('SDL_gfx_rotozoom') )
 }
 else
 {
-    plan( tests => 19 );
+    plan( tests => 23 );
 }
 
 my $v       = SDL::GFX::linked_version();
 isa_ok($v, 'SDL::Version', '[linked_version]');
 printf("got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch);
+
+is( SMOOTHING_OFF,     0,           'SMOOTHING_OFF should be imported' );
+is( SMOOTHING_OFF(),   0,           'SMOOTHING_OFF() should also be available' );
+is( SMOOTHING_ON,      1,           'SMOOTHING_ON should be imported' );
+is( SMOOTHING_ON(),    1,           'SMOOTHING_ON() should also be available' );
 
 my $display = SDL::Video::set_video_mode(640,480,32, SDL_ANYFORMAT );
 my $pixel   = SDL::Video::map_RGB( $display->format, 0, 0, 0 );

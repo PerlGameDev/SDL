@@ -6,6 +6,23 @@ SDL::GFX::Rotozoom - rotation and zooming functions for surfaces
 
 TODO, GFX
 
+=head1 CONSTANTS
+
+The constants are not exported by default. You can export them into your namespace by doing:
+
+ use SDL::GFX::Rotozoom ':all';
+
+or access them directly:
+
+ SDL::GFX::Rotozoom::SMOOTHING_OFF;
+
+or by choosing the export tags below:
+
+Export tag: ':smoothing'
+
+ SMOOTHING_OFF
+ SMOOTHING_ON
+
 =head1 METHODS
 
 =head2 surface

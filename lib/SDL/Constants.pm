@@ -2634,8 +2634,6 @@ use constant {
 	GL_NV_vertex_program3                               => 1,
 	GL_EXT_framebuffer_object                           => 1,
 	GL_GREMEDY_string_marker                            => 1,
-	SMOOTHING_OFF                                       => 0,
-	SMOOTHING_ON                                        => 1,
 	RW_SEEK_SET                                         => 0,
 	RW_SEEK_CUR                                         => 1,
 	RW_SEEK_END                                         => 2,
