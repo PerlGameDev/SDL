@@ -13,6 +13,9 @@ bootstrap SDL::Video;
 use base 'Exporter';
 
 our @EXPORT_OK = qw(
+	SDL_SWSURFACE
+	SDL_HWSURFACE
+	SDL_ASYNCBLIT
 	SDL_ANYFORMAT
 	SDL_HWPALETTE
 	SDL_DOUBLEBUF
@@ -32,6 +35,9 @@ our @EXPORT_OK = qw(
 our %EXPORT_TAGS = 
 (
 	flags => [qw(
+		SDL_SWSURFACE
+		SDL_HWSURFACE
+		SDL_ASYNCBLIT
 		SDL_ANYFORMAT
 		SDL_HWPALETTE
 		SDL_DOUBLEBUF
@@ -50,20 +56,23 @@ our %EXPORT_TAGS =
 );
 
 use constant{
-	SDL_ANYFORMAT                                       => 0x10000000,
-	SDL_HWPALETTE                                       => 0x20000000,
-	SDL_DOUBLEBUF                                       => 0x40000000,
-	SDL_FULLSCREEN                                      => 0x80000000,
-	SDL_OPENGL                                          => 0x00000002,
-	SDL_OPENGLBLIT                                      => 0x0000000A,
-	SDL_RESIZABLE                                       => 0x00000010,
-	SDL_NOFRAME                                         => 0x00000020,
-	SDL_HWACCEL                                         => 0x00000100,
-	SDL_SRCCOLORKEY                                     => 0x00001000,
-	SDL_RLEACCELOK                                      => 0x00002000,
-	SDL_RLEACCEL                                        => 0x00004000,
-	SDL_SRCALPHA                                        => 0x00010000,
-	SDL_PREALLOC                                        => 0x01000000,
+	SDL_SWSURFACE   => 0x00000000,
+	SDL_HWSURFACE   => 0x00000001,
+	SDL_ASYNCBLIT   => 0x00000004,
+	SDL_ANYFORMAT   => 0x10000000,
+	SDL_HWPALETTE   => 0x20000000,
+	SDL_DOUBLEBUF   => 0x40000000,
+	SDL_FULLSCREEN  => 0x80000000,
+	SDL_OPENGL      => 0x00000002,
+	SDL_OPENGLBLIT  => 0x0000000A,
+	SDL_RESIZABLE   => 0x00000010,
+	SDL_NOFRAME     => 0x00000020,
+	SDL_HWACCEL     => 0x00000100,
+	SDL_SRCCOLORKEY => 0x00001000,
+	SDL_RLEACCELOK  => 0x00002000,
+	SDL_RLEACCEL    => 0x00004000,
+	SDL_SRCALPHA    => 0x00010000,
+	SDL_PREALLOC    => 0x01000000,
 }; # flags
 
 # add all the other ":class" tags to the ":all" class,

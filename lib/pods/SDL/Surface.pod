@@ -31,15 +31,15 @@ An C<SDL_Surface> defines a surfaceangular area of pixels.
 
 The constants are not exported by default. You can export them into your namespace by doing:
 
- use SDL::Surface ':flags';
+ use SDL::Video ':flags';
 
 or
 
- use SDL::Surface ':all';
+ use SDL::Video ':all';
 
 or access them directly:
 
- SDL::Surface::SDL_SWSURFACE;
+ SDL::Video::SDL_SWSURFACE;
 
 Available constants: see L</flags>
 
@@ -62,7 +62,7 @@ The constructor creates a new surface with the specified parameter values.
 
 =head4 flags
 
-Available for new()
+Available flags for new() are exported by SDL::Video
 
 =over 4
 

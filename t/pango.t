@@ -3,10 +3,10 @@ use strict;
 use SDL ':init';
 use SDL::Config;
 use SDL::Color;
-use SDL::Surface ':flags';
+use SDL::Surface;
 use SDL::Overlay;
 use SDL::Rect;
-use SDL::Video;
+use SDL::Video ':flags';
 use SDL::PixelFormat;
 
 BEGIN

@@ -54,11 +54,11 @@ sub new {
 	my $st	  = $options{-stencil_size}     || $options{-st}  || 0;
 	my $async = $options{-asyncblit}        || 0;
 
-	$f |= SDL::Video::SDL_OPENGL       if ($options{-gl}         || $options{-opengl});
-	$f |= SDL::Video::SDL_FULLSCREEN   if ($options{-fullscreen} || $options{-full});
-	$f |= SDL::Video::SDL_RESIZABLE    if ($options{-resizeable});
-	$f |= SDL::Video::SDL_DOUBLEBUF    if ($db); 
-	$f |= SDL::Surface::SDL_ASYNCBLIT  if ($async);
+	$f |= SDL::Video::SDL_OPENGL     if ($options{-gl}         || $options{-opengl});
+	$f |= SDL::Video::SDL_FULLSCREEN if ($options{-fullscreen} || $options{-full});
+	$f |= SDL::Video::SDL_RESIZABLE  if ($options{-resizeable});
+	$f |= SDL::Video::SDL_DOUBLEBUF  if ($db); 
+	$f |= SDL::Video::SDL_ASYNCBLIT  if ($async);
 
 	if ($f & SDL::Video::SDL_OPENGL) { 
 		$SDL::App::USING_OPENGL = 1;

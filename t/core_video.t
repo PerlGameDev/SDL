@@ -2,7 +2,7 @@
 use strict;
 use SDL ':init';
 use SDL::Color;
-use SDL::Surface ':flags';
+use SDL::Surface;
 use SDL::Config;
 use SDL::Overlay;
 use Test::More;
@@ -21,7 +21,7 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 }
 else
 {
-	  plan( tests => 89);
+	  plan( tests => 95);
 }
 
 my @done =
@@ -75,6 +75,12 @@ my @done =
 
 can_ok ('SDL::Video', @done); 
 
+is( SDL_SWSURFACE,     0,           'SDL_SWSURFACE should be imported' );
+is( SDL_SWSURFACE(),   0,           'SDL_SWSURFACE() should also be available' );
+is( SDL_HWSURFACE,     1,           'SDL_HWSURFACE should be imported' );
+is( SDL_HWSURFACE(),   1,           'SDL_HWSURFACE() should also be available' );
+is( SDL_ASYNCBLIT,     4,           'SDL_ASYNCBLIT should be imported' );
+is( SDL_ASYNCBLIT(),   4,           'SDL_ASYNCBLIT() should also be available' );
 is( SDL_OPENGL,        2,           'SDL_OPENGL should be imported' );
 is( SDL_OPENGL(),      2,           'SDL_OPENGL() should also be available' );
 is( SDL_OPENGLBLIT,    10,          'SDL_OPENGLBLIT should be imported' );

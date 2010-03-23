@@ -4,9 +4,9 @@ use warnings;
 use Test::More;
 
 use SDL ':init';
-use SDL::Surface ':flags';
+use SDL::Surface;
 use SDL::PixelFormat;
-use SDL::Video;
+use SDL::Video ':flags';
 
 use lib 't/lib';
 use SDL::TestTool;

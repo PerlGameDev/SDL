@@ -6,7 +6,7 @@ use SDL::Rect;
 use SDL::Config;
 use SDL::Video ':flags';
 use SDL::Version;
-use SDL::Surface ':flags';
+use SDL::Surface;
 use SDL::GFX;
 use SDL::GFX::Primitives;
 use Test::More;
