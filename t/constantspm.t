@@ -7,12 +7,6 @@ BEGIN { use_ok('SDL::Constants') }
 
 # 'use' should have imported all constants
 
-is( INADDR_ANY,    0,  'INADDR_ANY should be imported' );
-is( INADDR_ANY(),  0,  'INADDR_ANY() should also be available' );
-is( INADDR_NONE,   0xFFFFFFFF, 'INADDR_NONE should be imported' );
-is( INADDR_NONE(), 0xFFFFFFFF, 'INADDR_NONE() should also be available' );
-
-
 is( SDL_GL_ACCUM_ALPHA_SIZE, 11, 'SDL_GL_ACCUM_ALPHA_SIZE should be imported' );
 is( SDL_GL_ACCUM_ALPHA_SIZE(), 11, 'SDL_GL_ACCUM_ALPHA_SIZE() should also be available' );
 is( SDL_GL_ACCUM_BLUE_SIZE, 10, 'SDL_GL_ACCUM_BLUE_SIZE should be imported' );

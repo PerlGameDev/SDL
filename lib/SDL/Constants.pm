@@ -10,8 +10,6 @@ use base 'Exporter';
 use SDL::Events;
 
 our @EXPORT=qw(
-	INADDR_ANY
-	INADDR_NONE
 	SDL_GL_ACCUM_ALPHA_SIZE
 	SDL_GL_ACCUM_BLUE_SIZE
 	SDL_GL_ACCUM_GREEN_SIZE
@@ -60,15 +58,6 @@ use constant {
 };
 
 use constant {
-	SDL_ENOMEM                                          => 0,
-	SDL_EFREAD                                          => 1,
-	SDL_EFWRITE                                         => 2,
-	SDL_EFSEEK                                          => 3,
-	SDL_UNSUPPORTED                                     => 4,
-	SDL_LASTERROR                                       => 5,
-}; # SDL_errorcode
-
-use constant {
 	FPS_UPPER_LIMIT                                     => 200,
 	FPS_LOWER_LIMIT                                     => 1,
 	FPS_DEFAULT                                         => 30,
@@ -80,9 +69,6 @@ use constant {
 use constant {
 	SDL_MUTEX_TIMEDOUT                                  => 1,
 	NeedFunctionPrototypes                              => 1,
-	INADDR_ANY                                          => 0x00000000,
-	INADDR_NONE                                         => 0xFFFFFFFF,
-	INADDR_BROADCAST                                    => 0xFFFFFFFF,
 	SDLNET_MAX_UDPCHANNELS                              => 32,
 	SDLNET_MAX_UDPADDRESSES                             => 4,
 	WIN32_LEAN_AND_MEAN                                 => 1,

@@ -42,18 +42,7 @@ require DynaLoader;
 use SDL_perl;
 use SDL::Constants;
 our @ISA = qw(Exporter DynaLoader);
-#BEGIN {
-#	@ISA = qw(Exporter DynaLoader);
-#	@EXPORT = qw( in &NULL );
-#};
 
-# Give our caller SDL::Constant's stuff as well as ours.
-#sub import {
-#  my $self = shift;
-#
-#  $self->export_to_level(1, @_);
-#  SDL::Constants->export_to_level(1);
-#}
 our $VERSION = '2.3_9'; #Development Release
 $VERSION = eval $VERSION;
 
