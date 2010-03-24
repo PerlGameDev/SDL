@@ -5,7 +5,6 @@ use Test::More;
 use SDL ':init';
 use SDL::Surface;
 use SDL::Video ':all';
-use SDL::Constants;
 
 use lib 't/lib';
 use SDL::TestTool;

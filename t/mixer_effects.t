@@ -7,7 +7,6 @@ use SDL::Config;
 use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
-use SDL::Constants;
 
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
 	plan( skip_all => 'Failed to init sound' );

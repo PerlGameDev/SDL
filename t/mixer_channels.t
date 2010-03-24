@@ -2,7 +2,6 @@
 use strict;
 use SDL ':init';
 use SDL::Config;
-use SDL::Constants;
 
 BEGIN
 {

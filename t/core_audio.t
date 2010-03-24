@@ -5,7 +5,6 @@ use SDL::Audio ':all';
 use SDL::AudioSpec;
 use Test::More;
 use Devel::Peek;
-use SDL::Constants;
 
 use lib 't/lib';
 use SDL::TestTool;

@@ -9,7 +9,6 @@ use Devel::Peek;
 use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
-use SDL::Constants;
 
 my $videodriver       = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};

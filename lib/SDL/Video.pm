@@ -41,6 +41,23 @@ our @EXPORT_OK = qw(
 	SDL_GRAB_OFF
 	SDL_GRAB_ON
 	SDL_GRAB_FULLSCREEN
+	SDL_GL_RED_SIZE
+	SDL_GL_GREEN_SIZE
+	SDL_GL_BLUE_SIZE
+	SDL_GL_ALPHA_SIZE
+	SDL_GL_BUFFER_SIZE
+	SDL_GL_DOUBLEBUFFER
+	SDL_GL_DEPTH_SIZE
+	SDL_GL_STENCIL_SIZE
+	SDL_GL_ACCUM_RED_SIZE
+	SDL_GL_ACCUM_GREEN_SIZE
+	SDL_GL_ACCUM_BLUE_SIZE
+	SDL_GL_ACCUM_ALPHA_SIZE
+	SDL_GL_STEREO
+	SDL_GL_MULTISAMPLEBUFFERS
+	SDL_GL_MULTISAMPLESAMPLES
+	SDL_GL_ACCELERATED_VISUAL
+	SDL_GL_SWAP_CONTROL
 );
 
 our %EXPORT_TAGS = 
@@ -86,6 +103,25 @@ our %EXPORT_TAGS =
 		SDL_GRAB_ON
 		SDL_GRAB_FULLSCREEN
 	)],
+	gl => [qw(
+		SDL_GL_RED_SIZE
+		SDL_GL_GREEN_SIZE
+		SDL_GL_BLUE_SIZE
+		SDL_GL_ALPHA_SIZE
+		SDL_GL_BUFFER_SIZE
+		SDL_GL_DOUBLEBUFFER
+		SDL_GL_DEPTH_SIZE
+		SDL_GL_STENCIL_SIZE
+		SDL_GL_ACCUM_RED_SIZE
+		SDL_GL_ACCUM_GREEN_SIZE
+		SDL_GL_ACCUM_BLUE_SIZE
+		SDL_GL_ACCUM_ALPHA_SIZE
+		SDL_GL_STEREO
+		SDL_GL_MULTISAMPLEBUFFERS
+		SDL_GL_MULTISAMPLESAMPLES
+		SDL_GL_ACCELERATED_VISUAL
+		SDL_GL_SWAP_CONTROL
+	)],
 );
 
 use constant{
@@ -121,6 +157,27 @@ use constant{
 	SDL_GRAB_ON         => 1,       # SDL_GrabMode
 	SDL_GRAB_FULLSCREEN	=> 2,       # SDL_GrabMode, used internally
 };
+
+use constant {
+	SDL_GL_RED_SIZE                                     => 0,
+	SDL_GL_GREEN_SIZE                                   => 1,
+	SDL_GL_BLUE_SIZE                                    => 2,
+	SDL_GL_ALPHA_SIZE                                   => 3,
+	SDL_GL_BUFFER_SIZE                                  => 4,
+	SDL_GL_DOUBLEBUFFER                                 => 5,
+	SDL_GL_DEPTH_SIZE                                   => 6,
+	SDL_GL_STENCIL_SIZE                                 => 7,
+	SDL_GL_ACCUM_RED_SIZE                               => 8,
+	SDL_GL_ACCUM_GREEN_SIZE                             => 9,
+	SDL_GL_ACCUM_BLUE_SIZE                              => 10,
+	SDL_GL_ACCUM_ALPHA_SIZE                             => 11,
+	SDL_GL_STEREO                                       => 12,
+	SDL_GL_MULTISAMPLEBUFFERS                           => 13,
+	SDL_GL_MULTISAMPLESAMPLES                           => 14,
+	SDL_GL_ACCELERATED_VISUAL                           => 15,
+	SDL_GL_SWAP_CONTROL                                 => 16,
+}; # SDL_GLattr
+
 
 # add all the other ":class" tags to the ":all" class,
 # deleting duplicates

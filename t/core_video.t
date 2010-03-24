@@ -8,7 +8,6 @@ use SDL::Overlay;
 use Test::More;
 use SDL::Rect;
 use SDL::Video ':all';
-use SDL::Constants;
 
 use lib 't/lib';
 use SDL::TestTool;
