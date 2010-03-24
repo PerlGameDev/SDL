@@ -3,17 +3,22 @@
 use strict;
 use warnings;
 
-use SDL;
-use SDL::Video;
+use SDL ':init';
+use SDL::Video ':all';
+use SDL::Events ':all';
+
 use SDL::Rect;
-use SDL::Surface;
 use SDL::Image;
 use SDL::Event;
-use SDL::Events;
+use SDL::Surface;
+
 
 SDL::init(SDL_INIT_VIDEO);
 
 my $menu = SDL::Image::load('data/menu.png');
+
+die " Image loading errors: ".SDL::get_error() if !$menu;
+
 my $screen
     = SDL::Video::set_video_mode( $menu->w, $menu->h, 32, SDL_SWSURFACE );
 

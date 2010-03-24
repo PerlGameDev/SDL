@@ -3,12 +3,12 @@
 use strict;
 use warnings;
 
-use SDL;
-use SDL::Surface;
-use SDL::Event;
-use SDL::Events;
-use SDL::Video;
+use SDL ':init';
+use SDL::Video ':all';
+use SDL::Events ':all';
 use SDL::Rect;
+use SDL::Event;
+use SDL::Surface;
 
 SDL::init(SDL_INIT_VIDEO);
 
