@@ -177,7 +177,9 @@ is( ref( SDL::Video::list_modes( $display->format , SDL_SWSURFACE )), 'ARRAY', '
 
 cmp_ok(SDL::Video::video_mode_ok( 100, 100, 16, SDL_SWSURFACE), '>=', 0, "[video_mode_ok] Checking if an integer was return");
 
-isa_ok(SDL::Video::set_video_mode( 100, 100 ,16, SDL_SWSURFACE), 'SDL::Surface', '[set_video_more] Checking if we get a surface ref back'); 
+$display = SDL::Video::set_video_mode( 100, 100 ,16, SDL_SWSURFACE); 
+
+isa_ok ( $display, 'SDL::Surface', '[set_video_more] Checking if we get a surface ref back'); 
 
 
 #TODO: Write to surface and check inf pixel in that area got updated.
