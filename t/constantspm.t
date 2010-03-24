@@ -7,17 +7,6 @@ BEGIN { use_ok('SDL::Constants') }
 
 # 'use' should have imported all constants
 
-is( CD_ERROR,       -1, 'CD_ERROR should be imported' );
-is( CD_ERROR(),     -1, 'CD_ERROR() should also be available' );
-is( CD_PAUSED,      3,  'CD_PAUSED should be imported' );
-is( CD_PAUSED(),    3,  'CD_PAUSED() should also be available' );
-is( CD_PLAYING,     2,  'CD_PLAYING should be imported' );
-is( CD_PLAYING(),   2,  'CD_PLAYING() should also be available' );
-is( CD_STOPPED,     1,  'CD_STOPPED should be imported' );
-is( CD_STOPPED(),   1,  'CD_STOPPED() should also be available' );
-is( CD_TRAYEMPTY,   0,  'CD_TRAYEMPTY should be imported' );
-is( CD_TRAYEMPTY(), 0,  'CD_TRAYEMPTY() should also be available' );
-
 is( INADDR_ANY,    0,  'INADDR_ANY should be imported' );
 is( INADDR_ANY(),  0,  'INADDR_ANY() should also be available' );
 is( INADDR_NONE,   0xFFFFFFFF, 'INADDR_NONE should be imported' );

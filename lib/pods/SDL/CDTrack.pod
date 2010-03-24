@@ -10,9 +10,9 @@ Core, CDROM, Structure
 
 =head1 SYNOPSIS
 
- use SDL;
+ use SDL ':init';
  use SDL::CDROM;
- use SDL::CD;
+ use SDL::CD ':status';
  use SDL::CDTrack;
 
  SDL::init( SDL_INIT_CDROM );
@@ -21,20 +21,33 @@ Core, CDROM, Structure
 
  if( $drives > 0 )
  {
-  my $CD = SDL::CD->new(0); #first drive's CD
-
-  if( $CD != NULL)
-  {
-	if( $CD->status != CD_TRAYEMPTY )
-	{
-	my $track = SDL::CD->track(0);
-	}
-  }
+     my $CD = SDL::CD->new(0); #first drive's CD
  
+     if($CD)
+     {
+         if( $CD->status != CD_TRAYEMPTY )
+         {
+             my $track = SDL::CD->track(0);
+         }
+     }
  }
 
- SDL::quit();
+=head1 CONSTANTS
 
+The constants are not exported by default. You can export them into your namespace by doing:
+
+ use SDL::CDTrack ':all';
+
+or access them directly:
+
+ SDL::CDTrack::SDL_AUDIO_TRACK;
+
+or by choosing the export tags below:
+
+Export tag: ':type'
+
+ SDL_AUDIO_TRACK
+ SDL_DATA_TRACK
 
 =head1 METHOD
 

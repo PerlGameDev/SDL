@@ -10,7 +10,7 @@ Core, CDROM, Structure
 
 =head1 SYNOPSIS
 
- use SDL;
+ use SDL ':init';
  use SDL::CDROM;
  use SDL::CD;
 
@@ -22,22 +22,45 @@ Core, CDROM, Structure
  {
   my $CD = SDL::CD->new( 0 );
  
-   if($CD != NULL)
+   if($CD)
    {
 	... 
    }
   
  }
  
- SDL::quit();
+=head1 CONSTANTS
+
+The constants are not exported by default. You can export them into your namespace by doing:
+
+ use SDL::CD ':all';
+
+or access them directly:
+
+ SDL::CD::CD_TRAYEMPTY;
+
+or by choosing the export tags below:
+
+Export tag: ':status'
+
+ CD_TRAYEMPTY
+ CD_STOPPED
+ CD_PLAYING
+ CD_PAUSED
+ CD_ERROR
+
+Export tag: ':defaults'
+
+ CD_FPS
+ SDL_MAX_TRACKS
 
 =head1 METHOD
 
-=head2 new( $drive )
+=head2 new
 
- my $CD = SDL::CD->new( $drive )
+ my $CD = SDL::CD->new($drive)
 
-Makes a new SDL::CD object. Returns NULL if the drive is busy or inaccessible. 
+Makes a new SDL::CD object. Returns C<undef> if the drive is busy or inaccessible. 
 
 =head2 status
  
@@ -45,22 +68,31 @@ Makes a new SDL::CD object. Returns NULL if the drive is busy or inaccessible.
 
 Returns the current status of the CD tray 
 
-=head3 returns
+Returns on of the following constants:
 
 =over 
 
-=item CD_TRAYEMPTY
+=item *
 
-=item CD_STOPPED
+CD_TRAYEMPTY
 
-=item CD_PLAYING
+=item *
 
-=item CD_PAUSED
+CD_STOPPED
 
-=item CD_ERROR = -1 
+=item *
+
+CD_PLAYING
+
+=item *
+
+CD_PAUSED
+
+=item *
+
+CD_ERROR
 
 =back
-
 
 =head2 play_tracks
 
@@ -68,25 +100,22 @@ Returns the current status of the CD tray
 
 Plays the given SDL::CD starting at track $start_track, for $ntracks tracks.  
 
-$start_frame is the frame offset, from the beginning of the $start_track, at which to start. $nframes is the frame offset, from the beginning of the last track ($start_track+$ntracks), at which to end playing.
+$start_frame is the frame offset, from the beginning of the $start_track, at which to start. $nframes is the frame offset, from the 
+beginning of the last track ($start_track+$ntracks), at which to end playing.
 
-play_tracks() should only be called after calling SDL_CDStatus to get track information about the CD use $CD->status().
+play_tracks() should only be called after calling L</status> to get information about the CD.
 
 B<Note: Data tracks are ignored.>
 
-=head3 Returns
-
-0, or -1 if there was an error.  
+Returns C<0>, or C<-1> if there was an error.  
 
 =head2 play
  
- $CD->play($start, $length );
+ $CD->play($start, $length);
 
 Plays the given SDL::CD , starting a frame $start for $length frames. 
 
-=head3 Returns
-
-0 on success, -1 on error
+Returns C<0> on success, C<-1> on error
 
 =head2 pause 
 
@@ -94,17 +123,13 @@ Plays the given SDL::CD , starting a frame $start for $length frames.
 
 Pauses play on CD
 
-=head3 Returns
-
-Returns 0 on success, or -1 on an error.  
+Returns C<0> on success, or C<-1> on an error.  
 
 =head2 resume
 
  $CD->resume();
 
-=head3 Returns
-
-Returns 0 on success, or -1 on an error.  
+Returns C<0> on success, or C<-1> on an error.  
 
 =head2 stop
 
@@ -112,9 +137,7 @@ Returns 0 on success, or -1 on an error.
 
 Stops play on the CD.  
 
-=head3 Returns
-
-Returns 0 on success, or -1 on an error.  
+Returns C<0> on success, or C<-1> on an error.  
 
 =head2 eject
 
@@ -122,9 +145,7 @@ Returns 0 on success, or -1 on an error.
 
 Ejects the CD.
 
-=head3 Returns
-
-Returns 0 on success, or -1 on an error.  
+Returns C<0> on success, or C<-1> on an error.   
 
 =head2 id
 
@@ -150,6 +171,15 @@ Current track on the CD;
  
 Retrives track description of track $number in CD. See L<SDL::CDTrack>.
 
+=head2 FRAMES_TO_MSF
+
+ my ($min, $sec, $fra) = FRAMES_TO_MSF($frames);
+
+Conversion functions from frames to Minute/Second/Frames
+
+=head2 MSF_TO_FRAMES
+
+ my $frames = MSF_TO_FRAMES($min, $sec, $fra);
 
 =head1 SEE ALSO
 

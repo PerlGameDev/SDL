@@ -10,11 +10,6 @@ use base 'Exporter';
 use SDL::Events;
 
 our @EXPORT=qw(
-	CD_ERROR
-	CD_PAUSED
-	CD_PLAYING
-	CD_STOPPED
-	CD_TRAYEMPTY
 	INADDR_ANY
 	INADDR_NONE
 	SDL_GL_ACCUM_ALPHA_SIZE
@@ -29,7 +24,6 @@ our @EXPORT=qw(
 	SDL_GL_GREEN_SIZE
 	SDL_GL_RED_SIZE
 	SDL_GL_STENCIL_SIZE
-	SDL_MIX_MAXVOLUME
 	SMPEG_ERROR
 	SMPEG_PLAYING
 	SMPEG_STOPPED
@@ -43,22 +37,6 @@ our @EXPORT=qw(
 );
 
 use constant {
-	SDL_MIX_MAXVOLUME                                   => 128,
-	SDL_MAX_TRACKS                                      => 99,
-	SDL_AUDIO_TRACK                                     => 0x00,
-	SDL_DATA_TRACK                                      => 0x04,
-};
-
-use constant {
-	CD_TRAYEMPTY                                        => 0,
-	CD_STOPPED                                          => 1,
-	CD_PLAYING                                          => 2,
-	CD_PAUSED                                           => 3,
-	CD_ERROR                                            => -1,
-}; # CDstatus
-
-use constant {
-	CD_FPS                                              => 75,
 	SDL_HAS_64BIT_TYPE                                  => 1,
 	SDL_AUDIO_DRIVER_DISK                               => 1,
 	SDL_AUDIO_DRIVER_DUMMY                              => 1,

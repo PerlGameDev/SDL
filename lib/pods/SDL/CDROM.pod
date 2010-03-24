@@ -10,7 +10,7 @@ Core, CDROM
 
 =head1 SYNOPSIS
 
- use SDL;
+ use SDL ':init';
  use SDL::CDROM;
  
  SDL::init(SDL_INIT_CDROM);
@@ -35,15 +35,21 @@ Returns number of drives available on the system
 
 Returns human readable name for CDROM device
 
-=head3 Examples
+Examples:
 
 =over
 
-=item '/dev/cdrom'
+=item *
 
-=item 'E:'
+'/dev/cdrom'
 
-=item '/dev/disk/ide/1/master'  
+=item '
+
+'E:'
+
+=item *
+
+'/dev/disk/ide/1/master'  
 
 =back
 

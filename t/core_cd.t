@@ -16,6 +16,22 @@ use SDL::CD ':all';
 use SDL::CDROM;
 use SDL::CDTrack ':all';
 
+is( CD_ERROR,       -1, 'CD_ERROR should be imported' );
+is( CD_ERROR(),     -1, 'CD_ERROR() should also be available' );
+is( CD_PAUSED,      3,  'CD_PAUSED should be imported' );
+is( CD_PAUSED(),    3,  'CD_PAUSED() should also be available' );
+is( CD_PLAYING,     2,  'CD_PLAYING should be imported' );
+is( CD_PLAYING(),   2,  'CD_PLAYING() should also be available' );
+is( CD_STOPPED,     1,  'CD_STOPPED should be imported' );
+is( CD_STOPPED(),   1,  'CD_STOPPED() should also be available' );
+is( CD_TRAYEMPTY,   0,  'CD_TRAYEMPTY should be imported' );
+is( CD_TRAYEMPTY(), 0,  'CD_TRAYEMPTY() should also be available' );
+
+is( SDL_AUDIO_TRACK,   0,  'SDL_AUDIO_TRACK should be imported' );
+is( SDL_AUDIO_TRACK(), 0,  'SDL_AUDIO_TRACK() should also be available' );
+is( SDL_DATA_TRACK,    4,  'SDL_DATA_TRACK should be imported' );
+is( SDL_DATA_TRACK(),  4,  'SDL_DATA_TRACK() should also be available' );
+
 my $num_drives = SDL::CDROM::num_drives();
 ok( $num_drives >= 0, "[SDL::CDROM::num_drives] is $num_drives" );
 for(0..$num_drives-1)
