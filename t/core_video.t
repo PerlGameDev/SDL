@@ -233,7 +233,7 @@ my $bmp_surface;
 
 SKIP:
 {
-	skip("No hardware surface available", 37) unless $video_info->hw_available();
+	skip("No hardware surface available", 26) unless $video_info->hw_available();
 
 	my $hwdisplay = SDL::Video::set_video_mode(640,480,8, SDL_HWSURFACE );
 
