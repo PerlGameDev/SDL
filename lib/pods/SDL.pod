@@ -73,31 +73,39 @@ Use the SDLPerl executable made in the bundle and call your scripts
 =head2 init(flags) 
 
 As with the C language API, SDL_perl initializes the SDL environment through
-the C<SDL::init> subroutine.  This routine takes a mode flag constructed through
-the bitwise OR product of the following constants:
+the C<SDL::init> subroutine. This routine takes a mode flag constructed through
+the bitwise OR product of the SDL_INIT_* constants.
+
+The constants are not exported by default. You can export them into your namespace by doing:
+
+ use SDL ':all';
+
+or access them directly:
+
+ SDL::SDL_INIT_AUDIO;
 
 =over 4
 
 =item *
-INIT_AUDIO
+SDL_INIT_AUDIO
 
 =item *
-INIT_VIDEO
+SDL_INIT_VIDEO
 
 =item *
-INIT_CDROM
+SDL_INIT_CDROM
 
 =item *
-INIT_EVERYTHING
+SDL_INIT_EVERYTHING
 
 =item *
-INIT_NOPARACHUTE
+SDL_INIT_NOPARACHUTE
 
 =item *
-INIT_JOYSTICK
+SDL_INIT_JOYSTICK
 
 =item *
-INIT_TIMER
+SDL_INIT_TIMER
 
 =back
 
@@ -183,7 +191,6 @@ Unknown SDL error
 Unknown SDL error
 
 =back
-
 
 Note 1: SDL_LASTERROR marks the highest numbered predefined error.
 Note 2: SDL also defines SDL_OutOfMemory() and SDL_Unsupported() for internal use
