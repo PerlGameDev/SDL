@@ -1,14 +1,14 @@
 #!perl
 use strict;
 use warnings;
-use SDL ':init';
+use SDL;
 use SDL::Rect;
 use SDL::Config;
-use SDL::Video ':all';
+use SDL::Video;
 use SDL::Version;
 use SDL::Surface;
 use SDL::GFX;
-use SDL::GFX::Rotozoom ':all';
+use SDL::GFX::Rotozoom;
 use Test::More;
 
 use lib 't/lib';

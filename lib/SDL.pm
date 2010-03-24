@@ -63,7 +63,7 @@ sub set_error {
 
 use base 'Exporter';
 
-our @EXPORT_OK = qw(
+our @EXPORT = qw(
 	SDL_INIT_AUDIO
 	SDL_INIT_CDROM
 	SDL_INIT_EVENTTHREAD

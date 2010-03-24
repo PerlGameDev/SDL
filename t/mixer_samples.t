@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-use SDL ':init';
+use SDL;
 use SDL::Config;
 
 BEGIN

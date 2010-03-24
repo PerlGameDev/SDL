@@ -10,11 +10,11 @@ Mixer
 
 =head1 CONSTANTS
 
-The constants are not exported by default. You can export them into your namespace by doing:
+The constants are exported by default. You can avoid this by doing:
 
- use SDL::Mixer ':all';
+ use SDL::Mixer ();
 
-or access them directly:
+and access them directly:
 
  SDL::Mixer::MIX_DEFAULT_FREQUENCY;
 

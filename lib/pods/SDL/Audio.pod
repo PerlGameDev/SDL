@@ -10,11 +10,11 @@ Core, Audio
 
 =head1 CONSTANTS
 
-The constants are not exported by default. You can export them into your namespace by doing:
+The constants are exported by default. You can avoid this by doing:
 
- use SDL::Audio ':all';
+ use SDL::Audio ();
 
-or access them directly:
+and access them directly:
 
  SDL::Audio::AUDIO_S16SYS;
 

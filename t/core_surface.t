@@ -9,13 +9,13 @@ BEGIN {
 }
 
 use strict;
-use SDL ':init';
+use SDL;
 use SDL::Config;
 use SDL::Surface;
 use SDL::App;
 use SDL::Rect;
 use SDL::Color;
-use SDL::Video ':all';
+use SDL::Video;
 use SDL::PixelFormat;
 use Test::More;
 

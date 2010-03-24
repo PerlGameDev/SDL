@@ -2,7 +2,7 @@
 use threads;
 use threads::shared;
 use strict;
-use SDL ':init';
+use SDL;
 use Test::More;
 use SDL::Time;
 

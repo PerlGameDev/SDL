@@ -13,7 +13,7 @@ bootstrap SDL::Mixer;
 
 use base 'Exporter';
 
-our @EXPORT_OK = qw(
+our @EXPORT = qw(
 	MIX_INIT_FLAC
 	MIX_INIT_MOD
 	MIX_INIT_MP3

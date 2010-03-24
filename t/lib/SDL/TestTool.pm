@@ -4,7 +4,7 @@ use warnings;
 use IO::CaptureOutput qw(capture);
 use SDL qw(:all);
 use SDL::AudioSpec;
-use SDL::Audio ':all';
+use SDL::Audio;
 my %inits =
 (
 	0x00000001 => 'SDL_INIT_TIMER',
@@ -14,8 +14,7 @@ my %inits =
 	0x00000200 => 'SDL_INIT_JOYSTICK',
 	0x00100000 => 'SDL_INIT_NOPARACHUTE',
 	0x01000000 => 'SDL_INIT_EVENTTHREAD',
-	0x0000FFFF => 'SDL_INIT_EVERYTHING',
-
+	0x0000FFFF => 'SDL_INIT_EVERYTHING'
 );
 
 sub init {

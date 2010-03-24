@@ -12,7 +12,7 @@ bootstrap SDL::Pango;
 
 use base 'Exporter';
 
-our @EXPORT_OK = qw(
+our @EXPORT = qw(
 	SDLPANGO_DIRECTION_LTR
 	SDLPANGO_DIRECTION_RTL
 	SDLPANGO_DIRECTION_WEAK_LTR

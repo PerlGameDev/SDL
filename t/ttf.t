@@ -1,12 +1,12 @@
 ﻿#!/usr/bin/perl -w
 use strict;
-use SDL ':init';
+use SDL;
 use SDL::Config;
 use SDL::Color;
 use SDL::Surface;
 use SDL::Overlay;
 use SDL::Rect;
-use SDL::Video ':all';
+use SDL::Video;
 
 BEGIN
 {

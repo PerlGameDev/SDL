@@ -2,7 +2,7 @@
 use strict;
 use threads;
 use threads::shared;
-use SDL ':init';
+use SDL;
 use SDL::Config;
 use Test::More;
 use lib 't/lib';
@@ -16,7 +16,7 @@ elsif( !SDL::Config->has('SDL_mixer') )
 	plan( skip_all => 'SDL_mixer support not compiled' );
 }
 
-use SDL::Mixer ':all';
+use SDL::Mixer;
 use SDL::Mixer::Channels;
 use SDL::Mixer::Effects;
 use SDL::Mixer::Samples;

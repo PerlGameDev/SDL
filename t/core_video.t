@@ -1,13 +1,13 @@
 #!/usr/bin/perl -w
 use strict;
-use SDL ':init';
+use SDL;
 use SDL::Color;
 use SDL::Surface;
 use SDL::Config;
 use SDL::Overlay;
 use Test::More;
 use SDL::Rect;
-use SDL::Video ':all';
+use SDL::Video;
 
 use lib 't/lib';
 use SDL::TestTool;

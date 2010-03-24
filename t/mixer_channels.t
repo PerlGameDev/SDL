@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-use SDL ':init';
+use SDL;
 use SDL::Config;
 
 BEGIN
@@ -18,7 +18,7 @@ BEGIN
 	}
 }
 
-use SDL::Mixer ':all';
+use SDL::Mixer;
 use SDL::Mixer::Channels;
 use SDL::Mixer::Samples;
 

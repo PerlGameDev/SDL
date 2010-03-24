@@ -10,7 +10,7 @@ Core, CDROM, Structure
 
 =head1 SYNOPSIS
 
- use SDL ':init';
+ use SDL;
  use SDL::CDROM;
  use SDL::CD;
 
@@ -31,11 +31,11 @@ Core, CDROM, Structure
  
 =head1 CONSTANTS
 
-The constants are not exported by default. You can export them into your namespace by doing:
+The constants are exported by default. You can avoid this by doing:
 
- use SDL::CD ':all';
+ use SDL::CD ();
 
-or access them directly:
+and access them directly:
 
  SDL::CD::CD_TRAYEMPTY;
 

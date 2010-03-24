@@ -2,8 +2,8 @@
 use strict;
 use Config;
 
-use SDL ':init';
-use SDL::Video ':all';
+use SDL;
+use SDL::Video;
 use SDL::Version;
 use Test::More;
 use lib 't/lib';

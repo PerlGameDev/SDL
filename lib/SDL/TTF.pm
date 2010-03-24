@@ -12,7 +12,7 @@ bootstrap SDL::TTF;
 
 use base 'Exporter';
 
-our @EXPORT_OK = qw(
+our @EXPORT = qw(
 	TTF_HINTING_NORMAL
 	TTF_HINTING_LIGHT
 	TTF_HINTING_MONO

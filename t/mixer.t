@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-use SDL ':init';
+use SDL;
 use SDL::Config;
 
 BEGIN
@@ -23,7 +23,7 @@ BEGIN
 # use SDL; use SDL::Version; SDL::init(SDL_INIT_AUDIO);
 #
 
-use SDL::Mixer ':all';
+use SDL::Mixer;
 use SDL::Version;
 
 my $v = SDL::Mixer::linked_version();

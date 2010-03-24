@@ -10,7 +10,7 @@ internal_load_dlls(__PACKAGE__);
 
 bootstrap SDL::CD;
 
-our @EXPORT_OK = qw(
+our @EXPORT = qw(
 	CD_TRAYEMPTY
 	CD_STOPPED
 	CD_PLAYING

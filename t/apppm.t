@@ -32,7 +32,7 @@
 
 
 use strict;
-use SDL ':init';
+use SDL;
 use SDL::Config;
 use SDL::Video;
 use Test::More;

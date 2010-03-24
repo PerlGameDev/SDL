@@ -12,7 +12,7 @@ bootstrap SDL::Events;
 
 use base 'Exporter';
 
-our @EXPORT_OK = qw(
+our @EXPORT = qw(
 	SDL_ACTIVEEVENT
 	SDL_KEYDOWN
 	SDL_KEYUP

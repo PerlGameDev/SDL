@@ -12,7 +12,7 @@ bootstrap SDL::Video;
 
 use base 'Exporter';
 
-our @EXPORT_OK = qw(
+our @EXPORT = qw(
 	SDL_SWSURFACE
 	SDL_HWSURFACE
 	SDL_ASYNCBLIT

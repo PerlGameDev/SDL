@@ -12,7 +12,7 @@ bootstrap SDL::Audio;
 
 use base 'Exporter';
 
-our @EXPORT_OK = qw(
+our @EXPORT = qw(
 	AUDIO_U8
 	AUDIO_S8
 	AUDIO_U16LSB

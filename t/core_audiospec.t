@@ -2,8 +2,8 @@
 use strict;
 use threads;
 use threads::shared;
-use SDL ':init';
-use SDL::Audio ':all';
+use SDL;
+use SDL::Audio;
 use SDL::AudioSpec;
 use Test::More;
 use Devel::Peek;

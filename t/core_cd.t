@@ -1,7 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
 use SDL;
-use SDL ':init';
 
 BEGIN
 {
@@ -12,9 +11,9 @@ BEGIN
     plan( skip_all => 'Failed to init cdrom' ) unless SDL::TestTool->init(SDL_INIT_CDROM);
 }
 
-use SDL::CD ':all';
+use SDL::CD;
 use SDL::CDROM;
-use SDL::CDTrack ':all';
+use SDL::CDTrack;
 
 is( CD_ERROR,       -1, 'CD_ERROR should be imported' );
 is( CD_ERROR(),     -1, 'CD_ERROR() should also be available' );

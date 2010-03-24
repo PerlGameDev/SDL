@@ -9,7 +9,7 @@ use strict;
 use warnings;
 use Carp;
 use SDL;
-use SDL::Constants;
+#use SDL::Constants;
 use SDL::Rect;
 use SDL::Video;
 use SDL::Event;

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use SDL ':init';
+use SDL;
 use Test::More tests => 5;
 
 use lib 't/lib';

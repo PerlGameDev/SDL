@@ -12,7 +12,7 @@ bootstrap SDL::GFX::Rotozoom;
 
 use base 'Exporter';
 
-our @EXPORT_OK = qw(
+our @EXPORT = qw(
 	SMOOTHING_OFF
 	SMOOTHING_ON
 );

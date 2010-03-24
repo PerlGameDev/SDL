@@ -10,7 +10,7 @@ internal_load_dlls(__PACKAGE__);
 
 bootstrap SDL::CDTrack;
 
-our @EXPORT_OK = qw(
+our @EXPORT = qw(
 	SDL_AUDIO_TRACK
 	SDL_DATA_TRACK
 );

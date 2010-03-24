@@ -1,10 +1,10 @@
 #!/usr/bin/perl -Iblib/lib -Iblib -Iblib/arch
 #
 
-use SDL ':init';
+use SDL;
 use SDL::Config;
 use SDL::Rect;
-use SDL::Video ':all';
+use SDL::Video;
 use SDL::Image;
 use SDL::Surface;
 

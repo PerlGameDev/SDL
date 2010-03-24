@@ -33,11 +33,11 @@ Most likely you just want to know how to get events for you app.
 
 =head1 CONSTANTS
 
-The constants are not exported by default. You can export them into your namespace by doing:
+The constants are exported by default. You can avoid this by doing:
 
- use SDL::Events ':all';
+ use SDL::Events ();
 
-or access them directly:
+and access them directly:
 
  SDL::Events::SDL_ACTIVEEVENT;
 

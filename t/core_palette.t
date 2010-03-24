@@ -3,10 +3,10 @@ use strict;
 use warnings;
 use Test::More;
 
-use SDL ':init';
+use SDL;
 use SDL::Surface;
 use SDL::PixelFormat;
-use SDL::Video ':all';
+use SDL::Video;
 
 use lib 't/lib';
 use SDL::TestTool;

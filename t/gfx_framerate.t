@@ -1,7 +1,7 @@
 #!perl
 use strict;
 use warnings;
-use SDL ':init';
+use SDL;
 use SDL::Config;
 use SDL::Version;
 use SDL::GFX;

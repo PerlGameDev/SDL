@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 use strict;
-use SDL ':init';
+use SDL;
 use SDL::Event;
-use SDL::Events ':all';
+use SDL::Events;
 use SDL::Surface;
-use SDL::Video ':all';
+use SDL::Video;
 use Devel::Peek;
 use Test::More;
 use lib 't/lib';

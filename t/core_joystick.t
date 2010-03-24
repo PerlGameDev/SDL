@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
-use SDL ':init';
+use SDL;
 use Test::More;
 use SDL::Joystick;
 my @done = qw/num_joysticks/;
