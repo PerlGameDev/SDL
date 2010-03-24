@@ -34,15 +34,15 @@ is( SDL_DATA_TRACK(),  4,  'SDL_DATA_TRACK() should also be available' );
 
 my $num_drives = SDL::CDROM::num_drives();
 ok( $num_drives >= 0, "[SDL::CDROM::num_drives] is $num_drives" );
-for(0..$num_drives-1)
-{
-	my $name = SDL::CDROM::name($_);
-	ok( $name, "[SDL::CDROM::name] for drive $_ is $name" );
-}
 
 SKIP:
 {
 	skip("no drives available or SDL_RELEASE_TESTING not set", 17) if $num_drives < 1 || !$ENV{SDL_RELEASE_TESTING};
+	for(0..$num_drives-1)
+	{
+		my $name = SDL::CDROM::name($_);
+		ok( $name, "[SDL::CDROM::name] for drive $_ is $name" );
+	}
 	my $cd = SDL::CD->new(0);
 	isa_ok( $cd, 'SDL::CD', "[SDL::CD->new]" );
 	my $status = $cd->status();
