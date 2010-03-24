@@ -8,6 +8,7 @@ use SDL::Overlay;
 use Test::More;
 use SDL::Rect;
 use SDL::Video;
+use SDL::VideoInfo;
 
 use lib 't/lib';
 use SDL::TestTool;
@@ -156,7 +157,7 @@ SDL::Video::GL_swap_buffers(); pass ( '[GL_swap_buffers] should work because Dou
 };
 
 
-my $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
+my $display    = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 
 if(!$display){
 	 plan skip_all => 'Couldn\'t set video mode: '. SDL::get_error();
@@ -166,13 +167,11 @@ if(!$display){
 
 isa_ok(SDL::Video::get_video_surface(), 'SDL::Surface', '[get_video_surface] Checking if we get a surface ref back'); 
 
-isa_ok(SDL::Video::get_video_info(), 'SDL::VideoInfo', '[get_video_info] Checking if we get videoinfo ref back');
+my $video_info = SDL::Video::get_video_info();
+isa_ok($video_info, 'SDL::VideoInfo', '[get_video_info] Checking if we get videoinfo ref back');
 
 my $driver_name = SDL::Video::video_driver_name();
-
 pass '[video_driver_name] This is your driver name: '.$driver_name;
-
-
 
 is( ref( SDL::Video::list_modes( $display->format , SDL_SWSURFACE )), 'ARRAY', '[list_modes] Returned an ARRAY! ');
 
@@ -194,12 +193,12 @@ is( ($value == 0)  ||  ($value == -1), 1,  '[flip] returns 0 or -1'  );
 SKIP:
 {
 	skip( "These negative test may cause older versions of SDL to crash", 2) unless $ENV{NEW_SDL};
-$value = SDL::Video::set_colors($display, 0, SDL::Color->new(0,0,0));
-is(  $value , 0,  '[set_colors] returns 0 trying to write to 32 bit display'  );
+	$value = SDL::Video::set_colors($display, 0, SDL::Color->new(0,0,0));
+	is(  $value , 0,  '[set_colors] returns 0 trying to write to 32 bit display'  );
 	
 	$value = SDL::Video::set_palette($display, SDL_LOGPAL|SDL_PHYSPAL, 0);
  
-is(  $value , 0,  '[set_palette] returns 0 trying to write to 32 bit surface'  );
+	is(  $value , 0,  '[set_palette] returns 0 trying to write to 32 bit surface'  );
 }
 SDL::delay(100);
 
@@ -228,9 +227,12 @@ SDL::Video::unlock_YUV_overlay($overlay); pass '[unlock_YUV_overlay] ran';
 my $display_at_rect = SDL::Rect->new(0, 0, 100, 100);
 is( SDL::Video::display_YUV_overlay( $overlay, $display_at_rect), 0 ,'[display_YUV_overlay] returns 0 on success'); 
 
+my $bmp_surface;
+
 SKIP:
 {
-	skip("Video driver $driver_name has problems with hardware surfaces", 37) if $driver_name =~ /^(fbcon)$/;
+	skip("No hardware surface available", 37) unless $video_info->hw_available();
+
 	my $hwdisplay = SDL::Video::set_video_mode(640,480,8, SDL_HWSURFACE );
 
 	if(!$hwdisplay){
@@ -261,13 +263,11 @@ SKIP:
 
 	TODO:
 	{
+		local $TODO =  "These test case test a very specific test scenario which might need to be re tought out ...";
 
-	local $TODO =  "These test case test a very specific test scenario which might need to be re tought out ...";
-
-	isa_ok(SDL::Video::convert_surface( $display , $hwdisplay->format, SDL_SRCALPHA), 'SDL::Surface', '[convert_surface] Checking if we get a surface ref back'); 
-	isa_ok(SDL::Video::display_format( $display ), 'SDL::Surface', '[display_format] Returns a SDL::Surface');
-	isa_ok(SDL::Video::display_format_alpha( $display ), 'SDL::Surface', '[display_format_alpha] Returns a SDL::Surface');
-
+		isa_ok(SDL::Video::convert_surface( $display , $hwdisplay->format, SDL_SRCALPHA), 'SDL::Surface', '[convert_surface] Checking if we get a surface ref back'); 
+		isa_ok(SDL::Video::display_format( $display ), 'SDL::Surface', '[display_format] Returns a SDL::Surface');
+		isa_ok(SDL::Video::display_format_alpha( $display ), 'SDL::Surface', '[display_format_alpha] Returns a SDL::Surface');
 	}
 
 	is(  SDL::Video::set_color_key($display, SDL_SRCCOLORKEY, SDL::Color->new( 0, 10, 0 ) ),
@@ -286,7 +286,7 @@ SKIP:
 	unlink($bmp) if -f $bmp;
 	SDL::Video::save_BMP($display, $bmp);
 	ok(-f $bmp, '[save_BMP] creates a file');
-	my $bmp_surface = SDL::Video::load_BMP($bmp);
+	$bmp_surface = SDL::Video::load_BMP($bmp);
 	isa_ok($bmp_surface, 'SDL::Surface', '[load_BMP] returns an SDL::Surface');
 	unlink($bmp) if -f $bmp;
 
@@ -306,6 +306,11 @@ SKIP:
 	is($clip_rect->y, 20, '[get_clip_rect] returns a rect with y 20');
 	is($clip_rect->w, 100, '[get_clip_rect] returns a rect with w 100');
 	is($clip_rect->h, 200, '[get_clip_rect] returns a rect with h 200');
+}
+
+SKIP:
+{
+	skip("No window manager available", 11) unless $video_info->wm_available();
 
 	my($title, $icon) = @{SDL::Video::wm_get_caption()};
 	is($title, undef, '[wm_get_caption] title is undef');
@@ -315,33 +320,36 @@ SKIP:
 	is($title, 'Title text', '[wm_set_caption set title]');
 	is($icon, 'Icon text', '[wm_set_caption set icon]');
 
-	SDL::Video::wm_set_icon($bmp_surface);
-	pass '[wm_set_icon] ran';
-
-
+	SKIP:
+	{
+		skip("No hardware surface available", 1) unless $video_info->hw_available();
+		SDL::Video::wm_set_icon($bmp_surface);
+		pass '[wm_set_icon] ran';
+	}
 
 	SKIP:
 	{
 		skip 'Turn on SDL_GUI_TEST', 6 unless $ENV{SDL_GUI_TEST};
-	SDL::Video::wm_grab_input(SDL_GRAB_ON);
-	pass '[wm_grab_input] ran with SDL_GRAB_ON';
+		SDL::Video::wm_grab_input(SDL_GRAB_ON);
+		pass '[wm_grab_input] ran with SDL_GRAB_ON';
 
-	is( SDL::Video::wm_grab_input(SDL_GRAB_QUERY), SDL_GRAB_ON, 
-		'[wm_grab_input] Got Correct grab mode back');
+		is( SDL::Video::wm_grab_input(SDL_GRAB_QUERY), SDL_GRAB_ON, 
+			'[wm_grab_input] Got Correct grab mode back');
 
-	SDL::Video::wm_grab_input(SDL_GRAB_OFF);
-	pass '[wm_grab_input] ran with SDL_GRAB_OFF';
+		SDL::Video::wm_grab_input(SDL_GRAB_OFF);
+		pass '[wm_grab_input] ran with SDL_GRAB_OFF';
 
-	is( SDL::Video::wm_grab_input(SDL_GRAB_QUERY), SDL_GRAB_OFF, 
-		'[wm_grab_input] Got Correct grab mode back');
+		is( SDL::Video::wm_grab_input(SDL_GRAB_QUERY), SDL_GRAB_OFF, 
+			'[wm_grab_input] Got Correct grab mode back');
 
-	my $ic = SDL::Video::wm_iconify_window();
-	is( $ic, 1,'[wm_iconify_window] ran');
+		my $ic = SDL::Video::wm_iconify_window();
+		is( $ic, 1,'[wm_iconify_window] ran');
 
-	SDL::Video::wm_toggle_fullscreen($display);
-	pass '[wm_toggle_fullscreen] ran';
+		SDL::Video::wm_toggle_fullscreen($display);
+		pass '[wm_toggle_fullscreen] ran';
 	}
 }
+
 
 $ENV{SDL_VIDEODRIVER} = $videodriver;
 
