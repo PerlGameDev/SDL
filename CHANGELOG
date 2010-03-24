@@ -3,7 +3,7 @@ Revision history for Perl extension SDL_perl.
 * 2.3_9
 	- Moved SDL::Net away [FROGGS]
 	- Pango XS/tests/docs [FROGGS]
-	- constants for Pango/TTF/Video are in their modules [FROGGS]
+	- constants for Audio/Video/Events/Mixer/Rotozoom/TTF/Pango are in their modules [FROGGS]
 	- tests are silent unless verbose mode [FROGGS]
 	- tests don't display video-gfx unless SDL_RELEASE_TESTING [FROGGS]
 	- SDL_VIDEODRIVER is not forced for windows if 'dummy'-driver is set [FROGGS]
