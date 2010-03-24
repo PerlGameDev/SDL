@@ -59,25 +59,8 @@ cursor_new(CLASS, data, mask, w, h, x ,y )
 	OUTPUT:
 		RETVAL
 
-
 void
-cursor_DESTROY(bag)
-	SV *bag
+cursor_DESTROY(self)
+	SDL_Cursor *self
 	CODE:
-		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
-			   SDL_Cursor * cursor = (SDL_Cursor*)(pointers[0]);
-			   if (PERL_GET_CONTEXT == pointers[1]) {
-			       pointers[0] = NULL;
-			       safefree( pointers );
-
-			       SDL_FreeCursor(cursor);
-			   }
-		       } else if (bag == 0) {
-			   XSRETURN(0);
-		       } else {
-			   XSRETURN_UNDEF;
-		       }
-
-
-
+		SDL_FreeCursor(self);

@@ -27,22 +27,9 @@ context_new(CLASS)
 		RETVAL
 
 void
-context_DESTROY(bag)
-	SV *bag
+context_DESTROY(context)
+	SDLPango_Context *context
 	CODE:
-		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
-			   SDLPango_Context * context = (SDLPango_Context*)(pointers[0]);
-			   if (PERL_GET_CONTEXT == pointers[1]) {
-			       pointers[0] = NULL;
-			       safefree( pointers );
-
-			       SDLPango_FreeContext(context);
-			   }
-		       } else if (bag == 0) {
-			   XSRETURN(0);
-		       } else {
-			   XSRETURN_UNDEF;
-		       }
+		SDLPango_FreeContext(context);
 
 #endif

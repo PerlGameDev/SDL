@@ -37,22 +37,9 @@ ttf_font_new(CLASS, file, ptsize, index = 0)
 
 
 void
-ttf_font_DESTROY(bag)
-	SV *bag
+ttf_font_DESTROY(ttf_font)
+	TTF_Font *ttf_font
 	CODE:
-		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
-			   TTF_Font * ttf_font = (TTF_Font*)(pointers[0]);
-			   if (PERL_GET_CONTEXT == pointers[1]) {
-			       pointers[0] = NULL;
-			       safefree( pointers );
-			       TTF_CloseFont(ttf_font);
-			   }
-		       } else if (bag == 0) {
-			   XSRETURN(0);
-		       } else {
-			   XSRETURN_UNDEF;
-		       }
-
+		TTF_CloseFont(ttf_font);
 
 #endif

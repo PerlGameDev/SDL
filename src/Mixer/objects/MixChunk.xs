@@ -47,23 +47,9 @@ mixchunk_volume ( mixchunk, ... )
 		RETVAL
 
 void
-mixchunk_DESTROY(bag)
-	SV *bag
+mixchunk_DESTROY(mixchunk)
+	Mix_Chunk *mixchunk
 	CODE:
-		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
-			   Mix_Chunk * mixchunk = (Mix_Chunk*)(pointers[0]);
-			   if (PERL_GET_CONTEXT == pointers[1]) {
-			       pointers[0] = NULL;
-			       safefree( pointers );
-
-			       Mix_FreeChunk(mixchunk);
-			   }
-		       } else if (bag == 0) {
-			   XSRETURN(0);
-		       } else {
-			   XSRETURN_UNDEF;
-		       }
-
+		Mix_FreeChunk(mixchunk);
 
 #endif

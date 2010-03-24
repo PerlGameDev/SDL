@@ -57,21 +57,8 @@ version_patch ( version, ... )
 		RETVAL
 
 void
-version_DESTROY(bag)
-	SV *bag
+version_DESTROY ( version, ... )
+	SDL_version *version
 	CODE:
-		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
-			   SDL_version * version = (SDL_version*)(pointers[0]);
-			   if (PERL_GET_CONTEXT == pointers[1]) {
-			       pointers[0] = NULL;
-			       safefree( pointers );
-
-			       safefree(version);
-			   }
-		       } else if (bag == 0) {
-			   XSRETURN(0);
-		       } else {
-			   XSRETURN_UNDEF;
-		       }
-
+		if( version != NULL)
+			safefree(version);

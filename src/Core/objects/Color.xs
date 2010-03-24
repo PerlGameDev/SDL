@@ -65,23 +65,7 @@ color_b ( color, ... )
 		RETVAL
 
 void
-color_DESTROY(bag)
-	SV *bag
+color_DESTROY ( color )
+	SDL_Color *color
 	CODE:
-		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
-			   SDL_Color * color = (SDL_Color*)(pointers[0]);
-			   if (PERL_GET_CONTEXT == pointers[1]) {
-			       pointers[0] = NULL;
-			       safefree( pointers );
-
-			       safefree(color);
-			   }
-		       } else if (bag == 0) {
-			   XSRETURN(0);
-		       } else {
-			   XSRETURN_UNDEF;
-		       }
-
-
-
+		safefree(color);

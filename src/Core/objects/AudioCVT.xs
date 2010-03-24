@@ -154,26 +154,8 @@ audiocvt_len_ratio(self, ...)
 	OUTPUT:
 		RETVAL
 
-
-
-
 void
-audiocvt_DESTROY(bag)
-	SV *bag
+audiocvt_DESTROY(self)
+	SDL_AudioCVT* self
 	CODE:
-		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
-			   SDL_AudioCVT * audiocvt = (SDL_AudioCVT*)(pointers[0]);
-			   if (PERL_GET_CONTEXT == pointers[1]) {
-			       pointers[0] = NULL;
-			       safefree( pointers );
-
-			       safefree(audiocvt);
-			   }
-		       } else if (bag == 0) {
-			   XSRETURN(0);
-		       } else {
-			   XSRETURN_UNDEF;
-		       }
-
-
+		safefree(self);
