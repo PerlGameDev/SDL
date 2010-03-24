@@ -23,20 +23,6 @@ is( INADDR_ANY(),  0,  'INADDR_ANY() should also be available' );
 is( INADDR_NONE,   0xFFFFFFFF, 'INADDR_NONE should be imported' );
 is( INADDR_NONE(), 0xFFFFFFFF, 'INADDR_NONE() should also be available' );
 
-is( MIX_DEFAULT_CHANNELS, 2, 'MIX_DEFAULT_CHANNELS should be imported' );
-is( MIX_DEFAULT_CHANNELS(), 2,'MIX_DEFAULT_CHANNELS() should also be available' );
-is( MIX_DEFAULT_FORMAT, 32784, 'MIX_DEFAULT_FORMAT should be imported' );
-is( MIX_DEFAULT_FORMAT(), 32784, 'MIX_DEFAULT_FORMAT() should also be available' );
-is( MIX_DEFAULT_FREQUENCY, 22050, 'MIX_DEFAULT_FREQUENCY should be imported' );
-is( MIX_DEFAULT_FREQUENCY(), 22050, 'MIX_DEFAULT_FREQUENCY() should also be available' );
-is( MIX_FADING_IN,    2,   'MIX_FADING_IN should be imported' );
-is( MIX_FADING_IN(),  2,   'MIX_FADING_IN() should also be available' );
-is( MIX_FADING_OUT,   1,   'MIX_FADING_OUT should be imported' );
-is( MIX_FADING_OUT(), 1,   'MIX_FADING_OUT() should also be available' );
-is( MIX_MAX_VOLUME,   128, 'MIX_MAX_VOLUME should be imported' );
-is( MIX_MAX_VOLUME(), 128, 'MIX_MAX_VOLUME() should also be available' );
-is( MIX_NO_FADING,    0,   'MIX_NO_FADING should be imported' );
-is( MIX_NO_FADING(),  0,   'MIX_NO_FADING() should also be available' );
 
 is( SDL_GL_ACCUM_ALPHA_SIZE, 11, 'SDL_GL_ACCUM_ALPHA_SIZE should be imported' );
 is( SDL_GL_ACCUM_ALPHA_SIZE(), 11, 'SDL_GL_ACCUM_ALPHA_SIZE() should also be available' );
@@ -62,9 +48,6 @@ is( SDL_GL_RED_SIZE,     0, 'SDL_GL_RED_SIZE should be imported' );
 is( SDL_GL_RED_SIZE(),   0, 'SDL_GL_RED_SIZE() should also be available' );
 is( SDL_GL_STENCIL_SIZE, 7, 'SDL_GL_STENCIL_SIZE should be imported' );
 is( SDL_GL_STENCIL_SIZE(), 7,'SDL_GL_STENCIL_SIZE() should also be available' );
-
-is( SDL_MIX_MAXVOLUME,   128, 'SDL_MIX_MAXVOLUME should be imported' );
-is( SDL_MIX_MAXVOLUME(), 128, 'SDL_MIX_MAXVOLUME() should also be available' );
 
 is( SMPEG_ERROR,     -1, 'SMPEG_ERROR should be imported' );
 is( SMPEG_ERROR(),   -1, 'SMPEG_ERROR() should also be available' );

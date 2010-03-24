@@ -17,7 +17,7 @@ elsif( !SDL::Config->has('SDL_mixer') )
 	plan( skip_all => 'SDL_mixer support not compiled' );
 }
 
-use SDL::Mixer;
+use SDL::Mixer ':all';
 use SDL::Mixer::Channels;
 use SDL::Mixer::Effects;
 use SDL::Mixer::Samples;
@@ -28,7 +28,7 @@ my $delay           = 500;
 my $audio_test_file = 'test/data/silence.wav';
 SDL::Mixer::Channels::volume( -1,  1 );
 
-if($ENV{'RELEASE_TESTING'})
+if($ENV{'SDL_RELEASE_TESTING'})
 {
 	SDL::Mixer::Channels::volume( -1, 20 );
 	$delay           = 1000;

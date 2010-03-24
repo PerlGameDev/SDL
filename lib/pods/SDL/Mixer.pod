@@ -8,6 +8,52 @@ SDL::Mixer - Sound and music functions
 
 Mixer
 
+=head1 CONSTANTS
+
+The constants are not exported by default. You can export them into your namespace by doing:
+
+ use SDL::Mixer ':all';
+
+or access them directly:
+
+ SDL::Mixer::MIX_DEFAULT_FREQUENCY;
+
+or by choosing the export tags below:
+
+Export tag: ':init'
+
+ MIX_INIT_FLAC
+ MIX_INIT_MOD
+ MIX_INIT_MP3
+ MIX_INIT_OGG
+
+Export tag: ':default'
+
+ MIX_CHANNELS
+ MIX_DEFAULT_FORMAT
+ MIX_DEFAULT_FREQUENCY
+ MIX_DEFAULT_CHANNELS
+ MIX_MAX_VOLUME
+ MIX_CHANNEL_POST
+
+Export tag: ':fading'
+
+ MIX_NO_FADING
+ MIX_FADING_OUT
+ MIX_FADING_IN
+
+Export tag: ':type'
+
+ MUS_NONE
+ MUS_CMD
+ MUS_WAV
+ MUS_MOD
+ MUS_MID
+ MUS_OGG
+ MUS_MP3
+ MUS_MP3_MAD
+ MUS_MP3_FLAC
+
 =head1 DESCRIPTION
 
 SDL::Mixer allows you to enable sound, alter music volume settings, and lets you play, pause and resume, as well as fading the sound and music 

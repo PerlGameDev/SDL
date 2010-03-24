@@ -17,23 +17,6 @@ our @EXPORT=qw(
 	CD_TRAYEMPTY
 	INADDR_ANY
 	INADDR_NONE
-	MIX_CHANNEL_POST
-	MIX_DEFAULT_CHANNELS
-	MIX_DEFAULT_FORMAT
-	MIX_DEFAULT_FREQUENCY
-	MIX_FADING_IN
-	MIX_FADING_OUT
-	MIX_MAX_VOLUME
-	MIX_NO_FADING
-	MUS_NONE
-	MUS_CMD
-	MUS_WAV
-	MUS_MOD
-	MUS_MID
-	MUS_OGG
-	MUS_MP3
-	MUS_MP3_MAD
-	MUS_FLAC
 	SDL_GL_ACCUM_ALPHA_SIZE
 	SDL_GL_ACCUM_BLUE_SIZE
 	SDL_GL_ACCUM_GREEN_SIZE
@@ -117,32 +100,6 @@ use constant {
 };
 
 use constant {
-	MIX_CHANNELS                                        => 8,
-	MIX_DEFAULT_FREQUENCY                               => 22050,
-	MIX_DEFAULT_CHANNELS                                => 2,
-	MIX_MAX_VOLUME                                      => 128,
-};
-
-use constant {
-	MIX_NO_FADING                                       => 0,
-	MIX_FADING_OUT                                      => 1,
-	MIX_FADING_IN                                       => 2,
-}; # Mix_Fading
-
-use constant {
-	MUS_NONE                                            => 0,
-	MUS_CMD                                             => 1,
-	MUS_WAV                                             => 2,
-	MUS_MOD                                             => 3,
-	MUS_MID                                             => 4,
-	MUS_OGG                                             => 5,
-	MUS_MP3                                             => 6,
-	MUS_MP3_MAD                                         => 7,
-	MUS_MP3_FLAC                                        => 8,
-}; # Mix_MusicType
-
-use constant {
-	MIX_CHANNEL_POST                                    => -2,
 	SDL_MUTEX_TIMEDOUT                                  => 1,
 	NeedFunctionPrototypes                              => 1,
 	INADDR_ANY                                          => 0x00000000,
@@ -150,8 +107,6 @@ use constant {
 	INADDR_BROADCAST                                    => 0xFFFFFFFF,
 	SDLNET_MAX_UDPCHANNELS                              => 32,
 	SDLNET_MAX_UDPADDRESSES                             => 4,
-	SDLNet_SetError                                     => SDL_SetError,
-	SDLNet_GetError                                     => SDL_GetError,
 	WIN32_LEAN_AND_MEAN                                 => 1,
 	GL_GLEXT_VERSION                                    => 29,
 	GL_UNSIGNED_BYTE_3_3_2                              => 0x8032,
@@ -2659,7 +2614,6 @@ use constant {
 
 # manual added!!
 use constant {
-	MIX_DEFAULT_FORMAT    => 32784,
 	SMPEG_ERROR => -1,
 	SMPEG_PLAYING => 1,
 	SMPEG_STOPPED => 0,

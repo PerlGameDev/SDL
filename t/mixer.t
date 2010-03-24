@@ -23,13 +23,28 @@ BEGIN
 # use SDL; use SDL::Version; SDL::init(SDL_INIT_AUDIO);
 #
 
-use SDL::Mixer;
+use SDL::Mixer ':all';
 use SDL::Version;
 
 my $v = SDL::Mixer::linked_version();
 
 isa_ok($v, 'SDL::Version', '[linked_version]');
 printf("got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch);
+
+is( MIX_DEFAULT_CHANNELS, 2, 'MIX_DEFAULT_CHANNELS should be imported' );
+is( MIX_DEFAULT_CHANNELS(), 2,'MIX_DEFAULT_CHANNELS() should also be available' );
+is( MIX_DEFAULT_FORMAT, 32784, 'MIX_DEFAULT_FORMAT should be imported' );
+is( MIX_DEFAULT_FORMAT(), 32784, 'MIX_DEFAULT_FORMAT() should also be available' );
+is( MIX_DEFAULT_FREQUENCY, 22050, 'MIX_DEFAULT_FREQUENCY should be imported' );
+is( MIX_DEFAULT_FREQUENCY(), 22050, 'MIX_DEFAULT_FREQUENCY() should also be available' );
+is( MIX_FADING_IN,    2,   'MIX_FADING_IN should be imported' );
+is( MIX_FADING_IN(),  2,   'MIX_FADING_IN() should also be available' );
+is( MIX_FADING_OUT,   1,   'MIX_FADING_OUT should be imported' );
+is( MIX_FADING_OUT(), 1,   'MIX_FADING_OUT() should also be available' );
+is( MIX_MAX_VOLUME,   128, 'MIX_MAX_VOLUME should be imported' );
+is( MIX_MAX_VOLUME(), 128, 'MIX_MAX_VOLUME() should also be available' );
+is( MIX_NO_FADING,    0,   'MIX_NO_FADING should be imported' );
+is( MIX_NO_FADING(),  0,   'MIX_NO_FADING() should also be available' );
 
 SKIP:
 {

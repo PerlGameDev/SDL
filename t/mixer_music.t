@@ -19,7 +19,7 @@ BEGIN
 	}
 }
 
-use SDL::Mixer;
+use SDL::Mixer ':all';
 use SDL::Mixer::Music;
 use SDL::Mixer::Samples;
 use SDL::Version;
