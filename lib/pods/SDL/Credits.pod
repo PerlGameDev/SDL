@@ -4,7 +4,7 @@
 
 =head2 Core Developers
 
-See the impact graph on our L<http://github.com/kthakore/SDL_perl/graphs/impact |github repository>.
+See the L<impact graph |http://github.com/kthakore/SDL_perl/graphs/impact > on our github repository.
 
 Also see our CONTRIBUTERS file.
 
