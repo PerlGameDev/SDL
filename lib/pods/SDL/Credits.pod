@@ -1,0 +1,25 @@
+=pod 
+
+=head1 The SDL Perl 2010 Development Team
+
+=head2 Core Developers
+
+See the impact graph on our L<http://github.com/kthakore/SDL_perl/graphs/impact |github repository>.
+
+Also see our CONTRIBUTERS file.
+
+=head2 Maintainance 
+
+Please contact the following individuals reagarding questions and problems with SDL Perl.
+	
+	Nick: FROGGS
+	Name: Tobias Leich
+
+	Nick: kthakore
+	Name: Kartik Thakore
+
+They can be reached on the SDL-devel\@perl.org mailing list and the #sdl channel on the irc.perl.org network.
+
+
+=cut
+
