@@ -11,14 +11,14 @@
 MODULE = SDL::CDROM 	PACKAGE = SDL::CDROM    PREFIX = cd_
 
 int
-cd_num_drives ()
+cd_num_drives()
 	CODE:
 		RETVAL = SDL_CDNumDrives();
 	OUTPUT:
 		RETVAL
 
 char *
-cd_name ( drive )
+cd_name( drive )
 	int drive
 	CODE:
 		RETVAL = strdup(SDL_CDName(drive));

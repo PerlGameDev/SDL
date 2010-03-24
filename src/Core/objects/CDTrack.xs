@@ -11,7 +11,7 @@
 MODULE = SDL::CDTrack 	PACKAGE = SDL::CDTrack    PREFIX = cdt_
 
 Uint8
-cdt_track_id ( track )
+cdt_id( track )
 	SDL_CDtrack *track
 	CODE:
 		RETVAL = track->id;
@@ -19,7 +19,7 @@ cdt_track_id ( track )
 		RETVAL
 
 Uint8
-cdt_track_type ( track )
+cdt_type( track )
 	SDL_CDtrack *track
 	CODE:
 		RETVAL = track->type;
@@ -27,7 +27,7 @@ cdt_track_type ( track )
 		RETVAL
 
 Uint16
-cdt_track_length ( track )
+cdt_length( track )
 	SDL_CDtrack *track
 	CODE:
 		RETVAL = track->length;
@@ -35,11 +35,9 @@ cdt_track_length ( track )
 		RETVAL
 
 Uint32
-cdt_track_offset ( track )
+cdt_offset( track )
 	SDL_CDtrack *track
 	CODE:
 		RETVAL = track->offset;
 	OUTPUT: 
 		RETVAL
-
-

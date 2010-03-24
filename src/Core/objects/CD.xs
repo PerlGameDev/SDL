@@ -15,6 +15,7 @@ cdr_new ( CLASS, drive )
 	char* CLASS
 	int drive
 	CODE:
+		warn("%i\n", 1);
 		RETVAL = SDL_CDOpen(drive);
 	OUTPUT:
 		RETVAL
