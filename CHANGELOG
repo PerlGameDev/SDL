@@ -7,6 +7,9 @@ Revision history for Perl extension SDL_perl.
 	- tests are silent unless verbose mode [FROGGS]
 	- tests don't display video-gfx unless SDL_RELEASE_TESTING [FROGGS]
 	- SDL_VIDEODRIVER is not forced for windows if 'dummy'-driver is set [FROGGS]
+	- examples made to work with new API [mantovani]
+	- manifest fix for MacOSX [kthakore]
+	- some measly docs [kthakore]
 
 * 2.3_8
 	- TTF XS/tests/docs [#85] [FROGGS]
