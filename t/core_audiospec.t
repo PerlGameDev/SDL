@@ -18,9 +18,7 @@ unless ( $ENV{AUTOMATED_TESTING} or $ENV{SDL_RELEASE_TESTING} ) {
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
 }
-else {
-    plan( tests => 1);
-}
+
 my $obtained = SDL::AudioSpec->new;   
 my $p :shared = 0;
 my $f :shared = 0;
@@ -46,6 +44,7 @@ sub callback{
       $f = 1;
     }
   }
+	isnt $p, 0,  '[callback] tested $p = '.$p;
 }
 
 die 'AudioMixer, Unable to open audio: '. SDL::get_error() if( SDL::Audio::open($desired, $obtained) <0 );
@@ -56,4 +55,4 @@ sleep(1);
 
 SDL::Audio::close();
 
-isnt $p, 0,  '[callback] tested ';
+done_testing();
