@@ -742,25 +742,26 @@ while(1)
 	SDL::Events::pump_events(); 
 
 	my $ret =  SDL::Events::poll_event($event);
-
+        my $r;
 	if ($event->type == SDL_ACTIVEEVENT && $event->active_gain == 1 && $event->active_state == SDL_APPINPUTFOCUS )
 	{
 		$got_event = 1;
-		last;
+		is( $got_event, 1, '[poll_event] Got an Active event back out') ;
+                         is( $event->active_gain() , 1, '[poll_event] Got right active->gain');
+                         is( $event->active_state() , SDL_APPINPUTFOCUS, '[poll_event] Got right active->state');
+		
 	}
 	if ($event->type == SDL_USEREVENT)
 	{
-		my $r =   $event->user_data1();
+		$r =   $event->user_data1();
 		is( @{$r}, 11, '[user_events] can hold user data now');
-
+                
 	}
-
+        last if $r && $got_event;
 	last if ($ret == 0 );
 }
 
-is( $got_event, 1, '[poll_event] Got an Active event back out') ;
-is( $event->active_gain() , 1, '[poll_event] Got right active->gain');
-is( $event->active_state() , SDL_APPINPUTFOCUS, '[poll_event] Got right active->state');
+
 
 
 SDL::Events::push_event($aevent); pass '[push_event] ran';
@@ -802,10 +803,10 @@ foreach(@mods)
 	is( SDL::Events::get_mod_state(), $_, '[get_mod_state] got the mod properly'); 
 
 }
-SDL::quit();
+#SDL::quit();
 
 
-SDL::init(SDL_INIT_VIDEO);
+#SDL::init(SDL_INIT_VIDEO);
 
 $display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 
@@ -901,7 +902,7 @@ SKIP:
 }
 
 $ENV{SDL_VIDEODRIVER} = $videodriver;
-
+SDL::quit();
 pass 'Are we still alive? Checking for segfaults';
 
 done_testing;
