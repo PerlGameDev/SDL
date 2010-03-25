@@ -15,11 +15,11 @@ $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 if( !SDL::TestTool->init(SDL_INIT_VIDEO) )
 {
-    plan( skip_all => 'Failed to init video' );
+	plan( skip_all => 'Failed to init video' );
 }
 elsif( !SDL::Config->has('SDL_image') )
 {
-    plan( skip_all => 'SDL_image support not compiled' );
+	plan( skip_all => 'SDL_image support not compiled' );
 }
 
 my @done = qw/
@@ -93,9 +93,14 @@ SKIP:
 		skip ('libjpeg support not compiled', 1) unless SDL::Config->has('jpeg');
 		is (SDL::Image::init( IMG_INIT_JPG ), IMG_INIT_JPG , '[init] Inited jpg');
 	}
-	
-	is (SDL::Image::init( IMG_INIT_TIF ), IMG_INIT_TIF , '[init] Inited TIFF');
-	
+
+
+	SKIP:
+	{
+		skip ('libtiff support not compiled', 1) unless SDL::Config->has('tiff');
+		is (SDL::Image::init( IMG_INIT_TIF ), IMG_INIT_TIF , '[init] Inited TIFF');
+	}
+
 	SKIP:
 	{
 		skip ('libpng support not compiled', 1) unless SDL::Config->has('png');
@@ -107,8 +112,8 @@ SKIP:
 		load_CUR_rw
 		is_ICO
 		is_CUR/
-	     );
- 
+	);
+
 	SDL::Image::quit(); pass '[quit] we can quit fine';
 }
 
