@@ -136,7 +136,7 @@ init ( flags )
 	Uint32 flags
 	CODE:
 		INIT_NS_APPLICATION
-#if defined WINDOWS || WIN32
+#if defined WINDOWS || defined WIN32
 		windows_force_driver();
 #endif
 		RETVAL = SDL_Init(flags);
