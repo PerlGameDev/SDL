@@ -140,8 +140,8 @@ init ( flags )
 		windows_force_driver();
 #endif
 		RETVAL = SDL_Init(flags);
-#if not defined WINDOWS 
-#if not defined WIN32
+#ifndef WINDOWS 
+#ifndef WIN32
 #ifdef HAVE_TLS_CONTEXT 
 
 		Perl_call_atexit(PERL_GET_CONTEXT, (void*)sdl_perl_atexit,0);
