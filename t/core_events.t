@@ -867,11 +867,11 @@ is( SDL::Events::joystick_event_state(SDL_QUERY), SDL_ENABLE, '[joystick_event_s
 is( SDL::Events::joystick_event_state(SDL_IGNORE),  SDL_IGNORE,  '[joystick_event_state] return SDL_IGNORE correctly');
 is( SDL::Events::joystick_event_state(SDL_QUERY), SDL_IGNORE, '[joystick_event_state] return  SDL_IGNORE took SDL_QUERY ');
 
-SDL::quit();
-
 SKIP:
 {
 	skip "Turn SDL_GUI_TEST on", 1 unless $ENV{'SDL_GUI_TEST'};
+	
+	SDL::quit();
 	SDL::init(SDL_INIT_VIDEO);
 	$display = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 	$event = SDL::Event->new();
@@ -898,8 +898,6 @@ SKIP:
 		}
 	}
 	is( $filtered, 1, '[set_event_filter] Properly filtered SDL_ACTIVEEVENT');
-
-#	SDL::quit();
 }
 
 $ENV{SDL_VIDEODRIVER} = $videodriver;
