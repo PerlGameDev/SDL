@@ -350,7 +350,7 @@ my %subsystems =
 			from => 'src/Image.xs',
 			to   =>	'lib/SDL/Image.xs',
 		},
-		libraries => [qw( SDL SDL_image jpeg png )],
+		libraries => [qw( SDL SDL_image jpeg png tiff)],
 	},
 	Pango => {
 		file	=> {
@@ -474,6 +474,12 @@ my %libraries = (
 		header => 'jpeglib.h',
 		lib    => 'jpeg',
 	},
+	tiff       => {	
+		define => 'HAVE_JPEG',
+		header => 'tiff.h',
+		lib    => 'tiff',
+	},
+
 	smpeg       => {
 		define => 'HAVE_SMPEG',
 		header => 'smpeg.h',
