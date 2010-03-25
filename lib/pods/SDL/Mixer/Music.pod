@@ -20,10 +20,6 @@ C<load_MUS> loads a music file into a C<SDL::Mixer::MixMusic> structure. This ca
 
  SDL::Mixer::Music::hook_music( $callback, $position );
  
- or
- 
- SDL::Mixer::Music::hook_music( &callback, $position );
-
 This sets up a custom music player function, so you can pass your own audio stream data into the SDL::Mixer.
 The function will be called with C<position> passed into the first parameter when the C<callback> is called.
 The audio stream buffer has to be filled with length bytes of music (2nd parameter).
@@ -39,7 +35,7 @@ B<Note>: At program termination also call C<SDL::Mixer::Music::hook_music()> to 
 
 Example:
 
- my $callback = sub
+ sub callback
  {
      my $position = shift; # position (first time its 0, on each call $length is added)
      my $length   = shift; # length of bytes we have to put in stream
@@ -53,9 +49,9 @@ Example:
      }
  
      return @stream;
- };
+ }
  
- SDL::Mixer::Music::hook_music( $callback, 0 );
+ SDL::Mixer::Music::hook_music( 'main::callback', 0 );
 
 =head2 hook_music_finished
 
@@ -70,8 +66,12 @@ Example:
 
  my $music_is_playing = 0;
  my @music            = qw(first.mp3 next.mp3 other.mp3 last.mp3);
- my $callback         = sub{ $music_is_playing = 0; };
- SDL::Mixer::Music::hook_music_finished( $callback );
+ sub callback
+ {
+     $music_is_playing = 0;
+ }
+ 
+ SDL::Mixer::Music::hook_music_finished( 'main::callback' );
  
  foreach my $this_song ( @music )
  {

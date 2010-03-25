@@ -17,10 +17,16 @@ Core, Audio, Structure
  
  my $audio_spec = SDL::AudioSpec->new();
  
-    $audio_spec->freq(22050);          # 22050Hz - FM Radio quality
-    $audio_spec->format(AUDIO_S16SYS); # 16-bit signed audio
-    $audio_spec->samples(8192);        # Large audio buffer reduces risk of dropouts but increases response time
-    $audio_spec->channels(1);          # Mono
+     $audio_spec->freq(22050);          # 22050Hz - FM Radio quality
+     $audio_spec->format(AUDIO_S16SYS); # 16-bit signed audio
+     $audio_spec->samples(8192);        # Large audio buffer reduces risk of dropouts but increases response time
+     $audio_spec->channels(1);          # Mono
+     $audio_spec->callback('main::callback');
+ 
+ sub callback
+ {
+     # do something here
+ }
 
 =head1 DESCIPTION
 
@@ -84,5 +90,9 @@ The number of separate sound channels. 1 is mono (single channel), 2 is stereo (
 When used with C<SDL::Audio::open_audio> this refers to the size of the audio buffer in samples. A sample is a chunk of audio data of the 
 size specified in format multiplied by the number of channels. When the C<SDL::AudioSpec> is used with C<SDL::Audio::load_wav> samples is 
 set to 4096.
+
+=head2 callback
+
+To be documented.
 
 =cut
