@@ -76,7 +76,7 @@ void
 windows_force_driver()
 {
 	char *test = SDL_getenv("SDL_VIDEODRIVER");
-	if(test && 0 != strcmp("dummy", test))
+	if(!test || 0 != strcmp("dummy", test))
 	{
 #if SDL_MAJOR_VERSION >= 1 && SDL_MINOR_VERSION >= 2 &&  SDL_PATCHLEVEL >= 14
 		putenv("SDL_VIDEODRIVER=directx");
