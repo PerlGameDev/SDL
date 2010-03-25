@@ -29,7 +29,7 @@ my $after = SDL::get_ticks();
 like( $after, qr/^\d+$/, '[get_ticks] returns a number again' );
 
 my $diff = $after - $before;
-ok( $diff > 50 && $diff < 300, '[delay](250) delayed for ' . $diff . 'ms' );
+ok( $diff > 100 && $diff < 400, '[delay](250) delayed for ' . $diff . 'ms' );
 
 my $fired :shared = 0;
 
