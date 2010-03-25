@@ -36,7 +36,7 @@ ok( $num_drives >= 0, "[SDL::CDROM::num_drives] is $num_drives" );
 
 SKIP:
 {
-	skip("no drives available or SDL_RELEASE_TESTING not set", 17) if $num_drives < 1 || !$ENV{SDL_RELEASE_TESTING};
+	skip("no drives available or SDL_RELEASE_TESTING not set", 17) if $num_drives <= 0 || !$ENV{SDL_RELEASE_TESTING};
 	for(0..$num_drives-1)
 	{
 		my $name = SDL::CDROM::name($_);
@@ -59,7 +59,7 @@ SKIP:
 	ok( defined $states{$status}, "[SDL::CD->status] is " . (defined $states{$status} ? $states{$status} : 'undefined' ));
 	SKIP:
 	{
-		skip("CD should be in CD_STOPPED state", 15) unless $status == CD_STOPPED;
+		skip("CD should be in CD_STOPPED state", 14) unless $status == CD_STOPPED;
 		my $track = $cd->track(3);
 		isa_ok( $track,                         'SDL::CDTrack',   "[SDL::CD->track]" );
 		my $id         = $cd->id();         ok( $id >= 0,         "[SDL::CD->id] is $id" );
@@ -83,7 +83,13 @@ SKIP:
 		is( $cd->resume(),                      0,                "[SDL::CD->resume] succeeded" ); SDL::delay(2000);
 		is( $cd->stop(),                        0,                "[SDL::CD->stop] succeeded" );   SDL::delay(2000);
 		is( $cd->play(CD_FPS * 30, CD_FPS * 2), 0,                "[SDL::CD->play] succeeded" );   SDL::delay(2000);
-		is( $cd->eject(),                       0,                "[SDL::CD->eject] succeeded" );  SDL::delay(2000);
+	}
+	SKIP:
+	{
+		skip("CD should be in CD_STOPPED or CD_TRAYEMPTY state", 1) unless $status == CD_STOPPED || $status == CD_TRAYEMPTY;
+
+		is( $cd->eject(),                       0,                "[SDL::CD->eject] succeeded" ) unless 
+		SDL::delay(2000);
 	}
 }
 
