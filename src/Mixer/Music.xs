@@ -7,10 +7,11 @@
 #ifdef HAVE_SDL_MIXER
 #include <SDL_mixer.h>
 
+PerlInterpreter *perl_my      = NULL;
 PerlInterpreter *perl_for_cb  = NULL;
 PerlInterpreter *perl_for_fcb = NULL;
-static SV       *cb           = (SV*)NULL;
-static SV       *fcb          = (SV*)NULL;
+char            *cb           = NULL;
+char            *fcb          = NULL;
 
 void mix_func(void *udata, Uint8 *stream, int len)
 {
@@ -26,9 +27,9 @@ void mix_func(void *udata, Uint8 *stream, int len)
 	*(int*)udata = *(int*)udata + len;
 	PUTBACK;                                   /* make local stack pointer global   */
 
-	if(cb != (SV*)NULL)
+	if(cb != NULL)
 	{
-        int count = perl_call_sv(cb, G_ARRAY); /* call the function                 */
+        int count = call_pv(cb, G_ARRAY);      /* call the function                 */
 		SPAGAIN;                               /* refresh stack pointer             */
 		
 		if(count == len + 1)
@@ -53,9 +54,9 @@ void mix_finished(void)
 	dSP;                                       /* initialize stack pointer          */
 	PUSHMARK(SP);                              /* remember the stack pointer        */
 
-	if(fcb != (SV*)NULL)
+	if(fcb != NULL)
 	{
-        perl_call_sv(fcb, G_DISCARD|G_VOID);          /* call the function                 */
+        call_pv(fcb, G_DISCARD|G_VOID);        /* call the function                 */
 	}
 }
 
@@ -134,18 +135,18 @@ mixmus_free_music( music )
 
 void
 mixmus_hook_music( func = NULL, arg = 0 )
-	SV *func
+	char *func
 	int arg
 	CODE:
 		if(func != NULL)
 		{
-			perl_for_cb = PERL_GET_CONTEXT;
+			if (perl_for_cb == NULL) {
+				perl_my     = PERL_GET_CONTEXT;
+				perl_for_cb = perl_clone(perl_my, CLONEf_KEEP_PTR_TABLE);
+				PERL_SET_CONTEXT(perl_my);
+			}
 		
-			if (cb == (SV*)NULL)
-				cb = newSVsv(func);
-			else
-				SvSetSV(cb, func);
-
+			cb           = func;
 			void *arg2   = safemalloc(sizeof(int));
 			*(int*) arg2 = arg;
 			Mix_HookMusic(&mix_func, arg2);
@@ -155,16 +156,17 @@ mixmus_hook_music( func = NULL, arg = 0 )
 
 void
 mixmus_hook_music_finished( func = NULL )
-	SV *func
+	char *func
 	CODE:
 		if(func != NULL)
 		{
-			perl_for_fcb = PERL_GET_CONTEXT;
-		
-			if (fcb == (SV*)NULL)
-				fcb = newSVsv(func);
-			else
-				SvSetSV(fcb, func);
+			if (perl_for_fcb == NULL) {
+				perl_my      = PERL_GET_CONTEXT;
+				perl_for_fcb = perl_clone(perl_my, CLONEf_KEEP_PTR_TABLE);
+				PERL_SET_CONTEXT(perl_my);
+			}
+
+			fcb = func;
 
 			Mix_HookMusicFinished(&mix_finished);
 		}

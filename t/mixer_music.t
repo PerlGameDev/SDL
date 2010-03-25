@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
+use threads;
+use threads::shared;
 use SDL;
 use SDL::Config;
 
@@ -27,9 +29,9 @@ my $v = SDL::Mixer::linked_version();
 
 is( SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 ),  0, '[open_audio] ran');
 
-my $finished        = 0;
-my $mix_func_called = 0;
-my $mix_func        = sub
+my $finished : shared        = 0;
+my $mix_func_called : shared = 0;
+sub mix_func
 {
 	my $position = shift; # position
 	my $length   = shift; # length of bytes we have to put in stream
@@ -63,7 +65,7 @@ if($ENV{'SDL_RELEASE_TESTING'})
 SDL::Mixer::Music::volume_music($volume1);
 is( SDL::Mixer::Music::volume_music($volume2),                $volume1,       "[volume_music] was $volume1, now set to $volume2" );
 
-my $callback  = sub
+sub callback
 {
 	# printf("[hook_music_finished] callback called\n", shift);
 	$finished++;
@@ -72,9 +74,9 @@ my $callback  = sub
 SKIP:
 {
 	skip('No sound unless SDL_RELEASE_TESTING', 5) unless $ENV{'SDL_RELEASE_TESTING'};
-	SDL::Mixer::Music::hook_music_finished( $callback ); pass '[hook_music_finished] registered callback';
+	SDL::Mixer::Music::hook_music_finished( 'main::callback' ); pass '[hook_music_finished] registered callback';
 
-	SDL::Mixer::Music::hook_music( $mix_func, 0 ); pass '[hook_music] registered custom music player';
+	SDL::Mixer::Music::hook_music( 'main::mix_func', 0 ); pass '[hook_music] registered custom music player';
 	is( SDL::Mixer::Music::get_music_hook_data(), 0,    "[get_music_hook_data] should return 0" );
 
 	SDL::delay(1000);
