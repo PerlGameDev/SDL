@@ -230,12 +230,13 @@ my $display_at_rect = SDL::Rect->new(0, 0, 100, 100);
 is( SDL::Video::display_YUV_overlay( $overlay, $display_at_rect), 0 ,'[display_YUV_overlay] returns 0 on success'); 
 
 my $bmp_surface;
+my $hwdisplay;
 
 SKIP:
 {
 	skip("No hardware surface available", 26) unless $video_info->hw_available();
 
-	my $hwdisplay = SDL::Video::set_video_mode(640,480,8, SDL_HWSURFACE );
+	$hwdisplay = SDL::Video::set_video_mode(640,480,8, SDL_HWSURFACE );
 
 	if(!$hwdisplay){
 		 plan skip_all => 'Couldn\'t set video mode: '. SDL::get_error();
@@ -267,43 +268,43 @@ SKIP:
 	{
 		local $TODO =  "These test case test a very specific test scenario which might need to be re tought out ...";
 
-		isa_ok(SDL::Video::convert_surface( $display , $hwdisplay->format, SDL_SRCALPHA), 'SDL::Surface', '[convert_surface] Checking if we get a surface ref back'); 
-		isa_ok(SDL::Video::display_format( $display ), 'SDL::Surface', '[display_format] Returns a SDL::Surface');
-		isa_ok(SDL::Video::display_format_alpha( $display ), 'SDL::Surface', '[display_format_alpha] Returns a SDL::Surface');
+		isa_ok(SDL::Video::convert_surface( $hwdisplay , $hwdisplay->format, SDL_SRCALPHA), 'SDL::Surface', '[convert_surface] Checking if we get a surface ref back'); 
+		isa_ok(SDL::Video::display_format( $hwdisplay ), 'SDL::Surface', '[display_format] Returns a SDL::Surface');
+		isa_ok(SDL::Video::display_format_alpha( $hwdisplay ), 'SDL::Surface', '[display_format_alpha] Returns a SDL::Surface');
 	}
 
-	is(  SDL::Video::set_color_key($display, SDL_SRCCOLORKEY, SDL::Color->new( 0, 10, 0 ) ),
+	is(  SDL::Video::set_color_key($hwdisplay, SDL_SRCCOLORKEY, SDL::Color->new( 0, 10, 0 ) ),
 	   0,  '[set_color_key] Returns 0 on success' 
 	   ) ;
 
-	is(  SDL::Video::set_alpha($display, SDL_SRCALPHA, 100 ),
+	is(  SDL::Video::set_alpha($hwdisplay, SDL_SRCALPHA, 100 ),
 	   0,  '[set_alpha] Returns 0 on success' 
 	   ) ;
 
-	is_deeply(SDL::Video::get_RGB($display->format, 0), [0,0,0], '[get_RGB] returns r,g,b');
+	is_deeply(SDL::Video::get_RGB($hwdisplay->format, 0), [0,0,0], '[get_RGB] returns r,g,b');
 
-	is_deeply(SDL::Video::get_RGBA($display->format, 0), [0,0,0,255], '[get_RGBA] returns r,g,b,a');
+	is_deeply(SDL::Video::get_RGBA($hwdisplay->format, 0), [0,0,0,255], '[get_RGBA] returns r,g,b,a');
 
 	my $bmp = 't/core_video.bmp';
 	unlink($bmp) if -f $bmp;
-	SDL::Video::save_BMP($display, $bmp);
+	SDL::Video::save_BMP($hwdisplay, $bmp);
 	ok(-f $bmp, '[save_BMP] creates a file');
 	$bmp_surface = SDL::Video::load_BMP($bmp);
 	isa_ok($bmp_surface, 'SDL::Surface', '[load_BMP] returns an SDL::Surface');
 	unlink($bmp) if -f $bmp;
 
-	my $pixel = SDL::Video::map_RGB( $display->format, 255, 127, 0 );
-	SDL::Video::fill_rect( $display, SDL::Rect->new( 0, 0, 32, 32 ), $pixel );
+	my $pixel = SDL::Video::map_RGB( $hwdisplay->format, 255, 127, 0 );
+	SDL::Video::fill_rect( $hwdisplay, SDL::Rect->new( 0, 0, 32, 32 ), $pixel );
 	ok( 1, '[fill_rect] filled rect' );
 
 	my $clip_rect = SDL::Rect->new(0, 0, 10, 20);
-	SDL::Video::get_clip_rect($display, $clip_rect);
+	SDL::Video::get_clip_rect($hwdisplay, $clip_rect);
 	is($clip_rect->x, 0, '[get_clip_rect] returns a rect with x 0');
 	is($clip_rect->y, 0, '[get_clip_rect] returns a rect with y 0');
 	is($clip_rect->w, 640, '[get_clip_rect] returns a rect with w 640');
 	is($clip_rect->h, 480, '[get_clip_rect] returns a rect with h 480');
-	SDL::Video::set_clip_rect($display, SDL::Rect->new(10, 20, 100, 200));
-	SDL::Video::get_clip_rect($display, $clip_rect);
+	SDL::Video::set_clip_rect($hwdisplay, SDL::Rect->new(10, 20, 100, 200));
+	SDL::Video::get_clip_rect($hwdisplay, $clip_rect);
 	is($clip_rect->x, 10, '[get_clip_rect] returns a rect with x 10');
 	is($clip_rect->y, 20, '[get_clip_rect] returns a rect with y 20');
 	is($clip_rect->w, 100, '[get_clip_rect] returns a rect with w 100');
@@ -347,8 +348,12 @@ SKIP:
 		my $ic = SDL::Video::wm_iconify_window();
 		is( $ic, 1,'[wm_iconify_window] ran');
 
-		SDL::Video::wm_toggle_fullscreen($display);
-		pass '[wm_toggle_fullscreen] ran';
+		SKIP:
+		{
+			skip("No hardware surface available", 1) unless $video_info->hw_available();
+			SDL::Video::wm_toggle_fullscreen($hwdisplay);
+			pass '[wm_toggle_fullscreen] ran';
+		}
 	}
 }
 
