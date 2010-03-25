@@ -475,7 +475,7 @@ my %libraries = (
 		lib    => 'jpeg',
 	},
 	tiff       => {	
-		define => 'HAVE_JPEG',
+		define => 'HAVE_TIFF',
 		header => 'tiff.h',
 		lib    => 'tiff',
 	},
