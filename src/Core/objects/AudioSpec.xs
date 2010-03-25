@@ -6,11 +6,6 @@
 #define aTHX_
 #endif
 
-
-#ifdef HAVE_SDL_TTF
-#include <SDL_ttf.h>
-#endif
-
 #ifdef USE_THREADS
 #define HAVE_TLS_CONTEXT
 #endif
