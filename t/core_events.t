@@ -902,7 +902,7 @@ SKIP:
 }
 
 $ENV{SDL_VIDEODRIVER} = $videodriver;
-SDL::quit();
+#SDL::quit();
 pass 'Are we still alive? Checking for segfaults';
 
 done_testing;
