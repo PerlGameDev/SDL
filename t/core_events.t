@@ -899,7 +899,7 @@ SKIP:
 	}
 	is( $filtered, 1, '[set_event_filter] Properly filtered SDL_ACTIVEEVENT');
 
-	SDL::quit();
+#	SDL::quit();
 }
 
 $ENV{SDL_VIDEODRIVER} = $videodriver;
