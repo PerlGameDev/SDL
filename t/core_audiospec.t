@@ -34,10 +34,11 @@ my $desired = SDL::AudioSpec->new;
 
 sub callback{
   my ($int_size, $len, $streamref) = @_;
-
+  my $chr = chr(0);
+  $chr = chr($p) if $p; #Windows is delaying the thread update for some reason
   for (my $i = 0; $i < $len; $i++) {
     use bytes;
-    substr($$streamref, $i, 1, chr($p));
+    substr($$streamref, $i, 1, $chr);
 
     if ($f && $p++ > 200) {
       $f = 0;
