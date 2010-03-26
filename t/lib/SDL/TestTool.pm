@@ -66,7 +66,7 @@ sub test_audio_open
 {
 	my $desired = SDL::AudioSpec->new;
 	$desired->freq(44100);
-	$desired->format(AUDIO_S16SYS);
+	$desired->format(SDL::Audio::AUDIO_S16SYS);
 	$desired->channels(2);
 	$desired->samples(4096);
 	$desired->callback('main::audio_callback');

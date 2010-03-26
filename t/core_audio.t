@@ -40,8 +40,8 @@ is( AUDIO_U16LSB,   0x0010, 'AUDIO_U16MSB should be imported' );
 is( AUDIO_U16LSB(), 0x0010, 'AUDIO_U16MSB() should also be available' );
 is( AUDIO_U8,       8,      'AUDIO_U8 should be imported' );
 is( AUDIO_U8(),     8,      'AUDIO_U8() should also be available' );
-ok( (AUDIO_U16SYS   == AUDIO_U16LSB)   || (AUDIO_U16SYS   == AUDIO_U16MSB),     'AUDIO_U16SYS should be imported' );
-ok( (AUDIO_U16SYS() == AUDIO_U16LSB()) || (AUDIO_U16SYS() == AUDIO_U16MSB()),   'AUDIO_U16SYS() should also be available' );
+ok( (SDL::Audio::AUDIO_U16SYS   == AUDIO_U16LSB)   || (SDL::Audio::AUDIO_U16SYS   == AUDIO_U16MSB),     'AUDIO_U16SYS should be imported' );
+ok( (SDL::Audio::AUDIO_U16SYS() == AUDIO_U16LSB()) || (SDL::Audio::AUDIO_U16SYS() == AUDIO_U16MSB()),   'AUDIO_U16SYS() should also be available' );
 
 is( SDL_AUDIO_PAUSED,    2, 'SDL_AUDIO_PAUSED should be imported' );
 is( SDL_AUDIO_PAUSED(),  2, 'SDL_AUDIO_PAUSED() should also be available' );
@@ -53,8 +53,8 @@ is( SDL_AUDIO_STOPPED(), 0, 'SDL_AUDIO_STOPPED() should also be available' );
 my $desired = SDL::AudioSpec->new;
    $desired->freq(44100);
 is( $desired->freq, 44100, '[audiospec] can set freq' );
-$desired->format(AUDIO_S16SYS);
-is( $desired->format, AUDIO_S16SYS,
+$desired->format(SDL::Audio::AUDIO_S16SYS);
+is( $desired->format, SDL::Audio::AUDIO_S16SYS,
     '[audiospec] can set format' );
 $desired->channels(2);
 is( $desired->channels, 2, '[audiospec] can set channels' );

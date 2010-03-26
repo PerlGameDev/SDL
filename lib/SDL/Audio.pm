@@ -1,9 +1,7 @@
 package SDL::Audio;
 use strict;
 use warnings;
-
 use vars qw(@ISA @EXPORT @EXPORT_OK);
-
 require Exporter;
 require DynaLoader;
 use SDL::Constants ':SDL::Audio';

@@ -18,6 +18,7 @@ BEGIN {
 		SDL::Joystick
 		SDL::Cursor
 		SDL::Audio
+		SDL::AudioCVT
 		SDL::AudioSpec
 		SDL::CDROM
 		SDL::CDTrack
