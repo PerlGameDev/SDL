@@ -3,9 +3,14 @@ package SDL::Constants;
 
 use warnings;
 use parent 'Exporter';
+#use Config;
 
-our @EXPORT      = ();
+our @EXPORT_OK   = ();
 our %EXPORT_TAGS = (
+	'SDL/defaults' => [qw(
+		SDL_LIL_ENDIAN
+		SDL_BIG_ENDIAN
+	)],
 	'SDL/init' => [qw(
 		SDL_INIT_AUDIO
 		SDL_INIT_CDROM
@@ -24,14 +29,29 @@ our %EXPORT_TAGS = (
 		AUDIO_U16MSB
 		AUDIO_S16MSB
 		AUDIO_U16
-		AUDIO_S16 
-		AUDIO_U16SYS
-		AUDIO_S16SYS
+		AUDIO_S16
 	)],
 	'SDL::Audio/status' => [qw(
 		SDL_AUDIO_STOPPED
 		SDL_AUDIO_PLAYING
 		SDL_AUDIO_PAUSED
+	)],
+	'SDL::CDROM/defaults' => [qw(
+		CD_FPS
+		SDL_MAX_TRACKS
+	)],
+	'SDL::CDROM/status' => [qw(
+		CD_TRAYEMPTY
+		CD_STOPPED
+		CD_PLAYING
+		CD_PAUSED
+		CD_ERROR
+	)],
+	'SDL::CDROM/track_type' => [qw(
+		SDL_AUDIO_TRACK
+		SDL_DATA_TRACK
+	)],
+	'dummy' => [qw(
 	)],
 	'dummy' => [qw(
 	)],
@@ -45,7 +65,7 @@ foreach my $package (keys %EXPORT_TAGS)
 	my $super_package = $package;
 	   $super_package =~ s/\/.*$//;
 	push(@{$EXPORT_TAGS{$super_package}}, @{$EXPORT_TAGS{$package}}) if $super_package ne $package;
-	push(@EXPORT, grep {!$seen{$_}++} @{$EXPORT_TAGS{$package}});
+	push(@EXPORT_OK, grep {!$seen{$_}++} @{$EXPORT_TAGS{$package}});
 }
 
 use constant{
@@ -60,6 +80,15 @@ use constant{
 }; # SDL/init
 
 use constant{
+	SDL_LIL_ENDIAN       => 1234,
+	SDL_BIG_ENDIAN       => 4321,
+}; # SDL/defaults
+
+#use constant{
+#	SDL_BYTEORDER        => ($Config{archname} =~ /(hppa|m68k|mc68000|MIPS|MISPEB|ppc|POWERPC|sparc)/i ? SDL_BIG_ENDIAN : SDL_LIL_ENDIAN)
+#}; # SDL/init
+
+use constant{
 	AUDIO_U8     => 0x0008,
 	AUDIO_S8     => 0x8008,
 	AUDIO_U16LSB => 0x0010,
@@ -70,11 +99,34 @@ use constant{
 	AUDIO_S16    => 0x8010,
 }; # SDL::Audio/format
 
+#use constant{
+#	AUDIO_U16SYS => SDL_BYTEORDER == SDL_LIL_ENDIAN ? AUDIO_U16LSB : AUDIO_U16MSB,
+#	AUDIO_S16SYS => SDL_BYTEORDER == SDL_LIL_ENDIAN ? AUDIO_S16LSB : AUDIO_S16MSB,
+#}; # SDL::Audio/format
+
 use constant{
 	SDL_AUDIO_STOPPED => 0,
 	SDL_AUDIO_PLAYING => 1,
 	SDL_AUDIO_PAUSED  => 2,
 }; # SDL::Audio/status
+
+use constant{
+	CD_FPS         => 75,
+	SDL_MAX_TRACKS => 99,
+}; # SDL::CDROM/defaults
+
+use constant{
+	CD_TRAYEMPTY => 0,
+	CD_STOPPED   => 1,
+	CD_PLAYING   => 2,
+	CD_PAUSED    => 3,
+	CD_ERROR     => -1,
+}; # SDL::CDROM/status
+
+use constant{
+	SDL_AUDIO_TRACK => 0,
+	SDL_DATA_TRACK  => 4,
+}; # SDL::CDROM/track_type
 
 1;
 

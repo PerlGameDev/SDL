@@ -1,8 +1,10 @@
 package SDL::CD;
 use strict;
 use warnings;
+use vars qw(@ISA @EXPORT @EXPORT_OK);
 require Exporter;
 require DynaLoader;
+use SDL::Constants ':SDL::CDROM';
 our @ISA = qw(Exporter DynaLoader);
 
 use SDL::Internal::Loader;
@@ -10,43 +12,14 @@ internal_load_dlls(__PACKAGE__);
 
 bootstrap SDL::CD;
 
-our @EXPORT = qw(
-	CD_TRAYEMPTY
-	CD_STOPPED
-	CD_PLAYING
-	CD_PAUSED
-	CD_ERROR
-	CD_FPS
-	SDL_MAX_TRACKS
+use parent 'Exporter';
+our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::CDROM'} };
+our %EXPORT_TAGS = (
+	all        => \@EXPORT,
+	format     => $SDL::Constants::EXPORT_TAGS{'SDL::CDROM/default'},
+	status     => $SDL::Constants::EXPORT_TAGS{'SDL::CDROM/status'},
+	track_type => $SDL::Constants::EXPORT_TAGS{'SDL::CDROM/track_type'}
 );
-
-our %EXPORT_TAGS = 
-(
-	status => [qw(
-		CD_TRAYEMPTY
-		CD_STOPPED
-		CD_PLAYING
-		CD_PAUSED
-		CD_ERROR
-	)],
-	defaults => [qw(
-		CD_FPS
-		SDL_MAX_TRACKS
-	)]
-);
-
-use constant{
-	CD_TRAYEMPTY => 0,
-	CD_STOPPED   => 1,
-	CD_PLAYING   => 2,
-	CD_PAUSED    => 3,
-	CD_ERROR     => -1,
-}; # status
-
-use constant{
-	CD_FPS         => 75,
-	SDL_MAX_TRACKS => 99,
-}; # defaults
 
 # Conversion functions from frames to Minute/Second/Frames and vice versa
 sub FRAMES_TO_MSF{
@@ -66,10 +39,5 @@ sub MSF_TO_FRAMES{
 
 	return ($M * 60 * CD_FPS + $S * CD_FPS + $F);
 }
-# add all the other ":class" tags to the ":all" class,
-# deleting duplicates
-my %seen;
-push @{$EXPORT_TAGS{all}},
-grep {!$seen{$_}++} @{$EXPORT_TAGS{$_}} foreach keys %EXPORT_TAGS;
 
 1;
