@@ -12,7 +12,7 @@ internal_load_dlls(__PACKAGE__);
 
 bootstrap SDL::CDTrack;
 
-use parent 'Exporter';
+use base 'Exporter';
 our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::CDROM'} };
 our %EXPORT_TAGS = (
 	all        => \@EXPORT,

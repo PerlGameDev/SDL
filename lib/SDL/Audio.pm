@@ -12,7 +12,7 @@ internal_load_dlls(__PACKAGE__);
 
 bootstrap SDL::Audio;
 
-use parent 'Exporter';
+use base 'Exporter';
 our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::Audio'} };
 our %EXPORT_TAGS = (
 	all    => \@EXPORT,
