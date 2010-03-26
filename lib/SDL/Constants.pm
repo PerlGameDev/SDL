@@ -55,6 +55,19 @@ our %EXPORT_TAGS = (
 		SDL_AUDIO_TRACK
 		SDL_DATA_TRACK
 	)],
+	'SDL::TTF/hinting' => [qw(
+		TTF_HINTING_NORMAL
+		TTF_HINTING_LIGHT
+		TTF_HINTING_MONO
+		TTF_HINTING_NONE
+	)],
+	'SDL::TTF/style' => [qw(
+		TTF_STYLE_NORMAL
+		TTF_STYLE_BOLD
+		TTF_STYLE_ITALIC
+		TTF_STYLE_UNDERLINE
+		TTF_STYLE_STRIKETHROUGH
+	)],
 	'SDL::Video/color' => [qw(
 		SDL_ALPHA_OPAQUE
 		SDL_ALPHA_TRANSPARENT
@@ -188,6 +201,18 @@ use constant{
 	SDL_AUDIO_TRACK => 0,
 	SDL_DATA_TRACK  => 4,
 }; # SDL::CDROM/track_type
+
+use constant{
+	TTF_HINTING_NORMAL      => 0,
+	TTF_HINTING_LIGHT       => 1,
+	TTF_HINTING_MONO        => 2,
+	TTF_HINTING_NONE        => 3,
+	TTF_STYLE_NORMAL        => 0,
+	TTF_STYLE_BOLD          => 1,
+	TTF_STYLE_ITALIC        => 2,
+	TTF_STYLE_UNDERLINE     => 4,
+	TTF_STYLE_STRIKETHROUGH => 8,
+}; # SDL::TTF
 
 use constant{
 	SDL_ALPHA_OPAQUE      => 255,
