@@ -3,7 +3,7 @@ package SDL::Constants;
 
 use warnings;
 use parent 'Exporter';
-use Config;
+#use Config;
 
 our @EXPORT_OK   = ();
 our %EXPORT_TAGS = (
@@ -30,6 +30,8 @@ our %EXPORT_TAGS = (
 		AUDIO_S16MSB
 		AUDIO_U16
 		AUDIO_S16
+		AUDIO_U16SYS
+		AUDIO_S16SYS
 	)],
 	'SDL::Audio/status' => [qw(
 		SDL_AUDIO_STOPPED
@@ -84,9 +86,9 @@ use constant{
 	SDL_BIG_ENDIAN       => 4321,
 }; # SDL/defaults
 
-use constant{
-	SDL_BYTEORDER        => ($Config{archname} =~ /(hppa|m68k|mc68000|MIPS|MISPEB|ppc|POWERPC|sparc)/i ? SDL_BIG_ENDIAN : SDL_LIL_ENDIAN)
-}; # SDL/init
+#use constant{
+#	SDL_BYTEORDER        => ($Config{archname} =~ /(hppa|m68k|mc68000|MIPS|MISPEB|ppc|POWERPC|sparc)/i ? SDL_BIG_ENDIAN : SDL_LIL_ENDIAN)
+#}; # SDL/init
 
 use constant{
 	AUDIO_U8     => 0x0008,
@@ -99,10 +101,10 @@ use constant{
 	AUDIO_S16    => 0x8010,
 }; # SDL::Audio/format
 
-#use constant{
-#	AUDIO_U16SYS => SDL_BYTEORDER == SDL_LIL_ENDIAN ? AUDIO_U16LSB : AUDIO_U16MSB,
-#	AUDIO_S16SYS => SDL_BYTEORDER == SDL_LIL_ENDIAN ? AUDIO_S16LSB : AUDIO_S16MSB,
-#}; # SDL::Audio/format
+use constant{
+	AUDIO_U16SYS => SDL::Audio::AUDIO_U16SYS,
+	AUDIO_S16SYS => SDL::Audio::AUDIO_S16SYS,
+}; # SDL::Audio/format
 
 use constant{
 	SDL_AUDIO_STOPPED => 0,
