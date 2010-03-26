@@ -4,20 +4,9 @@ package SDL::Constants;
 use warnings;
 use parent 'Exporter';
 
-our @EXPORT = qw(
-	SDL_INIT_AUDIO
-	SDL_INIT_CDROM
-	SDL_INIT_EVENTTHREAD
-	SDL_INIT_EVERYTHING
-	SDL_INIT_JOYSTICK
-	SDL_INIT_NOPARACHUTE
-	SDL_INIT_TIMER
-	SDL_INIT_VIDEO
-);
-
-our %EXPORT_TAGS = 
-(
-	'SDL' => [qw(
+our @EXPORT      = ();
+our %EXPORT_TAGS = (
+	'SDL/init' => [qw(
 		SDL_INIT_AUDIO
 		SDL_INIT_CDROM
 		SDL_INIT_EVENTTHREAD
@@ -26,10 +15,39 @@ our %EXPORT_TAGS =
 		SDL_INIT_NOPARACHUTE
 		SDL_INIT_TIMER
 		SDL_INIT_VIDEO
-	)]
+	)],
+	'SDL::Audio/format' => [qw(
+		AUDIO_U8
+		AUDIO_S8
+		AUDIO_U16LSB
+		AUDIO_S16LSB
+		AUDIO_U16MSB
+		AUDIO_S16MSB
+		AUDIO_U16
+		AUDIO_S16 
+		AUDIO_U16SYS
+		AUDIO_S16SYS
+	)],
+	'SDL::Audio/status' => [qw(
+		SDL_AUDIO_STOPPED
+		SDL_AUDIO_PLAYING
+		SDL_AUDIO_PAUSED
+	)],
+	'dummy' => [qw(
+	)],
 );
 
-# SDL
+# 1. all constants from %EXPORT_TAGS are gonna pushed into @EXPORT
+# 2. tags like 'package/tag' and 'package/next_tag' are merged into tag 'package'
+my %seen;
+foreach my $package (keys %EXPORT_TAGS)
+{
+	my $super_package = $package;
+	   $super_package =~ s/\/.*$//;
+	push(@{$EXPORT_TAGS{$super_package}}, @{$EXPORT_TAGS{$package}}) if $super_package ne $package;
+	push(@EXPORT, grep {!$seen{$_}++} @{$EXPORT_TAGS{$package}});
+}
+
 use constant{
 	SDL_INIT_TIMER       => 0x00000001,
 	SDL_INIT_AUDIO       => 0x00000010,
@@ -39,7 +57,24 @@ use constant{
 	SDL_INIT_NOPARACHUTE => 0x00100000,
 	SDL_INIT_EVENTTHREAD => 0x01000000,
 	SDL_INIT_EVERYTHING  => 0x0000FFFF,
-};
+}; # SDL/init
+
+use constant{
+	AUDIO_U8     => 0x0008,
+	AUDIO_S8     => 0x8008,
+	AUDIO_U16LSB => 0x0010,
+	AUDIO_S16LSB => 0x8010,
+	AUDIO_U16MSB => 0x1010,
+	AUDIO_S16MSB => 0x9010,
+	AUDIO_U16    => 0x0010,
+	AUDIO_S16    => 0x8010,
+}; # SDL::Audio/format
+
+use constant{
+	SDL_AUDIO_STOPPED => 0,
+	SDL_AUDIO_PLAYING => 1,
+	SDL_AUDIO_PAUSED  => 2,
+}; # SDL::Audio/status
 
 1;
 
