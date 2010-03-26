@@ -3,13 +3,14 @@ package SDL::Constants;
 
 use warnings;
 use parent 'Exporter';
-#use Config;
+use Config;
 
 our @EXPORT_OK   = ();
 our %EXPORT_TAGS = (
 	'SDL/defaults' => [qw(
 		SDL_LIL_ENDIAN
 		SDL_BIG_ENDIAN
+		
 	)],
 	'SDL/init' => [qw(
 		SDL_INIT_AUDIO
@@ -20,6 +21,7 @@ our %EXPORT_TAGS = (
 		SDL_INIT_NOPARACHUTE
 		SDL_INIT_TIMER
 		SDL_INIT_VIDEO
+		SDL_BYTEORDER
 	)],
 	'SDL::Audio/format' => [qw(
 		AUDIO_U8
@@ -86,9 +88,9 @@ use constant{
 	SDL_BIG_ENDIAN       => 4321,
 }; # SDL/defaults
 
-#use constant{
-#	SDL_BYTEORDER        => ($Config{archname} =~ /(hppa|m68k|mc68000|MIPS|MISPEB|ppc|POWERPC|sparc)/i ? SDL_BIG_ENDIAN : SDL_LIL_ENDIAN)
-#}; # SDL/init
+use constant{
+	SDL_BYTEORDER        => $Config{byteorder}
+}; # SDL/init
 
 use constant{
 	AUDIO_U8     => 0x0008,
@@ -102,8 +104,8 @@ use constant{
 }; # SDL::Audio/format
 
 use constant{
-	AUDIO_U16SYS => SDL::Audio::AUDIO_U16SYS,
-	AUDIO_S16SYS => SDL::Audio::AUDIO_S16SYS,
+	AUDIO_U16SYS => ($Config{byteorder} == 1234 ? 0x0010 : 0x1010),
+	AUDIO_S16SYS => ($Config{byteorder} == 1234 ? 0x8010 : 0x9010),
 }; # SDL::Audio/format
 
 use constant{
