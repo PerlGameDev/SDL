@@ -359,13 +359,6 @@ my %subsystems =
 		},
 		libraries => [qw( SDL smpeg)],
 	},
-	SVG => {
-		file	=> {
-			from => 'src/SVG.xs',
-			to   =>	'lib/SDL/SVG.xs',
-		},
-		libraries => [qw( SDL SDL_svg)],
-	},
 	Pango => {
 		file	=> {
 			from => 'src/Pango/Pango.xs',
@@ -472,11 +465,6 @@ my %libraries = (
 		define => 'HAVE_SDL_GFX_ROTOZOOM',     
 		header => 'SDL_rotozoom.h',
 		lib    => 'SDL_gfx',
-	},
-	SDL_svg    => {
-		define => 'HAVE_SDL_SVG',     
-		header => 'SDL_svg.h',
-		lib    => 'SDL_svg',
 	},
 	SDL_Pango    => {
 		define => 'HAVE_SDL_PANGO',     
