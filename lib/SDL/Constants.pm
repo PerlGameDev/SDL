@@ -3,7 +3,7 @@ package SDL::Constants;
 
 use warnings;
 use parent 'Exporter';
-#use Config;
+use Config;
 
 our @EXPORT_OK   = ();
 our %EXPORT_TAGS = (
@@ -84,9 +84,9 @@ use constant{
 	SDL_BIG_ENDIAN       => 4321,
 }; # SDL/defaults
 
-#use constant{
-#	SDL_BYTEORDER        => ($Config{archname} =~ /(hppa|m68k|mc68000|MIPS|MISPEB|ppc|POWERPC|sparc)/i ? SDL_BIG_ENDIAN : SDL_LIL_ENDIAN)
-#}; # SDL/init
+use constant{
+	SDL_BYTEORDER        => ($Config{archname} =~ /(hppa|m68k|mc68000|MIPS|MISPEB|ppc|POWERPC|sparc)/i ? SDL_BIG_ENDIAN : SDL_LIL_ENDIAN)
+}; # SDL/init
 
 use constant{
 	AUDIO_U8     => 0x0008,
