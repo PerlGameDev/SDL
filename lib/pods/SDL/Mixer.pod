@@ -27,7 +27,7 @@ Export tag: ':init'
  MIX_INIT_MP3
  MIX_INIT_OGG
 
-Export tag: ':default'
+Export tag: ':defaults'
 
  MIX_CHANNELS
  MIX_DEFAULT_FORMAT
@@ -53,6 +53,25 @@ Export tag: ':type'
  MUS_MP3
  MUS_MP3_MAD
  MUS_MP3_FLAC
+
+Export tag: ':format'
+
+ AUDIO_U8
+ AUDIO_S8
+ AUDIO_U16LSB
+ AUDIO_S16LSB
+ AUDIO_U16MSB
+ AUDIO_S16MSB
+ AUDIO_U16
+ AUDIO_S16 
+ AUDIO_U16SYS
+ AUDIO_S16SYS
+
+Export tag: ':status'
+
+ SDL_AUDIO_STOPPED
+ SDL_AUDIO_PLAYING
+ SDL_AUDIO_PAUSED
 
 =head1 DESCRIPTION
 
