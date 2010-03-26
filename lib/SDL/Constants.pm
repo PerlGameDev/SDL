@@ -55,6 +55,11 @@ our %EXPORT_TAGS = (
 		SDL_AUDIO_TRACK
 		SDL_DATA_TRACK
 	)],
+	'SDL::RWOps/defaults' => [qw(
+		RW_SEEK_SET
+		RW_SEEK_CUR
+		RW_SEEK_END
+	)],
 	'SDL::TTF/hinting' => [qw(
 		TTF_HINTING_NORMAL
 		TTF_HINTING_LIGHT
@@ -201,6 +206,12 @@ use constant{
 	SDL_AUDIO_TRACK => 0,
 	SDL_DATA_TRACK  => 4,
 }; # SDL::CDROM/track_type
+
+use constant{
+	RW_SEEK_SET => 0,
+	RW_SEEK_CUR => 1,
+	RW_SEEK_END => 2,
+}; # SDL::RWOps/defaults
 
 use constant{
 	TTF_HINTING_NORMAL      => 0,
