@@ -1,35 +1,22 @@
 package SDL::Net;
 use strict;
 use warnings;
+use vars qw(@ISA @EXPORT @EXPORT_OK);
 require Exporter;
 require DynaLoader;
-use vars qw(@ISA @EXPORT);
-
-BEGIN {
-	@ISA = qw(Exporter DynaLoader);
-	@EXPORT = qw(
-       		INADDR_BROADCAST
-        	SDLNET_MAX_UDPCHANNELS
-        	SDLNET_MAX_UDPADDRESSES );      
-}
-
+use SDL::Constants ':SDL::Net';
+our @ISA = qw(Exporter DynaLoader);
 
 use SDL::Internal::Loader;
 internal_load_dlls(__PACKAGE__);
 
 bootstrap SDL::Net;
 
-#use constant
-#{
-#	INADDR_ANY =>              0x00000000,
-#	INADDR_NONE =>             0xFFFFFFFF,
-#};
-use constant
-{
-	INADDR_BROADCAST =>        0xFFFFFFFF,
-	SDLNET_MAX_UDPCHANNELS =>  32,
-	SDLNET_MAX_UDPADDRESSES => 4
-};
-
+use base 'Exporter';
+our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::Net'} };
+our %EXPORT_TAGS = (
+	all      => \@EXPORT,
+	defaults => $SDL::Constants::EXPORT_TAGS{'SDL::Net/defaults'}
+);
 
 1;
