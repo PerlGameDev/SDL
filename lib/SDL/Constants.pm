@@ -2,7 +2,7 @@
 package SDL::Constants;
 
 use warnings;
-use parent 'Exporter';
+use base 'Exporter';
 #use Config;
 
 our @EXPORT_OK   = ();
