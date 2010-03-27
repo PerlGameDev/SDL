@@ -55,7 +55,7 @@ Example:
 
 =head2 hook_music_finished
 
- SDL::Mixer::Music::hook_music_finished( $callback );
+ SDL::Mixer::Music::hook_music_finished( 'main::callback' );
 
 This callback is called when music called by e.g. L<SDL::Mixer::Music::play_music> or L<SDL::Mixer::Music::fade_in_music> stops naturally. 
 This happens when the music is over or is fading out.
