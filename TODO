@@ -1,6 +1,10 @@
 TODO for SDL_perl
 
-Release 2.4.5
+Release 2.4
+- Clean up the source tree
+- Make test/* work with new code
+- Make tutorials work 
+- Make the cook book prgressive (maybe dupe lazyfoo)
 - Sugar for Core SDL objects
 - Make SDL work with Frozen Bubble
 
