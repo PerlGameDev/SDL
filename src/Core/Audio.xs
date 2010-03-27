@@ -94,6 +94,20 @@ audio_convert( cvt, data, len )
 	OUTPUT:
 		RETVAL
 
+SV *
+audio_audio_driver_name ( ... )
+	CODE:
+		char buffer[1024];
+		if ( SDL_AudioDriverName(buffer, 1024) != NULL ) 
+		{ 
+			RETVAL =  newSVpv(buffer, 0);
+		} 
+		else 
+			 XSRETURN_UNDEF;  	
+	OUTPUT:
+		RETVAL
+
+
 void
 audio_close ()
 	CODE:

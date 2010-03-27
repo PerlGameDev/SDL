@@ -12,7 +12,7 @@ use SDL::TestTool;
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
 } else {
-    plan( tests => 44);
+    plan( tests => 45);
 }
 my @done = qw/
     audio_spec
@@ -49,6 +49,9 @@ is( SDL_AUDIO_PLAYING,   1, 'SDL_AUDIO_PLAYING should be imported' );
 is( SDL_AUDIO_PLAYING(), 1, 'SDL_AUDIO_PLAYING() should also be available' );
 is( SDL_AUDIO_STOPPED,   0, 'SDL_AUDIO_STOPPED should be imported' );
 is( SDL_AUDIO_STOPPED(), 0, 'SDL_AUDIO_STOPPED() should also be available' );
+
+my $driver = SDL::Audio::audio_driver_name();
+pass "[audio_driver_name] using audio driver $driver";
 
 my $desired = SDL::AudioSpec->new;
    $desired->freq(44100);
