@@ -136,7 +136,7 @@ sub warp ($$$) {
 
 sub fullscreen ($) {
 	my $self = shift;
-	SDL::Video::wm_toggle_full_screen($self);
+	SDL::Video::wm_toggle_fullscreen($self);
 }
 
 sub iconify ($) {
