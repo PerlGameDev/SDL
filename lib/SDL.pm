@@ -45,6 +45,7 @@ our @ISA = qw(Exporter DynaLoader);
 
 use base 'Exporter';
 our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{SDL} };
+push @EXPORT, 'NULL';
 our %EXPORT_TAGS = (
 	all      => \@EXPORT,
 	init     => $SDL::Constants::EXPORT_TAGS{'SDL/init'},
