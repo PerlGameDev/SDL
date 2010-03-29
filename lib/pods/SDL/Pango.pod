@@ -48,7 +48,27 @@ and access them directly:
 
  SDL::Pango::SDLPANGO_DIRECTION_NEUTRAL;
 
-Available constants:
+or by choosing the export tags below:
+
+Export tag: ':align'
+
+=over 4
+
+=item SDLPANGO_ALIGN_LEFT
+
+Left alignment
+
+=item SDLPANGO_ALIGN_CENTER
+
+Centered
+
+=item SDLPANGO_ALIGN_RIGHT
+
+Right alignment
+
+=back
+
+Export tag: ':direction'
 
 =over 4
 
@@ -113,8 +133,27 @@ Sets the minimum size of the drawing rectangle.
 =head2 set_text
 
  SDL::Pango::set_text($context, $text, $length);
+ SDL::Pango::set_text($context, $text, $length, $alignment);
 
 Set plain text to context. Text must be utf-8. C<$length> chars will be rendered, pass C<-1> to render the whole text.
+
+C<$alignment> can be:
+
+=over 4
+
+=item *
+
+SDLPANGO_ALIGN_LEFT (default)
+
+=item *
+
+SDLPANGO_ALIGN_CENTER
+
+=item *
+
+SDLPANGO_ALIGN_RIGHT
+
+=back
 
 =head2 set_markup
 

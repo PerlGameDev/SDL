@@ -16,7 +16,8 @@ use base 'Exporter';
 our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::Pango'} };
 our %EXPORT_TAGS = (
 	all       => \@EXPORT,
-	direction => $SDL::Constants::EXPORT_TAGS{'SDL::Pango/direction'}
+	direction => $SDL::Constants::EXPORT_TAGS{'SDL::Pango/direction'},
+	align     => $SDL::Constants::EXPORT_TAGS{'SDL::Pango/align'}
 );
 
 1;

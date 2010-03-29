@@ -447,6 +447,11 @@ our %EXPORT_TAGS = (
 		SDLPANGO_DIRECTION_WEAK_RTL
 		SDLPANGO_DIRECTION_NEUTRAL
 	)],
+	'SDL::Pango/align' => [qw(
+		SDLPANGO_ALIGN_LEFT
+		SDLPANGO_ALIGN_CENTER
+		SDLPANGO_ALIGN_RIGHT
+	)],
 	'SDL::RWOps/defaults' => [qw(
 		RW_SEEK_SET
 		RW_SEEK_CUR
@@ -1020,6 +1025,12 @@ use constant{
 	SDLPANGO_DIRECTION_WEAK_RTL => 3,
 	SDLPANGO_DIRECTION_NEUTRAL  => 4
 }; # SDL::Pango/direction
+
+use constant{
+	SDLPANGO_ALIGN_LEFT   => 0,
+	SDLPANGO_ALIGN_CENTER => 1,
+	SDLPANGO_ALIGN_RIGHT  => 2
+}; # SDL::Pango/align
 
 use constant{
 	RW_SEEK_SET => 0,

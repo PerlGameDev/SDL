@@ -147,12 +147,13 @@ pango_set_dpi(context, dpi_x, dpi_y)
 		SDLPango_SetDpi(context, dpi_x, dpi_y);
 
 void
-pango_set_text(context, markup, length)
+pango_set_text(context, markup, length, alignment = SDLPANGO_ALIGN_LEFT)
 	SDLPango_Context *context
 	const char *markup
 	int length
+	SDLPango_Alignment alignment
 	CODE:
-		SDLPango_SetText(context, markup, length);
+		SDLPango_SetText_GivenAlignment(context, markup, length, alignment);
 
 void
 pango_set_language(context, language_tag)
