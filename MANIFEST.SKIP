@@ -1,3 +1,3 @@
 \.o$
 \.bak$
-^(?!typemap|script/\w+\.pl|src/[^\.]|test/data/[^\.]|MacOSX/[^\.]|examples/[^\.]+|lib/[\/\w]+\.p(m|od)|inc/|t/[\w\d-]+\.t|t/lib/SDL/TestTool\.pm|Build.PL$|INSTALL$|README$|MANIFEST$|CHANGELOG$|CONTRIBUTORS$|META.yml|$)
+^(?!typemap|script/\w+\.pl|src/[^\.]|test/data/[^\.]|MacOSX/[^\.]|examples/[^\.]+|lib/[\/\w]+\.p(m|od)|inc/|t/[\w\d-]+\.t|t/lib/SDL/TestTool\.pm|Build.PL$|INSTALL$|README$|MANIFEST$|CHANGELOG$|TODO$|CONTRIBUTORS$|META.yml|$)
