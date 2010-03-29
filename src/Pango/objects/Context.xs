@@ -19,10 +19,13 @@ See L<http://sdlpango.sourceforge.net/>
 #ifdef HAVE_SDL_PANGO
 
 SDLPango_Context *
-context_new(CLASS)
+context_new(CLASS, ...)
 	char* CLASS
 	CODE:
-		RETVAL = SDLPango_CreateContext();
+		if(items > 1)
+			RETVAL = SDLPango_CreateContext_GivenFontDesc((char *)SvPV(ST(1), PL_na));
+		else
+			RETVAL = SDLPango_CreateContext();
 	OUTPUT:
 		RETVAL
 
