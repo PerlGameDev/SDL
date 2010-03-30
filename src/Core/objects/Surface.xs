@@ -29,7 +29,7 @@ SDL_Surface -- Graphic surface structure
 =cut
 
 SDL_Surface *
-surface_new (CLASS, flags, width, height, depth, Rmask, Gmask, Bmask, Amask )
+surface_new (CLASS, flags, width, height, depth = 32, Rmask = 0xFF000000, Gmask = 0x00FF0000, Bmask = 0x0000FF00, Amask = 0x000000FF )
 	char* CLASS
 	Uint32 flags
 	int width
