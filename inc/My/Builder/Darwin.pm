@@ -33,6 +33,7 @@ package My::Builder::Darwin;
 use strict;
 use warnings;
 use Alien::SDL;
+use Cwd;
 use base 'My::Builder';
 
 sub special_build_settings
@@ -85,7 +86,7 @@ sub process_support_files {
 sub build_test
 {
       my $self =shift;
-      my $cmd = './SDLPerl.app/Contents/MacOS/SDLPerl `pwd`/Build test';
+      my $cmd = './SDLPerl.app/Contents/MacOS/SDLPerl '.getpwd().'/Build test';
       system ( split ' ', $cmd );
 
 }
