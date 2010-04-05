@@ -22,7 +22,7 @@ char libpath[MAXPATHLEN];
 char scriptfile[MAXPATHLEN];
 int argc_perl;
 char** argv_perl;
-char** env_perl
+char** env_perl;
 
 BOOL init_path;
 
@@ -132,7 +132,7 @@ xs_init(pTHX)
 
 - (void) launchPerl: (NSString*) script
 {
-
+	int count = 3;
 	unsigned buflen = [ script lengthOfBytesUsingEncoding: NSUTF8StringEncoding] + 1;
 	[script getCString:scriptfile maxLength: buflen encoding:NSUTF8StringEncoding];
 	fprintf(stderr,"Launching script: %s\n",scriptfile);
