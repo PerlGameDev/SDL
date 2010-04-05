@@ -132,15 +132,15 @@ xs_init(pTHX)
 
 - (void) launchPerl: (NSString*) script
 {
-	int count = 3;
-	char* embedding[] = { path, scriptfile, "0"};
+//	int count = 3;
+//	char* embedding[] = { path, scriptfile, "0"};
 	unsigned buflen = [ script lengthOfBytesUsingEncoding: NSUTF8StringEncoding] + 1;
 	[script getCString:scriptfile maxLength: buflen encoding:NSUTF8StringEncoding];
 	fprintf(stderr,"Launching script: %s\n",scriptfile);
 	PERL_SYS_INIT3(&argc_perl, &argv_perl, &env_perl);
 	my_perl = perl_alloc();
 	perl_construct(my_perl);
-	perl_parse(my_perl,xs_init,count,embedding,NULL);
+	perl_parse(my_perl,xs_init,argc_perl,argv_perl,(char **)NULL);
 	fprintf(stderr,"Running perl\n");
 	perl_run(my_perl);
 	fprintf(stderr,"Destructing  perl\n");
