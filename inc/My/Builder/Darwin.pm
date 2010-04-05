@@ -86,7 +86,7 @@ sub process_support_files {
 sub build_test
 {
       my $self =shift;
-      my $cmd = './SDLPerl.app/Contents/MacOS/SDLPerl '.getpwd().'/Build test';
+      my $cmd = './SDLPerl.app/Contents/MacOS/SDLPerl '.getcwd().'/Build test';
       system ( split ' ', $cmd );
 
 }
