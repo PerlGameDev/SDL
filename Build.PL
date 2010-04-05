@@ -338,13 +338,6 @@ my %subsystems =
 		},
 		libraries => [qw( SDL GL GLU )],
 	},
-	SFont => {
-		file	=> {
-			from => 'src/SFont.xs',
-			to   =>	'lib/SDL/SFont.xs',
-		},
-		libraries => [qw( SDL SDL_ttf )],
-	},	
 	Image => {
 		file	=> {
 			from => 'src/Image.xs',
