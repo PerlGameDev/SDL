@@ -133,6 +133,7 @@ xs_init(pTHX)
 - (void) launchPerl: (NSString*) script
 {
 	int count = 3;
+	char* embedding[] = { path, scriptfile, "0"};
 	unsigned buflen = [ script lengthOfBytesUsingEncoding: NSUTF8StringEncoding] + 1;
 	[script getCString:scriptfile maxLength: buflen encoding:NSUTF8StringEncoding];
 	fprintf(stderr,"Launching script: %s\n",scriptfile);
