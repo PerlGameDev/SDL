@@ -161,4 +161,19 @@ sub ACTION_install {
 	ExtUtils::Install::install($self->install_map, 1, 0, $self->{args}{uninst}||0);
 }
 
+sub ACTION_test {
+     my ($self) = @_;
+     $self->depends_on('build');
+     if ( $^O =~ /darwin/ )
+     {
+	$self->depends_on('bundle');
+	$self->build_test();
+     }
+     else
+     {
+	$self->SUPER::ACTION_test();
+     }
+
+}
+
 1;
