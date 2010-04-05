@@ -20,6 +20,10 @@ static PerlInterpreter *my_perl = NULL;
 char path[MAXPATHLEN];
 char libpath[MAXPATHLEN];
 char scriptfile[MAXPATHLEN];
+int argc_perl;
+char** argv_perl;
+char** env_perl
+
 BOOL init_path;
 
 void xs_init (pTHX);
@@ -117,23 +121,22 @@ xs_init(pTHX)
 {
 	fprintf(stderr, "Application did  finish launching\n");
 
-//	fprintf(stderr, "SCRIPT: %s\n",scriptfile);
-//	NSString* scr = [[NSString alloc] initWithUTF8String: scriptfile];
-//	fprintf(stderr, "Setting directory: %s\n",init_path ? "true" : "false");
-//	[self setupWorkingDirectory: init_path];
-//	fprintf(stderr,"Launching perl script %s\n", scriptfile);
-//	[self launchPerl: scr ];
+	fprintf(stderr, "SCRIPT: %s\n",scriptfile);
+	NSString* scr = [[NSString alloc] initWithUTF8String: scriptfile];
+	fprintf(stderr, "Setting directory: %s\n",init_path ? "true" : "false");
+	[self setupWorkingDirectory: init_path];
+	fprintf(stderr,"Launching perl script %s\n", scriptfile);
+	[self launchPerl: scr ];
 	[NSApp terminate: self];	
 }
 
 - (void) launchPerl: (NSString*) script
 {
-	int count = 3;
-	char* embedding[] = { path, scriptfile , "0" } ;
+
 	unsigned buflen = [ script lengthOfBytesUsingEncoding: NSUTF8StringEncoding] + 1;
 	[script getCString:scriptfile maxLength: buflen encoding:NSUTF8StringEncoding];
 	fprintf(stderr,"Launching script: %s\n",scriptfile);
-	PERL_SYS_INIT3(&count,&embedding,NULL);
+	PERL_SYS_INIT3(&argc_perl, &argv_perl, &env_perl);
 	my_perl = perl_alloc();
 	perl_construct(my_perl);
 	perl_parse(my_perl,xs_init,count,embedding,NULL);
@@ -152,26 +155,24 @@ xs_init(pTHX)
 	fprintf(stderr,"openFile %s\n", [filename UTF8String]);
 	fprintf(stderr, "Setting directory: %s\n",init_path ? "true" : "false");
 	[self setupWorkingDirectory: init_path];
-	fprintf(stderr,"launchgin perl\n");
+	fprintf(stderr,"launching perl\n");
 	[self launchPerl: filename];
 }
 
 @end
 
 int
-main( int argc, char** argv)
+main( int argc, char** argv, char** env)
 {
-	int i;
 	NSAutoreleasePool* pool;
 
-	fprintf(stderr, "ARGC %d \n", argc);
-	for (i = 0; i < argc; ++i) {
-		fprintf(stderr,"ARGV[%d] %s\n",i,argv[i]);
-	}
+	argc_perl = argc;
+	argv_perl = argv;
+	env_perl = env;	
 
 	init_path = YES;
 	memset(scriptfile,0,MAXPATHLEN);
-	if (argc >= 2) {
+	if( argc >= 2 ) {
 		if ( argc == 2 ) {
 			strncpy(scriptfile,argv[1],strlen(argv[1]));
 		} else {
@@ -179,6 +180,7 @@ main( int argc, char** argv)
 		}
 	}
 	fprintf(stderr, "[main] SCRIPT: %s\n",scriptfile);
+	
 
 	pool = [[NSAutoreleasePool alloc] init];
 
