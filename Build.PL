@@ -502,15 +502,15 @@ my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} } keys %
 
 ### stadard Module::Build stuff
 my $build = $package->new(
-	module_name          => 'SDL',
-	dist_name            => 'SDL', 
+	module_name          => 'SDL_perl',
+	dist_name            => 'SDL_perl', 
 	license		     => 'lgpl',
 	dist_version_from    => 'lib/SDL.pm',
 	configure_requires	      =>
 	{
 		'YAML'	=> '0.68',
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL' => '0.9.1',
+		'Alien::SDL' => '1.2',
 		'File::Find' => '2.07'
 	},
 	build_requires =>
@@ -518,7 +518,7 @@ my $build = $package->new(
 		'Test::Simple' => '0.88',
 		'IO::CaptureOutput' => '0',
 		'Test::Most' => '0.21',
-		'Alien::SDL' => '0.9.1',
+		'Alien::SDL' => '1.2',
 	},
 	build_recommends     =>
 	{
