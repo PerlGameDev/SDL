@@ -85,9 +85,14 @@ sub process_support_files {
 
 sub build_test
 {
-      my $self =shift;
+      my $self = shift;
+      $self->build_bundle();
       my $cmd = './SDLPerl.app/Contents/MacOS/SDLPerl '.getcwd().'/Build test';
       system ( split ' ', $cmd );
+
+      die 'Errors in Testing. Can\'t continue' if $?;
+
+      return $?;
 
 }
 

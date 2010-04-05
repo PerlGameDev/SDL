@@ -166,7 +166,6 @@ sub ACTION_test {
      $self->depends_on('build');
      if ( $^O =~ /darwin/ )
      {
-	$self->depends_on('bundle');
 	$self->build_test();
      }
      else
