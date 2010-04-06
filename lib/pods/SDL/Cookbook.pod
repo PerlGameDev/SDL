@@ -8,41 +8,4 @@ Cookbook
 
 =head2 First Steps
 
-=head3 Overview
-
-=head3 Installation
-
-=head3 Tutorial
-
-=head2 Core SDL Layer
-
-=head3 Video
-
-=head3 Events
-
-=head2 Audio 
-
-=head3 Mixer
-
-=head2 Images 
-
-=head3 BMP
-
-=head3 Image extensions
-
-=head2 Text
-
-=head3 TTF
-
-=head3 Pango
-
-=head2 Extras
-
-=head3 GFX
-
-=head3 OpenGL
-
-
-
-
-
+see L<SDL::Tutorial>
