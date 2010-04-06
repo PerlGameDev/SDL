@@ -11,10 +11,6 @@ PDL provides great number crunching capabilities to Perl and SDL provides game-d
 
 Cookbook
 
-=head1 Old SDL interface
-
-Please be aware that much of the code in this example uses SDL Perl v 2.2.4.  The SDL Perl developers are hard at work rewriting SDL, to be released as SDL 3.0 soon.  The new version of SDL is not backwards compatible.  Check back with this page after SDL 3.0 has been released to get the updated commands.
-
 =head1 Perl's SDL in a nutshell
 
 SDL stands for Simple DirectMedia Layer.  It's a cross-platform library written in C that's meant to handle all of the low-level graphics and sound stuff.  You can read more about SDL here: http://www.libsdl.org/.  Because SDL is focused on game programming, it has a raw but clean feel to it.  We will focus for now on using SDL to handle images for us.  Handling sound may some day be the focus of another chapter.
@@ -37,6 +33,7 @@ For example, here is a very poorly implemented hack (read - don't do this at hom
 	use SDL::App;
 	use SDL::Rect;
 	use SDL::Color;
+	use SDL::Video;
 
 	# User defined pen-nib size.
 	my $nib_size = 3;
@@ -51,18 +48,19 @@ For example, here is a very poorly implemented hack (read - don't do this at hom
 
 	# our nib will be white
 	my $nib_color = SDL::Color->new(
-			-r => 0xff,
-			-g => 0xff,
-			-b => 0xff,
+			0xff, #r
+			0xff, #b
+			0xff, #g
 		);
 
 	# and our nib will be represented by a rectangle
 	# (Alternatively, you could use an image, which would allow
 	# for pretty anti-aliasing if you created it in GIMP with
 	# antialiasing)
-	my $nib = SDL::Rect->new(
-		-height => $nib_size,
-		-width  => $nib_size,
+	my $nib = SDL::Rect->new( 
+	    0 , 0, #x, y
+     	$nib_size, #w
+		$nib_size, #h
 	);
 
 	# now draw a sine wave (wthout covering up previously drawn rectangles)
@@ -72,12 +70,12 @@ For example, here is a very poorly implemented hack (read - don't do this at hom
 		$nib->x( $t * 8 );
 		$nib->y( sin($t) * 80 + 240 );
 
-		$app->fill( $nib, $nib_color );
+		SDL::Video::fill_rect($app, $nib, $nib_color );
 	}
 
 	# Generally use the update command, but if you want to update the whole
 	# surface, use flip
-	$app->flip()
+	SDL::Video::fill_rect($app,)
 
 	sleep 5;
 
@@ -123,18 +121,19 @@ Here's some initialization code to get started; put this below the code already 
 	use SDL::App;
 	use SDL::Rect;
 	use SDL::Color;
+	use SDL::Video;
 
 	# Create the SDL App
 	my $app = SDL::App->new( -width  => $side_length, -height => $side_length, 
 					-title  => "Simple Simulation!", -depth  => 16, );
 
 	# white particles on a black background
-	my $particle_color = SDL::Color->new( -r => 0xff, -g => 0xff, -b => 0xff, );
-	my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00, );
+	my $particle_color = SDL::Color->new( 0xff, 0xff, 0xff, );
+	my $bg_color = SDL::Color->new( 0x00, 0x00, 0x00 );
 
 	# rectangles for the particles and the background
-	my $particle = SDL::Rect->new( -height => 5, -width  => 5, );
-	my $bg = SDL::Rect->new( -height => $side_length, -width => $side_length, );
+	my $particle = SDL::Rect->new( 0,0, 5, 5);
+	my $bg = SDL::Rect->new( 0,0,$side_length, $side_length, );
 
 Hopefully this is straightforward code.  We pull in our library dependencies and then create a few objects with the necessary properties.  Finally, we get to the actual application loop:
 
@@ -144,13 +143,13 @@ Hopefully this is straightforward code.  We pull in our library dependencies and
 		compute();
 
 		# Clean the canvas
-		$app->fill( $bg, $bg_color);
+		SDL::Video::fill_rect($app, $bg, $bg_color);
 		for(my $i = 0; $i < $numb_of_atoms; $i++) {
 			$particle->x( $positions->at(0,$i) );
 			$particle->y( $positions->at(1,$i) );
-			$app->fill( $particle, $particle_color );
+			SDL::Video::fill_rect($app, $particle, $particle_color );
 		}
-		$app->flip();
+		SDL::Video::flip($app);
 		$app->delay(10);
 	}
 
@@ -205,9 +204,9 @@ Clearly the particle rectangle's size is not supposed to change, but somehow it 
 	for(my $i = 0; $i < $numb_of_atoms; $i++) {
 		$particle->x( $positions->at(0,$i) );
 		$particle->y( $positions->at(1,$i) );
-		$particle->height( $particle_size );
-		$particle->width( $particle_size );
-		$app->fill( $particle, $particle_color );
+		$particle->h( $particle_size );
+		$particle->w( $particle_size );
+		SDL::Video::fill_rect($app, $particle, $particle_color );
 	}
 
 Now it's clear that although we still have particles flying off the screen up and to the left, they are no longer shriveling away.  This strange behavior is due to SDL's response to a negative position for a rectangle - it just resizes the rectangle so that it only the portion of the rectangle that's in positive territory remains.  The upshot is that you must always be careful about how you handle drawing positons.
@@ -339,31 +338,32 @@ Before moving into getting user interaction, I first want to be sure we're worki
 	use SDL::App;
 	use SDL::Rect;
 	use SDL::Color;
+	use SDL::Video;
 
 	# Create the SDL App
 	my $app = SDL::App->new( -width  => $side_length, -height => $side_length, 
 				-title  => "Simple Simulation!", -depth  => 16, );
 
 	# white particles on a black background
-	my $particle_color = SDL::Color->new( -r => 0xff, -g => 0xff, -b => 0xff, );
-	my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00, );
+	my $particle_color = SDL::Color->new( 0xff, 0xff, 0xff, );
+	my $bg_color = SDL::Color->new( 0x00, 0x00, 0x00 );
 
 	# rectangles for the particles and the background
-	my $particle = SDL::Rect->new( -height => 5, -width  => 5, );
-	my $bg = SDL::Rect->new( -height => $side_length, -width => $side_length, );
+	my $particle = SDL::Rect->new( 0,0, 5, 5);
+	my $bg = SDL::Rect->new( 0,0,$side_length, $side_length, );
 
 	# Run the simulation
 	for(my $t = 0; $t < 20; $t += $d_t) {
 		MyCompute::compute();
 
 		# Clean the canvas
-		$app->fill( $bg, $bg_color);
+		SDL::Video::fill_rect($app, $bg, $bg_color);
 		for(my $i = 0; $i < $numb_of_atoms; $i++) {
 			$particle->x( $positions->at(0,$i) );
 			$particle->y( $positions->at(1,$i) );
-			$app->fill( $particle, $particle_color );
+			SDL::Video::fill_rect($app, $particle, $particle_color );
 		}
-		$app->flip();
+		SDL::Video::flip($app);
 		$app->delay(10);
 	}
 	
@@ -373,7 +373,8 @@ So there it is, top to bottom, in about 75 lines.
 
 To respond to user interactions, we have to listen to user events using an SDL::Event object.  So first, add this line with our other use statements:
 
- use SDL::Event;
+ use SDL::Event; 
+	use SDL::Events; 
 
 and then be sure to create an event object amongst the animation initialization code:
 
@@ -386,14 +387,14 @@ Finally, we need to update the application loop so that it examines and responds
 		MyCompute::compute();
 
 		# Clean the canvas
-		$app->fill( $bg, $bg_color);
+		SDL::Video::fill_rect($app, $bg, $bg_color);
 		for(my $i = 0; $i < $numb_of_atoms; $i++) {
 			$particle->x( $positions->at(0,$i) );
 			$particle->y( $positions->at(1,$i) );
-			$app->fill( $particle, $particle_col10);
+			SDL::Video::fill_rect($app, $particle, $particle_col10);
 		
-		while($event->poll()) {
-			if($event->type() =head1  SDL_QUIT) {
+		while(SDL::Events::poll_event($event) ) {
+			if($event->type() ==  SDL_QUIT) {
 				exit;
 			}
 		}
@@ -419,14 +420,14 @@ Instead, create a dispatch table, which is nothing more than a hash whose values
 
 	sub incr_particle_size {
 		$particle_size++;
-		$particle->height($particle_size);
-		$particle->width($particle_size);
+		$particle->h($particle_size);
+		$particle->w($particle_size);
 	}
 
 	sub decr_particle_size {
 		$particle_size-- if $particle_size > 1;
-		$particle->height($particle_size);
-		$particle->width($particle_size);
+		$particle->h($particle_size);
+		$particle->w($particle_size);
 	}
 
 
@@ -435,21 +436,21 @@ Instead, create a dispatch table, which is nothing more than a hash whose values
 		MyCompute::compute();
 
 		# Clean the canvas
-		$app->fill( $bg, $bg_color);
+		SDL::Video::fill_rect($app, $bg, $bg_color);
 		for(my $i = 0; $i < $numb_of_atoms; $i++) {
 			$particle->x( $positions->at(0,$i) );
 			$particle->y( $positions->at(1,$i) );
-			$app->fill( $particle, $particle_color );
+			SDL::Video::fill_rect($app, $particle, $particle_color );
 		}
-		$app->flip();
+		SDL::Video::flip($app);
 		$app->delay(10);
 		
-		while($event->poll()) {
-			if($event->type() =head1  SDL_QUIT) {
+		while(SDL::Events::poll_event($event) ) {
+			if($event->type() ==  SDL_QUIT) {
 				exit;
-			} elsif($event->type() =head1  SDL_KEYDOWN) {
-				if(exists $keyname_dispatch_table->{$event->key_name()}) {
-					$keyname_dispatch_table->{$event->key_name()}->();
+			} elsif($event->type() ==  SDL_QUIT) {
+				if(exists $keyname_dispatch_table->{$event->keysym_name()}) {
+					$keyname_dispatch_table->{$event->keysym_name()}->();
 				}
 			}
 		}
@@ -511,22 +512,24 @@ Just so that you've got a complete working example, here is the final state of t
 	use SDL::App;
 	use SDL::Rect;
 	use SDL::Color;
-	use SDL::Event;
+	use SDL::Video;
+	use SDL::Event;  
+	use SDL::Events; 
 
 	# Create the SDL App
 	my $app = SDL::App->new( -width  => $side_length, -height => $side_length, 
 				-title  => "Simple Simulation!", -depth  => 16, );
 
 	# white particles on a black background
-	my $particle_color = SDL::Color->new( -r => 0xff, -g => 0xff, -b => 0xff, );
-	my $bg_color = SDL::Color->new( -r => 0x00, -g => 0x00, -b => 0x00, );
+	my $particle_color = SDL::Color->new( 0xff, 0xff, 0xff, );
+	my $bg_color = SDL::Color->new( 0x00, 0x00, 0x00 );
 
 	# rectangles for the particles and the background
-	my $particle = SDL::Rect->new( -height => 5, -width  => 5, );
-	my $bg = SDL::Rect->new( -height => $side_length, -width => $side_length, );
+	my $particle = SDL::Rect->new( 0,0, 5, 5);
+	my $bg = SDL::Rect->new( 0,0,$side_length, $side_length, );
 
 	# event listener
-	my $event = new SDL::Event;
+	my $event = new SDL::Event->new();
 
 	# event dispatch table
 	my $keyname_dispatch_table = {
@@ -540,14 +543,14 @@ Just so that you've got a complete working example, here is the final state of t
 
 	sub incr_particle_size {
 		$particle_size++;
-		$particle->height($particle_size);
-		$particle->width($particle_size);
+		$particle->h($particle_size);
+		$particle->w($particle_size);
 	}
 
 	sub decr_particle_size {
 		$particle_size-- if $particle_size > 1;
-		$particle->height($particle_size);
-		$particle->width($particle_size);
+		$particle->h($particle_size);
+		$particle->w($particle_size);
 	}
 
 
@@ -556,21 +559,21 @@ Just so that you've got a complete working example, here is the final state of t
 		MyCompute::compute();
 
 		# Clean the canvas
-		$app->fill( $bg, $bg_color);
+		SDL::Video::fill_rect($app, $bg, $bg_color);
 		for(my $i = 0; $i < $numb_of_atoms; $i++) {
 			$particle->x( $positions->at(0,$i) );
 			$particle->y( $positions->at(1,$i) );
-			$app->fill( $particle, $particle_color );
+			SDL::Video::fill_rect($app, $particle, $particle_color );
 		}
-		$app->flip();
+		SDL::Video::flip($app);
 		$app->delay(10);
 		
-		while($event->poll()) {
-			if($event->type() =head1  SDL_QUIT) {
+		while(SDL::Events::poll_event($event) ) {
+			if($event->type() ==  SDL_QUIT) {
 				exit;
-			} elsif($event->type() =head1  SDL_KEYDOWN) {
-				if(exists $keyname_dispatch_table->{$event->key_name()}) {
-					$keyname_dispatch_table->{$event->key_name()}->();
+			} elsif($event->type() ==  SDL_QUIT) {
+				if(exists $keyname_dispatch_table->{$event->keysym_name()}) {
+					$keyname_dispatch_table->{$event->keysym_name()}->();
 				}
 			}
 		}
