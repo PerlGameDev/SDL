@@ -37,6 +37,7 @@ use SDL;
 use SDL::App;
 use SDL::Rect;
 use SDL::Color;
+use SDL::Video;
 
 # change these values as necessary
 my $title                                = 'My SDL Animation';
@@ -52,20 +53,21 @@ my $app = SDL::App->new(
 );
 
 my $color = SDL::Color->new(
-	-r => $rect_r,
-	-g => $rect_g,
-	-b => $rect_b,
+	 $rect_r,
+	 $rect_g,
+	 $rect_b,
 );
 
 my $bg_color = SDL::Color->new(
-	-r => $bg_r,
-	-g => $bg_g,
-	-b => $bg_b,
+	 $bg_r,
+	 $bg_g,
+	 $bg_b,
 );
 
 my $background = SDL::Rect->new(
-	-width  => $width,
-	-height => $height,
+	 0,0,
+         $width,
+	 $height,
 );
 
 my $rect = create_rect();
@@ -104,10 +106,9 @@ sleep 2;
 sub create_rect
 {
 	return SDL::Rect->new(
-		-height => $rect_height,
-		-width  => $rect_width,
-		-x      => 0,
-		-y      => $rect_y,
+		0, $rect_y,
+		$rect_width,
+		$rect_height,
 	);
 }
 
@@ -115,19 +116,19 @@ sub draw_frame
 {
 	my ($app, %args) = @_;
 
-	$app->fill(   $args{bg},   $args{bg_color}   );
-	$app->fill(   $args{rect}, $args{rect_color} );
-	$app->update( $args{bg} );
+	SDL::Video::fill_rect($app,  $args{bg},   $args{bg_color}   );
+	SDL::Video::fill_rect($app, $args{rect}, $args{rect_color} );
+	SDL::Video::update_rects($app, $args{bg} );
 }
 
 sub draw_undraw_rect
 {
 	my ($app, %args) = @_;
 
-	$app->fill(   $args{old_rect}, $args{bg_color}   );
-	$app->fill(   $args{rect},     $args{rect_color} );
-	$app->update( $args{old_rect} );
-	$app->update( $args{rect} );
+	SDL::Video::fill_rect($app, $args{old_rect}, $args{bg_color}   );
+	SDL::Video::fill_rect($app,  $args{rect},     $args{rect_color} );
+	SDL::Video::update_rects($app, $args{old_rect} );
+	SDL::Video::update_rects($app, $args{rect} );
 }
 
 1;

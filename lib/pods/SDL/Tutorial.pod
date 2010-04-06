@@ -80,28 +80,28 @@ That, however, is another tutorial.
 
 =over 4
 
-=item L<SDL::Tutorial::Drawing>
+=item L<SDL::Animation>
 
-basic drawing with rectangles
+basic rectangle drawing and animation
 
-=item L<SDL::Tutorial::Animation>
+=item L<SDL::Tutorial::LunarLander>
 
-basic rectangle animation
-
-=item L<SDL::Tutorial::Images>
-
-image loading and animation
+basic image loading and animation
 
 =back
 
 =head1 AUTHOR
 
-chromatic, E<lt>chromatic@wgz.orgE<gt>.  
+chromatic, E<lt>chromatic@wgz.orgE<gt>. 
+
+nelson ferraz, E<lt>nferraz@cpan.orgE<gt>. 
+
+Updated by kthakore and garu.
 
 Written for and maintained by the Perl SDL project, L<http://sdl.perl.org/>.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2003 - 2004, chromatic.  All rights reserved.  This module is
+Copyright (c) 2003 - 2004, chromatic. 2009 - 2010, kthakore.  All rights reserved.  This module is
 distributed under the same terms as Perl itself, in the hope that it is useful
 but certainly under no guarantee.

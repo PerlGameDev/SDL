@@ -48,9 +48,9 @@ S< >
 	{
 		my ($app, %args) = @_;
 
-		$app->fill( $args{ bg }, $args{ bg_color } );
-		$app->fill( $args{rect}, $args{rect_color} );
-		$app->update( $args{bg} );
+		SDL::Video::fill_rect($app,  $args{bg},   $args{bg_color}   );
+		SDL::Video::fill_rect($app, $args{rect}, $args{rect_color} );
+		SDL::Video::update_rects($app, $args{bg} );
 	}
 
 S< >
@@ -103,9 +103,10 @@ S< >
 	{
 		my ($app, %args) = @_;
 
-		$app->fill(   $args{old_rect}, $args{bg_color}   );
-		$app->fill(   $args{rect],     $args{rect_color} );
-		$app->update( $args{old_rect}, $args{rect}       );
+		SDL::Video::fill_rect($app, $args{old_rect}, $args{bg_color}   );
+		SDL::Video::fill_rect($app,  $args{rect},     $args{rect_color} );
+		SDL::Video::update_rects($app, $args{old_rect} );
+		SDL::Video::update_rects($app, $args{rect} );
 	}
 
 S< >
@@ -156,6 +157,8 @@ animating images
 =head1 AUTHOR
 
 chromatic, E<lt>chromatic@wgz.orgE<gt>
+
+updated by kthakore, E<lt>kthakore@cpan.orgE<gt>
 
 Written for and maintained by the Perl SDL project, L<http://sdl.perl.org/>.
 
