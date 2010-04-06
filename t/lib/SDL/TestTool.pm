@@ -22,18 +22,6 @@ sub init {
     my $stdout = '';
     my $stderr = '';
 
-    if( !$ENV{SDL_BSD_TEST} and $^O =~ /bsd|solaris/i) 
-    {
-	    warn "SDL Perl is experimental in BSD environments. \n Turn on SDL_BSD_TEST to test your system.";
-	    return ;
-    }
-
-    if( $init == SDL::SDL_INIT_TIMER() and !$ENV{SDL_BSD_TEST} and $^O =~ /bsd|solaris/i )
-    {
-	    warn ' Timer is REALLY experimental with BSD environments';
-	    return ;
-    } 
-
     if( $init == SDL_INIT_VIDEO)
     {
 	    if( $^O !~ /win/i && !$ENV{DISPLAY} && !$ENV{SDL_VIDEODRIVER})
