@@ -500,7 +500,7 @@ my %xs = map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} } keys %
 
 ### stadard Module::Build stuff
 my $build = $package->new(
-	module_name          => 'SDL_perl',
+	module_name          => 'SDL',
 	dist_name            => 'SDL_perl', 
 	license		     => 'lgpl',
 	dist_version_from    => 'lib/SDL.pm',
