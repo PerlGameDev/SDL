@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2003 chromatic 
 # Copyright (C) 2004 David J. Goehrig
-# Copyright (C) 2009 Kartik Thakore
+# Copyright (C) 2010 Kartik Thakore
 
 use strict;
 use warnings;
@@ -11,12 +11,10 @@ use Carp;
 use lib 'inc';
 use Alien::SDL;
 
-print STDERR <<BROKENMSG if ($^O =~ /bsd|solaris/i );
-*************************** !!!WARNING!!! *****************************
-BSD support is currently experimental - you can continue, but 
-you've been warned! If you are interested in helping please contact us 
-at sdl-devel\@perl.org, or join us on #sdl in irc.perl.org
-***********************************************************************
+print STDERR <<BROKENMSG
+*************************** !!!WARNING!!! ********************************
+This Release breaks back compatibility support with versions 2.2 and below
+**************************************************************************
 BROKENMSG
 
 ### we need the platform-specific module
