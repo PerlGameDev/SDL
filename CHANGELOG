@@ -1,5 +1,12 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.4 
+	- MacOSX testing
+	- Pango working with frozen-bubble
+	- Clean up with back compatible stuff
+	- Dropped SVG and Sound
+	
+
 * 2.3_9
 	- all constants are in their modules, exported by default and documented [FROGGS]
 	- Moved SDL::Net away [FROGGS]
