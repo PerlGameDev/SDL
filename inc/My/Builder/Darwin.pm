@@ -86,7 +86,7 @@ sub process_support_files {
 sub build_test
 {
       my $self = shift;
-      $self->build_bundle() if !(-d getcwd().'/SDLPerl.app');
+      warn 'Please run perl Build Bundle first' and return 0 if !(-d getcwd().'/SDLPerl.app');
       my $cmd = './SDLPerl.app/Contents/MacOS/SDLPerl '.getcwd().'/Build test';
       system ( split ' ', $cmd );
 
