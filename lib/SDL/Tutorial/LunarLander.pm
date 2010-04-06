@@ -907,9 +907,11 @@ D8 BC C3 52 B7 FA 3F F9 91 00 CA 7A 4B E9 FF D9
     my $game =<<'EOGAME';
 #!/usr/bin/perl
 use SDL; #needed to get all constants
+use SDL::Video;
 use SDL::App;
 use SDL::Surface;
 use SDL::Rect;
+use SDL::Image;
 
 use strict;
 use warnings;
@@ -921,17 +923,17 @@ my $app = SDL::App->new(
     -depth  => 32,
 );
 
-my $background = SDL::Surface->new( -name => 'images/background.jpg', );
-my $ship       = SDL::Surface->new( -name => 'images/ship.jpg', );
+my $background = SDL::Image::load('images/background.jpg');
+my $ship       = SDL::Image::load('images/ship.jpg');
 
-my $background_rect = SDL::Rect->new(
-    -height => $background->height(),
-    -width  => $background->width(),
+my $background_rect = SDL::Rect->new(0,0,
+    $background->w,
+    $background->h,
 );
 
-my $ship_rect = SDL::Rect->new(
-    -height => $ship->height(),
-    -width  => $ship->width(),
+my $ship_rect = SDL::Rect->new(0,0,
+    $ship->w,
+    $ship->h,
 );
 
 sub draw {
@@ -941,19 +943,16 @@ sub draw {
     $y = 450 * ( 1000 - $y ) / 1000;
 
     # background
-    $background->blit( $background_rect, $app, $background_rect );
+    SDL::Video::blit_surface($background, $background_rect, $app, $background_rect );
 
     # ship
     my $ship_dest_rect = SDL::Rect->new(
-        -height => $ship->height(),
-        -width  => $ship->width(),
-        -x      => $x,
-        -y      => $y,
+        $x, $y, $ship->w, $ship->h,
     );
 
-    $ship->blit( $ship_rect, $app, $ship_dest_rect );
+    SDL::Video::blit_surface($ship, $ship_rect, $app, $ship_dest_rect );
 
-    $app->update($background_rect);
+    SDL::Video::update_rects($app, $background_rect);
 }
 
 my $height   = 1000; # m
