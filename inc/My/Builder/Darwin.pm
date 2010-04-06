@@ -86,10 +86,11 @@ sub process_support_files {
 sub build_test
 {
       my $self = shift;
-      warn 'Please run perl Build Bundle first' and return 0 if !(-d getcwd().'/SDLPerl.app');
+      $self->build_bundle() if !(-d getcwd().'/SDLPerl.app');
       my $cmd = './SDLPerl.app/Contents/MacOS/SDLPerl '.getcwd().'/Build test';
       if($ENV{SDL_PERL_TEST}) {
           $self->Module::Build::ACTION_test;
+	  $ENV{SDL_PERL_TEST} = 0; #unset it again
       } else {
           $ENV{SDL_PERL_TEST} = 1;
           system ( split ' ', $cmd );
