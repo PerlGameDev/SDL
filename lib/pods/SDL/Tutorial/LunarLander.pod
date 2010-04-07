@@ -1,8 +1,6 @@
-tags: Tutorials
-
 =head1 NAME
 
-Lunar Lander - a small tutorial on Perl SDL
+SDL::Tutorial::LunarLander - a small tutorial on Perl SDL
 
 =head2 CATEGORY
 
@@ -19,13 +17,13 @@ lines of code, or less.
 
 You can see the final version of the demo code by doing:
 
-S< >
+
 
    perl -MSDL::Tutorial::LunarLander=lander.pl -e1
 
-S< >
 
-this will create all three files used in the tutorial:
+
+this will create all three files used in the tutorial.
 
 
 =head2 FIRST VERSION
@@ -43,7 +41,7 @@ later.
 
 So, here's the initial code:
 
-S< >
+
 
     #!/usr/bin/perl
 
@@ -70,11 +68,11 @@ S< >
         print "You landed on the surface safely! :-D\n";
     }
 
-S< >
+
 
 Run the code and you'll see something like this:
 
-S< >
+
 
     at 0 s height = 1000 m, velocity = 0 m/s
     at 1 s height = 1000 m, velocity = 1 m/s
@@ -89,7 +87,7 @@ S< >
 
     CRASH!!!
 
-S< >
+
 
 "What happened? How do I control the ship???"
 
@@ -104,7 +102,7 @@ on the game logic!)
 
 So, create add this simple script to the end of your file:
 
-S< >
+
 
     __DATA__
     at 41s, accelerate 10 m/s^2 up
@@ -113,7 +111,7 @@ S< >
     at 47s, 10
     at 49s, 10
 
-S< >
+
 
 The script is straightforward: it simply states a time when we
 will push the spaceship up with a given acceleration. It accepts
@@ -121,23 +119,23 @@ free text: any two numbers you type will work.
 
 We can parse the script using this regular expression:
 
-S< >
+
 
     my $script_re = qr/(\d+) \D+ (\d+)/x;
 
-S< >
+
 
 And we can build a hash of ( time => acceleration ) with:
 
-S< >
+
 
     my %up = map { $_ =~ $script_re } <DATA>;
 
-S< >
+
 
 So the middle section of the program will become:
 
-S< >
+
 
     my $script_re = qr/(\d+) \D+ (\d+)/x;
     my %up = map { $_ =~ $script_re } <DATA>;
@@ -156,13 +154,13 @@ S< >
         $t        = $t + 1;
     }
 
-S< >
+
 
 That's it!
 
 Try to run the program, and the ship should land safely:
 
-S< >
+
 
     ./lunar.pl autopilot.txt 
     at 0 s height = 1000 m, velocity = 0 m/s
@@ -179,7 +177,7 @@ S< >
 
     You landed on the surface safely! :-D
 
-S< >
+
 
 Cool, but...
 
@@ -203,7 +201,7 @@ this tutorial; Save these images in a subdirectory called "images":
 
 First step: use the required libraries:
 
-S< >
+
 
 	use SDL; #needed to get all constants
 	use SDL::Video;
@@ -212,11 +210,11 @@ S< >
 	use SDL::Rect;
 	use SDL::Image;
 
-S< >
+
 
 Second step: initialize C<SDL::App>:
 
-S< >
+
 
     my $app = SDL::App->new(
         -title  => "Lunar Lander",
@@ -225,11 +223,11 @@ S< >
         -depth  => 32,
     );
 
-S< >
+
 
 Third step: load the images and create the necessary "rectangles":
 
-S< >
+
 
 	my $background = SDL::Image::load('images/background.jpg');
 	my $ship       = SDL::Image::load('images/ship.jpg');
@@ -244,11 +242,11 @@ S< >
 	    $ship->h,
 	);
 
-S< >
+
 
 Fourth step: create a sub to draw the spaceship and background:
 
-S< >
+
 
 	sub draw {
 	    my ( $x, $y ) = @_; # spaceship position
@@ -269,7 +267,7 @@ S< >
 	    SDL::Video::update_rects($app, $background_rect);
 	}
 
-S< >
+
 
 Note that this sub first combines all the bitmaps, using a blit
 ("Block Image Transfer") operation -- which is quite fast, but does
@@ -283,7 +281,7 @@ Finally, add the following lines to the end of the main loop, so that
 we call the C<draw()> function with the correct spaceship
 coordinates:
 
-S< >
+
 
     while ( $height > 0 ) {
 
@@ -293,7 +291,7 @@ S< >
         $app->delay(10);
     }
 
-S< >
+
 
 That's it!
 
