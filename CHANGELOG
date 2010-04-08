@@ -1,5 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.4.1
+	- Clean up docs
+	- Critical bug with 'static memory in gfx'
+
 * 2.4 
 	- MacOSX testing
 	- Pango working with frozen-bubble

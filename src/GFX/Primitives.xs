@@ -33,7 +33,7 @@
 
 #endif
 
-static Sint16* av_to_sint16 (AV* av)
+Sint16* av_to_sint16 (AV* av)
 {
 	int len = av_len(av);
 	if( len != -1)
