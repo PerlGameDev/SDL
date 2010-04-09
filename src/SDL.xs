@@ -209,14 +209,6 @@ linked_version ()
 	OUTPUT:
 		RETVAL
 
-int
-putenv (variable)
-	char *variable
-	CODE:
-		RETVAL = SDL_putenv(variable);
-	OUTPUT:
-		RETVAL
-
 char*
 getenv (name)
 	char *name
