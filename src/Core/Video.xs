@@ -8,8 +8,22 @@
 
 #include <SDL.h>
 
+void _uinta_free(Uint16* av, int len_from_av_len)
+{
+	if( av != NULL)
+	  return;
+	
+	
+	int i;
+	for(i =0; i < len_from_av_len; i++)
+	{
+	  safefree( av + i  );
+	}
+	
+	safefree(av);
+}
 
-static Uint16* av_to_uint16 (AV* av)
+Uint16* av_to_uint16 (AV* av)
 {
 	int len = av_len(av);
 	if( len != -1)
@@ -263,9 +277,9 @@ video_set_gamma_ramp( rt, gt, bt )
 		greentable = av_to_uint16(gt);
 		bluetable = av_to_uint16(bt);
 		RETVAL =  SDL_SetGammaRamp(redtable, greentable, bluetable);
-		if( redtable != NULL) { safefree(redtable); }
-		if( greentable != NULL) { safefree(greentable); }
-		if( bluetable != NULL) { safefree(bluetable); }	
+		_uinta_free(redtable, av_len(rt) ); 
+		_uinta_free(greentable, av_len(gt) ); 
+		_uinta_free(bluetable, av_len(bt) );
 	OUTPUT:
 		RETVAL 
 

@@ -12,7 +12,7 @@ use SDL::TestTool;
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
     plan( skip_all => 'Failed to init video' );
 } else {
-    plan( tests => 28 );
+    plan( tests => 26 );
 }
 
 my @done =qw/ 
@@ -68,10 +68,8 @@ isnt( SDL::was_init( 0 ), SDL_INIT_VIDEO, '[was_init] recognizes turned off flag
 SKIP:
 {
 	skip 'perl compiled with -DPERL_USE_SAFE_PUTENV', 2 if defined $Config{'config_args'} && $Config{'config_args'} =~ /PERL_USE_SAFE_PUTENV/;
-	my $pe = eval{ SDL::putenv('PERLSDL_TEST=hello');} ;
-	skip 'putenv not possible on your machine', 1 if $?;
-	is($pe , 0, '[putenv] returns 0');
-	is(SDL::getenv('PERLSDL_TEST'), 'hello', '[getenv] returns hello');
+	#SDL::putenv('PERLSDL_TEST=hello'; 
+	#is(SDL::getenv('PERLSDL_TEST'), 'hello', '[getenv] returns hello');
 }
 
 my @left = qw/
