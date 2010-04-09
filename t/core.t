@@ -12,7 +12,7 @@ use SDL::TestTool;
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
     plan( skip_all => 'Failed to init video' );
 } else {
-    plan( tests => 26 );
+    plan( tests => 28 );
 }
 
 my @done =qw/ 
