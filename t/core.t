@@ -68,7 +68,9 @@ isnt( SDL::was_init( 0 ), SDL_INIT_VIDEO, '[was_init] recognizes turned off flag
 SKIP:
 {
 	skip 'perl compiled with -DPERL_USE_SAFE_PUTENV', 2 if defined $Config{'config_args'} && $Config{'config_args'} =~ /PERL_USE_SAFE_PUTENV/;
-	is(SDL::putenv('PERLSDL_TEST=hello'), 0, '[putenv] returns 0');
+	my $pe = eval{ SDL::putenv('PERLSDL_TEST=hello');} ;
+	skip 'putenv not possible on your machine', 1 if $?;
+	is($pe , 0, '[putenv] returns 0');
 	is(SDL::getenv('PERLSDL_TEST'), 'hello', '[getenv] returns hello');
 }
 
