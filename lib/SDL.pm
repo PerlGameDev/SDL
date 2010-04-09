@@ -63,6 +63,26 @@ sub NULL {
 	return 0;
 }
 
+# workaround, doing putenv from perl instead of sdl's:
+#int
+#putenv (variable)
+#	char *variable
+#	CODE:
+#		RETVAL = SDL_putenv(variable);
+#	OUTPUT:
+#		RETVAL
+sub putenv
+{
+	my $cmd  = shift;
+	if($cmd =~ /^(\w+)=(.*)$/)
+	{
+		$ENV{$1} = $2;
+		return 0;
+	}
+	
+	return -1;
+}
+
 # workaround as:
 # extern DECLSPEC void SDLCALL SDL_SetError(const char *fmt, ...);
 sub set_error {
