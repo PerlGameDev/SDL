@@ -7,6 +7,7 @@ use SDL::Audio;
 use SDL::AudioSpec;
 use Test::More;
 use Devel::Peek;
+use Config;
 
 use lib 't/lib';
 use SDL::TestTool;
@@ -17,6 +18,10 @@ unless ( $ENV{AUTOMATED_TESTING} or $ENV{SDL_RELEASE_TESTING} ) {
 
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
+}
+
+if( defined $Config{'config_args'} && $Config{'config_args'} !~ /USE_ITHREADS/ ) {
+    plan( skip_all => 'Threads are needed for this test' );
 }
 
 my $obtained = SDL::AudioSpec->new;   

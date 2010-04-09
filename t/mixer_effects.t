@@ -7,9 +7,13 @@ use SDL::Config;
 use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
+use Config;
 
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
 	plan( skip_all => 'Failed to init sound' );
+}
+elsif( defined $Config{'config_args'} && $Config{'config_args'} !~ /USE_ITHREADS/ ) {
+    plan( skip_all => 'Threads are needed for this test' );
 }
 elsif( !SDL::Config->has('SDL_mixer') )
 {
