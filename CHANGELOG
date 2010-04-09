@@ -1,6 +1,6 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.42
+* 2.402
 	- Clean up docs [kthakore]
 	- Critical bug with 'static memory and array free in gfx' [kthakore]
 	- Bug fixes for mandriva [kthakore]
