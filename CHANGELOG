@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.403  Tue Apr 13 2010
+	- Fix: build requires now File::Find v0 (instead wrong 2.07) [FROGGS]
+
 * 2.402  Fri Apr 09 2010
 	- Clean up docs [kthakore]
 	- Critical bug with 'static memory and array free in gfx' [kthakore]
