@@ -1,11 +1,11 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.402
+* 2.402  Fri Apr 09 2010
 	- Clean up docs [kthakore]
 	- Critical bug with 'static memory and array free in gfx' [kthakore]
 	- Bug fixes for mandriva [kthakore]
 
-* 2.4 
+* 2.4  Tue Apr 06 2010
 	- MacOSX testing
 	- Pango working with frozen-bubble
 	- Clean up with back compatible stuff
