@@ -5,9 +5,9 @@
 #include <SDL.h>
 #ifdef HAVE_SDL_GFX_PRIMITIVES
 #include <SDL_gfxPrimitives.h>
-
-	SDL_version *linked_version = NULL; 
 #endif
+	SDL_version *linked_version = NULL; 
+
 
 #ifndef SDL_GFXPRIMITIVES_MAJOR
 #define SDL_GFXPRIMITIVES_MAJOR 0
