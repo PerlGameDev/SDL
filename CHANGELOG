@@ -13,9 +13,8 @@ Revision history for Perl extension SDL_perl.
 	- Pango working with frozen-bubble
 	- Clean up with back compatible stuff
 	- Dropped SVG and Sound
-	
 
-* 2.3_9
+* 2.3_9  Sun Mar 28 2010
 	- all constants are in their modules, exported by default and documented [FROGGS]
 	- Moved SDL::Net away [FROGGS]
 	- Pango XS/tests/docs [FROGGS]
@@ -26,7 +25,7 @@ Revision history for Perl extension SDL_perl.
 	- manifest fix for MacOSX [kthakore]
 	- some measly docs [kthakore]
 
-* 2.3_8
+* 2.3_8  Sat Mar 20 2010
 	- TTF XS/tests/docs [#85] [FROGGS]
 	- Minor fixes and cleanup [ kthakore, kmx ]
 	- added more version checks to SDL::GFX XS [#79] [FROGGS]
@@ -36,11 +35,11 @@ Revision history for Perl extension SDL_perl.
 	- Surface double free fix for picky kernel [kthakore]
 	- SDL::Events documentation [kthakore]
 
-* 2.3_7
+* 2.3_7  Mon Mar 08 2010
 	- Mixer XS/tests/docs [kthakore, FROGGS]
 	- Fixes for Build system on cygwin [kmx]
 
-* 2.3_6 
+* 2.3_6  Wed Feb 24 2010
 	- Moved mixer code into correct locations [kthakore]
 	- Cleaned up last of SDL xs [kthakore]
 	- Update Build system [kmx]
@@ -49,7 +48,7 @@ Revision history for Perl extension SDL_perl.
 	- Prepared XS to build when no threading available [kthakore]
 	- Minor bug fixes in test for core.t with PERL_SAFE_PUTENV [kthakore]
 
-* 2.3_5 
+* 2.3_5  Sun Jan 31 2010
 	- Fixed serious XS mem leaks in AV* [FROGGS]
 	- Removed usless verify method in SDL.pm [J_King]
 	- GFX rotozoom started [FROGGS]
@@ -59,7 +58,7 @@ Revision history for Perl extension SDL_perl.
 	- Migrated O_OBJECT to thread safe bag [ruoso, kthakore]
 	- Update time docs [kthakore]
 
-* 2.3_3
+* 2.3_3  Mon Dec 07 2009
 	- SDL::Image implemented and tested [#72] [kthakore]
 	- FreeBSD SDL test clean up [#75] [kthakore]
 	- Handle GFX seperate headers in Build [FROGGS,kthakore]
@@ -70,10 +69,10 @@ Revision history for Perl extension SDL_perl.
 	- Added license information file (README) for test/data [FROGGS]
 	- Moved mixer stuff from SDL:: to SDL::Mixer:: [FROGGS]
 
-* 2.3_1 
+* 2.3_1  Sun Nov 29 2009
 	- General fixup for CPAN
 
-* 2.3_0
+* 2.3_0  Sun Nov 29 2009
 	- General Memory leaking stopping [kthakore, acme]
 	- More complete unit testing [kthakore, acme, FROGGS]
 	- Fix bug with TTFSizeText, it actually returns 0 on success [acme]
