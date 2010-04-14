@@ -43,7 +43,7 @@ Examples:
 
 '/dev/cdrom'
 
-=item '
+=item *
 
 'E:'
 

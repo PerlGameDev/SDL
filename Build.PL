@@ -509,7 +509,7 @@ my $build = $package->new(
 		'YAML'	=> '0.68',
 		'ExtUtils::CBuilder' => '0.260301',
 		'Alien::SDL' => '1.2',
-		'File::Find' => '2.07'
+		'File::Find' => '0'
 	},
 	build_requires =>
 	{

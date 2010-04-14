@@ -1,12 +1,16 @@
 =pod 
 
+=head1 NAME
+
+SDL::Credits - Authors and contributors of the SDL Perl project
+
 =head1 The SDL Perl 2010 Development Team
 
 =head2 Core Developers
 
 See the L<impact graph|http://github.com/kthakore/SDL_perl/graphs/impact> on our github repository.
 
-Also see our CONTRIBUTERS file.
+Also see our CONTRIBUTORS file.
 
 =head2 Maintainance 
 
@@ -19,7 +23,6 @@ Please contact the following individuals reagarding questions and problems with 
 	Name: Kartik Thakore
 
 They can be reached on the SDL-devel\@perl.org mailing list and the #sdl channel on the irc.perl.org network.
-
 
 =cut
 

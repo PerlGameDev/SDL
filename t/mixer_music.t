@@ -4,6 +4,7 @@ use threads;
 use threads::shared;
 use SDL;
 use SDL::Config;
+use Config;
 
 BEGIN
 {
@@ -13,6 +14,9 @@ BEGIN
 
 	if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
 	    plan( skip_all => 'Failed to init sound' );
+	}
+	elsif( defined $Config{'config_args'} && $Config{'config_args'} !~ /USE_ITHREADS/ ) {
+		plan( skip_all => 'Threads are needed for this test' );
 	}
 	elsif( !SDL::Config->has('SDL_mixer') )
 	{

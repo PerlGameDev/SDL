@@ -5,6 +5,7 @@ use strict;
 use SDL;
 use Test::More;
 use SDL::Time;
+use Config;
 
 use lib 't/lib';
 use SDL::TestTool;
@@ -12,6 +13,9 @@ use SDL::TestTool;
 if( !SDL::TestTool->init(SDL_INIT_TIMER) )
 {
     plan( skip_all => 'Failed to init timer' );
+}
+elsif( defined $Config{'config_args'} && $Config{'config_args'} !~ /USE_ITHREADS/ ) {
+    plan( skip_all => 'Threads are needed for this test' );
 }
 else
 {

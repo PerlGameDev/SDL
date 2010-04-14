@@ -204,6 +204,8 @@ Jumps to position seconds from the current position in the stream.
 So you may want to call L<SDL::Mixer::Music::rewind_music> before this.
 Does not go in reverse... negative values do nothing. 
 
+=back
+
 Returns: C<0> on success, or C<-1> if the codec doesn't support this function. 
 
 =head2 paused_music
