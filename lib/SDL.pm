@@ -3,7 +3,7 @@
 # SDL.pm
 #
 # Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
-# Copyright (C) 2009 Kartik Thakore   <kthakore@cpan.org>
+# Copyright (C) 2010 Kartik Thakore   <kthakore@cpan.org>
 # ------------------------------------------------------------------------------
 #
 # This library is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ our %EXPORT_TAGS = (
 	defaults => $SDL::Constants::EXPORT_TAGS{'SDL/defaults'}
 );
 
-our $VERSION = '2.403';
+our $VERSION = '2.404';
 $VERSION = eval $VERSION;
 
 print "$VERSION" if (defined($ARGV[0]) && ($ARGV[0] eq '--SDLperl'));
