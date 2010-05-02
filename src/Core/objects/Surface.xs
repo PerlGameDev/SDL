@@ -116,14 +116,37 @@ surface_h ( surface )
 	OUTPUT:
 		RETVAL
 
-int
+SDL_Color *
 surface_get_pixel(surface, offset)
 	SDL_Surface *surface
 	int offset
+	PREINIT:
+		char *CLASS = "SDL::Color";
 	CODE:
-	  RETVAL =((unsigned int*)surface->pixels)[offset];
+		Uint8 r, g, b, a;
+		Uint32 pixel;
+		switch(surface->format->BytesPerPixel)
+		{
+			case 1: SDL_GetRGBA(((Uint8  *)surface->pixels)[offset], surface->format, &r, &g, &b, &a); break;
+			case 2: SDL_GetRGBA(((Uint16 *)surface->pixels)[offset], surface->format, &r, &g, &b, &a); break;
+			case 3:
+				pixel = ((Uint32)((Uint8 *)surface->pixels)[offset * surface->format->BytesPerPixel]     <<  0)
+				      + ((Uint32)((Uint8 *)surface->pixels)[offset * surface->format->BytesPerPixel + 1] <<  8)
+				      + ((Uint32)((Uint8 *)surface->pixels)[offset * surface->format->BytesPerPixel + 2] << 16);
+				SDL_GetRGBA(pixel, surface->format, &r, &g, &b, &a);
+				break;
+			case 4: SDL_GetRGBA(((Uint32 *)surface->pixels)[offset], surface->format, &r, &g, &b, &a); break;
+		}
+		//RETVAL =((unsigned int*)surface->pixels)[offset];
+
+		// returning 0xRRGGBBAA
+		//RETVAL = ((r << 24) | (g << 16) | ( b << 8) | a);
+		RETVAL = (SDL_Color *) safemalloc(sizeof(SDL_Color));
+		RETVAL->r = r;
+		RETVAL->g = g;
+		RETVAL->b = b;
 	OUTPUT:
-	  RETVAL
+		RETVAL
 
 
 IV
