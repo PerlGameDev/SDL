@@ -116,11 +116,11 @@ To set the surface's clip_rect use the following
 
 Disclaimer: This can be very slow, it is suitable for creating surfaces one time and not for animations
 
-=head2 get_pixels
+=head2 get_pixel
 
- $surface->get_pixels( $offset )  
+ my $color = $surface->get_pixel( $offset )  
 
-Returns the current integer value at (surface->pixels)[offset] 
+Returns the SDL::Color object for the pixel at C<$offset>. 
 
 =head2 set_pixels
 
