@@ -31,7 +31,7 @@ $options{-width}  ||= 800;
 $options{-height} ||= 600;
 $options{-depth} ||= $options{-bpp} || 24;
 
-$app = new SDL::App  %options;
+$app = SDL::App->new( %options );
 
 my %ttfonts = (
 	'aircut3.ttf' => 0,
@@ -49,12 +49,12 @@ for ( reverse keys %ttfonts ) {
 	for $mode ( qw/ -normal -bold -italic -underline / ) {
 		if (-e "data/$_") {
 			print STDERR "Loading $_\n";
-			$ttfonts{"$_$mode"} = new SDL::Tool::Font 
+			$ttfonts{"$_$mode"} = SDL::Tool::Font->new(
 						$mode => 1,
 						-ttfont => "data/$_", 
 						-size => 20, 
 						-fg => $SDL::Color::black,
-						-bg => $SDL::Color::black;
+						-bg => $SDL::Color::black );
 			push @fonts,  $ttfonts{"$_$mode"};
 		}
 	}
@@ -65,7 +65,7 @@ for ( reverse keys %ttfonts ) {
 for ( reverse keys %sfonts) {
 	if (-e "data/$_") {
 		print STDERR "Loading $_\n";
-		$sfonts{$_} = new SDL::Tool::Font -sfont => "data/$_";
+		$sfonts{$_} = SDL::Tool::Font->new( -sfont => "data/$_" );
 		push @fonts,  $sfonts{$_};
 	}
 }

@@ -7,7 +7,7 @@ SDL::SMPEG - a SDL perl extension
 
 =head1 SYNOPSIS
 
-  $video = new SDL::SMPEG ( -name => 'pr0n.mpg' );
+  $video = SDL::SMPEG->new( -name => 'pr0n.mpg' );
 
 =head1 DESCRIPTION
 

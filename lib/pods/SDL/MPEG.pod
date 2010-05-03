@@ -6,7 +6,7 @@ SDL::MPEG - a SDL perl extension
 
 =head1 SYNOPSIS
 
-  $info = new SDL::MPEG -from => $mpeg;
+  $info = SDL::MPEG->new( -from => $mpeg );
 
 =head1 DESCRIPTION
 

@@ -68,7 +68,7 @@ sub main
 	my $fps = 0.0;
 	my $frames_drawn = 0;
    
-	my $app = new SDL::App 
+	my $app = SDL::App->new
 				(
 					-title	=> "Jeff Molofee's lesson18: Quadratic",
 					-icon	=> "icon.png",
@@ -81,7 +81,7 @@ sub main
    
 	SDL::ShowCursor (0);
    
-	my $event = new SDL::Event;
+	my $event = SDL::Event->new;
 	$event->set (SDL_SYSWMEVENT (), SDL_IGNORE ());
 
 	InitGL ($arg_screen_width, $arg_screen_height);
@@ -394,7 +394,7 @@ sub ImageLoad
 	my @ref = ();
 
 	#makes use of SDL: BMP loader.
-	my $surface = new SDL::Surface (-name  => $filename);
+	my $surface = SDL::Surface->new(-name  => $filename);
    
 	my $width = $surface->width ();
 	my $height = $surface->height ();

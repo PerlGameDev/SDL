@@ -31,7 +31,7 @@ my $screen;
 my $screen_width  = 640;
 my $screen_height = 480;
 my $tile_size     = 10;
-my $model         = new SDL::Tutorial::MoP::Models;
+my $model         = SDL::Tutorial::MoP::Models->new;
 my @map           = $model->map();
 
 my @map_center    = (32, 24); # x, y

@@ -61,12 +61,12 @@ can_ok ('SDL::Tool::Font', qw/
 	new 
 	print
 	/);
-my $font = new SDL::Tool::Font
+my $font = SDL::Tool::Font->new(
 		-normal => 1,
 		-ttfont => 'test/data/aircut3.ttf',
 		-size => 20,
 		-fg => $SDL::Color::black,
-	 	-bg => $SDL::Color::black;
+	 	-bg => $SDL::Color::black );
 
 #use utf8;
 

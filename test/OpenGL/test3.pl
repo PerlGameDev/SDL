@@ -9,7 +9,7 @@ use SDL::Surface;
 use SDL::Event;
 use SDL::OpenGL;
 
-my $app = new SDL::App	-w => 800, -h => 600, -d => 16, -gl => 1;
+my $app = SDL::App->new( -w => 800, -h => 600, -d => 16, -gl => 1 );
 
 my @points = (  [-4.0, -4.0,  0.0 ],
 		[-2.0,  4.0,  0.0 ],

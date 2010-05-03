@@ -32,7 +32,7 @@ is( SDL::Pango::was_init(),                             0,                      
 is( SDL::Pango::init(),                                 0,                                     "[init] succeeded" );
 isnt( SDL::Pango::was_init(),                           0,                                     "[was_init] returns true" );
 
-my $context = new SDL::Pango::Context; isa_ok($context, 'SDL::Pango::Context',                 "[new SDL::Pango::Context]");
+my $context = SDL::Pango::Context->new; isa_ok($context, 'SDL::Pango::Context',                 "[new SDL::Pango::Context]");
 my $text    = 'Hi <b><span foreground="red"><i>k</i></span>thakore</b> its me, <u>Pango</u>!!';
 
 SDL::Pango::set_default_color($context, 0xA7C344FF, 0);                                   pass "[set_default_color] ran";

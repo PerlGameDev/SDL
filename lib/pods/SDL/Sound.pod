@@ -12,7 +12,7 @@ L<SDL::Sound> is a module for loading WAV files for sound effects.
 The file can be loaded by creating a new L<SDL::Sound> object by
 passing the filename to the constructor;
 
-	my $sound = new SDL::Sound 'my_sfx.wav';
+	my $sound = SDL::Sound->new( 'my_sfx.wav' );
 
 =head1 METHODS
 

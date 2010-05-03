@@ -10,7 +10,7 @@ L<SDL::Music> is used to load music files for use with L<SDL::Mixer>.
 To load a music file one simply creates a new object passing the filename 
 to the constructor:
 
-	my $music = new SDL::Music 'my_song.ogg';
+	my $music = SDL::Music->new(  'my_song.ogg' );
 
 
 =head1 AUTHOR

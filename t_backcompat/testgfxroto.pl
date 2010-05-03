@@ -74,7 +74,7 @@ sub set_app_args
 
 sub	init_game_context
 {
-	$app = new SDL::App (
+	$app = SDL::App->new(
 					 -width => $settings{screen_width}, 
 					 -height=> $settings{screen_height}, 
 					 -title => "testsprite",
@@ -82,24 +82,24 @@ sub	init_game_context
 					 -flags => $videoflags,
 			);
 
-	$app_rect= new SDL::Rect(
+	$app_rect= SDL::Rect->new(
 				 -height => $settings{screen_height}, 
 				 -width	=> $settings{screen_width},
 				);
 
 	$background = $SDL::Color::black;
 
-	$sprite = new SDL::Surface -name =>"data/logo.png"; 
+	$sprite = SDL::Surface->new( -name =>"data/logo.png" ); 
 
 	$sprite->display_format();
 
-	$sprite_rect = new SDL::Rect(-x		 => 0, 
+	$sprite_rect = SDL::Rect->new(-x		 => 0, 
 						 -y		 => 0,
 						 -width => $sprite->width,
 						 -height=> $sprite->height,
 						);
 	
-	$event = new SDL::Event();
+	$event = SDL::Event->new();
 }
 
 ## Prints diagnostics
@@ -179,11 +179,11 @@ sub put_sprite_rotated
 	my ($w,$h) = (SDL::SurfaceW($roto),SDL::SurfaceH($roto));;	 
 	
 
-	my $dest_rect = new SDL::Rect
+	my $dest_rect = SDL::Rect->new(
 				-x => $x - ($w/2),
 				-y => $y - ($h/2),
 				-width	=> $w,
-				-height => $h;
+				-height => $h );
 
 	SDL::SetColorKey($roto, SDL_SRCCOLORKEY, SDL::SurfacePixel($roto,$w/2,$h/2));
 	

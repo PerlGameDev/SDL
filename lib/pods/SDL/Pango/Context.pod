@@ -12,7 +12,7 @@ Pango, Structure
 
 =head2 new
 
- my $context = new SDL::Pango::Context;
+ my $context = SDL::Pango::Context->new;
 
 Creates a new SDL::Pango context object. See L<SDL::Pango>.
 

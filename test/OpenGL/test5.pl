@@ -8,7 +8,7 @@ use SDL::App;
 use SDL::Event;
 use SDL::OpenGL;
 
-my $app = new SDL::App	-w => 800, -h => 600, -d => 16, -gl => 1;
+my $app = SDL::App->new( -w => 800, -h => 600, -d => 16, -gl => 1 );
 
 my $knots = pack "f8", 0,0,0,0,1,1,1,1;
 my $edgePts = pack "f10", 0,0,1,0,1,1,0,1,0,0;
@@ -102,7 +102,7 @@ Up/Down/Left/Right	Rotate
 
 USAGE
 
-my $event = new SDL::Event;
+my $event = SDL::Event->new;
 $app->loop ({
 		SDL_QUIT() => sub { exit(); }, 
 		SDL_KEYDOWN() => sub { 

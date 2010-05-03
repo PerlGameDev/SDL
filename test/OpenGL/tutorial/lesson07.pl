@@ -52,7 +52,7 @@ sub main
 
    $vidmode_flags|= SDL_FULLSCREEN if $arg_fullscreen;
    
-   my $app = new SDL::App ( -title => "Jeff Molofee's GL Code Tutorial ... NeHe '99", 
+   my $app = SDL::App->new( -title => "Jeff Molofee's GL Code Tutorial ... NeHe '99", 
 			    -icon => "icon.png",
 			    -flags => $vidmode_flags,			
 			    -width => $arg_screen_width,
@@ -62,7 +62,7 @@ sub main
    
    SDL::ShowCursor(0);   
 
-   my $event = new SDL::Event;
+   my $event = SDL::Event->new;
    $event->set(SDL_SYSWMEVENT,SDL_IGNORE);
 
    InitGL($arg_screen_width, $arg_screen_height);
@@ -333,7 +333,7 @@ sub ImageLoad
   {
    my $filename=shift;
 
-   my $surface = new SDL::Surface( -name  => $filename); #makes use of SDL: BMP loader.
+   my $surface = SDL::Surface->new( -name  => $filename); #makes use of SDL: BMP loader.
    
    
    my $width=$surface->width();

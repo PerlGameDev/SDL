@@ -378,7 +378,7 @@ To respond to user interactions, we have to listen to user events using an SDL::
 
 and then be sure to create an event object amongst the animation initialization code:
 
- my $event = new SDL::Event;
+ my $event = SDL::Event->new;
 
 Finally, we need to update the application loop so that it examines and responds to events.  Replace the current application loop with this code:
 
@@ -529,7 +529,7 @@ Just so that you've got a complete working example, here is the final state of t
 	my $bg = SDL::Rect->new( 0,0,$side_length, $side_length, );
 
 	# event listener
-	my $event = new SDL::Event->new();
+	my $event = SDL::Event->new();
 
 	# event dispatch table
 	my $keyname_dispatch_table = {

@@ -65,7 +65,7 @@ $delay = $ARGV[0];
 
 print "Starting $0\n";
 
-my $app = new SDL::App	-w => 800, -h => 600, -d => 16, -gl =>1;
+my $app = SDL::App->new( -w => 800, -h => 600, -d => 16, -gl =>1 );
 
 print "Initializing OpenGL settings\n";
 printf "%-24s%s\n", "GL_RED_SIZE ", $app->attribute( SDL_GL_RED_SIZE() );
@@ -82,10 +82,10 @@ my @colors =  (
 	0.4,0.4,0.4,	0.3,0.3,0.3,	0.2,0.2,0.2, 0.1,0.1,0.1 );	#front
 	
 
-$cube = new SDL::OpenGL::Cube;
+$cube = SDL::OpenGL::Cube->new;
 $cube->color(@colors);
 
-$white = new SDL::OpenGL::Cube;
+$white = SDL::OpenGL::Cube->new;
 
 $toggle = 1;
 
@@ -135,7 +135,7 @@ InitView();
 DrawScene();
 $app->sync();
 
-my $event = new SDL::Event;
+my $event = SDL::Event->new;
 
 for (;;) {
 	for (0 .. 5) {

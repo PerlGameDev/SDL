@@ -34,7 +34,7 @@ sub main
   {  
    my $done=0;
 
-   my $app = new SDL::App ( -title => "Jeff Molofee's GL Code Tutorial ... NeHe '99", 
+   my $app = SDL::App->new( -title => "Jeff Molofee's GL Code Tutorial ... NeHe '99", 
 			    -icon => "icon.png",
 			    -width => $arg_screen_width,
 			    -height =>$arg_screen_height,
@@ -46,7 +46,7 @@ sub main
    
    SDL::ShowCursor (0);   
    
-   my $event = new SDL::Event;
+   my $event = SDL::Event->new;
    $event->set(SDL_SYSWMEVENT,SDL_IGNORE);#
 
    InitGL($arg_screen_width, $arg_screen_height);

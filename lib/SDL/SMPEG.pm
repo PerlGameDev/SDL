@@ -15,7 +15,7 @@ sub new {
 
 	my $n = $options{-name} || die "SDL::SMPEG must supply a filename to SDL::SMPEG::new\n";
 	my $a = $options{'-audio'} ? 1 : 0;
-	my $info = new SDL::MPEG();
+	my $info = SDL::MPEG->new();
 	
 	my $self = \SDL::NewSMPEG($n,$$info,$a);
 	croak SDL::GetError() unless $$self;

@@ -22,7 +22,7 @@ Pango
  
  SDL::Pango::init();
  
- my $context = new SDL::Pango::Context;
+ my $context = SDL::Pango::Context->new;
  SDL::Pango::set_default_color($context, 0xA7C344FF, 0);
  SDL::Pango::set_markup($context, 'Hallo <b>W<span foreground="red">o</span><i>r</i><u>l</u>d</b>!', -1);
 

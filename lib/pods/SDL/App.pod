@@ -14,7 +14,7 @@ Extension
 	use SDL::Event; 
 	use SDL::App; 
 	 
-	my $app = new SDL::App ( 
+	my $app = SDL::App->new( 
 	-title => 'Application Title', 
 	-width => 640, 
 	-height => 480, 
@@ -22,7 +22,7 @@ Extension
 
 This is the manual way of doing things	
 
-	my $event = new SDL::Event;             # create a new event 
+	my $event = SDL::Event->new;             # create a new event 
 
 	$event->pump();
 	$event->poll();
@@ -145,10 +145,10 @@ the event object used in the loop.
  
   Example:
 
-	my $app = new SDL::App  -title => "test.app", 
+	my $app = SDL::App->new( -title => "test.app", 
 				-width => 800, 
 				-height => 600, 
-				-depth => 32;
+				-depth => 32 );
 	
 	my %actions = (
 		SDL_QUIT() => sub { exit(0); },

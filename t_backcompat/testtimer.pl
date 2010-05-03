@@ -11,16 +11,16 @@ SDL::Init(SDL_INIT_TIMER);
 print STDERR "Waiting 4 seconds\n";
 SDL::Delay(4000);
 
-$a = new SDL::Timer sub { my $timer = shift;
+$a = SDL::Timer->new( sub { my $timer = shift;
 			  print STDERR "Timer A: $$timer{-times} runs\n" }, 
 		-delay => 1000, 
-		-times => 10;
+		-times => 10 );
 
-$b = new SDL::Timer sub { print STDERR "Timer B: ", ++$i,"\n" }, -delay => 3000;
+$b = SDL::Timer->new( sub { print STDERR "Timer B: ", ++$i,"\n" }, -delay => 3000 );
 			
-$c = new SDL::Timer sub { print STDERR "Timer C: restarting Timer A\n"; $a->run(1000,10) },
+$c = SDL::Timer->new( sub { print STDERR "Timer C: restarting Timer A\n"; $a->run(1000,10) },
 		-delay => 19000,
-		-times => 1;
+		-times => 1 );
 
 SDL::Delay(30000);
 

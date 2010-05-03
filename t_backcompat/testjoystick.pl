@@ -19,7 +19,7 @@ sub WatchJoystick($){
 	my $screenWidth = 640;
 	my $screenHeight = 480;
 
-	my $app = new SDL::App(-title => "Joystick Test",
+	my $app = SDL::App->new(-title => "Joystick Test",
 			       -width => $screenWidth,
 			       -height => $screenHeight,
 			       -depth=> 16 );
@@ -32,10 +32,10 @@ sub WatchJoystick($){
 	      SDL::JoystickNumBalls($joystick)." balls, and ".
 	      SDL::JoystickNumButtons($joystick)." buttons\n";
 	
-	my $event = new SDL::Event;
+	my $event = SDL::Event->new;
 	my $done = 0;	
-	my $colorWhite = new SDL::Color(-r=>255, -g=>255, -b=>255);
-	my $colorBlack = new SDL::Color();
+	my $colorWhite = SDL::Color->new(-r=>255, -g=>255, -b=>255);
+	my $colorBlack = SDL::Color->new();
 	my @axisRect = ();
 	my $numAxes=SDL::JoystickNumAxes($joystick);
 
@@ -97,7 +97,7 @@ sub WatchJoystick($){
 			#Update visual joystick state
 			for(my $i =0; $i < SDL::JoystickNumButtons($joystick); $i++)
 			  {
-				my $rect = new SDL::Rect( -width => 32,
+				my $rect = SDL::Rect->new( -width => 32,
 										  -height => 32,
 										  -x => $i*34,
 										  -y => $screenHeight-34); 
@@ -130,7 +130,7 @@ sub WatchJoystick($){
 
 				  if ($ox < 0)
 					{
-					  $axisRect[$i] = new SDL::Rect( -width=> $x,
+					  $axisRect[$i] = SDL::Rect->new( -width=> $x,
 													 -height=> 32,
 													 -x => ($screenWidth/2) - $x,
 													 -y => $i*34
@@ -138,7 +138,7 @@ sub WatchJoystick($){
 					}
 				  else
 					{
-					  $axisRect[$i] = new SDL::Rect( -width=> $x,
+					  $axisRect[$i] = SDL::Rect->new( -width=> $x,
 													 -height=> 32,
 													 -x => $screenWidth/2 ,
 													 -y => $i*34
@@ -207,7 +207,7 @@ sub draw_axis_method_1()
 					} elsif ( $y > ($screenHeight-16) ){
 					  $y = $screenHeight-16; 
 					}
-					$axisRect[$i] = new SDL::Rect( -width=> 16,
+					$axisRect[$i] = SDL::Rect->new( -width=> 16,
 												   -height=> 16,
 												   -x => $x,
 												   -y => $y);

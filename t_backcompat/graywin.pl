@@ -32,17 +32,17 @@ $options{-width} ||= 640;
 $options{-height} ||= 480;
 $options{-depth} ||= $options{-bpp} || 8;
 
-my $app = new SDL::App %options;
+my $app = SDL::App->new( %options );
 
 sub DrawBox {
 	my ($x,$y) = @_;
 
 	my ($w, $h) = ( int(rand(640)), int(rand(480)) );
 	
-	my $rect = new SDL::Rect -width => $w, -height => $h, 
-			-x => ($x - int($w/2)), -y => ($y - int($h/2));
+	my $rect = SDL::Rect->new( -width => $w, -height => $h, 
+			-x => ($x - int($w/2)), -y => ($y - int($h/2)) );
 	
-	my $color = new SDL::Color -r => rand(256), -g => rand(256), -b => rand(256);
+	my $color = SDL::Color->new( -r => rand(256), -g => rand(256), -b => rand(256) );
 
 	$app->fill($rect,$color);
 	$app->update($rect);

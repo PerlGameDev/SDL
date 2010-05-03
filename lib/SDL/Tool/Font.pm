@@ -45,14 +45,14 @@ sub new {
 	my %option = @_;
 
 	if ($option{-sfont}) {
-		$$self{-font} = new SDL::Font $option{-sfont};
+		$$self{-font} = SDL::Font->new( $option{-sfont} );
 	} elsif ($option{-ttfont} || $option{-t}) {
 		$option{-size} ||= 12;
-		$$self{-font} = new SDL::TTFont 
+		$$self{-font} = SDL::TTFont->new( 
 					-name => $option{-ttfont} || $option{-t},
 					-size => $option{-size} || $option{-s},
 					-fg => $option{-foreground} || $option{-fg} ,
-					-bg => $option{-background} || $option{-bg};
+					-bg => $option{-background} || $option{-bg} );
 		for (qw/ normal bold italic underline / ) {
 			if ($option{"-$_"}) {
 				

@@ -12,7 +12,7 @@ print STDERR <<USAGE;
 	Left click on any pixel to set its value to the last selected
 USAGE
 
-$app = new SDL::App -width => 320, -height => 240, -depth => 8;
+$app = SDL::App->new( -width => 320, -height => 240, -depth => 8 );
 
 my %colors = (
 	red => (new SDL::Color -r => 255, -g => 0, -b => 0 ),
@@ -42,7 +42,7 @@ for ( sort keys %colors ) {
 
 $app->sync();
 
-$last = new SDL::Color -r => 128, -g => 128, -b => 128;
+$last = SDL::Color->new( -r => 128, -g => 128, -b => 128 );
 
 $app->sync();
 $app->loop( {

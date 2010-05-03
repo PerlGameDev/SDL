@@ -42,7 +42,7 @@ sub main
   {  
    my $done=0;
    
-   my $app = new SDL::App ( -title => "Jeff Molofee's GL Code Tutorial ... NeHe '99", 
+   my $app = SDL::App->new( -title => "Jeff Molofee's GL Code Tutorial ... NeHe '99", 
 			    -icon => "Data/perl.png",
 			    -width => $arg_screen_width,
 			    -height =>$arg_screen_height,
@@ -52,7 +52,7 @@ sub main
    
    SDL::ShowCursor(0);   
 
-   my $event = new SDL::Event;
+   my $event = SDL::Event->new;
    $event->set(SDL_SYSWMEVENT,SDL_IGNORE);
    
    InitGL($arg_screen_width, $arg_screen_height);
@@ -234,7 +234,7 @@ sub create_SDL_surface_from_file
   {
    my $filename=shift;
    
-   my $surface = new SDL::Surface( -name  => $filename);
+   my $surface = SDL::Surface->new( -name  => $filename);
    
    return $surface;
 			       
@@ -261,7 +261,7 @@ sub read_gfx_file
    
    my $struct   = read_gimp_header_image($args{FILENAME}); 
    my $size     = length $struct->{DATA};
-   my $c_array  = new OpenGL::Array  $size  , GL_UNSIGNED_BYTE;
+   my $c_array  = OpenGL::Array->ne( $size, GL_UNSIGNED_BYTE );
 
    # c_array is the main reason to do the following ref count trickster:
    # (otherwise the OpenGL:Array goes out of scope and the memory (image) is ZEROed out (and invalidated) by the DESTROY method

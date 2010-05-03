@@ -25,7 +25,7 @@ $options{-width} ||= 640;
 $options{-height} ||= 480;
 $options{-depth} ||= $options{-bpp} || 24;
 
-my $app = new SDL::App %options;
+my $app = SDL::App->new( %options );
 
 # SDL::EventState(SDL_KEYUP,SDL_DISABLE);
 
@@ -65,7 +65,7 @@ sub print_key
 
 }
 
-my $event = new SDL::Event;
+my $event = SDL::Event->new;
 
 my $done = 0;
 

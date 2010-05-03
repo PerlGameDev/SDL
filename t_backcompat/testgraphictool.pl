@@ -8,24 +8,24 @@ use SDL::Surface;
 use SDL::App;
 use SDL::Tool::Graphic;
 
-my $app = new SDL::App(-title	=> "Graphic Tool Test",
+my $app = SDL::App->new(-title	=> "Graphic Tool Test",
 		       -width	=> 640,
 		       -height	=> 480,
 		       -depth	=> 16,
 		       -fullscreen => 0);
-my $app_rect = new SDL::Rect(	-x=>0,
+my $app_rect = SDL::Rect->new(	-x=>0,
 				-y=>0,
 				-width=>$app->width,
 				-height=>$app->height);
 
-my $sprite = new SDL::Surface(-name => "data/logo.png");
+my $sprite = SDL::Surface->new(-name => "data/logo.png");
 $sprite->display_format();
 
 #Test Zoom
-my $graphicTool = new SDL::Tool::Graphic();
+my $graphicTool = SDL::Tool::Graphic->new();
 $graphicTool->zoom($sprite, .5, .5, 1);
 
-my $sprite_rect = new SDL::Rect(	-x=>0,
+my $sprite_rect = SDL::Rect->new(	-x=>0,
 				-y=>0,
 				-width=>$sprite->width,
 				-height=>$sprite->height);
@@ -38,7 +38,7 @@ $app->fill($app_rect, $SDL::Color::black);
 #Test Rotate
 $graphicTool->rotoZoom($sprite, 90, 1, 1);
 
-$sprite_rect = new SDL::Rect(	-x=>0,
+$sprite_rect = SDL::Rect->new(	-x=>0,
 				-y=>0,
 				-width=>$sprite->width,
 				-height=>$sprite->height);

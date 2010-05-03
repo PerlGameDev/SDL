@@ -69,20 +69,20 @@ sub set_app_args
 
 sub init_game_context
 {
-	$app = new SDL::App 
+	$app = SDL::App->new(
 			-width => $settings{screen_width}, 
 			-height=> $settings{screen_height}, 
 			-title => "testsprite",
 			-icon	=> "data/icon.bmp",
-			-flags => $videoflags;
+			-flags => $videoflags );
 
-	$app_rect= new SDL::Rect
+	$app_rect= SDL::Rect->new(
 				-height => $settings{screen_height}, 
-				-width	=> $settings{screen_width};
+				-width	=> $settings{screen_width} );
 
 	$background = $SDL::Color::black;
 
-	$sprite = new SDL::Surface -name =>"data/icon.bmp"; 
+	$sprite = SDL::Surface->new( -name =>"data/icon.bmp" ); 
 
 	# Set transparent pixel as the pixel at (0,0) 
 	$sprite->set_color_key(SDL_SRCCOLORKEY,$sprite->pixel(0,0));	
@@ -91,13 +91,13 @@ sub init_game_context
 
 	$sprite->display_format();
 
-	$sprite_rect = new SDL::Rect 	
+	$sprite_rect = SDL::Rect->new(
 				-x => 0, 
 			 	-y => 0,
 				-width => $sprite->width,
-				-height=> $sprite->height;
+				-height=> $sprite->height );
 	
-	$event = new SDL::Event();
+	$event = SDL::Event->new();
 }
 
 ## Prints diagnostics
