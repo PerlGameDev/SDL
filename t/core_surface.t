@@ -30,7 +30,7 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 }
 else
 {
-    plan( tests => 37);
+    plan( tests => 39);
 }
 
 my $surface = SDL::Surface->new( SDL_ANYFORMAT, 640, 320, 8, 0, 0, 0, 0 );
@@ -119,7 +119,11 @@ SDL::Video::update_rects( $app, $small_rect );
 
 my $other_surface =  SDL::Surface->new_from( $surface->get_pixels_ptr, 640, 320, 8, $surface->pitch, 0, 0, 0, 0 ); 
 
-isa_ok( $surface->get_pixel(0), 'SDL::Color' );
+my $get_pixel = $surface->get_pixel(0);
+ok( $get_pixel >= 0,  "[get_pixel] returns integer ($get_pixel)" );
+$surface->set_pixels(0, 42); pass '[set_pixel] first pixel to 42' ;
+is( $surface->get_pixel(0), 42,   '[get_pixel] returns integer (42)' );
+
 isa_ok( $other_surface, 'SDL::Surface' );
 
 $ENV{SDL_VIDEODRIVER} = $videodriver;
