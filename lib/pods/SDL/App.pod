@@ -10,28 +10,30 @@ Extension
 
 =head1 SYNOPSIS
 		
-	use SDL;
-	use SDL::Event; 
-	use SDL::App; 
-	 
-	my $app = SDL::App->new( 
-	-title => 'Application Title', 
-	-width => 640, 
-	-height => 480, 
-	-depth => 32 ); 
+    use SDL;
+    use SDL::Event; 
+    use SDL::App; 
+    
+    my $app = SDL::App->new( 
+        -title  => 'Application Title',
+        -width  => 640,
+        -height => 480,
+        -depth  => 32
+    ); 
 
 This is the manual way of doing things	
 
-	my $event = SDL::Event->new;             # create a new event 
+    my $event = SDL::Event->new; # create a new event 
+    
+    $event->pump();
+    $event->poll();
+    
+    while ( $event->wait() ) { 
+        my $type = $event->type(); # get event type 
+        print $type; 
+        exit if $type == SDL_QUIT; 
+    }
 
-	$event->pump();
-	$event->poll();
-
-	while ($event->wait()) { 
-	  my $type = $event->type();      # get event type 
-	  print $type; 
-	  exit if $type == SDL_QUIT; 
-	  }
 An alternative to the manual Event processing is the L<SDL::App::loop> .
 
 =head1 DESCRIPTION
@@ -143,19 +145,21 @@ of event handler subroutines.  The keys of the hash must be SDL event types such
 as SDL_QUIT(), SDL_KEYDOWN(), and the like.  The event method recieves as its parameter 
 the event object used in the loop.
  
-  Example:
+Example:
 
-	my $app = SDL::App->new( -title => "test.app", 
-				-width => 800, 
-				-height => 600, 
-				-depth => 32 );
-	
-	my %actions = (
-		SDL_QUIT() => sub { exit(0); },
-		SDL_KEYDOWN() => sub { print "Key Pressed" },
-	);
-
-	$app->loop(\%actions);
+    my $app = SDL::App->new(
+        -title  => "test.app", 
+        -width  => 800, 
+        -height => 600, 
+        -depth  => 32
+    );
+    
+    my %actions = (
+        SDL_QUIT()    => sub { exit(0); },
+        SDL_KEYDOWN() => sub { print "Key Pressed" },
+    );
+    
+    $app->loop( \%actions );
 
 =head2 sync
 
