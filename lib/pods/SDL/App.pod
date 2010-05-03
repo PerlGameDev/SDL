@@ -11,8 +11,9 @@ Extension
 =head1 SYNOPSIS
 		
     use SDL;
-    use SDL::Event; 
     use SDL::App; 
+    use SDL::Event;
+    use SDL::Events; 
     
     my $app = SDL::App->new( 
         -title  => 'Application Title',
@@ -25,10 +26,9 @@ This is the manual way of doing things
 
     my $event = SDL::Event->new; # create a new event 
     
-    $event->pump();
-    $event->poll();
-    
-    while ( $event->wait() ) { 
+    SDL::Events::pump_events();
+       
+    while ( SDL::Events::poll_event($event) ) { 
         my $type = $event->type(); # get event type 
         print $type; 
         exit if $type == SDL_QUIT; 
