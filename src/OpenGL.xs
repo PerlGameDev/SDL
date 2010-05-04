@@ -158,6 +158,8 @@ sdl_perl_nurbs_end_callback ( void *cb )
 	LEAVE_TLS_CONTEXT	
 }
 
+#ifdef HAVE_GLU
+
 void
 sdl_perl_tess_end_callback ( void *cb )
 {
@@ -179,6 +181,7 @@ sdl_perl_tess_end_callback ( void *cb )
         LEAVE;
         LEAVE_TLS_CONTEXT
 }
+
 
 void
 sdl_perl_tess_begin_callback ( GLenum type,  void *cb )
@@ -311,6 +314,7 @@ sdl_perl_tess_combine_callback ( GLdouble coords[3], double *vd[4], GLfloat weig
         LEAVE;
         LEAVE_TLS_CONTEXT
 }
+#endif //HAVE_GLU check for callbacks 
 
 #endif
 
