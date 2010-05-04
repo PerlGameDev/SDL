@@ -42,7 +42,7 @@
 #ifdef PERL_DARWIN
 #include <gl.h>
 #include <glu.h>
-#else
+#else //not darwin
 #include <GL/gl.h>
 
 #if defined(__WIN32__) && defined(__MINGW32__)
@@ -55,10 +55,13 @@ constants missing in GL/gl.h thus we need also GL/glext.h
 #include <GL/glext.h>
 #undef GL_VERSION_1_3
 #undef GL_VERSION_1_2
-#endif
+#endif // this was for windows 
 
+#ifdef HAVE_GLU
 #include <GL/glu.h>
 #endif
+#endif //Darwin or not
+
 
 
 #ifdef USE_THREADS
