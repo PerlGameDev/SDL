@@ -44,6 +44,8 @@ plan ( tests => 3 );
 
 use_ok('SDL::OpenGL');
 
+SKIP:
+{
 skip ( 'No GL support found', 1) unless SDL::Config->has('GL');
 
 can_ok('main', qw/
@@ -77,7 +79,10 @@ can_ok('main', qw/
 	glVertex
 	glVertex
 	glViewport /);
+}
 
+SKIP:
+{
 skip ( 'No GLU support found', 1) unless SDL::Config->has('GLU');
 
 can_ok('main',qw/
@@ -91,5 +96,5 @@ can_ok('main',qw/
 	gluNurbsProperty
 	gluNurbsSurface
 	gluPwlCurve /);
-
+}
 sleep(2);
