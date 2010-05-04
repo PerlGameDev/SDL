@@ -23,7 +23,7 @@ our %EXPORT_TAGS = (
 	hat    => $SDL::Constants::EXPORT_TAGS{'SDL::Events/hat'},
 	app    => $SDL::Constants::EXPORT_TAGS{'SDL::Events/app'},
 	button => $SDL::Constants::EXPORT_TAGS{'SDL::Events/button'},
-	keysym => $SDL::Constants::EXPORT_TAGS{'SDL::Events/meysym'},
+	keysym => $SDL::Constants::EXPORT_TAGS{'SDL::Events/keysym'},
 	keymod => $SDL::Constants::EXPORT_TAGS{'SDL::Events/keymod'}
 );
 
