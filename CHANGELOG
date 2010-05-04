@@ -1,6 +1,7 @@
 Revision history for Perl extension SDL_perl.
 
 * 2.405 TBD
+	- Conditional compile on glu.h header [kthakore] {ticket 131}
 	- Documentation cleanup [bricas, kthakore]
 	- Remove usesages of 'new SDL...' [bricas]
 	- Fixed Surface->set_pixels/get_pixel, proper offset depending on Bpp [FROGGS]
