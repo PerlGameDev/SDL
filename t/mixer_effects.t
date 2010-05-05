@@ -1,9 +1,4 @@
 #!/usr/bin/perl -w
-use strict;
-use threads;
-use threads::shared;
-use SDL;
-use SDL::Config;
 
 BEGIN
 {
@@ -12,7 +7,8 @@ BEGIN
 		print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
 		exit(0);
 	}
-
+	use SDL;
+	use SDL::Config;
 	use Test::More;
 	use lib 't/lib';
 	use SDL::TestTool;
@@ -25,6 +21,9 @@ BEGIN
 		plan( skip_all => 'SDL_mixer support not compiled' );
 	}
 }
+use strict;
+use threads;
+use threads::shared;
 
 use SDL::Mixer;
 use SDL::Mixer::Channels;
