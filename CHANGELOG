@@ -1,11 +1,12 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.405 TBD
+* 2.405 Wed May 05 2010 
 	- Conditional compile on glu.h header [kthakore] {ticket 131}
 	- Documentation cleanup [bricas, kthakore]
 	- Remove usesages of 'new SDL...' [bricas]
 	- Fixed Surface->set_pixels/get_pixel, proper offset depending on Bpp [FROGGS]
 	- Fixed typo for :keysym export tag in Events [FROGGS]
+	- Fixed test fails due to lack of ithread support [FROGGS]
 
 * 2.404  Sun Apr 25 2010
 	- New Downstream Alien fixes for building from scratch [FROGGS]
