@@ -303,7 +303,7 @@ set_event_filter takes a coderef that it checks all events again. The callback g
 
 to filter the event return a 0, to pass the filter return a 1. 
 
-One B<Caveat> is if you are filterign SDL_QUITEVENT the event will be filtered if it is non-intterupt call ( Window closes normally ). If it is a interrupt SDL_QUITEVENT it will be process on the next event poll. 
+One B<Caveat> is if you are filtering SDL_QUIT the event will be filtered if it is non-intterupt call ( Window closes normally ). If it is a interrupt SDL_QUIT it will be process on the next event poll. 
 
 Events pushed onto to the queue with L<SDL::Events::push_events> or L<SDL::Events::peep_events> do not get filtered.
 
