@@ -4,19 +4,21 @@ use threads;
 use threads::shared;
 use SDL;
 use SDL::Config;
-use Config;
 
 BEGIN
 {
+	use Config;
+	if (! $Config{'useithreads'}) {
+		print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
+		exit(0);
+	}
+
 	use Test::More;
 	use lib 't/lib';
 	use SDL::TestTool;
 
 	if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
 	    plan( skip_all => 'Failed to init sound' );
-	}
-	elsif( defined $Config{'config_args'} && $Config{'config_args'} !~ /USE_ITHREADS/ ) {
-		plan( skip_all => 'Threads are needed for this test' );
 	}
 	elsif( !SDL::Config->has('SDL_mixer') )
 	{

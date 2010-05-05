@@ -2,7 +2,7 @@ package SDL::TestTool;
 use strict;
 use warnings;
 use IO::CaptureOutput qw(capture);
-use SDL qw(:all);
+use SDL;
 use SDL::AudioSpec;
 use SDL::Audio;
 my %inits =

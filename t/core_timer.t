@@ -1,4 +1,11 @@
 #!/usr/bin/perl -w
+BEGIN { # http://wiki.cpantesters.org/wiki/CPANAuthorNotes
+	use Config;
+	if (! $Config{'useithreads'}) {
+		print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
+		exit(0);
+	}
+}
 use threads;
 use threads::shared;
 use strict;
@@ -13,9 +20,6 @@ use SDL::TestTool;
 if( !SDL::TestTool->init(SDL_INIT_TIMER) )
 {
     plan( skip_all => 'Failed to init timer' );
-}
-elsif( defined $Config{'config_args'} && $Config{'config_args'} !~ /USE_ITHREADS/ ) {
-    plan( skip_all => 'Threads are needed for this test' );
 }
 else
 {

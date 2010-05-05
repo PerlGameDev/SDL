@@ -1,30 +1,36 @@
 #!perl
 use strict;
 use warnings;
-use SDL ;
+use SDL;
 use SDL::Config;
 use SDL::Mixer;
 use SDL::Mixer::Channels;
 use SDL::Mixer::Samples;
 use SDL::Mixer::MixChunk;
-use Test::More;
 
-use lib 't/lib';
+BEGIN {
+	use Config;
+	if (! $Config{'useithreads'}) {
+		print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
+		exit(0);
+	}
 
-use SDL::TestTool;
+	use Test::More;
+	use lib 't/lib';
+	use SDL::TestTool;
 
-if (! SDL::TestTool->init(SDL_INIT_AUDIO) ) {
-    plan( skip_all => 'Failed to init sound' );
+	if (! SDL::TestTool->init(SDL_INIT_AUDIO) ) {
+		plan( skip_all => 'Failed to init sound' );
+	}
+	elsif( !SDL::Config->has('SDL_mixer') )
+	{
+		plan( skip_all => 'SDL_mixer support not compiled' );
+	}
+	else
+	{
+		plan( tests => 6 );
+	}
 }
-elsif( !SDL::Config->has('SDL_mixer') )
-{
-    plan( skip_all => 'SDL_mixer support not compiled' );
-}
-else
-{
-    plan( tests => 6 );
-}
-
 
 is( SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 ), 0, 'open_audio passed' );
 
