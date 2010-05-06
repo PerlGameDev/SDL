@@ -19,10 +19,6 @@ $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 	   plan( skip_all => 'Failed to init video' );
 }
-else
-{
-	  plan( tests => 115);
-}
 
 my @done =
 	qw/ 
@@ -156,6 +152,25 @@ SDL::Video::GL_swap_buffers(); pass ( '[GL_swap_buffers] should work because Dou
 
 };
 
+my $video_info = SDL::Video::get_video_info();
+isa_ok($video_info, 'SDL::VideoInfo', '[get_video_info] Checking if we get videoinfo ref back');
+
+my $list_modes = SDL::Video::list_modes($video_info->vfmt, SDL_NOFRAME | SDL_HWSURFACE | SDL_FULLSCREEN);
+is( ref( $list_modes ), 'ARRAY', '[list_modes] Returned an ARRAY! ');
+
+my @modes = @{ $list_modes };
+
+if($#modes > 0)
+{
+	foreach my $mode ( @modes )
+	{
+		ok($mode->w > 0 && $mode->h > 0, '[list_modes] available mode: ' . $mode->w . ' x ' . $mode->h);
+	}
+}
+elsif($#modes == 0)
+{
+	is($modes[0], 'all', '[list_modes] available mode: all');
+}
 
 my $display    = SDL::Video::set_video_mode(640,480,32, SDL_SWSURFACE );
 
@@ -167,13 +182,8 @@ if(!$display){
 
 isa_ok(SDL::Video::get_video_surface(), 'SDL::Surface', '[get_video_surface] Checking if we get a surface ref back'); 
 
-my $video_info = SDL::Video::get_video_info();
-isa_ok($video_info, 'SDL::VideoInfo', '[get_video_info] Checking if we get videoinfo ref back');
-
 my $driver_name = SDL::Video::video_driver_name();
 pass '[video_driver_name] This is your driver name: '.$driver_name;
-
-is( ref( SDL::Video::list_modes( $display->format , SDL_SWSURFACE )), 'ARRAY', '[list_modes] Returned an ARRAY! ');
 
 cmp_ok(SDL::Video::video_mode_ok( 100, 100, 16, SDL_SWSURFACE), '>=', 0, "[video_mode_ok] Checking if an integer was return");
 
@@ -362,4 +372,6 @@ $ENV{SDL_VIDEODRIVER} = $videodriver;
 
 pass 'Are we still alive? Checking for segfaults';
 
-sleep(2);
+sleep(1);
+
+done_testing();
