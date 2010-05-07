@@ -30,7 +30,6 @@ my $screen_height  = 600;
 
 SDL::init(SDL_INIT_VIDEO);
 
-
 # setting video mode
 my $screen = SDL::Video::set_video_mode($screen_width, $screen_height, 32, SDL_SWSURFACE);
 #
@@ -93,17 +92,15 @@ warn SDL::get_error."\n" if(!$picture);
 SKIP:
 {
 	skip "picture not comming from XPM", 1 unless $picture;
- SDL::Video::blit_surface( $picture, SDL::Rect->new(0, 0, $picture->w, $picture->h),
-		           $screen,  SDL::Rect->new(0, 0, $screen->w,  $screen->h) );
+	SDL::Video::blit_surface( $picture, SDL::Rect->new(0, 0, $picture->w, $picture->h),
+	                          $screen,  SDL::Rect->new(0, 0, $screen->w,  $screen->h) );
 
-
-
-SDL::Video::flip( $screen);
-
-pass 'ok';
-SDL::delay(1000);
+	SDL::Video::flip( $screen);
+	pass 'ok';
 }
 
 $ENV{SDL_VIDEODRIVER} = $videodriver;
 
-done_testing;
+sleep(1);
+
+done_testing();

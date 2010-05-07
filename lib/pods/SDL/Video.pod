@@ -10,8 +10,8 @@ Core, Video
 
 =head1 SYNOPSIS
 
- use SDL ':init';
- use SDL::Video ':all';
+ use SDL;
+ use SDL::Video;
  use SDL::Surface;
  use SDL::Rect;
 
@@ -176,8 +176,22 @@ Example:
 
  my @modes = @{ SDL::Video::list_modes( $pixel_format, $flags ) };
 
-Returns a ref to an array of available screen dimensions for the given format and video flags,
-or it return undef if no modes are available.
+Returns a reference to an array:
+
+=over 4
+
+=item *
+of available screen dimensions (as C<SDL::Rect>'s) for the given format and video flags. 
+
+=item *
+with first array element 'all'. In this case you can set all modes.
+
+=item *
+with first array element 'none' if no mode is available.
+
+=back
+
+B<Note>: <list_modes> should be called before the video_mode ist set. Otherwise you will always get 'all'.
 
 Example:
 
@@ -196,9 +210,9 @@ Example:
  if($#modes > 0)
  {
      print("available modes:\n");
-     foreach my $index ( @modes )
+     foreach my $mode ( @modes )
      {
-         printf("%03d: %d x %d\n", $index, $modes[$index]->w, $modes[$index]->h );
+         printf("%d x %d\n", $mode->w, $mode->h );
      }
  }
  elsif($#modes == 0)
