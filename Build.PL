@@ -506,7 +506,7 @@ my $build = $package->new(
 	dist_version_from    => 'lib/SDL.pm',
 	configure_requires	      =>
 	{
-		'YAML'	=> '0.68',
+		'YAML::Any'	=> '0',
 		'ExtUtils::CBuilder' => '0.260301',
 		'Alien::SDL' => '1.403',
 		'File::Find' => '0'
