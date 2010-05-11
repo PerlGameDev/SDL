@@ -37,7 +37,7 @@ Get the implementation dependent name of joystick. The C<index> parameter refers
 
  printf("%d joysticks found\n", $num_joysticks);
 
- for($i = 0; i < $num_joysticks; $i++)
+ for($i = 0; $i < $num_joysticks; $i++)
  {
      printf("%s\n", SDL::Joystick::name($i));
  }
