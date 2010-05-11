@@ -181,12 +181,15 @@ Returns a reference to an array:
 =over 4
 
 =item *
+
 of available screen dimensions (as C<SDL::Rect>'s) for the given format and video flags. 
 
 =item *
+
 with first array element 'all'. In this case you can set all modes.
 
 =item *
+
 with first array element 'none' if no mode is available.
 
 =back
