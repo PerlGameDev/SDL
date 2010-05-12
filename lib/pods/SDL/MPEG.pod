@@ -4,6 +4,10 @@
 
 SDL::MPEG - a SDL perl extension
 
+=head1 CATEGORY
+
+TODO
+
 =head1 SYNOPSIS
 
   $info = SDL::MPEG->new( -from => $mpeg );

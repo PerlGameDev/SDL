@@ -6,6 +6,10 @@
 
 SDL::OpenGL - a perl extension
 
+=head1 CATEGORY
+
+TODO
+
 =head1 DESCRIPTION
 
 L<SDL::OpenGL> is a perl module which when used by your application

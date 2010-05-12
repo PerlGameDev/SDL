@@ -5,6 +5,10 @@
 
 SDL::SMPEG - a SDL perl extension
 
+=head1 CATEGORY
+
+TODO
+
 =head1 SYNOPSIS
 
   $video = SDL::SMPEG->new( -name => 'pr0n.mpg' );

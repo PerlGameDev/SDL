@@ -4,6 +4,10 @@
 
 SDL::Credits - Authors and contributors of the SDL Perl project
 
+=head1 CATEGORY
+
+Core
+
 =head1 The SDL Perl 2010 Development Team
 
 =head2 Core Developers
