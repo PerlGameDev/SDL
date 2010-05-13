@@ -16,7 +16,7 @@ Core
 
 SDL_perl is a package of Perl modules that provide both functional and object oriented interfaces to the Simple DirectMedia Layer for Perl 5.
 This package takes some liberties with the SDL API, and attempts to adhere to the spirit of both the SDL and Perl.
-This document describes the low-level functional SDL_perl API.
+This document describes the low-level functional SDL Perl API.
 For the object oriented programming interface please see the documentation provided on a per-class basis.
 
 =head1 CONSTANTS
@@ -43,22 +43,22 @@ Export tag: ':init'
 
 =head1 METHODS
 
-=head2 init(flags) 
+=head2 init(flags)
 
-As with the C language API, SDL_perl initializes the SDL environment with the C<SDL::init> subroutine.
+As with the C language API, SDL Perl initializes the SDL environment with the C<SDL::init> subroutine.
 This routine takes a mode flag constructed through the bitwise OR product of the C<SDL_INIT_*> constants.
 The C<flags> tell C<SDL::init> which subsystems to initialize.
 
  SDL::init(SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
 
-C<SDL::init> returns 0 on success, or -1 on error.
+C<SDL::init> returns C<0> on success, or C<-1> on error.
 
 =head2 init_subsystem(flags)
 
 After C<SDL> has been initialized with C<SDL::init> you may initialize any uninitialized subsystems with C<SDL::init_subsystem>.
 The C<flags> tell C<SDL::init_subsystem> which subsystems to initialize, and are taken in the same way as C<SDL::init>.
 
-C<SDL::init_subsystem> returns 0 on success, or -1 on error.
+C<SDL::init_subsystem> returns C<0> on success, or C<-1> on error.
 
 =head2 quit_subsystem(flags)
 
@@ -84,19 +84,19 @@ C<SDL::was_init> returns a mask of the initialized subsystems it checks.
 If C<flags> is C<0> or C<SDL_INIT_EVERYTHING>, a mask of all initialized subsystems will be returned (this does not include C<SDL_INIT_EVENTTHREAD> or C<SDL_INIT_NOPARACHUTE>).
 
  use SDL ':all';
- 
+
  my $mask = SDL::was_init(SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
  if($mask & SDL_INIT_AUDIO and $mask & SDL_INIT_JOYSTICK) {
-     # Both subsystems are initialized
+     # Both subsystems are initialized!
  }
 
 =head2 get_error()
 
-C<SDL::get_error> returns a scalar value containing the last error message set by the SDL library (if any).
+Returns a scalar value containing the last error message set by the SDL library (if any).
 
 =head2 set_error_real(error, @values)
 
-C<SDL::set_error_real> sets the SDL error to a C<printf> style formatted string. 
+C<SDL::set_error_real> sets the SDL error to a C<printf> style formatted string.
 
 C<SDL::set_error_real> doesn't return any values.
 
@@ -109,11 +109,11 @@ C<SDL::clear_error> doesn't return any values.
 
 =head2 version()
 
-C<SDL::version> returns an C<SDL::Version> object of the SDL library at compile-time.
+Returns an C<SDL::Version> object of the SDL library at compile-time.
 
  use SDL;
  use SDL::Version;
- 
+
  my $v = SDL::version();
  printf("got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch);
 
@@ -121,10 +121,17 @@ C<SDL::version> returns an C<SDL::Version> object of the SDL library at compile-
 
 C<SDL::linked_version> works in the same way as C<SDL::version>, but returns an C<SDL::Version> object of the SDL library at link-time.
 
+=head2 get_ticks()
+
+Returns the number of milliseconds since SDL library initialization.
+This value wraps around if the program runs for more than 49.7 days
+
 =head2 delay(ms)
 
-C<SDL::delay> delays further operations for the number of milliseconds specified.
+C<SDL::delay> waits the specified number of milliseconds before returning.
 The actual delay may be longer than specified depending on the underlying OS.
+
+C<SDL::delay> doesn't return anything.
 
  # Delay for half a second
  SDL::delay(500);
