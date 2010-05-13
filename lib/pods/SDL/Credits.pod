@@ -1,4 +1,4 @@
-=pod 
+=pod
 
 =head1 NAME
 
@@ -16,17 +16,16 @@ See the L<impact graph|http://github.com/kthakore/SDL_perl/graphs/impact> on our
 
 Also see our CONTRIBUTORS file.
 
-=head2 Maintainance 
+=head2 Maintenance
 
-Please contact the following individuals reagarding questions and problems with SDL Perl.
-	
+Please contact the following individuals regarding questions and problems with SDL Perl.
+
 	Nick: FROGGS
 	Name: Tobias Leich
 
 	Nick: kthakore
 	Name: Kartik Thakore
 
-They can be reached on the SDL-devel\@perl.org mailing list and the #sdl channel on the irc.perl.org network.
+They can be reached on the sdl-devel@perl.org mailing list and the #sdl channel on the irc.perl.org network.
 
 =cut
-

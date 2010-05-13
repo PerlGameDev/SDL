@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-SDL::Version -- SDL Bindings for structure SDL_Version
+SDL::Version - SDL Bindings for structure SDL_Version
 
 =head1 CATEGORY
 
@@ -14,32 +14,32 @@ Core, Structure
  use SDL::Version;
  
  # print compile-time version
- printf("SDL::version is %d.%d.%d\n", SDL::version->major, 
+ printf("SDL::version is %d.%d.%d\n", SDL::version->major,
                                       SDL::version->minor,
-                                      SDL::version->patch); 
+                                      SDL::version->patch);
  
  # print linked version
- printf("SDL::linked_version is %d.%d.%d\n", SDL::linked_version->major, 
-                                             SDL::linked_version->minor, 
+ printf("SDL::linked_version is %d.%d.%d\n", SDL::linked_version->major,
+                                             SDL::linked_version->minor,
                                              SDL::linked_version->patch);
 
 =head1 DESCRIPTION
 
-The C<SDL::Version> structure is used by the C<SDL::linked_version> function and the C<SDL::version> macro. The C<SDL::linked_version> function 
-returns the link-time SDL version whereas the C<SDL::version> macro returns the compile-time SDL version. 
+The C<SDL::Version> structure is used by the C<SDL::linked_version> function and the C<SDL::version> macro.
+The C<SDL::linked_version> function returns the link-time SDL version whereas C<SDL::version> returns the compile-time SDL version.
 
 =head1 METHODS
 
-=head2 major
+=head2 major()
 
-Major version number
+Returns the major version number.
 
-=head2 minor
+=head2 minor()
 
-Minor version number
+Returns the minor version number.
 
-=head2 patch
+=head2 patch()
 
-Patch version number
+Returns the patch version number.
 
 =cut
