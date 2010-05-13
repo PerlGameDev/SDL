@@ -10,6 +10,9 @@ Core
 
 =head1 SYNOPSIS
 
+ use threads;
+ use threads::shared;
+
  use SDL ':all';
  use SDL::Time;
 
@@ -17,7 +20,7 @@ Core
 
  SDL::init(SDL_INIT_TIMER);
 
- my $tick = 0;
+ my $tick :shared = 0;
  sub ticker { $tick++; warn $tick; return 100; }
 
  package main;
