@@ -20,7 +20,7 @@ pip http://strawberryperl.com/package/kmx/perl-modules-patched/PAR-1.000_patched
 
 =head1 USAGE
 
- perl SDLpp.pl --output=a.exe --input=script.pl 
+  perl SDLpp.pl --output=a.exe  --input=script.pl --nclude=./lib --more=Foo::Bar,Bar::Foo 
 
 =head1 AUTHOR
 
@@ -51,16 +51,25 @@ my $libs = 'SDL';
 
 my $input;
 
+my $Include = '';
+
+my $extra = '';
+
 my $result = GetOptions(
     "ouput=s"       => \$output,
     "libs=s"        => \$libs,
     "input=s"       => \$input,
+    "nclude=s"     => \$Include,
+    "more=s"	  => \$extra,
     "help"        => sub { usage() },
 );
 
+$extra ='-M '.$extra;
+$extra =~ s/,/ \-M /g;
+
 sub usage
 {
-  print " perl SDLpp.pl --output=a.exe --libs=SDL,SDL_main,SDL_gfx  --input=script.pl \n".
+  print " perl SDLpp.pl --output=a.exe --libs=SDL,SDL_main,SDL_gfx  --input=script.pl --nclude=./lib --more=Foo::Bar,Bar::Foo \n".
         " if --libs is not define all SDL libs are packaged \n";
   
   exit;
@@ -77,9 +86,15 @@ sub usage
 
 print "BUILDING PAR \n";
 my $exclude_modules  = '-X Alien::SDL::ConfigData -X SDL::ConfigData';
-my $include_modules = '-M ExtUtils::CBuilder::Base -M Data::Dumper';
+my $include_modules  = '-M ExtUtils::CBuilder::Base -M Data::Dumper -M SDL -M Alien::SDL';
+   $include_modules .= " $extra" if $extra;
+
 my $out_par = $output.'.par';
-my $par_cmd = "pp -B $exclude_modules $include_modules -p -o $out_par $input";
+my $par_cmd = "pp -B $exclude_modules $include_modules";
+   $par_cmd .= " -I $Include" if $Include;
+   $par_cmd .= " -p -o $out_par $input";
+
+ print "\t $par_cmd \n";
 
 `$par_cmd` if ! -e $out_par;
 
