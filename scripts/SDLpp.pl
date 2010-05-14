@@ -89,7 +89,9 @@ my $share = Alien::SDL::ConfigData->config('share_subdir');
 
 my @sdl_not_runtime = $par_file->membersMatching( $share.'/include' ); #TODO remove extra fluff in share_dri
 push @sdl_not_runtime ,$par_file->membersMatching( $share.'/etc' );
-push @sdl_not_runtime ,$par_file->membersMatching( $share.'/lib' );
+push @sdl_not_runtime ,$par_file->membersMatching( $share.'/share' );
+push @sdl_not_runtime ,$par_file->membersMatching( $share.'/lib' ) if $^O =~ /win32|win64/ig;
+push @sdl_not_runtime ,$par_file->membersMatching( $share.'/bin' ) unless $^O =~ /win32|win64/ig;
 print "REMOVING NON RUNTIME $#sdl_not_runtime files from  \n";
 
 $par_file->removeMember($_) foreach @sdl_not_runtime;
