@@ -1,3 +1,33 @@
+=pod
+
+=head1 NAME
+
+SDL perl packager - Package SDL games
+
+=head1 SETUP
+
+ cpan Alien::SDL SDL
+
+ cpan Module::ScanDeps 
+
+version 0.97 needed
+
+ cpan PAR::Packer 
+
+version 1.004 needed
+
+pip http://strawberryperl.com/package/kmx/perl-modules-patched/PAR-1.000_patched.tar.gz
+
+=head1 USAGE
+
+ perl SDLpp.pl --output=a.exe --input=script.pl 
+
+=head1 AUTHOR
+
+kthakore 
+
+=cut
+
 use strict;
 use warnings;
 use SDL;
