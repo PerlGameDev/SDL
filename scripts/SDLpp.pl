@@ -15,7 +15,7 @@ die 'Need PAR::Packer' if !( eval ' use PAR::Packer; 1');
 
 #Default out put is a or a.exe for windows
 my $output = 'a';
-   $output .= '.exe' if $^O =~ /win32|win64/ig ;
+   $output .= '.exe' if $^O =~ /win32/ig ;
 
 my $libs = 'SDL';
 
@@ -90,8 +90,8 @@ my $share = Alien::SDL::ConfigData->config('share_subdir');
 my @sdl_not_runtime = $par_file->membersMatching( $share.'/include' ); #TODO remove extra fluff in share_dri
 push @sdl_not_runtime ,$par_file->membersMatching( $share.'/etc' );
 push @sdl_not_runtime ,$par_file->membersMatching( $share.'/share' );
-push @sdl_not_runtime ,$par_file->membersMatching( $share.'/lib' ) if $^O =~ /win32|win64/ig;
-push @sdl_not_runtime ,$par_file->membersMatching( $share.'/bin' ) unless $^O =~ /win32|win64/ig;
+push @sdl_not_runtime ,$par_file->membersMatching( $share.'/lib' ) if $^O =~ /win32/ig;
+push @sdl_not_runtime ,$par_file->membersMatching( $share.'/bin' ) unless $^O =~ /win32/ig;
 print "REMOVING NON RUNTIME $#sdl_not_runtime files from  \n";
 
 $par_file->removeMember($_) foreach @sdl_not_runtime;
