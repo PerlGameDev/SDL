@@ -56,7 +56,7 @@ my $Include = '';
 my $extra = '';
 
 my $result = GetOptions(
-    "ouput=s"       => \$output,
+    "output=s"       => \$output,
     "libs=s"        => \$libs,
     "input=s"       => \$input,
     "nclude=s"     => \$Include,
