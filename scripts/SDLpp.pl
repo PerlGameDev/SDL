@@ -47,7 +47,7 @@ die 'Need PAR::Packer' if !( eval ' use PAR::Packer; 1');
 my $output = 'a';
    $output .= '.exe' if $^O =~ /win32/ig ;
 
-my $libs = 'SDL';
+my $libs = 'SDL,SDL-1.2,SDLmain';
 
 my $input;
 
@@ -67,10 +67,12 @@ my $result = GetOptions(
 $extra ='-M '.$extra if $extra;
 $extra =~ s/,/ \-M /g;
 
+my @sdl_libs = split ',', $libs;
+
 sub usage
 {
   print " perl SDLpp.pl --output=a.exe --libs=SDL,SDL_main,SDL_gfx  --input=script.pl --nclude=./lib --more=Foo::Bar,Bar::Foo \n".
-        " if --libs is not define all SDL libs are packaged \n";
+        " if --libs is not define only SDL,SDL-1.2,SDLmain libs are packaged \n";
   
   exit;
 }
@@ -138,7 +140,6 @@ my $alien_sdl_auto = $shares[0]->fileName;
 
 $alien_sdl_auto =~ s/$share(\S+)// if $alien_sdl_auto;
 
-print $alien_sdl_auto;
 my @auto_folder = $par_file->membersMatching( "$alien_sdl_auto(?!$share)" );
 
 my @sdl_not_runtime = $par_file->membersMatching( $share.'/include' ); #TODO remove extra fluff in share_dri
@@ -146,11 +147,76 @@ push @sdl_not_runtime, @auto_folder; #remove non share dir stuff
 push @sdl_not_runtime ,$par_file->membersMatching( $share.'/etc' );
 push @sdl_not_runtime ,$par_file->membersMatching( $share.'/share' );
 push @sdl_not_runtime ,$par_file->membersMatching( $share.'/lib' ) if $^O =~ /win32/ig;
+
+	 my @non = ();
+	my @sdl_libs_to_keep =();
+
+
+foreach(@sdl_libs)
+{
+	if ($^O =~ /win32/ig)
+	{
+	@non = $par_file->membersMatching( $share."/bin(\\S+)" );
+	#push @sdl_not_runtime ,$par_file->membersMatching( $share."/bin(\\S+)(?!$_)" ) 
+	}
+	else{
+	@non = $par_file->membersMatching( $share."/lib(\\S+)" );
+	}
+
+	print "Removing non $_ shared objs \n";
+	my $lib_look = 'lib'.$_;
+	 map { 
+		 my $n = $_->fileName;
+ 		if ($n =~ /$lib_look\.(so|a|dll|dylib)/)
+		 {
+		  push (  @sdl_libs_to_keep, $_ ) 
+		 }
+		
+		  
+	     } @non;
+
+	
+
+}
+
+print "found $#sdl_libs_to_keep sdl libs to keep \n";
+my $regex_search = ']';
+map { print "\t ".$_->fileName."\n"; $regex_search .= ']'.$_->fileName 
+ } @sdl_libs_to_keep;
+
+
+$regex_search =~ s/\]\]//g;
+$regex_search =~ s/\]/\|/g;
+
+$regex_search = '('.$regex_search.')';
+
+
+
+	map {
+		my $n = $_->fileName;
+		my $star = ' ';
+	 		
+		   $star = '*' if $n !~ $regex_search;
+		push @sdl_not_runtime, $_;		
+	     } @non; 
+
+
 push @sdl_not_runtime ,$par_file->membersMatching( $share.'/bin' ) unless $^O =~ /win32/ig;
 print "REMOVING NON RUNTIME $#sdl_not_runtime files from  \n";
+open ( my $FH, '>', 'DeleteRecords.txt') or die $!;
+foreach (@sdl_not_runtime)
+{
+ if($_->fileName =~ /$alien_sdl_auto$share/)
+ {
+	 print $FH "Not deleting ".$_->fileName." \n";
+ }
+ else{
+	$par_file->removeMember($_);
+        print $FH $_->fileName."\n";	
+ }
 
-$par_file->removeMember($_) foreach @sdl_not_runtime;
-
+}
+close $FH;
 
 my @config_members = $par_file->membersMatching( 'ConfigData.pm' );
 
