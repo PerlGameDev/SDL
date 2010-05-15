@@ -64,7 +64,7 @@ my $result = GetOptions(
     "help"        => sub { usage() },
 );
 
-$extra ='-M '.$extra;
+$extra ='-M '.$extra if $extra;
 $extra =~ s/,/ \-M /g;
 
 sub usage
@@ -132,7 +132,17 @@ $par_file->addFile( $SD_path, 'lib/SDL/ConfigData.pm');
  
 my $share = Alien::SDL::ConfigData->config('share_subdir');
 
+my @shares = $par_file->membersMatching($share);
+
+my $alien_sdl_auto = $shares[0]->fileName;
+
+$alien_sdl_auto =~ s/$share(\S+)// if $alien_sdl_auto;
+
+print $alien_sdl_auto;
+my @auto_folder = $par_file->membersMatching( "$alien_sdl_auto(?!$share)" );
+
 my @sdl_not_runtime = $par_file->membersMatching( $share.'/include' ); #TODO remove extra fluff in share_dri
+push @sdl_not_runtime, @auto_folder; #remove non share dir stuff 
 push @sdl_not_runtime ,$par_file->membersMatching( $share.'/etc' );
 push @sdl_not_runtime ,$par_file->membersMatching( $share.'/share' );
 push @sdl_not_runtime ,$par_file->membersMatching( $share.'/lib' ) if $^O =~ /win32/ig;
