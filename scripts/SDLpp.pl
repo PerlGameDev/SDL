@@ -196,8 +196,10 @@ $regex_search = '('.$regex_search.')';
 		my $n = $_->fileName;
 		my $star = ' ';
 	 		
-		   $star = '*' if $n !~ $regex_search;
-		push @sdl_not_runtime, $_;		
+		   if ($n !~ $regex_search)
+		   {
+		push @sdl_not_runtime, $_;
+			}		
 	     } @non; 
 
 
@@ -206,7 +208,7 @@ print "REMOVING NON RUNTIME $#sdl_not_runtime files from  \n";
 open ( my $FH, '>', 'DeleteRecords.txt') or die $!;
 foreach (@sdl_not_runtime)
 {
- if($_->fileName =~ /$alien_sdl_auto$share/)
+ if($_->fileName eq $alien_sdl_auto.$share)
  {
 	 print $FH "Not deleting ".$_->fileName." \n";
  }
