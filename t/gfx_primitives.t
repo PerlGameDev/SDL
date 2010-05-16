@@ -244,7 +244,14 @@ SDL::Video::update_rect($display, 0, 0, 640, 480);
 
 SDL::delay(3000);
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
 
 pass 'Are we still alive? Checking for segfaults';
 

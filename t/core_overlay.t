@@ -29,6 +29,13 @@ my $overlay = SDL::Overlay->new( 100, 100, SDL_YV12_OVERLAY, $display);
 
 isa_ok( $overlay, 'SDL::Overlay');
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
 
 sleep(2);

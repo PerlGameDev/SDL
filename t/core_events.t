@@ -901,7 +901,15 @@ SKIP:
 	is( $filtered, 1, '[set_event_filter] Properly filtered SDL_ACTIVEEVENT');
 }
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
+
 #SDL::quit();
 pass 'Are we still alive? Checking for segfaults';
 

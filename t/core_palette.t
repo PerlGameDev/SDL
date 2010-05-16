@@ -50,4 +50,11 @@ isa_ok( $disp->format->palette->colors(), 'ARRAY', 'Palette->colors[x] is a colo
 isa_ok( $disp->format->palette->color_index(23), 'SDL::Color', 'Palette->color_index() is a SDL::Color');
 }
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}

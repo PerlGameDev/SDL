@@ -28,4 +28,11 @@ SDL::clear_error();
 is( SDL::get_error, '', '[get_error] returns no error' );
 sleep(2);
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}

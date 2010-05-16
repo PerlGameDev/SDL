@@ -117,6 +117,14 @@ SKIP:
 	SDL::Image::quit(); pass '[quit] we can quit fine';
 }
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
+
 
 done_testing;

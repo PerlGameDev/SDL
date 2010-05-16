@@ -52,7 +52,14 @@ is( $fps->rate,       4, 'fps has rate' );
 
 SDL::delay(100);
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
 
 pass 'Are we still alive? Checking for segfaults';
 

@@ -126,7 +126,14 @@ is( $surface->get_pixel(0), 42,   '[get_pixel] returns integer (42)' );
 
 isa_ok( $other_surface, 'SDL::Surface' );
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
 
 pass 'Final SegFault test';
 

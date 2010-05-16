@@ -49,7 +49,14 @@ is( SDL::GFX::Framerate::delay($fps), undef, "[delay] return undef" );
 
 SDL::delay(100);
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
 
 pass 'Are we still alive? Checking for segfaults';
 

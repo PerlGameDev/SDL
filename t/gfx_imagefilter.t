@@ -152,7 +152,14 @@ TODO:
 }
 if( $done[0] eq 'none'){ print '0% done 0/'.$#left."\n" } else { print "$why\n" } 
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
 
 pass 'Are we still alive? Checking for segfaults';
 

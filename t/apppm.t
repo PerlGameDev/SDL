@@ -86,6 +86,13 @@ SKIP:
 	like($@, qr/cannot set video/, "check error message");
 }
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
 
 sleep(2);

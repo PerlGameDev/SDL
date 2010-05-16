@@ -220,8 +220,15 @@ is( SDL::TTF::was_init(),                  1, "[was_init] returns true" );
 is( SDL::TTF::quit(),                  undef, "[quit] ran" );
 is( SDL::TTF::was_init(),                  0, "[was_init] returns false" );
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
-
-done_testing;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
 
 sleep(1);
+
+done_testing;

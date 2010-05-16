@@ -40,6 +40,13 @@ isa_ok( $surface3, 'SDL::Surface', '[convert_surface] makes copy of surface conv
 
 warn 'SW->SW conversion failed: '.SDL::get_error if !$surface3;
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
 
 done_testing;
