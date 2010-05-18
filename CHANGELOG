@@ -1,9 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.406 TBD
+* 2.406 Tues May 18 2010
 	- Fixed SDL::Video::list_modes(), it returns now arrayref to SDL::Rects [FROGGS]
 	- Updated docs [Blaizer]
-	- Removed deprecated modules [kthakore]
+	- Removed deprecated modules [kthakore, FROGGS]
 
 * 2.405 Wed May 05 2010 
 	- Conditional compile on glu.h header [kthakore] {ticket 131}
