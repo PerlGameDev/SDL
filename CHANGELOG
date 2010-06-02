@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.407 Wed June 02 2010
+	- Minor fix on BOM marks in test files
+
 * 2.406 Tues May 18 2010
 	- Fixed SDL::Video::list_modes(), it returns now arrayref to SDL::Rects [FROGGS]
 	- Updated docs [Blaizer]
