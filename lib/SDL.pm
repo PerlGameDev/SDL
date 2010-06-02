@@ -52,7 +52,8 @@ our %EXPORT_TAGS = (
 	defaults => $SDL::Constants::EXPORT_TAGS{'SDL/defaults'}
 );
 
-our $VERSION = '2.407'7'7'7'7'7'7'SION = eval $VERSION;
+our $VERSION = '2.407';
+$VERSION = eval $VERSION;
 
 print "$VERSION" if (defined($ARGV[0]) && ($ARGV[0] eq '--SDLperl'));
 
