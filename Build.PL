@@ -507,15 +507,18 @@ my $build = $package->new(
 	configure_requires	      =>
 	{
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL' => '1.403',
-		'File::Find' => '0'
+		'Alien::SDL' => '1.405',
+		'File::Find' => '0',
+		'File::ShareDir' => '0',
+
 	},
 	build_requires =>
 	{
 		'Test::Simple' => '0.88',
 		'IO::CaptureOutput' => '0',
 		'Test::Most' => '0.21',
-		'Alien::SDL' => '1.403',
+		'Alien::SDL' => '1.405',
+		'File::ShareDir' => '0',
 	},
 	build_recommends     =>
 	{
