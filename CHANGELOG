@@ -1,5 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.408 Sun June 13 2010
+	- Added File::ShareDir as a dep
+	- TODO'd temporary test cases
+
 * 2.407 Wed June 02 2010
 	- Minor fix on BOM marks in test files
 
