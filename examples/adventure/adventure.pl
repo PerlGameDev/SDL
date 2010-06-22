@@ -129,7 +129,7 @@ use strict;
 use warnings;
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Surface;
 use SDL::Color;
 
@@ -139,7 +139,7 @@ my ($width,      $height,      $depth)   = (  640,  480,   16 );
 my ($bg_r,       $bg_g,        $bg_b)    = ( 0x77, 0xee, 0x77 );
 my $sleep_msec                           = 0.05;
 
-my $app = SDL::App->new(
+my $app = SDLx::App->new(
 	-width  => $width,
 	-height => $height,
 	-depth  => $depth,

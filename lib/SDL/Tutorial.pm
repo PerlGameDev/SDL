@@ -34,13 +34,13 @@ use strict;
 use warnings;
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 
 # change these values as necessary
 my  $title                   = 'My SDL App';
 my ($width, $height, $depth) = ( 640, 480, 16 );
 
-my $app = SDL::App->new(
+my $app = SDLx::App->new(
 	-width  => $width,
 	-height => $height,
 	-depth  => $depth,

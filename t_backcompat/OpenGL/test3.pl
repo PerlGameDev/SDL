@@ -4,12 +4,12 @@
 #
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Surface;
 use SDL::Event;
 use SDL::OpenGL;
 
-my $app = SDL::App->new( -w => 800, -h => 600, -d => 16, -gl => 1 );
+my $app = SDLx::App->new( -w => 800, -h => 600, -d => 16, -gl => 1 );
 
 my @points = (  [-4.0, -4.0,  0.0 ],
 		[-2.0,  4.0,  0.0 ],

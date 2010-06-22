@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Event;
 
 my %options;
@@ -25,7 +25,7 @@ $options{-width} ||= 640;
 $options{-height} ||= 480;
 $options{-depth} ||= $options{-bpp} || 24;
 
-my $app = SDL::App->new( %options );
+my $app = SDLx::App->new( %options );
 
 # SDL::EventState(SDL_KEYUP,SDL_DISABLE);
 

@@ -9,7 +9,7 @@ use strict;
 #use warnings;
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Rect;
 use SDL::Event;
 
@@ -19,7 +19,7 @@ sub WatchJoystick($){
 	my $screenWidth = 640;
 	my $screenHeight = 480;
 
-	my $app = SDL::App->new(-title => "Joystick Test",
+	my $app = SDLx::App->new(-title => "Joystick Test",
 			       -width => $screenWidth,
 			       -height => $screenHeight,
 			       -depth=> 16 );

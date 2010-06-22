@@ -6,7 +6,7 @@
 #
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Rect;
 use SDL::Event;
 use SDL::Color;
@@ -32,7 +32,7 @@ $options{-width} ||= 640;
 $options{-height} ||= 480;
 $options{-depth} ||= $options{-bpp} || 8;
 
-my $app = SDL::App->new( %options );
+my $app = SDLx::App->new( %options );
 
 sub DrawBox {
 	my ($x,$y) = @_;

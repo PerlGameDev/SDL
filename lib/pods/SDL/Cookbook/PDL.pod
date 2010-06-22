@@ -30,7 +30,7 @@ For example, here is a very poorly implemented hack (read - don't do this at hom
 	use strict;
 
 	use SDL;
-	use SDL::App;
+	use SDLx::App;
 	use SDL::Rect;
 	use SDL::Color;
 	use SDL::Video;
@@ -39,7 +39,7 @@ For example, here is a very poorly implemented hack (read - don't do this at hom
 	my $nib_size = 3;
 
 	# Create the SDL App
-	my $app = SDL::App->new(
+	my $app = SDLx::App->new(
 		-width  => 640,
 		-height => 480,
 		-depth  => 16,
@@ -118,13 +118,13 @@ We next need to figure out how the application is actually going to run and disp
 Here's some initialization code to get started; put this below the code already supplied above:
 
 	use SDL;
-	use SDL::App;
+	use SDLx::App;
 	use SDL::Rect;
 	use SDL::Color;
 	use SDL::Video;
 
 	# Create the SDL App
-	my $app = SDL::App->new( -width  => $side_length, -height => $side_length, 
+	my $app = SDLx::App->new( -width  => $side_length, -height => $side_length, 
 					-title  => "Simple Simulation!", -depth  => 16, );
 
 	# white particles on a black background
@@ -335,13 +335,13 @@ Before moving into getting user interaction, I first want to be sure we're worki
 	package main;
 
 	use SDL;
-	use SDL::App;
+	use SDLx::App;
 	use SDL::Rect;
 	use SDL::Color;
 	use SDL::Video;
 
 	# Create the SDL App
-	my $app = SDL::App->new( -width  => $side_length, -height => $side_length, 
+	my $app = SDLx::App->new( -width  => $side_length, -height => $side_length, 
 				-title  => "Simple Simulation!", -depth  => 16, );
 
 	# white particles on a black background
@@ -509,7 +509,7 @@ Just so that you've got a complete working example, here is the final state of t
 	package main;
 
 	use SDL;
-	use SDL::App;
+	use SDLx::App;
 	use SDL::Rect;
 	use SDL::Color;
 	use SDL::Video;
@@ -517,7 +517,7 @@ Just so that you've got a complete working example, here is the final state of t
 	use SDL::Events; 
 
 	# Create the SDL App
-	my $app = SDL::App->new( -width  => $side_length, -height => $side_length, 
+	my $app = SDLx::App->new( -width  => $side_length, -height => $side_length, 
 				-title  => "Simple Simulation!", -depth  => 16, );
 
 	# white particles on a black background

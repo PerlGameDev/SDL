@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Surface;
 use SDL::Event;
 use SDL::OpenGL;
@@ -13,7 +13,7 @@ use SDL::OpenGL::Constants;
 
 print "Starting $0\n";
 
-my $app = SDL::App->new( -w => 800, -h => 600, -d => 16, -gl => 1 );
+my $app = SDLx::App->new( -w => 800, -h => 600, -d => 16, -gl => 1 );
 
 print "Initializing OpenGL settings\n";
 printf "%-24s%s\n", "GL_RED_SIZE ", $app->attribute( SDL_GL_RED_SIZE() );

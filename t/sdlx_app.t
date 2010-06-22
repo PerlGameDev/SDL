@@ -27,7 +27,7 @@
 #	dgoehrig\@cpan.org
 #
 #
-# basic testing of SDL::App
+# basic testing of SDLx::App
 
 
 

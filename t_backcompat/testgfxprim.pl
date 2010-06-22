@@ -17,7 +17,7 @@ use Getopt::Long;
 use Data::Dumper;
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Event;
 use SDL::Surface;
 use SDL::Color;
@@ -69,7 +69,7 @@ sub set_app_args
 
 sub init_game_context
 {
-	$app = SDL::App->new(
+	$app = SDLx::App->new(
 			-width => $settings{screen_width}, 
 			-height=> $settings{screen_height}, 
 			-title => "testsprite",

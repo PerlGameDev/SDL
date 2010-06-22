@@ -12,7 +12,7 @@ use strict;
 use SDL;
 use SDL::Config;
 use SDL::Surface;
-use SDL::App;
+use SDLx::App;
 use SDL::Rect;
 use SDL::Color;
 use SDL::Video;
@@ -86,7 +86,7 @@ ok( 1, 'Managed to blit' );
 #$surface->update_rects( SDL::Rect->new( 0, 0, 32, 32 ) );
 #ok( 1, 'Managed to update_rects' );
 
-my $app = SDL::App->new(
+my $app = SDLx::App->new(
     -title  => "Test",
     -width  => 640,
     -height => 480,

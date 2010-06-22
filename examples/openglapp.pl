@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Mouse;
 use SDL::Video;
 use SDL::Events;
@@ -16,7 +16,7 @@ my ($SDLAPP, $WIDTH, $HEIGHT, $SDLEVENT);
 $| = 1;
 $WIDTH = 1024;
 $HEIGHT = 768;
-$SDLAPP = SDL::App->new(-title => "Opengl App", -width => $WIDTH, -height => $HEIGHT, -gl => 1);
+$SDLAPP = SDLx::App->new(-title => "Opengl App", -width => $WIDTH, -height => $HEIGHT, -gl => 1);
 $SDLEVENT = SDL::Event->new;
 
 SDL::Mouse::show_cursor(0);

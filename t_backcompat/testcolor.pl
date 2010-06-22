@@ -2,7 +2,7 @@
 #
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Event;
 
 use vars qw/ $app /;
@@ -12,7 +12,7 @@ print STDERR <<USAGE;
 	Left click on any pixel to set its value to the last selected
 USAGE
 
-$app = SDL::App->new( -width => 320, -height => 240, -depth => 8 );
+$app = SDLx::App->new( -width => 320, -height => 240, -depth => 8 );
 
 my %colors = (
 	red => (new SDL::Color -r => 255, -g => 0, -b => 0 ),

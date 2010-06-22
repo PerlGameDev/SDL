@@ -5,10 +5,10 @@ use warnings;
 
 use SDL;
 use SDL::Surface;
-use SDL::App;
+use SDLx::App;
 use SDL::Tool::Graphic;
 
-my $app = SDL::App->new(-title	=> "Graphic Tool Test",
+my $app = SDLx::App->new(-title	=> "Graphic Tool Test",
 		       -width	=> 640,
 		       -height	=> 480,
 		       -depth	=> 16,

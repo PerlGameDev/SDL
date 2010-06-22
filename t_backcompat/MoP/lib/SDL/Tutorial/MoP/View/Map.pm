@@ -1,7 +1,7 @@
 package SDL::Tutorial::MoP::View::Map;
 use strict;
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Event;
 use SDL::Video;
 use File::Spec::Functions qw(rel2abs splitpath catpath catfile);

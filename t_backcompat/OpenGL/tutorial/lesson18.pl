@@ -18,7 +18,7 @@ use strict;
 use Getopt::Long;
 
 use SDL::Constants;
-use SDL::App;
+use SDLx::App;
 use SDL::OpenGL::Constants;
 use SDL::OpenGL;
 use SDL::Event;
@@ -68,7 +68,7 @@ sub main
 	my $fps = 0.0;
 	my $frames_drawn = 0;
    
-	my $app = SDL::App->new
+	my $app = SDLx::App->new
 				(
 					-title	=> "Jeff Molofee's lesson18: Quadratic",
 					-icon	=> "icon.png",

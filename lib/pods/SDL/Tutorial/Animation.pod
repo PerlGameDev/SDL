@@ -36,7 +36,7 @@ frame and saving and restoring the background for every object drawn.
 
 Since you have to draw the screen in the right order once to start with it's
 pretty easy to make this into a loop and redraw things in the right order for
-every frame.  Given a L<SDL::App> object C<$app>, a L<SDL::Rect> C<$rect>, and
+every frame.  Given a L<SDLx::App> object C<$app>, a L<SDL::Rect> C<$rect>, and
 a L<SDL::Color> C<$color>, you only have to create a new SDL::Rect C<$bg>,
 representing the whole of the background surface and a new SDL::Color
 C<$bg_color>, representing the background color.  You can write a

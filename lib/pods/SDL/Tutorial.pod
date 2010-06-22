@@ -26,7 +26,7 @@ though.  Here's how to get up and running as quickly as possible.
 =head2 Surfaces
 
 All graphics in SDL live on a surface.  You'll need at least one.  That's what
-L<SDL::App> provides.
+L<SDLx::App> provides.
 
 Of course, before you can get a surface, you need to initialize your video
 mode.  SDL gives you several options, including whether to run in a window or
@@ -36,12 +36,12 @@ something really simple.
 
 =head2 Initialization
 
-SDL::App makes it easy to initialize video and create a surface.  Here's how to
+SDLx::App makes it easy to initialize video and create a surface.  Here's how to
 ask for a windowed surface with 640x480x16 resolution:
 
-	use SDL::App;
+	use SDLx::App;
 
-	my $app = SDL::App->new(
+	my $app = SDLx::App->new(
 		-width  => 640,
 		-height => 480,
 		-depth  => 16,
@@ -51,9 +51,9 @@ You can get more creative, especially if you use the C<-title> and C<-icon>
 attributes in a windowed application.  Here's how to set the window title of
 the application to C<My SDL Program>:
 
-	use SDL::App;
+	use SDLx::App;
 
-	my $app = SDL::App->new(
+	my $app = SDLx::App->new(
 		-height => 640,
 		-width  => 480,
 		-depth  => 16,

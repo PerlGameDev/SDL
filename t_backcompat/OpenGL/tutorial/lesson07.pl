@@ -13,7 +13,7 @@ use Data::Dumper;
 use Benchmark;
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::OpenGL;
 use SDL::Event;
 use SDL::Surface;
@@ -52,7 +52,7 @@ sub main
 
    $vidmode_flags|= SDL_FULLSCREEN if $arg_fullscreen;
    
-   my $app = SDL::App->new( -title => "Jeff Molofee's GL Code Tutorial ... NeHe '99", 
+   my $app = SDLx::App->new( -title => "Jeff Molofee's GL Code Tutorial ... NeHe '99", 
 			    -icon => "icon.png",
 			    -flags => $vidmode_flags,			
 			    -width => $arg_screen_width,

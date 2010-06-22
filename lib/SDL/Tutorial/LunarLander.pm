@@ -908,7 +908,7 @@ D8 BC C3 52 B7 FA 3F F9 91 00 CA 7A 4B E9 FF D9
 #!/usr/bin/perl
 use SDL; #needed to get all constants
 use SDL::Video;
-use SDL::App;
+use SDLx::App;
 use SDL::Surface;
 use SDL::Rect;
 use SDL::Image;
@@ -916,7 +916,7 @@ use SDL::Image;
 use strict;
 use warnings;
 
-my $app = SDL::App->new(
+my $app = SDLx::App->new(
     -title  => "Lunar Lander",
     -width  => 800,
     -height => 600,

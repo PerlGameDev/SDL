@@ -11,7 +11,7 @@ use strict;
 use Getopt::Long;
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::OpenGL;
 use SDL::Event;
 
@@ -33,7 +33,7 @@ sub main
   {  
    my $done=0;
    
-   my $app = SDL::App->new( -title => "Jeff Molofee's GL Code Tutorial ... NeHe '99", 
+   my $app = SDLx::App->new( -title => "Jeff Molofee's GL Code Tutorial ... NeHe '99", 
 			    -icon => "icon.png",
 			    -width => $arg_screen_width,
 			    -height =>$arg_screen_height,

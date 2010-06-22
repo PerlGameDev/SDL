@@ -34,7 +34,7 @@ use strict;
 use warnings;
 
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Rect;
 use SDL::Color;
 use SDL::Video;
@@ -46,7 +46,7 @@ my ($bg_r,       $bg_g,        $bg_b)    = ( 0x00, 0x00, 0x00 );
 my ($rect_r,     $rect_g,      $rect_b)  = ( 0x00, 0x00, 0xff ); 
 my ($rect_width, $rect_height, $rect_y)  = (  100,  100,  190 );
 
-my $app = SDL::App->new(
+my $app = SDLx::App->new(
 	-width  => $width,
 	-height => $height,
 	-depth  => $depth,
@@ -166,7 +166,7 @@ frame and saving and restoring the background for every object drawn.
 
 Since you have to draw the screen in the right order once to start with it's
 pretty easy to make this into a loop and redraw things in the right order for
-every frame.  Given a L<SDL::App> object C<$app>, a L<SDL::Rect> C<$rect>, and
+every frame.  Given a L<SDLx::App> object C<$app>, a L<SDL::Rect> C<$rect>, and
 a L<SDL::Color> C<$color>, you only have to create a new SDL::Rect C<$bg>,
 representing the whole of the background surface and a new SDL::Color
 C<$bg_color>, representing the background color.  You can write a

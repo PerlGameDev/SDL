@@ -61,7 +61,7 @@ sub new {
 	$f |= SDL::Video::SDL_ASYNCBLIT  if ($async);
 
 	if ($f & SDL::Video::SDL_OPENGL) { 
-		$SDL::App::USING_OPENGL = 1;
+		$SDLx::App::USING_OPENGL = 1;
 		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_RED_SIZE(),$r) if ($r);	
 		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_GREEN_SIZE(),$g) if ($g);	
 		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_BLUE_SIZE(),$b) if ($b);	
@@ -76,7 +76,7 @@ sub new {
 		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_BUFFER_SIZE(),$bs) if ($bs);
 		SDL::Video::GL_set_attribute(SDL::Constants::SDL_GL_DEPTH_SIZE(),$d);
 	} else {
-		$SDL::App::USING_OPENGL = 0;
+		$SDLx::App::USING_OPENGL = 0;
 	}
 
 	my $self = SDL::Video::set_video_mode($w,$h,$d,$f)
@@ -161,7 +161,7 @@ sub loop ($$) {
 
 sub sync ($) {
 	my $self = shift;
-	if ($SDL::App::USING_OPENGL) {
+	if ($SDLx::App::USING_OPENGL) {
 		SDL::Video::GL_swap_buffers()
 	} else {
 		SDL::Video::flip($self);
@@ -170,12 +170,12 @@ sub sync ($) {
 
 sub attribute ($$;$) {
 	my ($self,$mode,$value) = @_;
-	return undef unless ($SDL::App::USING_OPENGL);
+	return undef unless ($SDLx::App::USING_OPENGL);
 	if (defined $value) {
 		SDL::Video::GL_set_attribute($mode,$value);
 	}
 	my $returns = SDL::Video::GL_get_attribute($mode);	
-	croak "SDL::App::attribute failed to get GL attribute" if ($$returns[0] < 0);
+	croak "SDLx::App::attribute failed to get GL attribute" if ($$returns[0] < 0);
 	$$returns[1];	
 }
 

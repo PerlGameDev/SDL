@@ -67,6 +67,6 @@ David J. Goehrig
 
 =head1 SEE ALSO
 
-L<perl> L<SDL::App>
+L<perl> L<SDLx::App>
 
 =cut

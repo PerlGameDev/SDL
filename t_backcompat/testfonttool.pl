@@ -2,7 +2,7 @@
 
 use strict;
 use SDL;
-use SDL::App;
+use SDLx::App;
 use SDL::Event;
 use SDL::Tool::Font;
 use SDL::Color;
@@ -31,7 +31,7 @@ $options{-width}  ||= 800;
 $options{-height} ||= 600;
 $options{-depth} ||= $options{-bpp} || 24;
 
-$app = SDL::App->new( %options );
+$app = SDLx::App->new( %options );
 
 my %ttfonts = (
 	'aircut3.ttf' => 0,

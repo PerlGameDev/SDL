@@ -205,18 +205,18 @@ First step: use the required libraries:
 
 	use SDL; #needed to get all constants
 	use SDL::Video;
-	use SDL::App;
+	use SDLx::App;
 	use SDL::Surface;
 	use SDL::Rect;
 	use SDL::Image;
 
 
 
-Second step: initialize C<SDL::App>:
+Second step: initialize C<SDLx::App>:
 
 
 
-    my $app = SDL::App->new(
+    my $app = SDLx::App->new(
         -title  => "Lunar Lander",
         -width  => 800,
         -height => 600,
