@@ -52,6 +52,8 @@ BEGIN {
 		SDL::TTF::Font
 
 		SDL::Version
+
+		SDLx::App
 	/;
 	plan tests => scalar @modules;
 

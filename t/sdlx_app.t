@@ -40,9 +40,9 @@ use lib 't/lib';
 use SDL::TestTool;
 
     plan( tests => 8 );
-use_ok( 'SDL::App' ); 
+use_ok( 'SDLx::App' ); 
   
-can_ok ('SDL::App', qw/
+can_ok ('SDLx::App', qw/
 	new 
 	resize 
 	title 
@@ -65,7 +65,7 @@ SKIP:
 {
 	skip 'Video not avaiable', 6 unless SDL::TestTool->init(SDL_INIT_VIDEO);
 
-	my $app  = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
+	my $app  = SDLx::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
 
 	$app->sync;
 	sleep(1);
@@ -74,7 +74,7 @@ SKIP:
 	like($@, qr/not resizable/, "check for error message");
 	SDL::quit;
 
-	my $app2 = SDL::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO, -resizeable => 1);
+	my $app2 = SDLx::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO, -resizeable => 1);
 	$app2->sync;
 
 	my $driver = SDL::Video::video_driver_name();

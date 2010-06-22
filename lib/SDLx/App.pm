@@ -3,7 +3,7 @@
 # App.pm
 #
 
-package SDL::App;
+package SDLx::App;
 
 use strict;
 use warnings;
