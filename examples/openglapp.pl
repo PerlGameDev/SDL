@@ -1,6 +1,3 @@
-#!/usr/bin/perl
-#DISCLAIMER: This app is based on FLOYD-ATC's script"
-#
 use strict;
 use warnings;
 use SDL;
@@ -9,7 +6,7 @@ use SDL::Mouse;
 use SDL::Video;
 use SDL::Events;
 use SDL::Event;
-use SDL::OpenGL; 
+use OpenGL qw(:all);
 
 my ($SDLAPP, $WIDTH, $HEIGHT, $SDLEVENT);
 
@@ -19,19 +16,18 @@ $HEIGHT = 768;
 $SDLAPP = SDLx::App->new(-title => "Opengl App", -width => $WIDTH, -height => $HEIGHT, -gl => 1);
 $SDLEVENT = SDL::Event->new;
 
-SDL::Mouse::show_cursor(0);
+
 glEnable(GL_DEPTH_TEST);
 glMatrixMode(GL_PROJECTION);
 glLoadIdentity;
 gluPerspective(60, $WIDTH / $HEIGHT, 1, 1000);
-glTranslate(0, 0, -20);
-
+glTranslatef(0, 0, -20);
 
 
 while (1) {
   &handlepolls;
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glRotate(.1, 1, 1, 1);
+  glRotatef(.1, 1, 1, 1);
   &drawscene;
   $SDLAPP->sync;
 }
@@ -43,14 +39,16 @@ sub drawscene {
 
   for (-2 .. 2) {
     glPushMatrix;
-    glTranslate($_ * 3, 0, 0);
-    glColor(1, 0, 0);
+    glTranslatef($_ * 3, 0, 0);
+    glColor3d(1, 0, 0);
     &draw_cube;
     glPopMatrix;
   }
 
   return "";
 }
+
+
 
 
 
@@ -70,7 +68,8 @@ sub draw_cube {
     foreach my $vertex (0..3) {
       $index  = $indices[4 * $face + $vertex];
       $coords = $vertices[$index];
-      glVertex(@$coords);
+      
+      glVertex3d(@$coords);
     }
   }
 

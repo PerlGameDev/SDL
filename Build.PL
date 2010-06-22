@@ -329,13 +329,6 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
-	OpenGL => {
-		file      => {
-			from => 'src/OpenGL.xs',
-			to   => 'lib/SDL/OpenGL.xs', 
-		},
-		libraries => [qw( SDL GL GLU )],
-	},
 	Image => {
 		file	=> {
 			from => 'src/Image.xs',
