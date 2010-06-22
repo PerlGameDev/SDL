@@ -2,9 +2,9 @@ use Test::More tests => 87;
 use strict;
 use SDL;
 
-use_ok( 'SDL::Game::Rect' ); 
+use_ok( 'SDLx::Rect' ); 
   
-can_ok ('SDL::Game::Rect', qw/
+can_ok ('SDLx::Rect', qw/
 	new
 	x 
 	y 
@@ -19,9 +19,9 @@ can_ok ('SDL::Game::Rect', qw/
 	 /);
 
 
-my $rect = SDL::Game::Rect->new( 0, 0, 0, 0);
+my $rect = SDLx::Rect->new( 0, 0, 0, 0);
 
-isa_ok ($rect, 'SDL::Game::Rect','new went ok');
+isa_ok ($rect, 'SDLx::Rect','new went ok');
 
 foreach my $attr (qw(x y top    left  width   height 
                      w h bottom right centerx centery)
@@ -89,7 +89,7 @@ is ($rect->left, 10, 'left value should have been updated after bottom change');
 is ($rect->width, 45, 'width should have stayed the same');
 
 # checking two-valued accessors
-can_ok ('SDL::Game::Rect', qw/
+can_ok ('SDLx::Rect', qw/
     size
 	center
 	topleft

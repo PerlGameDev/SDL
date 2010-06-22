@@ -37,7 +37,7 @@ use strict;
 use SDL;
 use SDL::Config;
 use SDL::Rect;
-use SDL::Game::Rect;
+use SDLx::Rect;
 use SDL::Color;
 use SDL::Video;
 use Test::More;
@@ -80,7 +80,7 @@ SKIP:
 	my $blue_pixel = SDL::Video::map_RGB( $pixel_format, 0x00, 0x00, 0xff );
 	my $col_pixel = SDL::Video::map_RGB( $pixel_format, 0xf0, 0x00, 0x33 );
 
-	my $grect = SDL::Game::Rect->new(10, 10, 30, 35);
+	my $grect = SDLx::Rect->new(10, 10, 30, 35);
 	foreach(0..80)
 	{
 

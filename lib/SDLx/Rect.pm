@@ -1,4 +1,4 @@
-package SDL::Game::Rect;
+package SDLx::Rect;
 use strict;
 use warnings;
 use Carp;
@@ -733,16 +733,16 @@ __END__
 
 =head1 NAME
 
-SDL::Game::Rect - SDL::Game object for storing and manipulating rectangular coordinates
+SDLx::Rect - SDL::Game object for storing and manipulating rectangular coordinates
 
 =head1 SYNOPSIS
 
 
 =head1 DESCRIPTION
 
-C<< SDL::Game::Rect >> object are used to store and manipulate rectangular areas. Rect objects are created from a combination of left (or x), top (or y), width (or w) and height (or h) values, just like raw C<< SDL::Rect objects >>.
+C<< SDLx::Rect >> object are used to store and manipulate rectangular areas. Rect objects are created from a combination of left (or x), top (or y), width (or w) and height (or h) values, just like raw C<< SDL::Rect objects >>.
 
-All C<< SDL::Game::Rect >> methods that change either position or size of a Rect return B<a new copy> of the Rect with the affected changes. The original Rect is B<not> modified. If you wish to modify the current Rect object, you can use the equivalent "in-place" methods that do not return but instead affects the original Rect. These "in-place" methods are denoted with the "ip" suffix. Note that changing a Rect's attribute is I<always> an in-place operation.
+All C<< SDLx::Rect >> methods that change either position or size of a Rect return B<a new copy> of the Rect with the affected changes. The original Rect is B<not> modified. If you wish to modify the current Rect object, you can use the equivalent "in-place" methods that do not return but instead affects the original Rect. These "in-place" methods are denoted with the "ip" suffix. Note that changing a Rect's attribute is I<always> an in-place operation.
 
 
 =head2 ATTRIBUTES
@@ -809,7 +809,7 @@ Some of the attributes above can be fetched or set in pairs:
 
 =head2 METHODS 
 
-Methods denoted as receiving Rect objects can receive either C<<SDL::Game::Rect>> or raw C<<SDL::Rect>> objects.
+Methods denoted as receiving Rect objects can receive either C<<SDLx::Rect>> or raw C<<SDL::Rect>> objects.
 
 =head3 new ($left, $top, $width, $height)
 
@@ -923,7 +923,7 @@ Please report any bugs or feature requests to the bug tracker. I will be notifie
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc SDL::Game::Rect
+    perldoc SDLx::Rect
 
 
 =head1 ACKNOWLEDGEMENTS
