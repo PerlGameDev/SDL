@@ -161,6 +161,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL )],
 	},
+	SurfaceX => {
+		file      => {
+			from  => 'src/SDLx/Surface.xs',
+			to    => 'lib/SDLx/Surface.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	Overlay => {
 		file      => {
 			from  => 'src/Core/objects/Overlay.xs',
