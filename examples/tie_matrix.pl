@@ -67,9 +67,8 @@
                                       
             foreach( 0 ... rand($surface->w) )
             {
-                   $surface->set_pixels(( ( $surface->pitch * $_ +1)/$surface->format->BytesPerPixel) + 10, 0xff0000);
                    
-                   $matrix->[10][10] = 0x00ff00;
+                   $matrix->[$_][rand($surface->h)] = rand(0xffffff);
                   
             }
         SDL::Video::unlock_surface($surface);

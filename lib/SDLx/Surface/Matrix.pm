@@ -40,8 +40,7 @@ sub load {
 }
 
 sub calc_offset {
-	return  $_[0]->{offset} if $_[0]->{offset};
-	my ($self, $x, $y) = @_;
+	my ($self, $y, $x) = @_;
 	
 	my $offset = ( $self->surface->pitch * $y )/$self->surface->format->BytesPerPixel;
 	$offset +=  $x;	
