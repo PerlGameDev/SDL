@@ -14,22 +14,26 @@ has surface => (
 	is => 'rw',
 	isa => 'SDL::Surface',
 	default => sub {
-		
-		   _create_surf()
-		 
-		  }
+
+		_create_surf()
+
+	}
 );
+
+has _tied_array => (
+	is => 'rw',
+	);
 
 sub _create_surf
 {
-	
-	       my $surface = SDL::Surface->new( SDL_ANYFORMAT, 100,100,32, 0,0,0,0 );
-	           my $mapped_color =
-	           SDL::Video::map_RGB( $surface ->format(), 0, 0, 0 );    # blue
 
-		   SDL::Video::fill_rect( $surface ,
-		   SDL::Rect->new( 0, 0,$surface->w,  $surface->h ), $mapped_color );
-		return $surface;
+	my $surface = SDL::Surface->new( SDL_ANYFORMAT, 100,100,32, 0,0,0,0 );
+	my $mapped_color =
+	SDL::Video::map_RGB( $surface ->format(), 0, 0, 0 );    # blue
+
+	SDL::Video::fill_rect( $surface ,
+		SDL::Rect->new( 0, 0,$surface->w,  $surface->h ), $mapped_color );
+	return $surface;
 }
 
 sub load {
@@ -41,7 +45,7 @@ sub load {
 
 sub calc_offset {
 	my ($self, $y, $x) = @_;
-	
+
 	my $offset = ( $self->surface->pitch * $y )/$self->surface->format->BytesPerPixel;
 	$offset +=  $x;	
 	$_[0]->{offset} = $offset;
@@ -62,25 +66,81 @@ sub set_pixel {
 
 sub _array {
 	my $self = shift;
-	tie my @array, "Tie::Simple", undef, (
-		FETCH => sub {
-			my $y = $_[1];
-			tie my @row, "Tie::Simple", undef, (
-				FETCH => sub {
-					my $x = $_[1];
-					$self->get_pixel( $x, $y );
-				},
-				STORE => sub {
-					my $x = $_[1];
-					my $new_value = $_[2];
-					$self->set_pixel( $x, $y, $new_value );
-				},
-			);
-			return \@row;
-		},
-	);
 
-	return \@array;
+	my $array = $self->_tied_array;
+
+	unless( $array ) {
+		tie my @array, 'TiedMatrix', $self;
+		$array = \@array;
+		$self->_tied_array( $array );
+	}
+	return $array;
 }
 
 1;
+
+package TiedMatrix;
+use strict;
+use warnings;
+use base 'Tie::Array';
+
+sub new {
+	my $class = shift;
+	my $matrix = shift;
+	my $self = {
+		matrix => $matrix,
+		rows => [],
+	};
+	return bless $self, $class;
+}
+
+sub TIEARRAY {
+	return TiedMatrix->new( $_[1] );
+}
+
+sub FETCH {
+	my ($self, $y) = @_;
+
+	unless( $self->{rows}[$y] ) {
+		tie my @row, 'TiedMatrixRow', $self->{matrix}, $y;
+		$self->{rows}[$y] = \@row;
+	}
+	return $self->{rows}[$y];
+}
+
+1;
+
+package TiedMatrixRow;
+use strict;
+use warnings;
+use base 'Tie::Array';
+
+sub new {
+	my $class = shift;
+	my $matrix = shift;
+	my $y = shift;
+
+	my $self = {
+		matrix => $matrix,
+		y => $y,
+	};
+
+	return bless $self, $class;
+}
+
+sub TIEARRAY {
+	return TiedMatrixRow->new( $_[1], $_[2] );
+}
+
+sub FETCH {
+	my ($self, $x) = @_;
+	$self->{matrix}->get_pixel( $x, $self->{y} );
+}
+
+sub STORE {
+	my ($self, $x, $new_value) = @_;
+	$self->{matrix}->set_pixel( $x, $self->{y}, $new_value );
+}
+
+1;
+
