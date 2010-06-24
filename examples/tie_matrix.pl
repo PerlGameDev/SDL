@@ -23,7 +23,7 @@
 
     my $event = SDL::Event->new;    # create a new event
 
-    foreach (0..100) {
+    while(1) {
         SDL::Events::pump_events();
 
         while ( SDL::Events::poll_event($event) ) {
@@ -49,7 +49,7 @@
     sub load_surface {
 
         my $surface =
-          SDL::Surface->new( SDL_ANYFORMAT, 100, 100, 32, 0, 0, 0, 0 );
+          SDL::Surface->new( SDL_ANYFORMAT, 150, 150, 32, 0, 0, 0, 0 );
         my $mapped_color =
           SDL::Video::map_RGB( $surface->format(), 0, 0, 255 );    # blue
 
@@ -68,7 +68,7 @@
             foreach( 0 ... rand($surface->w) )
             {
                    
-                   $matrix->[$_][rand($surface->h)] = rand(0xffffff);
+                   $matrix->[$_][rand($surface->h)] = 0xFFFFFFFF/($_+1);
                   
             }
         SDL::Video::unlock_surface($surface);

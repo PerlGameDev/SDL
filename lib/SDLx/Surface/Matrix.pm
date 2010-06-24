@@ -15,7 +15,7 @@ use overload (
 sub new {
     my ($class, %options) = @_;
     my $self = bless {}, ref $class || $class;
-
+	
     $self->surface( exists $options{surface} ? $options{surface}
                     : _create_surf()
                   );
@@ -27,12 +27,12 @@ sub surface {
     my ($self, $surface) = @_;
 
     # short-circuit
-    return $self->{surface} unless $surface;
-
+	
     Carp::croak 'surface accepts only SDL::Surface objects'
         unless $surface->isa('SDL::Surface');
 
     $self->{surface} = $surface;
+    $self->{surface_data} = SDLx::Surface::pixel_array($surface);
     return $surface;
 }
 
@@ -48,7 +48,7 @@ sub _tied_array {
 sub _create_surf {
 	my $surface = SDL::Surface->new( SDL_ANYFORMAT, 100,100,32, 0,0,0,0 );
 	my $mapped_color =
-	SDL::Video::map_RGB( $surface ->format(), 0, 0, 0 );    # blue
+	SDL::Video::map_RGB( $surface->format(), 0, 0, 0 );    # blue
 
 	SDL::Video::fill_rect( $surface ,
 		SDL::Rect->new( 0, 0,$surface->w,  $surface->h ), $mapped_color );
@@ -65,12 +65,17 @@ sub load {
 
 sub get_pixel {
 	my ($self, $x, $y) = @_;
-	return SDLx::Surface::get_pixel( $self->surface, $x, $y );
+	
+	return SDLx::Surface::get_pixel($self->{surface}, $x, $y);
 }
 
 sub set_pixel {
 	my ($self, $x, $y, $new_value) = @_;
-	return  SDLx::Surface::set_pixel( $self->surface, $x, $y, $new_value);
+	#my $old =   $self->get_pixel($x, $y);
+	
+	 vec(${$self->{surface_data}->[$x][$y]}, 0,  $self->{surface}->format->BitsPerPixel) = $new_value;
+	 
+	 #return $old;
 }
 
 sub _array {
@@ -152,4 +157,3 @@ sub STORE {
 }
 
 1;
-
