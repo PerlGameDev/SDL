@@ -1,5 +1,5 @@
 package SDLx::Surface::Matrix;
-use Moose;
+use Carp ();
 use SDL;
 use SDL::Video;
 use SDL::Rect;
@@ -10,23 +10,41 @@ use overload (
 	'@{}' => '_array',
 );
 
-has surface => (
-	is => 'rw',
-	isa => 'SDL::Surface',
-	default => sub {
 
-		_create_surf()
+sub new {
+    my ($class, %options) = @_;
+    my $self = bless {}, ref $class || $class;
 
-	}
-);
+    $self->surface( exists $options{surface} ? $options{surface}
+                    : _create_surf()
+                  );
 
-has _tied_array => (
-	is => 'rw',
-	);
+    return $self;
+}
 
-sub _create_surf
-{
+sub surface {
+    my ($self, $surface) = @_;
 
+    # short-circuit
+    return $self->{surface} unless $surface;
+
+    Carp::croak 'surface accepts only SDL::Surface objects'
+        unless $surface->isa('SDL::Surface');
+
+    $self->{surface} = $surface;
+    return $surface;
+}
+
+sub _tied_array {
+    my ($self, $array) = @_;
+
+    if ($array) {
+        $self->{_tied_array} = $array if $array;
+    }
+    return $self->{_tied_array};
+}
+
+sub _create_surf {
 	my $surface = SDL::Surface->new( SDL_ANYFORMAT, 100,100,32, 0,0,0,0 );
 	my $mapped_color =
 	SDL::Video::map_RGB( $surface ->format(), 0, 0, 0 );    # blue
