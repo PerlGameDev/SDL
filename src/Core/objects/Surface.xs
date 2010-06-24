@@ -140,12 +140,17 @@ surface_get_pixel(surface, offset)
 		RETVAL
 
 
-IV
+SV *
 surface_get_pixels_ptr(surface)
 	SDL_Surface *surface
 	CODE:
 	  if(!surface->pixels) croak("Incomplete surface");
-	  RETVAL = PTR2IV(surface->pixels);
+	  SV * sv = newSV_type(SVt_PV);
+	  SvPV_set(sv, surface->pixels);
+	  SvPOK_on(sv);
+	  SvLEN_set(sv, 0);
+	  SvCUR_set(sv, surface->format->BytesPerPixel * surface->w * surface->h);
+	  RETVAL = newRV_noinc(sv);
 	OUTPUT:
 	  RETVAL
 
