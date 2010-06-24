@@ -12,32 +12,30 @@
 SV * get_pixel32 (SDL_Surface *surface, int x, int y)
 {
 	
-	if( x==0 && y ==0)
-	{
-		
-	}
 	//Convert the pixels to 32 bit 
 	Uint32 *pixels = (Uint32 *)surface->pixels; 
 	//Get the requested pixel 
 	
-	Uint32* u_ptr =  &(pixels[( y * surface->w ) + x ]); 
+	void* s =  pixels + _calc_offset(surface, x, y); 
 
+	//printf( " Pixel = %d, Ptr = %p \n", *((int*) s), s );
 
 	SV* sv = newSV_type(SVt_PV);
-        SvPV_set(sv, (char*)u_ptr);
-        SvLEN_set(sv, 0);              /* So Perl won't free it. */
-        SvCUR_set(sv, sizeof(Uint32));
-        SvPOK_on(sv);
-
-	return sv; //make a modifiable reference using u_ptr's place as the memory :)
+	SvPV_set(sv, s);
+	SvPOK_on(sv);
+	SvLEN_set(sv, 0);
+	SvCUR_set(sv, surface->format->BytesPerPixel);
+	return newRV_noinc(sv); //make a modifiable reference using u_ptr's place as the memory :)
 
 }
 
 
 SV * construct_p_matrix ( SDL_Surface *surface )
 {
+    //return  get_pixel32( surface, 0, 0);
     AV * matrix = newAV();
      int i, j;
+     i = 0;
      for(  i =0 ; i < surface->w; i++)
       {
 	AV * matrix_row = newAV();
@@ -45,10 +43,11 @@ SV * construct_p_matrix ( SDL_Surface *surface )
 		{
 			av_push(matrix_row, get_pixel32(surface, i,j) );
 		}
-	  av_push(matrix, newRV_noinc((SV*) matrix_row) );
+	  av_push(matrix, newRV_noinc((SV *)matrix_row) );
+	
 	}
 
-	return newRV_noinc(matrix);
+	return newRV_noinc((SV *)matrix);
 }
 
 
@@ -90,8 +89,20 @@ SV *
 surfacex_pixel_array ( surface )
 	SDL_Surface *surface
 	CODE:
-		if (surface->format->BytesPerPixel != 4) { croak( " only 32 bbp is implemented so far"); } 
-		RETVAL = construct_p_matrix (surface);
+		switch(surface->format->BytesPerPixel)
+		{
+			case 1:  croak("Not implemented yet for 8bpp surfaces\n");
+			         break;
+			case 2:  croak("Not implemented yet for 16bpp surfaces\n");
+			         break;
+			case 3:  croak("Not implemented yet for 24bpp surfaces\n");
+			         break;
+			case 4: 
+				RETVAL = construct_p_matrix (surface);
+			         break;
+
+		}
+		
 		
 	OUTPUT:
 		RETVAL
