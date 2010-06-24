@@ -23,7 +23,7 @@
 
     my $event = SDL::Event->new;    # create a new event
 
-    while (1) {
+    foreach (0..100) {
         SDL::Events::pump_events();
 
         while ( SDL::Events::poll_event($event) ) {

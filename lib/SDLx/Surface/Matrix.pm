@@ -4,6 +4,7 @@ use SDL;
 use SDL::Video;
 use SDL::Rect;
 use SDL::Surface;
+use SDLx::Surface;
 use SDL::PixelFormat;
 use Tie::Simple;
 use overload (
@@ -61,25 +62,15 @@ sub load {
 	}
 }
 
-sub calc_offset {
-	my ($self, $y, $x) = @_;
-
-	my $offset = ( $self->surface->pitch * $y )/$self->surface->format->BytesPerPixel;
-	$offset +=  $x;	
-	$_[0]->{offset} = $offset;
-	return $offset;
-}
 
 sub get_pixel {
 	my ($self, $x, $y) = @_;
-	return $self->surface->get_pixel( $self->calc_offset($x, $y) );
+	return SDLx::Surface::get_pixel( $self->surface, $x, $y );
 }
 
 sub set_pixel {
 	my ($self, $x, $y, $new_value) = @_;
-	my $old = $self->surface->get_pixel($self->calc_offset($x, $y));
-	$self->surface->set_pixels($self->calc_offset($x, $y), $new_value);
-	return $old;
+	return  SDLx::Surface::set_pixel( $self->surface, $x, $y, $new_value);
 }
 
 sub _array {

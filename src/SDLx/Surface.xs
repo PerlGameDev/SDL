@@ -52,6 +52,35 @@ SV * construct_p_matrix ( SDL_Surface *surface )
 }
 
 
+int _calc_offset ( SDL_Surface* surface, int y, int x )
+{	
+	int offset;
+	offset  = (surface->pitch * y)/surface->format->BytesPerPixel;
+	offset += x;
+	return offset;
+}
+
+
+int _get_pixel(SDL_Surface * surface, int offset)
+{
+
+	int value;
+		switch(surface->format->BytesPerPixel)
+		{
+			case 1:  value = ((Uint8  *)surface->pixels)[offset];
+			         break;
+			case 2:  value = ((Uint16 *)surface->pixels)[offset];
+			         break;
+			case 3:  value = ((Uint32)((Uint8 *)surface->pixels)[offset * surface->format->BytesPerPixel]     <<  0)
+			                + ((Uint32)((Uint8 *)surface->pixels)[offset * surface->format->BytesPerPixel + 1] <<  8)
+			                + ((Uint32)((Uint8 *)surface->pixels)[offset * surface->format->BytesPerPixel + 2] << 16);
+			         break;
+			case 4:  value = ((Uint32 *)surface->pixels)[offset];
+			         break;
+
+		}
+	return value;
+}
 
 
 MODULE = SDLx::Surface 	PACKAGE = SDLx::Surface    PREFIX = surfacex_
@@ -64,5 +93,45 @@ surfacex_pixel_array ( surface )
 		if (surface->format->BytesPerPixel != 4) { croak( " only 32 bbp is implemented so far"); } 
 		RETVAL = construct_p_matrix (surface);
 		
+	OUTPUT:
+		RETVAL
+
+int
+surfacex_get_pixel ( surface, x, y )
+	SDL_Surface *surface
+	int x
+	int y
+	CODE:
+		int offset;
+		offset =  _calc_offset( surface, x, y);
+		RETVAL = _get_pixel( surface, offset );
+	
+	OUTPUT:
+		RETVAL
+
+
+int
+surfacex_set_pixel ( surface, x, y, value )
+	SDL_Surface *surface
+	int x
+	int y
+	unsigned int value
+	CODE:
+		int offset;
+		offset =  _calc_offset( surface, x, y);
+		RETVAL = _get_pixel( surface, offset );
+		switch(surface->format->BytesPerPixel)
+			{
+				case 1: ((Uint8  *)surface->pixels)[offset] = (Uint8)value;
+					break;
+				case 2: ((Uint16 *)surface->pixels)[offset] = (Uint16)value;
+					break;
+				case 3: ((Uint8  *)surface->pixels)[offset * surface->format->BytesPerPixel]     = (Uint8)( value        & 0xFF);
+					((Uint8  *)surface->pixels)[offset * surface->format->BytesPerPixel + 1] = (Uint8)((value <<  8) & 0xFF);
+					((Uint8  *)surface->pixels)[offset * surface->format->BytesPerPixel + 2] = (Uint8)((value << 16) & 0xFF);
+					break;
+				case 4: ((Uint32 *)surface->pixels)[offset] = (Uint32)value;
+					break;
+			}	
 	OUTPUT:
 		RETVAL
