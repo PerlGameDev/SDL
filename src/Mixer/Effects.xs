@@ -102,11 +102,11 @@ mixeff_register(channel, func, done, arg)
 	CODE:
 		if(effects == NULL)
 		{
-			effects = safe_malloc(MAX_EFFECTS* sizeof(void*));
+			effects = safemalloc(MAX_EFFECTS* sizeof(void*));
 		}
 		if(effects_done == NULL)
 		{
-			effects_done = safe_malloc(MAX_EFFECTS* sizeof(void*));
+			effects_done = safemalloc(MAX_EFFECTS* sizeof(void*));
 		}
 		if(perl_cb == NULL)
 		{
