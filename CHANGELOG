@@ -1,5 +1,13 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.5 RC
+	- Fixed SDL::Surface->get_pixels_ptr
+	- Removed SDL::OpenGL, SDL::Game::Event
+	- Moved SDL::App -> SDLx::App, SDL::Game -> SDLx::Rect
+	- Fixed SDL::Video->new_from + tests
+	- Added SDLx::Surface and SDLx::Surface::Matrix
+	- Added ppport.h support for older perls
+
 * 2.408 Sun June 13 2010
 	- Added File::ShareDir as a dep
 	- TODO'd temporary test cases
