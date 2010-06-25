@@ -2,6 +2,10 @@ _build/
 *.o
 Build
 blib
+nytprof*
+lib/SDLx/*.c
+lib/SDLx/*.xs
+lib/SDLx/*_def.old
 lib/SDL/*.c
 lib/SDL/*.xs
 lib/SDL/*_def.old

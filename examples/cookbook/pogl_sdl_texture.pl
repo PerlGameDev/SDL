@@ -120,7 +120,7 @@ sub LoadTexture {
     my $nOfColors;
     my $texture_format;
     my $texture = 0;
-      $surface = SDL::Image::load("attackme_rp1.png");
+      $surface = SDL::Image::load($ARGV[0]);
       SDL::Video::lock_surface($surface);
 
 	
