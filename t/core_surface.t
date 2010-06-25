@@ -30,7 +30,7 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 }
 else
 {
-    plan( tests => 39);
+    plan( tests => 41);
 }
 
 my $surface = SDL::Surface->new( SDL_ANYFORMAT, 640, 320, 8, 0, 0, 0, 0 );
@@ -125,6 +125,10 @@ $surface->set_pixels(0, 42); pass '[set_pixel] first pixel to 42' ;
 is( $surface->get_pixel(0), 42,   '[get_pixel] returns integer (42)' );
 
 isa_ok( $other_surface, 'SDL::Surface' );
+is( $other_surface->w, $surface->w, '[new_form] have same w');
+is( $other_surface->h, $surface->h, '[neh_form] have same h');
+
+#TODO: Added more comparison stuff
 
 if($videodriver)
 {

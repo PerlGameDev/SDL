@@ -59,16 +59,9 @@ surface_new_from (CLASS, pixels, width, height, depth, pitch, Rmask, Gmask, Bmas
 	Uint32 Gmask
 	Uint32 Bmask
 	Uint32 Amask
-	IV pixels
+	void* pixels
 	CODE:
-		/*warn ("USING THIS WILL CAUSE YOUR CODE TO SEGFAULT ON EXIT! \n READ: http://sdlperl.ath.cx/projects/SDLPerl/ticket/53"); */
-		void *p = INT2PTR(void*, pixels);
-		int size_p = sizeof( (*p));  /*gets freed by old surface */
-	        unsigned int *newpixels = safemalloc( size_p ); /*gets freed by new Surface */
-		memcpy(newpixels, p, size_p);
-		/*warn("p is %p, newpixels is %p \n", p, newpixels); */
-		
-		RETVAL = SDL_CreateRGBSurfaceFrom ( newpixels, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask );
+		RETVAL = SDL_CreateRGBSurfaceFrom ( pixels, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask );
 		if( RETVAL == NULL)
 		croak ("SDL_CreateRGBSurfaceFrom failed: %s", SDL_GetError());
 
