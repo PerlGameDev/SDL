@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -27,7 +28,7 @@ typedef struct {
 
 Described here:
 
-See: L<http://www.ferzkopp.net/joomla/content/view/19/14/>
+See: L<http:/*www.ferzkopp.net/joomla/content/view/19/14/> */
 
 =cut
 

@@ -1,4 +1,4 @@
-// launcher.h
+/* launcher.h */
 
 @interface SDLPerlMain : NSObject
 - (void) launchPerl: (NSString*) script;

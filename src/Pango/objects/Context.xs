@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #include <SDL.h>
 
@@ -12,7 +13,7 @@ MODULE = SDL::Pango::Context	PACKAGE = SDL::Pango::Context	PREFIX = context_
 
 =for documentation
 
-See L<http://sdlpango.sourceforge.net/>
+See L<http:/*sdlpango.sourceforge.net/> */
 
 =cut
 

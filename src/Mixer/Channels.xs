@@ -1,6 +1,8 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#define NEED_sv_2pv_flags
+#include "ppport.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -50,7 +52,7 @@ MODULE = SDL::Mixer::Channels 	PACKAGE = SDL::Mixer::Channels    PREFIX = mixcha
 
 SDL_mixer bindings
 
-See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
+See: http:/*www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html */
 
 =cut
 

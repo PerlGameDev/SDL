@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -48,7 +49,7 @@ event_new (CLASS)
 	char *CLASS
 	CODE:
 		RETVAL = (SDL_Event *) safemalloc(sizeof (SDL_Event));
-		//set userdata to NULL for now 
+		/*set userdata to NULL for now  */
 		(RETVAL->user).data1 =(void *)NULL;
 		(RETVAL->user).data2 =(void *)NULL;
 
@@ -970,7 +971,7 @@ event_DESTROY(bag)
                    void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
                    SDL_Event* self = (SDL_Event*)(pointers[0]);
                    if (PERL_GET_CONTEXT == pointers[1]) {
-                       //warn("Freed surface %p and pixels %p \n", surface, surface->pixels);
+                       /*warn("Freed surface %p and pixels %p \n", surface, surface->pixels); */
                        if(self->type == SDL_USEREVENT) {
                            if( (self->user).data1 != NULL )
                               SvREFCNT_dec( (self->user).data1);

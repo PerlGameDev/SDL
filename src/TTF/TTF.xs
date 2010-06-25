@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #include <SDL.h>
 
@@ -59,11 +60,11 @@ static Uint16 *utf16_to_UNICODE(SV *sv)
 {
 	STRLEN len;
 	char *text      = SvPV(sv, len);
-	len            /= 2;                                      // 1-Byte chars to 2-Byte Uint16
-	Uint16 *unicode = safemalloc((len + 2) * sizeof(Uint16)); // length = BOM + characters + NULL
+	len            /= 2;                                      /* 1-Byte chars to 2-Byte Uint16 */
+	Uint16 *unicode = safemalloc((len + 2) * sizeof(Uint16)); /* length = BOM + characters + NULL */
 	int i;
 
-	// UTF-16 Big Endian with BOM
+	/* UTF-16 Big Endian with BOM */
 	if((Uint8)text[0] == 0xFE && (Uint8)text[1] == 0xFF)
 	{
 		for( i = 0; i < len; i++ )
@@ -74,7 +75,7 @@ static Uint16 *utf16_to_UNICODE(SV *sv)
 	}
 	
 	else
-	// UTF-16 Little Endian with BOM
+	/* UTF-16 Little Endian with BOM */
 	if((Uint8)text[0] == 0xFF && (Uint8)text[1] == 0xFE)
 	{
 		for( i = 0; i < len; i++ )
@@ -84,9 +85,9 @@ static Uint16 *utf16_to_UNICODE(SV *sv)
 		unicode[i] = 0;
 	}
 	
-	else // everything without BOM is treated as UTF-16 Big Endian
+	else /* everything without BOM is treated as UTF-16 Big Endian */
 	{
-		unicode[0] = 0xFEFF; // we have to pass it as UTF-16 Big Endian
+		unicode[0] = 0xFEFF; /* we have to pass it as UTF-16 Big Endian */
 		for( i = 0; i <= len; i++ )
 		{
 			unicode[i + 1] = (text[i * 2] << 8) | text[i * 2 + 1];
@@ -371,8 +372,8 @@ ttf_render_utf8_solid(font, text, fg)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
-		// this is buggy, see: http://bugzilla.libsdl.org/show_bug.cgi?id=970
-		//RETVAL = TTF_RenderUTF8_Solid(font, text, *fg);
+		/* this is buggy, see: http://bugzilla.libsdl.org/show_bug.cgi?id=970 */
+		/*RETVAL = TTF_RenderUTF8_Solid(font, text, *fg); */
 		
 		STRLEN len;
 		unsigned char*utf8_text = SvPV(text, len);

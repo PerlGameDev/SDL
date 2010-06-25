@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -12,27 +13,27 @@
 SV * get_pixel32 (SDL_Surface *surface, int x, int y)
 {
 	
-	//Convert the pixels to 32 bit 
+	/*Convert the pixels to 32 bit  */
 	Uint32 *pixels = (Uint32 *)surface->pixels; 
-	//Get the requested pixel 
+	/*Get the requested pixel  */
 	
 	void* s =  pixels + _calc_offset(surface, x, y); 
 
-	//printf( " Pixel = %d, Ptr = %p \n", *((int*) s), s );
+	/*printf( " Pixel = %d, Ptr = %p \n", *((int*) s), s ); */
 
 	SV* sv = newSV_type(SVt_PV);
 	SvPV_set(sv, s);
 	SvPOK_on(sv);
 	SvLEN_set(sv, 0);
 	SvCUR_set(sv, surface->format->BytesPerPixel);
-	return newRV_noinc(sv); //make a modifiable reference using u_ptr's place as the memory :)
+	return newRV_noinc(sv); /*make a modifiable reference using u_ptr's place as the memory :) */
 
 }
 
 
 SV * construct_p_matrix ( SDL_Surface *surface )
 {
-    //return  get_pixel32( surface, 0, 0);
+    /*return  get_pixel32( surface, 0, 0); */
     AV * matrix = newAV();
      int i, j;
      i = 0;

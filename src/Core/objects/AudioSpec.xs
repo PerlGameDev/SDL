@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -133,9 +134,9 @@ audiospec_callback( audiospec, cb )
 	SDL_AudioSpec *audiospec
 	char* cb
 	CODE:
-		// the audio callback will happen in a different thread.
-                // so we're going to leave a cloned interpreter available
-                // but still remain in the current one.
+		/* the audio callback will happen in a different thread. */
+                /* so we're going to leave a cloned interpreter available */
+                /* but still remain in the current one. */
 		if (perl_for_audio_cb == NULL) {
 		  perl_my = PERL_GET_CONTEXT;
 		  perl_for_audio_cb = perl_clone(perl_my, CLONEf_KEEP_PTR_TABLE);

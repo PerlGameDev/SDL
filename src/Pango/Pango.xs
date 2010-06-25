@@ -21,7 +21,7 @@ MODULE = SDL::Pango	PACKAGE = SDL::Pango	PREFIX = pango_
 
 =for documentation
 
-See L<http://sdlpango.sourceforge.net/>
+See L<http:/*sdlpango.sourceforge.net/> */
 
 =cut
 
@@ -69,32 +69,32 @@ pango_get_layout_height(context)
 void
 pango_set_default_color(context, ...)
 	SDLPango_Context *context
-	//const SDLPango_Matrix *color_matrix
+	/*const SDLPango_Matrix *color_matrix */
 	CODE:
-		if(items == 3) // context, foreground, background
+		if(items == 3) /* context, foreground, background */
 		{
 			Uint32 fg = SvIV(ST(1));
 			Uint32 bg = SvIV(ST(2));
-			MATRIX_DEFAULT->m[0][1] = (fg >> 24) & 0xFF; // fg red
-			MATRIX_DEFAULT->m[1][1] = (fg >> 16) & 0xFF; // fg green
-			MATRIX_DEFAULT->m[2][1] = (fg >>  8) & 0xFF; // fg blue
-			MATRIX_DEFAULT->m[3][1] =  fg        & 0xFF; // fg alpha
-			MATRIX_DEFAULT->m[0][0] = (bg >> 24) & 0xFF; // bg red
-			MATRIX_DEFAULT->m[1][0] = (bg >> 16) & 0xFF; // bg green
-			MATRIX_DEFAULT->m[2][0] = (bg >>  8) & 0xFF; // bg blue
-			MATRIX_DEFAULT->m[3][0] =  bg        & 0xFF; // bg alpha
+			MATRIX_DEFAULT->m[0][1] = (fg >> 24) & 0xFF; /* fg red */
+			MATRIX_DEFAULT->m[1][1] = (fg >> 16) & 0xFF; /* fg green */
+			MATRIX_DEFAULT->m[2][1] = (fg >>  8) & 0xFF; /* fg blue */
+			MATRIX_DEFAULT->m[3][1] =  fg        & 0xFF; /* fg alpha */
+			MATRIX_DEFAULT->m[0][0] = (bg >> 24) & 0xFF; /* bg red */
+			MATRIX_DEFAULT->m[1][0] = (bg >> 16) & 0xFF; /* bg green */
+			MATRIX_DEFAULT->m[2][0] = (bg >>  8) & 0xFF; /* bg blue */
+			MATRIX_DEFAULT->m[3][0] =  bg        & 0xFF; /* bg alpha */
 			SDLPango_SetDefaultColor(context, MATRIX_DEFAULT);
 		}
-		else if(items == 9) // context, fr, fg, fb, fa, br, bg, bb, ba
+		else if(items == 9) /* context, fr, fg, fb, fa, br, bg, bb, ba */
 		{
-			MATRIX_DEFAULT->m[0][1] = SvIV(ST(1)); // fg red
-			MATRIX_DEFAULT->m[1][1] = SvIV(ST(2)); // fg green
-			MATRIX_DEFAULT->m[2][1] = SvIV(ST(3)); // fg blue
-			MATRIX_DEFAULT->m[3][1] = SvIV(ST(4)); // fg alpha
-			MATRIX_DEFAULT->m[0][0] = SvIV(ST(5)); // bg red
-			MATRIX_DEFAULT->m[1][0] = SvIV(ST(6)); // bg green
-			MATRIX_DEFAULT->m[2][0] = SvIV(ST(7)); // bg blue
-			MATRIX_DEFAULT->m[3][0] = SvIV(ST(8)); // bg alpha
+			MATRIX_DEFAULT->m[0][1] = SvIV(ST(1)); /* fg red */
+			MATRIX_DEFAULT->m[1][1] = SvIV(ST(2)); /* fg green */
+			MATRIX_DEFAULT->m[2][1] = SvIV(ST(3)); /* fg blue */
+			MATRIX_DEFAULT->m[3][1] = SvIV(ST(4)); /* fg alpha */
+			MATRIX_DEFAULT->m[0][0] = SvIV(ST(5)); /* bg red */
+			MATRIX_DEFAULT->m[1][0] = SvIV(ST(6)); /* bg green */
+			MATRIX_DEFAULT->m[2][0] = SvIV(ST(7)); /* bg blue */
+			MATRIX_DEFAULT->m[3][0] = SvIV(ST(8)); /* bg alpha */
 			SDLPango_SetDefaultColor(context, MATRIX_DEFAULT);
 		}
 		else

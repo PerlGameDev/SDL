@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #include <SDL.h>
 
@@ -24,7 +25,7 @@ void effect_func(int chan, void *stream, int len, void *udata)
 	PERL_SET_CONTEXT(perl_cb);
 	Sint16 *buf = (Sint16 *)stream;
 
-	len /= 2;            // 2 bytes ber sample
+	len /= 2;            /* 2 bytes ber sample */
 	
 	dSP;                                       /* initialize stack pointer          */
 	
@@ -41,7 +42,7 @@ void effect_func(int chan, void *stream, int len, void *udata)
 	
 	PUTBACK;                                   /* make local stack pointer global   */
 
-	//if(cb != (SV*)NULL)
+	/*if(cb != (SV*)NULL) */
 	{
         int count = call_pv(effect_func_cb, G_ARRAY); /* call the function                 */
 		SPAGAIN;                               /* refresh stack pointer             */
@@ -51,7 +52,7 @@ void effect_func(int chan, void *stream, int len, void *udata)
 		
 		if(count)
 		{
-			memset(buf, 0, len * 2); // clear the buffer
+			memset(buf, 0, len * 2); /* clear the buffer */
 			
 			for(i = len - 1; i >= 0; i--)
 			{
@@ -73,13 +74,13 @@ void effect_pm_func(void *udata, Uint8 *stream, int len)
 
 void effect_done(int chan, void *udata)
 {
-	//PERL_SET_CONTEXT(perl_cb);
+	/*PERL_SET_CONTEXT(perl_cb); */
 
 	dSP;     /* initialize stack pointer          */
 	PUSHMARK(SP);                              /* remember the stack pointer        */
 
-	//if(fcb != (SV*)NULL)
-	//warn ( "Called %s", effect_func_done_cb );
+	/*if(fcb != (SV*)NULL) */
+	/*warn ( "Called %s", effect_func_done_cb ); */
 	
         call_pv(effect_func_done_cb, G_DISCARD|G_VOID);   /* call the function                 */
         
@@ -101,11 +102,11 @@ mixeff_register(channel, func, done, arg)
 	CODE:
 		if(effects == NULL)
 		{
-			effects = malloc(MAX_EFFECTS* sizeof(void*));
+			effects = safe_malloc(MAX_EFFECTS* sizeof(void*));
 		}
 		if(effects_done == NULL)
 		{
-			effects_done = malloc(MAX_EFFECTS* sizeof(void*));
+			effects_done = safe_malloc(MAX_EFFECTS* sizeof(void*));
 		}
 		if(perl_cb == NULL)
 		{
@@ -122,7 +123,7 @@ mixeff_register(channel, func, done, arg)
 			effects_done[registered_effects] = (void*)&effect_done;
 			if(0 != Mix_RegisterEffect(channel, effects[registered_effects], effects_done[registered_effects], arg))
 			{
-				//warn( "Registered %d %p %p", registered_effects, effects[registered_effects], effects_done[registered_effects]);
+				/*warn( "Registered %d %p %p", registered_effects, effects[registered_effects], effects_done[registered_effects]); */
 				
 				RETVAL = registered_effects;
 				registered_effects++;

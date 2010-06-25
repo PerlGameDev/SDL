@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -27,7 +28,7 @@ MODULE = SDL::Mixer::Groups 	PACKAGE = SDL::Mixer::Groups    PREFIX = mixgrp_
 
 SDL_mixer bindings
 
-See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
+See: http:/*www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html */
 
 =cut
 

@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -17,7 +18,7 @@ The Following are XS bindings to the MultiThread category in the SDL API v2.1.13
 
 Describe on the SDL API site.
 
-See: L<http://www.libsdl.org/cgi/docwiki.cgi/SDL_API>
+See: L<http:/*www.libsdl.org/cgi/docwiki.cgi/SDL_API> */
 
 =cut
 

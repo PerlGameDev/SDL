@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -134,11 +135,11 @@ NewSMPEG ( filename, info, use_audio )
 	SMPEG_Info* info
 	int use_audio
 	CODE:	
-//#ifdef HAVE_SDL_MIXER
-//		RETVAL = SMPEG_new(filename,info,0);
-//#else
+/*#ifdef HAVE_SDL_MIXER */
+/*		RETVAL = SMPEG_new(filename,info,0); */
+/*#else */
 		RETVAL = SMPEG_new(filename,info,use_audio);
-//#endif
+/*#endif */
 	OUTPUT:
 		RETVAL
 
@@ -154,9 +155,9 @@ SMPEGEnableAudio ( mpeg , flag )
 	int flag
 	CODE:	
 		SMPEG_enableaudio(mpeg,flag);
-//#ifdef HAVE_SDL_MIXER
-//		sdl_perl_use_smpeg_audio = flag;
-//#endif
+/*#ifdef HAVE_SDL_MIXER */
+/*		sdl_perl_use_smpeg_audio = flag; */
+/*#endif */
 
 void
 SMPEGEnableVideo ( mpeg , flag )
@@ -202,18 +203,18 @@ SMPEGPlay ( mpeg )
                 SDL_AudioSpec audiofmt;
                 Uint16 format;
                 int freq, channels;
-//#ifdef HAVE_SDL_MIXER
-//		if  (sdl_perl_use_smpeg_audio ) {
-//       			SMPEG_enableaudio(mpeg, 0);
-//			Mix_QuerySpec(&freq, &format, &channels);
-//			audiofmt.format = format;
-//			audiofmt.freq = freq;
-//			audiofmt.channels = channels;
-//			SMPEG_actualSpec(mpeg, &audiofmt);
-//			Mix_HookMusic(SMPEG_playAudioSDL, mpeg);
-//			SMPEG_enableaudio(mpeg, 1);
-//		}
-//#endif
+/*#ifdef HAVE_SDL_MIXER */
+/*		if  (sdl_perl_use_smpeg_audio ) { */
+/*       			SMPEG_enableaudio(mpeg, 0); */
+/*			Mix_QuerySpec(&freq, &format, &channels); */
+/*			audiofmt.format = format; */
+/*			audiofmt.freq = freq; */
+/*			audiofmt.channels = channels; */
+/*			SMPEG_actualSpec(mpeg, &audiofmt); */
+/*			Mix_HookMusic(SMPEG_playAudioSDL, mpeg); */
+/*			SMPEG_enableaudio(mpeg, 1); */
+/*		} */
+/*#endif */
 	        SMPEG_play(mpeg);
 
 SMPEGstatus
@@ -242,9 +243,9 @@ SMPEGStop ( mpeg )
 	SMPEG* mpeg
 	CODE:
 		SMPEG_stop(mpeg);
-//#ifdef HAVE_SDL_MIXER
-//        	Mix_HookMusic(NULL, NULL);
-//#endif
+/*#ifdef HAVE_SDL_MIXER */
+/*        	Mix_HookMusic(NULL, NULL); */
+/*#endif */
 
 void
 SMPEGRewind ( mpeg )

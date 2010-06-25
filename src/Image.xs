@@ -1,6 +1,8 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#define NEED_sv_2pv_flags_GLOBAL
+#include "ppport.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -366,7 +368,7 @@ image_read_XPM_from_array(array, w)
 	PREINIT:
 		char* CLASS = "SDL::Surface";
 	CODE:
-		//make columns first
+		/*make columns first */
 		int x, len;
 		SV ** elem;
 		len = av_len(array) + 1;
@@ -378,9 +380,9 @@ image_read_XPM_from_array(array, w)
 			 temp = SvPV_nolen(*elem);
 			src_x[x] = safemalloc(w * sizeof(char) );
 			memcpy( src_x[x], temp, w * sizeof(char) );
-			//warn("put in %s", src_x[x]);
+			/*warn("put in %s", src_x[x]); */
 		}
-	  		//test(src_x); 
+	  		/*test(src_x);  */
 		RETVAL = IMG_ReadXPMFromArray( src_x) ;
 		for(x=0; x < len; x++)
 		  safefree(src_x[x]);

@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #include <SDL.h>
 
@@ -68,7 +69,7 @@ MODULE = SDL::Mixer::Music 	PACKAGE = SDL::Mixer::Music    PREFIX = mixmus_
 
 SDL_mixer bindings
 
-See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
+See: http:/*www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html */
 
 =cut
 

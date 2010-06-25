@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "ppport.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -33,7 +34,7 @@ int eventfilter_cb( const void * event)
 	XPUSHs( sv_setref_pv( eventref, "SDL::Event", (void *)pointers) );
 	PUTBACK;
 
-//	printf ( "Eventref is %p. Event is %p. CopyEvent is %p \n", eventref, event, copyEvent);
+/*	printf ( "Eventref is %p. Event is %p. CopyEvent is %p \n", eventref, event, copyEvent); */
 	
 	count = call_sv(eventfiltersv, G_SCALAR);
 
@@ -58,7 +59,7 @@ The Following are XS bindings to the Event category in the SDL API v2.1.13
 
 Describe on the SDL API site.
 
-See: L<http://www.libsdl.org/cgi/docwiki.cgi/SDL_API#head-29746762ba51fc3fe8b888f8d314b13de27610e9>
+See: L<http:/*www.libsdl.org/cgi/docwiki.cgi/SDL_API#head-29746762ba51fc3fe8b888f8d314b13de27610e9> */
 
 =cut
 
