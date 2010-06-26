@@ -141,6 +141,8 @@ xs_init(pTHX)
 	my_perl = perl_alloc();
 	perl_construct(my_perl);
 	perl_parse(my_perl,xs_init,argc_perl,argv_perl,(char **)NULL);
+        PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
+
 	//fprintf(stderr,"Running perl\n");
 	perl_run(my_perl);
 	//fprintf(stderr,"Destructing  perl\n");
