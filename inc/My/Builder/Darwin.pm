@@ -1,33 +1,4 @@
 #!/usr/bin/env perl
-#
-# Darwin.pm
-#
-# Copyright (C) 2005 David J. Goehrig <dgoehrig@cpan.org>
-#
-# ------------------------------------------------------------------------------
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License, or (at your option) any later version.
-#
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-#
-# ------------------------------------------------------------------------------
-#
-# Please feel free to send questions, suggestions or improvements to:
-#
-#	David J. Goehrig
-#	dgoehrig@cpan.org
-#
-
 package My::Builder::Darwin;
 
 use strict;
@@ -39,7 +10,7 @@ use base 'My::Builder';
 sub special_build_settings
 {
 	my $self = shift;
-	$self->{c_source} = ['launcher.m'];
+	$self->{c_source} = ['src','main.c'];
 	$self->{c_sources} = 'MacOSX';
 	$self->{install_base} = "SDLPerl.app/Contents/Resources";
 }
@@ -58,9 +29,13 @@ sub build_bundle
 	$libs .= ' ' . `$^X -MExtUtils::Embed -e ldopts`;
 	chomp($libs);
 	$libs =~ s/-lSDLmain//g;
-	print STDERR "gcc $cflags MacOSX/launcher.m $libs -framework Cocoa -o \"$bundle_contents/MacOS/SDLPerl\"";
-	print STDERR `gcc $cflags MacOSX/launcher.m $libs -framework Cocoa -o \"$bundle_contents/MacOS/SDLPerl\"`;
+	my $cmd = "gcc $cflags $libs MacOSX/main.c  -o \"$bundle_contents/MacOS/SDLPerl\"";
+	print STDERR $cmd;
+	system ($cmd);
+#	my $rez = "/Developer/Tools/Rez -d __DARWIN__ -useDF -o $bundle_content/Resources/SDLPerl.rsrc $(ARCH_FLAGS) SDLPerl.r
+#	/Developer/Tools/ResMerger -dstIs DF $bundle_content/Resources/SDLPerl.rsrc -o $@"
 	mkdir "$bundle_contents/Resources",0755;
+	print
 	system "echo \"APPL????\" > \"$bundle_contents/PkgInfo\"";
 	system "cp MacOSX/Info.plist \"$bundle_contents/\"";
 	system "cp \"MacOSX/SDLPerl.icns\" \"$bundle_contents/Resources\"";

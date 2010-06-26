@@ -1,0 +1,37 @@
+#!/bin/make -f
+
+BUILD=build
+APP_PARTS=\
+  $(BUILD)/SDLPerl.app/Contents/Info.plist \
+  $(BUILD)/SDLPerl.app/Contents/MacOS/SDLPerl \
+  $(BUILD)/SDLPerl.app/Contents/Resources/SDLPerl.rsrc \
+  $(BUILD)/SDLPerl.app/Contents/PkgInfo
+
+all: $(BUILD)/SDLPerl.app
+
+clean:
+	rm -rf $(BUILD)
+
+$(BUILD)/SDLPerl.app: $(APP_PARTS)
+
+$(BUILD)/SDLPerl.app/Contents:
+	mkdir -p $@
+
+$(BUILD)/SDLPerl.app/Contents/MacOS:
+	mkdir -p $@
+
+$(BUILD)/SDLPerl.app/Contents/Resources:
+	mkdir -p $@
+
+$(BUILD)/SDLPerl.app/Contents/PkgInfo: $(BUILD)/SDLPerl.app/Contents
+	echo -n "BNDL????" > $@
+
+$(BUILD)/SDLPerl.app/Contents/Info.plist: $(BUILD)/SDLPerl.app/Contents
+	cp Info.plist $@
+
+$(BUILD)/SDLPerl.app/Contents/MacOS/SDLPerl: $(BUILD)/SDLPerl.app/Contents/MacOS
+	gcc -o $@ $(ARCH_FLAGS) main.c
+
+$(BUILD)/SDLPerl.app/Contents/Resources/SDLPerl.rsrc: $(BUILD)/SDLPerl.app/Contents/Resources
+	 /Developer/Tools/Rez -d __DARWIN__ -useDF -o $(BUILD)/SDLPerl.rsrc $(ARCH_FLAGS) SDLPerl.r
+	/Developer/Tools/ResMerger -dstIs DF $(BUILD)/SDLPerl.rsrc -o $@
