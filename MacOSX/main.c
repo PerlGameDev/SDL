@@ -1,7 +1,8 @@
 #include <EXTERN.h> /*  from the Perl distribution */
 #include <perl.h> /*  from the Perl distribution */
-#include <unistd.h>
 #include <SDL/SDL.h>
+
+extern char **environ;
 
 static PerlInterpreter *my_perl; /* ** The Perl interpreter ***/
 static void xs_init (pTHX);
@@ -21,7 +22,7 @@ xs_init(pTHX)
 int main(int argc, char *argv[])
 {
 	char **env = environ;
-	PERL_SYS_INIT3(&argc,&argv,&env);
+	PERL_SYS_INIT3(&argc,&argv, &env);
 	my_perl = perl_alloc();
 	perl_construct(my_perl);
 	PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
