@@ -343,13 +343,13 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_image jpeg png tiff)],
 	},
-	SMPEG => {
-		file	=> {
-			from => 'src/SMPEG.xs',
-			to   =>	'lib/SDL/SMPEG.xs',
-		},
-		libraries => [qw( SDL smpeg)],
-	},
+#	SMPEG => {
+#		file	=> {
+#			from => 'src/SMPEG.xs',
+#			to   =>	'lib/SDL/SMPEG.xs',
+#		},
+#		libraries => [qw( SDL smpeg)],
+#	},
 	Pango => {
 		file	=> {
 			from => 'src/Pango/Pango.xs',
