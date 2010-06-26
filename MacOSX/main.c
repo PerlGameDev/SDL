@@ -1,5 +1,6 @@
 #include <EXTERN.h> /*  from the Perl distribution */
 #include <perl.h> /*  from the Perl distribution */
+#include <stdlib.h>
 #include <SDL/SDL.h>
 
 static PerlInterpreter *my_perl; /* ** The Perl interpreter ***/
@@ -17,8 +18,10 @@ xs_init(pTHX)
 
 
 
-int main(int argc, char **argv, char **env)
+int main(int argc, char *argv[])
 {
+	//printf( "ENV %s \n", argv[1] );
+	char **env; // we can't do this but will have  to use getenv
 	PERL_SYS_INIT3(&argc,&argv,&env);
 	my_perl = perl_alloc();
 	perl_construct(my_perl);
