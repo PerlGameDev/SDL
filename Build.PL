@@ -20,7 +20,7 @@ BROKENMSG
 ### we need the platform-specific module
 my %platforms =(
 	MSWin32      => 'Windows',
-	MacOS        => 'MacOS',
+	MacOS        => 'Darwin',
 	darwin       => 'Darwin',
 	cygwin       => 'Unix',
 	freebsd      => 'Unix',
