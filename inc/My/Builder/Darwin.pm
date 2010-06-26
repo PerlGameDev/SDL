@@ -20,43 +20,28 @@ sub build_bundle
 	my $bundle_contents="SDLPerl.app/Contents";
 	system "mkdir -p \"$bundle_contents\"";
 	mkdir "$bundle_contents/MacOS",0755;
-	my $cflags = Alien::SDL->config('cflags');
+	my $cflags ;#= Alien::SDL->config('cflags');
+	$cflags = ' ' . `$^X -MExtUtils::Embed -e ccopts`;
 	chomp($cflags);
-	$cflags .= ' ' . `$^X -MExtUtils::Embed -e ccopts`;
-	chomp($cflags);
-	my $libs = Alien::SDL->config('libs');
+	$cflags .= ' '.Alien::SDL->config('cflags');
+	my $libs ; #= Alien::SDL->config('libs');
+	$libs = ' ' . `$^X -MExtUtils::Embed -e ldopts`;
 	chomp($libs);
-	$libs .= ' ' . `$^X -MExtUtils::Embed -e ldopts`;
+	$libs .= ' '. Alien::SDL->config('libs');
 	chomp($libs);
 	$libs =~ s/-lSDLmain//g;
-	my $cmd = "gcc $cflags $libs MacOSX/main.c  -o \"$bundle_contents/MacOS/SDLPerl\"";
-	print STDERR $cmd;
+	my $cmd = "gcc -o \"$bundle_contents/MacOS/SDLPerl\"  MacOSX/main.c $cflags $libs ";
+	print STDERR $cmd."\n";
 	system ($cmd);
 #	my $rez = "/Developer/Tools/Rez -d __DARWIN__ -useDF -o $bundle_content/Resources/SDLPerl.rsrc $(ARCH_FLAGS) SDLPerl.r
 #	/Developer/Tools/ResMerger -dstIs DF $bundle_content/Resources/SDLPerl.rsrc -o $@"
 	mkdir "$bundle_contents/Resources",0755;
-	print
 	system "echo \"APPL????\" > \"$bundle_contents/PkgInfo\"";
 	system "cp MacOSX/Info.plist \"$bundle_contents/\"";
 	system "cp \"MacOSX/SDLPerl.icns\" \"$bundle_contents/Resources\"";
 }
 
-sub process_support_files {
-       my $self = shift;
-       my $p = $self->{properties};
-       return unless $p->{c_source};
-       return unless $p->{c_sources};
 
-       push @{$p->{include_dirs}}, $p->{c_source};
-       unless ( $p->{extra_compiler_flags} && $p->{extra_compiler_flags} =~ /DARCHNAME/) {
-              $p->{extra_compiler_flags} .=  " -DARCHNAME=" . $self->{config}{archname};
-       }
-       print STDERR "[SDL::Build] extra compiler flags" . $p->{extra_compiler_flags} . "\n";
-
-       foreach my $file (map($p->{c_source} . "/$_", @{$p->{c_sources}})) {
-              push @{$p->{objects}}, $self->compile_c($file);
-       }
-}
 
 sub build_test
 {
