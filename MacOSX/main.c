@@ -1,6 +1,7 @@
 #include <EXTERN.h> /*  from the Perl distribution */
 #include <perl.h> /*  from the Perl distribution */
-//#include <SDL/SDL.h>
+#include <SDL/SDL.h>
+#include <SDL/SDLMain.h>
 
 static PerlInterpreter *my_perl; /* ** The Perl interpreter ***/
 static void xs_init (pTHX);

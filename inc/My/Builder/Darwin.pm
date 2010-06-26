@@ -27,9 +27,8 @@ sub build_bundle
 	my $libs ; #= Alien::SDL->config('libs');
 	$libs = ' ' . `$^X -MExtUtils::Embed -e ldopts`;
 	chomp($libs);
-	$libs .= ' '. Alien::SDL->config('libs');
+	$libs .= ' '. Alien::SDL->config('libs').' -lSDLmain';
 	chomp($libs);
-	$libs =~ s/-lSDLmain//g;
 	my $cmd = "gcc -o \"$bundle_contents/MacOS/SDLPerl\"  MacOSX/main.c $cflags $libs ";
 	print STDERR $cmd."\n";
 	system ($cmd);
