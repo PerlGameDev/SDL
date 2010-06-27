@@ -20,8 +20,10 @@ PDL's core type is a piddle. Once a piddle is provided to PDL it can go do a num
 First lets get the right modules.
 
   use PDL;
+  use SDL::Rect;
   use SDL::Video;
   use SDL::Surface;
+  use SDL::PixelFormat;
 
 Suppose you want a surface of size (200,400) and 32 bit (RGBA).
 
