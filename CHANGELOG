@@ -7,6 +7,7 @@ Revision history for Perl extension SDL_perl.
 	- Fixed SDL::Video->new_from + tests
 	- Added SDLx::Surface and SDLx::Surface::Matrix
 	- Added ppport.h support for older perls
+	- MacOSx compile and useage works
 
 * 2.408 Sun June 13 2010
 	- Added File::ShareDir as a dep
