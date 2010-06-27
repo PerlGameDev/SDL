@@ -69,7 +69,7 @@ sub update {
 
     SDL::Video::lock_surface($surface);
 
-    $piddle ( :, 0 : rand(400), 0 : rand(200) ) .=
+    $piddle ( :, rand(400) : rand(400), rand(200) : rand(200) ) .=
       pdl( rand(225), rand(225), rand(255), 255 );
 
     #
