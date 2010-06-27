@@ -49,7 +49,7 @@ surface_new (CLASS, flags, width, height, depth = 32, Rmask = 0xFF000000, Gmask 
 		RETVAL
 
 SDL_Surface *
-surface_new_from (CLASS, pixels, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask )
+surface_new_from (CLASS, pixels, width, height, depth, pitch, Rmask = 0xFF000000 , Gmask =  0x00FF0000, Bmask = 0x0000FF00, Amask =  0x000000FF )
 	char* CLASS
 	int width
 	int height
@@ -59,9 +59,10 @@ surface_new_from (CLASS, pixels, width, height, depth, pitch, Rmask, Gmask, Bmas
 	Uint32 Gmask
 	Uint32 Bmask
 	Uint32 Amask
-	char* pixels
+	SV* pixels
 	CODE:
-		RETVAL = SDL_CreateRGBSurfaceFrom ( (void *)pixels, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask );
+		int* pix = SvRV ( SvRV( pixels ) );
+		RETVAL = SDL_CreateRGBSurfaceFrom ( pix, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask );
 		if( RETVAL == NULL)
 		croak ("SDL_CreateRGBSurfaceFrom failed: %s", SDL_GetError());
 
