@@ -2,6 +2,8 @@ use strict;
 use SDL;
 use SDL::Config;
 
+my $audiodriver;
+
 BEGIN {
 	use Config;
 	if (! $Config{'useithreads'}) {
@@ -12,6 +14,9 @@ BEGIN {
 	use Test::More;
 	use lib 't/lib';
 	use SDL::TestTool;
+
+    $audiodriver          = $ENV{SDL_AUDIODRIVER};
+    $ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 	if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
 		plan( skip_all => 'Failed to init sound' );
@@ -47,5 +52,14 @@ SDL::Mixer::Music::play_music( $mix_music, 0 );
 SDL::Mixer::close_audio();
 
 ok( 1, 'Got to the end' );
+
+if($audiodriver)
+{
+	$ENV{SDL_AUDIODRIVER} = $audiodriver;
+}
+else
+{
+	delete $ENV{SDL_AUDIODRIVER};
+}
 
 sleep(2);

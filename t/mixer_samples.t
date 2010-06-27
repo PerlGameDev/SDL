@@ -3,6 +3,8 @@ use strict;
 use SDL;
 use SDL::Config;
 
+my $audiodriver;
+
 BEGIN
 {
 	use Config;
@@ -15,7 +17,10 @@ BEGIN
 	use lib 't/lib';
 	use SDL::TestTool;
 
-	if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
+    $audiodriver          = $ENV{SDL_AUDIODRIVER};
+    $ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+    
+    if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
 	    plan( skip_all => 'Failed to init sound' );
 	}
 	elsif( !SDL::Config->has('SDL_mixer') )
@@ -88,5 +93,14 @@ TODO:
 print "$why\n";
 
 pass 'Checking for segfaults';
+
+if($audiodriver)
+{
+	$ENV{SDL_AUDIODRIVER} = $audiodriver;
+}
+else
+{
+	delete $ENV{SDL_AUDIODRIVER};
+}
 
 done_testing();

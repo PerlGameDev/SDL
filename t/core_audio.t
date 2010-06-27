@@ -16,6 +16,9 @@ use Devel::Peek;
 use lib 't/lib';
 use SDL::TestTool;
 
+my $audiodriver       = $ENV{SDL_AUDIODRIVER};
+$ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
     plan( skip_all => 'Failed to init sound' );
 } else {
@@ -127,6 +130,16 @@ TODO:
 
 }
 print "$why\n";
+
+if($audiodriver)
+{
+	$ENV{SDL_AUDIODRIVER} = $audiodriver;
+}
+else
+{
+	delete $ENV{SDL_AUDIODRIVER};
+}
+
 sleep(1);
 
 sub audio_callback

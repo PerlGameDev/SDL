@@ -8,6 +8,7 @@ Revision history for Perl extension SDL_perl.
 	- Added SDLx::Surface and SDLx::Surface::Matrix
 	- Added ppport.h support for older perls
 	- MacOSx compile and useage works
+	- Using dummy audiodriver for tests so no sound is played [#163] [FROGGS]
 
 * 2.408 Sun June 13 2010
 	- Added File::ShareDir as a dep

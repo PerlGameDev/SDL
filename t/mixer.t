@@ -3,6 +3,8 @@ use strict;
 use SDL;
 use SDL::Config;
 
+my $audiodriver;
+
 BEGIN
 {
 	use Config;
@@ -14,6 +16,9 @@ BEGIN
 	use Test::More;
 	use lib 't/lib';
 	use SDL::TestTool;
+
+    $audiodriver          = $ENV{SDL_AUDIODRIVER};
+    $ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 	if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
 	    plan( skip_all => 'Failed to init sound' );
@@ -83,6 +88,15 @@ SKIP:
 {
 	skip ( 'Version 1.2.10 needed' , 1) unless ( $v->major >= 1 && $v->minor >= 2 && $v->patch >= 10); 
 	SDL::Mixer::quit(); pass '[quit] ran';
+}
+
+if($audiodriver)
+{
+	$ENV{SDL_AUDIODRIVER} = $audiodriver;
+}
+else
+{
+	delete $ENV{SDL_AUDIODRIVER};
 }
 
 done_testing();

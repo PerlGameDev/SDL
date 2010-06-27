@@ -20,6 +20,10 @@ use lib 't/lib';
 use SDL::TestTool;
 
 plan( skip_all => "author tests not required for installation" ) unless ( $ENV{AUTOMATED_TESTING} or $ENV{SDL_RELEASE_TESTING} );
+
+my $audiodriver       = $ENV{SDL_AUDIODRIVER};
+$ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
 plan( skip_all => 'Failed to init sound' )                       unless SDL::TestTool->init(SDL_INIT_AUDIO);
 
 my $obtained = SDL::AudioSpec->new;   
@@ -53,6 +57,15 @@ sub callback{
 die 'AudioMixer, Unable to open audio: '. SDL::get_error() if( SDL::Audio::open($desired, $obtained) <0 );
 
 SDL::Audio::pause(0);
+
+if($audiodriver)
+{
+	$ENV{SDL_AUDIODRIVER} = $audiodriver;
+}
+else
+{
+	delete $ENV{SDL_AUDIODRIVER};
+}
 
 sleep(1);
 
