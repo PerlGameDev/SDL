@@ -9,3 +9,7 @@ Cookbook
 =head2 First Steps
 
 see L<SDL::Tutorial>
+
+=head2 PDL with SDL
+
+Attaching a PDL piddle object to SDL. L<SDL::Cookbook::PDL>

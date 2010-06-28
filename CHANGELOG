@@ -4,11 +4,12 @@ Revision history for Perl extension SDL_perl.
 	- Fixed SDL::Surface->get_pixels_ptr
 	- Removed SDL::OpenGL, SDL::Game::Event
 	- Moved SDL::App -> SDLx::App, SDL::Game -> SDLx::Rect
-	- Fixed SDL::Video->new_from + tests
+	- Fixed SDL::Video->new_from + tests + PDL support
 	- Added SDLx::Surface and SDLx::Surface::Matrix
 	- Added ppport.h support for older perls
 	- MacOSx compile and useage works
 	- Using dummy audiodriver for tests so no sound is played [#163] [FROGGS]
+	- POGL example added
 
 * 2.408 Sun June 13 2010
 	- Added File::ShareDir as a dep
