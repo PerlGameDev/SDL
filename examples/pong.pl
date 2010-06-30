@@ -11,7 +11,7 @@ use Data::Dumper;
 use Math::Trig;
 
 use lib 'lib';
-use SDLx::Widget::Controller;
+use SDLx::Controller;
 
 my $app = init();
 
@@ -88,7 +88,7 @@ sub init {
     return $a;
 }
 
-my $game = SDLx::Widget::Controller->new( dt=> 0.1);
+my $game = SDLx::Controller->new( dt=> 0.1);
 
 sub on_move {
     my $dt = shift;
