@@ -4,11 +4,8 @@ use Test::More;
 use SDL;
 use SDL::Video;
 use SDL::Color;
+use SDLx::Sprite;
 
-BEGIN { 
-	use_ok( 'SDLx::Sprite' )
-		or BAIL_OUT 'failed to load Sprite class - bailing'
-}
 
 can_ok('SDLx::Sprite', qw( new rect clip load surface x y
                                    w h draw alpha_key)
@@ -16,8 +13,7 @@ can_ok('SDLx::Sprite', qw( new rect clip load surface x y
 
 TODO: {
     local $TODO = 'methods not implemented yet';
-
-    can_ok( 'SDLx::Sprite', qw( rotation ) );
+    can_ok( 'SDLx::Sprite', qw( add remove zoom ) );
 };
 
 
@@ -51,7 +47,7 @@ is($w, 0, 'no w defined upon raw initialization');
 is($h, 0, 'no h defined upon raw initialization');
 
 
-isa_ok ( $sprite->load('data/hero.png'), 'SDLx::Sprite', '[load] works');
+isa_ok ( $sprite->load('test/data/hero.png'), 'SDLx::Sprite', '[load] works');
 
 isa_ok ( $sprite->alpha_key(SDL::Color->new(0xfc, 0x00, 0xff)), 'SDLx::Sprite', '[alpha] works');
 

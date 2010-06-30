@@ -54,6 +54,8 @@ BEGIN {
 		SDL::Version
 
 		SDLx::App
+		SDLx::Sprite
+
 	/;
 	plan tests => scalar @modules;
 
