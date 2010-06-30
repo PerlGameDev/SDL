@@ -193,4 +193,20 @@ my $move_id  = $game->add_move_handler( \&on_move );
 my $event_id = $game->add_event_handler( \&on_event );
 my $show_id  = $game->add_show_handler( \&on_show );
 
+print <<'EOT';
+In this example, you should see two blue rectangles in the edges
+of the screen, and a red square bouncing by. This is a very simple
+and incomplete clone of pong, where you control the left paddle
+with the up and down keys, while the right paddle is controlled
+by the computer. However, you'll soon notice the "ball" goes right
+through both paddles, even though it bounces in the screen. In fact,
+this demo confines both paddles and the bouncing square into the
+screen.
+
+As with the other example, "print screen" should work if your
+system propagates it.
+
+To exit the demo, just close the window normally.
+EOT
+
 $game->run();
