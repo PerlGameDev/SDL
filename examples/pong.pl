@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Carp;
-use SDL ;
+use SDL;
 use SDL::Video ;
 use SDL::Surface;
 use SDL::Rect;
@@ -23,7 +23,6 @@ my $paddle = {
     vel   => 250,
     x_vel => 0,
     y_vel => 0,
-
 };
 
 
@@ -35,7 +34,6 @@ my $paddle2 = {
     vel   => 250,
     x_vel => 0,
     y_vel => 0,
-
 };
 
 my $r_ball = {
@@ -45,21 +43,17 @@ my $r_ball = {
     h     => 20,
     vel_x => ( 150 ),
     vel_y => ( 150 ),
-    
-    
-    
 };
 
 sub ball_confine {
     my ($w,$h,$x,$y, $ws, $hs) = @_;
-    
+
     my ($m_x,$m_y) = (1,1);
     $m_x = -1 if $x + $ws >= $w || $x <= 0;
     $m_y = -1 if $y + $hs >= $h || $y <= 0;
-    
-      
+
     return [$m_x,$m_y];  
-      }
+}
       
 sub paddle_confine {
        #return if $_[0]->{y_vel} == 0;
@@ -110,13 +104,20 @@ sub on_move {
     my $transform = ball_confine( $app->w, $app->h, $r_ball->{x} , $r_ball->{y},  $r_ball->{w}, $r_ball->{h} );
     $r_ball->{vel_x } *= $transform->[0];
     $r_ball->{vel_y } *= $transform->[1];
-    
+
     $r_ball->{x} += $r_ball->{vel_x } * $dt; 
     $r_ball->{y} += $r_ball->{vel_y } * $dt;
-    
-    
-    
-    
+
+    # "AI" for the other paddle
+    if ($r_ball->{y} > $paddle2->{y}) {
+        $paddle2->{y_vel} = $paddle2->{vel};
+    }
+    elsif ($r_ball->{y} < $paddle2->{y}) {
+        $paddle2->{y_vel} = -1 * $paddle2->{vel};
+    }
+    else {
+        $paddle2->{y_vel} = 0;
+    }
 
     return 1;
 }
@@ -161,8 +162,6 @@ sub show_paddle {
     my $app = shift;
     my $paddle = shift;
 
-
-
     SDL::Video::fill_rect(
         $app,
         SDL::Rect->new( $paddle->{x}, $paddle->{y}, $paddle->{w}, $paddle->{h} ),
@@ -180,7 +179,7 @@ sub on_show {
     );
     
     
-   show_paddle ($app, $paddle);
+    show_paddle ($app, $paddle);
     
     show_paddle ($app, $paddle2);
     
