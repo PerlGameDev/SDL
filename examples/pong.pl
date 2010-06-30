@@ -21,7 +21,6 @@ my $paddle = {
     w     => 20,
     h     => 80,
     vel   => 250,
-    x_vel => 0,
     y_vel => 0,
 };
 
@@ -32,7 +31,6 @@ my $paddle2 = {
     w     => 20,
     h     => 80,
     vel   => 250,
-    x_vel => 0,
     y_vel => 0,
 };
 
@@ -135,8 +133,6 @@ sub on_event {
 		}
         $paddle->{y_vel} -= $paddle->{vel} if $key == SDLK_UP;
         $paddle->{y_vel} += $paddle->{vel} if $key == SDLK_DOWN;
-        $paddle->{x_vel} -= $paddle->{vel} if $key == SDLK_LEFT;
-        $paddle->{x_vel} += $paddle->{vel} if $key == SDLK_RIGHT;
         $r_ball->{rot_vel} += 50 if $key == SDLK_SPACE;
      
     }
@@ -144,9 +140,6 @@ sub on_event {
         my $key = $event->key_sym;
         $paddle->{y_vel} += $paddle->{vel} if $key == SDLK_UP;
         $paddle->{y_vel} -= $paddle->{vel} if $key == SDLK_DOWN;
-        $paddle->{x_vel} += $paddle->{vel} if $key == SDLK_LEFT;
-        $paddle->{x_vel} -= $paddle->{vel} if $key == SDLK_RIGHT;
-        
     }
     elsif ( $event->type == SDL_QUIT ) {
         return 0;
