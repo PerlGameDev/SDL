@@ -41,8 +41,8 @@ my $r_ball = {
     y     => $app->w /2,
     w     => 20,
     h     => 20,
-    vel_x => ( 150 ),
-    vel_y => ( 150 ),
+    x_vel => ( 150 ),
+    y_vel => ( 150 ),
 };
 
 sub ball_confine {
@@ -102,11 +102,11 @@ sub on_move {
     # cc_speed = 2 * pi * r / T 
     
     my $transform = ball_confine( $app->w, $app->h, $r_ball->{x} , $r_ball->{y},  $r_ball->{w}, $r_ball->{h} );
-    $r_ball->{vel_x } *= $transform->[0];
-    $r_ball->{vel_y } *= $transform->[1];
+    $r_ball->{x_vel } *= $transform->[0];
+    $r_ball->{y_vel } *= $transform->[1];
 
-    $r_ball->{x} += $r_ball->{vel_x } * $dt; 
-    $r_ball->{y} += $r_ball->{vel_y } * $dt;
+    $r_ball->{x} += $r_ball->{x_vel } * $dt;
+    $r_ball->{y} += $r_ball->{y_vel } * $dt;
 
     # "AI" for the other paddle
     if ($r_ball->{y} > $paddle2->{y}) {
