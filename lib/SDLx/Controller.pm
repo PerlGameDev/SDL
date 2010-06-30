@@ -1,4 +1,4 @@
-package SDLx::Widget::Controller;
+package SDLx::Controller;
 use strict;
 use warnings;
 use SDL;
@@ -9,7 +9,7 @@ use SDLx::Controller::Timer;
 sub new {
     my $class = shift;
     my $self = bless {@_}, $class;
-    $self->{delta} = SDLx::Widget::Controller::Timer->new();
+    $self->{delta} = SDLx::Controller::Timer->new();
     $self->{delta}->start();    # should do this after on_load
     $self->{dt} = 0.1 unless $self->{dt};
 
