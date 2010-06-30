@@ -10,6 +10,8 @@ Revision history for Perl extension SDL_perl.
 	- MacOSx compile and useage works
 	- Using dummy audiodriver for tests so no sound is played [#163] [FROGGS]
 	- POGL example added
+	- Fixed fail due to to strict test for texture_polygon in SDL::GFX 
+	- Created SDL::FPS {Bliazer}
 
 * 2.408 Sun June 13 2010
 	- Added File::ShareDir as a dep
