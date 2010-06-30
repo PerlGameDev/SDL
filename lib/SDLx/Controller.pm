@@ -87,6 +87,42 @@ sub add_show_handler {
     return _add_handler( $_[0]->{show_handlers}, $_[1] );
 }
 
+sub _remove_handler {
+    my ( $arr_ref, $id ) = @_;
+    return splice( @{$arr_ref}, $id, 1 );
+}
+
+sub remove_move_handler {
+    return _remove_handler( $_[0]->{move_handlers}, $_[1] );
+}
+
+sub remove_event_handler {
+    return _remove_handler( $_[0]->{event_handlers}, $_[1] );
+}
+
+sub remove_show_handler {
+    return _remove_handler( $_[0]->{show_handlers}, $_[1] );
+}
+
+sub remove_all_handlers {
+    $_[0]->{move_handlers}  = [];
+    $_[0]->{event_handlers} = [];
+    $_[0]->{show_handlers}  = [];
+}
+
+sub remove_all_move_handlers {
+    $_[0]->{move_handlers} = [];
+}
+
+sub remove_all_event_handlers {
+    $_[0]->{event_handlers} = [];
+}
+
+sub remove_all_show_handlers {
+    $_[0]->{show_handlers} = [];
+}
+
 
 1; #not 42 man!
+
 
