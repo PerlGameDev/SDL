@@ -20,7 +20,7 @@ SDL::Video::fill_rect( $disp, SDL::Rect->new( 0, 0, $disp->w, $disp->h ), $pixel
 
 my $sprite = SDLx::Sprite->new();
 
- $sprite->load('data/chest.png');
+ $sprite->load('test/data/chest.png');
  
  $sprite->alpha_key(SDL::Color->new(0xfc, 0x00, 0xff));
  $sprite->alpha(0.8);

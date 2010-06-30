@@ -20,7 +20,7 @@ SDL::Video::fill_rect( $disp, SDL::Rect->new( 0, 0, $disp->w, $disp->h ), $pixel
 
 my $sprite = SDLx::Sprite::Animated->new;
 
- $sprite->load('data/hero.png');
+ $sprite->load('test/data/hero.png');
  $sprite->alpha_key(SDL::Color->new(0xfc, 0x00, 0xff));
  $sprite->clip( SDL::Rect->new(48,0,48,48) );
  $sprite->step_y(48);
