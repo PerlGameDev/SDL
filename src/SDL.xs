@@ -104,6 +104,7 @@ void boot_SDL__OpenGL();
 
 XS(boot_SDL_perl)
 {
+	PL_perl_destruct_level = 2;
 	GET_TLS_CONTEXT
 	boot_SDL();
 }
