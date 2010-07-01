@@ -1,5 +1,10 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.5 
+	- Fixed Memory Leaks due to perl desturct level 
+	- Fixed Memory leak in SDL::Mixer::Music 
+	- Fixed the test on SDLx::Sprite
+
 * 2.5 RC
 	- Fixed SDL::Surface->get_pixels_ptr
 	- Removed SDL::OpenGL, SDL::Game::Event
