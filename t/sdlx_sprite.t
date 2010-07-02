@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use Test::More;
 use SDL;
+use SDL::Config;
 use SDL::Video;
 use SDL::Color;
 use SDLx::Sprite;
