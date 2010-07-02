@@ -39,7 +39,7 @@ sub new {
 	$self->y($options{y})                 if exists $options{y};
     $self->rotation($options{rotation})   if exists $options{rotation};
 	$self->alpha_key($options{alpha_key}) if exists $options{alpha_key};
-#    $self->alpha($options{alpha})         if exists $options{alpha};
+    $self->alpha($options{alpha})         if exists $options{alpha};
 
 	return $self;
 }

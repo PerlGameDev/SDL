@@ -151,6 +151,7 @@ mixmus_hook_music( func = NULL, arg = 0 )
 			void *arg2   = safemalloc(sizeof(int));
 			*(int*) arg2 = arg;
 			Mix_HookMusic(&mix_func, arg2);
+			safefree(arg2);
 		}
 		else
 			Mix_HookMusic(NULL, NULL);
@@ -293,5 +294,12 @@ mixmus_set_music_cmd( cmd = NULL )
 		RETVAL = Mix_SetMusicCMD( cmd );
 	OUTPUT:
 		RETVAL
+
+void
+mixmus_DESTROY( music )
+	Mix_Music *music
+	CODE:
+		Mix_FreeMusic(music);
+
 
 #endif

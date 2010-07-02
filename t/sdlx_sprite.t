@@ -2,9 +2,14 @@ use strict;
 use warnings;
 use Test::More;
 use SDL;
+use SDL::Config;
 use SDL::Video;
 use SDL::Color;
 use SDLx::Sprite;
+use lib 't/lib';
+use SDL::TestTool;
+
+
 
 
 can_ok('SDLx::Sprite', qw( new rect clip load surface x y
@@ -20,7 +25,14 @@ TODO: {
 my $videodriver       = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
-SDL::init(SDL_INIT_VIDEO);
+if( !SDL::TestTool->init(SDL_INIT_VIDEO) )
+{
+	plan( skip_all => 'Failed to init video' );
+}
+elsif( !SDL::Config->has('SDL_image') )
+{
+	plan( skip_all => 'SDL_image support not compiled' );
+}
 
 my $disp = SDL::Video::set_video_mode( 300, 300, 32, SDL_ANYFORMAT);
 
