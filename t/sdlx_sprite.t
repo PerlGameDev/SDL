@@ -5,6 +5,7 @@ use SDL;
 use SDL::Video;
 use SDL::Color;
 use SDLx::Sprite;
+use lib 't/lib';
 use SDL::TestTool;
 
 
