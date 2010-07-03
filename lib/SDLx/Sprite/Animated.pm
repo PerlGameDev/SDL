@@ -21,6 +21,16 @@ sub step_y {
     return $self->{step_y};
 }
 
+sub step_x {
+    my ($self, $step_x) = @_;
+
+    if ($step_x) {
+        $self->{step_x} = $step_x;
+    }
+
+    return $self->{step_x};
+}
+
 sub next {
     my $self = shift;
     my $frame = $self->{current_frame} + 1 * $self->{direction};
