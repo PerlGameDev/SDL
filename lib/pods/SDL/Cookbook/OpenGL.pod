@@ -29,6 +29,8 @@ Expanded from Floyd-ATC's OpenGL example.
 	use SDL::Event;
 	use OpenGL qw(:all);
 
+You can use OpenGL as needed here.
+
 	my ($SDLAPP, $WIDTH, $HEIGHT, $SDLEVENT);
 
 	$| = 1;
@@ -37,6 +39,7 @@ Expanded from Floyd-ATC's OpenGL example.
 	$SDLAPP = SDLx::App->new(-title => "Opengl App", -width => $WIDTH, -height => $HEIGHT, -gl => 1);
 	$SDLEVENT = SDL::Event->new;
 
+SDLx::App can start an OpenGL application with the parameter -gl => 1.
 
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);
@@ -44,6 +47,7 @@ Expanded from Floyd-ATC's OpenGL example.
 	gluPerspective(60, $WIDTH / $HEIGHT, 1, 1000);
 	glTranslatef(0, 0, -20);
 
+Above we enable GL and set the correct prespective
 
 	while (1) {
 	  &handlepolls;
@@ -53,7 +57,7 @@ Expanded from Floyd-ATC's OpenGL example.
 	  $SDLAPP->sync;
 	}
 
-
+For SDLx::App sync handles the GL buffer clean.
 
 	sub drawscene {
 	  my ($color, $x, $y, $z);
@@ -68,9 +72,6 @@ Expanded from Floyd-ATC's OpenGL example.
 
 	  return "";
 	}
-
-
-
 
 
 	sub draw_cube {
@@ -99,8 +100,7 @@ Expanded from Floyd-ATC's OpenGL example.
 	  return "";
 	}
 
-
-
+Below we can use SDL::Events as normal:
 
 	sub handlepolls {
 	  my ($type, $key);
@@ -127,6 +127,6 @@ Expanded from Floyd-ATC's OpenGL example.
 
 =head1 SEE ALSO
 
-L<perl> L<SDLx::App> L<OpenGL>
+L<perl> L<SDLx::App> L<OpenGL> 
 
 =cut

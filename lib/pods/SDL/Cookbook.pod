@@ -16,5 +16,7 @@ Attaching a PDL piddle object to SDL. L<SDL::Cookbook::PDL>
 
 =head2 POGL with SDL
 
+Starting an OpenGL app with SDLx::App. L<SDL::Cookbook::OpenGL>
+
 Sending textures to Perl OpenGL. L<SDL::Cookbook::POGL>
 
