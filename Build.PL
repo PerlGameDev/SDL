@@ -343,6 +343,14 @@ my %subsystems =
 		},
 		libraries => [qw( SDL SDL_image jpeg png tiff)],
 	},
+	SFont => {
+		file	=> {
+			from => 'src/SDLx/SFont.xs',
+			to   =>	'lib/SDLx/SFont.xs',
+		},
+		libraries => [qw( SDL SDL_image )],
+	},
+
 #	SMPEG => {
 #		file	=> {
 #			from => 'src/SMPEG.xs',

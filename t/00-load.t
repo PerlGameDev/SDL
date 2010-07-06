@@ -57,6 +57,7 @@ BEGIN {
 		SDLx::Sprite
 		SDLx::Sprite::Animated
 		SDLx::FPS
+		SDLx::SFont
 		
 	/;
 	plan tests => scalar @modules;
