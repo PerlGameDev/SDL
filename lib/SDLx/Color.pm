@@ -2,10 +2,10 @@ package SDLx::Color;
 use strict;
 use SDL::Color;
 use Carp;
-our @ISA = qw(SDL::Color);
+use base 'SDL::Color';
 use overload
-	'@{}' => "_array",
-	fallback => 1,
+'@{}' => "_array",
+fallback => 1,
 ;
 
 sub new {
@@ -62,23 +62,41 @@ sub new {
 		my $n = int(ref() ? 0 : $_);
 		$n < 0 ? 0 : $n > 255 ? 255 : $n;
 	} @rgba;
-	
-	
+
+
 	#What do with alpha?????
-	
-	
-	$class->SDL::Color::new(@rgba[0..2]);
+	my $self = $class->SUPER::new( @rgba[0..2] );
+	unless ($$self) {
+		#require Carp;
+		croak SDL::get_error();
+
+	}
+	bless $self, $class;
+	$self->{a} = 255 ;
+	$self->{a} = $rgba[3] if $rgba[3];
+
+
+	return $self;
 }
 sub rgb {
 	my ($self) = @_;
 	sprintf "0x" . "%02x" x 3, $self->r, $self->g, $self->b;
 
 }
+
+sub a :lvalue
+{
+	return $_[0]->{a};
+}
+
 sub rgba {
 	my ($self) = @_;
 	$self->rgb . sprintf "%02x", $self->a;
 }
 sub _array {
 	my ($self) = @_;
-	[$self->r, $self->g, $self->b];
+	[$self->r, $self->g, $self->b, $self->a];
 }
+
+
+1;
