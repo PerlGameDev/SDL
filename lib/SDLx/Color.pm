@@ -2,11 +2,11 @@ package SDLx::Color;
 use strict;
 use SDL::Color;
 use Carp;
-use base 'SDL::Color';
 use overload
 '@{}' => "_array",
 fallback => 1,
 ;
+
 
 sub new {
 	my ($class, @args) = @_;
@@ -65,16 +65,13 @@ sub new {
 
 
 	#What do with alpha?????
-	my $self = $class->SUPER::new( @rgba[0..2] );
-	unless ($$self) {
-		#require Carp;
-		croak SDL::get_error();
-
-	}
+	my $self = {};
 	bless $self, $class;
-	$self->{a} = 255 ;
-	$self->{a} = $rgba[3] if $rgba[3];
 
+	$self->r = $rgba[0];
+	$self->b = $rgba[1];
+	$self->g = $rgba[2];
+	$self->a = $rgba[3];
 
 	return $self;
 }
@@ -84,10 +81,27 @@ sub rgb {
 
 }
 
+sub r :lvalue
+{
+	return $_[0]->{r};
+}
+
+sub b :lvalue
+{
+	return $_[0]->{b};
+}
+
+sub g :lvalue
+{
+	return $_[0]->{g};
+}
+
 sub a :lvalue
 {
 	return $_[0]->{a};
 }
+
+
 
 sub rgba {
 	my ($self) = @_;
@@ -95,7 +109,12 @@ sub rgba {
 }
 sub _array {
 	my ($self) = @_;
-	[$self->r, $self->g, $self->b, $self->a];
+	[$self->r, $self->b, $self->g, $self->a];
+}
+
+sub palettize {
+
+	return SDL::Color->new( $_[0]->r, $_[0]->b, $_[0]->g);
 }
 
 

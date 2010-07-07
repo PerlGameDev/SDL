@@ -11,10 +11,15 @@ use SDL::TestTool;
 
 can_ok('SDLx::Color', qw( new rgb ) );
 
+my $color = SDLx::Color->new( [ 10, 20, 30, 40 ]);
+isa_ok($color, 'SDLx::Color');
+
+
 TODO:
 {
-	local $TODO = "Constructor needs to be fixed";
-my $color = SDLx::Color->new( [ 10, 20, 30, 40 ]);
+	local $TODO = "Arrayref overload fails";
+	#print @{$color}[0];
+	fail( "Array overload fails");
 
 }
 
