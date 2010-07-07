@@ -2,59 +2,72 @@
 
 =head1 NAME
 
-SDL::Mouse -- SDL Bindings for the Mouse device
+SDL::Mouse - SDL Bindings for the Mouse device
 
 =head1 CATEGORY
 
 Core, Mouse
 
+=head1 CONSTANTS
+
+The constants for SDL::Mouse belong to SDL::Events/SDL::Event, under the export tag of C<':state'>.
+
 =head1 METHODS
 
 =head2 warp_mouse
 
- void warp_mouse( int $x, int $y );
+ SDL::Mouse::warp_mouse( $x, $y );
 
 Set the position of the mouse cursor (generates a mouse motion event).
+Even if the mouse is warped to where it currently is, a mouse motion event is generated.
 
 =head2 set_cursor
 
- void set_cursor( object );
+ SDL::Mouse::set_cursor( $cursor_object );
 
-Sets the currently active cursor to the specified one. If the cursor is currently visible, the change will be immediately represented 
-on the display. C<set_cursor()> can be used to force cursor redraw, if this is desired for any reason. 
+Sets the currently active cursor to the specified one.
+See L<SDL::Cursor> for details on cursor objects.
+If the cursor is currently visible, the change will be immediately represented on the display.
+C<set_cursor()> can be used to force cursor redraw, if this is desired for any reason.
 
 =head2 get_cursor
 
- object get_cursor();
- 
+ my $cursor_object = SDL::Mouse::get_cursor;
+
 Gets the currently active mouse cursor.
 
 =head2 show_cursor
 
- int show_cursor( int toggle );
+ my $return = SDL::Mouse::show_cursor( $state );
 
-Toggle whether or not the cursor is shown on the screen. Passing C<SDL_ENABLE> displays the cursor and passing C<SDL_DISABLE> hides it. 
+Toggle whether or not the cursor is shown on the screen.
+Passing C<SDL_ENABLE> displays the cursor and passing C<SDL_DISABLE> hides it.
 The current state of the mouse cursor can be queried by passing C<SDL_QUERY>, either C<SDL_DISABLE> or C<SDL_ENABLE> will be returned.
 
  use SDL;
  use SDL::Mouse;
  use SDL::Video;
- 
+ use SDL::Events ':state'; #For the constants
+
  SDL::init(SDL_INIT_VIDEO);
- SDL::Video::set_video_mode( 640, 480, 16, SDL_SWSURFACE);
- 
+ SDL::Video::set_video_mode(640, 480, 16, SDL_SWSURFACE);
+
  printf("Cursor is %s\n", SDL::Mouse::show_cursor(SDL_QUERY) ? 'visible' : 'not visible');
- 
+
  sleep(3);
- 
+
  SDL::Mouse::show_cursor(SDL_DISABLE);
  printf("Cursor is %s\n", SDL::Mouse::show_cursor(SDL_QUERY) ? 'visible' : 'not visible');
- 
+
  sleep(3);
- 
+
  SDL::Mouse::show_cursor(SDL_ENABLE);
  printf("Cursor is %s\n", SDL::Mouse::show_cursor(SDL_QUERY) ? 'visible' : 'not visible');
- 
+
  sleep(3);
+
+=head1 SEE ALSO
+
+L<SDL::Cursor>
 
 =cut

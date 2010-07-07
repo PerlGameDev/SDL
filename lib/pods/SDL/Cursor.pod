@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-SDL::Cursor -- Mouse cursor structure
+SDL::Cursor - Mouse cursor structure
 
 =head1 CATEGORY
 
@@ -16,22 +16,25 @@ Core, Mouse, Structure
      $width,
      $height,
      $hotspot_left,
-     $hotspot_top );
+     $hotspot_top
+ );
 
  SDL::Mouse::set_cursor($cursor);
 
 =head1 DESCRIPTION
 
-the C<SDL::Cursor> module handles mouse cursors, and provide the developer to
-use custom made cursors. Note that the cursors can only be in black and
-white.
+The C<SDL::Cursor> module handles mouse cursors, and allows the developer to use custom-made cursors.
+Note that cursors can only be in black and white.
 
 =head1 METHODS
 
 =head2 new
 
-Create a cursor using the specified data and mask (in MSB format). The cursor width must be a multiple of 8 bits.
+ my $cursor = SDL::Cursor->new(
+     \@data, \@mask, $width, $height, $hotspot_left, $hotspot_top
+ );
 
+Create a cursor using the specified data and mask (in MSB format).
 The cursor is created in black and white according to the following:
 
  Data / Mask   Resulting pixel on screen
@@ -40,21 +43,20 @@ The cursor is created in black and white according to the following:
     0 / 0      Transparent
     1 / 0      Inverted color if possible, black if not.
 
-Cursors created with this function must be freed with SDL_FreeCursor.
-
-If you want to have color cursor, then this function is not for you; instead, you must hide normal system cursor with C<SDL::Cursor->new>
-and in your main loop, when you draw graphics, also draw a C<SDL::Surface> at the location of the mouse cursor. 
+If you want to have color cursor, then this function is not for you.
+Instead, you should hide the cursor with C<SDL::Mouse::show_cursor(SDL_DISABLE)>.
+Then in your main loop, when you draw graphics, draw a C<SDL::Surface> at the location of the mouse cursor.
 
 Example:
 
  use SDL;
- use SDL::Cursor;
- use SDL::Mouse;
  use SDL::Video;
- 
+ use SDL::Mouse;
+ use SDL::Cursor;
+
  SDL::init(SDL_INIT_VIDEO);
- SDL::Video::set_video_mode( 640, 480, 16, SDL_SWSURFACE);
- 
+ SDL::Video::set_video_mode(640, 480, 16, SDL_SWSURFACE);
+
  my @data = (
      0b00000000,
      0b00111100,
@@ -65,7 +67,6 @@ Example:
      0b00111100,
      0b00000000
  );
-
  my @mask = (
      0b00111100,
      0b01111110,
@@ -76,20 +77,40 @@ Example:
      0b01111110,
      0b00111100
  );
-
- my $cursor = SDL::Cursor->new( \@data, \@mask, 8, 8, 0, 0 );
- 
+ my $cursor = SDL::Cursor->new(\@data, \@mask, 8, 8, 0, 0);
  sleep(1);
+
  SDL::Mouse::set_cursor($cursor);
- 
  sleep(5);
+
+The width of cursors work in groups of 8.
+If the width is above 8, twice the amount of elements in C<@data> and C<@mask> are required.
+If the width is above 16, three times are required, and so on.
+For example, if you wanted a 9 pixel crosshair you might do the following:
+
+ my @data = (
+     0b00001000,0b00000000,
+     0b00001000,0b00000000,
+     0b00001000,0b00000000,
+     0b00001000,0b00000000,
+     0b11111111,0b10000000,
+     0b00001000,0b00000000,
+     0b00001000,0b00000000,
+     0b00001000,0b00000000,
+     0b00001000,0b00000000,
+ );
+ my @mask = @data;
+
+ my $cursor = SDL::Cursor->new(\@data, \@mask, 9, 9, 4, 4);
+
+The hotspot is offset by 4 pixels because a crosshair clicks from the center instead of the top left.
 
 =head1 AUTHOR
 
-David J. Goehrig, Tobias Leich
+David J. Goehrig, Tobias Leich, Blaizer
 
 =head1 SEE ALSO
 
 L<perl> L<SDL::Mouse>
 
-=cut	
+=cut

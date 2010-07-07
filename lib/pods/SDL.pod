@@ -43,31 +43,39 @@ Export tag: ':init'
 
 =head1 METHODS
 
-=head2 init(flags)
+=head2 init
+
+ SDL::init( $flags );
 
 As with the C language API, SDL Perl initializes the SDL environment with the C<SDL::init> subroutine.
 This routine takes a mode flag constructed through the bitwise OR product of the C<SDL_INIT_*> constants.
-The C<flags> tell C<SDL::init> which subsystems to initialize.
+The C<$flags> tell C<SDL::init> which subsystems to initialize.
 
  SDL::init(SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
 
 C<SDL::init> returns C<0> on success, or C<-1> on error.
 
-=head2 init_subsystem(flags)
+=head2 init_subsystem
 
-After C<SDL> has been initialized with C<SDL::init> you may initialize any uninitialized subsystems with C<SDL::init_subsystem>.
-The C<flags> tell C<SDL::init_subsystem> which subsystems to initialize, and are taken in the same way as C<SDL::init>.
+ SDL::init_subsystem( $flags );
+
+After SDL has been initialized with C<SDL::init> you may initialize any uninitialized subsystems with C<SDL::init_subsystem>.
+The C<$flags> tell C<SDL::init_subsystem> which subsystems to initialize, and are taken in the same way as C<SDL::init>.
 
 C<SDL::init_subsystem> returns C<0> on success, or C<-1> on error.
 
-=head2 quit_subsystem(flags)
+=head2 quit_subsystem
+
+ SDL::quit_subsystem( $flags );
 
 C<SDL::quit_subsystem> allows you to shut down a subsystem that has been previously initialized by C<SDL::init> or C<SDL::init_subsystem>.
-The C<flags> tell C<SDL::quit_subsystem> which subsystems to shut down, and are taken in the same way as C<SDL::init>.
+The C<$flags> tell C<SDL::quit_subsystem> which subsystems to shut down, and are taken in the same way as C<SDL::init>.
 
 C<SDL::quit_subsystem> doesn't return any values.
 
-=head2 quit()
+=head2 quit
+
+ SDL::quit;
 
 C<SDL::quit> Shuts down all SDL subsystems, unloads the dynamically linked library and frees the allocated resources.
 
@@ -75,13 +83,15 @@ B<Note:> This will be called automatically when Perl exits. You don't need to ca
 
 C<SDL::quit> doesn't return any values.
 
-=head2 was_init(flags)
+=head2 was_init
+
+ my $flags = SDL::was_init( $flags );
 
 C<SDL::was_init> allows you to see which SDL subsytems have been initialized.
-The C<flags> tell C<SDL::was_init> which subsystems to check, and are taken in the same way as C<SDL::init>.
+The C<$flags> tell C<SDL::was_init> which subsystems to check, and are taken in the same way as C<SDL::init>.
 
 C<SDL::was_init> returns a mask of the initialized subsystems it checks.
-If C<flags> is C<0> or C<SDL_INIT_EVERYTHING>, a mask of all initialized subsystems will be returned (this does not include C<SDL_INIT_EVENTTHREAD> or C<SDL_INIT_NOPARACHUTE>).
+If C<$flags> is C<0> or C<SDL_INIT_EVERYTHING>, a mask of all initialized subsystems will be returned (this does not include C<SDL_INIT_EVENTTHREAD> or C<SDL_INIT_NOPARACHUTE>).
 
  use SDL ':all';
 
@@ -90,43 +100,55 @@ If C<flags> is C<0> or C<SDL_INIT_EVERYTHING>, a mask of all initialized subsyst
      # Both subsystems are initialized!
  }
 
-=head2 get_error()
+=head2 get_error
+
+ my $error = SDL::get_error;
 
 Returns a scalar value containing the last error message set by the SDL library (if any).
 
-=head2 set_error_real(error, @values)
+=head2 set_error_real
+
+ SDL::set_error_real( $printf_format, @values )
 
 C<SDL::set_error_real> sets the SDL error to a C<printf> style formatted string.
 
 C<SDL::set_error_real> doesn't return any values.
 
-=head2 clear_error()
+=head2 clear_error
+
+ SDL::clear_error;
 
 C<SDL::clear_error> deletes all information about the last SDL error.
 This is useful if the error has been handled by the program.
 
 C<SDL::clear_error> doesn't return any values.
 
-=head2 version()
+=head2 version
+
+ my $version = SDL::version;
 
 Returns an C<SDL::Version> object of the SDL library at compile-time.
 
  use SDL;
  use SDL::Version;
 
- my $v = SDL::version();
+ my $v = SDL::version;
  printf("got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch);
 
-=head2 linked_version()
+=head2 linked_version
 
 C<SDL::linked_version> works in the same way as C<SDL::version>, but returns an C<SDL::Version> object of the SDL library at link-time.
 
-=head2 get_ticks()
+=head2 get_ticks
+
+ my $ticks = SDL::get_ticks;
 
 Returns the number of milliseconds since SDL library initialization.
 This value wraps around if the program runs for more than 49.7 days
 
-=head2 delay(ms)
+=head2 delay
+
+ SDL::delay( $ms );
 
 C<SDL::delay> waits the specified number of milliseconds before returning.
 The actual delay may be longer than specified depending on the underlying OS.
@@ -136,7 +158,7 @@ C<SDL::delay> doesn't return anything.
  # Delay for half a second
  SDL::delay(500);
 
-=head1 AUTHORS
+=head1 AUTHOR
 
 magnet, kthakore, Blaizer
 

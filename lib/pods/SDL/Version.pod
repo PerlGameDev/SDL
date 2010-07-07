@@ -12,12 +12,12 @@ Core, Structure
 
  use SDL;
  use SDL::Version;
- 
+
  # print compile-time version
  printf("SDL::version is %d.%d.%d\n", SDL::version->major,
                                       SDL::version->minor,
                                       SDL::version->patch);
- 
+
  # print linked version
  printf("SDL::linked_version is %d.%d.%d\n", SDL::linked_version->major,
                                              SDL::linked_version->minor,
@@ -27,18 +27,20 @@ Core, Structure
 
 The C<SDL::Version> structure is used by the C<SDL::linked_version> function and the C<SDL::version> macro.
 The C<SDL::linked_version> function returns the link-time SDL version whereas C<SDL::version> returns the compile-time SDL version.
+B<Note:> This is the SDL version, not the SDL_Perl version.
+The SDL_Perl version is in C<$SDL::VERSION>.
 
 =head1 METHODS
 
-=head2 major()
+=head2 major
 
 Returns the major version number.
 
-=head2 minor()
+=head2 minor
 
 Returns the minor version number.
 
-=head2 patch()
+=head2 patch
 
 Returns the patch version number.
 

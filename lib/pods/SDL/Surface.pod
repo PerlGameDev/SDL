@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-SDL::Surface - Graphic surface structure.
+SDL::Surface - Graphic surface structure
 
 =head1 CATEGORY
 
@@ -10,55 +10,25 @@ Core, Video, Structure
 
 =head1 SYNOPSIS
 
-The main surface (display) is provided by L<SDL::Video::set_video_mode>.
-  use SDL; #provides flags & constants
-  use SDL::Video; #provides access to set_video_mode
-  use SDL::Surface; #provides access to SDL_Surface struct internals
-  
-  SDL::init(SDL_INIT_VIDEO); 
-  my $display = SDL::Video::set_video_mode(); 
- 
-All surfaces constructed from now on are attached to the $display. There are two constructors available to do this.
+ use SDL;
+ use SDL::Video;
+ use SDL::Surface;
 
-  my $surface  = SDL::Surface->new ( ... ); 
-  my $surface2 = SDL::Surface->new_from ( surface, ... ); 
-  
+ # Create the main surface (display)
+ SDL::init(SDL_INIT_VIDEO);
+ my $display = SDL::Video::set_video_mode(640, 480, 16, SDL_SWSURFACE);
+
+ # Create other surfaces attached to the $display.
+ my $surface  = SDL::Surface->new(SDL_ASYNCBLIT | SDL_HWSURFACE, 640, 480, 16, 0, 0, 0, 0);
+ my $surface2 = SDL::Surface->new_from($surface, 100, 100, 8, 0, 0, 0, 0);
+
 =head1 DESCRIPTION
 
 An C<SDL_Surface> defines a surfaceangular area of pixels.
 
 =head1 CONSTANTS
 
-The constants are exported by default. You can avoid this by doing:
-
- use SDL::Video ();
-
-and access them directly:
-
- SDL::Video::SDL_SWSURFACE;
-
-Available constants: see L</flags>
-
-=head1 METHODS
-
-=head2 new ( flags, width, height, depth, Rmask, Gmask, Bmask, Amask )
-
-The constructor creates a new surface with the specified parameter values.
-
-    my $surface = SDL::Surface->new( ... );
-
-=head2 new_from ( surface, width, height, depth, Rmask, Gmask, Bmask, Amask )
-
-The constructor creates a new surface with the specified parameter values. 
-
-    my $surface = SDL::Surface->new_from( $old_surface, ... );
-
-
-=head3 Construtor Parameters
-
-=head4 flags
-
-Available flags for new() are exported by SDL::Video
+The constants for SDL::Surface belong to SDL::Video, under the export tag of C<':surface'>.
 
 =over 4
 
@@ -68,87 +38,99 @@ Use asynchronous blit if possible
 
 =item SDL_SWSURFACE
 
-Stored in the system memory.
+Store in system memory
 
 =item SDL_HWSURFACE
 
-Stored in video memory
+Store in video memory
 
 =back
 
+=head1 METHODS
+
+=head2 new
+
+ my $surface = SDL::Surface->new(
+     $flags, $width, $height, $depth, $Rmask, $Gmask, $Bmask, $Amask
+ );
+
+The constructor creates a new surface with the specified parameter values.
+
+The four mask values are the bits that the channel will ignore.
+For example, an Rmask of C<0xFF> will ignore that channel completely, making everything on the surface more green/blue.
+
+=head2 new_from
+
+ my $surface = SDL::Surface->new_from(
+     $surface, $width, $height, $depth, $Rmask, $Gmask, $Bmask, $Amask
+ );
+
+The constructor creates a new surface with the specified parameter values.
+The flags are taken from the specified C<$surface>.
+
 =head2 w
 
-SDL::Surface width are defined at construction. Thus the following is read only. 
+ my $w = $surface->w;
 
-  my $w = $surface->w; 
-  
+Returns the width of the surface.
+SDL::Surface width is defined at construction so this is read-only.
+
 =head2 h
 
-SDL::Surface height are defined at construction. Thus the following is read only. 
+ my $h = $surface->h;
 
-  my $h = $surface->h; 
+Returns the height of the surface.
+SDL::Surface height is defined at construction so this is read-only.
 
 =head2 format
 
-The format of the pixels stored in the surface. See L<SDL::PixelFormat>
-
  my $format = $surface->format;
+
+The format of the pixels stored in the surface.
+See L<SDL::PixelFormat>
 
 =head2 pitch
 
  my $pitch = $surface->pitch;
 
-SDL::Surface's scanline length in bytes
-
-=head2 clip_rect
-
-To get the surface's clip_rect we the following
-
- my $clip_rect = SDL::Rect->new(0,0,0,0);
- SDL::Video::get_clip_rect($surface, $clip_rect);
-
-To set the surface's clip_rect use the following
-
- my $clip_rect = SDL::Rect->new(2,23,23,542);
- SDL::Video::set_clip_rect($surface, $clip_rect);
+The scanline length in bytes.
 
 =head1 Direct Write to Surface Pixel
 
-Disclaimer: This can be very slow, it is suitable for creating surfaces one time and not for animations
+B<Disclaimer:> The following methods can be very slow, making them suitable for creating surfaces, but not for animations
 
 =head2 get_pixel
 
- my $pixel = $surface->get_pixel( $offset )  
+ my $pixel = $surface->get_pixel( $offset )
 
-Returns the pixel value for the given C<$offset>. The pixel value depends on current pixel format.
+Returns the pixel value for the given C<$offset>.
+The pixel value depends on current pixel format.
 
-B<Note>: For surfaces with a palette (1 byte per pixel) the palette index is returned instead of color values.
+B<Note:> For surfaces with a palette (1 byte per pixel) the palette index is returned instead of color values.
 
 =head2 set_pixels
 
  $surface->set_pixels( $offset, $value );
 
-Sets the current pixel C<$value> to the given C<$offset>. The pixel value must fit the pixel format of the surface.
+Sets the pixel C<$value> to the given C<$offset>.
+The pixel value must fit the pixel format of the surface.
 
 B<Note>: For surfaces with a palette (1 byte per pixel) the palette index must be passed instead of color values.
 
-=head3 Usage
+Example:
 
- sub putpixel
- {
-     my($x, $y, $color) = @_;
-     $screen->set_pixels( $x + $y * $screen->w, $color);
+ sub putpixel {
+     my ($x, $y, $color) = @_;
+     $display->set_pixels( $x + $y * $display->w, $color);
  }
 
-See also examples/sols/ch02.pl
+See also F<examples/pixel_operations/sols/ch02.pl>!
 
 =head2 get_pixels_ptr
 
- $surface->get_pixels_ptr();
+ my $ptr = $surface->get_pixels_ptr;
 
-Returns the C ptr to this surfaces's pixels
-
-
+Returns a reference to the surface's pixels.
 
 =head1 SEE ALSO
 

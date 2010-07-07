@@ -10,14 +10,14 @@ Core, Video, Structure
 
 =head1 SYNOPSIS
 
-  my $black = SDL::Color->new( 0, 0, 0);
-  my $color = SDL::Color->new(255, 0, 0);
-  my $r = $color->r; # 255
-  my $g = $color->g; # 0
-  my $b = $color->b; # 0
-  $color->g(255);
-  $color->b(255);
-  # $color is now white
+ my $black = SDL::Color->new(0, 0, 0);
+ my $color = SDL::Color->new(255, 0, 0);
+ my $r = $color->r; # 255
+ my $g = $color->g; # 0
+ my $b = $color->b; # 0
+ $color->g(255);
+ $color->b(255);
+ # $color is now white
 
 =head1 DESCRIPTION
 
@@ -25,36 +25,35 @@ C<SDL_Color> describes a color in a format independent way.
 
 =head1 METHODS
 
-=head2 new ( $r, $g, $b )
+=head2 new
 
-The constructor creates a new color with the specified red, green and
-blue values:
+ my $color = SDL::Color->new(255, 0, 0);
 
-  my $color = SDL::Color->new(255, 0, 0);
+The constructor creates a new color with the specified red, green and blue values.
 
 =head2 r
 
-If passed a value, this method sets the red component of the color;
-if not, it returns the red component of the color:
+ my $r = $color->r;
+ $color->r(128);
 
-  my $r = $color->r; # 255
-  $color->r(128);
+If passed a value, this method sets the red component of the color;
+if not, it returns the red component of the color.
 
 =head2 g
 
-If passed a value, this method sets the green component of the color;
-if not, it returns the green component of the color:
+ my $g = $color->g;
+ $color->g(128);
 
-  my $g = $color->g; # 255
-  $color->g(128);
+If passed a value, this method sets the green component of the color;
+if not, it returns the green component of the color.
 
 =head2 b
 
-If passed a value, this method sets the blue component of the color;
-if not, it returns the blue component of the color:
+ my $b = $color->b;
+ $color->b(128);
 
-  my $b = $color->b; # 255
-  $color->b(128);
+If passed a value, this method sets the blue component of the color;
+if not, it returns the blue component of the color.
 
 =head1 SEE ALSO
 

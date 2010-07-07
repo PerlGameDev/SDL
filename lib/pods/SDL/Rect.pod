@@ -10,15 +10,14 @@ Core, Video, Structure
 
 =head1 SYNOPSIS
 
-  my $rect = SDL::Rect->new( 0, 0, 0, 0 );
-  $rect->x(1);
-  $rect->y(2);
-  $rect->w(3);
-  $rect->h(4);
-  my $x = $rect->x; # 1
-  my $y = $rect->y; # 2
-  my $w = $rect->w; # 3
-  my $h = $rect->h; # 4
+ my $rect = SDL::Rect->new(0, 0, 50, 4);
+ $rect->x(1);
+ $rect->y(2);
+ $rect->w(3);
+ my $x = $rect->x; # 1
+ my $y = $rect->y; # 2
+ my $w = $rect->w; # 3
+ my $h = $rect->h; # 4
 
 =head1 DESCRIPTION
 
@@ -26,44 +25,43 @@ An C<SDL_Rect> defines a rectangular area of pixels.
 
 =head1 METHODS
 
-=head2 new ( $x, $y, $w, $h )
+=head2 new
 
-The constructor creates a new rectangle with the specified x, y, w, h
-values:
+ my $rect = SDL::Rect->new( $x, $y, $w, $h );
 
-    my $rect = SDL::Rect->new( 0, 0, 0, 0 );
+The constructor creates a new rectangle with the specified x, y, width and height values.
 
 =head2 x
 
-If passed a value, this method sets the x component of the rectangle;
-if not, it returns the x component of the rectangle:
+ my $x = $rect->x;
+ $rect->x(128);
 
-  my $x = $rect->x; # 255
-  $rect->x(128);
+If passed a value, this method sets the x component of the rectangle;
+if not, it returns the x component of the rectangle.
 
 =head2 y
 
-If passed a value, this method sets the y component of the rectangle;
-if not, it returns the y component of the rectangle:
+ my $y = $rect->y;
+ $rect->y(128);
 
-  my $y = $rect->y; # 255
-  $rect->y(128);
+If passed a value, this method sets the y component of the rectangle;
+if not, it returns the y component of the rectangle.
 
 =head2 w
 
-If passed a value, this method sets the w component of the rectangle;
-if not, it returns the w component of the rectangle:
+ my $w = $rect->w;
+ $rect->w(128);
 
-  my $w = $rect->w; # 255
-  $rect->w(128);
+If passed a value, this method sets the w component of the rectangle;
+if not, it returns the w component of the rectangle.
 
 =head2 h
 
-If passed a value, this method sets the h component of the rectangle;
-if not, it returns the h component of the rectangle:
+ my $h = $rect->h;
+ $rect->h(128);
 
-  my $h = $rect->h; # 255
-  $rect->h(128);
+If passed a value, this method sets the h component of the rectangle;
+if not, it returns the h component of the rectangle.
 
 =head1 SEE ALSO
 
