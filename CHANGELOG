@@ -5,7 +5,6 @@ Revision history for Perl extension SDL_perl.
 	- Fixed Memory leak in SDL::Mixer::Music 
 	- Fixed the test on SDLx::Sprite
 	- Added SDLx::FPS [Blaizer]
-	- Added SDLx::Color [Blaizer]
 	- Cleaned up docs [Blaizer]
 	- Added SDLx::SFont
 
