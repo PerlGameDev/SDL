@@ -57,7 +57,6 @@ BEGIN {
 		SDLx::Sprite
 		SDLx::Sprite::Animated
 		SDLx::FPS
-		SDLx::Color
 		SDLx::SFont
 		
 	/;
