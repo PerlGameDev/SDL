@@ -1,0 +1,28 @@
+=pod
+
+=head1 NAME
+
+SDL::Deprecated - Log of Deprecated items per release
+
+=head1 CATEGORY
+
+Core
+
+=head1 RELEASES
+
+=head2 2.500
+
+=over 
+
+
+=item SDL::App 
+
+SDL::App has migrated to SDLx::App namespace. The reason for this is because it is an extenstion and not a 1:1 XS/Constant Module to the c library.
+
+=item SDL::Game::Rect 
+
+SDL::Game::Rect has migrated to SDLx::Rect namespace. Same reasoning as above.
+
+=back
+
+=cut
