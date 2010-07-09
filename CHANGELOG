@@ -6,7 +6,8 @@ Revision history for Perl extension SDL_perl.
 	- Fixed the test on SDLx::Sprite
 	- Added SDLx::FPS [Blaizer]
 	- Cleaned up docs [Blaizer]
-	- Added SDLx::SFont
+	- Cleaned up docs for SDLx::Rect and added Category 
+	- Added SDLx::SFont and docs
 
 * 2.5 RC
 	- Fixed SDL::Surface->get_pixels_ptr
