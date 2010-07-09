@@ -2,6 +2,10 @@
 
 SDLx::Sprite - interact with images quick and easily in SDL
 
+=head1 CATEGORY
+
+Extension
+
 =head1 SYNOPSIS
 
     use SDLx::Sprite;
