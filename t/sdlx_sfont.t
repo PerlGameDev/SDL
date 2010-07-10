@@ -4,7 +4,7 @@ use Test::More;
 use SDL;
 use SDL::Config;
 use SDL::Video;
-use SDLx::App;
+use SDL::Surface;
 use SDLx::SFont;
 use lib 't/lib';
 use SDL::TestTool;
