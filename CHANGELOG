@@ -1,6 +1,12 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.5 
+* 2.502  July 10 2010
+	- Fixes tests for SDLx::TTF and SDL::Surface [FROGGS, kthakore] 
+	- Makes ptr to pixels READONLY for some safety
+	- *nix users gets a stack dumper of segfault
+
+* 2.500  July 9 2010
+ 
 	- Fixed Memory Leaks due to perl desturct level 
 	- Fixed Memory leak in SDL::Mixer::Music 
 	- Fixed the test on SDLx::Sprite
