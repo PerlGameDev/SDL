@@ -119,7 +119,7 @@ SDL::Video::update_rects( $app, $small_rect );
 
 
 my $ref = $surface->get_pixels_ptr;
-my $other_surface =  SDL::Surface->new_from( $$ref, 640, 320, 8, $surface->pitch, 0, 0, 0, 0 );
+my $other_surface =  SDL::Surface->new_from( $ref, 640, 320, 8, $surface->pitch, 0, 0, 0, 0 );
 my $get_pixel = $surface->get_pixel(0);
 ok( $get_pixel >= 0,  "[get_pixel] returns integer ($get_pixel)" );
 $surface->set_pixels(0, 42); pass '[set_pixel] first pixel to 42' ;
