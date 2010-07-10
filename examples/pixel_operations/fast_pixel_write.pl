@@ -1,8 +1,8 @@
     use strict;
     use warnings;
-    use SDL 2.408; 
+    use SDL; 
     use SDLx::App; #this is in the github repo.
-    use SDLx::Surface::Matrix;
+    use SDLx::Surface;
     use SDL::Event;
     use SDL::Events;
 
