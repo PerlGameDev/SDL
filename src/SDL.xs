@@ -73,6 +73,28 @@ extern PerlInterpreter *parent_perl;
 
 #endif
 
+
+#ifndef WINDOWS 
+#ifndef WIN32
+#include <execinfo.h>
+#include <signal.h>
+#include <stdlib.h>
+
+void handler(int sig) {
+  void *array[10];
+  size_t size;
+
+   //get void*'s for all entries on the stack
+     size = backtrace(array, 10);
+  
+    // print out all the frames to stderr
+         fprintf(stderr, "Error: signal %d:\n", sig);
+           backtrace_symbols_fd(array, size, 2);
+      exit(1);
+}
+#endif
+#endif
+
 void
 windows_force_driver()
 {
@@ -104,6 +126,12 @@ void boot_SDL__OpenGL();
 
 XS(boot_SDL_perl)
 {
+
+#ifndef WINDOWS 
+#ifndef WIN32
+	signal(SIGSEGV, handler);
+#endif
+#endif
 	PL_perl_destruct_level = 2;
 	GET_TLS_CONTEXT
 	boot_SDL();

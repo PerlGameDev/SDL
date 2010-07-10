@@ -1,6 +1,7 @@
 package SDLx::SFont;
 use strict;
 use warnings;
+use SDL::Image;
 use vars qw(@ISA @EXPORT @EXPORT_OK);
 require Exporter;
 require DynaLoader;

@@ -120,13 +120,16 @@ sub set_file_flags
 	my %file_flags;
 	my %build_systems = %{$self->notes('build_systems')};
 
+	my $debug = " "; 
+        $debug = ' -g -rdynamic ' unless $^O =~ /(win|darwin)/i;
+
 	while (my ($subsystem, $param) = each %build_systems )
 	{
 		my $sub_file = $self->notes('subsystems')->{$subsystem}{file}{to};
 		$file_flags{$sub_file} = {
 			extra_compiler_flags =>
 			[
-				(split(' ', $self->notes('sdl_cflags'))),
+				 (split(' ', $debug.$self->notes('sdl_cflags'))),
 				@{$param->{defines}},
 				( defined $Config{usethreads} ? ('-DUSE_THREADS', '-fPIC') : ('-fPIC' )),
 			],
