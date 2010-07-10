@@ -1,6 +1,6 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.502  July 10 2010
+* 2.501  July 10 2010
 	- Fixes tests for SDLx::TTF and SDL::Surface [FROGGS, kthakore] 
 	- Makes ptr to pixels READONLY for some safety
 	- *nix users gets a stack dumper of segfault
