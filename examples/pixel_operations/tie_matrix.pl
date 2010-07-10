@@ -1,8 +1,8 @@
     use strict;
     use warnings;
-    use SDL 2.408; 
+    use SDL; 
     use SDLx::App; #this is in the github repo.
-    use SDLx::Surface::Matrix;
+    use SDLx::Surface;
     use SDL::Event;
     use SDL::Events;
 
@@ -19,7 +19,7 @@
     load_app();
 
     my $surface = load_surface();
-    my $matrix = SDLx::Surface::Matrix->new( surface => $surface );
+    my $matrix = SDLx::Surface->new( surface => $surface );
 
     my $event = SDL::Event->new;    # create a new event
 
