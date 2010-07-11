@@ -25,6 +25,14 @@ sub FETCH {
 	$self->{matrix}->get_pixel( $x, $self->{y} );
 }
 
+sub FETCHSIZE {
+
+	my ($self, $x) = @_;
+	return 	$self->{matrix}->surface->w; 
+
+
+}
+
 sub STORE {
 	my ($self, $x, $new_value) = @_;
 	$self->{matrix}->set_pixel( $x, $self->{y}, $new_value );

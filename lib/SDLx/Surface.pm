@@ -39,15 +39,13 @@ sub new {
 }
 
 sub surface {
+    return $_[0]->{surface} unless $_[1];
     my ($self, $surface) = @_;
-
-    # short-circuit
-	
     Carp::croak 'surface accepts only SDL::Surface objects'
         unless $surface->isa('SDL::Surface');
 
     $self->{surface} = $surface;
-    return $surface;
+    return $self->{surface};
 }
 
 sub _tied_array {
@@ -68,14 +66,6 @@ sub _create_surf {
 		SDL::Rect->new( 0, 0,$surface->w,  $surface->h ), $mapped_color );
 	return $surface;
 }
-
-sub load {
-	my ($self, $data) = @_;
-	{
-		$self->surface ( $data );
-	}
-}
-
 
 sub get_pixel{
 	my ($self, $y, $x) = @_;

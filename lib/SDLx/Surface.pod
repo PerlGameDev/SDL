@@ -1,0 +1,47 @@
+=pod
+
+=head1 NAME
+
+SDLx::Surface - Graphic surface matrix extension
+
+=head1 CATEGORY
+
+Extension
+
+=head1 SYNOPSIS
+
+ use SDL;
+ use SDL::Video;
+ use SDLx::Surface;
+
+ # Create the main surface (display)
+ SDL::init(SDL_INIT_VIDEO);
+ my $display = SDL::Video::set_video_mode(640, 480, 16, SDL_SWSURFACE);
+
+ my $surf_matrix = SDLx::Surface->new( surface => $display);
+ 
+ $surf__matrix->[10][10] = 0xFFFF; #for 16bpp write white at x = 10 and y=10
+
+ $surf_matrix->surface( $new_surface );
+
+ my $orig_surface = $surf_matrix->surface();
+
+=head1 DESCRIPTION
+
+An C<SDLx::Surface> allows matrix read and write to a surface, safely. 
+
+=head1 METHODS
+
+=head2 new
+
+Takes a SDL::Surface in hash format.
+
+=head2 surface
+
+If a SDL::Surface is passed it is attached to the matrix. Returns the SDL::Surface that is currently attached to this SDLx::Surface
+
+=head1 AUTHOR
+
+ kthakore 
+
+

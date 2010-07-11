@@ -28,4 +28,9 @@ sub FETCH {
 	return $self->{rows}[$y];
 }
 
+sub FETCHSIZE {
+	my ($self, $x) = @_;
+	return 	$self->{matrix}->surface->h; 
+}
+
 1;
