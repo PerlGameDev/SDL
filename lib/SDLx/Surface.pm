@@ -24,20 +24,6 @@ internal_load_dlls(__PACKAGE__);
 
 bootstrap SDLx::Surface;
 
-use base 'Exporter';
-our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::Video'} };
-our %EXPORT_TAGS = (
-	all     => \@EXPORT,
-	color   => $SDL::Constants::EXPORT_TAGS{'SDL::Video/color'},
-	surface => $SDL::Constants::EXPORT_TAGS{'SDL::Video/surface'},
-	video   => $SDL::Constants::EXPORT_TAGS{'SDL::Video/video'},
-	overlay => $SDL::Constants::EXPORT_TAGS{'SDL::Video/overlay'},
-	grab    => $SDL::Constants::EXPORT_TAGS{'SDL::Video/grab'},
-	palette => $SDL::Constants::EXPORT_TAGS{'SDL::Video/palette'},
-	gl      => $SDL::Constants::EXPORT_TAGS{'SDL::Video/gl'}
-);
-
-
 sub new {
     my ($class, %options) = @_;
     my $self = bless {}, ref $class || $class;

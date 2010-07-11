@@ -120,8 +120,10 @@ sub set_file_flags
 	my %file_flags;
 	my %build_systems = %{$self->notes('build_systems')};
 
-	my $debug = " "; 
-        $debug = ' -g -rdynamic ' unless $^O =~ /(win|darwin)/i;
+	#TODO:  Search for execinfo.h signal.h and turn this on.
+	#	This should also be turned on only during CPAN tests
+	my $debug = " -DNOSIGCATCH "; 
+        $debug = ' -g -rdynamic ' unless ($^O =~ /(win|darwin|bsd)/i && $ENV{SDLPROD});
 
 	while (my ($subsystem, $param) = each %build_systems )
 	{
