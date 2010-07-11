@@ -97,7 +97,7 @@ END{
 	foreach  ( reverse @DynaLoader::dl_librefs)
 	{
 		    my $module = pop @loaded_modules;
-		 DynaLoader::dl_unload_file($_) if $module && $module =~ /SDL/; #only unload SDL stuff
+		 DynaLoader::dl_unload_file($_) if $module ; #only unload Modules
 
 	}
 }
