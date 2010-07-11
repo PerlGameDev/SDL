@@ -119,8 +119,9 @@ sub set_file_flags
 
 	#TODO:  Search for execinfo.h signal.h and turn this on.
 	#	This should also be turned on only during CPAN tests
-	my $debug = " -DNOSIGCATCH "; 
-        $debug = ' -g -rdynamic ' unless ($^O =~ /(win|darwin|bsd)/i && $ENV{SDLPROD});
+	my $debug = '';
+	   $debug .= " -DNOSIGCATCH " if Alien::SDL->check_header(qw(execinfo.h signal.h)) && $ENV{AUTOMATED_TESTING};
+	   $debug .= ' -g -rdynamic ' unless ($^O =~ /(win|darwin|bsd)/i && $ENV{SDLPROD});
 
 	while (my ($subsystem, $param) = each %build_systems )
 	{
