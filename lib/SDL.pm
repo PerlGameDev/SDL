@@ -79,7 +79,7 @@ sub putenv
 		$ENV{$1} = $2;
 		return 0;
 	}
-	
+
 	return -1;
 }
 
@@ -88,6 +88,18 @@ sub putenv
 sub set_error {
 	my($format, @arguments) = @_;
 	SDL::set_error_real(sprintf($format, @arguments));
+}
+
+END{
+	return if ($^O =~ 'VMS' || $^O =~ 'darwin');
+	my @loaded_modules = @DynaLoader::dl_modules;
+
+	foreach  ( reverse @DynaLoader::dl_librefs)
+	{
+		    my $module = pop @loaded_modules;
+		 DynaLoader::dl_unload_file($_) if $module && $module =~ /SDL/; #only unload SDL stuff
+
+	}
 }
 
 1;
