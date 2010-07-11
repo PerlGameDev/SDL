@@ -90,16 +90,22 @@ sub set_error {
 	SDL::set_error_real(sprintf($format, @arguments));
 }
 
+=pod 
 END{
 	return if ($^O =~ 'VMS' || $^O =~ 'darwin');
 	my @loaded_modules = @DynaLoader::dl_modules;
 
-	foreach  ( reverse @DynaLoader::dl_librefs)
+	foreach my $libref ( reverse @DynaLoader::dl_librefs)
 	{
-		    my $module = pop @loaded_modules;
-		 DynaLoader::dl_unload_file($_) if $module ; #only unload Modules
+	    my $module = pop @loaded_modules;
+
+		if ( $module =~ /SDL/)
+		{
+		  DynaLoader::dl_unload_file($libref); #only unload Modules
+	 	}
 
 	}
 }
+=cut
 
 1;
