@@ -44,9 +44,6 @@ sub process_xs
 {
 	my ($self, $file) = @_;
 
-	#TODO: call this in MSWin32::process_xs
-	$file =~ s/\\/\//g if( $^O eq 'MSWin32' );
-
 	my $properties                   = $self->{properties};
 	my $file_args                    = $self->notes( 'file_flags' )->{$file};
 
@@ -167,17 +164,10 @@ sub ACTION_install {
 }
 
 sub ACTION_test {
-     my ($self) = @_;
-     $self->depends_on('build');
-     if ( $^O =~ /darwin/ )
-     {
-	$self->build_test();
-     }
-     else
-     {
-	$self->SUPER::ACTION_test();
-     }
+	my ($self) = @_;
+	$self->depends_on('build');
 
+	$self->SUPER::ACTION_test();
 }
 
 1;
