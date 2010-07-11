@@ -29,6 +29,8 @@ use Encode;
 my $videodriver       = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
+
+
 my $lv = SDL::TTF::linked_version();
 my $cv = SDL::TTF::compile_time_version();
 
@@ -58,6 +60,9 @@ is( TTF_STYLE_STRIKETHROUGH(),                            8, 'TTF_STYLE_STRIKETH
 is( SDL::TTF::was_init(),                                 0,                   "[was_init] returns false" );
 is( SDL::TTF::init(),                                     0,                   "[init] succeeded" );
 is( SDL::TTF::was_init(),                                 1,                   "[was_init] returns true" );
+is( SDL::TTF::quit(),                  			  undef,               "[quit] ran" );
+is( SDL::TTF::was_init(),                                 0,                   "[was_init] returns false" );
+is( SDL::TTF::init(),                                     0,                   "[init] succeeded" );
 is( SDL::TTF::byte_swapped_unicode(0),                    undef,               "[ttf_byte_swapped_unicode] on" );
 is( SDL::TTF::byte_swapped_unicode(1),                    undef,               "[ttf_byte_swapped_unicode] off" );
 my $font = SDL::TTF::open_font('test/data/aircut3.ttf', 24);
@@ -216,9 +221,9 @@ SKIP:
 
 	SDL::delay(2000);
 }
-is( SDL::TTF::was_init(),                  1, "[was_init] returns true" );
-is( SDL::TTF::quit(),                  undef, "[quit] ran" );
-is( SDL::TTF::was_init(),                  0, "[was_init] returns false" );
+
+END
+{
 
 if($videodriver)
 {
@@ -229,6 +234,5 @@ else
 	delete $ENV{SDL_VIDEODRIVER};
 }
 
-sleep(1);
-
 done_testing;
+}

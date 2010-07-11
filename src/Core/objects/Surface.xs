@@ -61,8 +61,8 @@ surface_new_from (CLASS, pixels, width, height, depth, pitch, Rmask = 0xFF000000
 	Uint32 Amask
 	SV* pixels
 	CODE:
-		int* pix = SvRV ( SvRV( pixels ) );
-		RETVAL = SDL_CreateRGBSurfaceFrom ( pix, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask );
+		int* pix = (int *) SvRV ( (SV*) SvRV( pixels ) );
+		RETVAL = SDL_CreateRGBSurfaceFrom ( (void *)pix, width, height, depth, pitch, Rmask, Gmask, Bmask, Amask );
 		if( RETVAL == NULL)
 		croak ("SDL_CreateRGBSurfaceFrom failed: %s", SDL_GetError());
 
@@ -145,6 +145,7 @@ surface_get_pixels_ptr(surface)
 	  SV * sv = newSV_type(SVt_PV);
 	  SvPV_set(sv, surface->pixels);
 	  SvPOK_on(sv);
+	  SvREADONLY(sv);
 	  SvLEN_set(sv, 0);
 	  SvCUR_set(sv, surface->format->BytesPerPixel * surface->w * surface->h);
 	  RETVAL = newRV_noinc(sv);

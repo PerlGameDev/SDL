@@ -527,10 +527,12 @@ my $build = $package->new(
 		'Test::Most' => '0.21',
 		'Alien::SDL' => '1.409',
 		'File::ShareDir' => '0',
+		'Tie::Simple'   => '0'
 	},
 	build_recommends     =>
 	{
 		'Pod::ToDemo'  => '0.20'		
+
 	},
 	c_source	     => 'src',
 	xs_files             => \%xs,

@@ -52,7 +52,7 @@ SV * construct_p_matrix ( SDL_Surface *surface )
 }
 
 
-int _calc_offset ( SDL_Surface* surface, int y, int x )
+int _calc_offset ( SDL_Surface* surface, int x, int y )
 {	
 	int offset;
 	offset  = (surface->pitch * y)/surface->format->BytesPerPixel;
@@ -109,11 +109,16 @@ surfacex_pixel_array ( surface )
 		RETVAL
 
 int
-surfacex_get_pixel ( surface, x, y )
+surfacex_get_pixel_xs ( surface, x, y )
 	SDL_Surface *surface
 	int x
 	int y
 	CODE:
+		if( x < 0 || y < 0 || x > surface->w || y > surface->h)
+		{
+		    croak(" Invalid location for pixel (%d, %d) on surface dims (%d, %d)", x,y,surface->w, surface->h);
+		}
+
 		int offset;
 		offset =  _calc_offset( surface, x, y);
 		RETVAL = _get_pixel( surface, offset );
@@ -122,16 +127,20 @@ surfacex_get_pixel ( surface, x, y )
 		RETVAL
 
 
-int
-surfacex_set_pixel ( surface, x, y, value )
+void
+surfacex_set_pixel_xs ( surface, x, y, value )
 	SDL_Surface *surface
 	int x
 	int y
 	unsigned int value
 	CODE:
+		if( x < 0 || y < 0 || x > surface->w || y > surface->h)
+		{
+		    croak(" Invalid location for pixel (%d, %d) on surface dims (%d, %d)", x,y,surface->w, surface->h);
+		}
 		int offset;
 		offset =  _calc_offset( surface, x, y);
-		RETVAL = _get_pixel( surface, offset );
+		SDL_LockSurface(surface);
 		switch(surface->format->BytesPerPixel)
 			{
 				case 1: ((Uint8  *)surface->pixels)[offset] = (Uint8)value;
@@ -145,5 +154,6 @@ surfacex_set_pixel ( surface, x, y, value )
 				case 4: ((Uint32 *)surface->pixels)[offset] = (Uint32)value;
 					break;
 			}	
-	OUTPUT:
-		RETVAL
+		SDL_UnlockSurface(surface);
+
+	
