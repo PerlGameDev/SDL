@@ -33,7 +33,23 @@ foreach my $a ( @surfs)
 
 }
 
-$surfs[0]->blit( [0,0,10,10], $surfs[1], [0,0,30,30] );
+#my $source = SDLx::Surface->new( width=> 400, height=>200, flags=> SDL_SWSURFACE, depth=>32 ),
+ 
+
+is( $surfs[0]->[1][2], 0 );
+is( $surfs[1]->[1][2], 0 );
+
+$surfs[0]->[1][2] = 0x00FF00FF;
+
+is( $surfs[0]->[1][2], 0x00FF00FF );
+
+$surfs[0]->blit( $surfs[1] );
+
+my $foo = SDL::get_error();
+
+diag "Got errors $foo";
+
+is( $surfs[1]->[1][2], 0x00FF00FF);
 
 pass ('[blit] Worked!');
 

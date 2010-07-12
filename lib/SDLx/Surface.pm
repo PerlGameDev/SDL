@@ -37,10 +37,10 @@ sub new {
 		$options{depth} |=  32; #default 32
 		$options{flags} |= SDL_ANYFORMAT;
 
-			$options{redmask} |= 0;
-			$options{greenmask} |= 0;
-			$options{bluemask} |= 0;
-			$options{alphamask} |= 0;
+			$options{redmask} |= 0xFF000000;
+			$options{greenmask} |= 0x00FF0000;
+			$options{bluemask} |= 0x0000FF00;
+			$options{alphamask} |= 0x000000FF;
 
 		my $surface = SDL::Surface->new( $options{flags}, 
 			$options{width}, 
@@ -106,11 +106,13 @@ sub _array {
 #EXTENSTIONS
 
 sub blit {
-	my ($self, $src_rect, $dest, $dest_rect) = @_;
-	
-	Carp::croak 'Array ref or SDL::Rect for source rect required' unless (ref($src_rect) eq 'ARRAY' or $src_rect->isa('SDL::Rect') );
-	Carp::croak 'Array SDLx::Surface or SDL::Surface for dest required' unless ( $dest->isa('SDL::Surface') or $dest->isa('SDLx::Surface') );
-	Carp::croak 'Array ref or SDL::Rect for dest rect required' unless (ref($dest_rect) eq 'ARRAY' or $dest_rect->isa('SDL::Rect') );
+	my ($self, $dest, $src_rect, $dest_rect) = @_;
+
+	$src_rect |= NULL;
+	$dest_rect |= NULL;	
+	Carp::croak 'Array ref or SDL::Rect for source rect required' unless $src_rect == NULL or (ref($src_rect) eq 'ARRAY' or $src_rect->isa('SDL::Rect') );  
+	Carp::croak 'SDLx::Surface or SDL::Surface for dest required' unless ( $dest->isa('SDL::Surface') or $dest->isa('SDLx::Surface') );
+	Carp::croak 'Array ref or SDL::Rect for dest rect required' unless $dest_rect == NULL or (ref($dest_rect) eq 'ARRAY' or $dest_rect->isa('SDL::Rect') );
 	
 	my $dest_surface = $dest;
 	   $dest_surface = $dest->surface if $dest->isa('SDLx::Surface');

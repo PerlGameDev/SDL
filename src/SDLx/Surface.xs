@@ -140,7 +140,9 @@ surfacex_set_pixel_xs ( surface, x, y, value )
 		}
 		int offset;
 		offset =  _calc_offset( surface, x, y);
-		SDL_LockSurface(surface);
+		if(SDL_MUSTLOCK(surface)) 
+		  if ( SDL_LockSurface(surface) < 0)
+		    croak( "Locking surface in set_pixels failed: %s", SDL_GetError() );
 		switch(surface->format->BytesPerPixel)
 			{
 				case 1: ((Uint8  *)surface->pixels)[offset] = (Uint8)value;
@@ -154,6 +156,7 @@ surfacex_set_pixel_xs ( surface, x, y, value )
 				case 4: ((Uint32 *)surface->pixels)[offset] = (Uint32)value;
 					break;
 			}	
+		if(SDL_MUSTLOCK(surface))
 		SDL_UnlockSurface(surface);
 
 	
