@@ -33,4 +33,8 @@ foreach my $a ( @surfs)
 
 }
 
+$surfs[0]->blit( [0,0,10,10], $surfs[1], [0,0,30,30] );
+
+pass ('[blit] Worked!');
+
 done_testing;

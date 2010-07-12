@@ -37,13 +37,10 @@ sub new {
 		$options{depth} |=  32; #default 32
 		$options{flags} |= SDL_ANYFORMAT;
 
-		if( $options{redmask} || $options{greenmask} || $options{bluemask} || $options{alphamask} )
-		{
 			$options{redmask} |= 0;
 			$options{greenmask} |= 0;
 			$options{bluemask} |= 0;
 			$options{alphamask} |= 0;
-		} 
 
 		my $surface = SDL::Surface->new( $options{flags}, 
 			$options{width}, 
@@ -104,6 +101,30 @@ sub _array {
 		$self->_tied_array( $array );
 	}
 	return $array;
+}
+
+#EXTENSTIONS
+
+sub blit {
+	my ($self, $src_rect, $dest, $dest_rect) = @_;
+	
+	Carp::croak 'Array ref or SDL::Rect for source rect required' unless (ref($src_rect) eq 'ARRAY' or $src_rect->isa('SDL::Rect') );
+	Carp::croak 'Array SDLx::Surface or SDL::Surface for dest required' unless ( $dest->isa('SDL::Surface') or $dest->isa('SDLx::Surface') );
+	Carp::croak 'Array ref or SDL::Rect for dest rect required' unless (ref($dest_rect) eq 'ARRAY' or $dest_rect->isa('SDL::Rect') );
+	
+	my $dest_surface = $dest;
+	   $dest_surface = $dest->surface if $dest->isa('SDLx::Surface');
+
+	my $pass_src_rect = $src_rect;
+       	SDL::Rect->new( @{$src_rect} ) if ref $src_rect eq 'ARRAY';
+
+	my $pass_dest_rect = $dest_rect;
+	SDL::Rect->new( @{$dest_rect} ) if ref $dest_rect eq 'ARRAY';
+
+	SDL::Video::blit_surface( $self->surface(), $pass_src_rect, $dest_surface, $pass_dest_rect);
+
+	return $self
+
 }
 
 1;

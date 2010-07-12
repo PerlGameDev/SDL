@@ -53,6 +53,16 @@ If a surface is passed to 'surface =>' that is loaded. Otherwise you can define 
 
 If a SDL::Surface is passed it is attached to the matrix. Returns the SDL::Surface that is currently attached to this SDLx::Surface
 
+=head1 EXTENSIONS
+
+=head2 blit 
+
+ $sdlx_surface->blit( $src_rect, $dest, $dest_rect );
+
+Blits SDLx::Surface onto $dest surface. $src_rect or $dest_rect can be array refs or SDL::Rect. $dest can be SDLx::Surface or SDL::Surface. 
+
+Returns $self
+
 =head1 AUTHOR
 
  kthakore 
