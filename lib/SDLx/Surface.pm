@@ -123,7 +123,8 @@ sub blit {
 	my $pass_dest_rect = $dest_rect;
 	SDL::Rect->new( @{$dest_rect} ) if ref $dest_rect eq 'ARRAY';
 
-	SDL::Video::blit_surface( $self->surface(), $pass_src_rect, $dest_surface, $pass_dest_rect);
+	Carp::croak 'Destination was not a surface' unless $dest_surface->isa('SDL::Surface');
+	SDL::Video::blit_surface( $dest_surface,$pass_src_rect, $self->surface(), $pass_dest_rect);
 
 	return $self
 
