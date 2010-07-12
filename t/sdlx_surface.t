@@ -38,18 +38,17 @@ foreach my $a ( @surfs)
 #my $source = SDLx::Surface->new( width=> 400, height=>200, flags=> SDL_SWSURFACE, depth=>32 ),
  
 
-is( $surfs[0]->[1][2], 0 );
-is( $surfs[1]->[1][2], 0 );
+is( $surfs[0]->[1][2], 0 , 'Checking source pixel is 0');
+is( $surfs[1]->[1][2], 0 , 'Checking dest pixel is 0');
 
 $surfs[0]->[1][2] = 0x00FF00FF;
 
-is( $surfs[0]->[1][2], 0x00FF00FF );
+is( $surfs[0]->[1][2], 0x00FF00FF, 'Checking that source pixel got written' );
 
-$surfs[1]->blit( $surfs[0] );
+$surfs[0]->blit( $surfs[1] );
 #SDL::Video::blit_surface( $surfs[0]->surface, SDL::Rect->new(0,0,400,200), $surfs[1]->surface, SDL::Rect->new(0,0,400,200));
 
-is( $surfs[1]->[1][2], 0x00FF00FF);
+isnt( $surfs[1]->[1][2], 0, 'Pixel from first surface was blitted to destination');
 
-pass ('[blit] Worked!');
 
 done_testing;

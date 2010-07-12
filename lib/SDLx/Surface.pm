@@ -13,6 +13,7 @@ use SDLx::Surface;
 use SDLx::Surface::TiedMatrix;
 use SDL::PixelFormat;
 use Tie::Simple;
+use Data::Dumper;
 use overload (
 	'@{}' => '_array',
 );
@@ -113,11 +114,13 @@ sub blit {
 	my $dest_surface = $dest;
 	   $dest_surface = $dest->surface if $dest->isa('SDLx::Surface');
 
-	$src_rect |= SDL::Rect->new(0,0,$self->surface->w, $self->surface->h);
-	$dest_rect |= SDL::Rect->new(0,0, $dest_surface->w, $dest_surface->h);	
+	$src_rect = SDL::Rect->new(0,0, $self->{surface}->w, $self->{surface}->h) unless defined $src_rect ;
+	$dest_rect = SDL::Rect->new(0,0, $dest_surface->w, $dest_surface->h) unless defined $dest_rect;	
 
-	Carp::croak 'Array ref or SDL::Rect for source rect required' unless (ref($src_rect) =~ 'ARRAY') || ($src_rect->isa('SDL::Rect') );  
-	Carp::croak 'Array ref or SDL::Rect for dest rect required' unless (ref($dest_rect) =~ 'ARRAY') || ($dest_rect->isa('SDL::Rect') );
+	Carp::croak 'Array ref or SDL::Rect for source rect required.'
+	unless (ref($src_rect) eq 'ARRAY') || $src_rect->isa('SDL::Rect');  
+	Carp::croak 'Array ref or SDL::Rect for dest rect required' 
+	unless (ref($dest_rect) eq 'ARRAY') || ($dest_rect->isa('SDL::Rect') );
 
 	my $pass_src_rect = $src_rect;
        	SDL::Rect->new( @{$src_rect} ) if ref $src_rect eq 'ARRAY';
@@ -126,7 +129,7 @@ sub blit {
 	SDL::Rect->new( @{$dest_rect} ) if ref $dest_rect eq 'ARRAY';
 
 	Carp::croak 'Destination was not a surface' unless $dest_surface->isa('SDL::Surface');
-	SDL::Video::blit_surface( $dest_surface,$pass_src_rect, $self->surface(), $pass_dest_rect);
+	SDL::Video::blit_surface( $self->surface(), $pass_src_rect, $dest_surface, $pass_dest_rect);
 
 	return $self
 
