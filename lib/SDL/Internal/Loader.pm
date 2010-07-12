@@ -4,6 +4,7 @@ use warnings;
 require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(internal_load_dlls);
+our @LIBREFS = ();
 
 use SDL::ConfigData;
 use Alien::SDL;
@@ -44,6 +45,7 @@ sub internal_load_dlls($) {
     if($file && -e $file) {
       my $libref = DynaLoader::dl_load_file($file, 0);
       push(@DynaLoader::dl_librefs, $libref) if $libref;
+      push (@LIBREFS, $libref) if $libref;
     }
     else {
       print(STDERR "###ERROR### shared object file '$file' for '$n' not found.\n");

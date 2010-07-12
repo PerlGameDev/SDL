@@ -3,26 +3,16 @@ use strict;
 use warnings;
 use Test::More;
 use SDL;
+use SDL::Rect;
 
 
 # Don't run tests for installs
 use Test::More;
-unless ( $env{automated_testing} or $env{release_testing} ) {
-	plan( skip_all => "author tests not required for installation" );
-}
 
-sub overlay_leak()
+sub leaky()
 {
 
-SDL::Init(SDL_INIT_VIDEO);
-
-my $display = SDL::SetVideoMode(640,480,32, SDL_SWSURFACE );
-
-my $overlay = SDL::Overlay->new( 100, 100, SDL_YV12_OVERLAY, $display);
-
-$overlay = undef;
-
-$display = undef;
+	SDL::Rect->new(0,0,10,10);
 
 }
 
@@ -30,7 +20,7 @@ $display = undef;
 eval 'use Test::Valgrind';
 plan skip_all => 'Test::Valgrind is required to test your distribution with valgrind' if $@;
 
-overlay_leak();
+leaky();
 
 
 sleep(2);
