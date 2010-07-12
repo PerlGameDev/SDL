@@ -57,9 +57,11 @@ If a SDL::Surface is passed it is attached to the matrix. Returns the SDL::Surfa
 
 =head2 blit 
 
- $sdlx_surface->blit( $src_rect, $dest, $dest_rect );
+ $sdlx_surface->blit( $dest, $src_rect, $dest_rect );
 
-Blits SDLx::Surface onto $dest surface. $src_rect or $dest_rect can be array refs or SDL::Rect. $dest can be SDLx::Surface or SDL::Surface. 
+Blits SDLx::Surface onto $dest surface. 
+$src_rect or $dest_rect are optional. $src_rect or $dest_rect can be array refs or SDL::Rect. $dest can be SDLx::Surface or SDL::Surface. 
+
 
 Returns $self
 
