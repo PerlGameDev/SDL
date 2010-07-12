@@ -74,8 +74,7 @@ extern PerlInterpreter *parent_perl;
 #endif
 
 
-#ifndef WINDOWS 
-#ifndef WIN32
+#ifndef NOSIGCATCH
 #include <execinfo.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -92,7 +91,6 @@ void handler(int sig) {
            backtrace_symbols_fd(array, size, 2);
       exit(1);
 }
-#endif
 #endif
 
 void
@@ -127,10 +125,8 @@ void boot_SDL__OpenGL();
 XS(boot_SDL_perl)
 {
 
-#ifndef WINDOWS 
-#ifndef WIN32
+#ifndef NOSIGCATCH 
 	signal(SIGSEGV, handler);
-#endif
 #endif
 	PL_perl_destruct_level = 2;
 	GET_TLS_CONTEXT

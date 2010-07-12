@@ -58,6 +58,9 @@ BEGIN {
 		SDLx::Sprite::Animated
 		SDLx::FPS
 		SDLx::SFont
+		SDLx::Surface
+		SDLx::Surface::TiedMatrix
+		SDLx::Surface::TiedMatrixRow
 		
 	/;
 	plan tests => scalar @modules;

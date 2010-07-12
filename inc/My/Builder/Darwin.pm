@@ -42,19 +42,19 @@ sub build_bundle
 
 
 
-sub build_test
+sub ACTION_test
 {
-      my $self = shift;
-      $self->build_bundle() if !(-d getcwd().'/SDLPerl.app');
-      my $cmd = './SDLPerl.app/Contents/MacOS/SDLPerl '.getcwd().'/Build test';
-      if($ENV{SDL_PERL_TEST}) {
-          $self->Module::Build::ACTION_test;
-	  $ENV{SDL_PERL_TEST} = 0; #unset it again
-      } else {
-          $ENV{SDL_PERL_TEST} = 1;
-          system ( split ' ', $cmd );
-         die 'Errors in Testing. Can\'t continue' if $?;
-      }
+	my $self = shift;
+	$self->build_bundle() if !(-d getcwd().'/SDLPerl.app');
+	my $cmd = './SDLPerl.app/Contents/MacOS/SDLPerl '.getcwd().'/Build test';
+	if($ENV{SDL_PERL_TEST}) {
+		$self->Module::Build::ACTION_test;
+		$ENV{SDL_PERL_TEST} = 0; #unset it again
+	} else {
+		$ENV{SDL_PERL_TEST} = 1;
+		system ( split ' ', $cmd );
+		die 'Errors in Testing. Can\'t continue' if $?;
+	}
 }
 
 1;
