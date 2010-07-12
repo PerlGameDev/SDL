@@ -36,6 +36,19 @@ An C<SDLx::Surface> allows matrix read and write to a surface, safely.
 
 Takes a SDL::Surface in hash format.
 
+If a surface is passed to 'surface =>' that is loaded. Otherwise you can define at least a width and a height. 
+
+	SDLx::Surface->new(  surface => $surface) # The $surface is loaded
+
+	SDLx::Surface->new( width=> 400, height=>200) 
+		# A SDL::Surface->new( SDL_ANYFORMAT, 400, 200, 32) is loaded
+
+	SDLx::Surface->new( width=> 400, height=>200, flags=> SDL_SWSURFACE, depth=>24 ) 
+	  	# A SDL::Surface->new( SDL_SWSURFACE, 400, 200, 24) is loaded 
+
+	SDLx::Surface->new( width=> 400, height=>200, flags=> SDL_SWSURFACE, depth=>32, greenmask=>0xFF000000 )
+		# A SDL::Surface->new( SDL_ANYFORMAT, 400, 200, 32, 0, 0xFF000000,0, 0, 0 ) is loaded
+
 =head2 surface
 
 If a SDL::Surface is passed it is attached to the matrix. Returns the SDL::Surface that is currently attached to this SDLx::Surface

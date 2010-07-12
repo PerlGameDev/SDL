@@ -25,36 +25,64 @@ internal_load_dlls(__PACKAGE__);
 bootstrap SDLx::Surface;
 
 sub new {
-    my ($class, %options) = @_;
-    my $self = bless {}, ref $class || $class;
+	my ($class, %options) = @_;
+	my $self = bless {}, ref $class || $class;
 
-    Carp::croak 'A surface must be passed!'
-        unless $options{surface};
+	if( $options{surface} )
+	{
 
-    $self->surface( exists $options{surface} ? $options{surface}
-                    : _create_surf()
-                  );
+		$self->surface( exists $options{surface} ? $options{surface}
+			: _create_surf()
+		);
+	}
+	elsif ( $options{width} && $options{height} ) #atleast give a dimension
+	{
+		$options{depth} |=  32; #default 32
+		$options{flags} |= SDL_ANYFORMAT;
 
-    return $self;
+		if( $options{redmask} || $options{greenmask} || $options{bluemask} || $options{alphamask} )
+		{
+			$options{redmask} |= 0;
+			$options{greenmask} |= 0;
+			$options{bluemask} |= 0;
+			$options{alphamask} |= 0;
+		} 
+
+		my $surface = SDL::Surface->new( $options{flags}, 
+			$options{width}, 
+			$options{height}, 
+			$options{depth}, 
+			$options{redmask},
+			$options{greenmask},
+			$options{bluemask},
+			$options{alphamask}
+		);
+		$self->surface( $surface );
+	}
+	else
+	{
+		Carp::croak 'Provide surface, or atleast width and height';
+	}
+	return $self;
 }
 
 sub surface {
-    return $_[0]->{surface} unless $_[1];
-    my ($self, $surface) = @_;
-    Carp::croak 'surface accepts only SDL::Surface objects'
-        unless $surface->isa('SDL::Surface');
+	return $_[0]->{surface} unless $_[1];
+	my ($self, $surface) = @_;
+	Carp::croak 'surface accepts only SDL::Surface objects'
+	unless $surface->isa('SDL::Surface');
 
-    $self->{surface} = $surface;
-    return $self->{surface};
+	$self->{surface} = $surface;
+	return $self->{surface};
 }
 
 sub _tied_array {
-    my ($self, $array) = @_;
+	my ($self, $array) = @_;
 
-    if ($array) {
-        $self->{_tied_array} = $array if $array;
-    }
-    return $self->{_tied_array};
+	if ($array) {
+		$self->{_tied_array} = $array if $array;
+	}
+	return $self->{_tied_array};
 }
 
 sub _create_surf {
