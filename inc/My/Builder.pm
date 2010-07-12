@@ -37,6 +37,7 @@ use base 'Module::Build';
 use Carp;
 use File::Spec;
 use Config;
+use Alien::SDL::ConfigData;
 
 # Module::Build doesn't seem to have a way to use separate flags for separate
 # XS files, so here's the override that makes separate files build correctly:
@@ -147,6 +148,13 @@ sub set_file_flags
 }
 
 # override the following functions in My::Builder::<platform> if necessary
+sub ACTION_build {
+	my $self = shift;
+
+	printf("[Alien::SDL] Build option used:\n\t%s\n", ${Alien::SDL::ConfigData->config('build_params')}{'title'} || 'n.a.');
+	$self->SUPER::ACTION_build;
+}
+
 # both special to MacOS/Darwin, somebody should review whether it is still necessary
 sub special_build_settings { }
 sub build_bundle { }
