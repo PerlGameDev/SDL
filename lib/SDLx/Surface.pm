@@ -108,14 +108,16 @@ sub _array {
 sub blit {
 	my ($self, $dest, $src_rect, $dest_rect) = @_;
 
-	$src_rect |= NULL;
-	$dest_rect |= NULL;	
-	Carp::croak 'Array ref or SDL::Rect for source rect required' unless $src_rect == NULL or (ref($src_rect) eq 'ARRAY' or $src_rect->isa('SDL::Rect') );  
-	Carp::croak 'SDLx::Surface or SDL::Surface for dest required' unless ( $dest->isa('SDL::Surface') or $dest->isa('SDLx::Surface') );
-	Carp::croak 'Array ref or SDL::Rect for dest rect required' unless $dest_rect == NULL or (ref($dest_rect) eq 'ARRAY' or $dest_rect->isa('SDL::Rect') );
-	
+	Carp::croak 'SDLx::Surface or SDL::Surface for dest required' unless ( $dest->isa('SDL::Surface') || $dest->isa('SDLx::Surface') );
+		
 	my $dest_surface = $dest;
 	   $dest_surface = $dest->surface if $dest->isa('SDLx::Surface');
+
+	$src_rect |= SDL::Rect->new(0,0,$self->surface->w, $self->surface->h);
+	$dest_rect |= SDL::Rect->new(0,0, $dest_surface->w, $dest_surface->h);	
+
+	Carp::croak 'Array ref or SDL::Rect for source rect required' unless (ref($src_rect) =~ 'ARRAY') || ($src_rect->isa('SDL::Rect') );  
+	Carp::croak 'Array ref or SDL::Rect for dest rect required' unless (ref($dest_rect) =~ 'ARRAY') || ($dest_rect->isa('SDL::Rect') );
 
 	my $pass_src_rect = $src_rect;
        	SDL::Rect->new( @{$src_rect} ) if ref $src_rect eq 'ARRAY';

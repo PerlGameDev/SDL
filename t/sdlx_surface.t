@@ -5,6 +5,8 @@ use SDL;
 use SDL::Surface;
 use SDLx::Surface;
 
+SDL::init(SDL_INIT_VIDEO);
+
 my $surface = SDL::Surface->new( SDL_SWSURFACE, 400,200, 32);
 my @surfs = (
 	SDLx::Surface->new(  surface => $surface),
@@ -39,13 +41,14 @@ foreach my $a ( @surfs)
 is( $surfs[0]->[1][2], 0 );
 is( $surfs[1]->[1][2], 0 );
 
-$surfs[1]->[1][2] = 0x00FF00FF;
+$surfs[0]->[1][2] = 0x00FF00FF;
 
-is( $surfs[1]->[1][2], 0x00FF00FF );
+is( $surfs[0]->[1][2], 0x00FF00FF );
 
-$surfs[0]->blit( $surfs[1] );
+$surfs[1]->blit( $surfs[0] );
+#SDL::Video::blit_surface( $surfs[0]->surface, SDL::Rect->new(0,0,400,200), $surfs[1]->surface, SDL::Rect->new(0,0,400,200));
 
-is( $surfs[0]->[1][2], 0x00FF00FF);
+is( $surfs[1]->[1][2], 0x00FF00FF);
 
 pass ('[blit] Worked!');
 
