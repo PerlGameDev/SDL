@@ -30,10 +30,7 @@ sub new {
 
 	if( $options{surface} )
 	{
-
-		$self->surface( exists $options{surface} ? $options{surface}
-			: _create_surf()
-		);
+		$self->surface( $options{surface} );
 	}
 	elsif ( $options{width} && $options{height} ) #atleast give a dimension
 	{
@@ -83,16 +80,6 @@ sub _tied_array {
 		$self->{_tied_array} = $array if $array;
 	}
 	return $self->{_tied_array};
-}
-
-sub _create_surf {
-	my $surface = SDL::Surface->new( SDL_ANYFORMAT, 100,100,32, 0,0,0,0 );
-	my $mapped_color =
-	SDL::Video::map_RGB( $surface->format(), 0, 0, 0 );    # blue
-
-	SDL::Video::fill_rect( $surface ,
-		SDL::Rect->new( 0, 0,$surface->w,  $surface->h ), $mapped_color );
-	return $surface;
 }
 
 sub get_pixel{
