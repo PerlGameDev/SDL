@@ -71,7 +71,11 @@ is( SDL::GFX::Primitives::aapolygon_color(        $display, [274, 278, 276, 278,
 is( SDL::GFX::Primitives::aapolygon_RGBA(         $display, [280, 284, 282, 284, 280], [243, 243, 245, 247, 247], 5, 0xFF, 0xFF, 0x00, 0xFF),             0, 'aapolygon_RGBA' );          # yellow
 is( SDL::GFX::Primitives::filled_polygon_color(   $display, [286, 290, 288, 290, 286], [243, 243, 245, 247, 247], 5, 0x00FFFFFF),                         0, 'filled_polygon_color' );    # cyan
 is( SDL::GFX::Primitives::filled_polygon_RGBA(    $display, [292, 296, 294, 296, 292], [243, 243, 245, 247, 247], 5, 0xFF, 0x00, 0xFF, 0xFF),             0, 'filled_polygon_RGBA' );     # magenta
-isnt( SDL::GFX::Primitives::textured_polygon(       $display, [298, 302, 300, 302, 298], [243, 243, 245, 247, 247], 5, $surf,                  0, 0),       -1, 'textured_polygon' );        # texture
+SKIP:
+{
+	skip ( 'Version 2.0.14 needed' , 1) unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 14 ); 
+	isnt( SDL::GFX::Primitives::textured_polygon(       $display, [298, 302, 300, 302, 298], [243, 243, 245, 247, 247], 5, $surf,                  0, 0),       -1, 'textured_polygon' );        # texture
+}
 SKIP:
 {
 	skip ( 'Version 2.0.17 needed' , 3) unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 17 ); 
