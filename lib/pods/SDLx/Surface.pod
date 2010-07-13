@@ -70,6 +70,17 @@ Applies L<SDL::Video::flip> to the Surface, with error checking.
 
 Returns $self
 
+=head2 update
+
+ $sdlx_surface->update(); # whole surface is updated
+ $sdlx_surface->update([0,0,1,1]); # only that area (0,0,1,1) is updated
+ 
+ $sdlx_surface->update( [ SDL::Rect->new(0,0,1,2) ... ]); # defined rects are updated
+
+Applies L<SDL::Video::update_rect> for no rect or 1 array ref. Applies L<SDL::Video::update_rects> for array of L<SDL::Rect>s. 
+
+Returns $self
+
 =head1 AUTHOR
 
  kthakore 
