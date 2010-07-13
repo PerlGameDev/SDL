@@ -53,7 +53,7 @@ If a surface is passed to 'surface =>' that is loaded. Otherwise you can define 
 
 If a SDL::Surface is passed it is attached to the matrix. Returns the SDL::Surface that is currently attached to this SDLx::Surface
 
-=head2 get_diplay
+=head2 get_display
 
 If L<SDLx::App->new()> or L<SDL::Video::get_video_mode> called before then:
 
