@@ -2,12 +2,12 @@ Revision history for Perl extension SDL_perl.
 
 * 2.502
 	- Displaying Alien::SDL's build option for every build step [FROGGS]
-	- Dispalying error message if required shared lib is missing [FROGGS]
+	- Displaying error message if required shared lib is missing [FROGGS]
 	- Added test and docs for SDLx::Surface
-	- Added version gaurd for older version of pixelinfo struct
+	- Added version guard for older version of pixelinfo struct
 	- Added example of new SDLx::Surface
 	- Fixes for exec.h stack dumper during testing
-	
+	- Added version guard for SDLx::GFX [FROGGS]	
 
 * 2.501  July 10 2010
 	- Fixes tests for SDLx::TTF and SDL::Surface [FROGGS, kthakore] 
