@@ -66,10 +66,11 @@ $surfs[1]->flip();
 pass 'Fliped the surface';
 
 $surfs[0]->update();
-#$surfs[0]->update( [0,10,30,40] );
-#$surfs[0]->update( [ SDL::Rect->new(0,1,2,3), SDL::Rect->new(2,4,5,6)] );
-
-pass 'Update passes';
+pass 'update all surface';
+$surfs[0]->update( [0,10,30,40] );
+pass 'Single rect update';
+$surfs[0]->update( [ SDL::Rect->new(0,1,2,3), SDL::Rect->new(2,4,5,6)] );
+pass 'SDL::Rect array update';
 
 if($videodriver)
 {

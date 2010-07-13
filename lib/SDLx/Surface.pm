@@ -146,7 +146,7 @@ sub flip
 sub update {
 	my ($self, $rects) = @_;
 
-	if ( !defined( $rects ) || scalar ( $rects ) == 1 )
+	if ( !defined( $rects ) || ( ref($rects) eq 'ARRAY' && !ref($rects->[0]) ) ) 
 	{
 		my @pass_rect = ();
 		@pass_rect = @{$rects->[0]} if $rects->[0];
@@ -160,7 +160,6 @@ sub update {
 	else
 	{
 		#TODO: Validate each rect? 
-
 		SDL::Video::update_rects($self->surface(), @{$rects});
 	}
 
