@@ -50,5 +50,9 @@ $surfs[0]->blit( $surfs[1] );
 
 isnt( $surfs[1]->[1][2], 0, 'Pixel from first surface was blitted to destination');
 
+$surf[1]->flip()
+
+pass 'Fliped the surface';
+
 
 done_testing;

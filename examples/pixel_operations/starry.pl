@@ -25,7 +25,7 @@ foreach ( 0..40 )
 	push (@stars, { x => $x, y => $y, speed => $speed });
 }
 
-my $display_matrix = SDLx::Surface->new( surface => $app );
+my $display_matrix = SDLx::Surface->new( width => 300, height => 400, depth => 32 );
 
 
 foreach(0..300)
@@ -60,8 +60,12 @@ foreach(0..300)
 		$display_matrix->[$_->{x}][$_->{y}] = 0xFFFFFFFF;
 		
 #		push @update_rects, SDL::Rect->new($_->{x}, $_->{y}, 2, 2);
+		
+
 
 	}
+	SDL::Video::update_rect( $display_matrix->surface(), 0,0, $app->w, $app->h );
+	$display_matrix->blit( $app );
 
 	SDL::Video::update_rect( $app, 0,0, $app->w, $app->h );
 

@@ -8,12 +8,12 @@ use Carp ();
 use SDL;
 use SDL::Video;
 use SDL::Rect;
+use SDL::Color;
 use SDL::Surface;
 use SDLx::Surface;
 use SDLx::Surface::TiedMatrix;
 use SDL::PixelFormat;
 use Tie::Simple;
-use Data::Dumper;
 use overload (
 	'@{}' => '_array',
 );
@@ -135,6 +135,36 @@ sub blit {
 
 }
 
-1;
+sub flip
+{
+	Carp::croak "surface is not defined" unless $_[0]->surface();
+	Carp::croak "Error flipping surface: ".SDL::get_error()  if ( SDL::Video::flip( $_[0]->surface() ) == -1 );
+	return $_[0];
+
+}
+
+sub update {
+	my ($self, @rects) = @_;
+
+	return $self;
+}
+
+sub draw_rect{
+	my ($self, $rect, $color) = @_;
+
+	return $self;
+}
+
+sub draw_line{
+	my ($self, $start, $end, $color, $antialias) = @_;
+
+	return $self;
+}
+
+sub draw_cirle{
+	my ($self, $center, $radius, $color, $antialias) = @_;
+
+	return $self;
+}
 
 
