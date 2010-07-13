@@ -62,6 +62,11 @@ If a SDL::Surface is passed it is attached to the matrix. Returns the SDL::Surfa
 Blits SDLx::Surface onto $dest surface. 
 $src_rect or $dest_rect are optional. $src_rect or $dest_rect can be array refs or SDL::Rect. $dest can be SDLx::Surface or SDL::Surface. 
 
+Returns $self
+
+=head2 flip
+
+Applies L<SDL::Video::flip> to the Surface, with error checking.
 
 Returns $self
 
