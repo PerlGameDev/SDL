@@ -192,6 +192,8 @@ sub update {
 	return $self;
 }
 
+#TODO
+=pod
 sub draw_rect{
 	my ($self, $rect, $color) = @_;
 
@@ -209,5 +211,6 @@ sub draw_cirle{
 
 	return $self;
 }
+=cut 
 
 1;
