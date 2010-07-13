@@ -185,6 +185,8 @@ gfx_roto_shrink_surface(src, factorx, factory)
 
 #endif
 
+#if (SDL_GFXPRIMITIVES_MAJOR >= 2) && (SDL_GFXPRIMITIVES_MINOR >= 0) && (SDL_GFXPRIMITIVES_MICRO >= 17)
+
 SDL_Surface *
 gfx_roto_rotate_surface_90_degrees(pSurf, numClockwiseTurns)
 	SDL_Surface* pSurf
@@ -195,5 +197,21 @@ gfx_roto_rotate_surface_90_degrees(pSurf, numClockwiseTurns)
 		RETVAL = rotateSurface90Degrees(pSurf, numClockwiseTurns);
 	OUTPUT:
 		RETVAL
+
+#else
+
+SDL_Surface *
+gfx_roto_rotate_surface_90_degrees(pSurf, numClockwiseTurns)
+	SDL_Surface* pSurf
+	int numClockwiseTurns
+	PREINIT:
+		char *CLASS = "SDL::Surface";
+	CODE:
+		warn("SDL_gfx >= 2.0.17 needed for SDL::GFX::Rotozoom::rotate_surface_90_degrees( src, numclockwiseturns )");
+		XSRETURN_UNDEF;
+	OUTPUT:
+		RETVAL
+
+#endif
 
 #endif

@@ -803,6 +803,8 @@ gfx_prim_filled_polygon_RGBA(dst, vx, vy, n, r, g, b, a)
 	OUTPUT:
 		RETVAL
 
+#if (SDL_GFXPRIMITIVES_MAJOR >= 2) && (SDL_GFXPRIMITIVES_MINOR >= 0) && (SDL_GFXPRIMITIVES_MICRO >= 14)
+
 int
 gfx_prim_textured_polygon(dst, vx, vy, n, texture, texture_dx, texture_dy)
 	SDL_Surface * dst
@@ -821,6 +823,25 @@ gfx_prim_textured_polygon(dst, vx, vy, n, texture, texture_dx, texture_dy)
 
 	OUTPUT:
 		RETVAL
+
+#else
+
+int
+gfx_prim_textured_polygon(dst, vx, vy, n, texture, texture_dx, texture_dy)
+	SDL_Surface * dst
+	AV* vx
+	AV* vy
+	int n
+	SDL_Surface * texture
+	int texture_dx
+	int texture_dy
+	CODE:
+		warn("SDL_gfx >= 2.0.14 needed for SDL::GFX::Rotozoom::textured_polygon(dst, vx, vy, n, texture, texture_dx, texture_dy)");
+		XSRETURN_UNDEF;
+	OUTPUT:
+		RETVAL
+
+#endif
 
 #if (SDL_GFXPRIMITIVES_MAJOR >= 2) && (SDL_GFXPRIMITIVES_MINOR >= 0) && (SDL_GFXPRIMITIVES_MICRO >= 17)
 
