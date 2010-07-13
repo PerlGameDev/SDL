@@ -3,9 +3,20 @@ use warnings;
 use Test::More;
 use SDL;
 use SDL::Surface;
+use SDL::Rect;
 use SDLx::Surface;
+use SDL::Video;
+use lib 't/lib';
+use SDL::TestTool;
 
-SDL::init(SDL_INIT_VIDEO);
+my $videodriver       = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
+my $app = SDL::Video::set_video_mode( 400,200,32, SDL_SWSURFACE);
+
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
+    plan( skip_all => 'Failed to init video' );
+}
 
 my $surface = SDL::Surface->new( SDL_SWSURFACE, 400,200, 32);
 my @surfs = (
@@ -50,9 +61,26 @@ $surfs[0]->blit( $surfs[1] );
 
 isnt( $surfs[1]->[1][2], 0, 'Pixel from first surface was blitted to destination');
 
-$surf[1]->flip()
+$surfs[1]->flip();
 
 pass 'Fliped the surface';
+
+$surfs[0]->update();
+#$surfs[0]->update( [0,10,30,40] );
+#$surfs[0]->update( [ SDL::Rect->new(0,1,2,3), SDL::Rect->new(2,4,5,6)] );
+
+pass 'Update passes';
+
+if($videodriver)
+{
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else
+{
+	delete $ENV{SDL_VIDEODRIVER};
+}
+
+pass 'Final SegFault test';
 
 
 done_testing;

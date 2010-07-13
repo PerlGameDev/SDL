@@ -144,7 +144,25 @@ sub flip
 }
 
 sub update {
-	my ($self, @rects) = @_;
+	my ($self, $rects) = @_;
+
+	if ( !defined( $rects ) || scalar ( $rects ) == 1 )
+	{
+		my @pass_rect = ();
+		@pass_rect = @{$rects->[0]} if $rects->[0];
+		$pass_rect[0] |= 0;
+		$pass_rect[1] |= 0;
+		$pass_rect[2] |= $self->surface->w;
+		$pass_rect[3] |= $self->surface->h;
+
+		SDL::Video::update_rect( $self->surface(), @pass_rect );
+	}
+	else
+	{
+		#TODO: Validate each rect? 
+
+		SDL::Video::update_rects($self->surface(), @{$rects});
+	}
 
 	return $self;
 }
@@ -167,4 +185,4 @@ sub draw_cirle{
 	return $self;
 }
 
-
+1;
