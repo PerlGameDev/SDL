@@ -61,6 +61,32 @@ sub new {
 	return $self;
 }
 
+sub get_display {
+	my $disp = SDL::Video::get_video_surface;
+	return SDLx::Surface->new( surface => $disp ) if $disp;
+	my %options = @_;
+
+	if ( $options{width} && $options{height} ) #atleast give a dimension
+	{
+		$options{depth} |=  32; #default 32
+		$options{flags} |= SDL_ANYFORMAT;
+
+		my $surface = SDL::Video::set_video_mode(
+			$options{width}, 
+			$options{height}, 
+			$options{depth}, 
+			$options{flags}, 
+			);
+			SDLx::Surface->new( surface=> $surface );
+	}
+	else
+	{
+		Carp::croak 'set_video_mode externally or atleast provide width and height';
+	}
+	
+
+}
+
 sub surface {
 	return $_[0]->{surface} unless $_[1];
 	my ($self, $surface) = @_;

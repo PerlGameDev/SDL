@@ -53,6 +53,22 @@ If a surface is passed to 'surface =>' that is loaded. Otherwise you can define 
 
 If a SDL::Surface is passed it is attached to the matrix. Returns the SDL::Surface that is currently attached to this SDLx::Surface
 
+=head2 get_diplay
+
+If L<SDLx::App->new()> or L<SDL::Video::get_video_mode> called before then:
+
+ my $appx = SDLx::Surface::get_display(); 
+
+gets the display if it is already made. Passed options are ignored. Otherwise you can quickly make the display with :
+
+ SDLx::Surface::get_display( width => 20, height => 20) #depth => 32 and SDL_ANYFORMAT used
+
+or you can also pass flags and depth. 
+
+ SDLx::Surface::get_display( width => 20, height => 20, flags=> SDL_HWSURFACE, depth=>24) 
+
+Get or create the main display surface and attach to a SDLx::Surface.
+
 =head1 EXTENSIONS
 
 =head2 blit 

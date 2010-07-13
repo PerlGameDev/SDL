@@ -12,11 +12,17 @@ use SDL::TestTool;
 my $videodriver       = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
-my $app = SDL::Video::set_video_mode( 400,200,32, SDL_SWSURFACE);
-
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
     plan( skip_all => 'Failed to init video' );
 }
+
+my $app = SDL::Video::set_video_mode( 400,200,32, SDL_SWSURFACE);
+
+my $app_x = SDLx::Surface::get_display();
+
+is_deeply( $app_x->surface->get_pixels_ptr, $app->get_pixels_ptr, '[get_display] works');
+
+
 
 my $surface = SDL::Surface->new( SDL_SWSURFACE, 400,200, 32);
 my @surfs = (
