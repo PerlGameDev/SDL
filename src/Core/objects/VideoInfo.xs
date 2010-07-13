@@ -152,6 +152,9 @@ videoinfo_vfmt( videoinfo )
 	OUTPUT:
 		RETVAL
 
+
+#if SDL_MAJOR_VERSION >= 1 && SDL_MINOR_VERSION >=2 && SDL_PATCHLEVEL >=10
+
 int
 videoinfo_current_w( videoinfo )
 
@@ -172,7 +175,7 @@ videoinfo_current_h( videoinfo )
 	OUTPUT:
 		RETVAL
 
-
+#endif
 
 	
 
