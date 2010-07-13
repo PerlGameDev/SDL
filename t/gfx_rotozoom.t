@@ -90,7 +90,11 @@ SKIP:
 	draw();
 }
 $src = SDL::Surface->new( SDL_SWSURFACE, 100, 200, 32, 0, 0, 0, 0 );
-isa_ok(SDL::GFX::Rotozoom::rotate_surface_90_degrees($src, 1), 'SDL::Surface', 'rotate_surface_90_degrees');
+SKIP:
+{
+	skip ( 'Version 2.0.17 needed' , 1) unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 17 ); 
+	isa_ok(SDL::GFX::Rotozoom::rotate_surface_90_degrees($src, 1), 'SDL::Surface', 'rotate_surface_90_degrees');
+}
 # Note: everything but 32bit surface will crash
 
 for(1..5)
