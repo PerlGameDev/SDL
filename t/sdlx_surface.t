@@ -78,6 +78,10 @@ pass 'Single rect update';
 $surfs[0]->update( [ SDL::Rect->new(0,1,2,3), SDL::Rect->new(2,4,5,6)] );
 pass 'SDL::Rect array update';
 
+
+$surfs[0]->draw_rect( [0,0,10,20], 0xFF00FFFF);
+pass 'draw_rect works';
+
 if($videodriver)
 {
 	$ENV{SDL_VIDEODRIVER} = $videodriver;

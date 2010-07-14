@@ -14,6 +14,7 @@ use SDLx::Surface;
 use SDLx::Surface::TiedMatrix;
 use SDL::PixelFormat;
 use Tie::Simple;
+
 use overload (
 	'@{}' => '_array',
 );
@@ -192,13 +193,23 @@ sub update {
 	return $self;
 }
 
-#TODO
-=pod
 sub draw_rect{
 	my ($self, $rect, $color) = @_;
+	Carp::croak "Rect needs to be a SDL::Rect or an array ref" unless ref($rect) eq 'ARRAY' || $rect->isa('SDL::Rect');
+	require Scalar::Util;
+	Carp::croak "Color needs to be a number" unless Scalar::Util::looks_like_number( $color );
+	
+	my $prect = SDL::Rect->new( @{$rect} ) if ref($rect) eq 'ARRAY';
+
+	Carp::croak "Error drawing rect: ".SDL::get_error() unless SDL::Video::fill_rect( $self->surface, $prect, $color) == 0;
 
 	return $self;
 }
+
+
+#TODO
+=pod
+
 
 sub draw_line{
 	my ($self, $start, $end, $color, $antialias) = @_;

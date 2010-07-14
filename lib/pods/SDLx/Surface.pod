@@ -55,7 +55,7 @@ If a SDL::Surface is passed it is attached to the matrix. Returns the SDL::Surfa
 
 =head2 get_display
 
-If L<SDLx::App->new()> or L<SDL::Video::get_video_mode> called before then:
+If L<SDLx::App::new> or L<SDL::Video::get_video_mode> called before then:
 
  my $appx = SDLx::Surface::get_display(); 
 
@@ -97,8 +97,17 @@ Applies L<SDL::Video::update_rect> for no rect or 1 array ref. Applies L<SDL::Vi
 
 Returns $self
 
+
+=head2 draw_rect
+
+ $sdlx_surface->draw_rect( [$x,$y,$w,$h], 0xFFFF00FF );
+ $sdlx_surface->draw_rect( SDL::Rect->new($x,$y,$w,$h), 0xFFFF00FF );
+
+Draws a rect on the surface with the given color. 
+
+Returns $self
+
 =head1 AUTHOR
 
  kthakore 
-
 
