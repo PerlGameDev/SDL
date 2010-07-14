@@ -12,6 +12,7 @@ use SDL::Color;
 use SDL::Surface;
 use SDLx::Surface;
 use SDLx::Surface::TiedMatrix;
+use SDL::GFX::Primitives;
 use SDL::PixelFormat;
 use Tie::Simple;
 
@@ -39,10 +40,10 @@ sub new {
 		$options{depth} |=  32; #default 32
 		$options{flags} |= SDL_ANYFORMAT;
 
-			$options{redmask} |= 0xFF000000;
-			$options{greenmask} |= 0x00FF0000;
-			$options{bluemask} |= 0x0000FF00;
-			$options{alphamask} |= 0x000000FF;
+		$options{redmask} |= 0xFF000000;
+		$options{greenmask} |= 0x00FF0000;
+		$options{bluemask} |= 0x0000FF00;
+		$options{alphamask} |= 0x000000FF;
 
 		my $surface = SDL::Surface->new( $options{flags}, 
 			$options{width}, 
@@ -77,14 +78,14 @@ sub get_display {
 			$options{height}, 
 			$options{depth}, 
 			$options{flags}, 
-			);
-			SDLx::Surface->new( surface=> $surface );
+		);
+		SDLx::Surface->new( surface=> $surface );
 	}
 	else
 	{
 		Carp::croak 'set_video_mode externally or atleast provide width and height';
 	}
-	
+
 
 }
 
@@ -137,9 +138,9 @@ sub blit {
 	my ($self, $dest, $src_rect, $dest_rect) = @_;
 
 	Carp::croak 'SDLx::Surface or SDL::Surface for dest required' unless ( $dest->isa('SDL::Surface') || $dest->isa('SDLx::Surface') );
-		
+
 	my $dest_surface = $dest;
-	   $dest_surface = $dest->surface if $dest->isa('SDLx::Surface');
+	$dest_surface = $dest->surface if $dest->isa('SDLx::Surface');
 
 	$src_rect = SDL::Rect->new(0,0, $self->{surface}->w, $self->{surface}->h) unless defined $src_rect ;
 	$dest_rect = SDL::Rect->new(0,0, $dest_surface->w, $dest_surface->h) unless defined $dest_rect;	
@@ -150,7 +151,7 @@ sub blit {
 	unless (ref($dest_rect) eq 'ARRAY') || ($dest_rect->isa('SDL::Rect') );
 
 	my $pass_src_rect = $src_rect;
-       	SDL::Rect->new( @{$src_rect} ) if ref $src_rect eq 'ARRAY';
+	SDL::Rect->new( @{$src_rect} ) if ref $src_rect eq 'ARRAY';
 
 	my $pass_dest_rect = $dest_rect;
 	SDL::Rect->new( @{$dest_rect} ) if ref $dest_rect eq 'ARRAY';
@@ -198,7 +199,7 @@ sub draw_rect{
 	Carp::croak "Rect needs to be a SDL::Rect or an array ref" unless ref($rect) eq 'ARRAY' || $rect->isa('SDL::Rect');
 	require Scalar::Util;
 	Carp::croak "Color needs to be a number" unless Scalar::Util::looks_like_number( $color );
-	
+
 	my $prect = SDL::Rect->new( @{$rect} ) if ref($rect) eq 'ARRAY';
 
 	Carp::croak "Error drawing rect: ".SDL::get_error() unless SDL::Video::fill_rect( $self->surface, $prect, $color) == 0;
@@ -207,15 +208,54 @@ sub draw_rect{
 }
 
 
-#TODO
-=pod
 
 
 sub draw_line{
 	my ($self, $start, $end, $color, $antialias) = @_;
 
+	Carp::croak "Error start needs an array ref [x,y]" unless ref($start) eq 'ARRAY';
+	Carp::croak "Error end needs an array ref [x,y]" unless ref($end) eq 'ARRAY';
+
+	my $result;
+	if( Scalar::Util::looks_like_number( $color ) )
+	{
+		if ( $antialias)
+		{
+		$result = SDL::GFX::Primitives::aaline_color( $self->surface, @$start, @$end, $color );	
+		}
+		else
+		{
+
+			$result = SDL::GFX::Primitives::line_color( $self->surface, @$start, @$end, $color );	
+		}
+	}
+	elsif ( ref($color) eq 'ARRAY' && scalar(@$color) >= 4)
+	{
+
+	if ( $antialias)
+		{
+			$result = SDL::GFX::Primitives::aaline_RGBA( $self->surface, @$start, @$end, @$color );	
+		}
+		else
+		{
+
+			$result = SDL::GFX::Primitives::line_RGBA( $self->surface, @$start, @$end, @$color );	
+		}
+
+	}
+	else
+	{
+		Carp::croak "Color needs to be a number or array ref [r,g,b,a,...]";	
+
+	}
+
+	Carp::croak "Error drawing line: ". SDL::get_error() if ($result == -1);
+
 	return $self;
 }
+
+#TODO
+=pod
 
 sub draw_cirle{
 	my ($self, $center, $radius, $color, $antialias) = @_;

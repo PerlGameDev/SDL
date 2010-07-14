@@ -107,6 +107,15 @@ Draws a rect on the surface with the given color.
 
 Returns $self
 
+=head2 draw_line
+
+ $sdlx_surface->draw_line( [$x1, $y1], [$x2, $y2], $color, $antialias); # $color is a number
+ $sdlx_surface->draw_line( [$x1, $y1], [$x2, $y2], \@color, $antialias); # 
+
+Draws a line on the surface. Antialias is turned on if $antialias is defined. 
+
+Returns $self
+
 =head1 AUTHOR
 
  kthakore 

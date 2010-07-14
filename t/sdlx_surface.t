@@ -82,6 +82,14 @@ pass 'SDL::Rect array update';
 $surfs[0]->draw_rect( [0,0,10,20], 0xFF00FFFF);
 pass 'draw_rect works';
 
+$surfs[1]->draw_line( [0,10], [ 20, 10 ], 0xff00ffff);
+$surfs[1]->draw_line( [0,10], [ 20, 10 ], 0xff00ffff, 1);
+$surfs[1]->draw_line( [0,10], [ 20, 10 ], [255,255,0,255]);
+$surfs[1]->draw_line( [0,10], [ 20, 10 ], [255,255,0,255], 1);
+
+
+pass 'draw_line works';
+
 if($videodriver)
 {
 	$ENV{SDL_VIDEODRIVER} = $videodriver;
