@@ -36,10 +36,10 @@ elsif( !SDL::Config->has('SDL_image') )
 
 my $disp = SDL::Video::set_video_mode( 300, 300, 32, SDL_ANYFORMAT);
 
-my $sprite = SDLx::Sprite->new;
+my $sprite = SDLx::Sprite->new( width => 1, height => 1);
 
 # test initial values
-ok($sprite, 'object defined');
+#ok($sprite, 'object defined');
 isa_ok ( $sprite, 'SDLx::Sprite');
 
 my $rect = $sprite->rect;
@@ -47,16 +47,16 @@ ok($rect, 'rect defined upon raw initialization');
 isa_ok($rect, 'SDL::Rect', 'spawned rect isa SDL::Rect');
 is($rect->x, 0, 'rect->x init');
 is($rect->y, 0, 'rect->y init');
-is($rect->w, 0, 'rect->w init');
-is($rect->h, 0, 'rect->h init');
+is($rect->w, 1, 'rect->w init');
+is($rect->h, 1, 'rect->h init');
 
 my ($x, $y) = ($sprite->x, $sprite->y);
 is($x, 0, 'no x defined upon raw initialization');
 is($y, 0, 'no y defined upon raw initialization');
 
 my ($w, $h) = ($sprite->w, $sprite->h);
-is($w, 0, 'no w defined upon raw initialization');
-is($h, 0, 'no h defined upon raw initialization');
+is($w, 1, 'w defined upon raw initialization');
+is($h, 1, 'h defined upon raw initialization');
 
 
 isa_ok ( $sprite->load('test/data/hero.png'), 'SDLx::Sprite', '[load] works');
@@ -80,4 +80,3 @@ else
 {
 	delete $ENV{SDL_VIDEODRIVER};
 }
-

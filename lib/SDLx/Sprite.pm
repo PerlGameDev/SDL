@@ -46,7 +46,7 @@ sub new {
 	else
 	{
 		
-		Carp::croak "Need a surface or an image name";
+		Carp::croak "Need a surface => SDL::Surface, an image => name, or ( width => ... , height => ...)";
 	}
 	
 	

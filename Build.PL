@@ -341,7 +341,7 @@ my %subsystems =
 			from => 'src/Image.xs',
 			to   =>	'lib/SDL/Image.xs',
 		},
-		libraries => [qw( SDL SDL_image jpeg png tiff)],
+		libraries => [qw( SDL SDL_image )],
 	},
 	SFont => {
 		file	=> {
