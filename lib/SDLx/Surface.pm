@@ -132,6 +132,35 @@ sub _array {
 	return $array;
 }
 
+#WRAPPING
+
+sub w {
+	$_[0]->surface->w();
+}
+sub h {
+	$_[0]->surface->h();
+}
+sub format {
+	$_[0]->surface->format();
+}
+
+sub pitch {
+	$_[0]->surface->pitch();
+}
+
+sub flags {
+	$_[0]->surface->flags();
+}
+
+sub clip_rect {
+
+	SDL::Video::get_clip_rect ( $_[0]->surface);
+	
+}
+
+
+
+
 #EXTENSTIONS
 
 sub blit {
@@ -151,11 +180,11 @@ sub blit {
 	unless (ref($dest_rect) eq 'ARRAY') || ($dest_rect->isa('SDL::Rect') );
 
 	my $pass_src_rect = $src_rect;
-	$pass_src_rect = SDL::Rect->new( @{$src_rect} ) if ref $src_rect eq 'ARRAY';
+	 $pass_src_rect = SDL::Rect->new( @{$src_rect} ) if ref $src_rect eq 'ARRAY';
 
 	my $pass_dest_rect = $dest_rect;
-	$pass_dest_rect = SDL::Rect->new( @{$dest_rect} ) if ref $dest_rect eq 'ARRAY';
-
+	 $pass_dest_rect =  SDL::Rect->new( @{$dest_rect} ) if ref $dest_rect eq 'ARRAY';
+	
 	Carp::croak 'Destination was not a surface' unless $dest_surface->isa('SDL::Surface');
 	SDL::Video::blit_surface( $self->surface(), $pass_src_rect, $dest_surface, $pass_dest_rect);
 
@@ -202,7 +231,9 @@ sub draw_rect{
 
 	my $prect = SDL::Rect->new( @{$rect} ) if ref($rect) eq 'ARRAY';
 
-	Carp::croak "Error drawing rect: ".SDL::get_error() unless SDL::Video::fill_rect( $self->surface, $prect, $color) == 0;
+	my $result = SDL::Video::fill_rect( $self->surface, $prect, $color);
+	return $self unless $result;
+	Carp::croak "Error drawing rect: ".SDL::get_error() unless $result == 0;
 
 	return $self;
 }
