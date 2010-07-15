@@ -18,9 +18,7 @@ my $pixel   = SDL::Video::map_RGB( $disp->format, 0, 0, 0 );
 SDL::Video::fill_rect( $disp, SDL::Rect->new( 0, 0, $disp->w, $disp->h ), $pixel );
 
 
-my $sprite = SDLx::Sprite->new();
-
- $sprite->load('test/data/chest.png');
+my $sprite = SDLx::Sprite->new( image=> 'test/data/chest.png');
  
  $sprite->alpha_key(SDL::Color->new(0xfc, 0x00, 0xff));
  $sprite->alpha(0.8);
