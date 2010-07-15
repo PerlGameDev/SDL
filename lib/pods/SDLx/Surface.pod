@@ -20,7 +20,7 @@ Extension
 
  my $surf_matrix = SDLx::Surface->new( surface => $display);
  
- $surf__matrix->[10][10] = 0xFFFF; #for 16bpp write white at x = 10 and y=10
+ $surf_matrix->[10][10] = 0xFFFF; #for 16bpp write white at x = 10 and y=10
 
  $surf_matrix->surface( $new_surface );
 
