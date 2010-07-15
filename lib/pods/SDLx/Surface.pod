@@ -30,7 +30,7 @@ Extension
 
 An C<SDLx::Surface> allows matrix read and write to a surface, safely. 
 
-=head1 METHODS
+=head1 CONSTRUCTOR 
 
 =head2 new
 
@@ -49,9 +49,6 @@ If a surface is passed to 'surface =>' that is loaded. Otherwise you can define 
 	SDLx::Surface->new( width=> 400, height=>200, flags=> SDL_SWSURFACE, depth=>32, greenmask=>0xFF000000 )
 		# A SDL::Surface->new( SDL_ANYFORMAT, 400, 200, 32, 0, 0xFF000000,0, 0, 0 ) is loaded
 
-=head2 surface
-
-If a SDL::Surface is passed it is attached to the matrix. Returns the SDL::Surface that is currently attached to this SDLx::Surface
 
 =head2 get_display
 
@@ -68,6 +65,24 @@ or you can also pass flags and depth.
  SDLx::Surface::get_display( width => 20, height => 20, flags=> SDL_HWSURFACE, depth=>24) 
 
 Get or create the main display surface and attach to a SDLx::Surface.
+
+=head2 duplicate
+
+Does a attributes only, no pixel, copy of another SDLx::Surface. 
+
+=head1 ATTRIBUTES
+
+=head2 surface
+
+If a SDL::Surface is passed it is attached to the matrix. Returns the SDL::Surface that is currently attached to this SDLx::Surface
+
+=head2 w, h, format, pitch, flags
+
+Returns the inner SDL::Surface's respective attribute. See C<SDL::Surface>.
+
+=head2 clip_rect
+
+Sets the passed C<SDL::Rect> as the new clip_rect for the surface. Returns the SDL::Surface's clip_rect. See C<SDL::Video::get_clip_rect> and C<SDL::Video::set_clip_rect>.
 
 =head1 EXTENSIONS
 

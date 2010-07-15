@@ -5,9 +5,11 @@ use SDL;
 use SDL::Surface;
 use SDL::Rect;
 use SDLx::Surface;
+use SDL::PixelFormat;
 use SDL::Video;
 use lib 't/lib';
 use SDL::TestTool;
+
 
 my $videodriver       = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
@@ -86,9 +88,17 @@ $surfs[1]->draw_line( [0,10], [ 20, 10 ], 0xff00ffff);
 $surfs[1]->draw_line( [0,10], [ 20, 10 ], 0xff00ffff, 1);
 $surfs[1]->draw_line( [0,10], [ 20, 10 ], [255,255,0,255]);
 $surfs[1]->draw_line( [0,10], [ 20, 10 ], [255,255,0,255], 1);
-
-
 pass 'draw_line works';
+
+
+my $surf_dup = SDLx::Surface::duplicate( $surfs[1] );
+
+is ( $surf_dup->w , $surfs[1]->w, 'Duplicate surf has same width' );
+is ( $surf_dup->h , $surfs[1]->h, 'Duplicate surf has same flags' );
+is ( $surf_dup->flags , $surfs[1]->flags, 'Duplicate surf has same flags' );
+is ( $surf_dup->format->BitsPerPixel , $surfs[1]->format->BitsPerPixel, 'Duplicate surf has same bpp' );
+
+
 
 if($videodriver)
 {
