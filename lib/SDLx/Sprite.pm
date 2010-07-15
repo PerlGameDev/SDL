@@ -227,6 +227,9 @@ sub alpha {
 
 sub rotation {
     my ($self, $angle, $smooth) = @_;
+    
+
+    
     if ($angle && $self->{orig_surface}) {
     	
         require SDL::GFX::Rotozoom;
@@ -238,8 +241,15 @@ sub rotation {
                          (defined $smooth && $smooth != 0) 
 		 ) or Carp::croak 'rotation error: ' . SDL::get_error;
 	
-        $self->handle_surface($rotated); 
-        $self->surface( $rotated );
+	#After rotation the surface is on a undefined background. 
+	#This causes problems with alpha. So we create a surface with a fill of the src_color.
+	#This insures less artifacts.
+	
+	my $background = SDLx::Surface::duplicate($rotated);
+	$background->draw_rect( [0,0,$background->w, $background->h ], $self->{alpha_key} ) if $self->{alpha_key};
+	SDLx::Surface->new( surface => $rotated)->blit( $background);
+	
+        $self->handle_surface($background->surface); 
         $self->alpha_key( $self->{alpha_key} ) if $self->{alpha_key};
         $self->alpha( $self->{alpha} ) if $self->{alpha};
         $self->{angle} = $angle;
