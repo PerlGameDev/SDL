@@ -23,7 +23,9 @@ sub new {
 		
 		$self = $class->SUPER::new(surface => $options{surface}) ;
 		$self->{orig_surface} = $options{surface};
-		_init_rects(@_);
+		
+		$self->_init_rects(%options);
+		$self->handle_surface($self->surface);
 	}
 	elsif( exists $options{image} )
 	{
@@ -32,6 +34,14 @@ sub new {
 		$self->_init_rects(%options);
 		$self->handle_surface($surf);
 		$self->{orig_surface} = $surf;
+	}
+	elsif ( exists $options{width} && $options{height} )
+	{
+		$self = $class->SUPER::new(%options) ;
+		$self->{orig_surface} = $self->surface;
+		
+		$self->_init_rects(%options);
+		$self->handle_surface($self->surface);
 	}
 	else
 	{
@@ -168,6 +178,7 @@ sub y {
 
 sub draw {
 	my ($self, $surface) = @_;
+	Carp::croak 'Surface needs to be defined' unless defined $surface;
 
 	$self->blit( $surface,
 		$self->clip,
@@ -179,7 +190,7 @@ sub draw {
 sub draw_xy 
 {
    my ($self, $surface, $x, $y ) = @_;
-
+   Carp::croak 'Surface needs to be defined' unless defined $surface;
    $self->x($x);
    $self->y($y);
    return  $self->draw($surface);
