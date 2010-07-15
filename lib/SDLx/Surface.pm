@@ -154,6 +154,7 @@ sub flags {
 
 sub clip_rect {
 
+	SDL::Video::set_clip_rect( $_[0]->surface, $_[1] ) if ($_[1] && $_[1]->isa('SDL::Rect') )
 	SDL::Video::get_clip_rect ( $_[0]->surface);
 	
 }
