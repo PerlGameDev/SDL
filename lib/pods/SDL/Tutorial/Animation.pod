@@ -38,9 +38,31 @@ Since you have to draw the screen in the right order once to start with it's
 pretty easy to make this into a loop and redraw things in the right order for
 every frame.  Given a L<SDLx::App> object C<$app>, a L<SDL::Rect> C<$rect>, and
 a L<SDL::Color> C<$color>, you only have to create a new SDL::Rect C<$bg>,
-representing the whole of the background surface and a new SDL::Color
-C<$bg_color>, representing the background color.  You can write a
-C<draw_frame()> function as follows:
+representing the whole of the background surface and a new mapped color 
+C<$bg_color>, representing the background color.  The colors need to be mapped 
+to the format of the current display. This is done by L<SDL::Video::map_RGB>.
+
+S< >
+
+my $color = SDL::Video::map_RGB (
+	 $app->format,
+	 $rect_r,
+	 $rect_g,
+	 $rect_b,
+);
+
+my $bg_color = SDL::Video::map_RGB (
+	 $app->format,
+ 	 $bg_r,
+	 $bg_g,
+	 $bg_b,
+);
+
+S< >
+
+
+
+You can write a C<draw_frame()> function as follows:
 
 S< >
 
