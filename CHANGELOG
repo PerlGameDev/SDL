@@ -8,6 +8,7 @@ Revision history for Perl extension SDL_perl.
 	- Added example of new SDLx::Surface
 	- Fixes for exec.h stack dumper during testing
 	- Added version guard for SDLx::GFX [FROGGS]	
+	- Modified SDLx::Sprite to inherit from SDLx::Surface
 
 * 2.501  July 10 2010
 	- Fixes tests for SDLx::TTF and SDL::Surface [FROGGS, kthakore] 
