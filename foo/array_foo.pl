@@ -11,7 +11,10 @@ SDL::init(SDL_INIT_VIDEO);
 my $app = SDLx::Surface::get_display( width => 200, height => 200 );
 
 my $foo = SDLx::Surface->new( width => 200, height => 200 );
+my $foo_ = SDLx::Surface->new( width => 200, height => 200 );
 
+my $foo_surf = $foo->surface;
+my $foo__surf = $foo_->surface;
 
 my @update_rects = ( );
 
@@ -28,7 +31,7 @@ foreach( 0..200000)
 sub update_rects_test
 {
 
-   SDL::Video::update_rects( $foo->surface, @update_rects );
+   SDL::Video::update_rects( $foo_surf, @update_rects );
 
 }
 
@@ -36,7 +39,7 @@ sub update_rects_test
 sub update_rects_test_two
 {
 
-   SDL::Video::update_rects_fast( $foo->surface, \@update_rects );
+   SDL::Video::update_rects_fast( $foo__surf, \@update_rects );
 
 }
 
