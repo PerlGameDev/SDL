@@ -5,23 +5,30 @@ use SDL;
 use SDL::Rect;
 use SDLx::Surface;
 use SDL::Video;
-use Test::More;
 use Benchmark qw(:all);
 
-my $foo = SDLx::Surface::get_display( width => 200, height => 200 );
+SDL::init(SDL_INIT_VIDEO);
+my $app = SDLx::Surface::get_display( width => 200, height => 200 );
+
+my $foo = SDLx::Surface->new( width => 200, height => 200 );
 
 
 my @update_rects = ( );
 
-foreach( 0...20)
+sub a 
 {
-	push ( @update_rects, SDL::Rect->new(rand(200), rand(200),rand(200),rand(200)) );
+	return int(rand(100)+50);
+}
+
+foreach( 0..20)
+{
+	push ( @update_rects, SDL::Rect->new(a,a,a,a ) );
 }
 
 sub update_rects_test
 {
 
-   SDL::Video::update_rects( $foo->surface, \@update_rects );
+   SDL::Video::update_rects( $foo->surface, @update_rects );
 
 }
 
@@ -36,6 +43,5 @@ sub update_rects_test_two
 
 cmpthese( -1, { one=> 'update_rects_test', two => 'update_rects_test_two' } );
 
-pass();
 
-done_testing();
+
