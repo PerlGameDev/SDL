@@ -20,7 +20,7 @@ sub a
 	return int(rand(100)+50);
 }
 
-foreach( 0..20)
+foreach( 0..200000)
 {
 	push ( @update_rects, SDL::Rect->new(a,a,a,a ) );
 }
