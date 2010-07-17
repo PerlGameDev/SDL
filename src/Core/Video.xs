@@ -185,6 +185,22 @@ video_update_rects ( surface, ... )
 		SDL_UpdateRects(surface,num_rects,rects);
 		safefree(rects);
 
+void
+video_update_rects_fast ( surface, array )
+	SDL_Surface *surface
+	AV* array
+	CODE:
+		SDL_Rect* rects;
+		int i;
+		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*av_len(array));
+		for(i=0;i<av_len(array);i++) {
+			SV** elem = av_fetch( array, i, 0);
+                        void** pointers = (void **)elem; 
+			rects[i] = *(SDL_Rect *)(pointers[0]);
+		}
+		SDL_UpdateRects(surface,av_len(array),rects);
+		safefree(rects);
+
 
 int
 video_flip ( surface )
