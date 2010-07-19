@@ -271,7 +271,7 @@ SDLx::Sprite::Animated - create animated SDL sprites easily!
 
 
   # as usual, you can setup most of the above during object spawning
-  my $animation = SDLx::Animation->new(
+  my $animation = SDLx::Sprite::Animated->new(
                        image  => 'hero.png',
                        rect   => SDL::Rect->new(...),
                        step_x => 20,
