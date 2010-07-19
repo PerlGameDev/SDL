@@ -6,16 +6,16 @@ use SDL;
 use SDL::Video;
 use SDL::Rect;
 use SDL::Surface;
-use SDLx::Sprite;
-use SDLx::Controller::Timer;
 use Carp ();
 
-use parent 'SDLx::Sprite';
+#BEGIN { require SDLx::Sprite; our @ISA = qw(SDLx::Sprite) }
+use SDLx::Sprite;
+use base 'SDLx::Sprite';
 
 sub new {
     my ( $class, %options ) = @_;
 
-    my ( $w, $h ) = ( $options{rect}->w, $options{rect}->h )
+    my ($w, $h) = ($options{rect}->w, $options{rect}->h)
         if exists $options{rect};
 
     my $self = $class->SUPER::new(%options);
@@ -25,16 +25,16 @@ sub new {
     $self->type( exists $options{type}     ? $options{type}   : 'circular' );
     $self->max_loops( exists $options{max_loops} ? $options{max_loops} : 0 );
     $self->ticks_per_frame(
-        exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 0 );
+        exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
 
-    if ( exists $options{rect} ) {
-        $self->rect->w($w);
-        $self->rect->h($h);
-        $self->clip->w($w);
-        $self->clip->h($h);
+    if (exists $options{rect}) {
+        $self->rect->w( $w );
+        $self->rect->h( $h );
+        $self->clip->w( $w );
+        $self->clip->h( $h );
     }
 
-    $self->{timer} = SDLx::Controller::Timer->new();
+    $self->{ticks} = 0;
     return $self;
 }
 
@@ -114,20 +114,20 @@ sub set_sequences {
     return $self;
 }
 
-sub sequence {
+sub current_sequence {
     my ( $self, $sequence ) = @_;
 
     if ($sequence) {
-        $self->{sequence}      = $sequence;
-        $self->{current_frame} = 0;
+        $self->{current_sequence} = $sequence;
+        $self->{current_frame}    = 0;
     }
 
-    return $self->{sequence};
+    return $self->{current_sequence};
 }
 
 sub _sequence {
     my $self = shift;
-    return $self->{sequences}->{ $self->{sequence} };
+    return $self->{sequences}->{ $self->{current_sequence} };
 }
 
 sub _frame {
@@ -159,14 +159,13 @@ sub reset {
 
 sub start {
     my $self = shift;
-    $self->{ticks} = 0;
-    $self->{timer}->start();
+    $self->{running} = 1;
     return $self;
 }
 
 sub stop {
     my $self = shift;
-    $self->{timer}->stop();
+    $self->{running} = 0;
     return $self;
 }
 
@@ -187,16 +186,9 @@ sub _source_frame {
 sub draw {
     my ( $self, $surface ) = @_;
 
-    if ( $self->{ticks_per_frame} && $self->{timer}->is_started ) {
-        $self->{ticks} += $self->{timer}->get_ticks;
-        if ( $self->{ticks} > $self->{ticks_per_frame} ) {
-            $self->{ticks} = 0;
-            $self->next;
-        }
-    }
-    else {
-        $self->next;
-    }
+    $self->{ticks}++;
+    $self->next
+        if $self->{running} && $self->{ticks} % $self->{ticks_per_frame} == 0;
 
     Carp::croak 'destination must be a SDL::Surface'
         unless ref $surface and $surface->isa('SDL::Surface');
@@ -477,7 +469,7 @@ If you want to restart autoplay from the initial frame, just do:
 
 =head1 AUTHORS
 
-Jeffrey T. Palmer C<< <jeffrey.t.palmer@gmail.com> >>
+JTpalmer
 
 Dustin Mays, C<< <dork.fish.wat@gmail.com> >>
 
@@ -487,5 +479,5 @@ Kartik thakore C<< <kthakore at cpan.org> >>
 
 =head1 SEE ALSO
 
-L<< SDLx::Sprite >>, L<< SDL::Surface >>, L<< SDL >>
+L<< SDL::Surface >>, L<< SDL >>
 
