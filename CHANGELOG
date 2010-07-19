@@ -1,5 +1,10 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.503
+	- Finished a working version of SDLx::Sprite::Animated [jtpalmer]
+	- Added draw functions to SDLx::Sprite
+	- Cleanedup Sprite inheritance from Surface
+
 * 2.502
 	- Displaying Alien::SDL's build option for every build step [FROGGS]
 	- Displaying error message if required shared lib is missing [FROGGS]
