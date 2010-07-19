@@ -114,20 +114,20 @@ sub set_sequences {
     return $self;
 }
 
-sub current_sequence {
+sub sequence {
     my ( $self, $sequence ) = @_;
 
     if ($sequence) {
-        $self->{current_sequence} = $sequence;
+        $self->{sequence} = $sequence;
         $self->{current_frame}    = 0;
     }
 
-    return $self->{current_sequence};
+    return $self->{sequence};
 }
 
 sub _sequence {
     my $self = shift;
-    return $self->{sequences}->{ $self->{current_sequence} };
+    return $self->{sequences}->{ $self->{sequence} };
 }
 
 sub _frame {
