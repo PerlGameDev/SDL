@@ -1,18 +1,50 @@
 package SDLx::Sprite::Animated;
+use strict;
+use warnings;
 
-BEGIN { require SDLx::Sprite; our @ISA = qw(SDLx::Sprite) }
+use SDL;
+use SDL::Video;
+use SDL::Rect;
+use SDL::Surface;
+use Carp ();
+
+#BEGIN { require SDLx::Sprite; our @ISA = qw(SDLx::Sprite) }
+use SDLx::Sprite;
+use base 'SDLx::Sprite';
+
+sub new {
+    my ( $class, %options ) = @_;
+
+    my ($w, $h) = ($options{rect}->w, $options{rect}->h)
+        if exists $options{rect};
+
+    my $self = $class->SUPER::new(%options);
+
+    $self->step_y( exists $options{step_y} ? $options{step_y} : 0 );
+    $self->step_x( exists $options{step_x} ? $options{step_x} : 0 );
+    $self->type( exists $options{type}     ? $options{type}   : 'circular' );
+    $self->max_loops( exists $options{max_loops} ? $options{max_loops} : 0 );
+    $self->ticks_per_frame(
+        exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
+
+    if (exists $options{rect}) {
+        $self->rect->w( $w );
+        $self->rect->h( $h );
+        $self->clip->w( $w );
+        $self->clip->h( $h );
+    }
+
+    $self->{ticks} = 0;
+    return $self;
+}
 
 sub load {
     my $self = shift;
-    warn "+++ THAT WOULD BE ME!!\n";
-    $self->SUPER::load( @_ );
-    $self->{direction} = 1;
-    $self->{current_frame} = 1;
-    $self->{total_frames} = 3;
+    return $self->SUPER::load(@_);
 }
 
 sub step_y {
-    my ($self, $step_y) = @_;
+    my ( $self, $step_y ) = @_;
 
     if ($step_y) {
         $self->{step_y} = $step_y;
@@ -22,7 +54,7 @@ sub step_y {
 }
 
 sub step_x {
-    my ($self, $step_x) = @_;
+    my ( $self, $step_x ) = @_;
 
     if ($step_x) {
         $self->{step_x} = $step_x;
@@ -31,40 +63,139 @@ sub step_x {
     return $self->{step_x};
 }
 
+sub type {
+    my ( $self, $type ) = @_;
+
+    if ($type) {
+        $self->{type} = $type;
+    }
+
+    return $self->{type};
+}
+
+sub max_loops {
+    my ( $self, $max ) = @_;
+
+    if ($max) {
+        $self->{max_loops} = $max;
+    }
+
+    return $self->{max_loops};
+}
+
+sub ticks_per_frame {
+    my ( $self, $ticks ) = @_;
+
+    if ($ticks) {
+        $self->{ticks_per_frame} = $ticks;
+    }
+
+    return $self->{ticks_per_frame};
+}
+
+sub current_frame {
+    my ( $self, $frame ) = @_;
+
+    if ($frame) {
+        $self->{current_frame} = $frame;
+    }
+
+    return $self->{current_frame};
+}
+
+sub current_loop {
+    return $_[0]->{current_loop};
+}
+
+sub set_sequences {
+    my ( $self, %sequences ) = @_;
+
+    $self->{sequences} = \%sequences;
+    return $self;
+}
+
+sub current_sequence {
+    my ( $self, $sequence ) = @_;
+
+    if ($sequence) {
+        $self->{current_sequence} = $sequence;
+        $self->{current_frame}    = 0;
+    }
+
+    return $self->{current_sequence};
+}
+
+sub _sequence {
+    my $self = shift;
+    return $self->{sequences}->{ $self->{current_sequence} };
+}
+
+sub _frame {
+    my $self = shift;
+    return $self->_sequence->[ $self->{current_frame} ];
+}
+
 sub next {
     my $self = shift;
-    my $frame = $self->{current_frame} + 1 * $self->{direction};
 
-    if ($frame == 1 or $frame == $self->{total_frames}) {
-        #TODO check type and max_loops
+    # TODO direction, type, max_loops, current_loop
+    $self->{current_frame}
+        = ( $self->{current_frame} + 1 ) % @{ $self->_sequence };
+}
 
-        #TODO: this is 'circular'
-        $self->{direction} *= -1;
-    }
-    $self->{current_frame} = $frame;
+sub previous {
+    my $self = shift;
+
+    # TODO
+    return $self;
+}
+
+sub reset {
+    my $self = shift;
+    $self->stop;
+    $self->{current_frame} = 0;
+    return $self;
+}
+
+sub start {
+    my $self = shift;
+    $self->{running} = 1;
+    return $self;
+}
+
+sub stop {
+    my $self = shift;
+    $self->{running} = 0;
+    return $self;
+}
+
+sub _source_frame {
+    my $self = shift;
+
+    # TODO step_x, step_y
+    my $clip  = $self->clip;
+    my $frame = $self->_frame;
+
+    return SDL::Rect->new(
+        $frame->[0] * $clip->w,
+        $frame->[1] * $clip->h,
+        $clip->w, $clip->h,
+    );
 }
 
 sub draw {
-	my ($self, $surface) = @_;
+    my ( $self, $surface ) = @_;
 
-	Carp::croak 'destination must be a SDL::Surface'
-	unless ref $surface and $surface->isa('SDL::Surface');
+    $self->{ticks}++;
+    $self->next
+        if $self->{running} && $self->{ticks} % $self->{ticks_per_frame} == 0;
 
-    #TODO: make this suck less
-    my $clip = $self->clip;
-    my $source_frame = SDL::Rect->new(
-            $clip->x,
-            $clip->y + $self->step_y * ($self->{current_frame} - 1),
-            $clip->w,
-            $clip->h
-    );
+    Carp::croak 'destination must be a SDL::Surface'
+        unless ref $surface and $surface->isa('SDL::Surface');
 
-	SDL::Video::blit_surface( $self->surface,
-		$source_frame,
-		$surface,
-		$self->rect
-	);
-	return $self;
+    SDL::Video::blit_surface( $self->surface, $self->_source_frame, $surface,
+        $self->rect );
+    return $self;
 }
 
 1;
@@ -337,6 +468,8 @@ If you want to restart autoplay from the initial frame, just do:
 
 
 =head1 AUTHORS
+
+JTpalmer
 
 Dustin Mays, C<< <dork.fish.wat@gmail.com> >>
 

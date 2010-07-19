@@ -59,7 +59,7 @@ is($w, 1, 'w defined upon raw initialization');
 is($h, 1, 'h defined upon raw initialization');
 
 
-isa_ok ( $sprite->load('test/data/hero.png'), 'SDLx::Sprite', '[load] works');
+isa_ok ( $sprite->load('test/data/hero.bmp'), 'SDLx::Sprite', '[load] works');
 
 isa_ok ( $sprite->alpha_key(SDL::Color->new(0xfc, 0x00, 0xff)), 'SDLx::Sprite', '[alpha] works');
 
