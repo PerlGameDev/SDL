@@ -1,47 +1,38 @@
 tags: Tutorials
 
-  = head1 NAME
+=pod
 
-  SDL::Tutorial::Animation
+=head1 NAME
 
-  = head2 CATEGORY
+SDL::Tutorial::Animation
 
-  Tutorials
+=head2 CATEGORY
 
-  = head1 SYNOPSIS
+Tutorials
 
-  # to read this tutorial
-  $ perldoc SDL::Tutorial::Animation
+=head1 SYNOPSIS
 
-  # to create a demo animation program based on this tutorial
-  $ perl -MSDL::Tutorial::Animation = sdl_anim . pl -e 1
+	# to read this tutorial
+	$ perldoc SDL::Tutorial::Animation
 
-  = head1 ANIMATING A RECTANGLE
+	# to create a demo animation program based on this tutorial
+	$ perl -MSDL::Tutorial::Animation=sdl_anim.pl -e 1
 
-  Now that you can display a rectangle on the screen,
-  the next step is to animate that rectangle . As with movies,
-  there's no actual motion
-  . Computer animations are just very very fast slideshows
-  . The hard work is creating nearly identical images in every slide(
-      or frame, in graphics terms )
-  .
+=head1 ANIMATING A RECTANGLE
 
-  Okay, it's not that difficult .
+Now that you can display a rectangle on the screen, the next step is to animate
+that rectangle.  As with movies, there's no actual motion.  Computer animations are just very very fast slideshows.  The hard work is creating nearly identical images in every slide (or frame, in graphics terms).
 
-  There is one small difficulty to address,
-  however . Once you blit one surface onto another,
-  the destination is changed permanently 
-  . There's no concept of layers here
-  unless you write it yourself
-      . If you fail to take this into account(
-            and just about everyone does at first ),
-    you'll end up with blurry graphics moving around on the screen
-      .
+Okay, it's not that difficult.
 
-      There are two approaches to solve this problem,
-    redrawing the screen on every frame and saving and restoring the background
-      for every object drawn
-      .
+There is one small difficulty to address, however.  Once you blit one surface
+onto another, the destination is changed permanently.  There's no concept of
+layers here unless you write it yourself.  If you fail to take this into
+account (and just about everyone does at first), you'll end up with blurry
+graphics moving around on the screen.
+
+There are two approaches to solve this problem, redrawing the screen on every
+frame and saving and restoring the background for every object drawn.
 
 =head2 Redrawing the Screen
 
