@@ -1,12 +1,12 @@
 use strict;
 use warnings;
 use Carp;
-use SDL ;
-use SDL::Video ;
+use SDL;
+use SDL::Video;
 use SDL::Surface;
 use SDL::Rect;
 use SDL::Event;
-use SDL::Events ;
+use SDL::Events;
 use Data::Dumper;
 use Math::Trig;
 
@@ -27,15 +27,15 @@ my $ball = {
 };
 
 my $r_ball = {
-    x     => 0,
-    y     => 0,
-    w     => 20,
-    h     => 20,
+    x       => 0,
+    y       => 0,
+    w       => 20,
+    h       => 20,
     radians => 0,
     rot_vel => 50,
     radius  => 100,
-    c_x   => $app->w/2,
-    c_y   => $app->h/2,
+    c_x     => $app->w / 2,
+    c_y     => $app->h / 2,
 };
 
 sub init {
@@ -64,12 +64,14 @@ sub on_move {
     $ball->{x} += $ball->{x_vel} * $dt;
 
     $ball->{y} += $ball->{y_vel} * $dt;
-    
+
     # Period = $r_ball->{vel}
-    # cc_speed = 2 * pi * r / T 
+    # cc_speed = 2 * pi * r / T
     $r_ball->{radians} += $r_ball->{rot_vel} * $dt;
-    $r_ball->{x} = $r_ball->{c_x} + sin( $r_ball->{radians} * pi / 180 ) * $r_ball->{radius}; 
-    $r_ball->{y} = $r_ball->{c_y} + cos( $r_ball->{radians} * pi / 180 ) * $r_ball->{radius};
+    $r_ball->{x} =
+      $r_ball->{c_x} + sin( $r_ball->{radians} * pi / 180 ) * $r_ball->{radius};
+    $r_ball->{y} =
+      $r_ball->{c_y} + cos( $r_ball->{radians} * pi / 180 ) * $r_ball->{radius};
 
     return 1;
 }
@@ -79,18 +81,22 @@ sub on_event {
 
     if ( $event->type == SDL_KEYDOWN ) {
         my $key = $event->key_sym;
-		if($key == SDLK_PRINT)
-		{
-			my $screen_shot_index = 1;
-			map{$screen_shot_index = $1 + 1 if $_ =~ /Shot(\d+)\.bmp/ && $1 >= $screen_shot_index} <Shot*\.bmp>;
-			SDL::Video::save_BMP($app, sprintf("Shot%04d.bmp", $screen_shot_index ));
-		}
+        if ( $key == SDLK_PRINT ) {
+            my $screen_shot_index = 1;
+            map {
+                $screen_shot_index = $1 + 1
+                  if $_ =~ /Shot(\d+)\.bmp/
+                      && $1 >= $screen_shot_index
+            } <Shot*\.bmp>;
+            SDL::Video::save_BMP( $app,
+                sprintf( "Shot%04d.bmp", $screen_shot_index ) );
+        }
         $ball->{y_vel} -= $ball->{vel} if $key == SDLK_UP;
         $ball->{y_vel} += $ball->{vel} if $key == SDLK_DOWN;
         $ball->{x_vel} -= $ball->{vel} if $key == SDLK_LEFT;
         $ball->{x_vel} += $ball->{vel} if $key == SDLK_RIGHT;
         $r_ball->{rot_vel} += 50 if $key == SDLK_SPACE;
-     
+
     }
     elsif ( $event->type == SDL_KEYUP ) {
         my $key = $event->key_sym;
@@ -98,7 +104,7 @@ sub on_event {
         $ball->{y_vel} -= $ball->{vel} if $key == SDLK_DOWN;
         $ball->{x_vel} += $ball->{vel} if $key == SDLK_LEFT;
         $ball->{x_vel} -= $ball->{vel} if $key == SDLK_RIGHT;
-        
+
     }
     elsif ( $event->type == SDL_QUIT ) {
         return 0;
@@ -119,10 +125,12 @@ sub on_show {
         SDL::Rect->new( $ball->{x}, $ball->{y}, $ball->{w}, $ball->{h} ),
         SDL::Video::map_RGB( $app->format, 0, 0, 255 )
     );
-    
+
     SDL::Video::fill_rect(
         $app,
-        SDL::Rect->new( $r_ball->{x}, $r_ball->{y}, $r_ball->{w}, $r_ball->{h} ),
+        SDL::Rect->new(
+            $r_ball->{x}, $r_ball->{y}, $r_ball->{w}, $r_ball->{h}
+        ),
         SDL::Video::map_RGB( $app->format, 255, 0, 0 )
     );
 

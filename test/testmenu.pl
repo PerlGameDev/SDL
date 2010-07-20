@@ -12,15 +12,14 @@ use SDL::Image;
 use SDL::Event;
 use SDL::Surface;
 
-
 SDL::init(SDL_INIT_VIDEO);
 
 my $menu = SDL::Image::load('data/menu.png');
 
-die " Image loading errors: ".SDL::get_error() if !$menu;
+die " Image loading errors: " . SDL::get_error() if !$menu;
 
-my $screen
-    = SDL::Video::set_video_mode( $menu->w, $menu->h, 32, SDL_SWSURFACE );
+my $screen =
+  SDL::Video::set_video_mode( $menu->w, $menu->h, 32, SDL_SWSURFACE );
 
 my $hilight = SDL::Image::load('data/highlight.png');
 
@@ -58,9 +57,11 @@ while ( !$quit ) {
             ### PROCESS EVENT HERE
             if ( $event->key_sym == SDLK_DOWN ) {
                 $sel++ if $sel < $#select;
-            } elsif ( $event->key_sym == SDLK_UP ) {
+            }
+            elsif ( $event->key_sym == SDLK_UP ) {
                 $sel-- if $sel > 0;
-            } elsif ( $event->key_sym == SDLK_RETURN ) {
+            }
+            elsif ( $event->key_sym == SDLK_RETURN ) {
                 print $item{ $select[$sel] }, "\n";
                 exit(0) if $select[$sel] eq 'giveup';
             }

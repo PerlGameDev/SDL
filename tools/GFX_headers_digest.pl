@@ -24,30 +24,32 @@ if ( $ENV{SDL_GFX_LOC} && -d $ENV{SDL_GFX_LOC} ) {
     $head_loc = $ENV{SDL_GFX_LOC};
 }
 
-while (my ($header, $module) = each(%mod_headers )) {
+while ( my ( $header, $module ) = each(%mod_headers) ) {
 
-    my $file = File::Spec->catfile( $head_loc, $header.'.h' );
+    my $file = File::Spec->catfile( $head_loc, $header . '.h' );
 
     warn " Creating Config for: $file at $module ::Config \n";
-    
-    my $config = { header => $header.'.h', file => $file, module => $module };   
-    
+
+    my $config = { header => $header . '.h', file => $file, module => $module };
 
     my $FH;
     open $FH, '<' . $file
-    or warn "Cannot find $file please set \$ENV{SDL_GFX_LOC} to point to a different location  : $!";
+      or warn
+"Cannot find $file please set \$ENV{SDL_GFX_LOC} to point to a different location  : $!";
 
-    if (!$FH){$config->{exist} = -1  ; next }
+    if ( !$FH ) { $config->{exist} = -1; next }
 
     my @methods = ();
 
-    grep { $_ =~ /^(\s+|)(\S+) (\S+) (\*|)(\S+)(\()/; push ( @methods, $5) if $5 }
-      <$FH>;
-      
-      $config->{methods} = \@methods;
+    grep {
+        $_ =~ /^(\s+|)(\S+) (\S+) (\*|)(\S+)(\()/;
+        push( @methods, $5 ) if $5
+    } <$FH>;
+
+    $config->{methods} = \@methods;
 
     close $FH;
-    
+
     warn Dumper $config;
 
 }

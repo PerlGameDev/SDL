@@ -118,6 +118,7 @@ sub current_frame {
     my ( $self, $frame ) = @_;
 
     if ($frame) {
+
         # TODO: Validate frame.
         $self->{current_frame} = $frame;
     }
@@ -142,6 +143,7 @@ sub sequence {
     my ( $self, $sequence ) = @_;
 
     if ($sequence) {
+
         #TODO: Validate sequence.
         $self->{sequence}      = $sequence;
         $self->{current_frame} = 0;
@@ -165,8 +167,8 @@ sub next {
     my $self = shift;
 
     # TODO: direction, type, max_loops, current_loop
-    $self->{current_frame}
-        = ( $self->{current_frame} + 1 ) % @{ $self->_sequence };
+    $self->{current_frame} =
+      ( $self->{current_frame} + 1 ) % @{ $self->_sequence };
     $self->_update_clip;
 }
 
@@ -220,10 +222,10 @@ sub draw {
 
     $self->{ticks}++;
     $self->next
-        if $self->{started} && $self->{ticks} % $self->{ticks_per_frame} == 0;
+      if $self->{started} && $self->{ticks} % $self->{ticks_per_frame} == 0;
 
     Carp::croak 'destination must be a SDL::Surface'
-        unless ref $surface and $surface->isa('SDL::Surface');
+      unless ref $surface and $surface->isa('SDL::Surface');
 
     SDL::Video::blit_surface( $self->surface, $self->clip, $surface,
         $self->rect );

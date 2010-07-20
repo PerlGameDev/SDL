@@ -12,27 +12,27 @@ use Getopt::Std;
 use Pod::Usage;
 use Data::Dumper;
 
-my $server  = 'scsys.co.uk';
-my $url     = "http://$server:8001/paste";
-my $opt     = {
-    c => '#sdl',                              # channel
-    n => getlogin || getpwuid($<) || 'someone',  # name
-    t => undef,                                  # title
+my $server = 'scsys.co.uk';
+my $url    = "http://$server:8001/paste";
+my $opt    = {
+    c => '#sdl',                                   # channel
+    n => getlogin || getpwuid($<) || 'someone',    # name
+    t => undef,                                    # title
 };
 
 getopt( 'c:n:t:', $opt );
 
 pod2usage(2)
-    unless defined $opt->{t};
+  unless defined $opt->{t};
 
-
-my $text; while(<>) { $text .= $_; }
-my $mech  = WWW::Mechanize->new(
+my $text;
+while (<>) { $text .= $_; }
+my $mech = WWW::Mechanize->new(
     cookie_jar => undef,
     autocheck  => 1,
 );
 
-$mech->get( $url );
+$mech->get($url);
 
 $mech->submit_form(
     form_name => 'pasteForm',
@@ -42,12 +42,11 @@ $mech->submit_form(
         summary => $opt->{t},
         paste   => $text,
     },
-    button    => 'Paste it',
+    button => 'Paste it',
 );
 
 my @link = $mech->links;
 print "Your paste can be found at ", $link[0]->url, "\n";
-
 
 =head1 NAME
 

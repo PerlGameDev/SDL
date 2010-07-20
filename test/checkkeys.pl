@@ -12,8 +12,7 @@ use SDL::Surface;
 
 SDL::init(SDL_INIT_VIDEO);
 
-my $screen_surface
-    = SDL::Video::set_video_mode( 800, 600, 32, SDL_SWSURFACE );
+my $screen_surface = SDL::Video::set_video_mode( 800, 600, 32, SDL_SWSURFACE );
 
 my $event = SDL::Event->new();
 my ( $r, $g, $b ) = ( 0, 0, 0 );

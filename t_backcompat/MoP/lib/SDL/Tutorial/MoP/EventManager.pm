@@ -1,7 +1,7 @@
 package SDL::Tutorial::MoP::EventManager;
 
 sub new {
-    my ($class, %params) = @_;
+    my ( $class, %params ) = @_;
 
     my $self = bless {%params}, $class;
 
@@ -11,30 +11,26 @@ sub new {
     return $self;
 }
 
-sub listeners : lvalue 
-{
+sub listeners : lvalue {
     return shift->{listeners};
 }
 
-sub evt_queue : lvalue 
-{
+sub evt_queue : lvalue {
     return shift->{evt_queue};
 }
 
-sub reg_listener 
-{
-    my ($self, $listener) = (@_);
+sub reg_listener {
+    my ( $self, $listener ) = (@_);
     $self->listeners->{$listener} = $listener
       if defined $listener;
 
     return $self->listeners->{$listener};
 }
 
-sub un_reg_listener 
-{
-    my ($self, $listener) = (@_);
+sub un_reg_listener {
+    my ( $self, $listener ) = (@_);
 
-    if (defined $listener) {
+    if ( defined $listener ) {
         return delete $self->listeners->{$listener};
     }
     else {
@@ -42,15 +38,13 @@ sub un_reg_listener
     }
 }
 
-sub post 
-{
+sub post {
     my $self  = shift;
     my $event = shift;
 
     die "Post needs a Event as parameter" unless defined $event->{name};
 
-    foreach my $listener (values %{$self->listeners}) 
-    {
+    foreach my $listener ( values %{ $self->listeners } ) {
         $listener->notify($event);
     }
 }

@@ -9,12 +9,12 @@
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -30,7 +30,7 @@
 # basic testing of SDLx::App
 
 BEGIN {
-	unshift @INC, 'blib/lib','blib/arch';
+    unshift @INC, 'blib/lib', 'blib/arch';
 }
 
 use strict;
@@ -44,66 +44,69 @@ use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
 
+plan( tests => 3 );
 
-plan ( tests => 3 );
+use_ok('SDLx::App');
 
-use_ok( 'SDLx::App' ); 
-  
-can_ok ('SDLx::App', qw/
-	new 
-	resize 
-	title 
-	delay
-	ticks 
-	error 
-	warp 
-	fullscreen 
-	iconify 
-	grab_input 
-	loop
-	sync 
-	attribute
-/);
+can_ok(
+    'SDLx::App', qw/
+      new
+      resize
+      title
+      delay
+      ticks
+      error
+      warp
+      fullscreen
+      iconify
+      grab_input
+      loop
+      sync
+      attribute
+      /
+);
 
-my $videodriver       = $ENV{SDL_VIDEODRIVER};
+my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 SKIP:
 {
-	skip 'No Video', 1 unless SDL::TestTool->init(SDL_INIT_VIDEO);
+    skip 'No Video', 1 unless SDL::TestTool->init(SDL_INIT_VIDEO);
 
-	my $app  = SDLx::App->new(-title => "Test", -width => 640, -height => 480, -init => SDL_INIT_VIDEO);
+    my $app = SDLx::App->new(
+        -title  => "Test",
+        -width  => 640,
+        -height => 480,
+        -init   => SDL_INIT_VIDEO
+    );
 
-	my $rect = SDL::Rect->new( 0,0, $app->w, $app->h);
+    my $rect = SDL::Rect->new( 0, 0, $app->w, $app->h );
 
-	my $pixel_format = $app->format;
-	my $blue_pixel = SDL::Video::map_RGB( $pixel_format, 0x00, 0x00, 0xff );
-	my $col_pixel = SDL::Video::map_RGB( $pixel_format, 0xf0, 0x00, 0x33 );
+    my $pixel_format = $app->format;
+    my $blue_pixel   = SDL::Video::map_RGB( $pixel_format, 0x00, 0x00, 0xff );
+    my $col_pixel    = SDL::Video::map_RGB( $pixel_format, 0xf0, 0x00, 0x33 );
 
-	my $grect = SDLx::Rect->new(10, 10, 30, 35);
-	foreach(0..80)
-	{
+    my $grect = SDLx::Rect->new( 10, 10, 30, 35 );
+    foreach ( 0 .. 80 ) {
 
- 	$grect->x($_ );	
-	$grect->centery($_ * 3); 
-	$grect->size( ($_ / 40) * $_, ($_/38) * $_ );
-	SDL::Video::fill_rect( $app, $rect, $blue_pixel );
-	SDL::Video::fill_rect( $app, $grect, $col_pixel );
+        $grect->x($_);
+        $grect->centery( $_ * 3 );
+        $grect->size( ( $_ / 40 ) * $_, ( $_ / 38 ) * $_ );
+        SDL::Video::fill_rect( $app, $rect,  $blue_pixel );
+        SDL::Video::fill_rect( $app, $grect, $col_pixel );
 
-        SDL::Video::update_rect($app, 0, 0, 640, 480);
+        SDL::Video::update_rect( $app, 0, 0, 640, 480 );
         SDL::delay(10);
-	}
+    }
 
-	SDL::delay(100);
-	pass 'Ran';
+    SDL::delay(100);
+    pass 'Ran';
 }
 
-if($videodriver)
-{
-	$ENV{SDL_VIDEODRIVER} = $videodriver;
+if ($videodriver) {
+    $ENV{SDL_VIDEODRIVER} = $videodriver;
 }
-else
-{
-	delete $ENV{SDL_VIDEODRIVER};
+else {
+    delete $ENV{SDL_VIDEODRIVER};
 }
 

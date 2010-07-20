@@ -1,3 +1,4 @@
+
 =head1 NAME
 
 SDL::GFX::FPSManager - data structure used by SDL::GFX::Framerate

@@ -11,12 +11,12 @@
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
 # version 2.1 of the License, or (at your option) any later version.
-# 
+#
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
@@ -32,7 +32,7 @@
 # basic testing of SDL::Tool::Font
 
 BEGIN {
-	unshift @INC, 'blib/lib','blib/arch';
+    unshift @INC, 'blib/lib', 'blib/arch';
 }
 
 use strict;
@@ -40,33 +40,41 @@ use SDL;
 use SDL::Config;
 use Test::More;
 
-plan( skip_all => "Failing test due to moving stuff around");
+plan( skip_all => "Failing test due to moving stuff around" );
 
-if ( SDL::Config->has('SDL_image') 
-	&& SDL::Config->has('SDL_ttf') ) {
-	plan ( tests => 2 );
-} else {
-	plan ( skip_all => 
-		( SDL::Config->has('SDL_image') 
-			? '' 
-			: ' SDL_image support not compiled')
-		. ( SDL::Config->has('SDL_ttf') 
-			? ''
-			: ' SDL_ttf support not compiled'));
+if (   SDL::Config->has('SDL_image')
+    && SDL::Config->has('SDL_ttf') )
+{
+    plan( tests => 2 );
+}
+else {
+    plan(
+        skip_all => (
+            SDL::Config->has('SDL_image') ? ''
+            : ' SDL_image support not compiled'
+          )
+          . (
+            SDL::Config->has('SDL_ttf') ? ''
+            : ' SDL_ttf support not compiled'
+          )
+    );
 }
 
-use_ok( 'SDL::Tool::Font' ); 
-  
-can_ok ('SDL::Tool::Font', qw/
-	new 
-	print
-	/);
+use_ok('SDL::Tool::Font');
+
+can_ok(
+    'SDL::Tool::Font', qw/
+      new
+      print
+      /
+);
 my $font = SDL::Tool::Font->new(
-		-normal => 1,
-		-ttfont => 'test/data/aircut3.ttf',
-		-size => 20,
-		-fg => $SDL::Color::black,
-	 	-bg => $SDL::Color::black );
+    -normal => 1,
+    -ttfont => 'test/data/aircut3.ttf',
+    -size   => 20,
+    -fg     => $SDL::Color::black,
+    -bg     => $SDL::Color::black
+);
 
 #use utf8;
 

@@ -10,14 +10,14 @@ use SDL::Tutorial::MoP::Controller::Game;
 BEGIN {
     use Exporter ();
     use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-    $VERSION     = '0.01';
-    @ISA         = qw(Exporter);
+    $VERSION = '0.01';
+    @ISA     = qw(Exporter);
+
     #Give a hoot don't pollute, do not export more than needed by default
     @EXPORT      = qw();
     @EXPORT_OK   = qw();
     %EXPORT_TAGS = ();
 }
-
 
 #################### subroutine header begin ####################
 
@@ -37,28 +37,26 @@ See Also   :
 
 #################### subroutine header end ####################
 
-sub new
-{
-	my ($class, %parameters) = @_;
+sub new {
+    my ( $class, %parameters ) = @_;
 
-	my $self = bless ({}, ref ($class) || $class);
+    my $self = bless( {}, ref($class) || $class );
 
-	return $self;
+    return $self;
 }
 
-sub play
-{
-    my ($class, $EDEBUG, $KEYDEBUG, $GDEBUG, $FPS) = @_;
+sub play {
+    my ( $class, $EDEBUG, $KEYDEBUG, $GDEBUG, $FPS ) = @_;
 
     my $keybd    = SDL::Tutorial::MoP::Controller::Keyboard->new();
     my $spinner  = SDL::Tutorial::MoP::Controller::CPUSpinner->new();
     my $gameView = SDL::Tutorial::MoP::View::Game->new();
 
-    my $game     = SDL::Tutorial::MoP::Controller::Game->new(
-        EDEBUG      => ${EDEBUG},
-        GDEBUG      => ${GDEBUG},
-        KEYDEBUG    => ${KEYDEBUG},
-        FPS         => $FPS,
+    my $game = SDL::Tutorial::MoP::Controller::Game->new(
+        EDEBUG   => ${EDEBUG},
+        GDEBUG   => ${GDEBUG},
+        KEYDEBUG => ${KEYDEBUG},
+        FPS      => $FPS,
     );
 
     $spinner->run;
@@ -67,9 +65,8 @@ sub play
 SDL::Tutorial::MoP->play(@ARGV) unless caller;
 
 #################### main pod documentation begin ###################
-## Below is the stub of documentation for your module. 
+## Below is the stub of documentation for your module.
 ## You better edit it!
-
 
 =head1 NAME
 
@@ -130,5 +127,6 @@ perl(1).
 #################### main pod documentation end ###################
 
 1;
+
 # The preceding line will help the module return a true value
 

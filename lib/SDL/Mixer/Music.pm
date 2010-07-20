@@ -13,15 +13,18 @@ internal_load_dlls(__PACKAGE__);
 bootstrap SDL::Mixer::Music;
 
 use base 'Exporter';
-our @EXPORT      = (@{ $SDL::Constants::EXPORT_TAGS{'SDL::Mixer'} }, @{ $SDL::Constants::EXPORT_TAGS{'SDL::Audio'} });
+our @EXPORT = (
+    @{ $SDL::Constants::EXPORT_TAGS{'SDL::Mixer'} },
+    @{ $SDL::Constants::EXPORT_TAGS{'SDL::Audio'} }
+);
 our %EXPORT_TAGS = (
-	all      => \@EXPORT,
-	init     => $SDL::Constants::EXPORT_TAGS{'SDL::Mixer/init'},
-	defaults => $SDL::Constants::EXPORT_TAGS{'SDL::Mixer/defaults'},
-	fading   => $SDL::Constants::EXPORT_TAGS{'SDL::Mixer/fading'},
-	type     => $SDL::Constants::EXPORT_TAGS{'SDL::Mixer/type'},
-	format   => $SDL::Constants::EXPORT_TAGS{'SDL::Audio/format'},
-	status   => $SDL::Constants::EXPORT_TAGS{'SDL::Audio/status'}
+    all      => \@EXPORT,
+    init     => $SDL::Constants::EXPORT_TAGS{'SDL::Mixer/init'},
+    defaults => $SDL::Constants::EXPORT_TAGS{'SDL::Mixer/defaults'},
+    fading   => $SDL::Constants::EXPORT_TAGS{'SDL::Mixer/fading'},
+    type     => $SDL::Constants::EXPORT_TAGS{'SDL::Mixer/type'},
+    format   => $SDL::Constants::EXPORT_TAGS{'SDL::Audio/format'},
+    status   => $SDL::Constants::EXPORT_TAGS{'SDL::Audio/status'}
 );
 
 1;

@@ -12,19 +12,17 @@ sub init {
 
 sub run {
     my $self = shift;
-    while ($self->{keep_going} == 1) {
-        $self->evt_manager->post({ name => 'Tick'});
+    while ( $self->{keep_going} == 1 ) {
+        $self->evt_manager->post( { name => 'Tick' } );
     }
 }
 
 sub notify {
-    my ($self, $event) = (@_);
+    my ( $self, $event ) = (@_);
 
     print "Notify in CPU Spinner \n" if $self->{EDEBUG};
 
-    my %event_method = (
-        'Quit' =>  '_quit',
-    );
+    my %event_method = ( 'Quit' => '_quit', );
 
     my $method = $event_method{ $event->{name} };
 
