@@ -1,4 +1,6 @@
 
+=pod
+
 =head1 NAME
 
 SDLx::Sprite::Animated - create animated SDL sprites easily!
