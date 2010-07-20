@@ -5,12 +5,11 @@ use warnings;
 use SDL;
 use SDL::Video;
 use SDL::Rect;
-use SDL::Surface;
 use SDLx::Sprite;
-use SDLx::Controller::Timer;
-use Carp ();
 
 use base 'SDLx::Sprite';
+
+use Carp ();
 
 sub new {
     my ( $class, %options ) = @_;
@@ -30,9 +29,9 @@ sub new {
     $self->type( exists $options{type}     ? $options{type}   : 'circular' );
     $self->max_loops( exists $options{max_loops} ? $options{max_loops} : 0 );
     $self->ticks_per_frame(
-        exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 0 );
+        exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
 
-    $self->{timer} = SDLx::Controller::Timer->new();
+    $self->{ticks} = 0;
 
     return $self;
 }
@@ -183,14 +182,13 @@ sub reset {
 
 sub start {
     my $self = shift;
-    $self->{ticks} = 0;
-    $self->{timer}->start();
+    $self->{running} = 1;
     return $self;
 }
 
 sub stop {
     my $self = shift;
-    $self->{timer}->stop();
+    $self->{running} = 0;
     return $self;
 }
 
@@ -208,16 +206,9 @@ sub _update_clip {
 sub draw {
     my ( $self, $surface ) = @_;
 
-    if ( $self->{ticks_per_frame} && $self->{timer}->is_started ) {
-        $self->{ticks} += $self->{timer}->get_ticks;
-        if ( $self->{ticks} > $self->{ticks_per_frame} ) {
-            $self->{ticks} = 0;
-            $self->next;
-        }
-    }
-    else {
-        $self->next;
-    }
+    $self->{ticks}++;
+    $self->next
+        if $self->{running} && $self->{ticks} % $self->{ticks_per_frame} == 0;
 
     Carp::croak 'destination must be a SDL::Surface'
         unless ref $surface and $surface->isa('SDL::Surface');
@@ -498,7 +489,7 @@ If you want to restart autoplay from the initial frame, just do:
 
 =head1 AUTHORS
 
-Jeffrey T. Palmer C<< <jeffrey.t.palmer@gmail.com> >>
+JTpalmer
 
 Dustin Mays, C<< <dork.fish.wat@gmail.com> >>
 
@@ -508,5 +499,5 @@ Kartik thakore C<< <kthakore at cpan.org> >>
 
 =head1 SEE ALSO
 
-L<< SDLx::Sprite >>, L<< SDL::Surface >>, L<< SDL >>
+L<< SDL::Surface >>, L<< SDL >>
 
