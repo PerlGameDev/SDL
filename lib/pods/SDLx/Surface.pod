@@ -50,19 +50,19 @@ If a surface is passed to 'surface =>' that is loaded. Otherwise you can define 
 		# A SDL::Surface->new( SDL_ANYFORMAT, 400, 200, 32, 0, 0xFF000000,0, 0, 0 ) is loaded
 
 
-=head2 get_display
+=head2 display
 
 If L<SDLx::App::new> or L<SDL::Video::get_video_mode> called before then:
 
- my $appx = SDLx::Surface::get_display(); 
+ my $appx = SDLx::Surface::display(); 
 
 gets the display if it is already made. Passed options are ignored. Otherwise you can quickly make the display with :
 
- SDLx::Surface::get_display( width => 20, height => 20) #depth => 32 and SDL_ANYFORMAT used
+ SDLx::Surface::display( width => 20, height => 20) #depth => 32 and SDL_ANYFORMAT used
 
 or you can also pass flags and depth. 
 
- SDLx::Surface::get_display( width => 20, height => 20, flags=> SDL_HWSURFACE, depth=>24) 
+ SDLx::Surface::display( width => 20, height => 20, flags=> SDL_HWSURFACE, depth=>24) 
 
 Get or create the main display surface and attach to a SDLx::Surface.
 

@@ -55,7 +55,7 @@ sub new {
     return $self;
 }
 
-sub get_display {
+sub display {
     my $disp = SDL::Video::get_video_surface;
     return SDLx::Surface->new( surface => $disp ) if $disp;
     my %options = @_;

@@ -20,9 +20,9 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 
 my $app = SDL::Video::set_video_mode( 400,200,32, SDL_SWSURFACE);
 
-my $app_x = SDLx::Surface::get_display();
+my $app_x = SDLx::Surface::display();
 
-is_deeply( $app_x->surface->get_pixels_ptr, $app->get_pixels_ptr, '[get_display] works');
+is_deeply( $app_x->surface->get_pixels_ptr, $app->get_pixels_ptr, '[display] works');
 
 
 

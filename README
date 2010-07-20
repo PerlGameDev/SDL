@@ -5,13 +5,10 @@ SYNOPSIS
     use SDL;
  
 DESCRIPTION
-    SDL_perl is a package of perl modules that provides both functional and
-    object orient interfaces to the Simple DirectMedia Layer for Perl 5.
-    This package does take some liberties with the SDL API, and attempts to
-    adhere to the spirit of both the SDL and Perl. This document describes
-    the low-level functional SDL_perl API. For the object oriented
-    programming interface please see the documentation provided on a per
-    class basis.
+    SDL_perl is a package of Perl modules that provide both functional and
+    object oriented interfaces to the Simple DirectMedia Layer for Perl 5.
+    This package takes some liberties with the SDL API, and attempts to adhere
+    to the spirit of both the SDL and Perl.
  
 The SDL Perl 2009 Development Team
     Documentation
