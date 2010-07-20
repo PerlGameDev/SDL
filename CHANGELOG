@@ -25,7 +25,7 @@ Revision history for Perl extension SDL_perl.
 	- Fixed Memory Leaks due to perl desturct level 
 	- Fixed Memory leak in SDL::Mixer::Music 
 	- Fixed the test on SDLx::Sprite
-	- Added SDLx::FPS [Blaizer]
+	- Modified SDLx::FPS [Blaizer]
 	- Cleaned up docs [Blaizer]
 	- Cleaned up docs for SDLx::Rect and added Category 
 	- Added SDLx::SFont and docs and test
@@ -41,7 +41,7 @@ Revision history for Perl extension SDL_perl.
 	- Using dummy audiodriver for tests so no sound is played [#163] [FROGGS]
 	- POGL example added
 	- Fixed fail due to to strict test for texture_polygon in SDL::GFX 
-	- Created SDL::FPS {Bliazer}
+	- Created SDLx::FPS [Blaizer]
 
 * 2.408 Sun June 13 2010
 	- Added File::ShareDir as a dep
