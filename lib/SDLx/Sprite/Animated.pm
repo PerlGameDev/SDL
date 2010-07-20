@@ -489,7 +489,7 @@ If you want to restart autoplay from the initial frame, just do:
 
 =head1 AUTHORS
 
-JTpalmer
+Jeffrey T. Palmer C<< <jeffrey.t.palmer at gmail.com> >>
 
 Dustin Mays, C<< <dork.fish.wat@gmail.com> >>
 
