@@ -68,7 +68,7 @@ sub update {
 
     SDL::Video::lock_surface($surface);
 
-    $piddle->nslice(
+    $piddle->mslice(
         'X',
         [ rand(400), rand(400), 1 ],
         [ rand(200), rand(200), 1 ]
