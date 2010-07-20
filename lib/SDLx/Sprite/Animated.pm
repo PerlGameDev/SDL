@@ -10,7 +10,7 @@ use SDLx::Sprite;
 use SDLx::Controller::Timer;
 use Carp ();
 
-use parent 'SDLx::Sprite';
+use base 'SDLx::Sprite';
 
 sub new {
     my ( $class, %options ) = @_;
