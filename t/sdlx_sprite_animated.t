@@ -81,6 +81,7 @@ is( $clip->x, 0,  'clip->x after load' );
 is( $clip->y, 0,  'clip->y after load' );
 is( $clip->w, 48, 'clip->w after load' );
 is( $clip->h, 48, 'clip->h after load' );
+
 is( $rect->x, 0,  'rect->x after load' );
 is( $rect->y, 0,  'rect->y after load' );
 is( $rect->w, 48, 'rect->w after load' );
@@ -88,11 +89,12 @@ is( $rect->h, 48, 'rect->h after load' );
 
 $sprite->set_sequences( left => [ [ 1, 0 ], [ 1, 1 ], [ 1, 2 ] ], );
 $sprite->sequence('left');
-    
-is( $clip->x, 48,  'clip->x after sequence' );
+
+is( $clip->x, 48, 'clip->x after sequence' );
 is( $clip->y, 0,  'clip->y after sequence' );
 is( $clip->w, 48, 'clip->w after sequence' );
 is( $clip->h, 48, 'clip->h after sequence' );
+
 is( $rect->x, 0,  'rect->x after sequence' );
 is( $rect->y, 0,  'rect->y after sequence' );
 is( $rect->w, 48, 'rect->w after sequence' );
@@ -104,6 +106,7 @@ is( $clip->x, 48, 'clip->x after next' );
 is( $clip->y, 48, 'clip->y after next' );
 is( $clip->w, 48, 'clip->w after next' );
 is( $clip->h, 48, 'clip->h after next' );
+
 is( $rect->x, 0,  'rect->x after next' );
 is( $rect->y, 0,  'rect->y after next' );
 is( $rect->w, 48, 'rect->w after next' );
@@ -115,6 +118,7 @@ is( $clip->x, 48, 'clip->x after second next' );
 is( $clip->y, 96, 'clip->y after second next' );
 is( $clip->w, 48, 'clip->w after second next' );
 is( $clip->h, 48, 'clip->h after second next' );
+
 is( $rect->x, 0,  'rect->x after second next' );
 is( $rect->y, 0,  'rect->y after second next' );
 is( $rect->w, 48, 'rect->w after second next' );
@@ -122,14 +126,32 @@ is( $rect->h, 48, 'rect->h after second next' );
 
 $sprite->next;
 
-is( $clip->x, 48,  'clip->x after third next' );
+is( $clip->x, 48, 'clip->x after third next' );
 is( $clip->y, 0,  'clip->y after third next' );
 is( $clip->w, 48, 'clip->w after third next' );
 is( $clip->h, 48, 'clip->h after third next' );
+
 is( $rect->x, 0,  'rect->x after third next' );
 is( $rect->y, 0,  'rect->y after third next' );
 is( $rect->w, 48, 'rect->w after third next' );
 is( $rect->h, 48, 'rect->h after third next' );
+
+$sprite = SDLx::Sprite::Animated->new(
+    image => 'test/data/hero.bmp',
+    rect  => SDL::Rect->new( 40, 50, 48, 48 ),
+);
+
+$clip = $sprite->clip;
+is( $clip->x, 0,  'clip->x after new with image' );
+is( $clip->y, 0,  'clip->y after new with image' );
+is( $clip->w, 48, 'clip->w after new with image' );
+is( $clip->h, 48, 'clip->h after new with image' );
+
+$rect = $sprite->rect;
+is( $rect->x, 40, 'rect->x after new with image' );
+is( $rect->y, 50, 'rect->y after new with image' );
+is( $rect->w, 48, 'rect->w after new with image' );
+is( $rect->h, 48, 'rect->h after new with image' );
 
 done_testing;
 
@@ -140,3 +162,4 @@ if ($videodriver) {
 else {
     delete $ENV{SDL_VIDEODRIVER};
 }
+

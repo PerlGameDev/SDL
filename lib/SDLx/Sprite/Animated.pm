@@ -51,6 +51,8 @@ sub _store_geometry {
 
     $self->{width}  = $w;
     $self->{height} = $h;
+
+    $self->_restore_geometry;
 }
 
 sub _restore_geometry {
