@@ -116,6 +116,7 @@ sub current_frame {
     my ( $self, $frame ) = @_;
 
     if ($frame) {
+        # TODO: Validate frame.
         $self->{current_frame} = $frame;
     }
 
@@ -129,6 +130,7 @@ sub current_loop {
 sub set_sequences {
     my ( $self, %sequences ) = @_;
 
+    # TODO: Validate sequences.
     $self->{sequences} = \%sequences;
 
     return $self;
@@ -138,6 +140,7 @@ sub sequence {
     my ( $self, $sequence ) = @_;
 
     if ($sequence) {
+        #TODO: Validate sequence.
         $self->{sequence}      = $sequence;
         $self->{current_frame} = 0;
         $self->_update_clip;
@@ -159,36 +162,43 @@ sub _frame {
 sub next {
     my $self = shift;
 
-    # TODO direction, type, max_loops, current_loop
+    # TODO: direction, type, max_loops, current_loop
     $self->{current_frame}
         = ( $self->{current_frame} + 1 ) % @{ $self->_sequence };
     $self->_update_clip;
 }
 
+# TODO
 sub previous {
     my $self = shift;
 
-    # TODO
     $self->_update_clip;
+
     return $self;
 }
 
 sub reset {
     my $self = shift;
+
     $self->stop;
     $self->{current_frame} = 0;
+
     return $self;
 }
 
 sub start {
     my $self = shift;
+
     $self->{started} = 1;
+
     return $self;
 }
 
 sub stop {
     my $self = shift;
+
     $self->{started} = 0;
+
     return $self;
 }
 
@@ -215,6 +225,7 @@ sub draw {
 
     SDL::Video::blit_surface( $self->surface, $self->clip, $surface,
         $self->rect );
+
     return $self;
 }
 
