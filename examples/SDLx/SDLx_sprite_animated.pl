@@ -3,8 +3,6 @@ use SDL;
 use SDL::Video;
 use SDL::Color;
 use SDL::Rect;
-use SDL::Surface;
-use SDL::GFX::Rotozoom;
 
 use SDLx::Sprite::Animated;
 
@@ -23,7 +21,7 @@ my $sprite = SDLx::Sprite::Animated->new(
 );
 $sprite->set_sequences( left => [ [ 1, 0 ], [ 1, 1 ], [ 1, 2 ] ], );
 $sprite->alpha_key( SDL::Color->new( 0xfc, 0x00, 0xff ) );
-$sprite->current_sequence('left');
+$sprite->sequence('left');
 $sprite->start();
 my $x     = 0;
 my $ticks = 0;
