@@ -68,10 +68,12 @@ sub update {
 
     SDL::Video::lock_surface($surface);
 
-    $piddle->nslice ( 'X', [rand(400), rand(400),1], [rand(200), rand(200),1] ) .=
-      pdl( rand(225), rand(225), rand(255), 255 );
+    $piddle->nslice(
+        'X',
+        [ rand(400), rand(400), 1 ],
+        [ rand(200), rand(200), 1 ]
+    ) .= pdl( rand(225), rand(225), rand(255), 255 );
 
-    
     SDL::Video::unlock_surface($surface);
 
     my $b = SDL::Video::blit_surface(
