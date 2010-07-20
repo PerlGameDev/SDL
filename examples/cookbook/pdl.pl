@@ -14,7 +14,6 @@ use SDL::Color;
 use Devel::Peek;
 
 use PDL;
-use PDL::NiceSlice;
 
 my $app = SDLx::App->new(
     -title  => 'Application Title',
@@ -69,10 +68,10 @@ sub update {
 
     SDL::Video::lock_surface($surface);
 
-    $piddle ( :, rand(400) : rand(400), rand(200) : rand(200) ) .=
+    $piddle->nslice ( 'X', [rand(400), rand(400),1], [rand(200), rand(200),1] ) .=
       pdl( rand(225), rand(225), rand(255), 255 );
 
-    #
+    
     SDL::Video::unlock_surface($surface);
 
     my $b = SDL::Video::blit_surface(
