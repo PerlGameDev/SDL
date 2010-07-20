@@ -1,0 +1,287 @@
+
+=pod
+
+=head1 NAME
+
+SDLx::Sprite::Animated - create animated SDL sprites easily!
+
+=head1 CATEGORY
+
+Extension
+
+=head1 SYNOPSIS
+
+  use SDLx::Sprite::Animated;
+
+  # simplest possible form, where 'hero.png' is an image containing
+  # fixed-length sprites in sequence. It doesn't matter if they are
+  # placed vertically or horizontally, as long as the the widest
+  # side is a multiple of the (narrowest) other. The widget will
+  # automatically divide it in the proper frames, provided there is
+  # no slack space between each frame.
+
+  my $animation = SDLx::Sprite::Animated->new->load('hero.png');
+
+  # that's it! Defaults are sane enough to DWIM in simple cases,
+  # so you just have to call draw() on the right place. If you
+  # need to setup your animation or have more control over it,
+  # feel free to use the attributes and methods below.
+
+  # these are the most useful methods to use in your game loop
+  # (or wherever you want to manipulate the animation):
+  $animation->next;
+  $animation->previous;
+  $animation->reset;
+
+  $animation->current_frame;   # current frame number
+  $animation->current_loop;    # current loop number
+
+  # you can control positioning just like a regular SDLx::Sprite:
+  $animation->rect
+  $animation->x;
+  $animation->y;
+
+  # just like a regular Sprite, we fetch our source rect from ->clip,
+  # updating it on each call to ->next (or ->previous, or ->reset).
+  # If source rects for your animation are further appart (or less)
+  # than the rect's width and height, you can adjust the animation
+  # x/y offsets:
+  $animation->step_x(15);
+  $animation->step_y(30);
+
+  $animation->draw($screen); # remember to do this! :)
+
+  # we can also call ->next() automatically after each draw():
+  $animation->start;
+  $animation->stop;
+
+  # default is to go to the next frame at each draw(). If this is
+  # too fast for you, change the attribute below:
+  $animation->ticks_per_frame(10);
+
+  # select type of animation loop when it reaches the last frame:
+  $animation->type('circular'); # restarts loop at the beginning
+  $animation->type('reverse');  # goes backwards
+
+  $animation->max_loops(3); 0 or undef for infinite looping
+
+
+  # as usual, you can setup most of the above during object spawning
+  my $animation = SDLx::Sprite::Animated->new(
+                       image  => 'hero.png',
+                       rect   => SDL::Rect->new(...),
+                       step_x => 20,
+                       step_y => 0,
+                       ...
+                  );
+
+
+=head1 DESCRIPTION
+
+An animation is a series of frames that are played in order. Frames are
+loaded from an image, usually referred to as a Sprite Sheet or Sprite Strip.
+
+This module let's you interact with such strips and create sprite animations
+just as easily as you would manipulate a regular SDLx::Sprite object.
+
+=head1 WARNING! VOLATILE CODE AHEAD
+
+This is a new module and the API is subject to change without notice.
+If you care, please join the discussion on the #sdl IRC channel in
+I<irc.perl.org>. All thoughts on further improving the API are welcome.
+
+You have been warned :)
+
+=head1 ATTRIBUTES AND METHODS
+
+SDLx::Sprite::Animated is a B<subclass> of L<< SDLx::Sprite >>, inheriting
+all its attributes and methods. Please refer to that module's documentation
+for information on those.
+
+The one difference in behavior is that, while a standard SDLx::Sprite uses
+C<< ->clip() >> to select the part of the surface to display,
+SDLx::Sprite::Animated treats C<< ->clip() >> as the B<initial> rect, from
+which to start the animation.
+
+The following attributes and methods are available:
+
+=head2 new
+
+=head2 new( %options )
+
+Creates a new SDLx::Sprite::Animated object. No option is mandatory. It
+accepts all the options from a regular SDLx::Sprite object plus these:
+
+=over 4
+
+=item * step_x => $integer
+
+Uses $integer as the number of pixels to move on the x-axis (left-to-right,
+0 being no dislocation whatsoever, when the strip goes from top to bottom)
+to reach the next frame.
+
+=item * step_y => $integer
+
+Uses $integer as the number of pixels to move on the y-axis (top-to-bottom,
+0 being no dislocation whatsoever, when the strip goes from left to right)
+to reach the next frame.
+
+=item * max_loops => $integer
+
+Uses $integer as the number of times to loop the animation (when it reaches
+the end of the strip).
+
+=item * ticks_per_frame => $integer
+
+Uses $integer to set how many calls to draw() must be issued before we go to
+the next frame during autoplay (i.e. between calls to start() and stop()).
+
+=item * type => $string
+
+Uses $string to set the type of animation loop when it reaches the last
+frame in the strip. See the type() method below for information on
+available looping types.
+
+=back
+
+=head2 step_x()
+
+=head2 step_x( $integer )
+
+Uses $integer as the number of pixels to move on the x-axis (left-to-right,
+0 being no dislocation whatsoever, when the strip goes from top to bottom)
+to reach the next frame.
+
+Defaults to the same width as the clip() rect.
+
+=head2 step_y()
+
+=head2 step_y( $integer )
+
+Uses $integer as the number of pixels to move on the y-axis (top-to-bottom,
+0 being no dislocation whatsoever, when the strip goes from left to right)
+to reach the next frame.
+
+Defaults to the same height as the clip() rect.
+
+=head2 max_loops()
+
+=head2 max_loops( $integer )
+
+Uses $integer as the number of times to loop the animation (when it reaches
+the end of the strip). After that B<< all calls to previous() or next() will be no-ops >>.
+
+Set it to C<0> or C<undef> to allow infinite loops. Default is 0 (infinite).
+
+=head2 ticks_per_frame()
+
+=head2 ticks_per_frame( $integer )
+
+Uses $integer to set how many calls to draw() must be issued before we go to
+the next frame during autoplay (i.e. between calls to start() and stop()).
+
+Default is just 1 tick per frame, so you might want to change this if it's too fast.
+
+=head2 type()
+
+=head2 type( $string )
+
+Uses $string to set the type of animation loop when it reaches the last
+frame in the strip. Available looping types are:
+
+=over 4
+
+=item * 'circular'
+
+Restarts loop at the beginning of the strip. If you have 4 frames, the flow
+will be 1-2-3-4-1-2-3-4-1-2-3-4-1-2-... up until the number of loops you
+set in the max_loops() attribute.
+
+=item * 'reverse'
+
+Loops back and forth on the strip. If you have 4 frames, the flow will be
+1-2-3-4-3-2-1-2-3-4-3-2-... up until the number of loops you set in the
+max_loops() attribute.
+
+=back
+
+Case is irrelevant for type(), so for example 'Circular', 'CIRCULAR' and
+'CiRcUlAr' are all accepted as 'circular'. The return value is guaranteed
+to be lowercase.
+
+Default value is 'circular'.
+
+=head2 next()
+
+Goes to the next frame in the strip. Calling this method will also reset
+the tick counter used by ticks_per_frame().
+
+If max_loops() has reached its limit, this will be a no-op.
+
+Returns the object, allowing method chaining.
+
+=head2 previous()
+
+Goes to the previous frame in the strip. Calling this method will also reset
+the tick counter used by ticks_per_frame().
+
+If max_loops() has reached its limit, this will be a no-op.
+
+Returns the object, allowing method chaining.
+
+=head2 reset()
+
+Goes to the first frame in the strip, meaning whatever clip is set to.
+
+If max_loops() has reached its limit, this will be a no-op.
+
+Returns the object, allowing method chaining.
+
+=head2 current_frame()
+
+Returns the current frame number. Note that this is 1-based (first frame
+is 1, second is 2, etc).
+
+=head2 current_loop()
+
+Returns the loop counter, i.e. which run number is it at. This is also
+1-based (first time is 1, second time is 2, etc). Note that we only
+keep track of the counter if max_loops() is set to a finite number. Otherwise,
+this will be a no-op.
+
+=head1 start()
+
+After you call this method, the object will issue a call to C<< ->next() >>
+automatically for you every time C<< ->draw() >> is called
+C<< ticks_per_frame() >> times.
+
+If you want to stop autoplay, see C<< stop() >> below.
+
+Default is off (no autoplay).
+
+=head1 stop()
+
+Stops autoplay. After you call this, the object will need you to call
+C<< ->previous() >> and C<< ->next() >> explicitly to change frames.
+
+To resume autoplay from wherever you are, use C<< start() >>.
+
+If you want to restart autoplay from the initial frame, just do:
+
+  $sprite->reset->start;
+
+
+=head1 AUTHORS
+
+Jeffrey T. Palmer C<< <jeffrey.t.palmer at gmail.com> >>
+
+Dustin Mays, C<< <dork.fish.wat@gmail.com> >>
+
+Breno G. de Oliveira, C<< <garu at cpan.org> >>
+
+Kartik thakore C<< <kthakore at cpan.org> >>
+
+=head1 SEE ALSO
+
+L<< SDL::Surface >>, L<< SDL >>
+
