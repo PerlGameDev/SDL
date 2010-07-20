@@ -12,8 +12,8 @@ use SDL::TestTool;
 can_ok(
     'SDLx::Sprite::Animated',
     qw( new rect clip load surface x y w h draw alpha_key
-        step_x step_y type max_loops ticks_per_frame current_frame current_loop
-        set_sequences sequence next previous reset start stop draw)
+      step_x step_y type max_loops ticks_per_frame current_frame current_loop
+      set_sequences sequence next previous reset start stop draw)
 );
 
 TODO: {
