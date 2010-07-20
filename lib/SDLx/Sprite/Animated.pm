@@ -182,13 +182,13 @@ sub reset {
 
 sub start {
     my $self = shift;
-    $self->{running} = 1;
+    $self->{started} = 1;
     return $self;
 }
 
 sub stop {
     my $self = shift;
-    $self->{running} = 0;
+    $self->{started} = 0;
     return $self;
 }
 
@@ -208,7 +208,7 @@ sub draw {
 
     $self->{ticks}++;
     $self->next
-        if $self->{running} && $self->{ticks} % $self->{ticks_per_frame} == 0;
+        if $self->{started} && $self->{ticks} % $self->{ticks_per_frame} == 0;
 
     Carp::croak 'destination must be a SDL::Surface'
         unless ref $surface and $surface->isa('SDL::Surface');
