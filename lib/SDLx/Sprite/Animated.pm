@@ -131,6 +131,7 @@ sub set_sequences {
     my ( $self, %sequences ) = @_;
 
     $self->{sequences} = \%sequences;
+
     return $self;
 }
 
@@ -140,6 +141,7 @@ sub sequence {
     if ($sequence) {
         $self->{sequence}      = $sequence;
         $self->{current_frame} = 0;
+        $self->_update_clip;
     }
 
     return $self->{sequence};
