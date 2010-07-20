@@ -15,8 +15,8 @@ use base 'SDLx::Sprite';
 sub new {
     my ( $class, %options ) = @_;
 
-    my ($w, $h) = ($options{rect}->w, $options{rect}->h)
-        if exists $options{rect};
+    my ( $w, $h ) = ( $options{rect}->w, $options{rect}->h )
+      if exists $options{rect};
 
     my $self = $class->SUPER::new(%options);
 
@@ -27,11 +27,11 @@ sub new {
     $self->ticks_per_frame(
         exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
 
-    if (exists $options{rect}) {
-        $self->rect->w( $w );
-        $self->rect->h( $h );
-        $self->clip->w( $w );
-        $self->clip->h( $h );
+    if ( exists $options{rect} ) {
+        $self->rect->w($w);
+        $self->rect->h($h);
+        $self->clip->w($w);
+        $self->clip->h($h);
     }
 
     $self->{ticks} = 0;
@@ -139,8 +139,8 @@ sub next {
     my $self = shift;
 
     # TODO direction, type, max_loops, current_loop
-    $self->{current_frame}
-        = ( $self->{current_frame} + 1 ) % @{ $self->_sequence };
+    $self->{current_frame} =
+      ( $self->{current_frame} + 1 ) % @{ $self->_sequence };
 }
 
 sub previous {
@@ -188,10 +188,10 @@ sub draw {
 
     $self->{ticks}++;
     $self->next
-        if $self->{running} && $self->{ticks} % $self->{ticks_per_frame} == 0;
+      if $self->{running} && $self->{ticks} % $self->{ticks_per_frame} == 0;
 
     Carp::croak 'destination must be a SDL::Surface'
-        unless ref $surface and $surface->isa('SDL::Surface');
+      unless ref $surface and $surface->isa('SDL::Surface');
 
     SDL::Video::blit_surface( $self->surface, $self->_source_frame, $surface,
         $self->rect );

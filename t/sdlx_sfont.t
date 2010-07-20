@@ -9,67 +9,56 @@ use SDLx::SFont;
 use lib 't/lib';
 use SDL::TestTool;
 
-can_ok('SDLx::SFont', qw( new ) );
+can_ok( 'SDLx::SFont', qw( new ) );
 
-
-my $videodriver       = $ENV{SDL_VIDEODRIVER};
+my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
-my $audiodriver       = $ENV{SDL_AUDIODRIVER};
+my $audiodriver = $ENV{SDL_AUDIODRIVER};
 $ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
-
-
-if( !SDL::TestTool->init(SDL_INIT_VIDEO) )
-{
-	plan( skip_all => 'Failed to init video' );
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
+    plan( skip_all => 'Failed to init video' );
 }
-elsif( !SDL::Config->has('SDL_image') )
-{
-	plan( skip_all => 'SDL_image support not compiled' );
+elsif ( !SDL::Config->has('SDL_image') ) {
+    plan( skip_all => 'SDL_image support not compiled' );
 }
 
-   #Make a surface
-   #Select a font
-   my $d = SDL::Surface->new(SDL_SWSURFACE, 100,100, 32);
-   my $font = SDLx::SFont->new('test/data/font.png');
+#Make a surface
+#Select a font
+my $d = SDL::Surface->new( SDL_SWSURFACE, 100, 100, 32 );
+my $font = SDLx::SFont->new('test/data/font.png');
 
-   isa_ok( $font , 'SDL::Surface', '[new] makes surface');
-  
-   #print using $font
-   
-   SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
+isa_ok( $font, 'SDL::Surface', '[new] makes surface' );
 
-   pass( '[print_test] worked');
+#print using $font
 
-   $font->use();
+SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
 
-   pass( '[use] switch font worked');
+pass('[print_test] worked');
 
-   SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
-   pass( '[use|printe_text] switch to font and print worked');
+$font->use();
 
-END
-{
-done_testing;
+pass('[use] switch font worked');
 
-#reset the old video driver
-if($videodriver)
-{
-	$ENV{SDL_VIDEODRIVER} = $videodriver;
-}
-else
-{
-	delete $ENV{SDL_VIDEODRIVER};
-}
+SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
+pass('[use|printe_text] switch to font and print worked');
 
+END {
+    done_testing;
 
-if($audiodriver)
-{
-	$ENV{SDL_AUDIODRIVER} = $audiodriver;
-}
-else
-{
-	delete $ENV{SDL_AUDIODRIVER};
-}
+    #reset the old video driver
+    if ($videodriver) {
+        $ENV{SDL_VIDEODRIVER} = $videodriver;
+    }
+    else {
+        delete $ENV{SDL_VIDEODRIVER};
+    }
+
+    if ($audiodriver) {
+        $ENV{SDL_AUDIODRIVER} = $audiodriver;
+    }
+    else {
+        delete $ENV{SDL_AUDIODRIVER};
+    }
 }

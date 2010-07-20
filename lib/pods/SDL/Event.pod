@@ -1,3 +1,4 @@
+
 =head1 NAME
 
 SDL::Event - General event structure

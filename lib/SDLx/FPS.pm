@@ -6,45 +6,52 @@ use Carp;
 our @ISA = qw(SDL::GFX::FPSManager);
 
 sub new {
-	my ($class, @args) = @_;
-	if(ref $args[0]) {
-		my %options = %{$args[0]};
-		if(@args > 1) {
-			Carp::carp("Extra arguments are not taken when hash is specified");
-		}
-		for(grep {
-			my $key = $_;
-			!grep $_ eq $key, qw/fps framecount rateticks lastticks rate/;
-		} keys %options) {
-			Carp::carp("Unrecognized constructor hash key: $_");
-		}
-		@args = (
-			@options{qw/fps framecount rateticks lastticks rate/}
-		);
-	}
-	elsif(@args > 4) {
-		Carp::carp("Too many arguments given");
-	}
-	my $fps = $class->SDL::GFX::FPSManager::new(map defined() ? $_ : 0, @args[1..4]);
-	$fps->init;
-	$fps->set($args[0]) if defined $args[0];
-	$fps;
+    my ( $class, @args ) = @_;
+    if ( ref $args[0] ) {
+        my %options = %{ $args[0] };
+        if ( @args > 1 ) {
+            Carp::carp("Extra arguments are not taken when hash is specified");
+        }
+        for (
+            grep {
+                my $key = $_;
+                !grep $_ eq $key, qw/fps framecount rateticks lastticks rate/;
+            } keys %options
+          )
+        {
+            Carp::carp("Unrecognized constructor hash key: $_");
+        }
+        @args = ( @options{qw/fps framecount rateticks lastticks rate/} );
+    }
+    elsif ( @args > 4 ) {
+        Carp::carp("Too many arguments given");
+    }
+    my $fps = $class->SDL::GFX::FPSManager::new( map defined() ? $_ : 0,
+        @args[ 1 .. 4 ] );
+    $fps->init;
+    $fps->set( $args[0] ) if defined $args[0];
+    $fps;
 }
+
 sub init {
-	SDL::GFX::Framerate::init($_[0]);
+    SDL::GFX::Framerate::init( $_[0] );
 }
+
 sub set {
-	SDL::GFX::Framerate::set(@_[0, 1]);
+    SDL::GFX::Framerate::set( @_[ 0, 1 ] );
 }
+
 sub get {
-	SDL::GFX::Framerate::get($_[0]);
+    SDL::GFX::Framerate::get( $_[0] );
 }
+
 sub delay {
-	SDL::GFX::Framerate::delay($_[0]);
+    SDL::GFX::Framerate::delay( $_[0] );
 }
 1;
 
 __END__
+
 =head1 NAME
 
 SDLx::FPS - a more convenient way to set a framerate

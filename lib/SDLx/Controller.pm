@@ -69,7 +69,7 @@ sub quit { shift->{quit} = 1 }
 sub _add_handler {
     my ( $arr_ref, $handler ) = @_;
     push @{$arr_ref}, $handler;
-    return $#{$arr_ref}
+    return $#{$arr_ref};
 }
 
 sub add_move_handler {
@@ -122,8 +122,7 @@ sub remove_all_show_handlers {
     $_[0]->{show_handlers} = [];
 }
 
-
-1; #not 42 man!
+1;    #not 42 man!
 
 __END__
 

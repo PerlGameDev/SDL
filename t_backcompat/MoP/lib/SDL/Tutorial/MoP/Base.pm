@@ -13,9 +13,8 @@ our $VERSION = '0.01';
 my $evt_manager = SDL::Tutorial::MoP::EventManager->new();
 sub evt_manager { $evt_manager }
 
-sub new 
-{
-    my ($class, %params) = (@_);
+sub new {
+    my ( $class, %params ) = (@_);
 
     my $self = bless {%params}, $class;
 

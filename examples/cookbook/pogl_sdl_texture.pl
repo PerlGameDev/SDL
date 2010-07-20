@@ -21,7 +21,7 @@ init_SDL();
 
 while (1) {
     pump_sdl();
-    
+
 }
 
 ###################################################
@@ -49,19 +49,17 @@ sub init_SDL {
 
     $event = new SDL::Event;
 
-
 }
 #######################################################
 sub pump_sdl {
 
     SDL::Events::pump_events();
 
-        while ( SDL::Events::poll_event($event) ) {
-            my $type = $event->type();    # get event type
-            exit if $type == SDL_QUIT;
-        }
+    while ( SDL::Events::poll_event($event) ) {
+        my $type = $event->type();    # get event type
+        exit if $type == SDL_QUIT;
+    }
     DrawScene();
-
 
     return 1;
 }
@@ -103,7 +101,7 @@ sub InitView {
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
 
     glEnable(GL_TEXTURE_2D);
-   
+
     LoadTexture();
 
     glViewport( 0, 0, 1024, 768 );
@@ -120,47 +118,48 @@ sub LoadTexture {
     my $nOfColors;
     my $texture_format;
     my $texture = 0;
-      $surface = SDL::Image::load($ARGV[0]);
-      SDL::Video::lock_surface($surface);
+    $surface = SDL::Image::load( $ARGV[0] );
+    SDL::Video::lock_surface($surface);
 
-	
-         #get the number of channels in the SDL surface
-         $nOfColors = $surface->format->BytesPerPixel;
-         if ($nOfColors == 4)     # contains an alpha channel
-         {
-                 if ($surface->format->Rmask == 0x000000ff){
-                         $texture_format = GL_RGBA;}
-                 else{
-                         $texture_format = GL_BGRA;}
-         } elsif ($nOfColors == 3)     # no alpha channel
-         {
-                 if ($surface->format->Rmask == 0x000000ff){
-                         $texture_format = GL_RGB;}
-                 else{
-                         $texture_format = GL_BGR;}
-         } else {
-                 print "warning: the image is not truecolor..  this will 
+    #get the number of channels in the SDL surface
+    $nOfColors = $surface->format->BytesPerPixel;
+    if ( $nOfColors == 4 )    # contains an alpha channel
+    {
+        if ( $surface->format->Rmask == 0x000000ff ) {
+            $texture_format = GL_RGBA;
+        }
+        else {
+            $texture_format = GL_BGRA;
+        }
+    }
+    elsif ( $nOfColors == 3 )    # no alpha channel
+    {
+        if ( $surface->format->Rmask == 0x000000ff ) {
+            $texture_format = GL_RGB;
+        }
+        else {
+            $texture_format = GL_BGR;
+        }
+    }
+    else {
+        print "warning: the image is not truecolor..  this will 
 probably break\n";
-         }
+    }
 
-	# Have OpenGL generate a texture object handle for us
-	glGenTextures_p(1);
-	
-	# Bind the texture object
-	glBindTexture( GL_TEXTURE_2D, 1);
+    # Have OpenGL generate a texture object handle for us
+    glGenTextures_p(1);
 
-	#Set the texture's stretching properties
-         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    # Bind the texture object
+    glBindTexture( GL_TEXTURE_2D, 1 );
 
+    #Set the texture's stretching properties
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
+# Edit the texture object's image data using the information SDL_Surface gives us
 
-        # Edit the texture object's image data using the information SDL_Surface gives us
-  
-	gluBuild2DMipmaps_s(GL_TEXTURE_2D, $surface->format->BytesPerPixel,
-         $surface->w, $surface->h, $texture_format,GL_UNSIGNED_BYTE, ${$surface->get_pixels_ptr}  );
-					
-
-   
+    gluBuild2DMipmaps_s( GL_TEXTURE_2D, $surface->format->BytesPerPixel,
+        $surface->w, $surface->h, $texture_format, GL_UNSIGNED_BYTE,
+        ${ $surface->get_pixels_ptr } );
 
 }

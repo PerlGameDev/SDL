@@ -1,12 +1,11 @@
-use Inline C => DATA =>
-	LIBS => `sdl-config --libs` =>
-	INC  => `sdl-config --cflags`;
-	     
+use Inline C => DATA => LIBS => `sdl-config --libs` => INC =>
+  `sdl-config --cflags`;
+
 my $fp = get_function_pointer();
-print '[Perl] In perl we got :'.$fp."\n";
+print '[Perl] In perl we got :' . $fp . "\n";
 print '[Perl] Making Thread.';
 
-make_thread( get_function_pointer() , 'I AM THE OVERLOARD XENU!!!');
+make_thread( get_function_pointer(), 'I AM THE OVERLOARD XENU!!!' );
 
 __END__    
 __C__

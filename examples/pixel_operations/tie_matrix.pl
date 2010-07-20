@@ -1,7 +1,7 @@
     use strict;
     use warnings;
-    use SDL; 
-    use SDLx::App; #this is in the github repo.
+    use SDL;
+    use SDLx::App;    #this is in the github repo.
     use SDLx::Surface;
     use SDL::Event;
     use SDL::Events;
@@ -23,14 +23,14 @@
 
     my $event = SDL::Event->new;    # create a new event
 
-    while(1) {
+    while (1) {
         SDL::Events::pump_events();
 
         while ( SDL::Events::poll_event($event) ) {
             my $type = $event->type();    # get event type
             exit if $type == SDL_QUIT;
         }
-        
+
         update();
 
         SDL::Video::update_rect( $app, 0, 0, $app->w, $app->h );
@@ -58,18 +58,24 @@
             $mapped_color );
         return $surface;
     }
-    
+
     sub update {
         load_app();
-            SDL::Video::blit_surface( $surface, SDL::Rect->new( 0, 0, $surface->w, $surface->h ),
-                                      $app, SDL::Rect->new( ($app->w - $surface->w)/2 , ($app->h - $surface->h)/2, $app->w, $app->h ));
-           SDL::Video::lock_surface($surface);                           
-                                      
-            foreach( 0 ... rand($surface->w) )
-            {
-                   
-                   $matrix->[$_][rand($surface->h)] = 0xFFFFFFFF/($_+1);
-                  
-            }
+        SDL::Video::blit_surface(
+            $surface,
+            SDL::Rect->new( 0, 0, $surface->w, $surface->h ),
+            $app,
+            SDL::Rect->new(
+                ( $app->w - $surface->w ) / 2, ( $app->h - $surface->h ) / 2,
+                $app->w, $app->h
+            )
+        );
+        SDL::Video::lock_surface($surface);
+
+        foreach ( 0 ... rand( $surface->w ) ) {
+
+            $matrix->[$_][ rand( $surface->h ) ] = 0xFFFFFFFF / ( $_ + 1 );
+
+        }
         SDL::Video::unlock_surface($surface);
     }

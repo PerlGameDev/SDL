@@ -15,8 +15,8 @@ SDL::init(SDL_INIT_VIDEO);
 my $width  = 800;
 my $height = 600;
 
-my $screen_surface
-    = SDL::Video::set_video_mode( $width, $height, 32, SDL_SWSURFACE );
+my $screen_surface =
+  SDL::Video::set_video_mode( $width, $height, 32, SDL_SWSURFACE );
 
 my $event = SDL::Event->new;
 
@@ -32,11 +32,9 @@ while (1) {
                 rand_color(),              rand_color()
             );
 
-            SDL::Video::fill_rect(
-                $screen_surface,
+            SDL::Video::fill_rect( $screen_surface,
                 SDL::Rect->new( $event->button_x, $event->button_y, 20, 10 ),
-                $mapped_color
-            );
+                $mapped_color );
 
         }
 

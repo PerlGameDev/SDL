@@ -11,9 +11,7 @@ use SDL::Sound;
 my $filename = shift || 'data/sample.wav';
 
 # we want a frequency that is higher than the default
-my $mixer = SDL::Mixer->new(
-    -frequency => 44100,
-);
+my $mixer = SDL::Mixer->new( -frequency => 44100, );
 print "Using audio driver: ", SDL::AudioDriverName(), "\n";
 
 my $wave = SDL::Sound->new($filename);

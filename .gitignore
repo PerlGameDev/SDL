@@ -34,3 +34,5 @@ MANIFEST
 *.tar.gz
 *.swp
 *~
+*.bak
+*.ERR

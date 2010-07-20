@@ -22,15 +22,14 @@ use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
 
-my $videodriver       = $ENV{SDL_VIDEODRIVER};
+my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
     plan( skip_all => 'Failed to init video' );
 }
-else
-{
-    plan( tests => 41);
+else {
+    plan( tests => 41 );
 }
 
 my $surface = SDL::Surface->new( SDL_ANYFORMAT, 640, 320, 8, 0, 0, 0, 0 );
@@ -46,29 +45,28 @@ is( $clip_rect->y, 0,   'clip_rect has y' );
 is( $clip_rect->w, 640, 'clip_rect has width' );
 is( $clip_rect->h, 320, 'clip_rect has height' );
 
-
 my $image = SDL::Video::load_BMP('test/data/icon.bmp');
 is( $image->w, 32, 'image has width' );
 is( $image->h, 32, 'image has height' );
 
 my $pixel_format = $image->format;
 isa_ok( $pixel_format, 'SDL::PixelFormat' );
-is( $pixel_format->BitsPerPixel,  8,        ' BitsPerPixel' );
-is( $pixel_format->BytesPerPixel, 1,        ' BytesPerPixel' );
-is( $pixel_format->Rloss,         8,        ' Rloss' );
-is( $pixel_format->Gloss,         8,        ' Gloss' );
-is( $pixel_format->Bloss,         8,        ' Bloss' );
-is( $pixel_format->Aloss,         8,        ' Aloss' );
-is( $pixel_format->Rshift,        0,        ' Rshift' );
-is( $pixel_format->Gshift,        0,        ' Gshift' );
-is( $pixel_format->Bshift,        0,        ' Bshift' );
-is( $pixel_format->Ashift,        0,        ' Ashift' );
-is( $pixel_format->Rmask,         0,        ' Rmask' );
-is( $pixel_format->Gmask,         0,        ' Gmask' );
-is( $pixel_format->Bmask,         0,        ' Bmask' );
-is( $pixel_format->Amask,         0,        ' Amask' );
-is( $pixel_format->colorkey,      0,        ' colorkey' );
-is( $pixel_format->alpha,         255,      ' alpha' );
+is( $pixel_format->BitsPerPixel,  8,   ' BitsPerPixel' );
+is( $pixel_format->BytesPerPixel, 1,   ' BytesPerPixel' );
+is( $pixel_format->Rloss,         8,   ' Rloss' );
+is( $pixel_format->Gloss,         8,   ' Gloss' );
+is( $pixel_format->Bloss,         8,   ' Bloss' );
+is( $pixel_format->Aloss,         8,   ' Aloss' );
+is( $pixel_format->Rshift,        0,   ' Rshift' );
+is( $pixel_format->Gshift,        0,   ' Gshift' );
+is( $pixel_format->Bshift,        0,   ' Bshift' );
+is( $pixel_format->Ashift,        0,   ' Ashift' );
+is( $pixel_format->Rmask,         0,   ' Rmask' );
+is( $pixel_format->Gmask,         0,   ' Gmask' );
+is( $pixel_format->Bmask,         0,   ' Bmask' );
+is( $pixel_format->Amask,         0,   ' Amask' );
+is( $pixel_format->colorkey,      0,   ' colorkey' );
+is( $pixel_format->alpha,         255, ' alpha' );
 
 my $pixel = SDL::Video::map_RGB( $pixel_format, 255, 127, 0 );
 is( $pixel, 2, 'maping RGB to surface' );
@@ -78,7 +76,6 @@ ok( 1, 'Managed to fill_rect' );
 my $small_rect = SDL::Rect->new( 0, 0, 64, 64 );
 SDL::Video::blit_surface( $image, $small_rect, $surface, $small_rect );
 ok( 1, 'Managed to blit' );
-
 
 #my $image_format = $surface->display;
 #$surface->update_rect( 0, 0, 32, 32 );
@@ -103,41 +100,36 @@ isa_ok( $image_format_alpha, 'SDL::Surface' );
 
 my $app_pixel_format = $app->format;
 
-
 my $rect = SDL::Rect->new( 0, 0, $app->w, $app->h );
-
 
 my $blue_pixel = SDL::Video::map_RGB( $app_pixel_format, 0x00, 0x00, 0xff );
 
-
 SDL::Video::fill_rect( $app, $rect, $blue_pixel );
-
 
 SDL::Video::update_rect( $app, 0, 0, 0, 0 );
 
 SDL::Video::update_rects( $app, $small_rect );
 
-
 my $ref = $surface->get_pixels_ptr;
-my $other_surface =  SDL::Surface->new_from( $ref, 640, 320, 8, $surface->pitch, 0, 0, 0, 0 );
+my $other_surface =
+  SDL::Surface->new_from( $ref, 640, 320, 8, $surface->pitch, 0, 0, 0, 0 );
 my $get_pixel = $surface->get_pixel(0);
-ok( $get_pixel >= 0,  "[get_pixel] returns integer ($get_pixel)" );
-$surface->set_pixels(0, 42); pass '[set_pixel] first pixel to 42' ;
-is( $surface->get_pixel(0), 42,   '[get_pixel] returns integer (42)' );
+ok( $get_pixel >= 0, "[get_pixel] returns integer ($get_pixel)" );
+$surface->set_pixels( 0, 42 );
+pass '[set_pixel] first pixel to 42';
+is( $surface->get_pixel(0), 42, '[get_pixel] returns integer (42)' );
 
 isa_ok( $other_surface, 'SDL::Surface' );
-is( $other_surface->w, $surface->w, '[new_form] have same w');
-is( $other_surface->h, $surface->h, '[neh_form] have same h');
+is( $other_surface->w, $surface->w, '[new_form] have same w' );
+is( $other_surface->h, $surface->h, '[neh_form] have same h' );
 
 #TODO: Added more comparison stuff
 
-if($videodriver)
-{
-	$ENV{SDL_VIDEODRIVER} = $videodriver;
+if ($videodriver) {
+    $ENV{SDL_VIDEODRIVER} = $videodriver;
 }
-else
-{
-	delete $ENV{SDL_VIDEODRIVER};
+else {
+    delete $ENV{SDL_VIDEODRIVER};
 }
 
 pass 'Final SegFault test';
