@@ -37,7 +37,7 @@ use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
 
-plan( tests => 8 );
+plan( tests => 9 );
 use_ok('SDLx::App');
 
 can_ok(
@@ -69,25 +69,28 @@ SKIP:
         -title  => "Test",
         -width  => 640,
         -height => 480,
-        -init   => SDL_INIT_VIDEO
+	-noinit => 1,
     );
 
     $app->sync;
     sleep(1);
     pass 'App inited';
+    isa_ok( $app, 'SDLx::Surface', 'SDLx::App is a SDLx::Surface' );
     ok(
         !eval { $app->resize( 640, 480 ); 1 },
         "can't resize with no -resizeable"
     );
     like( $@, qr/not resizable/, "check for error message" );
+    $app = undef;
     SDL::quit;
 
     my $app2 = SDLx::App->new(
         -title      => "Test",
         -width      => 640,
         -height     => 480,
-        -init       => SDL_INIT_VIDEO,
-        -resizeable => 1
+        -resizeable => 1,
+	-noinit     => 1,
+
     );
     $app2->sync;
 
