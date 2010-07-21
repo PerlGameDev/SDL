@@ -27,8 +27,10 @@ sub build_bundle {
     chomp($libs);
     $libs .= ' ' . Alien::SDL->config('libs') . ' -lSDLmain';
     chomp($libs);
+    my $arch = ' ';
+    $arch = '-arch'.$ENV{SDL_ARCH} if $ENV{SDL_ARCH};
     my $cmd =
-      "gcc -o \"$bundle_contents/MacOS/SDLPerl\"  MacOSX/main.c $cflags $libs ";
+      "gcc $arch -o \"$bundle_contents/MacOS/SDLPerl\"  MacOSX/main.c $cflags $libs ";
     print STDERR $cmd . "\n";
     system($cmd);
 
