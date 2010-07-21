@@ -96,6 +96,13 @@ $src_rect or $dest_rect are optional. $src_rect or $dest_rect can be array refs 
 
 Returns $self
 
+=head2 blit_by
+
+ $sdlx_surface->blit_by( $src, $src_rect, $dest_rect );
+
+Does the same as C<blit> but the C<SDLx::Surface> is the one being blitted to.
+This is useful when the surface you have isn't an C<SDLx::Surface>, but the surface it is being blitted to is.
+
 =head2 flip
 
 Applies L<SDL::Video::flip> to the Surface, with error checking.
