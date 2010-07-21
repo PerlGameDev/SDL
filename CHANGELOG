@@ -4,6 +4,7 @@ Revision history for Perl extension SDL_perl.
 	- Finished a working version of SDLx::Sprite::Animated [jtpalmer]
 	- Added draw functions to SDLx::Sprite
 	- Cleanedup Sprite inheritance from Surface
+	- Fixed bug in SDL::Event::key_mod, it returned pointer instead of int [FROGGS]
 
 * 2.502
 	- Displaying Alien::SDL's build option for every build step [FROGGS]

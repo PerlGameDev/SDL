@@ -217,7 +217,7 @@ event_key_sym ( event, ... )
 	OUTPUT:
 		RETVAL
 
-SDLMod *
+Uint16
 event_key_mod ( event, ... )
 	SDL_Event *event
 	CODE: 
@@ -226,11 +226,10 @@ event_key_mod ( event, ... )
 		
 		if( items > 1 )
 		{
-			SDLMod *mp  = (SDLMod * )SvPV( ST(1), PL_na) ;
-			b->mod = *mp;
+			b->mod = SvIV( ST(1) );
 		}
 
-		RETVAL = &(b->mod);
+		RETVAL = b->mod;
 	OUTPUT:
 		RETVAL
 
