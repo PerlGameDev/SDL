@@ -16,7 +16,10 @@ use SDL::GFX::Primitives;
 use SDL::PixelFormat;
 use Tie::Simple;
 
-use overload ( '@{}' => '_array', );
+use overload (
+    '@{}' => '_array',
+    fallback => 1,
+);
 use SDL::Constants ':SDL::Video';
 our @ISA = qw(Exporter DynaLoader);
 
@@ -176,11 +179,14 @@ sub blit {
 
     Carp::croak 'SDLx::Surface or SDL::Surface for dest required'
       unless ( $dest->isa('SDL::Surface') || $dest->isa('SDLx::Surface') );
+	
+    my $self_surface = $self;
+    $self_surface = $self->surface if $self->isa('SDLx::Surface');
 
     my $dest_surface = $dest;
     $dest_surface = $dest->surface if $dest->isa('SDLx::Surface');
 
-    $src_rect = SDL::Rect->new( 0, 0, $self->{surface}->w, $self->{surface}->h )
+    $src_rect = SDL::Rect->new( 0, 0, $self_surface->w, $self_surface->h )
       unless defined $src_rect;
     $dest_rect = SDL::Rect->new( 0, 0, $dest_surface->w, $dest_surface->h )
       unless defined $dest_rect;
@@ -199,11 +205,16 @@ sub blit {
 
     Carp::croak 'Destination was not a surface'
       unless $dest_surface->isa('SDL::Surface');
-    SDL::Video::blit_surface( $self->surface(), $pass_src_rect, $dest_surface,
+    SDL::Video::blit_surface( $self_surface, $pass_src_rect, $dest_surface,
         $pass_dest_rect );
 
     return $self
 
+}
+
+sub blit_by {
+    my ( $self, $src, $src_rect, $dest_rect ) = @_;
+    SDLx::Surface::blit( $src, $self, $src_rect, $dest_rect );
 }
 
 sub flip {

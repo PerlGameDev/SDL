@@ -586,8 +586,10 @@ Example:
  
  SDL::init(SDL_INIT_VIDEO);
  
+ SDL::TTF::init();
+
  my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
- my $font    = SDL::TTF::open_font('arial.ttf', '24);
+ my $font    = SDL::TTF::open_font('arial.ttf', '24');
  my $white   = SDL::Color->new(0xFF, 0xFF, 0xFF);
  my $black   = SDL::Color->new(0x00, 0x00, 0x00);
  my $surface = SDL::TTF::render_text_solid($font, 'Hallo!', $white, $black);
@@ -639,8 +641,10 @@ Example:
  
  SDL::init(SDL_INIT_VIDEO);
  
+ SDL::TTF::init();
+ 
  my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
- my $font    = SDL::TTF::open_font('arial.ttf', '24);
+ my $font    = SDL::TTF::open_font('arial.ttf', '24');
  my $surface = SDL::TTF::render_text_blended($font, 'Hallo!', SDL::Color->new(0xFF,0xFF,0xFF));
  
  SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(10, 10, 640, 480));
