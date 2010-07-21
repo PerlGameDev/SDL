@@ -10,68 +10,75 @@ use SDL::Video;
 use lib 't/lib';
 use SDL::TestTool;
 
-
-my $videodriver       = $ENV{SDL_VIDEODRIVER};
+my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
     plan( skip_all => 'Failed to init video' );
 }
 
-my $app = SDL::Video::set_video_mode( 400,200,32, SDL_SWSURFACE);
+my $app = SDL::Video::set_video_mode( 400, 200, 32, SDL_SWSURFACE );
 
 my $app_x = SDLx::Surface::display();
 
-is_deeply( $app_x->surface->get_pixels_ptr, $app->get_pixels_ptr, '[display] works');
+is_deeply( $app_x->surface->get_pixels_ptr,
+    $app->get_pixels_ptr, '[display] works' );
 
-
-
-my $surface = SDL::Surface->new( SDL_SWSURFACE, 400,200, 32);
+my $surface = SDL::Surface->new( SDL_SWSURFACE, 400, 200, 32 );
 my @surfs = (
-	SDLx::Surface->new(  surface => $surface),
-	SDLx::Surface->new( width=> 400, height=>200),
-	SDLx::Surface->new( width=> 400, height=>200, flags=> SDL_SWSURFACE, depth=>32 ),
-	SDLx::Surface->new( width=> 400, height=>200, flags=> SDL_SWSURFACE, depth=>32, greenmask=>0xFF000000 ),
-
+    SDLx::Surface->new( surface => $surface ),
+    SDLx::Surface->new( width   => 400, height => 200 ),
+    SDLx::Surface->new(
+        width  => 400,
+        height => 200,
+        flags  => SDL_SWSURFACE,
+        depth  => 32
+    ),
+    SDLx::Surface->new(
+        width     => 400,
+        height    => 200,
+        flags     => SDL_SWSURFACE,
+        depth     => 32,
+        greenmask => 0xFF000000
+    ),
 
 );
 
-foreach my $a ( @surfs)
-{
-	isa_ok ( $a, 'SDLx::Surface');
+foreach my $a (@surfs) {
+    isa_ok( $a, 'SDLx::Surface' );
 
-	isa_ok ( $a->surface(), 'SDL::Surface');
+    isa_ok( $a->surface(), 'SDL::Surface' );
 
-	my $color =  $a->[0][0];
-	is ( $color , 0, 'Right color returned');
+    my $color = $a->[0][0];
+    is( $color, 0, 'Right color returned' );
 
-	$a->[0][0] = 0x00FF00FF;
-	is ( $a->[0][0] , 0x00FF00FF, 'Right color returned');
+    $a->[0][0] = 0x00FF00FF;
+    is( $a->[0][0], 0x00FF00FF, 'Right color returned' );
 
-	is ( @{$a} , 200 , 'Correct Y value');
+    is( @{$a}, 200, 'Correct Y value' );
 
-	is ( @{$a->[0]} , 400 , 'Correct X value');
+    is( @{ $a->[0] }, 400, 'Correct X value' );
 
 }
 
 #my $source = SDLx::Surface->new( width=> 400, height=>200, flags=> SDL_SWSURFACE, depth=>32 ),
- 
 
-is( $surfs[0]->[1][2], 0 , 'Checking source pixel is 0');
-is( $surfs[1]->[1][2], 0 , 'Checking dest pixel is 0');
+is( $surfs[0]->[1][2], 0, 'Checking source pixel is 0' );
+is( $surfs[1]->[1][2], 0, 'Checking dest pixel is 0' );
 
 $surfs[0]->[1][2] = 0x00FF00FF;
 
 is( $surfs[0]->[1][2], 0x00FF00FF, 'Checking that source pixel got written' );
 
 $surfs[0]->blit( $surfs[1] );
+
 #SDL::Video::blit_surface( $surfs[0]->surface, SDL::Rect->new(0,0,400,200), $surfs[1]->surface, SDL::Rect->new(0,0,400,200));
 
-isnt( $surfs[1]->[1][2], 0, 'Pixel blitted from one surface to another');
+isnt( $surfs[1]->[1][2], 0, 'Pixel blitted from one surface to another' );
 
-$surfs[1]->blit_by( $surfs[0], undef, [1, 0, 0, 0] );
+$surfs[1]->blit_by( $surfs[0], undef, [ 1, 0, 0, 0 ] );
 
-isnt( $surfs[1]->[2][2], 0, 'Pixel by_blitted to another surface with offset');
+isnt( $surfs[1]->[2][2], 0, 'Pixel by_blitted to another surface with offset' );
 
 $surfs[1]->flip();
 
@@ -79,41 +86,39 @@ pass 'Fliped the surface';
 
 $surfs[0]->update();
 pass 'update all surface';
-$surfs[0]->update( [0,10,30,40] );
+$surfs[0]->update( [ 0, 10, 30, 40 ] );
 pass 'Single rect update';
-$surfs[0]->update( [ SDL::Rect->new(0,1,2,3), SDL::Rect->new(2,4,5,6)] );
+$surfs[0]
+  ->update( [ SDL::Rect->new( 0, 1, 2, 3 ), SDL::Rect->new( 2, 4, 5, 6 ) ] );
 pass 'SDL::Rect array update';
 
-
-$surfs[0]->draw_rect( [0,0,10,20], 0xFF00FFFF);
+$surfs[0]->draw_rect( [ 0, 0, 10, 20 ], 0xFF00FFFF );
 pass 'draw_rect works';
 
-$surfs[1]->draw_line( [0,10], [ 20, 10 ], 0xff00ffff);
-$surfs[1]->draw_line( [0,10], [ 20, 10 ], 0xff00ffff, 1);
-$surfs[1]->draw_line( [0,10], [ 20, 10 ], [255,255,0,255]);
-$surfs[1]->draw_line( [0,10], [ 20, 10 ], [255,255,0,255], 1);
+$surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], 0xff00ffff );
+$surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], 0xff00ffff, 1 );
+$surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], [ 255, 255, 0, 255 ] );
+$surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], [ 255, 255, 0, 255 ], 1 );
 pass 'draw_line works';
-
 
 my $surf_dup = SDLx::Surface::duplicate( $surfs[1] );
 
-is ( $surf_dup->w , $surfs[1]->w, 'Duplicate surf has same width' );
-is ( $surf_dup->h , $surfs[1]->h, 'Duplicate surf has same flags' );
-is ( $surf_dup->flags , $surfs[1]->flags, 'Duplicate surf has same flags' );
-is ( $surf_dup->format->BitsPerPixel , $surfs[1]->format->BitsPerPixel, 'Duplicate surf has same bpp' );
+is( $surf_dup->w,     $surfs[1]->w,     'Duplicate surf has same width' );
+is( $surf_dup->h,     $surfs[1]->h,     'Duplicate surf has same flags' );
+is( $surf_dup->flags, $surfs[1]->flags, 'Duplicate surf has same flags' );
+is(
+    $surf_dup->format->BitsPerPixel,
+    $surfs[1]->format->BitsPerPixel,
+    'Duplicate surf has same bpp'
+);
 
-
-
-if($videodriver)
-{
-	$ENV{SDL_VIDEODRIVER} = $videodriver;
+if ($videodriver) {
+    $ENV{SDL_VIDEODRIVER} = $videodriver;
 }
-else
-{
-	delete $ENV{SDL_VIDEODRIVER};
+else {
+    delete $ENV{SDL_VIDEODRIVER};
 }
 
 pass 'Final SegFault test';
-
 
 done_testing;

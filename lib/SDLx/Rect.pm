@@ -672,7 +672,8 @@ sub _do_rects_intersect {
     return (
         ( $rect_A->x >= $rect_B->x && $rect_A->x < $rect_B->x + $rect_B->w )
           || ( $rect_B->x >= $rect_A->x
-            && $rect_B->x < $rect_A->x + $rect_A->w ) )
+            && $rect_B->x < $rect_A->x + $rect_A->w )
+      )
       && ( ( $rect_A->y >= $rect_B->y && $rect_A->y < $rect_B->y + $rect_B->h )
         || ( $rect_B->y >= $rect_A->y && $rect_B->y < $rect_A->y + $rect_A->h )
       );

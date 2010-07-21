@@ -25,15 +25,15 @@ sub new {
     my %options = @_;
 
     # SDL_INIT_VIDEO() is 0, so check defined instead of truth.
-   unless( exists( $options{-noinit} ) ) # we shouldn't do init always
-   {
-    my $init =
-    defined $options{-init}
-    ? $options{-init}
-    : SDL::SDL_INIT_EVERYTHING;
+    unless ( exists( $options{-noinit} ) )    # we shouldn't do init always
+    {
+        my $init =
+          defined $options{-init}
+          ? $options{-init}
+          : SDL::SDL_INIT_EVERYTHING;
 
-    SDL::init($init);
-   }
+        SDL::init($init);
+    }
     my $t  = $options{-title}      || $options{-t}  || $0;
     my $it = $options{-icon_title} || $options{-it} || $t;
     my $ic = $options{-icon}       || $options{-i}  || "";
@@ -100,7 +100,7 @@ sub new {
 
     my $self = SDL::Video::set_video_mode( $w, $h, $d, $f )
       or croak SDL::get_error();
-	$self = SDLx::Surface->new( surface => $self);
+    $self = SDLx::Surface->new( surface => $self );
     if ( $ic and -e $ic ) {
         my $icon = SDL::Video::load_BMP($ic);
         SDL::Video::wm_set_icon($$icon);

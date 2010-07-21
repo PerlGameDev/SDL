@@ -69,7 +69,7 @@ SKIP:
         -title  => "Test",
         -width  => 640,
         -height => 480,
-	-noinit => 1,
+        -noinit => 1,
     );
 
     $app->sync;
@@ -89,7 +89,7 @@ SKIP:
         -width      => 640,
         -height     => 480,
         -resizeable => 1,
-	-noinit     => 1,
+        -noinit     => 1,
 
     );
     $app2->sync;

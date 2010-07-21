@@ -17,7 +17,7 @@ use SDL::PixelFormat;
 use Tie::Simple;
 
 use overload (
-    '@{}' => '_array',
+    '@{}'    => '_array',
     fallback => 1,
 );
 use SDL::Constants ':SDL::Video';
@@ -179,7 +179,7 @@ sub blit {
 
     Carp::croak 'SDLx::Surface or SDL::Surface for dest required'
       unless ( $dest->isa('SDL::Surface') || $dest->isa('SDLx::Surface') );
-	
+
     my $self_surface = $self;
     $self_surface = $self->surface if $self->isa('SDLx::Surface');
 
