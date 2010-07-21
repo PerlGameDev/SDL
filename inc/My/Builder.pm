@@ -127,11 +127,14 @@ sub set_file_flags {
 
     }
 
+    my $arch = ' ';
+    $arch = '-arch'.$ENV{SDL_ARCH} if $ENV{SDL_ARCH};
+
     while ( my ( $subsystem, $param ) = each %build_systems ) {
         my $sub_file = $self->notes('subsystems')->{$subsystem}{file}{to};
         $file_flags{$sub_file} = {
             extra_compiler_flags => [
-                ( split( ' ', $debug . $self->notes('sdl_cflags') ) ),
+                ( split( ' ', $arch . $debug . $self->notes('sdl_cflags') ) ),
                 @{ $param->{defines} },
                 (
                     defined $Config{usethreads}
