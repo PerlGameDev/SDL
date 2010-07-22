@@ -43,10 +43,6 @@ my @surfs = (
 		depth     => 32,
 		greenmask => 0xFF000000
 	),
-<<<<<<< HEAD
-=======
-
->>>>>>> 5881b4d8d7c0ad7f74b09b6c2539ea89fafd19c0
 );
 
 foreach my $a (@surfs) {
@@ -84,7 +80,6 @@ isnt( $surfs[1]->[1][2], 0, 'Pixel blitted from one surface to another' );
 $surfs[1]->blit_by( $surfs[0], undef, [ 1, 0, 0, 0 ] );
 
 isnt( $surfs[1]->[2][2], 0, 'Pixel by_blitted to another surface with offset' );
-<<<<<<< HEAD
 
 push @surfs, SDLx::Surface->new(
 	w => 1,
@@ -93,8 +88,6 @@ push @surfs, SDLx::Surface->new(
 );
 
 is( $surfs[-1]->[0][0], 1, 'Fill color worked' );
-=======
->>>>>>> 5881b4d8d7c0ad7f74b09b6c2539ea89fafd19c0
 
 $surfs[1]->flip();
 
