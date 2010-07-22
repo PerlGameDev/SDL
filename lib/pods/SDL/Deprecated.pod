@@ -11,6 +11,20 @@ Core
 
 =head1 RELEASES
 
+=head2 2.502
+
+=item SDLx::App
+
+Now depends on L<SDLx::Surface>. To get the SDL::Surface, use C< ->surface() >. Alternatively L<SDLx::Surface::display()|SDLx::Surface/display>.
+
+=item SDLx::Surface
+
+C< get_display > is now called L<SDLx::Surface::display|SDLx::Surface/display>. 
+
+=item SDLx::Sprite::Animated
+
+Has drastically changed, and is still volatile.
+
 =head2 2.500
 
 =over 
