@@ -18,13 +18,11 @@ my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
-    plan( skip_all => 'Failed to init video' );
-}
-elsif ( !SDL::Config->has('SDL_gfx_imagefilter') ) {
-    plan( skip_all => 'SDL_gfx_imagefilter support not compiled' );
-}
-else {
-    plan( tests => 8 );
+	plan( skip_all => 'Failed to init video' );
+} elsif ( !SDL::Config->has('SDL_gfx_imagefilter') ) {
+	plan( skip_all => 'SDL_gfx_imagefilter support not compiled' );
+} else {
+	plan( tests => 8 );
 }
 
 my $v = SDL::GFX::linked_version();
@@ -32,16 +30,18 @@ isa_ok( $v, 'SDL::Version', '[linked_version]' );
 printf( "got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch );
 
 my @done = qw/
-  MMX_detect
-  /;
+	MMX_detect
+	/;
 
 my $display = SDL::Video::set_video_mode( 640, 480, 32, SDL_SWSURFACE );
 my $pixel = SDL::Video::map_RGB( $display->format, 0, 0, 0 );
-SDL::Video::fill_rect( $display,
-    SDL::Rect->new( 0, 0, $display->w, $display->h ), $pixel );
+SDL::Video::fill_rect(
+	$display,
+	SDL::Rect->new( 0, 0, $display->w, $display->h ), $pixel
+);
 
 if ( !$display ) {
-    plan skip_all => 'Couldn\'t set video mode: ' . SDL::get_error();
+	plan skip_all => 'Couldn\'t set video mode: ' . SDL::get_error();
 }
 
 my $mmx_before = SDL::GFX::ImageFilter::MMX_detect();
@@ -50,7 +50,8 @@ is( SDL::GFX::ImageFilter::MMX_off(),    undef, 'MMX_off' );
 is( SDL::GFX::ImageFilter::MMX_detect(), 0,     "MMX_detect (MMX is off now)" );
 is( SDL::GFX::ImageFilter::MMX_on(),     undef, 'MMX_on' );
 is( SDL::GFX::ImageFilter::MMX_detect(),
-    $mmx_before, "MMX_detect (MMX is same as at start)" );
+	$mmx_before, "MMX_detect (MMX is same as at start)"
+);
 
 #add(Src1, Src2, Dest, length)
 #mean(Src1, Src2, Dest, length)
@@ -97,69 +98,68 @@ SDL::Video::update_rect( $display, 0, 0, 640, 480 );
 #SDL::delay(1000);
 
 my @left = qw/
-  MMX_detect
-  MMX_off
-  MMX_on
-  add
-  mean
-  sub
-  abs_diff
-  mult
-  mult_nor
-  mult_div_by_2
-  mult_div_by_4
-  bit_and
-  bit_or
-  div
-  bit_negation
-  add_byte
-  add_uint
-  add_byte_to_half
-  sub_byte
-  sub_uint
-  shift_right
-  shift_right_uint
-  mult_by_byte
-  shift_right_and_mult_by_byte
-  shift_left_byte
-  shift_left_uint
-  shift_left
-  binarize_using_threshold
-  clip_to_range
-  normalize_linear
-  convolve_kernel_3x3_divide
-  convolve_kernel_5x5_divide
-  convolve_kernel_7x7_divide
-  convolve_kernel_9x9_divide
-  convolve_kernel_3x3_shift_right
-  convolve_kernel_5x5_shift_right
-  convolve_kernel_7x7_shift_right
-  convolve_kernel_9x9_shift_right
-  sobel_x
-  sobel_x_shift_right
-  align_stack
-  restore_stack
-  /;
+	MMX_detect
+	MMX_off
+	MMX_on
+	add
+	mean
+	sub
+	abs_diff
+	mult
+	mult_nor
+	mult_div_by_2
+	mult_div_by_4
+	bit_and
+	bit_or
+	div
+	bit_negation
+	add_byte
+	add_uint
+	add_byte_to_half
+	sub_byte
+	sub_uint
+	shift_right
+	shift_right_uint
+	mult_by_byte
+	shift_right_and_mult_by_byte
+	shift_left_byte
+	shift_left_uint
+	shift_left
+	binarize_using_threshold
+	clip_to_range
+	normalize_linear
+	convolve_kernel_3x3_divide
+	convolve_kernel_5x5_divide
+	convolve_kernel_7x7_divide
+	convolve_kernel_9x9_divide
+	convolve_kernel_3x3_shift_right
+	convolve_kernel_5x5_shift_right
+	convolve_kernel_7x7_shift_right
+	convolve_kernel_9x9_shift_right
+	sobel_x
+	sobel_x_shift_right
+	align_stack
+	restore_stack
+	/;
 
 my $why =
-    '[Percentage Completion] '
-  . int( 100 * ( $#done + 1 ) / ( $#done + $#left + 2 ) )
-  . '% implementation. '
-  . ( $#done + 1 ) . '/'
-  . ( $#done + $#left + 2 );
+	  '[Percentage Completion] '
+	. int( 100 * ( $#done + 1 ) / ( $#done + $#left + 2 ) )
+	. '% implementation. '
+	. ( $#done + 1 ) . '/'
+	. ( $#done + $#left + 2 );
 TODO:
 {
-    local $TODO = $why;
-    pass "\nThe following functions:\n" . join ",", @left;
+	local $TODO = $why;
+	pass "\nThe following functions:\n" . join ",", @left;
 }
 if   ( $done[0] eq 'none' ) { print '0% done 0/' . $#left . "\n" }
 else                        { print "$why\n" }
 
 if ($videodriver) {
-    $ENV{SDL_VIDEODRIVER} = $videodriver;
-}
-else {
-    delete $ENV{SDL_VIDEODRIVER};
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+} else {
+	delete $ENV{SDL_VIDEODRIVER};
 }
 
 pass 'Are we still alive? Checking for segfaults';

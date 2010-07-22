@@ -11,32 +11,31 @@ use SDL::Mixer::MixChunk;
 my $audiodriver;
 
 BEGIN {
-    use Config;
-    if ( !$Config{'useithreads'} ) {
-        print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
-        exit(0);
-    }
+	use Config;
+	if ( !$Config{'useithreads'} ) {
+		print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
+		exit(0);
+	}
 
-    use Test::More;
-    use lib 't/lib';
-    use SDL::TestTool;
+	use Test::More;
+	use lib 't/lib';
+	use SDL::TestTool;
 
-    $audiodriver = $ENV{SDL_AUDIODRIVER};
-    $ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+	$audiodriver = $ENV{SDL_AUDIODRIVER};
+	$ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
-    if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
-        plan( skip_all => 'Failed to init sound' );
-    }
-    elsif ( !SDL::Config->has('SDL_mixer') ) {
-        plan( skip_all => 'SDL_mixer support not compiled' );
-    }
-    else {
-        plan( tests => 6 );
-    }
+	if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
+		plan( skip_all => 'Failed to init sound' );
+	} elsif ( !SDL::Config->has('SDL_mixer') ) {
+		plan( skip_all => 'SDL_mixer support not compiled' );
+	} else {
+		plan( tests => 6 );
+	}
 }
 
 is( SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 ),
-    0, 'open_audio passed' );
+	0, 'open_audio passed'
+);
 
 my $mix_chunk = SDL::Mixer::Samples::load_WAV('test/data/sample.wav');
 isa_ok( $mix_chunk, 'SDL::Mixer::MixChunk' );
@@ -56,10 +55,9 @@ SDL::Mixer::close_audio();
 ok( 1, 'Got to the end' );
 
 if ($audiodriver) {
-    $ENV{SDL_AUDIODRIVER} = $audiodriver;
-}
-else {
-    delete $ENV{SDL_AUDIODRIVER};
+	$ENV{SDL_AUDIODRIVER} = $audiodriver;
+} else {
+	delete $ENV{SDL_AUDIODRIVER};
 }
 
 sleep(2);

@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
-BEGIN {    # http://wiki.cpantesters.org/wiki/CPANAuthorNotes
-    use Config;
-    if ( !$Config{'useithreads'} ) {
-        print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
-        exit(0);
-    }
+BEGIN { # http://wiki.cpantesters.org/wiki/CPANAuthorNotes
+	use Config;
+	if ( !$Config{'useithreads'} ) {
+		print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
+		exit(0);
+	}
 }
 use threads;
 use threads::shared;
@@ -18,14 +18,13 @@ use lib 't/lib';
 use SDL::TestTool;
 
 if ( !SDL::TestTool->init(SDL_INIT_TIMER) ) {
-    plan( skip_all => 'Failed to init timer' );
-}
-else {
-    plan( tests => 6 );
+	plan( skip_all => 'Failed to init timer' );
+} else {
+	plan( tests => 6 );
 }
 
 my @done = qw/get_ticks
-  delay/;
+	delay/;
 
 my $before = SDL::get_ticks();
 like( $before, qr/^\d+$/, '[get_ticks] returns a number' );
@@ -50,16 +49,16 @@ isnt( $fired, 0, '[add_timer] ran ' . $fired );
 my @left = qw/set_timer new_timer_callback add_timer remove_timer/;
 
 my $why =
-    '[Percentage Completion] '
-  . int( 100 * ( $#done + 1 ) / ( $#done + $#left + 2 ) )
-  . "\% implementation. "
-  . ( $#done + 1 ) . " / "
-  . ( $#done + $#left + 2 );
+	  '[Percentage Completion] '
+	. int( 100 * ( $#done + 1 ) / ( $#done + $#left + 2 ) )
+	. "\% implementation. "
+	. ( $#done + 1 ) . " / "
+	. ( $#done + $#left + 2 );
 
 TODO:
 {
-    local $TODO = $why;
-    pass "\nThe following functions:\n" . join ",", @left;
+	local $TODO = $why;
+	pass "\nThe following functions:\n" . join ",", @left;
 }
 print "$why\n";
 

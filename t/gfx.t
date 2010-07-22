@@ -11,7 +11,7 @@ use lib 't/lib';
 use SDL::TestTool;
 
 if ( !SDL::Config->has('SDL_gfx_primitives') ) {
-    plan( skip_all => 'SDL_gfx support not compiled' );
+	plan( skip_all => 'SDL_gfx support not compiled' );
 }
 
 my $v = SDL::GFX::linked_version();

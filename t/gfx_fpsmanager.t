@@ -16,13 +16,11 @@ my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
-    plan( skip_all => 'Failed to init video' );
-}
-elsif ( !SDL::Config->has('SDL_gfx_framerate') ) {
-    plan( skip_all => 'SDL_gfx_framerate support not compiled' );
-}
-else {
-    plan( tests => 11 );
+	plan( skip_all => 'Failed to init video' );
+} elsif ( !SDL::Config->has('SDL_gfx_framerate') ) {
+	plan( skip_all => 'SDL_gfx_framerate support not compiled' );
+} else {
+	plan( tests => 11 );
 }
 
 my $v = SDL::GFX::linked_version();
@@ -50,10 +48,9 @@ is( $fps->rate,       4, 'fps has rate' );
 SDL::delay(100);
 
 if ($videodriver) {
-    $ENV{SDL_VIDEODRIVER} = $videodriver;
-}
-else {
-    delete $ENV{SDL_VIDEODRIVER};
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+} else {
+	delete $ENV{SDL_VIDEODRIVER};
 }
 
 pass 'Are we still alive? Checking for segfaults';

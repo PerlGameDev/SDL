@@ -10,32 +10,31 @@ use lib 't/lib';
 use SDL::TestTool;
 
 can_ok(
-    'SDLx::Sprite::Animated',
-    qw( new rect clip load surface x y w h draw alpha_key
-      step_x step_y type max_loops ticks_per_frame current_frame current_loop
-      set_sequences sequence next previous reset start stop draw)
+	'SDLx::Sprite::Animated',
+	qw( new rect clip load surface x y w h draw alpha_key
+		step_x step_y type max_loops ticks_per_frame current_frame current_loop
+		set_sequences sequence next previous reset start stop draw)
 );
 
 TODO: {
-    local $TODO = 'methods not implemented yet';
-    can_ok( 'SDLx::Sprite', qw( add remove zoom ) );
+	local $TODO = 'methods not implemented yet';
+	can_ok( 'SDLx::Sprite', qw( add remove zoom ) );
 }
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
-    plan( skip_all => 'Failed to init video' );
-}
-elsif ( !SDL::Config->has('SDL_image') ) {
-    plan( skip_all => 'SDL_image support not compiled' );
+	plan( skip_all => 'Failed to init video' );
+} elsif ( !SDL::Config->has('SDL_image') ) {
+	plan( skip_all => 'SDL_image support not compiled' );
 }
 
 my $disp = SDL::Video::set_video_mode( 300, 300, 32, SDL_ANYFORMAT );
 
 my $sprite = SDLx::Sprite::Animated->new(
-    width  => 48,
-    height => 48
+	width  => 48,
+	height => 48
 );
 
 isa_ok( $sprite, 'SDLx::Sprite' );
@@ -65,17 +64,25 @@ my ( $w, $h ) = ( $sprite->w, $sprite->h );
 is( $w, 48, 'w defined upon raw initialization' );
 is( $h, 48, 'h defined upon raw initialization' );
 
-isa_ok( $sprite->load('test/data/hero.bmp'),
-    'SDLx::Sprite::Animated', '[load] works' );
+isa_ok(
+	$sprite->load('test/data/hero.bmp'),
+	'SDLx::Sprite::Animated', '[load] works'
+);
 
-isa_ok( $sprite->alpha_key( SDL::Color->new( 0xfc, 0x00, 0xff ) ),
-    'SDLx::Sprite::Animated', '[alpha] works' );
+isa_ok(
+	$sprite->alpha_key( SDL::Color->new( 0xfc, 0x00, 0xff ) ),
+	'SDLx::Sprite::Animated', '[alpha] works'
+);
 
-isa_ok( $sprite->alpha(0xcc), 'SDLx::Sprite::Animated',
-    '[alpha] integer works ' );
+isa_ok(
+	$sprite->alpha(0xcc), 'SDLx::Sprite::Animated',
+	'[alpha] integer works '
+);
 
-isa_ok( $sprite->alpha(0.3), 'SDLx::Sprite::Animated',
-    '[alpha]  percentage works' );
+isa_ok(
+	$sprite->alpha(0.3), 'SDLx::Sprite::Animated',
+	'[alpha]  percentage works'
+);
 
 is( $clip->x, 0,  'clip->x after load' );
 is( $clip->y, 0,  'clip->y after load' );
@@ -137,8 +144,8 @@ is( $rect->w, 48, 'rect->w after third next' );
 is( $rect->h, 48, 'rect->h after third next' );
 
 $sprite = SDLx::Sprite::Animated->new(
-    image => 'test/data/hero.bmp',
-    rect  => SDL::Rect->new( 40, 50, 48, 48 ),
+	image => 'test/data/hero.bmp',
+	rect  => SDL::Rect->new( 40, 50, 48, 48 ),
 );
 
 $clip = $sprite->clip;
@@ -157,9 +164,8 @@ done_testing;
 
 #reset the old video driver
 if ($videodriver) {
-    $ENV{SDL_VIDEODRIVER} = $videodriver;
-}
-else {
-    delete $ENV{SDL_VIDEODRIVER};
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+} else {
+	delete $ENV{SDL_VIDEODRIVER};
 }
 

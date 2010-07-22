@@ -39,9 +39,9 @@ plan( skip_all => 'Old test TBD' );
 use_ok('SDL::Tool::Graphic');
 
 can_ok(
-    'SDL::Tool::Graphic', qw/
-      new zoom rotoZoom
-      /
+	'SDL::Tool::Graphic', qw/
+		new zoom rotoZoom
+		/
 );
 
 my $gtool = SDL::Tool::Graphic->new();

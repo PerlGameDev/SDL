@@ -32,7 +32,7 @@
 # basic testing of SDL::Palette
 
 BEGIN {
-    unshift @INC, 'blib/lib', 'blib/arch';
+	unshift @INC, 'blib/lib', 'blib/arch';
 }
 
 use strict;
@@ -44,13 +44,13 @@ plan( tests => 2 );
 use_ok('SDL::Game::Palette');
 
 can_ok(
-    'SDL::Game::Palette', qw/
-      new
-      size
-      red
-      green
-      blue
-      color /
+	'SDL::Game::Palette', qw/
+		new
+		size
+		red
+		green
+		blue
+		color /
 );
 
 sleep(2);
