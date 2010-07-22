@@ -41,21 +41,21 @@ plan( tests => 9 );
 use_ok('SDLx::App');
 
 can_ok(
-	'SDLx::App', qw/
-		new
-		resize
-		title
-		delay
-		ticks
-		error
-		warp
-		fullscreen
-		iconify
-		grab_input
-		loop
-		sync
-		attribute
-		/
+    'SDLx::App', qw/
+      new
+      resize
+      title
+      delay
+      ticks
+      error
+      warp
+      fullscreen
+      iconify
+      grab_input
+      loop
+      sync
+      attribute
+      /
 );
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};
@@ -63,55 +63,59 @@ $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 SKIP:
 {
-	skip 'Video not avaiable', 6 unless SDL::TestTool->init(SDL_INIT_VIDEO);
+    skip 'Video not avaiable', 6 unless SDL::TestTool->init(SDL_INIT_VIDEO);
 
-	my $app = SDLx::App->new(
-		-title  => "Test",
-		-width  => 640,
-		-height => 480,
-		-noinit => 1,
-	);
+    my $app = SDLx::App->new(
+        -title  => "Test",
+        -width  => 640,
+        -height => 480,
+        -noinit => 1,
+    );
 
-	$app->sync;
-	sleep(1);
-	pass 'App inited';
-	isa_ok( $app, 'SDLx::Surface', 'SDLx::App is a SDLx::Surface' );
-	ok( !eval { $app->resize( 640, 480 ); 1 },
-		"can't resize with no -resizeable"
-	);
-	like( $@, qr/not resizable/, "check for error message" );
-	$app = undef;
-	SDL::quit;
+    $app->sync;
+    sleep(1);
+    pass 'App inited';
+    isa_ok( $app, 'SDLx::Surface', 'SDLx::App is a SDLx::Surface' );
+    ok(
+        !eval { $app->resize( 640, 480 ); 1 },
+        "can't resize with no -resizeable"
+    );
+    like( $@, qr/not resizable/, "check for error message" );
+    $app = undef;
+    SDL::quit;
 
-	my $app2 = SDLx::App->new(
-		-title      => "Test",
-		-width      => 640,
-		-height     => 480,
-		-resizeable => 1,
-		-noinit     => 1,
+    my $app2 = SDLx::App->new(
+        -title      => "Test",
+        -width      => 640,
+        -height     => 480,
+        -resizeable => 1,
+        -noinit     => 1,
 
-	);
-	$app2->sync;
+    );
+    $app2->sync;
 
-	my $driver = SDL::Video::video_driver_name();
+    my $driver = SDL::Video::video_driver_name();
 
-	#should really check for all drivers that don't support resize
-	skip "Video driver $driver doesn't support resize", 3
-		if ( $driver eq 'fbcon' || $driver eq 'dummy' );
+    #should really check for all drivers that don't support resize
+    skip "Video driver $driver doesn't support resize", 3
+      if ( $driver eq 'fbcon' || $driver eq 'dummy' );
 
-	ok( eval { $app2->resize( 640, 480 ); 1 },
-		"succeed at resize with $driver"
-	);
-	ok( !eval { $app2->resize( -1, -1 ); 1 },
-		"fail to resize to bad size with $driver"
-	);
-	like( $@, qr/cannot set video/, "check error message" );
+    ok(
+        eval { $app2->resize( 640, 480 ); 1 },
+        "succeed at resize with $driver"
+    );
+    ok(
+        !eval { $app2->resize( -1, -1 ); 1 },
+        "fail to resize to bad size with $driver"
+    );
+    like( $@, qr/cannot set video/, "check error message" );
 }
 
 if ($videodriver) {
-	$ENV{SDL_VIDEODRIVER} = $videodriver;
-} else {
-	delete $ENV{SDL_VIDEODRIVER};
+    $ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else {
+    delete $ENV{SDL_VIDEODRIVER};
 }
 
 sleep(2);

@@ -15,8 +15,8 @@ bootstrap SDL::Net;
 use base 'Exporter';
 our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::Net'} };
 our %EXPORT_TAGS = (
-	all      => \@EXPORT,
-	defaults => $SDL::Constants::EXPORT_TAGS{'SDL::Net/defaults'}
+    all      => \@EXPORT,
+    defaults => $SDL::Constants::EXPORT_TAGS{'SDL::Net/defaults'}
 );
 
 1;

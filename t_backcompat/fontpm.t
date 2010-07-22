@@ -32,7 +32,7 @@
 # basic testing of SDL::Font
 
 BEGIN {
-	unshift @INC, 'blib/lib', 'blib/arch';
+    unshift @INC, 'blib/lib', 'blib/arch';
 }
 
 use strict;
@@ -41,9 +41,10 @@ use SDL::Config;
 use Test::More;
 
 if ( SDL::Config->has('SDL_image') ) {
-	plan( tests => 2 );
-} else {
-	plan( skip_all => 'SDL_image support not compiled' );
+    plan( tests => 2 );
+}
+else {
+    plan( skip_all => 'SDL_image support not compiled' );
 }
 
 use_ok('SDL::Font');

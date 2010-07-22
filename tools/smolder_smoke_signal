@@ -1,18 +1,19 @@
 #!/usr/bin/perl 
 
 eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
-	if 0; # not running under some shell
+  if 0;    # not running under some shell
 use strict;
 use warnings;
 use Getopt::Long;
 use Pod::Usage;
 
 BEGIN {
-	eval { require WWW::Mechanize };
-	if ($@) {
-		warn "\nCannot load WWW::Mechanize. " . "\nPlease install it before using smolder_smoke_signal.\n";
-		exit(1);
-	}
+    eval { require WWW::Mechanize };
+    if ($@) {
+        warn "\nCannot load WWW::Mechanize. "
+          . "\nPlease install it before using smolder_smoke_signal.\n";
+        exit(1);
+    }
 }
 
 =pod
@@ -110,38 +111,40 @@ Print verbose output of our actions to STDOUT.
 =cut
 
 # default options
-my ($server,   $project, $user,     $pw,      $file, $arch,
-	$platform, $tags,    $comments, $verbose, $rev,  $port
+my (
+    $server,   $project, $user,     $pw,      $file, $arch,
+    $platform, $tags,    $comments, $verbose, $rev,  $port
 );
 my ( $help, $man );
 
 GetOptions(
-	'server=s'       => \$server,
-	'port=s'         => \$port,
-	'project=s'      => \$project,
-	'username=s'     => \$user,
-	'password=s'     => \$pw,
-	'file=s'         => \$file,
-	'architecture=s' => \$arch,
-	'platform=s'     => \$platform,
-	'tags=s'         => \$tags,
-	'comments=s'     => \$comments,
-	'revision=s'     => \$rev,
-	'verbose!'       => \$verbose,
-	'help'           => \$help,
-	'man'            => \$man,
+    'server=s'       => \$server,
+    'port=s'         => \$port,
+    'project=s'      => \$project,
+    'username=s'     => \$user,
+    'password=s'     => \$pw,
+    'file=s'         => \$file,
+    'architecture=s' => \$arch,
+    'platform=s'     => \$platform,
+    'tags=s'         => \$tags,
+    'comments=s'     => \$comments,
+    'revision=s'     => \$rev,
+    'verbose!'       => \$verbose,
+    'help'           => \$help,
+    'man'            => \$man,
 ) || pod2usage();
 
 if ($help) {
-	pod2usage(
-		-exitval => 0,
-		-verbose => 1,
-	);
-} elsif ($man) {
-	pod2usage(
-		-exitval => 0,
-		-verbose => 2,
-	);
+    pod2usage(
+        -exitval => 0,
+        -verbose => 1,
+    );
+}
+elsif ($man) {
+    pod2usage(
+        -exitval => 0,
+        -verbose => 2,
+    );
 }
 
 # make sure all the required fields are there
@@ -153,13 +156,14 @@ _missing_required('file')     unless $file;
 
 # make sure our file is there and is of the right type
 if ( -r $file ) {
-	unless ( $file =~ /\.tar(\.gz)?$/ ) {
-		warn "File '$file' is not of the correct type!\n";
-		exit(1);
-	}
-} else {
-	warn "File '$file' does not exist, or is not readable!\n";
-	exit(1);
+    unless ( $file =~ /\.tar(\.gz)?$/ ) {
+        warn "File '$file' is not of the correct type!\n";
+        exit(1);
+    }
+}
+else {
+    warn "File '$file' does not exist, or is not readable!\n";
+    exit(1);
 }
 
 # try and reach the smolder server
@@ -169,8 +173,9 @@ my $mech     = WWW::Mechanize->new();
 my $base_url = "http://$server:$port/app";
 eval { $mech->get($base_url) };
 unless ( $mech->status eq '200' ) {
-	warn "Could not reach $server:$port successfully. Received status " . $mech->status . "\n";
-	exit(1);
+    warn "Could not reach $server:$port successfully. Received status "
+      . $mech->status . "\n";
+    exit(1);
 }
 
 # now login
@@ -178,18 +183,19 @@ print "Trying to login with username '$user'.\n" if ($verbose);
 $mech->get( $base_url . '/public_auth/login' );
 my $form = $mech->form_name('login');
 if ( $mech->status ne '200' || !$form ) {
-	warn "Could not reach Smolder login form. Are you sure $server:$port is a Smolder server?\n";
-	exit(1);
+    warn
+"Could not reach Smolder login form. Are you sure $server:$port is a Smolder server?\n";
+    exit(1);
 }
 $mech->set_fields(
-	username => $user,
-	password => $pw,
+    username => $user,
+    password => $pw,
 );
 $mech->submit();
 my $content = $mech->content;
 if ( $mech->status ne '200' || $content !~ /Welcome \Q$user\E/ ) {
-	warn "Could not login with username '$user' and password '$pw'!\n";
-	exit(1);
+    warn "Could not login with username '$user' and password '$pw'!\n";
+    exit(1);
 }
 
 # now go to this project's page
@@ -199,8 +205,9 @@ $content = $mech->content;
 $content =~ />\Q$project\E<!--ID:(\d+)-->/;
 my $project_id = $1;
 if ( $mech->status ne '200' || !$project_id ) {
-	warn "Could not get your project listing, or you are not a member of the '$project' project!\n";
-	exit(1);
+    warn
+"Could not get your project listing, or you are not a member of the '$project' project!\n";
+    exit(1);
 }
 
 # now go to the add-smoke-report page for this project
@@ -208,8 +215,8 @@ print "Adding smoke report to project '$project'.\n" if ($verbose);
 $mech->get( $base_url . "/developer_projects/add_report/$project_id" );
 $content = $mech->content;
 if ( $mech->status ne '200' || $content !~ /New Smoke Report/ ) {
-	warn "Could not reach the Add Smoke Report form!\n";
-	exit(1);
+    warn "Could not reach the Add Smoke Report form!\n";
+    exit(1);
 }
 $mech->form_name('add_report');
 my %fields = ( report_file => $file );
@@ -223,8 +230,8 @@ $mech->submit();
 
 $content = $mech->content;
 if ( $mech->status ne '200' || $content !~ /Recent Smoke Reports/ ) {
-	warn "Could not upload smoke report with the given information!\n";
-	exit(1);
+    warn "Could not upload smoke report with the given information!\n";
+    exit(1);
 }
 $content =~ /#(\d+) Added/;
 my $report_id = $1;
@@ -235,7 +242,7 @@ print "\nReport successfully uploaded as #$report_id.\n";
 # helper methods
 ##########################################################
 sub _missing_required {
-	my $field = shift;
-	warn "Missing required field '$field'!\n";
-	pod2usage();
+    my $field = shift;
+    warn "Missing required field '$field'!\n";
+    pod2usage();
 }
