@@ -36,13 +36,13 @@ sub new {
 		$self->surface( $options{surface} );
 	} elsif ( $options{width} && $options{height} ) #atleast give a dimension
 	{
-		$options{depth} |= 32;                      #default 32
-		$options{flags} |= SDL_ANYFORMAT;
+		$options{depth} ||= 32;                      #default 32
+		$options{flags} ||= SDL_ANYFORMAT;
 
-		$options{redmask}   |= 0xFF000000;
-		$options{greenmask} |= 0x00FF0000;
-		$options{bluemask}  |= 0x0000FF00;
-		$options{alphamask} |= 0x000000FF;
+		$options{redmask}   ||= 0xFF000000;
+		$options{greenmask} ||= 0x00FF0000;
+		$options{bluemask}  ||= 0x0000FF00;
+		$options{alphamask} ||= 0x000000FF;
 
 		my $surface = SDL::Surface->new(
 			$options{flags},    $options{width},   $options{height},
