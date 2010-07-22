@@ -18,10 +18,9 @@ my $audiodriver = $ENV{SDL_AUDIODRIVER};
 $ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
-    plan( skip_all => 'Failed to init video' );
-}
-elsif ( !SDL::Config->has('SDL_image') ) {
-    plan( skip_all => 'SDL_image support not compiled' );
+	plan( skip_all => 'Failed to init video' );
+} elsif ( !SDL::Config->has('SDL_image') ) {
+	plan( skip_all => 'SDL_image support not compiled' );
 }
 
 #Make a surface
@@ -45,20 +44,18 @@ SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
 pass('[use|printe_text] switch to font and print worked');
 
 END {
-    done_testing;
+	done_testing;
 
-    #reset the old video driver
-    if ($videodriver) {
-        $ENV{SDL_VIDEODRIVER} = $videodriver;
-    }
-    else {
-        delete $ENV{SDL_VIDEODRIVER};
-    }
+	#reset the old video driver
+	if ($videodriver) {
+		$ENV{SDL_VIDEODRIVER} = $videodriver;
+	} else {
+		delete $ENV{SDL_VIDEODRIVER};
+	}
 
-    if ($audiodriver) {
-        $ENV{SDL_AUDIODRIVER} = $audiodriver;
-    }
-    else {
-        delete $ENV{SDL_AUDIODRIVER};
-    }
+	if ($audiodriver) {
+		$ENV{SDL_AUDIODRIVER} = $audiodriver;
+	} else {
+		delete $ENV{SDL_AUDIODRIVER};
+	}
 }

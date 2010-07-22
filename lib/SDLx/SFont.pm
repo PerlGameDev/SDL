@@ -12,12 +12,12 @@ use base 'Exporter';
 our @EXPORT = ('SDL_TEXTWIDTH');
 
 sub SDL_TEXTWIDTH {
-    return SDLx::SFont::TextWidth( join( '', @_ ) );
+	return SDLx::SFont::TextWidth( join( '', @_ ) );
 }
 
-sub print_text {    #print is a horrible name for this
-    my ( $surf, $x, $y, @text ) = @_;
-    SDLx::SFont::print_string( $surf, $x, $y, join( '', @text ) );
+sub print_text { #print is a horrible name for this
+	my ( $surf, $x, $y, @text ) = @_;
+	SDLx::SFont::print_string( $surf, $x, $y, join( '', @text ) );
 }
 
 bootstrap SDLx::SFont;

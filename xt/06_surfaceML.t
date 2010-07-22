@@ -29,7 +29,7 @@
 # Memory leaks testing
 
 BEGIN {
-    unshift @INC, 'blib/lib', 'blib/arch';
+	unshift @INC, 'blib/lib', 'blib/arch';
 }
 
 use strict;
@@ -38,41 +38,40 @@ use Test::More;
 
 # Don't run tests for installs
 unless ( $ENV{AUTOMATED_TESTING} or $ENV{RELEASE_TESTING} ) {
-    plan( skip_all => "Author tests not required for installation" );
+	plan( skip_all => "Author tests not required for installation" );
 }
 
 # This is stolen for Gabor's examples in padre's SDL plugin
 sub surface_leak() {
-    use SDL;
-    use SDLx::App;
-    use SDL::Rect;
-    use SDL::Color;
+	use SDL;
+	use SDLx::App;
+	use SDL::Rect;
+	use SDL::Color;
 
-    my $window = SDLx::App->new(
-        -width  => 640,
-        -height => 480,
-        -depth  => 16,
-        -title  => 'SDL Demo',
-        -init   => SDL_INIT_VIDEO
+	my $window = SDLx::App->new(
+		-width  => 640,
+		-height => 480,
+		-depth  => 16,
+		-title  => 'SDL Demo',
+		-init   => SDL_INIT_VIDEO
 
-    );
+	);
 
-    my $rect = SDL::Rect->new( 0, 0, 10, 20 );
+	my $rect = SDL::Rect->new( 0, 0, 10, 20 );
 
-    my $blue = SDL::Color->new(
-        -r => 0x00,
-        -g => 0x00,
-        -b => 0xff,
-    );
-    $window->fill( $rect, $blue );
-    $window->update($rect);
+	my $blue = SDL::Color->new(
+		-r => 0x00,
+		-g => 0x00,
+		-b => 0xff,
+	);
+	$window->fill( $rect, $blue );
+	$window->update($rect);
 
 }
 
 eval 'use Test::Valgrind';
-plan skip_all =>
-  'Test::Valgrind is required to test your distribution with valgrind'
-  if $@;
+plan skip_all => 'Test::Valgrind is required to test your distribution with valgrind'
+	if $@;
 
 surface_leak();
 

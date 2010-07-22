@@ -32,7 +32,7 @@
 # basic testing of SDL::Sound
 
 BEGIN {
-    unshift @INC, 'blib/lib', 'blib/arch';
+	unshift @INC, 'blib/lib', 'blib/arch';
 }
 
 use strict;
@@ -45,10 +45,10 @@ plan( tests => 2 );
 use_ok('SDL::Sound');
 
 can_ok(
-    'SDL::Sound', qw/
-      new
-      volume
-      /
+	'SDL::Sound', qw/
+		new
+		volume
+		/
 );
 
 sleep(2);

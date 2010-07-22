@@ -11,19 +11,19 @@ our $VERSION = '0.01';
 # all the classes will also inherit the evt_manager,
 # so we won't have to pass it around everywhere
 my $evt_manager = SDL::Tutorial::MoP::EventManager->new();
-sub evt_manager { $evt_manager }
+sub evt_manager {$evt_manager}
 
 sub new {
-    my ( $class, %params ) = (@_);
+	my ( $class, %params ) = (@_);
 
-    my $self = bless {%params}, $class;
+	my $self = bless {%params}, $class;
 
-    # all controllers must register a listener
-    $self->evt_manager->reg_listener($self);
+	# all controllers must register a listener
+	$self->evt_manager->reg_listener($self);
 
-    $self->init(%params) if $self->can('init');
+	$self->init(%params) if $self->can('init');
 
-    return $self;
+	return $self;
 }
 
 1;

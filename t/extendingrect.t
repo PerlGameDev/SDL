@@ -2,19 +2,19 @@ package MyRect;
 use base 'SDL::Rect';
 
 sub new {
-    my $class = shift;
-    my $self  = $class->SUPER::new(@_);
-    unless ( ref $self ) {
-        require Carp;
-        Carp::croak SDL::GetError();
-    }
-    return bless $self => $class;
+	my $class = shift;
+	my $self  = $class->SUPER::new(@_);
+	unless ( ref $self ) {
+		require Carp;
+		Carp::croak SDL::GetError();
+	}
+	return bless $self => $class;
 
 }
 
 sub foo {
-    my $self = shift;
-    return $self->x;
+	my $self = shift;
+	return $self->x;
 }
 
 package main;

@@ -8,15 +8,15 @@ use SDL::Tutorial::MoP::Controller::CPUSpinner;
 use SDL::Tutorial::MoP::Controller::Game;
 
 BEGIN {
-    use Exporter ();
-    use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-    $VERSION = '0.01';
-    @ISA     = qw(Exporter);
+	use Exporter ();
+	use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+	$VERSION = '0.01';
+	@ISA     = qw(Exporter);
 
-    #Give a hoot don't pollute, do not export more than needed by default
-    @EXPORT      = qw();
-    @EXPORT_OK   = qw();
-    %EXPORT_TAGS = ();
+	#Give a hoot don't pollute, do not export more than needed by default
+	@EXPORT      = qw();
+	@EXPORT_OK   = qw();
+	%EXPORT_TAGS = ();
 }
 
 #################### subroutine header begin ####################
@@ -38,28 +38,28 @@ See Also   :
 #################### subroutine header end ####################
 
 sub new {
-    my ( $class, %parameters ) = @_;
+	my ( $class, %parameters ) = @_;
 
-    my $self = bless( {}, ref($class) || $class );
+	my $self = bless( {}, ref($class) || $class );
 
-    return $self;
+	return $self;
 }
 
 sub play {
-    my ( $class, $EDEBUG, $KEYDEBUG, $GDEBUG, $FPS ) = @_;
+	my ( $class, $EDEBUG, $KEYDEBUG, $GDEBUG, $FPS ) = @_;
 
-    my $keybd    = SDL::Tutorial::MoP::Controller::Keyboard->new();
-    my $spinner  = SDL::Tutorial::MoP::Controller::CPUSpinner->new();
-    my $gameView = SDL::Tutorial::MoP::View::Game->new();
+	my $keybd    = SDL::Tutorial::MoP::Controller::Keyboard->new();
+	my $spinner  = SDL::Tutorial::MoP::Controller::CPUSpinner->new();
+	my $gameView = SDL::Tutorial::MoP::View::Game->new();
 
-    my $game = SDL::Tutorial::MoP::Controller::Game->new(
-        EDEBUG   => ${EDEBUG},
-        GDEBUG   => ${GDEBUG},
-        KEYDEBUG => ${KEYDEBUG},
-        FPS      => $FPS,
-    );
+	my $game = SDL::Tutorial::MoP::Controller::Game->new(
+		EDEBUG   => ${EDEBUG},
+		GDEBUG   => ${GDEBUG},
+		KEYDEBUG => ${KEYDEBUG},
+		FPS      => $FPS,
+	);
 
-    $spinner->run;
+	$spinner->run;
 }
 
 SDL::Tutorial::MoP->play(@ARGV) unless caller;

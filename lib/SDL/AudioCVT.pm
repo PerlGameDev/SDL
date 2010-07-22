@@ -15,9 +15,9 @@ bootstrap SDL::AudioCVT;
 use base 'Exporter';
 our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::Audio'} };
 our %EXPORT_TAGS = (
-    all    => \@EXPORT,
-    format => $SDL::Constants::EXPORT_TAGS{'SDL::Audio/format'},
-    status => $SDL::Constants::EXPORT_TAGS{'SDL::Audio/status'}
+	all    => \@EXPORT,
+	format => $SDL::Constants::EXPORT_TAGS{'SDL::Audio/format'},
+	status => $SDL::Constants::EXPORT_TAGS{'SDL::Audio/status'}
 );
 
 1;

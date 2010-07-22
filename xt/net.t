@@ -14,13 +14,13 @@ use SDL::TestTool;
 =cut
 
 if ( !SDL::Config->has('SDL_net') ) {
-    plan( skip_all => 'SDL_net support not compiled' );
+	plan( skip_all => 'SDL_net support not compiled' );
 }
 
 my @done = qw/
-  init
-  quit
-  /;
+	init
+	quit
+	/;
 
 can_ok( 'SDL::Net', @done );
 
@@ -32,22 +32,22 @@ is( 0, SDL::Net::init(), '[init] SDL net is inited' );
 SDL::Net::quit();
 pass('[quit] SDL net quit');
 my @left = qw/
-  read16
-  write16
-  read32
-  write32
-  /;
+	read16
+	write16
+	read32
+	write32
+	/;
 
 my $why =
-    '[Percentage Completion] '
-  . int( 100 * $#done / ( $#done + $#left ) )
-  . "\% implementation. $#done / "
-  . ( $#done + $#left );
+	  '[Percentage Completion] '
+	. int( 100 * $#done / ( $#done + $#left ) )
+	. "\% implementation. $#done / "
+	. ( $#done + $#left );
 
 TODO:
 {
-    local $TODO = $why;
-    pass "\nThe following functions:\n" . join ",", @left;
+	local $TODO = $why;
+	pass "\nThe following functions:\n" . join ",", @left;
 }
 if   ( $done[0] eq 'none' ) { diag '0% done 0/' . $#left }
 else                        { diag $why}

@@ -15,30 +15,30 @@ bootstrap SDL::CD;
 use base 'Exporter';
 our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::CDROM'} };
 our %EXPORT_TAGS = (
-    all        => \@EXPORT,
-    format     => $SDL::Constants::EXPORT_TAGS{'SDL::CDROM/default'},
-    status     => $SDL::Constants::EXPORT_TAGS{'SDL::CDROM/status'},
-    track_type => $SDL::Constants::EXPORT_TAGS{'SDL::CDROM/track_type'}
+	all        => \@EXPORT,
+	format     => $SDL::Constants::EXPORT_TAGS{'SDL::CDROM/default'},
+	status     => $SDL::Constants::EXPORT_TAGS{'SDL::CDROM/status'},
+	track_type => $SDL::Constants::EXPORT_TAGS{'SDL::CDROM/track_type'}
 );
 
 # Conversion functions from frames to Minute/Second/Frames and vice versa
 sub FRAMES_TO_MSF {
-    my $frames = shift;
-    my $F      = $frames % CD_FPS;
-    $frames /= CD_FPS;
-    my $S = $frames % 60;
-    $frames /= 60;
-    my $M = $frames;
+	my $frames = shift;
+	my $F      = $frames % CD_FPS;
+	$frames /= CD_FPS;
+	my $S = $frames % 60;
+	$frames /= 60;
+	my $M = $frames;
 
-    return ( $M, $S, $F );
+	return ( $M, $S, $F );
 }
 
 sub MSF_TO_FRAMES {
-    my $M = shift;
-    my $S = shift;
-    my $F = shift;
+	my $M = shift;
+	my $S = shift;
+	my $F = shift;
 
-    return ( $M * 60 * CD_FPS + $S * CD_FPS + $F );
+	return ( $M * 60 * CD_FPS + $S * CD_FPS + $F );
 }
 
 1;
