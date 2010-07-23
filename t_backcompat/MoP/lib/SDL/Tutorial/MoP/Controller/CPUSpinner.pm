@@ -6,41 +6,41 @@ use warnings;
 use base 'SDL::Tutorial::MoP::Base';
 
 sub init {
-	my $self = shift;
-	$self->{keep_going} ||= 1;
+    my $self = shift;
+    $self->{keep_going} ||= 1;
 }
 
 sub run {
-	my $self = shift;
-	while ( $self->{keep_going} == 1 ) {
-		$self->evt_manager->post( { name => 'Tick' } );
-	}
+    my $self = shift;
+    while ( $self->{keep_going} == 1 ) {
+        $self->evt_manager->post( { name => 'Tick' } );
+    }
 }
 
 sub notify {
-	my ( $self, $event ) = (@_);
+    my ( $self, $event ) = (@_);
 
-	print "Notify in CPU Spinner \n" if $self->{EDEBUG};
+    print "Notify in CPU Spinner \n" if $self->{EDEBUG};
 
-	my %event_method = ( 'Quit' => '_quit', );
+    my %event_method = ( 'Quit' => '_quit', );
 
-	my $method = $event_method{ $event->{name} };
+    my $method = $event_method{ $event->{name} };
 
-	if ( defined $method ) {
-		print "Event: $event->{name}\n" if $self->{EDEBUG};
+    if ( defined $method ) {
+        print "Event: $event->{name}\n" if $self->{EDEBUG};
 
-		# call the corresponding method
-		$self->$method();
-	}
+        # call the corresponding method
+        $self->$method();
+    }
 
-	#if we did not have a tick event then some other controller needs to do
-	#something so game state is still beign process we cannot have new input
-	#now
+    #if we did not have a tick event then some other controller needs to do
+    #something so game state is still beign process we cannot have new input
+    #now
 }
 
 sub _quit {
-	my $self = shift;
-	$self->{keep_going} = 0;
+    my $self = shift;
+    $self->{keep_going} = 0;
 }
 
 1;

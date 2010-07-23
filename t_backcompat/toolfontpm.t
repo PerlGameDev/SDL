@@ -32,7 +32,7 @@
 # basic testing of SDL::Tool::Font
 
 BEGIN {
-	unshift @INC, 'blib/lib', 'blib/arch';
+    unshift @INC, 'blib/lib', 'blib/arch';
 }
 
 use strict;
@@ -43,36 +43,37 @@ use Test::More;
 plan( skip_all => "Failing test due to moving stuff around" );
 
 if (   SDL::Config->has('SDL_image')
-	&& SDL::Config->has('SDL_ttf') )
+    && SDL::Config->has('SDL_ttf') )
 {
-	plan( tests => 2 );
-} else {
-	plan(
-		skip_all => (
-			SDL::Config->has('SDL_image') ? ''
-			: ' SDL_image support not compiled'
-			)
-			. (
-			SDL::Config->has('SDL_ttf') ? ''
-			: ' SDL_ttf support not compiled'
-			)
-	);
+    plan( tests => 2 );
+}
+else {
+    plan(
+        skip_all => (
+            SDL::Config->has('SDL_image') ? ''
+            : ' SDL_image support not compiled'
+          )
+          . (
+            SDL::Config->has('SDL_ttf') ? ''
+            : ' SDL_ttf support not compiled'
+          )
+    );
 }
 
 use_ok('SDL::Tool::Font');
 
 can_ok(
-	'SDL::Tool::Font', qw/
-		new
-		print
-		/
+    'SDL::Tool::Font', qw/
+      new
+      print
+      /
 );
 my $font = SDL::Tool::Font->new(
-	-normal => 1,
-	-ttfont => 'test/data/aircut3.ttf',
-	-size   => 20,
-	-fg     => $SDL::Color::black,
-	-bg     => $SDL::Color::black
+    -normal => 1,
+    -ttfont => 'test/data/aircut3.ttf',
+    -size   => 20,
+    -fg     => $SDL::Color::black,
+    -bg     => $SDL::Color::black
 );
 
 #use utf8;

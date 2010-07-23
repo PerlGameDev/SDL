@@ -5,7 +5,7 @@
 #
 
 BEGIN {
-	unshift @INC, 'blib/lib', 'blib/arch';
+    unshift @INC, 'blib/lib', 'blib/arch';
 }
 
 use strict;
@@ -26,9 +26,10 @@ my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
-	plan( skip_all => 'Failed to init video' );
-} else {
-	plan( tests => 41 );
+    plan( skip_all => 'Failed to init video' );
+}
+else {
+    plan( tests => 41 );
 }
 
 my $surface = SDL::Surface->new( SDL_ANYFORMAT, 640, 320, 8, 0, 0, 0, 0 );
@@ -83,10 +84,10 @@ ok( 1, 'Managed to blit' );
 #ok( 1, 'Managed to update_rects' );
 
 my $app = SDLx::App->new(
-	-title  => "Test",
-	-width  => 640,
-	-height => 480,
-	-init   => SDL_INIT_VIDEO
+    -title  => "Test",
+    -width  => 640,
+    -height => 480,
+    -init   => SDL_INIT_VIDEO
 );
 
 pass 'did this pass';
@@ -109,9 +110,10 @@ SDL::Video::update_rect( $app, 0, 0, 0, 0 );
 
 SDL::Video::update_rects( $app, $small_rect );
 
-my $ref           = $surface->get_pixels_ptr;
-my $other_surface = SDL::Surface->new_from( $ref, 640, 320, 8, $surface->pitch, 0, 0, 0, 0 );
-my $get_pixel     = $surface->get_pixel(0);
+my $ref = $surface->get_pixels_ptr;
+my $other_surface =
+  SDL::Surface->new_from( $ref, 640, 320, 8, $surface->pitch, 0, 0, 0, 0 );
+my $get_pixel = $surface->get_pixel(0);
 ok( $get_pixel >= 0, "[get_pixel] returns integer ($get_pixel)" );
 $surface->set_pixels( 0, 42 );
 pass '[set_pixel] first pixel to 42';
@@ -124,9 +126,10 @@ is( $other_surface->h, $surface->h, '[neh_form] have same h' );
 #TODO: Added more comparison stuff
 
 if ($videodriver) {
-	$ENV{SDL_VIDEODRIVER} = $videodriver;
-} else {
-	delete $ENV{SDL_VIDEODRIVER};
+    $ENV{SDL_VIDEODRIVER} = $videodriver;
+}
+else {
+    delete $ENV{SDL_VIDEODRIVER};
 }
 
 pass 'Final SegFault test';

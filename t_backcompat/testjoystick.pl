@@ -15,170 +15,196 @@ use SDL::Rect;
 use SDL::Event;
 
 sub WatchJoystick($) {
-	( my $joystick ) = @_;
-	my $screenWidth  = 640;
-	my $screenHeight = 480;
+    ( my $joystick ) = @_;
+    my $screenWidth  = 640;
+    my $screenHeight = 480;
 
-	my $app = SDLx::App->new(
-		-title  => "Joystick Test",
-		-width  => $screenWidth,
-		-height => $screenHeight,
-		-depth  => 16
-	);
+    my $app = SDLx::App->new(
+        -title  => "Joystick Test",
+        -width  => $screenWidth,
+        -height => $screenHeight,
+        -depth  => 16
+    );
 
-	#Print information about the joystick we are watching
-	my $name = SDL::JoystickName( SDL::JoystickIndex($joystick) );
-	print "Watching joystick " . SDL::JoystickIndex($joystick) . ": (" . ( $name ? $name : "Unknown Joystick" ) . ")\n";
-	print "Joystick has "
-		. SDL::JoystickNumAxes($joystick)
-		. " axes, "
-		. SDL::JoystickNumHats($joystick)
-		. " hats, "
-		. SDL::JoystickNumBalls($joystick)
-		. " balls, and "
-		. SDL::JoystickNumButtons($joystick)
-		. " buttons\n";
+    #Print information about the joystick we are watching
+    my $name = SDL::JoystickName( SDL::JoystickIndex($joystick) );
+    print "Watching joystick "
+      . SDL::JoystickIndex($joystick) . ": ("
+      . ( $name ? $name : "Unknown Joystick" ) . ")\n";
+    print "Joystick has "
+      . SDL::JoystickNumAxes($joystick)
+      . " axes, "
+      . SDL::JoystickNumHats($joystick)
+      . " hats, "
+      . SDL::JoystickNumBalls($joystick)
+      . " balls, and "
+      . SDL::JoystickNumButtons($joystick)
+      . " buttons\n";
 
-	my $event      = SDL::Event->new;
-	my $done       = 0;
-	my $colorWhite = SDL::Color->new( -r => 255, -g => 255, -b => 255 );
-	my $colorBlack = SDL::Color->new();
-	my @axisRect   = ();
-	my $numAxes    = SDL::JoystickNumAxes($joystick);
+    my $event      = SDL::Event->new;
+    my $done       = 0;
+    my $colorWhite = SDL::Color->new( -r => 255, -g => 255, -b => 255 );
+    my $colorBlack = SDL::Color->new();
+    my @axisRect   = ();
+    my $numAxes    = SDL::JoystickNumAxes($joystick);
 
-	while ( !$done ) {
-		while ( $event->poll() ) {
-			if ( $event->type() eq SDL_JOYAXISMOTION ) {
-				print "Joystick "
-					. SDL::JoyAxisEventWhich($$event)
-					. " axis "
-					. SDL::JoyAxisEventAxis($$event)
-					. " value: "
-					. SDL::JoyAxisEventValue($$event) . "\n";
-			} elsif ( $event->type() eq SDL_JOYHATMOTION ) {
-				print "Joystick " . SDL::JoyHatEventWhich($$event) . " hat " . SDL::JoyHatEventHat($$event);
-				if ( SDL::JoyHatEventValue($$event) == SDL_HAT_CENTERED() ) {
-					print " centered";
-				} elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_UP() ) {
-					print " up";
-				} elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_RIGHT() ) {
-					print " right";
-				} elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_DOWN() ) {
-					print " down";
-				} elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_LEFT() ) {
-					print " left";
-				} elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_RIGHTUP() ) {
-					print " right & up";
-				} elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_RIGHTDOWN() ) {
-					print " right & down";
-				} elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_LEFTDOWN() ) {
-					print " left & down";
-				} elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_LEFTUP() ) {
-					print " left & up";
-				}
-				print "\n";
-			} elsif ( $event->type() eq SDL_JOYBALLMOTION ) {
-				print "Joystick "
-					. SDL::JoyBallEventWhich($$event)
-					. " ball "
-					. SDL::JoyBallEventBall($$event)
-					. " delta: ("
-					. SDL::JoyBallEventXrel($$event) . ","
-					. SDL::JoyBallEventYrel($$event) . "\n";
-			} elsif ( $event->type() eq SDL_JOYBUTTONDOWN ) {
-				print "Joystick "
-					. SDL::JoyButtonEventWhich($$event)
-					. " button "
-					. SDL::JoyButtonEventButton($$event)
-					. " down\n";
-			} elsif ( $event->type() eq SDL_JOYBUTTONUP ) {
-				print "Joystick "
-					. SDL::JoyButtonEventWhich($$event)
-					. " button "
-					. SDL::JoyButtonEventButton($$event) . " up\n";
-			} elsif (
-				$event->type() eq SDL_QUIT
-				or (    $event->type() eq SDL_KEYDOWN
-					and $event->key_sym() == SDLK_ESCAPE )
-				)
-			{
-				$done = 1;
-			}
+    while ( !$done ) {
+        while ( $event->poll() ) {
+            if ( $event->type() eq SDL_JOYAXISMOTION ) {
+                print "Joystick "
+                  . SDL::JoyAxisEventWhich($$event)
+                  . " axis "
+                  . SDL::JoyAxisEventAxis($$event)
+                  . " value: "
+                  . SDL::JoyAxisEventValue($$event) . "\n";
+            }
+            elsif ( $event->type() eq SDL_JOYHATMOTION ) {
+                print "Joystick "
+                  . SDL::JoyHatEventWhich($$event) . " hat "
+                  . SDL::JoyHatEventHat($$event);
+                if ( SDL::JoyHatEventValue($$event) == SDL_HAT_CENTERED() ) {
+                    print " centered";
+                }
+                elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_UP() ) {
+                    print " up";
+                }
+                elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_RIGHT() ) {
+                    print " right";
+                }
+                elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_DOWN() ) {
+                    print " down";
+                }
+                elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_LEFT() ) {
+                    print " left";
+                }
+                elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_RIGHTUP() ) {
+                    print " right & up";
+                }
+                elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_RIGHTDOWN() )
+                {
+                    print " right & down";
+                }
+                elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_LEFTDOWN() ) {
+                    print " left & down";
+                }
+                elsif ( SDL::JoyHatEventValue($$event) == SDL_HAT_LEFTUP() ) {
+                    print " left & up";
+                }
+                print "\n";
+            }
+            elsif ( $event->type() eq SDL_JOYBALLMOTION ) {
+                print "Joystick "
+                  . SDL::JoyBallEventWhich($$event)
+                  . " ball "
+                  . SDL::JoyBallEventBall($$event)
+                  . " delta: ("
+                  . SDL::JoyBallEventXrel($$event) . ","
+                  . SDL::JoyBallEventYrel($$event) . "\n";
+            }
+            elsif ( $event->type() eq SDL_JOYBUTTONDOWN ) {
+                print "Joystick "
+                  . SDL::JoyButtonEventWhich($$event)
+                  . " button "
+                  . SDL::JoyButtonEventButton($$event)
+                  . " down\n";
+            }
+            elsif ( $event->type() eq SDL_JOYBUTTONUP ) {
+                print "Joystick "
+                  . SDL::JoyButtonEventWhich($$event)
+                  . " button "
+                  . SDL::JoyButtonEventButton($$event) . " up\n";
+            }
+            elsif (
+                $event->type() eq SDL_QUIT
+                or (    $event->type() eq SDL_KEYDOWN
+                    and $event->key_sym() == SDLK_ESCAPE )
+              )
+            {
+                $done = 1;
+            }
 
-			#Update visual joystick state
-			for ( my $i = 0; $i < SDL::JoystickNumButtons($joystick); $i++ ) {
-				my $rect = SDL::Rect->new(
-					-width  => 32,
-					-height => 32,
-					-x      => $i * 34,
-					-y      => $screenHeight - 34
-				);
-				if ( SDL::JoystickGetButton( $joystick, $i ) eq SDL_PRESSED ) {
-					$app->fill( $rect, $colorWhite );
-				} else {
-					$app->fill( $rect, $colorBlack );
-				}
-				$app->update($rect);
-			}
+            #Update visual joystick state
+            for ( my $i = 0 ; $i < SDL::JoystickNumButtons($joystick) ; $i++ ) {
+                my $rect = SDL::Rect->new(
+                    -width  => 32,
+                    -height => 32,
+                    -x      => $i * 34,
+                    -y      => $screenHeight - 34
+                );
+                if ( SDL::JoystickGetButton( $joystick, $i ) eq SDL_PRESSED ) {
+                    $app->fill( $rect, $colorWhite );
+                }
+                else {
+                    $app->fill( $rect, $colorBlack );
+                }
+                $app->update($rect);
+            }
 
-			for ( my $i = 0; $i < $numAxes; $i += 1 ) {
+            for ( my $i = 0 ; $i < $numAxes ; $i += 1 ) {
 
-				#Remove previous axis box
-				if ( $axisRect[$i] ) {
-					$app->fill( $axisRect[$i], $colorBlack );
-					$app->update( $axisRect[$i] );
-				}
+                #Remove previous axis box
+                if ( $axisRect[$i] ) {
+                    $app->fill( $axisRect[$i], $colorBlack );
+                    $app->update( $axisRect[$i] );
+                }
 
-				# Draw the axis
-				my $ox = SDL::JoystickGetAxis( $joystick, $i );
-				my $x = abs( $ox / 256 );
-				if ( $x < 0 ) {
-					$x = 0;
-				} elsif ( $x > ( $screenWidth - 16 ) ) {
-					$x = $screenWidth - 16;
-				}
+                # Draw the axis
+                my $ox = SDL::JoystickGetAxis( $joystick, $i );
+                my $x = abs( $ox / 256 );
+                if ( $x < 0 ) {
+                    $x = 0;
+                }
+                elsif ( $x > ( $screenWidth - 16 ) ) {
+                    $x = $screenWidth - 16;
+                }
 
-				if ( $ox < 0 ) {
-					$axisRect[$i] = SDL::Rect->new(
-						-width  => $x,
-						-height => 32,
-						-x      => ( $screenWidth / 2 ) - $x,
-						-y      => $i * 34
-					);
-				} else {
-					$axisRect[$i] = SDL::Rect->new(
-						-width  => $x,
-						-height => 32,
-						-x      => $screenWidth / 2,
-						-y      => $i * 34
-					);
-				}
+                if ( $ox < 0 ) {
+                    $axisRect[$i] = SDL::Rect->new(
+                        -width  => $x,
+                        -height => 32,
+                        -x      => ( $screenWidth / 2 ) - $x,
+                        -y      => $i * 34
+                    );
+                }
+                else {
+                    $axisRect[$i] = SDL::Rect->new(
+                        -width  => $x,
+                        -height => 32,
+                        -x      => $screenWidth / 2,
+                        -y      => $i * 34
+                    );
+                }
 
-				$app->fill( $axisRect[$i], $colorWhite );
-				$app->update( $axisRect[$i] );
-			}
-		}
-	}
+                $app->fill( $axisRect[$i], $colorWhite );
+                $app->update( $axisRect[$i] );
+            }
+        }
+    }
 }
 
 die "Could not initialize SDL: ", SDL::GetError()
-	if ( 0 > SDL::Init( SDL_INIT_JOYSTICK() ) );
+  if ( 0 > SDL::Init( SDL_INIT_JOYSTICK() ) );
 
 printf "There are %d joysticks attched\n", SDL::NumJoysticks();
-for ( my $i = 0; $i < SDL::NumJoysticks(); $i++ ) {
-	my $name = SDL::JoystickName($i);
-	print "Joystick " . $i . ": " . ( $name ? $name : "Unknown Joystick" ) . "\n";
+for ( my $i = 0 ; $i < SDL::NumJoysticks() ; $i++ ) {
+    my $name = SDL::JoystickName($i);
+    print "Joystick " 
+      . $i . ": "
+      . ( $name ? $name : "Unknown Joystick" ) . "\n";
 }
 
 if ( $ARGV[0] ne undef ) {
-	my $joystick = SDL::JoystickOpen( $ARGV[0] );
-	if ( !$joystick ) {
-		print "Couldn't open joystick " . $ARGV[0] . ": " . SDL::GetError() . "\n";
-	} else {
-		WatchJoystick($joystick);
-		SDL::JoystickClose($joystick);
-	}
-	SDL::QuitSubSystem( SDL_INIT_JOYSTICK() );
+    my $joystick = SDL::JoystickOpen( $ARGV[0] );
+    if ( !$joystick ) {
+        print "Couldn't open joystick "
+          . $ARGV[0] . ": "
+          . SDL::GetError() . "\n";
+    }
+    else {
+        WatchJoystick($joystick);
+        SDL::JoystickClose($joystick);
+    }
+    SDL::QuitSubSystem( SDL_INIT_JOYSTICK() );
 }
 
 exit;

@@ -15,9 +15,9 @@ bootstrap SDL::TTF::Font;
 use base 'Exporter';
 our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::TTF'} };
 our %EXPORT_TAGS = (
-	all     => \@EXPORT,
-	hinting => $SDL::Constants::EXPORT_TAGS{'SDL::TTF/hinting'},
-	style   => $SDL::Constants::EXPORT_TAGS{'SDL::TTF/style'}
+    all     => \@EXPORT,
+    hinting => $SDL::Constants::EXPORT_TAGS{'SDL::TTF/hinting'},
+    style   => $SDL::Constants::EXPORT_TAGS{'SDL::TTF/style'}
 );
 
 1;

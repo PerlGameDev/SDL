@@ -3,7 +3,7 @@
 
 open XS, "< sdl_words.txt" or die "could not open sdl_words.txt\n";
 open CPP, "| cpp `sdl-config --cflags` - > SDL.cx"
-	or die "Could not pipe to cpp, $!\n";
+  or die "Could not pipe to cpp, $!\n";
 
 print CPP <<HEADER;
 #include <SDL.h>
@@ -21,9 +21,9 @@ print CPP <<HEADER;
 HEADER
 
 while (<XS>) {
-	chomp();
-	print CPP "#$_ $_\n";
-	$words{$_} = 0;
+    chomp();
+    print CPP "#$_ $_\n";
+    $words{$_} = 0;
 }
 
 close XS;
@@ -58,7 +58,7 @@ main ( int argc, char **argv ) {
 HERE
 
 for ( grep { $words{$_} == 0 } keys %words ) {
-	print FP <<THERE;
+    print FP <<THERE;
 	fprintf(stdout,"sub main::$_ { \%i }\n", $_);
 THERE
 
@@ -73,21 +73,21 @@ system("gcc `sdl-config --cflags --libs` -o sdl_const sdl_const.c");
 my $enums;
 open ENUMS, "./sdl_const |";
 {
-	local $/ = undef;
-	$enums = <ENUMS>;
+    local $/ = undef;
+    $enums = <ENUMS>;
 }
 close ENUMS;
 
 $goodstuff .= "\n$enums";
 
 for ( split "\n", $goodstuff ) {
-	if (/sub\s+main::([A-Za-z0-9_]+)/) {
-		$words{$1} = 1;
-	}
+    if (/sub\s+main::([A-Za-z0-9_]+)/) {
+        $words{$1} = 1;
+    }
 }
 
 for ( keys %words ) {
-	print STDERR "Failed to find $_\n" unless $words{$_};
+    print STDERR "Failed to find $_\n" unless $words{$_};
 }
 
 (@words) = grep { $words{$_} == 1 } keys %words;

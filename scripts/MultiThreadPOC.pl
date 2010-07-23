@@ -1,4 +1,5 @@
-use Inline C => DATA => LIBS => `sdl-config --libs` => INC => `sdl-config --cflags`;
+use Inline C => DATA => LIBS => `sdl-config --libs` => INC =>
+  `sdl-config --cflags`;
 
 my $fp = get_function_pointer();
 print '[Perl] In perl we got :' . $fp . "\n";

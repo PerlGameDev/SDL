@@ -49,9 +49,9 @@ use base 'Exporter';
 our @EXPORT = @{ $SDL::Constants::EXPORT_TAGS{SDL} };
 push @EXPORT, 'NULL';
 our %EXPORT_TAGS = (
-	all      => \@EXPORT,
-	init     => $SDL::Constants::EXPORT_TAGS{'SDL/init'},
-	defaults => $SDL::Constants::EXPORT_TAGS{'SDL/defaults'}
+    all      => \@EXPORT,
+    init     => $SDL::Constants::EXPORT_TAGS{'SDL/init'},
+    defaults => $SDL::Constants::EXPORT_TAGS{'SDL/defaults'}
 );
 
 our $VERSION = '2.503';
@@ -62,7 +62,7 @@ print "$VERSION" if ( defined( $ARGV[0] ) && ( $ARGV[0] eq '--SDLperl' ) );
 $SDL::DEBUG = 0;
 
 sub NULL {
-	return 0;
+    return 0;
 }
 
 # workaround, doing putenv from perl instead of sdl's:
@@ -74,20 +74,20 @@ sub NULL {
 #	OUTPUT:
 #		RETVAL
 sub putenv {
-	my $cmd = shift;
-	if ( $cmd =~ /^(\w+)=(.*)$/ ) {
-		$ENV{$1} = $2;
-		return 0;
-	}
+    my $cmd = shift;
+    if ( $cmd =~ /^(\w+)=(.*)$/ ) {
+        $ENV{$1} = $2;
+        return 0;
+    }
 
-	return -1;
+    return -1;
 }
 
 # workaround as:
 # extern DECLSPEC void SDLCALL SDL_SetError(const char *fmt, ...);
 sub set_error {
-	my ( $format, @arguments ) = @_;
-	SDL::set_error_real( sprintf( $format, @arguments ) );
+    my ( $format, @arguments ) = @_;
+    SDL::set_error_real( sprintf( $format, @arguments ) );
 }
 
 =pod

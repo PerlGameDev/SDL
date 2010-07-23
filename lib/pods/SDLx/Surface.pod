@@ -49,7 +49,9 @@ If a surface is passed to 'surface =>' that is loaded. Otherwise you can define 
 
 	SDLx::Surface->new( width=> 400, height=>200, flags=> SDL_SWSURFACE, depth=>32, greenmask=>0xFF000000 )
 		# A SDL::Surface->new( SDL_ANYFORMAT, 400, 200, 32, 0, 0xFF000000,0, 0, 0 ) is loaded
-
+	SDLx::Surface->new( w => 1, h => 1, color => 0xFF0000FF )
+		# A SDL::Surface->new( SDL_ANYFORMAT, 1, 1, 32, 0, 0, 0, 0 ) is loaded
+		all pixels are colored with color (red)
 
 =head2 display
 
@@ -64,6 +66,8 @@ gets the display if it is already made. Passed options are ignored. Otherwise yo
 or you can also pass flags and depth. 
 
  SDLx::Surface::display( width => 20, height => 20, flags=> SDL_HWSURFACE, depth=>24) 
+
+You can also use the keys C<w> and C<h> in place of C<width> and C<height>, as with C<new>.
 
 Get or create the main display surface and attach to a SDLx::Surface.
 
@@ -92,7 +96,7 @@ Sets the passed C<SDL::Rect> as the new clip_rect for the surface. Returns the S
  $sdlx_surface->blit( $dest, $src_rect, $dest_rect );
 
 Blits SDLx::Surface onto $dest surface. 
-$src_rect or $dest_rect are optional. $src_rect or $dest_rect can be array refs or SDL::Rect. $dest can be SDLx::Surface or SDL::Surface. 
+$src_rect or $dest_rect are optional. If $src_rect is ommited, it will be the size of the entire surface. If $dest_rect is ommited, it will be blitted at C<(0, 0)>. $src_rect or $dest_rect can be array refs or SDL::Rect. $dest can be SDLx::Surface or SDL::Surface.
 
 Returns $self
 
@@ -126,7 +130,7 @@ Returns $self
  $sdlx_surface->draw_rect( [$x,$y,$w,$h], 0xFFFF00FF );
  $sdlx_surface->draw_rect( SDL::Rect->new($x,$y,$w,$h), 0xFFFF00FF );
 
-Draws a rect on the surface with the given color. 
+Draws a rect on the surface with the given color. If the rect is ommited, the colored rect will be drawn to the entire surface.
 
 Returns $self
 
@@ -135,7 +139,7 @@ Returns $self
  $sdlx_surface->draw_line( [$x1, $y1], [$x2, $y2], $color, $antialias); # $color is a number
  $sdlx_surface->draw_line( [$x1, $y1], [$x2, $y2], \@color, $antialias); # 
 
-Draws a line on the surface. Antialias is turned on if $antialias is defined. 
+Draws a line on the surface. Antialias is turned on if $antialias is true. 
 
 Returns $self
 

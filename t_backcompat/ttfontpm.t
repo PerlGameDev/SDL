@@ -32,7 +32,7 @@
 # basic testing of SDL::TTFont
 
 BEGIN {
-	unshift @INC, 'blib/lib', 'blib/arch';
+    unshift @INC, 'blib/lib', 'blib/arch';
 }
 
 use strict;
@@ -43,33 +43,34 @@ use Test::More;
 plan( skip_all => "Failing test due to moving stuff around" );
 
 if ( SDL::Config->has('SDL_ttf') ) {
-	plan( tests => 2 );
-} else {
-	plan( skip_all => 'SDL_ttf support not compiled' );
+    plan( tests => 2 );
+}
+else {
+    plan( skip_all => 'SDL_ttf support not compiled' );
 }
 
 use_ok('SDL::TTFont');
 
 can_ok(
-	'SDL::TTFont', qw/
-		new
-		print
-		width
-		height
-		ascent
-		descent
-		normal
-		bold
-		italic
-		underline
-		text_shaded
-		text_solid
-		text_blended
-		utf8_shaded
-		utf8_solid
-		utf8_blended
-		unicode_shaded
-		unicode_solid
-		unicode_blended /
+    'SDL::TTFont', qw/
+      new
+      print
+      width
+      height
+      ascent
+      descent
+      normal
+      bold
+      italic
+      underline
+      text_shaded
+      text_solid
+      text_blended
+      utf8_shaded
+      utf8_solid
+      utf8_blended
+      unicode_shaded
+      unicode_solid
+      unicode_blended /
 );
 sleep(2);
