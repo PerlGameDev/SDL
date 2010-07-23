@@ -27,7 +27,7 @@ while (1) {
 ###################################################
 
 sub init_SDL {
-    $app = new SDLx::App-w => 1024, -h => 768, -d => 16, -gl => 1;
+    $app = SDLx::App->new(w => 1024, h => 768, d => 16, gl => 1);
 
     print "Initializing OpenGL settings\n";
     printf "%-24s%s\n", "GL_RED_SIZE ", $app->attribute( SDL_GL_RED_SIZE() );

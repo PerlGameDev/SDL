@@ -14,10 +14,10 @@ $|      = 1;
 $WIDTH  = 1024;
 $HEIGHT = 768;
 $SDLAPP = SDLx::App->new(
-    -title  => "Opengl App",
-    -width  => $WIDTH,
-    -height => $HEIGHT,
-    -gl     => 1
+    title  => "Opengl App",
+    width  => $WIDTH,
+    height => $HEIGHT,
+    gl     => 1
 );
 $SDLEVENT = SDL::Event->new;
 

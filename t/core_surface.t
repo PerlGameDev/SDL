@@ -84,10 +84,10 @@ ok( 1, 'Managed to blit' );
 #ok( 1, 'Managed to update_rects' );
 
 my $app = SDLx::App->new(
-    -title  => "Test",
-    -width  => 640,
-    -height => 480,
-    -init   => SDL_INIT_VIDEO
+    title  => "Test",
+    width  => 640,
+    height => 480,
+    init   => SDL_INIT_VIDEO
 );
 
 pass 'did this pass';

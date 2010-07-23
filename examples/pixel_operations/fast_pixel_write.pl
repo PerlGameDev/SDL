@@ -10,10 +10,10 @@ use SDL::Rect;
 use SDL::Video;
 
 my $app = SDLx::App->new(
-    -title  => 'Application Title',
-    -width  => 640,
-    -height => 480,
-    -depth  => 32
+    title  => 'Application Title',
+    width  => 640,
+    height => 480,
+    depth  => 32
 );
 
 load_app();

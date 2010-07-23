@@ -16,10 +16,10 @@ use Devel::Peek;
 use PDL;
 
 my $app = SDLx::App->new(
-    -title  => 'Application Title',
-    -width  => 640,
-    -height => 480,
-    -depth  => 32
+    title  => 'Application Title',
+    width  => 640,
+    height => 480,
+    depth  => 32
 );
 my $mapped_color = SDL::Video::map_RGB( $app->format(), 50, 50, 50 );    # blue
 

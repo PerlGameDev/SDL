@@ -9,7 +9,7 @@ use SDL::Surface;
 use SDLx::Surface;
 use SDLx::App;
 
-my $app = SDLx::App->new( -width => 300, -height => 400, -depth => 32 );
+my $app = SDLx::App->new( width => 300, height => 400, depth => 32 );
 
 my $quit  = 0;
 my $rot   = 0;

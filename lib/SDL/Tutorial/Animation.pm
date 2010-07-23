@@ -47,9 +47,9 @@ my ( $rect_r,     $rect_g,      $rect_b ) = ( 0x00, 0x00, 0xff );
 my ( $rect_width, $rect_height, $rect_y ) = ( 100,  100,  190 );
 
 my $app = SDLx::App->new(
-    -width  => $width,
-    -height => $height,
-    -depth  => $depth,
+    width  => $width,
+    height => $height,
+    depth  => $depth,
 );
 
 my $color = SDL::Video::map_RGB( $app->format, $rect_r, $rect_g, $rect_b, );

@@ -155,9 +155,9 @@ my ( $bg_r,  $bg_g,   $bg_b )  = ( 0x77, 0xee, 0x77 );
 my $sleep_msec = 0.05;
 
 my $app = SDLx::App->new(
-    -width  => $width,
-    -height => $height,
-    -depth  => $depth,
+    width  => $width,
+    height => $height,
+    depth  => $depth,
 );
 
 my $bg_color = SDL::Color->new( $bg_r, $bg_g, $bg_b, );

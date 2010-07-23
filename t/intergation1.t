@@ -74,10 +74,10 @@ SKIP:
     skip 'No Video', 1 unless SDL::TestTool->init(SDL_INIT_VIDEO);
 
     my $app = SDLx::App->new(
-        -title  => "Test",
-        -width  => 640,
-        -height => 480,
-        -init   => SDL_INIT_VIDEO
+        title  => "Test",
+        width  => 640,
+        height => 480,
+        init   => SDL_INIT_VIDEO
     );
 
     my $rect = SDL::Rect->new( 0, 0, $app->w, $app->h );

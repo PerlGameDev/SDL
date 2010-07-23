@@ -917,10 +917,10 @@ use strict;
 use warnings;
 
 my $app = SDLx::App->new(
-    -title  => "Lunar Lander",
-    -width  => 800,
-    -height => 600,
-    -depth  => 32,
+    title  => "Lunar Lander",
+    width  => 800,
+    height => 600,
+    depth  => 32,
 );
 
 my $background = SDL::Image::load('images/background.jpg');

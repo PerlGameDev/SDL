@@ -49,11 +49,11 @@ sub surface_leak() {
     use SDL::Color;
 
     my $window = SDLx::App->new(
-        -width  => 640,
-        -height => 480,
-        -depth  => 16,
-        -title  => 'SDL Demo',
-        -init   => SDL_INIT_VIDEO
+        width  => 640,
+        height => 480,
+        depth  => 16,
+        title  => 'SDL Demo',
+        init   => SDL_INIT_VIDEO
 
     );
 
