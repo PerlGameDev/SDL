@@ -37,7 +37,7 @@ use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
 
-plan( tests => 11 );
+plan( tests => 13 );
 use_ok('SDLx::App');
 
 can_ok(
@@ -97,6 +97,10 @@ SKIP:
     is( $title, "Test", "title set correctly" );
     
     is( $icon, "foo", "icon_title set correctly" );
+    
+    is( $app3->w, 640, "width set correctly" );
+    
+    is( $app3->h, 480, "height set correctly" );
     
     my $app2 = SDLx::App->new(
         title      => "Test",

@@ -1,6 +1,10 @@
 Revision history for Perl extension SDL_perl.
 
 * 2.503
+    - Removed examples/adventure/
+    - Removed dashes from SDLx::App constructor [#176] [Blaizer]
+    - Added tests for SDLx::Controller [Blaizer]
+    - Added removing handlers with coderef in SDLx::Controller [Blaizer]
 	- Finished a working version of SDLx::Sprite::Animated [jtpalmer]
 	- Added draw functions to SDLx::Surface
 	- Cleaned up Sprite inheritance from Surface
