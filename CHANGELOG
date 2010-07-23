@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+NEXT
+	- Using bmp file if libpng isnt available in t/sdlx_sfont.t [#177] [FROGGS]
+
 * 2.503
 	- Removed examples/adventure/
 	- Removed dashes from SDLx::App constructor [#176] [Blaizer]
@@ -9,7 +12,7 @@ Revision history for Perl extension SDL_perl.
 	- Added draw functions to SDLx::Surface
 	- Cleaned up Sprite inheritance from Surface
 	- Fixed bug in SDL::Event::key_mod, it returned pointer instead of int [FROGGS]
-	- SDLx::App now depends on SDLx::Surface 
+	- SDLx::App now depends on SDLx::Surface
 
 * 2.502
 	- Displaying Alien::SDL's build option for every build step [FROGGS]

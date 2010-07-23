@@ -27,7 +27,8 @@ elsif ( !SDL::Config->has('SDL_image') ) {
 #Make a surface
 #Select a font
 my $d = SDL::Surface->new( SDL_SWSURFACE, 100, 100, 32 );
-my $font = SDLx::SFont->new('test/data/font.png');
+my $font = SDLx::SFont->new(
+    'test/data/font.' . ( SDL::Config->has('png') ? 'png' : 'bmp' ) );
 
 isa_ok( $font, 'SDL::Surface', '[new] makes surface' );
 
