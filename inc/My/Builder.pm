@@ -173,7 +173,7 @@ sub ACTION_bundle {
     $self->build_bundle();
 }
 
-# Override Install method for darwin
+# inc/My/Darwin.pm will override Install method for MacOS
 sub ACTION_install {
     my ($self) = @_;
     require ExtUtils::Install;
