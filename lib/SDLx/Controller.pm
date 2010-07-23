@@ -88,19 +88,19 @@ sub add_show_handler {
 }
 
 sub _remove_handler {
-	my ( $arr_ref, $id ) = @_;
+	my ( $handlers_ref, $id ) = @_;
 	if(ref $id) {
 		$id = (
 			grep {
-				$id eq ${$arr_ref}[$_]   #coderef matches with input
-			} 0..$#{$arr_ref}
+				$id eq ${$handlers_ref}[$_]   #coderef matches with input
+			} 0..$#{$handlers_ref}
 		)[0];   #only the first coderef
 		if(!defined $id) {
 			Carp::carp("$id is not currently a handler of this type");
 			return;
 		}
 	}
-	return splice( @{$arr_ref}, $id, 1 );
+	return splice( @{$handlers_ref}, $id, 1 );
 }
 
 sub remove_move_handler {
