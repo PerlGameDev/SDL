@@ -93,7 +93,7 @@ sub _remove_handler {
 		$id = (
 			grep {
 				$id eq ${$arr_ref}[$_]   #coderef matches with input
-			} 0..@{$arr_ref}-1   #index nums
+			} 0..$#{$arr_ref}
 		)[0];   #only the first coderef
 		if(!defined $id) {
 			Carp::carp("$id is not currently a handler of this type");
