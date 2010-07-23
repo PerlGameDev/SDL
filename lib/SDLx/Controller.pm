@@ -78,12 +78,12 @@ sub add_move_handler {
 }
 
 sub add_event_handler {
-	$_[0]->remove all_event_handlers if !$_[0]->{event_handlers};
+	$_[0]->remove_all_event_handlers if !$_[0]->{event_handlers};
 	return _add_handler( $_[0]->{event_handlers}, $_[1] );
 }
 
 sub add_show_handler {
-	$_[0]->remove all_show_handlers if !$_[0]->{show_handlers};
+	$_[0]->remove_all_show_handlers if !$_[0]->{show_handlers};
 	return _add_handler( $_[0]->{show_handlers}, $_[1] );
 }
 
@@ -91,8 +91,10 @@ sub _remove_handler {
 	my ( $arr_ref, $id ) = @_;
 	if(ref $id) {
 		$id = (
-			grep { $id eq ${$arr_ref}[$_] } 0..@{$arr_ref}-1
-		)[0];
+			grep {
+				$id eq ${$arr_ref}[$_]   #coderef matches with input
+			} 0..@{$arr_ref}-1   #index nums
+		)[0];   #only the first coderef
 		if(!defined $id) {
 			Carp::carp("$id is not currently a handler of this type");
 			return;
