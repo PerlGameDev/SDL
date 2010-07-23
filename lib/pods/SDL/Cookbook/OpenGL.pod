@@ -37,10 +37,10 @@ You can use OpenGL as needed here.
 	$| = 1;
 	$WIDTH = 1024;
 	$HEIGHT = 768;
-	$SDLAPP = SDLx::App->new(-title => "Opengl App", -width => $WIDTH, -height => $HEIGHT, -gl => 1);
+	$SDLAPP = SDLx::App->new(title => "Opengl App", width => $WIDTH, height => $HEIGHT, gl => 1);
 	$SDLEVENT = SDL::Event->new;
 
-SDLx::App can start an OpenGL application with the parameter -gl => 1.
+SDLx::App can start an OpenGL application with the parameter gl => 1.
 
 	glEnable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);

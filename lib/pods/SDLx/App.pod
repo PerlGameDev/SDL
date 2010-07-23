@@ -17,10 +17,10 @@ Extension
     use SDL::Events; 
     
     my $app = SDLx::App->new( 
-        -title  => 'Application Title',
-        -width  => 640,
-        -height => 480,
-        -depth  => 32
+        title  => 'Application Title',
+        width  => 640,
+        height => 480,
+        depth  => 32
     ); 
 
 This is the manual way of doing things	
@@ -55,35 +55,35 @@ C<SDLx::App::new> takes a series of named parameters:
 
 =item *
 
--title
+title
 
 =item *
 
--icon_title
+icon_title
 
 =item *
 
--icon
+icon
 
 =item *
 
--width
+width
 
 =item *
 
--height
+height
 
 =item *
 
--depth
+depth
 
 =item *
 
--flags
+flags
 
 =item *
 
--resizeable
+resizeable
 
 =back
 
@@ -111,7 +111,7 @@ C<SDLx::App::error> returns the last error message set by the SDL.
 =head2 resize
 
 C<SDLx::App::resize> takes a new height and width of the application
-if the application was originally created with the -resizable option.
+if the application was originally created with the resizable option.
 
 =head2 fullscreen
 
@@ -149,10 +149,10 @@ the event object used in the loop.
 Example:
 
     my $app = SDLx::App->new(
-        -title  => "test.app", 
-        -width  => 800, 
-        -height => 600, 
-        -depth  => 32
+        title  => "test.app", 
+        width  => 800, 
+        height => 600, 
+        depth  => 32
     );
     
     my %actions = (

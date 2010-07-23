@@ -73,23 +73,34 @@ sub _add_handler {
 }
 
 sub add_move_handler {
-    $_[0]->{move_handlers} = [] if !$_[0]->{move_handlers};
-    return _add_handler( $_[0]->{move_handlers}, $_[1] );
+	$_[0]->remove_all_move_handlers if !$_[0]->{move_handlers};
+	return _add_handler( $_[0]->{move_handlers}, $_[1] );
 }
 
 sub add_event_handler {
-    $_[0]->{event_handlers} = [] if !$_[0]->{event_handlers};
-    return _add_handler( $_[0]->{event_handlers}, $_[1] );
+	$_[0]->remove_all_event_handlers if !$_[0]->{event_handlers};
+	return _add_handler( $_[0]->{event_handlers}, $_[1] );
 }
 
 sub add_show_handler {
-    $_[0]->{show_handlers} = [] if !$_[0]->{show_handlers};
-    return _add_handler( $_[0]->{show_handlers}, $_[1] );
+	$_[0]->remove_all_show_handlers if !$_[0]->{show_handlers};
+	return _add_handler( $_[0]->{show_handlers}, $_[1] );
 }
 
 sub _remove_handler {
-    my ( $arr_ref, $id ) = @_;
-    return splice( @{$arr_ref}, $id, 1 );
+	my ( $handlers_ref, $id ) = @_;
+	if(ref $id) {
+		$id = (
+			grep {
+				$id eq ${$handlers_ref}[$_]   #coderef matches with input
+			} 0..$#{$handlers_ref}
+		)[0];   #only the first coderef
+		if(!defined $id) {
+			Carp::carp("$id is not currently a handler of this type");
+			return;
+		}
+	}
+	return splice( @{$handlers_ref}, $id, 1 );
 }
 
 sub remove_move_handler {
@@ -105,9 +116,9 @@ sub remove_show_handler {
 }
 
 sub remove_all_handlers {
-    $_[0]->{move_handlers}  = [];
-    $_[0]->{event_handlers} = [];
-    $_[0]->{show_handlers}  = [];
+	$_[0]->remove_all_move_handlers;
+	$_[0]->remove_all_event_handlers;
+	$_[0]->remove_all_show_handlers;
 }
 
 sub remove_all_move_handlers {

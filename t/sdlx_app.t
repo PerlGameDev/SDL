@@ -37,7 +37,7 @@ use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
 
-plan( tests => 9 );
+plan( tests => 11 );
 use_ok('SDLx::App');
 
 can_ok(
@@ -66,10 +66,10 @@ SKIP:
     skip 'Video not avaiable', 6 unless SDL::TestTool->init(SDL_INIT_VIDEO);
 
     my $app = SDLx::App->new(
-        -title  => "Test",
-        -width  => 640,
-        -height => 480,
-        -noinit => 1,
+        title  => "Test",
+        width  => 640,
+        height => 480,
+        noinit => 1,
     );
 
     $app->sync;
@@ -84,13 +84,26 @@ SKIP:
     $app = undef;
     SDL::quit;
 
+    my $app3 = SDLx::App->new(
+        title      => "Test",
+        icon_title => "foo",
+        width      => 640,
+        height     => 480,
+        noinit     => 1,
+    );
+    
+    my ($title, $icon) = @{ SDL::Video::wm_get_caption() };
+    
+    is( $title, "Test", "title set correctly" );
+    
+    is( $icon, "foo", "icon_title set correctly" );
+    
     my $app2 = SDLx::App->new(
-        -title      => "Test",
-        -width      => 640,
-        -height     => 480,
-        -resizeable => 1,
-        -noinit     => 1,
-
+        title      => "Test",
+        width      => 640,
+        height     => 480,
+        resizeable => 1,
+        noinit     => 1,
     );
     $app2->sync;
 

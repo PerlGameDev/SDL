@@ -14,7 +14,7 @@ Extension
 
    #Make a surface
    #Select a font
-   my $d = SDLx::App->new( -title => 'app', -width => 200, -height => 200, -depth => 32 );
+   my $d = SDLx::App->new( title => 'app', width => 200, height => 200, depth => 32 );
 
    my $font = SDLx::SFont->new('t/font.png');
   

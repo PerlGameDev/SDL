@@ -124,6 +124,9 @@ Exits the main loop. Calling this method will cause C<< run >> to return.
 
 Removes the handler with the given index from the respective calling queue.
 
+You can also pass a coderef.
+The first coderef in the handler list that this matches will be removed.
+
 Returns the removed handler.
 
 =head2 remove_all_move_handlers

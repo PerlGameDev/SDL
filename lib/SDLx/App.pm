@@ -25,40 +25,40 @@ sub new {
     my %options = @_;
 
     # SDL_INIT_VIDEO() is 0, so check defined instead of truth.
-    unless ( exists( $options{-noinit} ) )    # we shouldn't do init always
+    unless ( exists( $options{noinit} ) )    # we shouldn't do init always
     {
         my $init =
-          defined $options{-init}
-          ? $options{-init}
+          defined $options{init}
+          ? $options{init}
           : SDL::SDL_INIT_EVERYTHING;
 
         SDL::init($init);
     }
-    my $t  = $options{-title}      || $options{-t}  || $0;
-    my $it = $options{-icon_title} || $options{-it} || $t;
-    my $ic = $options{-icon}       || $options{-i}  || "";
-    my $w  = $options{-width}      || $options{-w}  || 800;
-    my $h  = $options{-height}     || $options{-h}  || 600;
-    my $d  = $options{-depth}      || $options{-d}  || 16;
-    my $f = $options{-flags}      || $options{-f} || SDL::Video::SDL_ANYFORMAT;
-    my $r = $options{-red_size}   || $options{-r} || 5;
-    my $g = $options{-green_size} || $options{-g} || 5;
-    my $b = $options{-blue_size}  || $options{-b} || 5;
-    my $a = $options{-alpha_size} || $options{-a} || 0;
-    my $ras = $options{-red_accum_size}   || $options{-ras} || 0;
-    my $gas = $options{-green_accum_size} || $options{-gas} || 0;
-    my $bas = $options{-blue_accum_size}  || $options{-bas} || 0;
-    my $aas = $options{-alpha_accum_size} || $options{-aas} || 0;
-    my $db  = $options{-double_buffer}    || $options{-db}  || 0;
+    my $t   = $options{title}      || $options{t}  || $0;
+    my $it  = $options{icon_title} || $options{it} || $t;
+    my $ic  = $options{icon}       || $options{i}  || "";
+    my $w   = $options{width}      || $options{w}  || 800;
+    my $h   = $options{height}     || $options{h}  || 600;
+    my $d   = $options{depth}      || $options{d}  || 16;
+    my $f   = $options{flags}      || $options{f}  || SDL::Video::SDL_ANYFORMAT;
+    my $r   = $options{red_size}   || $options{r}  || 5;
+    my $g   = $options{green_size} || $options{g}  || 5;
+    my $b   = $options{blue_size}  || $options{b}  || 5;
+    my $a   = $options{alpha_size} || $options{a}  || 0;
+    my $ras = $options{red_accum_size}   || $options{ras} || 0;
+    my $gas = $options{green_accum_size} || $options{gas} || 0;
+    my $bas = $options{blue_accum_size}  || $options{bas} || 0;
+    my $aas = $options{alpha_accum_size} || $options{aas} || 0;
+    my $db  = $options{double_buffer}    || $options{db}  || 0;
 
-    my $bs = $options{-buffer_size}  || $options{-bs} || 0;
-    my $st = $options{-stencil_size} || $options{-st} || 0;
-    my $async = $options{-asyncblit} || 0;
+    my $bs = $options{buffer_size}  || $options{bs} || 0;
+    my $st = $options{stencil_size} || $options{st} || 0;
+    my $async = $options{asyncblit} || 0;
 
-    $f |= SDL::Video::SDL_OPENGL if ( $options{-gl} || $options{-opengl} );
+    $f |= SDL::Video::SDL_OPENGL if ( $options{gl} || $options{opengl} );
     $f |= SDL::Video::SDL_FULLSCREEN
-      if ( $options{-fullscreen} || $options{-full} );
-    $f |= SDL::Video::SDL_RESIZABLE if ( $options{-resizeable} );
+      if ( $options{fullscreen} || $options{full} );
+    $f |= SDL::Video::SDL_RESIZABLE if ( $options{resizeable} );
     $f |= SDL::Video::SDL_DOUBLEBUF if ($db);
     $f |= SDL::Video::SDL_ASYNCBLIT if ($async);
 
@@ -112,7 +112,7 @@ sub new {
     return $self;
 }
 
-sub resize ($$$) {
+sub resize {
     my ( $self, $w, $h ) = @_;
     my $flags = $self->flags;
     if ( $flags & SDL::Video::SDL_RESIZABLE ) {
@@ -125,7 +125,7 @@ sub resize ($$$) {
     }
 }
 
-sub title ($;$) {
+sub title {
     my $self = shift;
     my ( $title, $icon );
     if (@_) {
@@ -136,7 +136,7 @@ sub title ($;$) {
     return SDL::Video::wm_get_caption();
 }
 
-sub delay ($$) {
+sub delay {
     my $self  = shift;
     my $delay = shift;
     SDL::delay($delay);
@@ -150,27 +150,27 @@ sub error {
     return SDL::get_error();
 }
 
-sub warp ($$$) {
+sub warp {
     my $self = shift;
     SDL::Mouse::warp_mouse(@_);
 }
 
-sub fullscreen ($) {
+sub fullscreen {
     my $self = shift;
     SDL::Video::wm_toggle_fullscreen($self);
 }
 
-sub iconify ($) {
+sub iconify {
     my $self = shift;
     SDL::Video::wm_iconify_window();
 }
 
-sub grab_input ($$) {
+sub grab_input {
     my ( $self, $mode ) = @_;
     SDL::Video::wm_grab_input($mode);
 }
 
-sub loop ($$) {
+sub loop {
     my ( $self, $href ) = @_;
     my $event = SDL::Event->new();
     while ( SDL::Events::wait_event($event) ) {
@@ -180,7 +180,7 @@ sub loop ($$) {
     }
 }
 
-sub sync ($) {
+sub sync {
     my $self = shift;
     if ($SDLx::App::USING_OPENGL) {
         SDL::Video::GL_swap_buffers();
@@ -190,7 +190,7 @@ sub sync ($) {
     }
 }
 
-sub attribute ($$;$) {
+sub attribute {
     my ( $self, $mode, $value ) = @_;
     return undef unless ($SDLx::App::USING_OPENGL);
     if ( defined $value ) {
