@@ -218,10 +218,10 @@ Second step: initialize C<SDLx::App>:
 
 
     my $app = SDLx::App->new(
-        -title  => "Lunar Lander",
-        -width  => 800,
-        -height => 600,
-        -depth  => 32,
+        title  => "Lunar Lander",
+        width  => 800,
+        height => 600,
+        depth  => 32,
     );
 
 
