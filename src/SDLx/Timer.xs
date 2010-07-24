@@ -61,6 +61,38 @@ timerx_paused ( timer, ... )
 	OUTPUT:
 		RETVAL
 
+void
+timerx_start ( timer )
+	sdlx_timer *timer
+	CODE:
+		timer->started = 1;
+		timer->started_ticks = SDL_GetTicks();
+
+void
+timerx_stop ( timer )
+	sdlx_timer *timer
+	CODE:
+		timer->started = 0;
+		timer->paused = 0;
+
+void
+timerx_pause ( timer )
+	sdlx_timer *timer
+	CODE:
+		if( timer->started == 1 && timer->paused == 0)
+		{
+			timer->paused = 1;
+			timer->paused_ticks = SDL_GetTicks() - timer->started_ticks;
+		}
+
+void
+timerx_unpause ( timer )
+	sdlx_timer *timer
+	CODE:
+		timer->paused = 0;
+		timer->started_ticks = SDL_GetTicks() - timer->started_ticks;
+		timer->paused_ticks = 0;
+
 
 void
 timerx_DESTROY(bag)
