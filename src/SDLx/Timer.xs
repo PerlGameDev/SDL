@@ -111,8 +111,10 @@ timerx_get_ticks ( timer )
 			RETVAL = diff;
 		   }
 		}
-		
-		RETVAL = 0;
+		else
+		{
+			RETVAL = 0;
+		}
 	OUTPUT:
 		RETVAL
 
