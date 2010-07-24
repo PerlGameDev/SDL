@@ -167,6 +167,13 @@ my %subsystems = (
         },
         libraries => [qw( SDL )],
     },
+    TimerX => {
+        file => {
+            from => 'src/SDLx/Timer.xs',
+            to   => 'lib/SDLx/Controller/Timer.xs',
+        },
+        libraries => [qw( SDL )],
+    },
     Overlay => {
         file => {
             from => 'src/Core/objects/Overlay.xs',
