@@ -117,6 +117,23 @@ timerx_get_ticks ( timer )
 		RETVAL
 
 
+int
+timerx_is_started ( timer )
+	sdlx_timer *timer
+	CODE:
+		RETVAL = timer->started;
+	OUTPUT:
+		RETVAL
+
+int
+timerx_is_paused ( timer)
+	sdlx_timer *timer
+	CODE:
+		RETVAL = timer->paused;
+	OUTPUT:
+		RETVAL
+
+
 void
 timerx_DESTROY(bag)
 	SV *bag
