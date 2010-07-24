@@ -25,6 +25,43 @@ timerx_new (CLASS, ... )
 		RETVAL
 
 
+int
+timerx_started_ticks ( timer, ... )
+	sdlx_timer *timer
+	CODE:
+		if (items > 1 ) timer->started_ticks = SvIV(ST(1)); 
+		RETVAL = timer->started_ticks;
+	OUTPUT:
+		RETVAL
+
+int
+timerx_paused_ticks ( timer, ... )
+	sdlx_timer *timer
+	CODE:
+		if (items > 1 ) timer->paused_ticks = SvIV(ST(1)); 
+		RETVAL = timer->paused_ticks;
+	OUTPUT:
+		RETVAL
+
+int
+timerx_started ( timer, ... )
+	sdlx_timer *timer
+	CODE:
+		if (items > 1 ) timer->started = SvIV(ST(1)); 
+		RETVAL = timer->started;
+	OUTPUT:
+		RETVAL
+
+int
+timerx_paused ( timer, ... )
+	sdlx_timer *timer
+	CODE:
+		if (items > 1 ) timer->paused = SvIV(ST(1)); 
+		RETVAL = timer->paused;
+	OUTPUT:
+		RETVAL
+
+
 void
 timerx_DESTROY(bag)
 	SV *bag
