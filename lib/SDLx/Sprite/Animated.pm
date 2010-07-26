@@ -99,7 +99,7 @@ sub type {
 sub max_loops {
     my ( $self, $max ) = @_;
 
-    if ($max) {
+    if ( @_ > 1 ) {
         $self->{max_loops} = $max;
     }
 
@@ -149,6 +149,7 @@ sub sequence {
         #TODO: Validate sequence.
         $self->{sequence}      = $sequence;
         $self->{current_frame} = 0;
+        $self->{current_loop}  = 0;
         $self->_update_clip;
     }
 
@@ -168,9 +169,12 @@ sub _frame {
 sub next {
     my $self = shift;
 
-    # TODO: direction, type, max_loops, current_loop
+    return if $self->{max_loops} && $self->{current_loop} >= $self->{max_loops};
+
+    # TODO: direction, type
     $self->{current_frame} =
       ( $self->{current_frame} + 1 ) % @{ $self->_sequence };
+    $self->{current_loop}++ if $self->{current_frame} == 0;
     $self->_update_clip;
 }
 
@@ -223,7 +227,8 @@ sub draw {
 
     $self->{ticks}++;
     $self->next
-      if $self->{started} && $self->{ticks} % $self->{ticks_per_frame} == 0;
+      if $self->{started}
+          && $self->{ticks} % $self->{ticks_per_frame} == 0;
 
     Carp::croak 'destination must be a SDL::Surface'
       unless ref $surface and $surface->isa('SDL::Surface');

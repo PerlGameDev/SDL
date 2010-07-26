@@ -206,6 +206,31 @@ is( $clip->y, 0,   'clip->y after second next' );
 is( $clip->w, 48,  'clip->w after second next' );
 is( $clip->h, 48,  'clip->h after second next' );
 
+$sprite = SDLx::Sprite::Animated->new(
+    image     => 'test/data/hero.bmp',
+    rect      => SDL::Rect->new( 40, 50, 48, 48 ),
+    max_loops => 2,
+);
+$sprite->set_sequences( up => [ [ 0, 0 ], [ 0, 1 ], ], );
+$sprite->sequence('up');
+$clip = $sprite->clip;
+is( $clip->y, 0, 'clip->y after new with max_loops' );
+
+$sprite->next;
+is( $clip->y, 48, 'clip->y after first next' );
+
+$sprite->next;
+is( $clip->y, 0, 'clip->y after second next' );
+
+$sprite->next;
+is( $clip->y, 48, 'clip->y after third next' );
+
+$sprite->next;
+is( $clip->y, 0, 'clip->y after fourth next' );
+
+$sprite->next;
+is( $clip->y, 0, 'clip->y after fifth next' );
+
 done_testing;
 
 #reset the old video driver
