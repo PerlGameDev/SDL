@@ -39,6 +39,7 @@ my $sprite = SDLx::Sprite::Animated->new(
 );
 
 isa_ok( $sprite, 'SDLx::Sprite' );
+isa_ok( $sprite, 'SDLx::Surface' );
 isa_ok( $sprite, 'SDLx::Sprite::Animated' );
 
 my $clip = $sprite->clip;
