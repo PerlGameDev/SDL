@@ -91,7 +91,7 @@ sub type {
     my ( $self, $type ) = @_;
 
     if ($type) {
-        $self->{type} = $type;
+        $self->{type} = lc $type;
     }
 
     return $self->{type};
