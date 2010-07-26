@@ -150,7 +150,7 @@ sub sequence {
         #TODO: Validate sequence.
         $self->{sequence}      = $sequence;
         $self->{current_frame} = 1;
-        $self->{current_loop}  = 0;
+        $self->{current_loop}  = 1;
         $self->{direction}     = 1;
         $self->_update_clip;
     }
@@ -173,7 +173,7 @@ sub next {
 
     return if @{ $self->_sequence } == 1;
 
-    return if $self->{max_loops} && $self->{current_loop} >= $self->{max_loops};
+    return if $self->{max_loops} && $self->{current_loop} > $self->{max_loops};
 
     my $next_frame =
       ( $self->{current_frame} - 1 + $self->{direction} )
