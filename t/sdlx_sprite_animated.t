@@ -153,6 +153,59 @@ is( $rect->y, 50, 'rect->y after new with image' );
 is( $rect->w, 48, 'rect->w after new with image' );
 is( $rect->h, 48, 'rect->h after new with image' );
 
+$sprite = SDLx::Sprite::Animated->new(
+    image => 'test/data/hero.bmp',
+    rect  => SDL::Rect->new( 40, 50, 48, 48 ),
+    step_x => 50,
+    step_y => 50,
+);
+$sprite->set_sequences(
+    left => [ [ 1, 0 ], [ 1, 1 ], ],
+    right => [ [ 3, 0 ], [ 3, 1 ], ],
+);
+$sprite->sequence('left');
+
+$clip = $sprite->clip;
+is( $clip->x, 50,  'clip->x after new with image' );
+is( $clip->y, 0,  'clip->y after new with image' );
+is( $clip->w, 48, 'clip->w after new with image' );
+is( $clip->h, 48, 'clip->h after new with image' );
+
+$sprite->next;
+$clip = $sprite->clip;
+is( $clip->x, 50,  'clip->x after first next' );
+is( $clip->y, 50,  'clip->y after first next' );
+is( $clip->w, 48, 'clip->w after first next' );
+is( $clip->h, 48, 'clip->h after first next' );
+
+$sprite->next;
+$clip = $sprite->clip;
+is( $clip->x, 50,  'clip->x after second next' );
+is( $clip->y, 0,  'clip->y after second next' );
+is( $clip->w, 48, 'clip->w after second next' );
+is( $clip->h, 48, 'clip->h after second next' );
+
+$sprite->sequence('right');
+$clip = $sprite->clip;
+is( $clip->x, 150,  'clip->x after new with image' );
+is( $clip->y, 0,  'clip->y after new with image' );
+is( $clip->w, 48, 'clip->w after new with image' );
+is( $clip->h, 48, 'clip->h after new with image' );
+
+$sprite->next;
+$clip = $sprite->clip;
+is( $clip->x, 150,  'clip->x after first next' );
+is( $clip->y, 50,  'clip->y after first next' );
+is( $clip->w, 48, 'clip->w after first next' );
+is( $clip->h, 48, 'clip->h after first next' );
+
+$sprite->next;
+$clip = $sprite->clip;
+is( $clip->x, 150,  'clip->x after second next' );
+is( $clip->y, 0,  'clip->y after second next' );
+is( $clip->w, 48, 'clip->w after second next' );
+is( $clip->h, 48, 'clip->h after second next' );
+
 done_testing;
 
 #reset the old video driver
