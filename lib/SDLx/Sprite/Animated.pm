@@ -184,9 +184,12 @@ sub next {
 
         if ( $self->{type} eq 'reverse' ) {
 
-            $self->{current_loop}++ if $self->{direction} == -1;
-
-            $next_frame = @{ $self->_sequence } - 2 if $self->{direction} == 1;
+            if ( $self->{direction} == 1 ) {
+                $next_frame = @{ $self->_sequence } - 2;
+            }
+            else {
+                $self->{current_loop}++;
+            }
 
             $self->{direction} *= -1;
         }
