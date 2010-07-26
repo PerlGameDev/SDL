@@ -90,6 +90,8 @@ is( $rect->h, 48, 'rect->h after load' );
 $sprite->set_sequences( left => [ [ 1, 0 ], [ 1, 1 ], [ 1, 2 ] ], );
 $sprite->sequence('left');
 
+is( $sprite->current_frame, 1, 'current_frame after sequence' );
+
 is( $clip->x, 48, 'clip->x after sequence' );
 is( $clip->y, 0,  'clip->y after sequence' );
 is( $clip->w, 48, 'clip->w after sequence' );
@@ -101,6 +103,7 @@ is( $rect->w, 48, 'rect->w after sequence' );
 is( $rect->h, 48, 'rect->h after sequence' );
 
 $sprite->next;
+is( $sprite->current_frame, 2, 'current_frame after next' );
 
 is( $clip->x, 48, 'clip->x after next' );
 is( $clip->y, 48, 'clip->y after next' );
@@ -113,6 +116,7 @@ is( $rect->w, 48, 'rect->w after next' );
 is( $rect->h, 48, 'rect->h after next' );
 
 $sprite->next;
+is( $sprite->current_frame, 3, 'current_frame after second next' );
 
 is( $clip->x, 48, 'clip->x after second next' );
 is( $clip->y, 96, 'clip->y after second next' );
@@ -125,6 +129,7 @@ is( $rect->w, 48, 'rect->w after second next' );
 is( $rect->h, 48, 'rect->h after second next' );
 
 $sprite->next;
+is( $sprite->current_frame, 1, 'current_frame after third next' );
 
 is( $clip->x, 48, 'clip->x after third next' );
 is( $clip->y, 0,  'clip->y after third next' );
@@ -244,32 +249,39 @@ is( $sprite->current_loop, 0,
     'sprite->current_loop after new with type = reverse' );
 
 $sprite->next;
-is( $clip->y,              48, 'clip->y after first next' );
-is( $sprite->current_loop, 0,  'sprite->current_loop after first next' );
+is( $clip->y,               48, 'clip->y after first next' );
+is( $sprite->current_frame, 2,  'current_frame after first next' );
+is( $sprite->current_loop,  0,  'sprite->current_loop after first next' );
 
 $sprite->next;
-is( $clip->y,              96, 'clip->y after second next' );
-is( $sprite->current_loop, 0,  'sprite->current_loop after second next' );
+is( $clip->y,               96, 'clip->y after second next' );
+is( $sprite->current_frame, 3,  'current_frame after second next' );
+is( $sprite->current_loop,  0,  'sprite->current_loop after second next' );
 
 $sprite->next;
-is( $clip->y,              48, 'clip->y after third next' );
-is( $sprite->current_loop, 0,  'sprite->current_loop after third next' );
+is( $clip->y,               48, 'clip->y after third next' );
+is( $sprite->current_frame, 2,  'current_frame after third next' );
+is( $sprite->current_loop,  0,  'sprite->current_loop after third next' );
 
 $sprite->next;
-is( $clip->y,              0, 'clip->y after fourth next' );
-is( $sprite->current_loop, 1, 'sprite->current_loop after fourth next' );
+is( $clip->y,               0, 'clip->y after fourth next' );
+is( $sprite->current_frame, 1, 'current_frame after fourth next' );
+is( $sprite->current_loop,  1, 'sprite->current_loop after fourth next' );
 
 $sprite->next;
-is( $clip->y,              48, 'clip->y after fifth next' );
-is( $sprite->current_loop, 1,  'sprite->current_loop after fifth next' );
+is( $clip->y,               48, 'clip->y after fifth next' );
+is( $sprite->current_frame, 2,  'current_frame after fifth next' );
+is( $sprite->current_loop,  1,  'sprite->current_loop after fifth next' );
 
 $sprite->next;
-is( $clip->y,              96, 'clip->y after sixth next' );
-is( $sprite->current_loop, 1,  'sprite->current_loop after sixth next' );
+is( $clip->y,               96, 'clip->y after sixth next' );
+is( $sprite->current_frame, 3,  'current_frame after sixth next' );
+is( $sprite->current_loop,  1,  'sprite->current_loop after sixth next' );
 
 $sprite->next;
-is( $clip->y,              48, 'clip->y after seventh next' );
-is( $sprite->current_loop, 1,  'sprite->current_loop after seventh next' );
+is( $clip->y,               48, 'clip->y after seventh next' );
+is( $sprite->current_frame, 2,  'current_frame after seventh next' );
+is( $sprite->current_loop,  1,  'sprite->current_loop after seventh next' );
 
 done_testing;
 

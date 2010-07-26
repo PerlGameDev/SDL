@@ -149,7 +149,7 @@ sub sequence {
 
         #TODO: Validate sequence.
         $self->{sequence}      = $sequence;
-        $self->{current_frame} = 0;
+        $self->{current_frame} = 1;
         $self->{current_loop}  = 0;
         $self->{direction}     = 1;
         $self->_update_clip;
@@ -165,7 +165,7 @@ sub _sequence {
 
 sub _frame {
     my $self = shift;
-    return $self->_sequence->[ $self->{current_frame} ];
+    return $self->_sequence->[ $self->{current_frame} - 1 ];
 }
 
 sub next {
@@ -176,7 +176,8 @@ sub next {
     return if $self->{max_loops} && $self->{current_loop} >= $self->{max_loops};
 
     my $next_frame =
-      ( $self->{current_frame} + $self->{direction} ) % @{ $self->_sequence };
+      ( $self->{current_frame} - 1 + $self->{direction} )
+      % @{ $self->_sequence };
 
     if ( $next_frame == 0 ) {
         $self->{current_loop}++ if $self->{type} eq 'circular';
@@ -190,7 +191,7 @@ sub next {
             $self->{direction} *= -1;
         }
     }
-    $self->{current_frame} = $next_frame;
+    $self->{current_frame} = $next_frame + 1;
 
     $self->_update_clip;
 }
@@ -208,7 +209,7 @@ sub reset {
     my $self = shift;
 
     $self->stop;
-    $self->{current_frame} = 0;
+    $self->{current_frame} = 1;
 
     return $self;
 }
