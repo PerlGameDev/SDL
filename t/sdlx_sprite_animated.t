@@ -231,6 +231,46 @@ is( $clip->y, 0, 'clip->y after fourth next' );
 $sprite->next;
 is( $clip->y, 0, 'clip->y after fifth next' );
 
+$sprite = SDLx::Sprite::Animated->new(
+    image => 'test/data/hero.bmp',
+    rect  => SDL::Rect->new( 40, 50, 48, 48 ),
+    type  => 'reverse'
+);
+$sprite->set_sequences( up => [ [ 0, 0 ], [ 0, 1 ], [ 0, 2 ], ], );
+$sprite->sequence('up');
+$clip = $sprite->clip;
+is( $clip->y, 0, 'clip->y after new with type = reverse' );
+is( $sprite->current_loop, 0,
+    'sprite->current_loop after new with type = reverse' );
+
+$sprite->next;
+is( $clip->y,              48, 'clip->y after first next' );
+is( $sprite->current_loop, 0,  'sprite->current_loop after first next' );
+
+$sprite->next;
+is( $clip->y,              96, 'clip->y after second next' );
+is( $sprite->current_loop, 0,  'sprite->current_loop after second next' );
+
+$sprite->next;
+is( $clip->y,              48, 'clip->y after third next' );
+is( $sprite->current_loop, 0,  'sprite->current_loop after third next' );
+
+$sprite->next;
+is( $clip->y,              0, 'clip->y after fourth next' );
+is( $sprite->current_loop, 1, 'sprite->current_loop after fourth next' );
+
+$sprite->next;
+is( $clip->y,              48, 'clip->y after fifth next' );
+is( $sprite->current_loop, 1,  'sprite->current_loop after fifth next' );
+
+$sprite->next;
+is( $clip->y,              96, 'clip->y after sixth next' );
+is( $sprite->current_loop, 1,  'sprite->current_loop after sixth next' );
+
+$sprite->next;
+is( $clip->y,              48, 'clip->y after seventh next' );
+is( $sprite->current_loop, 1,  'sprite->current_loop after seventh next' );
+
 done_testing;
 
 #reset the old video driver

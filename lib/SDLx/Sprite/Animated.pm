@@ -33,7 +33,8 @@ sub new {
     $self->ticks_per_frame(
         exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
 
-    $self->{ticks} = 0;
+    $self->{ticks}     = 0;
+    $self->{direction} = 1;
 
     return $self;
 }
@@ -150,6 +151,7 @@ sub sequence {
         $self->{sequence}      = $sequence;
         $self->{current_frame} = 0;
         $self->{current_loop}  = 0;
+        $self->{direction}     = 1;
         $self->_update_clip;
     }
 
@@ -169,12 +171,27 @@ sub _frame {
 sub next {
     my $self = shift;
 
+    return if @{ $self->_sequence } == 1;
+
     return if $self->{max_loops} && $self->{current_loop} >= $self->{max_loops};
 
-    # TODO: direction, type
-    $self->{current_frame} =
-      ( $self->{current_frame} + 1 ) % @{ $self->_sequence };
-    $self->{current_loop}++ if $self->{current_frame} == 0;
+    my $next_frame =
+      ( $self->{current_frame} + $self->{direction} ) % @{ $self->_sequence };
+
+    if ( $next_frame == 0 ) {
+        $self->{current_loop}++ if $self->{type} eq 'circular';
+
+        if ( $self->{type} eq 'reverse' ) {
+
+            $self->{current_loop}++ if $self->{direction} == -1;
+
+            $next_frame = @{ $self->_sequence } - 2 if $self->{direction} == 1;
+
+            $self->{direction} *= -1;
+        }
+    }
+    $self->{current_frame} = $next_frame;
+
     $self->_update_clip;
 }
 
