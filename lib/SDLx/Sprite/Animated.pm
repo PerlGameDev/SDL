@@ -24,9 +24,11 @@ sub new {
 
     $self->_store_geometry( $w, $h );
 
-    $self->step_y( exists $options{step_y} ? $options{step_y} : 0 );
-    $self->step_x( exists $options{step_x} ? $options{step_x} : 0 );
-    $self->type( exists $options{type}     ? $options{type}   : 'circular' );
+    $self->step_x(
+        exists $options{step_x} ? $options{step_x} : $self->clip->w );
+    $self->step_y(
+        exists $options{step_y} ? $options{step_y} : $self->clip->h );
+    $self->type( exists $options{type} ? $options{type} : 'circular' );
     $self->max_loops( exists $options{max_loops} ? $options{max_loops} : 0 );
     $self->ticks_per_frame(
         exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
@@ -212,9 +214,8 @@ sub _update_clip {
     my $clip  = $self->clip;
     my $frame = $self->_frame;
 
-    # TODO step_x, step_y
-    $clip->x( $frame->[0] * $clip->w );
-    $clip->y( $frame->[1] * $clip->h );
+    $clip->x( $frame->[0] * $self->step_x );
+    $clip->y( $frame->[1] * $self->step_y );
 }
 
 sub draw {
