@@ -197,6 +197,8 @@ sub next {
     $self->{current_frame} = $next_frame + 1;
 
     $self->_update_clip;
+
+    return $self;
 }
 
 # TODO
