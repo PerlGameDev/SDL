@@ -39,6 +39,7 @@ sub tick
 {
  my $self = shift;
    my $rss = get('http://sdlperl.ath.cx/projects/SDLPerl/timeline?ticket=on&milestone=on&max=50&daysback=90&format=rss');
+   return 1 unless $rss;
    my $xml = XMLin($rss);
    my $spl = $xml->{channel}->{item}->[0]->{guid}->{content};
 
