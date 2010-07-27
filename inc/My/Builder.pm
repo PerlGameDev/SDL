@@ -126,6 +126,10 @@ sub set_file_flags {
         $debug .= ' -g -rdynamic ' unless ( $^O =~ /(win|darwin|bsd)/i );
 
     }
+    else
+    {
+	    $debug .= ' -O2 ';
+    }
 
     my $arch = ' ';
     $arch = '-arch' . $ENV{SDL_ARCH} if $ENV{SDL_ARCH};

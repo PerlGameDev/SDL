@@ -17,7 +17,7 @@ use SDL::Events;
 use SDL::Surface;
 use SDL::PixelFormat;
 use SDLx::Surface;
-use base 'SDLx::Surface';
+use base qw/SDLx::Surface SDLx::Controller/;
 
 sub new {
     my $proto   = shift;
@@ -34,6 +34,7 @@ sub new {
 
         SDL::init($init);
     }
+   	
     my $t   = $options{title}      || $options{t}  || $0;
     my $it  = $options{icon_title} || $options{it} || $t;
     my $ic  = $options{icon}       || $options{i}  || "";
@@ -107,10 +108,20 @@ sub new {
     }
 
     SDL::Video::wm_set_caption( $t, $it );
-
     bless $self, $class;
+    $self = $self->_new_controller();
     return $self;
 }
+
+sub _new_controller {
+    my $self = shift;
+    $self->{delta} = SDLx::Controller::Timer->new();
+    $self->{delta}->start();    # should do this after on_load
+    $self->{dt} = 0.1 unless $self->{dt};
+
+    return $self;
+}
+
 
 sub resize {
     my ( $self, $w, $h ) = @_;
