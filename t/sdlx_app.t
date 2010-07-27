@@ -143,7 +143,7 @@ SKIP:
 #    $app->run();
     pass 'SDLx::App can run as a controller';
 
-    sub boo{ warn $_[0]; return 0; };
+    sub boo{  return 0; };
 
 if ($videodriver) {
     $ENV{SDL_VIDEODRIVER} = $videodriver;
