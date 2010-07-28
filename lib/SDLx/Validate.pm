@@ -35,10 +35,16 @@ sub sdl_surface
 
 sub rects
 {
-    my $src_rect = shift;
-    if ( ref($src_rect) eq 'ARRAY' ) 
+    require SDL::Rect;
+
+    my ($src_rect, $rect_array_ref) = @_; #passed to cover undef
+
+    if ( ref($rect_array_ref) eq 'ARRAY' && !defined($src_rect) )
     {
-        require SDL::Rect;
+        return SDL::Rect->new(@{$rect_array_ref});
+    }
+    elsif ( ref($src_rect) eq 'ARRAY' ) 
+    {
         return SDL::Rect->new(@{$src_rect});
     }
     elsif ( $src_rect->isa('SDL::Rect') )
@@ -47,7 +53,7 @@ sub rects
     }
     else
     {
-        Carp::croak 'Array ref or SDL::Rect for source rect required.'
+            Carp::croak 'Array ref or SDL::Rect for source rect required.';
     }
 
 }

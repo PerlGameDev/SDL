@@ -241,10 +241,6 @@ sub update {
 
 sub draw_rect {
     my ( $self, $rect, $color ) = @_;
-    Carp::croak "Rect needs to be a SDL::Rect or array ref or undef"
-      unless !defined($rect)
-          || ref($rect) eq 'ARRAY'
-          || $rect->isa('SDL::Rect');
     require Scalar::Util;
     if ( Scalar::Util::looks_like_number($color) ) {
 
@@ -257,12 +253,7 @@ sub draw_rect {
         Carp::croak "Color needs to be a number or a SDL::Color";
     }
 
-    $rect = (
-         !defined($rect) ? SDL::Rect->new( 0, 0, $self->w, $self->h )
-        : ref($rect) ? SDL::Rect->new( @{$rect} )
-        : $rect
-    );
-
+    $rect = SDLx::Validate::rects( $rect, [ 0, 0, $self->w, $self->h ] ); 
     SDL::Video::fill_rect( $self->surface, $rect, $color )
       and Carp::croak "Error drawing rect: " . SDL::get_error();
 
