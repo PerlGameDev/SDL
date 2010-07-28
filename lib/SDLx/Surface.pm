@@ -14,6 +14,7 @@ use SDLx::Surface;
 use SDLx::Surface::TiedMatrix;
 use SDL::GFX::Primitives;
 use SDL::PixelFormat;
+use SDLx::Validate;
 use Tie::Simple;
 
 use overload (
@@ -91,9 +92,7 @@ sub display {
 
 sub duplicate {
     my $surface = shift;
-    Carp::croak 'SDLx::Surface or SDL::Surface for surface required'
-      unless ( $surface->isa('SDL::Surface')
-        || $surface->isa('SDLx::Surface') );
+    SDLx::Validate::surfaces($surface); 
     require SDL::PixelFormat;
     return SDLx::Surface->new(
         width  => $surface->w,
@@ -144,9 +143,7 @@ sub _array {
 sub surface {
     return $_[0]->{surface} unless $_[1];
     my ( $self, $surface ) = @_;
-    Carp::croak 'surface accepts only SDL::Surface objects'
-      unless $surface->isa('SDL::Surface');
-
+    SDLx::Validate::sdl_surface($surface);
     $self->{surface} = $surface;
     return $self->{surface};
 }
@@ -185,14 +182,12 @@ sub clip_rect {
 sub blit {
     my ( $self, $dest, $src_rect, $dest_rect ) = @_;
 
-    Carp::croak 'SDLx::Surface or SDL::Surface for dest required'
-      unless ( $dest->isa('SDL::Surface') || $dest->isa('SDLx::Surface') );
-
-    my $self_surface = $self;
-    $self_surface = $self->surface if $self->isa('SDLx::Surface');
+    my $dest_type = SDLx::Validate::surfaces( $dest );
+ 
+    my $self_surface = $self->surface;
 
     my $dest_surface = $dest;
-    $dest_surface = $dest->surface if $dest->isa('SDLx::Surface');
+    $dest_surface = $dest->surface if $dest_type eq 'sdlx';
 
     $src_rect = SDL::Rect->new( 0, 0, $self_surface->w, $self_surface->h )
       unless defined $src_rect;
@@ -211,8 +206,6 @@ sub blit {
     $pass_dest_rect = SDL::Rect->new( @{$dest_rect} )
       if ref $dest_rect eq 'ARRAY';
 
-    Carp::croak 'Destination was not a surface'
-      unless $dest_surface->isa('SDL::Surface');
     SDL::Video::blit_surface( $self_surface, $pass_src_rect, $dest_surface,
         $pass_dest_rect );
 
