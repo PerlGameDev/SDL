@@ -58,5 +58,27 @@ sub rects
 
 }
 
+sub colors
+{
+    my $color = shift;
+    require Scalar::Util;
+    if ( !defined($color) ) 
+    {
+        Carp::croak "Color cannot be undefined. Please pass a SDL::Color or number";
+    }
+    elsif ( Scalar::Util::looks_like_number($color) ) {
+        return $color;
+    }
+    elsif ( $color->isa('SDL::Color') ) {
+        return ( $color->r << 24 ) + ( $color->g << 16 ) + ( $color->b << 8 ) + 0xFF;
+    }
+    else {
+        Carp::croak "Color needs to be a number or a SDL::Color";
+    }
+
+
+
+}
+
 1;
 

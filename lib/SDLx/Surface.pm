@@ -16,7 +16,6 @@ use SDL::GFX::Primitives;
 use SDL::PixelFormat;
 use SDLx::Validate;
 use Tie::Simple;
-use Data::Dumper;
 
 use overload (
     '@{}'    => '_array',
@@ -241,22 +240,10 @@ sub update {
 
 sub draw_rect {
     my ( $self, $rect, $color ) = @_;
-    require Scalar::Util;
-    if ( Scalar::Util::looks_like_number($color) ) {
-
-    }
-    elsif ( $color->isa('SDL::Color') ) {
-        $color =
-          ( $color->r << 24 ) + ( $color->g << 16 ) + ( $color->b << 8 ) + 0xFF;
-    }
-    else {
-        Carp::croak "Color needs to be a number or a SDL::Color";
-    }
-
+    $color = SDLx::Validate::colors($color);
     $rect = SDLx::Validate::rects( $rect, [ 0, 0, $self->w, $self->h ] ); 
     SDL::Video::fill_rect( $self->surface, $rect, $color )
       and Carp::croak "Error drawing rect: " . SDL::get_error();
-
     return $self;
 }
 
