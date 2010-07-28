@@ -294,15 +294,10 @@ sub draw_line {
     return $self;
 }
 
-#TODO
-
-=pod
-
-sub draw_cirle{
+sub draw_circle{
 	my ($self, $center, $radius, $color, $antialias) = @_;
 
 	return $self;
 }
-=cut 
 
 1;
