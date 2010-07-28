@@ -17,6 +17,7 @@ use SDL::Events;
 use SDL::Surface;
 use SDL::PixelFormat;
 use SDLx::Surface;
+use Data::Dumper;
 use base qw/SDLx::Surface SDLx::Controller/;
 
 sub new {
@@ -98,30 +99,23 @@ sub new {
     else {
         $SDLx::App::USING_OPENGL = 0;
     }
-
-    my $self = SDL::Video::set_video_mode( $w, $h, $d, $f )
+    
+    my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
       or croak SDL::get_error();
-    $self = SDLx::Surface->new( surface => $self );
-    if ( $ic and -e $ic ) {
+    $options{surface} = $surface;
+
+    my $self = SDLx::Surface->new( %options );
+    
+        if ( $ic and -e $ic ) {
         my $icon = SDL::Video::load_BMP($ic);
         SDL::Video::wm_set_icon($$icon);
     }
-
+   
     SDL::Video::wm_set_caption( $t, $it );
+    $self = SDLx::Controller->new( %{$self} );
     bless $self, $class;
-    $self = $self->_new_controller();
     return $self;
 }
-
-sub _new_controller {
-    my $self = shift;
-    $self->{delta} = SDLx::Controller::Timer->new();
-    $self->{delta}->start();    # should do this after on_load
-    $self->{dt} = 0.1 unless $self->{dt};
-
-    return $self;
-}
-
 
 sub resize {
     my ( $self, $w, $h ) = @_;
