@@ -2,146 +2,179 @@ package SDLx::Color;
 use strict;
 use warnings;
 no warnings "uninitialized"; #undef is 0 in this module
-use SDL ();
-use SDL::Video ();
 use SDL::Color ();
+use SDL::Video ();
+use SDLx::Surface ();
 use Carp ();
 use Scalar::Util ();
 
-# TODO: MAP_RGB(A). AND TEST! #
-
-sub new_rgb {
-	my ($class, @arg) = @_;
-	$class = ref $class || $class;
-	if(@arg == 1 and !defined($arg[0]) || Scalar::Util::looks_like_number($arg[0])) {
-		my $num = $arg[0];
-		Carp::carp("Number given as color was bigger than maximum expected: 0xFFFFFF")
-			if $num > 0xFFFFFF;
-		Carp::carp("Number given as color was negative")
-			if $num < 0;
-		return bless {
-			r => $arg[0] >> 16 & 255,
-			g => $arg[0] >> 8  & 255,
-			b => $arg[0]       & 255,
-			a => 0
-		}, $class;
+sub _make_t {
+	my ($t, $arg) = @_;
+	Carp::croak("Wrong amount of arguments")
+		unless @_ == 2;
+	my ($num_rgb, $num_rgba, $list_rgb, $list_rgba, $error);
+	$t == 0 ? $num_rgb   = 1 :
+	$t == 1 ? $num_rgba  = 1 :
+	$t == 3 ? $list_rgb  = 1 :
+	$t == 4 ? $list_rgba = 1 :
+			  $error     = 1 ;
+	Carp::croak("$t invalid. You shouldn't be calling this directly anyway")
+		if $error;
+	$t += 3 if $t < 3; #$t is 3 if rgb and 4 if rgba
+	my $list = $list_rgb || $list_rgba; 
+	if(!$arg) {
+		return(
+			$list ? (0) x $t :
+			        0
+		);
 	}
-	$class->new(@arg);
-}
-
-sub new_rgba {
-	my ($class, @arg) = @_;
-	$class = ref $class || $class;
-	if(@arg == 1 and !defined($arg[0]) || Scalar::Util::looks_like_number($arg[0])) {
-		my $num = $arg[0];
-		Carp::carp("Number given as color was bigger than maximum expected: 0xFFFFFFFF")
-			if $num > 0xFFFFFFFF;
-		if($num < 0) {
-			Carp::carp("Number given as color was negative");
-			$num = 0;
+	elsif(Scalar::Util::looks_like_number($arg)) {
+		if($arg < 0) {
+			Carp::carp("Color was a negative number");
+			return(
+				$list ? (0) x $t :
+				        0
+			);
 		}
-		return bless {
-			r => $num >> 24 & 0xFF,
-			g => $num >> 16 & 0xFF,
-			b => $num >> 8  & 0xFF,
-			a => $num       & 0xFF
-		}, $class;
-	}
-	$class->new(@arg);
-}
-
-sub new {
-	my ($class, @arg) = @_;
-	$class = ref $class || $class;
-	if(@arg > 1) {
-		@arg = ( \@arg ); #to be processed as arrayref
-	}
-	if(@arg == 1) {
-		my $arg = $arg[0];
-		if(!$arg) {
-			return $class->new_rgb($arg); #could have been new_rgba as well
+		elsif($arg > 0xFFFFFF) {
+			Carp::carp("Color was number greater than maximum expected: 0x" . "FF" x $t);
+			return(
+				$num_rgb  ? 0xFFFFFF   :
+				$num_rgba ? 0xFFFFFFFF :
+				            (0xFF) x $t
+			);
 		}
-		elsif(Scalar::Util::looks_like_number($arg)) {
-			Carp::croak("new does not know what to do with numbers. Use new_rgb or new_rgba");
+		if($list_rgb) {
+			return(
+				$arg >> 16 & 0xFF,
+				$arg >>  8 & 0xFF,
+				$arg       & 0xFF
+			);
 		}
-		elsif(Scalar::Util::blessed($arg) and $arg->isa("SDLx::Color")) {
-			return $arg;
-		}
-		elsif(Scalar::Util::blessed($arg) and $arg->isa("SDL::Color")) {
-			return bless {
-				r => $arg->r,
-				g => $arg->g,
-				b => $arg->b,
-				a => 0
-			}, $class;
-		}
-		elsif(ref $arg eq "ARRAY" or ref $arg eq "HASH") {
-			my @arg;
-			if(ref $arg eq "HASH") {
-				@arg = (
-					$arg->{r},
-					$arg->{g},
-					$arg->{b},
-					$arg->{a}
-				);
-			}
-			else {
-				@arg = @$arg[0..3];
-			}
-			for(@arg) {
-				Carp::croak("All values in an array/hash must be numbers")
-					if Scalar::Util::looks_like_number($_);
-				Carp::carp("Number bigger than maximum expected: 0xFF")
-					if $_ > 0xFF;
-				if($_ < 0) {
-					Carp::carp("Number was negative");
-					$_ = 0;
-				}
-				$_ ||= 0;
-			}
-			return bless {
-				r => $arg[0],
-				g => $arg[1],
-				b => $arg[2],
-				a => $arg[3]
-			}, $class;
+		elsif($list_rgba) {
+			return(
+				$arg >> 24,
+				$arg >> 16 & 0xFF,
+				$arg >>  8 & 0xFF,
+				$arg       & 0xFF
+			);
 		}
 		else {
-			Carp::croak("Color given is of a type not understood");
+			return $arg;
+		}
+	}
+	elsif(Scalar::Util::blessed($arg) and $arg->isa("SDLx::Color")) {
+		if($num_rgb) {
+			return(
+				($arg->r << 16) +
+				($arg->g <<  8) +
+				($arg->b      )
+			);
+		}
+		elsif($num_rgba) {
+			return(
+				($arg->r << 24) +
+				($arg->g << 16) +
+				($arg->b <<  8) +
+				(0xFF         )
+			)
+		}
+		elsif($list_rgb) {
+			return(
+				$arg->r,
+				$arg->g,
+				$arg->b
+			);
+		}
+		else {
+			return(
+				$arg->r,
+				$arg->g,
+				$arg->b,
+				0xFF
+			);
+		}
+	}
+	elsif(ref $arg eq "ARRAY") {
+		if(@$arg > $t) {
+			Carp::carp("Color arrayref had more values than maximum expected: $t");
+			@$arg = @$arg[0..$t-1];
+		}
+		for(@$arg) {
+			$_ ||= 0;
+			Carp::croak("All values in color arrayref must be numbers")
+				unless Scalar::Util::looks_like_number($_);
+			if($_ > 0xFF) {
+				Carp::carp("Number in color arrayref was greater than maximum expected: 0xFF");
+				$_ = 0xFF;
+			}
+			elsif($_ < 0) {
+				Carp::carp("Number in color arrayref was negative");
+				$_ = 0;
+			}
+		}
+		if($num_rgb) {
+			return(
+				($arg->[0] << 16) +
+				($arg->[1] <<  8) +
+				($arg->[2]      )
+			);
+		}
+		elsif($num_rgba) {
+			return(
+				($arg->[0] << 24) +
+				($arg->[1] << 16) +
+				($arg->[2] <<  8) +
+				($arg->[3]      )
+			);
+		}
+		else {
+			return @$arg[0..$t-1];
 		}
 	}
 	else {
-		Carp::croak("Must recieve an argument, even if it's undef")
+		Carp::croak("Color must be a number, an arrayref, or an SDLx::Color");
 	}
 }
 
-sub r { $_[0]->{r} }
-sub g { $_[0]->{g} }
-sub b { $_[0]->{b} }
-sub a { $_[0]->{a} }
+sub num_rgb {
+	return(
+		_make_t( 0, @_ )
+	);
+}
+sub num_rgba {
+	return(
+		_make_t( 1, @_ )
+	);
+}
 
-sub rgb {
-	my ($self) = @_;
-	0 + (sprintf "0x" . "%02x" x 3, $self->r, $self->g, $self->b);
+sub list_rgb {
+	return(
+		_make_t( 3, @_ )
+	);
 }
-sub rgba {
-	my ($self) = @_;
-	0 + ($self->rgb . sprintf "%02x", $self->a);
+sub list_rgba {
+	return(
+		_make_t( 4, @_ )
+	);
 }
+
+sub color {
+	return SDL::Color->new(
+		_make_t( 3, @_ )
+	);
+}
+
 sub map_rgb {
-	my ($self) = @_;
-	
+	return SDL::Video::map_rgb(
+		SDLx::Surface::display->format,
+		_make_t( 3, @_ )
+	);
 }
 sub map_rgba {
-	my ($self) = @_;
-	
-}
-sub color {
-	my ($self) = @_;
-	SDL::Color->new(
-		$self->r,
-		$self->g,
-		$self->b
+	return SDL::Video::map_rgba(
+		SDLx::Surface::display->format,
+		_make_t( 4, @_ )
 	);
 }
 
