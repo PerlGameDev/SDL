@@ -16,6 +16,7 @@ use SDL::GFX::Primitives;
 use SDL::PixelFormat;
 use SDLx::Validate;
 use Tie::Simple;
+use Data::Dumper;
 
 use overload (
     '@{}'    => '_array',
@@ -143,8 +144,7 @@ sub _array {
 sub surface {
     return $_[0]->{surface} unless $_[1];
     my ( $self, $surface ) = @_;
-    SDLx::Validate::sdl_surface($surface);
-    $self->{surface} = $surface;
+    $self->{surface} = SDLx::Validate::surfaces($surface);
     return $self->{surface};
 }
 
@@ -181,30 +181,19 @@ sub clip_rect {
 
 sub blit {
     my ( $self, $dest, $src_rect, $dest_rect ) = @_;
-
-    my $dest_type = SDLx::Validate::surfaces( $dest );
  
     my $self_surface = $self->surface;
 
-    my $dest_surface = $dest;
-    $dest_surface = $dest->surface if $dest_type eq 'sdlx';
+    my $dest_surface = SDLx::Validate::surfaces( $dest );
 
     $src_rect = SDL::Rect->new( 0, 0, $self_surface->w, $self_surface->h )
       unless defined $src_rect;
     $dest_rect = SDL::Rect->new( 0, 0, $dest_surface->w, $dest_surface->h )
       unless defined $dest_rect;
 
-    Carp::croak 'Array ref or SDL::Rect for source rect required.'
-      unless ( ref($src_rect) eq 'ARRAY' ) || $src_rect->isa('SDL::Rect');
-    Carp::croak 'Array ref or SDL::Rect for dest rect required'
-      unless ( ref($dest_rect) eq 'ARRAY' ) || ( $dest_rect->isa('SDL::Rect') );
+    my $pass_src_rect = SDLx::Validate::rects($src_rect);
 
-    my $pass_src_rect = $src_rect;
-    $pass_src_rect = SDL::Rect->new( @{$src_rect} ) if ref $src_rect eq 'ARRAY';
-
-    my $pass_dest_rect = $dest_rect;
-    $pass_dest_rect = SDL::Rect->new( @{$dest_rect} )
-      if ref $dest_rect eq 'ARRAY';
+    my $pass_dest_rect = SDLx::Validate::rects($dest_rect);
 
     SDL::Video::blit_surface( $self_surface, $pass_src_rect, $dest_surface,
         $pass_dest_rect );
