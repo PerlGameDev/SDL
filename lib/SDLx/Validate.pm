@@ -43,11 +43,11 @@ sub rect {
         return $arg;
     }
     else {
-        Carp::croak("Rect must be arrayref or SDL::Rect or undef");
+        Carp::croak("Rect must be arrayref or SDL::Rect");
     }
 }
 
-sub _make_t {
+sub _make_t { # QUESTION Why is it called '_make_t'? What is the 't' for?
     my ( $t, $arg ) = @_;
     Carp::croak("Wrong amount of arguments")
       unless @_ == 2;
