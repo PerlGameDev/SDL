@@ -6,7 +6,7 @@ no warnings "uninitialized";
 use Carp;
 use Scalar::Util ();
 
-sub surface {warn "@_";
+sub surface {
 	my ($arg) = @_;
 	Carp::croak("Wrong amount of arguments")
 		unless @_ == 1;
