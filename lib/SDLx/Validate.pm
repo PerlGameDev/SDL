@@ -2,7 +2,6 @@
 package SDLx::Validate;
 use strict;
 use warnings;
-no warnings "uninitialized"; #TODO: Don't use this. Just check for undef or modify it out
 use Carp;
 use Scalar::Util ();
 
@@ -66,7 +65,7 @@ sub _make_t {
 
         if ( !defined $arg or $arg < 0 ) {
             Carp::carp("Color was a negative number")
-              if $arg < 0;
+              if defined $arg && $arg < 0;
             if ($num_rgb) {
                 return 0;
             }
@@ -128,21 +127,26 @@ sub _make_t {
             Carp::croak("All values in color arrayref must be numbers or undef")
               unless !defined $$_
                   or Scalar::Util::looks_like_number($$_);
-            if ( $$_ > 0xFF ) {
-                Carp::carp(
+            if ( defined $$_ ) {
+                if ( $$_ > 0xFF ) {
+                    Carp::carp(
 "Number in color arrayref was greater than maximum expected: 0xFF"
-                );
-                $$_ = 0xFF;
-            }
-            elsif ( $$_ < 0 ) {
-                Carp::carp("Number in color arrayref was negative");
-                $$_ = 0;
+                    );
+                    $$_ = 0xFF;
+                }
+                elsif ( $$_ < 0 ) {
+                    Carp::carp("Number in color arrayref was negative");
+                    $$_ = 0;
+                }
             }
         }
         if ($num_rgb) {
+            foreach ( 0 .. 2 ) { $arg->[$_] = 0 unless $arg->[$_] }
             return ( ( $arg->[0] << 16 ) + ( $arg->[1] << 8 ) + ( $arg->[2] ) );
         }
         elsif ($num_rgba) {
+            foreach ( 0 .. 2 ) { $arg->[$_] = 0 unless $arg->[$_] }
+
             return ( ( $arg->[0] << 24 ) +
                   ( $arg->[1] << 16 ) +
                   ( $arg->[2] << 8 ) +
