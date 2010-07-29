@@ -92,7 +92,7 @@ sub display {
 
 sub duplicate {
     my $surface = shift;
-    SDLx::Validate::surfaces($surface); 
+    SDLx::Validate::surface($surface);
     require SDL::PixelFormat;
     return SDLx::Surface->new(
         width  => $surface->w,
@@ -143,7 +143,7 @@ sub _array {
 sub surface {
     return $_[0]->{surface} unless $_[1];
     my ( $self, $surface ) = @_;
-    $self->{surface} = SDLx::Validate::surfaces($surface);
+    $self->{surface} = SDLx::Validate::surface($surface);
     return $self->{surface};
 }
 
@@ -180,19 +180,19 @@ sub clip_rect {
 
 sub blit {
     my ( $self, $dest, $src_rect, $dest_rect ) = @_;
- 
+
     my $self_surface = $self->surface;
 
-    my $dest_surface = SDLx::Validate::surfaces( $dest );
+    my $dest_surface = SDLx::Validate::surface($dest);
 
     $src_rect = SDL::Rect->new( 0, 0, $self_surface->w, $self_surface->h )
       unless defined $src_rect;
     $dest_rect = SDL::Rect->new( 0, 0, $dest_surface->w, $dest_surface->h )
       unless defined $dest_rect;
 
-    my $pass_src_rect = SDLx::Validate::rects($src_rect);
+    my $pass_src_rect = SDLx::Validate::rect($src_rect);
 
-    my $pass_dest_rect = SDLx::Validate::rects($dest_rect);
+    my $pass_dest_rect = SDLx::Validate::rect($dest_rect);
 
     SDL::Video::blit_surface( $self_surface, $pass_src_rect, $dest_surface,
         $pass_dest_rect );
@@ -240,8 +240,14 @@ sub update {
 
 sub draw_rect {
     my ( $self, $rect, $color ) = @_;
-    $color = SDLx::Validate::colors($color);
-    $rect = SDLx::Validate::rects( $rect, [ 0, 0, $self->w, $self->h ] ); 
+    $color = SDLx::Validate::num_rgba($color);
+    if ( defined $rect ) {
+        $rect = SDLx::Validate::rect($rect);
+    }
+    else {
+        $rect = SDL::Rect->new( 0, 0, $self->w, $self->h );
+    }
+
     SDL::Video::fill_rect( $self->surface, $rect, $color )
       and Carp::croak "Error drawing rect: " . SDL::get_error();
     return $self;
@@ -294,10 +300,10 @@ sub draw_line {
     return $self;
 }
 
-sub draw_circle{
-	my ($self, $center, $radius, $color, $antialias) = @_;
+sub draw_circle {
+    my ( $self, $center, $radius, $color, $antialias ) = @_;
 
-	return $self;
+    return $self;
 }
 
 1;
