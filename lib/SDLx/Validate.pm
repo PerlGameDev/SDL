@@ -17,9 +17,12 @@ sub surface {
             require SDLx::Surface;
             return $arg->surface();
         }
+        else { #This will catch stuff like SDL::Rect or any other random crap
+            Carp::croak("Surface must be SDL::Surface or SDLx::Surface");
+        }
     }
     else {
-        Carp::croak("Surface must be SDL::Surface or SDLx::Surface");
+        Carp::croak("Surface must be an object of isa SDL::Surface and SDLx::Surface");
     }
 }
 

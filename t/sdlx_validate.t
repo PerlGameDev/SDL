@@ -14,6 +14,8 @@ for (@surfaces) {
     ok( SDLx::Validate::surface(eval)->isa("SDL::Surface"),
         "surface($_) is a SDL::Surface" );
 }
+eval { SDLx::Validate::surface( SDL::Rect->new( 0, 0, 0, 0) ) };
+is( $@=~ /Surface must be SDL::Surface or SDLx::Surface/, 1,  "Validate detects wrong objects" );
 
 my @rects_0 = ( '[]', '[0, 0, 0, 0]', 'SDL::Rect->new(0, 0, 0, 0)', );
 for (@rects_0) {
