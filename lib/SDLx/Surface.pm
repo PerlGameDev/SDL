@@ -92,7 +92,7 @@ sub display {
 
 sub duplicate {
     my $surface = shift;
-    SDLx::Validate::surface($surface); 
+    SDLx::Validate::surface($surface);
     require SDL::PixelFormat;
     return SDLx::Surface->new(
         width  => $surface->w,
@@ -180,10 +180,10 @@ sub clip_rect {
 
 sub blit {
     my ( $self, $dest, $src_rect, $dest_rect ) = @_;
- 
+
     my $self_surface = $self->surface;
 
-    my $dest_surface = SDLx::Validate::surface( $dest );
+    my $dest_surface = SDLx::Validate::surface($dest);
 
     $src_rect = SDL::Rect->new( 0, 0, $self_surface->w, $self_surface->h )
       unless defined $src_rect;
@@ -241,13 +241,13 @@ sub update {
 sub draw_rect {
     my ( $self, $rect, $color ) = @_;
     $color = SDLx::Validate::num_rgba($color);
-	if(defined $rect) {
-		$rect = SDLx::Validate::rect( $rect ); 
-	}
-	else {
-		$rect = SDL::Rect->new(0, 0, $self->w, $self->h);
-	}
-	
+    if ( defined $rect ) {
+        $rect = SDLx::Validate::rect($rect);
+    }
+    else {
+        $rect = SDL::Rect->new( 0, 0, $self->w, $self->h );
+    }
+
     SDL::Video::fill_rect( $self->surface, $rect, $color )
       and Carp::croak "Error drawing rect: " . SDL::get_error();
     return $self;
@@ -300,10 +300,10 @@ sub draw_line {
     return $self;
 }
 
-sub draw_circle{
-	my ($self, $center, $radius, $color, $antialias) = @_;
+sub draw_circle {
+    my ( $self, $center, $radius, $color, $antialias ) = @_;
 
-	return $self;
+    return $self;
 }
 
 1;
