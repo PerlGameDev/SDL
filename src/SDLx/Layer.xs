@@ -24,7 +24,6 @@ layerx_new( CLASS, surface, ... )
         RETVAL->clip      = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
         RETVAL->pos       = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
         RETVAL->surface   = SDL_ConvertSurface(surface, surface->format, surface->flags);
-        RETVAL->data      = (HV *)safemalloc( sizeof(HV) );
         (RETVAL->pos)->x  = 0;
         (RETVAL->pos)->y  = 0;
         (RETVAL->pos)->w  = (RETVAL->surface)->w;
@@ -37,6 +36,8 @@ layerx_new( CLASS, surface, ... )
         if(SvROK(ST(items - 1)) && SVt_PVHV == SvTYPE(SvRV(ST(items - 1))))
         {
             RETVAL->data = (HV *)SvRV(ST(items - 1));
+            //if(SvREFCNT(RETVAL->data) < 2)
+                SvREFCNT_inc(RETVAL->data);
             items--;
         }
         else
@@ -158,9 +159,6 @@ void
 layerx_DESTROY( layer )
     SDLx_Layer *layer
     CODE:
-        /*safefree(layer->clip);
-        layer->clip = NULL;
-        safefree(layer->pos);
-        layer->pos = NULL;*/
+        //if((HV *)NULL != layer->data) // Attempt to free unreferenced scalar
+            //SvREFCNT_dec(layer->data);
         safefree(layer);
-        //layer = NULL;

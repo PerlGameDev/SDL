@@ -30,6 +30,7 @@ my $surface = SDL::Image::load('test/data/picture.bmp');
 my $hash = { id => 7 };
 my $layer   = SDLx::Layer->new( $surface, 20, 40, 0, 5, 100, 120, $hash );
 my $layer2  = SDLx::Layer->new( $surface, 60, 60 );
+my $layer3  = SDLx::Layer->new( $surface, 60, 60, { aa => 'bb', bb => 'cc' } );
 
 isa_ok( $layer,             'SDLx::Layer',  'SDLx::Layer->new');
 is    ( $layer->x,          20,             'SDLx::Layer->x' );
@@ -52,6 +53,7 @@ is    ( $layer->pos->h,     200,            'SDLx::Layer->pos->h' );
 isa_ok( $layer->data,       'HASH',         'SDLx::Layer->data' );
 is    ( $layer2->data,      undef,          'SDLx::Layer->data' );
 is    ( $layer->data->{id}, 7,              'SDLx::Layer->data->{}' );
+is    ( $layer3->data->{bb}, 'cc',          'SDLx::Layer->data->{}' );
 
 
 ############ SDLx::LayerManager #####################################################
