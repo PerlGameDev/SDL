@@ -36,6 +36,7 @@ my $sprite = SDLx::Sprite->new( width => 1, height => 1 );
 # test initial values
 #ok($sprite, 'object defined');
 isa_ok( $sprite, 'SDLx::Sprite' );
+isa_ok( $sprite, 'SDLx::Surface' );
 
 my $rect = $sprite->rect;
 ok( $rect, 'rect defined upon raw initialization' );

@@ -24,14 +24,17 @@ sub new {
 
     $self->_store_geometry( $w, $h );
 
-    $self->step_y( exists $options{step_y} ? $options{step_y} : 0 );
-    $self->step_x( exists $options{step_x} ? $options{step_x} : 0 );
-    $self->type( exists $options{type}     ? $options{type}   : 'circular' );
+    $self->step_x(
+        exists $options{step_x} ? $options{step_x} : $self->clip->w );
+    $self->step_y(
+        exists $options{step_y} ? $options{step_y} : $self->clip->h );
     $self->max_loops( exists $options{max_loops} ? $options{max_loops} : 0 );
     $self->ticks_per_frame(
         exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
+    $self->type( exists $options{type} ? $options{type} : 'circular' );
 
-    $self->{ticks} = 0;
+    $self->{ticks}     = 0;
+    $self->{direction} = 1;
 
     return $self;
 }
@@ -88,7 +91,7 @@ sub type {
     my ( $self, $type ) = @_;
 
     if ($type) {
-        $self->{type} = $type;
+        $self->{type} = lc $type;
     }
 
     return $self->{type};
@@ -97,7 +100,7 @@ sub type {
 sub max_loops {
     my ( $self, $max ) = @_;
 
-    if ($max) {
+    if ( @_ > 1 ) {
         $self->{max_loops} = $max;
     }
 
@@ -146,7 +149,9 @@ sub sequence {
 
         #TODO: Validate sequence.
         $self->{sequence}      = $sequence;
-        $self->{current_frame} = 0;
+        $self->{current_frame} = 1;
+        $self->{current_loop}  = 1;
+        $self->{direction}     = 1;
         $self->_update_clip;
     }
 
@@ -160,16 +165,40 @@ sub _sequence {
 
 sub _frame {
     my $self = shift;
-    return $self->_sequence->[ $self->{current_frame} ];
+    return $self->_sequence->[ $self->{current_frame} - 1 ];
 }
 
 sub next {
     my $self = shift;
 
-    # TODO: direction, type, max_loops, current_loop
-    $self->{current_frame} =
-      ( $self->{current_frame} + 1 ) % @{ $self->_sequence };
+    return if @{ $self->_sequence } == 1;
+
+    return if $self->{max_loops} && $self->{current_loop} > $self->{max_loops};
+
+    my $next_frame =
+      ( $self->{current_frame} - 1 + $self->{direction} )
+      % @{ $self->_sequence };
+
+    if ( $next_frame == 0 ) {
+        $self->{current_loop}++ if $self->{type} eq 'circular';
+
+        if ( $self->{type} eq 'reverse' ) {
+
+            if ( $self->{direction} == 1 ) {
+                $next_frame = @{ $self->_sequence } - 2;
+            }
+            else {
+                $self->{current_loop}++;
+            }
+
+            $self->{direction} *= -1;
+        }
+    }
+    $self->{current_frame} = $next_frame + 1;
+
     $self->_update_clip;
+
+    return $self;
 }
 
 # TODO
@@ -185,7 +214,7 @@ sub reset {
     my $self = shift;
 
     $self->stop;
-    $self->{current_frame} = 0;
+    $self->{current_frame} = 1;
 
     return $self;
 }
@@ -212,9 +241,8 @@ sub _update_clip {
     my $clip  = $self->clip;
     my $frame = $self->_frame;
 
-    # TODO step_x, step_y
-    $clip->x( $frame->[0] * $clip->w );
-    $clip->y( $frame->[1] * $clip->h );
+    $clip->x( $frame->[0] * $self->step_x );
+    $clip->y( $frame->[1] * $self->step_y );
 }
 
 sub draw {
@@ -222,7 +250,8 @@ sub draw {
 
     $self->{ticks}++;
     $self->next
-      if $self->{started} && $self->{ticks} % $self->{ticks_per_frame} == 0;
+      if $self->{started}
+          && $self->{ticks} % $self->{ticks_per_frame} == 0;
 
     Carp::croak 'destination must be a SDL::Surface'
       unless ref $surface and $surface->isa('SDL::Surface');
