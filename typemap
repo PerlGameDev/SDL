@@ -55,7 +55,8 @@ Mix_Music *		O_OBJECT
 SDL_GLattr              T_IV
 SDLPango_Context * 	O_OBJECT
 sdlx_timer * 		O_OBJECT
-SDLx_LayerManager * 	O_OBJECT
+SDLx_LayerManager *	O_OBJECT
+SDLx_Layer *	O_OBJECT
 SDLPango_Alignment T_UV
 int *			T_PTR
 int **			T_PTR

@@ -63,42 +63,42 @@ sub set {
 #    return \@layers;
 #}
 
-sub blit {
-    my $self = shift;
-    my $dest = shift;
-    
-    return 0 unless (scalar @attached_layers || $must_redraw);
-    
-    my $did_redraw = (scalar @attached_layers || $must_redraw);
-
-    #print("$must_redraw\n");
-    my ( $mask, $x, $y ) = @{ SDL::Events::get_mouse_state() };
-    
-    #$snapshot->blit_by($dest) if $must_redraw;
-    
-    if(scalar @attached_layers || $must_redraw) {
-        my $layer_index = 0;
-        foreach (@layers) {
-            $_->{layer}->draw($dest) unless join( ',', @attached_layers ) =~ m/\b\Q$layer_index\E\b/;
-            $layer_index++;
-        }
-        #$snapshot = SDLx::Sprite->new(width => $dest->w, height => $dest->h);
-        $snapshot->blit_by($dest);
-        #print("2\n");
-    }
-    
-    foreach (@attached_layers) {
-        $layers[$_]->{layer}->draw_xy($dest, $x + @{$attached_distance[$_]}[0], $y + @{$attached_distance[$_]}[1]);
-    }
-    
-    #unless (scalar @attached_layers && defined $snapshot) {
-    #    $snapshot = SDLx::Sprite->new(width => $self->{dest}->w, height => $self->{dest}->h);
-    #    $snapshot->blit_by($self->{dest});
-    #}
-    
-    $must_redraw = 0;
-    return $did_redraw;
-}
+#sub blit {
+#    my $self = shift;
+#    my $dest = shift;
+#    
+#    return 0 unless (scalar @attached_layers || $must_redraw);
+#    
+#    my $did_redraw = (scalar @attached_layers || $must_redraw);
+#
+#    #print("$must_redraw\n");
+#    my ( $mask, $x, $y ) = @{ SDL::Events::get_mouse_state() };
+#    
+#    #$snapshot->blit_by($dest) if $must_redraw;
+#    
+#    if(scalar @attached_layers || $must_redraw) {
+#        my $layer_index = 0;
+#        foreach (@layers) {
+#            $_->{layer}->draw($dest) unless join( ',', @attached_layers ) =~ m/\b\Q$layer_index\E\b/;
+#            $layer_index++;
+#        }
+#        #$snapshot = SDLx::Sprite->new(width => $dest->w, height => $dest->h);
+#        $snapshot->blit_by($dest);
+#        #print("2\n");
+#    }
+#    
+#    foreach (@attached_layers) {
+#        $layers[$_]->{layer}->draw_xy($dest, $x + @{$attached_distance[$_]}[0], $y + @{$attached_distance[$_]}[1]);
+#    }
+#    
+#    #unless (scalar @attached_layers && defined $snapshot) {
+#    #    $snapshot = SDLx::Sprite->new(width => $self->{dest}->w, height => $self->{dest}->h);
+#    #    $snapshot->blit_by($self->{dest});
+#    #}
+#    
+#    $must_redraw = 0;
+#    return $did_redraw;
+#}
 
 sub attach {
     my $self = shift;

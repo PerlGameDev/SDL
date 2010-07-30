@@ -202,6 +202,13 @@ my %subsystems = (
         },
         libraries => [qw( SDL )],
     },
+    LayerX => {
+        file => {
+            from => 'src/SDLx/Layer.xs',
+            to   => 'lib/SDLx/Layer.xs',
+        },
+        libraries => [qw( SDL SDL_image )],
+    },
     AudioSpec => {
         file => {
             from => 'src/Core/objects/AudioSpec.xs',

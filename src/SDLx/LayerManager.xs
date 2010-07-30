@@ -10,47 +10,7 @@
 #include <SDL.h>
 #include "SDLx/LayerManager.h"
 
-#define SDLX_MAX_LAYER_SIZE 256
-
-SV *layers[SDLX_MAX_LAYER_SIZE];
-SV *attached_layers[SDLX_MAX_LAYER_SIZE];
-
-Uint8 _length()
-{
-    int i = 0;
-    while(i < SDLX_MAX_LAYER_SIZE && layers[i] != NULL)
-    {
-        i++;
-    }
-    
-    return i;
-}
-
-int _call_method(SV *ref, char *method)
-{
-    dSP;
-    int count;
-    int retval = 0;
-    
-    ENTER;
-    SAVETMPS;
-    
-    PUSHMARK(SP);
-    XPUSHs(ref);
-    PUTBACK;
-    
-    count = call_method(method, G_SCALAR);
-    
-    SPAGAIN;
-    if (count == 1)
-        retval = POPi;
-    PUTBACK;
-    
-    FREETMPS;
-    LEAVE;
-    
-    return retval;
-}
+PerlInterpreter * perl = NULL;
 
 MODULE = SDLx::LayerManager    PACKAGE = SDLx::LayerManager    PREFIX = lmx_
 
@@ -59,52 +19,45 @@ lmx_new( CLASS, ... )
     char* CLASS
     CODE:
         RETVAL = (SDLx_LayerManager *)safemalloc( sizeof(SDLx_LayerManager) );
-        RETVAL->layers = newAV();
+        RETVAL->length = 0;
     OUTPUT:
         RETVAL
 
 void *
-lmx_add( manager, ... )
+lmx_add( manager, layer )
     SDLx_LayerManager *manager
+    SDLx_Layer *layer
     CODE:
-        int i = 1;
-        while( i < items )
-        {
-            av_push(manager->layers, (SV *)newSVsv(ST(i)));
-            
-            /*printf("is object: %d\n",       sv_isobject((SV *)ST(i)));
-            printf("is SDLx::Sprite: %d\n", sv_derived_from((SV *)ST(i), "SDLx::Sprite"));
-            
-            printf("x is %d\n", _call_method((SV *)ST(i), "x"));
-
-            PUSHMARK(SP);
-            XPUSHs((SV *)ST(i));
-            XPUSHs(sv_2mortal(newSViv(7)));
-            PUTBACK;
-            call_method("x", G_DISCARD);
-            
-            printf("x is %d\n", _call_method((SV *)ST(i), "x"));*/
-
-            i++;
-        }
+        manager->layers[manager->length] = layer;
+        manager->length++;
 
 AV *
 lmx_layers( manager )
     SDLx_LayerManager *manager
     CODE:
-        RETVAL = manager->layers;
+        XSRETURN_UNDEF;
     OUTPUT:
         RETVAL
+
 
 SV *
 lmx_layer( manager, index )
     SDLx_LayerManager *manager
     int index
+    PREINIT:
+        char* CLASS = "SDLx::Layer";
     CODE:
-        if(index <= av_len(manager->layers))
+        if(index >= 0 && index < manager->length)
         {
-            RETVAL = *av_fetch(manager->layers, index, 0);
-            SvREFCNT_inc(RETVAL);
+            SV   *rectref  = newSV( sizeof(SDLx_Layer *) );
+            void *copyRect = safemalloc( sizeof(SDLx_Layer) );
+            memcpy( copyRect, (manager->layers)[index], sizeof(SDLx_Layer) );
+
+            void** pointers = malloc(2 * sizeof(void*));
+            pointers[0]     = (void*)copyRect;
+            pointers[1]     = (void*)perl;
+
+            RETVAL = newSVsv(sv_setref_pv(rectref, "SDLx::Layer", (void *)pointers));
         }
         else
             XSRETURN_UNDEF;
@@ -115,9 +68,46 @@ int
 lmx_length( manager )
     SDLx_LayerManager *manager
     CODE:
-        RETVAL = av_len(manager->layers) + 1;
+        RETVAL = manager->length;
     OUTPUT:
         RETVAL
+
+void
+lmx_blit( manager, dest )
+    SDLx_LayerManager *manager
+    SDL_Surface       *dest
+    CODE:
+        //int x, y;
+        //SDL_GetMouseState(&x, &y);
+        
+        int index = 0;
+        while(index < manager->length)
+        {
+            //SDLx_Layer *layer = *(manager->layers);
+            SDLx_Layer *layer = (manager->layers)[index];
+            
+            SDL_BlitSurface(layer->surface, layer->clip, dest, layer->pos);
+            //SDL_UpdateRect(dest, 0, 0, 0, 0);
+            
+            index++;
+        }
+        
+        /*
+        my ( $mask, $x, $y ) = @{ SDL::Events::get_mouse_state() };
+        
+        if(scalar @attached_layers) {
+            my $layer_index = 0;
+            foreach (@layers) {
+                $_->{layer}->draw($dest) unless join( ',', @attached_layers ) =~ m/\b\Q$layer_index\E\b/;
+                $layer_index++;
+            }
+            $snapshot->blit_by($dest);
+        }
+        
+        foreach (@attached_layers) {
+            $layers[$_]->{layer}->draw_xy($dest, $x + @{$attached_distance[$_]}[0], $y + @{$attached_distance[$_]}[1]);
+        }
+        */
 
 void
 lmx_DESTROY( manager )
