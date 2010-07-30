@@ -28,30 +28,32 @@ my $surface = SDL::Image::load('test/data/picture.bmp');
 ############# SDLx::Layer ###########################################################
 
 my $hash = { id => 7 };
-my $layer = SDLx::Layer->new( $surface, 20, 40, 0, 5, 100, 120, $hash );
-my $layer2 = SDLx::Layer->new( $surface, 60, 60 );
+my $layer   = SDLx::Layer->new( $surface, 20, 40, 0, 5, 100, 120, $hash );
+my $layer2  = SDLx::Layer->new( $surface, 60, 60 );
+my $layer3  = SDLx::Layer->new( $surface, 60, 60, { aa => 'bb', bb => 'cc' } );
 
-isa_ok( $layer, 'SDLx::Layer', 'SDLx::Layer->new' );
-is( $layer->x, 20,  'SDLx::Layer->x' );
-is( $layer->y, 40,  'SDLx::Layer->y' );
-is( $layer->w, 100, 'SDLx::Layer->w' );
-is( $layer->h, 120, 'SDLx::Layer->h' );
-isa_ok( $layer->surface, 'SDL::Surface', 'SDLx::Layer->surface' );
-is( $layer->surface->w, 180, 'SDLx::Layer->surface->w' );
-is( $layer->surface->h, 200, 'SDLx::Layer->surface->h' );
-isa_ok( $layer->clip, 'SDL::Rect', 'SDLx::Layer->clip' );
-is( $layer->clip->x, 0,   'SDLx::Layer->clip->x' );
-is( $layer->clip->y, 5,   'SDLx::Layer->clip->y' );
-is( $layer->clip->w, 100, 'SDLx::Layer->clip->w' );
-is( $layer->clip->h, 120, 'SDLx::Layer->clip->h' );
-isa_ok( $layer->pos, 'SDL::Rect', 'SDLx::Layer->pos' );
-is( $layer->pos->x, 20,  'SDLx::Layer->pos->x' );
-is( $layer->pos->y, 40,  'SDLx::Layer->pos->y' );
-is( $layer->pos->w, 180, 'SDLx::Layer->pos->w' );
-is( $layer->pos->h, 200, 'SDLx::Layer->pos->h' );
-isa_ok( $layer->data, 'HASH', 'SDLx::Layer->data' );
-is( $layer2->data,      undef, 'SDLx::Layer->data' );
-is( $layer->data->{id}, 7,     'SDLx::Layer->data->{}' );
+isa_ok( $layer,             'SDLx::Layer',  'SDLx::Layer->new');
+is    ( $layer->x,          20,             'SDLx::Layer->x' );
+is    ( $layer->y,          40,             'SDLx::Layer->y' );
+is    ( $layer->w,          100,            'SDLx::Layer->w' );
+is    ( $layer->h,          120,            'SDLx::Layer->h' );
+isa_ok( $layer->surface,    'SDL::Surface', 'SDLx::Layer->surface' );
+is    ( $layer->surface->w, 180,            'SDLx::Layer->surface->w' );
+is    ( $layer->surface->h, 200,            'SDLx::Layer->surface->h' );
+isa_ok( $layer->clip,       'SDL::Rect',    'SDLx::Layer->clip' );
+is    ( $layer->clip->x,    0,              'SDLx::Layer->clip->x' );
+is    ( $layer->clip->y,    5,              'SDLx::Layer->clip->y' );
+is    ( $layer->clip->w,    100,            'SDLx::Layer->clip->w' );
+is    ( $layer->clip->h,    120,            'SDLx::Layer->clip->h' );
+isa_ok( $layer->pos,        'SDL::Rect',    'SDLx::Layer->pos' );
+is    ( $layer->pos->x,     20,             'SDLx::Layer->pos->x' );
+is    ( $layer->pos->y,     40,             'SDLx::Layer->pos->y' );
+is    ( $layer->pos->w,     180,            'SDLx::Layer->pos->w' );
+is    ( $layer->pos->h,     200,            'SDLx::Layer->pos->h' );
+isa_ok( $layer->data,       'HASH',         'SDLx::Layer->data' );
+is    ( $layer2->data,      undef,          'SDLx::Layer->data' );
+is    ( $layer->data->{id}, 7,              'SDLx::Layer->data->{}' );
+is    ( $layer3->data->{bb}, 'cc',          'SDLx::Layer->data->{}' );
 
 
 ############ SDLx::LayerManager #####################################################
