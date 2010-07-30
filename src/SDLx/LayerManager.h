@@ -1,6 +1,7 @@
 
 #include "Layer.h"
 
+
 typedef struct SDLx_LayerManager
 {
     SDLx_Layer *layers[256];
