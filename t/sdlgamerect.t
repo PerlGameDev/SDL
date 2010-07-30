@@ -5,19 +5,19 @@ use SDL;
 use_ok('SDLx::Rect');
 
 can_ok(
-    'SDLx::Rect', qw/
-      new
-      x
-      y
-      width
-      height
-      w
-      h
-      top
-      left
-      centerx
-      centery
-      /
+	'SDLx::Rect', qw/
+		new
+		x
+		y
+		width
+		height
+		w
+		h
+		top
+		left
+		centerx
+		centery
+		/
 );
 
 my $rect = SDLx::Rect->new( 0, 0, 0, 0 );
@@ -25,11 +25,11 @@ my $rect = SDLx::Rect->new( 0, 0, 0, 0 );
 isa_ok( $rect, 'SDLx::Rect', 'new went ok' );
 
 foreach my $attr (
-    qw(x y top    left  width   height
-    w h bottom right centerx centery)
-  )
+	qw(x y top    left  width   height
+	w h bottom right centerx centery)
+	)
 {
-    is( $rect->$attr, 0, "$attr is 0" );
+	is( $rect->$attr, 0, "$attr is 0" );
 }
 
 # set and get at the same time (and testing method aliases)
@@ -67,44 +67,47 @@ is( $rect->h(),      67,  'h is 67' );
 is( $rect->bottom,      190, 'bottom should be relative to heigth and top' );
 is( $rect->bottom(189), 189, 'changing bottom value' );
 is( $rect->bottom,      189, 'checking bottom value again' );
-is( $rect->top, 122, 'top value should have been updated after bottom change' );
-is( $rect->height, 67, 'height should have stayed the same' );
+is( $rect->top,         122, 'top value should have been updated after bottom change' );
+is( $rect->height,      67,  'height should have stayed the same' );
 
 is( $rect->centery,      155, 'checking vertical center' );
 is( $rect->centery(154), 154, 'changing centery value' );
 is( $rect->centery,      154, 'checking centery value again' );
 is( $rect->top, 121,
-    'top value should have been updated after centery change' );
+	'top value should have been updated after centery change'
+);
 is( $rect->height, 67, 'height should have stayed the same' );
 
 is( $rect->right,     57, 'right should be relative to width and left' );
 is( $rect->right(56), 56, 'changing right value' );
 is( $rect->right,     56, 'checking right value again' );
 is( $rect->left, 11,
-    'left value should have been updated after bottom change' );
+	'left value should have been updated after bottom change'
+);
 is( $rect->width, 45, 'width should have stayed the same' );
 
 is( $rect->centerx,     33, 'checking horizontal center' );
 is( $rect->centerx(32), 32, 'changing centerx value' );
 is( $rect->centerx,     32, 'checking centerx value again' );
 is( $rect->left, 10,
-    'left value should have been updated after bottom change' );
+	'left value should have been updated after bottom change'
+);
 is( $rect->width, 45, 'width should have stayed the same' );
 
 # checking two-valued accessors
 can_ok(
-    'SDLx::Rect', qw/
-      size
-      center
-      topleft
-      midleft
-      bottomleft
-      topright
-      midright
-      bottomright
-      midtop
-      midbottom
-      /
+	'SDLx::Rect', qw/
+		size
+		center
+		topleft
+		midleft
+		bottomleft
+		topright
+		midright
+		bottomright
+		midtop
+		midbottom
+		/
 );
 
 is_deeply( [ $rect->center ], [ 32, 154 ], 'checking center pair' );

@@ -56,12 +56,12 @@ my $Include = '';
 my $extra = '';
 
 my $result = GetOptions(
-    "output=s" => \$output,
-    "libs=s"   => \$libs,
-    "input=s"  => \$input,
-    "nclude=s" => \$Include,
-    "more=s"   => \$extra,
-    "help"     => sub { usage() },
+	"output=s" => \$output,
+	"libs=s"   => \$libs,
+	"input=s"  => \$input,
+	"nclude=s" => \$Include,
+	"more=s"   => \$extra,
+	"help"     => sub { usage() },
 );
 
 $extra = '-M ' . $extra if $extra;
@@ -70,22 +70,21 @@ $extra =~ s/,/ \-M /g;
 my @sdl_libs = split ',', $libs;
 
 sub usage {
-    print
-" perl SDLpp.pl --output=a.exe --libs=SDL,SDL_main,SDL_gfx  --input=script.pl --nclude=./lib --more=Foo::Bar,Bar::Foo \n"
-      . " if --libs is not define only SDL,SDL-1.2,SDLmain libs are packaged \n";
+	print
+		" perl SDLpp.pl --output=a.exe --libs=SDL,SDL_main,SDL_gfx  --input=script.pl --nclude=./lib --more=Foo::Bar,Bar::Foo \n"
+		. " if --libs is not define only SDL,SDL-1.2,SDLmain libs are packaged \n";
 
-    exit;
+	exit;
 }
 
 if ( !$input ) {
-    warn 'Input needs to be specified.';
-    usage;
+	warn 'Input needs to be specified.';
+	usage;
 }
 
 print "BUILDING PAR \n";
 my $exclude_modules = '-X Alien::SDL::ConfigData -X SDL::ConfigData';
-my $include_modules =
-  '-M ExtUtils::CBuilder::Base -M Data::Dumper -M SDL -M Alien::SDL';
+my $include_modules = '-M ExtUtils::CBuilder::Base -M Data::Dumper -M SDL -M Alien::SDL';
 $include_modules .= " $extra" if $extra;
 
 my $out_par = $output . '.par';
@@ -108,19 +107,19 @@ finddepth( \&wanted, @INC );
 
 sub wanted {
 
-    if ( $_ =~ /ConfigData/ ) {
-        $AS_path = $File::Find::name
-          if $File::Find::name =~ 'Alien/SDL/ConfigData.pm';
-        $SD_path = $File::Find::name
-          if $File::Find::name =~ 'SDL/ConfigData.pm'
-              && $File::Find::name !~ 'Alien/SDL/ConfigData.pm';
+	if ( $_ =~ /ConfigData/ ) {
+		$AS_path = $File::Find::name
+			if $File::Find::name =~ 'Alien/SDL/ConfigData.pm';
+		$SD_path = $File::Find::name
+			if $File::Find::name =~ 'SDL/ConfigData.pm'
+				&& $File::Find::name !~ 'Alien/SDL/ConfigData.pm';
 
-        $lib = $File::Find::dir if ( $AS_path && $SD_path );
-    }
+		$lib = $File::Find::dir if ( $AS_path && $SD_path );
+	}
 }
 
 die "Cannot find lib/SDL/ConfigData.pm or lib/Alien/SDL/ConfigData.pm \n"
-  if ( !$AS_path || !$SD_path );
+	if ( !$AS_path || !$SD_path );
 
 print "Found ConfigData files in $lib \n";
 
@@ -128,7 +127,7 @@ print "READING PAR FILE \n";
 
 my $par_file = Archive::Zip->new();
 unless ( $par_file->read($out_par) == AZ_OK ) {
-    die 'read error on ' . $out_par;
+	die 'read error on ' . $out_par;
 }
 
 $par_file->addFile( $AS_path, 'lib/Alien/SDL/ConfigData.pm' );
@@ -144,44 +143,42 @@ $alien_sdl_auto =~ s/$share(\S+)// if $alien_sdl_auto;
 
 my @auto_folder = $par_file->membersMatching("$alien_sdl_auto(?!$share)");
 
-my @sdl_not_runtime = $par_file->membersMatching( $share . '/include' )
-  ;    #TODO remove extra fluff in share_dri
-push @sdl_not_runtime, @auto_folder;    #remove non share dir stuff
+my @sdl_not_runtime = $par_file->membersMatching( $share . '/include' ); #TODO remove extra fluff in share_dri
+push @sdl_not_runtime, @auto_folder;                                     #remove non share dir stuff
 push @sdl_not_runtime, $par_file->membersMatching( $share . '/etc' );
 push @sdl_not_runtime, $par_file->membersMatching( $share . '/share' );
 push @sdl_not_runtime, $par_file->membersMatching( $share . '/lib' )
-  if $^O =~ /win32/ig;
+	if $^O =~ /win32/ig;
 
 my @non              = ();
 my @sdl_libs_to_keep = ();
 
 foreach (@sdl_libs) {
-    if ( $^O =~ /win32/ig ) {
-        @non = $par_file->membersMatching( $share . "/bin(\\S+)" );
+	if ( $^O =~ /win32/ig ) {
+		@non = $par_file->membersMatching( $share . "/bin(\\S+)" );
 
- #push @sdl_not_runtime ,$par_file->membersMatching( $share."/bin(\\S+)(?!$_)" )
-    }
-    else {
-        @non = $par_file->membersMatching( $share . "/lib(\\S+)" );
-    }
+		#push @sdl_not_runtime ,$par_file->membersMatching( $share."/bin(\\S+)(?!$_)" )
+	} else {
+		@non = $par_file->membersMatching( $share . "/lib(\\S+)" );
+	}
 
-    print "Removing non $_ shared objs \n";
-    my $lib_look = 'lib' . $_;
-    map {
-        my $n = $_->fileName;
-        if ( $n =~ /$lib_look\.(so|a|dll|dylib)/ ) {
-            push( @sdl_libs_to_keep, $_ );
-        }
+	print "Removing non $_ shared objs \n";
+	my $lib_look = 'lib' . $_;
+	map {
+		my $n = $_->fileName;
+		if ( $n =~ /$lib_look\.(so|a|dll|dylib)/ ) {
+			push( @sdl_libs_to_keep, $_ );
+		}
 
-    } @non;
+	} @non;
 
 }
 
 print "found $#sdl_libs_to_keep sdl libs to keep \n";
 my $regex_search = ']';
 map {
-    print "\t " . $_->fileName . "\n";
-    $regex_search .= ']' . $_->fileName
+	print "\t " . $_->fileName . "\n";
+	$regex_search .= ']' . $_->fileName
 } @sdl_libs_to_keep;
 
 $regex_search =~ s/\]\]//g;
@@ -190,26 +187,25 @@ $regex_search =~ s/\]/\|/g;
 $regex_search = '(' . $regex_search . ')';
 
 map {
-    my $n    = $_->fileName;
-    my $star = ' ';
+	my $n    = $_->fileName;
+	my $star = ' ';
 
-    if ( $n !~ $regex_search ) {
-        push @sdl_not_runtime, $_;
-    }
+	if ( $n !~ $regex_search ) {
+		push @sdl_not_runtime, $_;
+	}
 } @non;
 
 push @sdl_not_runtime, $par_file->membersMatching( $share . '/bin' )
-  unless $^O =~ /win32/ig;
+	unless $^O =~ /win32/ig;
 print "REMOVING NON RUNTIME $#sdl_not_runtime files from  \n";
 open( my $FH, '>', 'DeleteRecords.txt' ) or die $!;
 foreach (@sdl_not_runtime) {
-    if ( $_->fileName eq $alien_sdl_auto . $share ) {
-        print $FH "Not deleting " . $_->fileName . " \n";
-    }
-    else {
-        $par_file->removeMember($_);
-        print $FH $_->fileName . "\n";
-    }
+	if ( $_->fileName eq $alien_sdl_auto . $share ) {
+		print $FH "Not deleting " . $_->fileName . " \n";
+	} else {
+		$par_file->removeMember($_);
+		print $FH $_->fileName . "\n";
+	}
 
 }
 close $FH;
@@ -217,13 +213,13 @@ close $FH;
 my @config_members = $par_file->membersMatching('ConfigData.pm');
 
 foreach (@config_members) {
-    $_->desiredCompressionLevel(1);
-    $_->unixFileAttributes(0644);
+	$_->desiredCompressionLevel(1);
+	$_->unixFileAttributes(0644);
 }
 
 unlink $out_par . '2';
 unless ( $par_file->writeToFileNamed( $out_par . '2' ) == AZ_OK ) {
-    die 'write error';
+	die 'write error';
 }
 
 $par_cmd = "pp -o $output " . $out_par . "2";

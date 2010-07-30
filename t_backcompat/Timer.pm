@@ -36,49 +36,46 @@ use Carp;
 use SDL;
 
 sub new {
-    my $proto     = shift;
-    my $class     = ref($proto) || $proto;
-    my $self      = {};
-    my $func      = shift;
-    my (%options) = @_;
+	my $proto     = shift;
+	my $class     = ref($proto) || $proto;
+	my $self      = {};
+	my $func      = shift;
+	my (%options) = @_;
 
-    croak "SDL::Timer::new no delay specified\n"
-      unless ( $options{-delay} );
-    $$self{-delay} = $options{-delay} || $options{-d} || 0;
-    $$self{-times} = $options{-times} || $options{-t} || 0;
-    if ( $$self{-times} ) {
-        $$self{-routine} =
-          sub { &$func($self); $$self{-delay} if ( --$$self{-times} ) };
-    }
-    else {
-        $$self{-routine} = sub { &$func; $$self{-delay} };
-    }
-    $$self{-timer} = SDL::NewTimer( $$self{-delay}, $$self{-routine} );
-    croak "Could not create timer, ", SDL::get_error(), "\n"
-      unless ( $self->{-timer} );
-    bless $self, $class;
-    return $self;
+	croak "SDL::Timer::new no delay specified\n"
+		unless ( $options{-delay} );
+	$$self{-delay} = $options{-delay} || $options{-d} || 0;
+	$$self{-times} = $options{-times} || $options{-t} || 0;
+	if ( $$self{-times} ) {
+		$$self{-routine} = sub { &$func($self); $$self{-delay} if ( --$$self{-times} ) };
+	} else {
+		$$self{-routine} = sub { &$func; $$self{-delay} };
+	}
+	$$self{-timer} = SDL::NewTimer( $$self{-delay}, $$self{-routine} );
+	croak "Could not create timer, ", SDL::get_error(), "\n"
+		unless ( $self->{-timer} );
+	bless $self, $class;
+	return $self;
 }
 
 sub DESTROY {
-    my $self = shift;
-    SDL::RemoveTimer( $$self{-timer} ) if ( $$self{-timer} );
-    $$self{-timer} = 0;
+	my $self = shift;
+	SDL::RemoveTimer( $$self{-timer} ) if ( $$self{-timer} );
+	$$self{-timer} = 0;
 }
 
 sub run {
-    my ( $self, $delay, $times ) = @_;
-    $$self{-delay} = $delay;
-    $$self{-times} = $times;
-    SDL::RemoveTimer( $$self{-timer} ) if ( $$self{-timer} );
-    $$self{-timer} =
-      SDL::AddTimer( $$self{-delay}, SDL::PerlTimerCallback, $$self{-routine} );
+	my ( $self, $delay, $times ) = @_;
+	$$self{-delay} = $delay;
+	$$self{-times} = $times;
+	SDL::RemoveTimer( $$self{-timer} ) if ( $$self{-timer} );
+	$$self{-timer} = SDL::AddTimer( $$self{-delay}, SDL::PerlTimerCallback, $$self{-routine} );
 }
 
 sub stop {
-    my ($self) = @_;
-    SDL::RemoveTimer( $$self{-timer} ) if ( $$self{-timer} );
-    $$self{-timer} = 0;
+	my ($self) = @_;
+	SDL::RemoveTimer( $$self{-timer} ) if ( $$self{-timer} );
+	$$self{-timer} = 0;
 }
 
 1;

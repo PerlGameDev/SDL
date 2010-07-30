@@ -19,16 +19,16 @@ BROKENMSG
 
 ### we need the platform-specific module
 my %platforms = (
-    MSWin32     => 'Windows',
-    MacOS       => 'Darwin',
-    darwin      => 'Darwin',
-    cygwin      => 'Unix',
-    freebsd     => 'Unix',
-    gnukfreebsd => 'Unix',
-    linux       => 'Unix',
-    netbsd      => 'Unix',
-    openbsd     => 'Unix',
-    solaris     => 'Unix',
+	MSWin32     => 'Windows',
+	MacOS       => 'Darwin',
+	darwin      => 'Darwin',
+	cygwin      => 'Unix',
+	freebsd     => 'Unix',
+	gnukfreebsd => 'Unix',
+	linux       => 'Unix',
+	netbsd      => 'Unix',
+	openbsd     => 'Unix',
+	solaris     => 'Unix',
 );
 my $package = 'My::Builder::' . ( $platforms{$^O} || 'Unix' );
 print "Gonna use '$package' class ...\n";
@@ -370,57 +370,56 @@ my %subsystems = (
         },
         libraries => [qw( SDL SDL_image )],
     },
+	#	SMPEG => {
+	#		file	=> {
+	#			from => 'src/SMPEG.xs',
+	#			to   =>	'lib/SDL/SMPEG.xs',
+	#		},
+	#		libraries => [qw( SDL smpeg)],
+	#	},
+	Pango => {
+		file => {
+			from => 'src/Pango/Pango.xs',
+			to   => 'lib/SDL/Pango.xs',
+		},
+		libraries => [qw( SDL SDL_Pango )],
+	},
+	Context => {
+		file => {
+			from => 'src/Pango/objects/Context.xs',
+			to   => 'lib/SDL/Pango/Context.xs',
+		},
+		libraries => [qw( SDL SDL_Pango )],
+	},
 
-    #	SMPEG => {
-    #		file	=> {
-    #			from => 'src/SMPEG.xs',
-    #			to   =>	'lib/SDL/SMPEG.xs',
-    #		},
-    #		libraries => [qw( SDL smpeg)],
-    #	},
-    Pango => {
-        file => {
-            from => 'src/Pango/Pango.xs',
-            to   => 'lib/SDL/Pango.xs',
-        },
-        libraries => [qw( SDL SDL_Pango )],
-    },
-    Context => {
-        file => {
-            from => 'src/Pango/objects/Context.xs',
-            to   => 'lib/SDL/Pango/Context.xs',
-        },
-        libraries => [qw( SDL SDL_Pango )],
-    },
-
-    #	Net => {
-    #		file      => {
-    #			from  => 'src/Net/Net.xs',
-    #			to    => 'lib/SDL/Net.xs',
-    #		},
-    #		libraries => [qw( SDL SDL_net )],
-    #	},
-    #	TCP => {
-    #		file      => {
-    #			from  => 'src/Net/TCP.xs',
-    #			to    => 'lib/SDL/Net/TCP.xs',
-    #		},
-    #		libraries => [qw( SDL SDL_net )],
-    #	},
-    #	UDP => {
-    #		file      => {
-    #			from  => 'src/Net/UDP.xs',
-    #			to    => 'lib/SDL/Net/UDP.xs',
-    #		},
-    #		libraries => [qw( SDL SDL_net )],
-    #	},
-    #	IPaddress => {
-    #		file      => {
-    #			from  => 'src/Net/objects/IPaddress.xs',
-    #			to    => 'lib/SDL/Net/IPaddress.xs',
-    #		},
-    #		libraries => [qw( SDL SDL_net )],
-    #	},
+	#	Net => {
+	#		file      => {
+	#			from  => 'src/Net/Net.xs',
+	#			to    => 'lib/SDL/Net.xs',
+	#		},
+	#		libraries => [qw( SDL SDL_net )],
+	#	},
+	#	TCP => {
+	#		file      => {
+	#			from  => 'src/Net/TCP.xs',
+	#			to    => 'lib/SDL/Net/TCP.xs',
+	#		},
+	#		libraries => [qw( SDL SDL_net )],
+	#	},
+	#	UDP => {
+	#		file      => {
+	#			from  => 'src/Net/UDP.xs',
+	#			to    => 'lib/SDL/Net/UDP.xs',
+	#		},
+	#		libraries => [qw( SDL SDL_net )],
+	#	},
+	#	IPaddress => {
+	#		file      => {
+	#			from  => 'src/Net/objects/IPaddress.xs',
+	#			to    => 'lib/SDL/Net/IPaddress.xs',
+	#		},
+	#		libraries => [qw( SDL SDL_net )],
+	#	},
 
 );
 
@@ -431,150 +430,150 @@ my %subsystems = (
 #                   could be a sigle value or an array of values
 #        <lib>    = value that will be used as -l<value> option when linking XS code
 my %libraries = (
-    SDL => {
-        define => 'HAVE_SDL',
-        header => 'SDL.h',
-        lib    => 'SDL',
-    },
-    SDL_image => {
-        define => 'HAVE_SDL_IMAGE',
-        header => 'SDL_image.h',
-        lib    => 'SDL_image',
-    },
-    SDL_mixer => {
-        define => 'HAVE_SDL_MIXER',
-        header => 'SDL_mixer.h',
-        lib    => 'SDL_mixer',
-    },
+	SDL => {
+		define => 'HAVE_SDL',
+		header => 'SDL.h',
+		lib    => 'SDL',
+	},
+	SDL_image => {
+		define => 'HAVE_SDL_IMAGE',
+		header => 'SDL_image.h',
+		lib    => 'SDL_image',
+	},
+	SDL_mixer => {
+		define => 'HAVE_SDL_MIXER',
+		header => 'SDL_mixer.h',
+		lib    => 'SDL_mixer',
+	},
 
-    #	SDL_net     => {
-    #		define => 'HAVE_SDL_NET',
-    #		header => 'SDL_net.h',
-    #		lib    => 'SDL_net',
-    #	},
-    SDL_ttf => {
-        define => 'HAVE_SDL_TTF',
-        header => 'SDL_ttf.h',
-        lib    => 'SDL_ttf',
-    },
-    SDL_gfx => {
-        define => 'HAVE_SDL_GFX',
-        header => 'SDL_gfxPrimitives.h',
-        lib    => 'SDL_gfx',
-    },
-    SDL_gfx_blitfunc => {
-        define => 'HAVE_SDL_GFX_BLITFUNC',
-        header => 'SDL_gfxBlitFunc.h',
-        lib    => 'SDL_gfx',
-    },
-    SDL_gfx_framerate => {
-        define => 'HAVE_SDL_GFX_FRAMERATE',
-        header => 'SDL_framerate.h',
-        lib    => 'SDL_gfx',
-    },
-    SDL_gfx_imagefilter => {
-        define => 'HAVE_SDL_GFX_IMAGEFILTER',
-        header => 'SDL_imageFilter.h',
-        lib    => 'SDL_gfx',
-    },
-    SDL_gfx_primitives => {
-        define => 'HAVE_SDL_GFX_PRIMITIVES',
-        header => 'SDL_gfxPrimitives.h',
-        lib    => 'SDL_gfx',
-    },
-    SDL_gfx_rotozoom => {
-        define => 'HAVE_SDL_GFX_ROTOZOOM',
-        header => 'SDL_rotozoom.h',
-        lib    => 'SDL_gfx',
-    },
-    SDL_Pango => {
-        define => 'HAVE_SDL_PANGO',
-        header => 'SDL_Pango.h',
-        lib    => 'SDL_Pango',
-    },
-    png => {
-        define => 'HAVE_PNG',
-        header => 'png.h',
-        lib    => 'png',
-    },
-    jpeg => {
-        define => 'HAVE_JPEG',
-        header => 'jpeglib.h',
-        lib    => 'jpeg',
-    },
-    tiff => {
-        define => 'HAVE_TIFF',
-        header => 'tiff.h',
-        lib    => 'tiff',
-    },
+	#	SDL_net     => {
+	#		define => 'HAVE_SDL_NET',
+	#		header => 'SDL_net.h',
+	#		lib    => 'SDL_net',
+	#	},
+	SDL_ttf => {
+		define => 'HAVE_SDL_TTF',
+		header => 'SDL_ttf.h',
+		lib    => 'SDL_ttf',
+	},
+	SDL_gfx => {
+		define => 'HAVE_SDL_GFX',
+		header => 'SDL_gfxPrimitives.h',
+		lib    => 'SDL_gfx',
+	},
+	SDL_gfx_blitfunc => {
+		define => 'HAVE_SDL_GFX_BLITFUNC',
+		header => 'SDL_gfxBlitFunc.h',
+		lib    => 'SDL_gfx',
+	},
+	SDL_gfx_framerate => {
+		define => 'HAVE_SDL_GFX_FRAMERATE',
+		header => 'SDL_framerate.h',
+		lib    => 'SDL_gfx',
+	},
+	SDL_gfx_imagefilter => {
+		define => 'HAVE_SDL_GFX_IMAGEFILTER',
+		header => 'SDL_imageFilter.h',
+		lib    => 'SDL_gfx',
+	},
+	SDL_gfx_primitives => {
+		define => 'HAVE_SDL_GFX_PRIMITIVES',
+		header => 'SDL_gfxPrimitives.h',
+		lib    => 'SDL_gfx',
+	},
+	SDL_gfx_rotozoom => {
+		define => 'HAVE_SDL_GFX_ROTOZOOM',
+		header => 'SDL_rotozoom.h',
+		lib    => 'SDL_gfx',
+	},
+	SDL_Pango => {
+		define => 'HAVE_SDL_PANGO',
+		header => 'SDL_Pango.h',
+		lib    => 'SDL_Pango',
+	},
+	png => {
+		define => 'HAVE_PNG',
+		header => 'png.h',
+		lib    => 'png',
+	},
+	jpeg => {
+		define => 'HAVE_JPEG',
+		header => 'jpeglib.h',
+		lib    => 'jpeg',
+	},
+	tiff => {
+		define => 'HAVE_TIFF',
+		header => 'tiff.h',
+		lib    => 'tiff',
+	},
 
-    smpeg => {
-        define => 'HAVE_SMPEG',
-        header => 'smpeg/smpeg.h',
-        lib    => 'smpeg',
-    },
-    GL => {
-        define => 'HAVE_GL',
-        header => [ 'GL/gl.h', 'GL/glext.h' ],
-        lib    => ( $^O =~ /^(MSWin32|cygwin)$/ )
-        ? 'opengl32'
-        : 'GL',    # xxx not nice
-    },
-    GLU => {
-        define => 'HAVE_GLU',
-        header => 'GL/glu.h',
-        lib => ( $^O =~ /^(MSWin32|cygwin)$/ ) ? 'glu32' : 'GLU', # xxx not nice
-    },
+	smpeg => {
+		define => 'HAVE_SMPEG',
+		header => 'smpeg/smpeg.h',
+		lib    => 'smpeg',
+	},
+	GL => {
+		define => 'HAVE_GL',
+		header => [ 'GL/gl.h', 'GL/glext.h' ],
+		lib    => ( $^O =~ /^(MSWin32|cygwin)$/ )
+		? 'opengl32'
+		: 'GL', # xxx not nice
+	},
+	GLU => {
+		define => 'HAVE_GLU',
+		header => 'GL/glu.h',
+		lib    => ( $^O =~ /^(MSWin32|cygwin)$/ ) ? 'glu32' : 'GLU', # xxx not nice
+	},
 );
 
 ### mangle the compilable files into a format Module::Build can understand
 my %xs =
-  map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
-  keys %subsystems;
+	map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
+	keys %subsystems;
 
 ### stadard Module::Build stuff
 my $build = $package->new(
-    module_name        => 'SDL',
-    dist_name          => 'SDL',
-    license            => 'lgpl',
-    dist_version_from  => 'lib/SDL.pm',
-    configure_requires => {
-        'ExtUtils::CBuilder' => '0.260301',
-        'Alien::SDL'         => '1.412',
-        'File::Find'         => '0',
-        'File::ShareDir'     => '0',
+	module_name        => 'SDL',
+	dist_name          => 'SDL',
+	license            => 'lgpl',
+	dist_version_from  => 'lib/SDL.pm',
+	configure_requires => {
+		'ExtUtils::CBuilder' => '0.260301',
+		'Alien::SDL'         => '1.412',
+		'File::Find'         => '0',
+		'File::ShareDir'     => '0',
 
-    },
-    build_requires => {
-        'Test::Simple'      => '0.88',
-        'IO::CaptureOutput' => '0',
-        'Test::Most'        => '0.21',
-        'Alien::SDL'        => '1.412',
-        'File::ShareDir'    => '0',
-        'Tie::Simple'       => '0'
-    },
-    build_recommends => {
-        'Pod::ToDemo' => '0.20'
+	},
+	build_requires => {
+		'Test::Simple'      => '0.88',
+		'IO::CaptureOutput' => '0',
+		'Test::Most'        => '0.21',
+		'Alien::SDL'        => '1.412',
+		'File::ShareDir'    => '0',
+		'Tie::Simple'       => '0'
+	},
+	build_recommends => {
+		'Pod::ToDemo' => '0.20'
 
-    },
-    c_source => 'src',
-    xs_files => \%xs,
-    meta_add => {},
+	},
+	c_source => 'src',
+	xs_files => \%xs,
+	meta_add => {},
 
-#create_readme => 1, ### make sense only if there is some POD doc in the file specified by dist_version_from
-    meta_merge => {
-        resources => {
-            bugtracker => 'http://sdlperl.ath.cx/projects/SDLPerl',
-            repository => 'http://github.com/kthakore/SDL_perl'
-        }
-    },
-    dist_abstract => 'SDL bindings to Perl',
-    dist_author   => 'Kartik Thakore <KTHAKORE@cpan.org>',
+	#create_readme => 1, ### make sense only if there is some POD doc in the file specified by dist_version_from
+	meta_merge => {
+		resources => {
+			bugtracker => 'http://sdlperl.ath.cx/projects/SDLPerl',
+			repository => 'http://github.com/kthakore/SDL_perl'
+		}
+	},
+	dist_abstract => 'SDL bindings to Perl',
+	dist_author   => 'Kartik Thakore <KTHAKORE@cpan.org>',
 );
 
 ### Alien::SDL quick check
 warn "###WARNING### Alien::SDL seems to be broken"
-  unless Alien::SDL->config('prefix');
+	unless Alien::SDL->config('prefix');
 
 ### see which subsystems can be built -- do we have headers for them?
 print "Gonna autodetect available libraries ...\n";
@@ -599,7 +598,7 @@ $build->notes( 'libraries',     \%libraries );
 $build->notes( 'build_systems', $build_systems );
 $build->notes( 'sdl_cflags',    Alien::SDL->config('cflags') );
 $build->notes( 'sdl_libs',      Alien::SDL->config('libs') );
-$build->set_file_flags();    # creates notes('file_flags')
+$build->set_file_flags(); # creates notes('file_flags')
 
 # now we're ready to go!
 $build->create_build_script();

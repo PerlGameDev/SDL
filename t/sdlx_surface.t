@@ -14,49 +14,51 @@ my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
-    plan( skip_all => 'Failed to init video' );
+	plan( skip_all => 'Failed to init video' );
 }
 
 my $app = SDL::Video::set_video_mode( 400, 200, 32, SDL_SWSURFACE );
 
 my $app_x = SDLx::Surface::display();
 
-is_deeply( $app_x->surface->get_pixels_ptr,
-    $app->get_pixels_ptr, '[display] works' );
+is_deeply(
+	$app_x->surface->get_pixels_ptr,
+	$app->get_pixels_ptr, '[display] works'
+);
 
 my $surface = SDL::Surface->new( SDL_SWSURFACE, 400, 200, 32 );
 my @surfs = (
-    SDLx::Surface->new( surface => $surface ),
-    SDLx::Surface->new( width   => 400, height => 200 ),
-    SDLx::Surface->new(
-        width  => 400,
-        height => 200,
-        flags  => SDL_SWSURFACE,
-        depth  => 32
-    ),
-    SDLx::Surface->new(
-        width     => 400,
-        height    => 200,
-        flags     => SDL_SWSURFACE,
-        depth     => 32,
-        greenmask => 0xFF000000
-    ),
+	SDLx::Surface->new( surface => $surface ),
+	SDLx::Surface->new( width   => 400, height => 200 ),
+	SDLx::Surface->new(
+		width  => 400,
+		height => 200,
+		flags  => SDL_SWSURFACE,
+		depth  => 32
+	),
+	SDLx::Surface->new(
+		width     => 400,
+		height    => 200,
+		flags     => SDL_SWSURFACE,
+		depth     => 32,
+		greenmask => 0xFF000000
+	),
 );
 
 foreach my $a (@surfs) {
-    isa_ok( $a, 'SDLx::Surface' );
+	isa_ok( $a, 'SDLx::Surface' );
 
-    isa_ok( $a->surface(), 'SDL::Surface' );
+	isa_ok( $a->surface(), 'SDL::Surface' );
 
-    my $color = $a->[0][0];
-    is( $color, 0, 'Right color returned' );
+	my $color = $a->[0][0];
+	is( $color, 0, 'Right color returned' );
 
-    $a->[0][0] = 0x00FF00FF;
-    is( $a->[0][0], 0x00FF00FF, 'Right color returned' );
+	$a->[0][0] = 0x00FF00FF;
+	is( $a->[0][0], 0x00FF00FF, 'Right color returned' );
 
-    is( @{$a}, 200, 'Correct Y value' );
+	is( @{$a}, 200, 'Correct Y value' );
 
-    is( @{ $a->[0] }, 400, 'Correct X value' );
+	is( @{ $a->[0] }, 400, 'Correct X value' );
 
 }
 
@@ -80,11 +82,11 @@ $surfs[1]->blit_by( $surfs[0], undef, [ 1, 0, 0, 0 ] );
 isnt( $surfs[1]->[2][2], 0, 'Pixel by_blitted to another surface with offset' );
 
 push @surfs,
-  SDLx::Surface->new(
-    w     => 1,
-    h     => 1,
-    color => 1,
-  );
+	SDLx::Surface->new(
+	w     => 1,
+	h     => 1,
+	color => 1,
+	);
 
 is( $surfs[-1]->[0][0], 1, 'Fill color worked' );
 
@@ -96,8 +98,7 @@ $surfs[0]->update();
 pass 'update all surface';
 $surfs[0]->update( [ 0, 10, 30, 40 ] );
 pass 'Single rect update';
-$surfs[0]
-  ->update( [ SDL::Rect->new( 0, 1, 2, 3 ), SDL::Rect->new( 2, 4, 5, 6 ) ] );
+$surfs[0]->update( [ SDL::Rect->new( 0, 1, 2, 3 ), SDL::Rect->new( 2, 4, 5, 6 ) ] );
 pass 'SDL::Rect array update';
 
 $surfs[0]->draw_rect( [ 0, 0, 10, 20 ], 0xFF00FFFF );
@@ -112,10 +113,10 @@ pass 'draw_line works';
 
 TODO:
 {
-    local $TODO = 'Draw_Circle is not done yet';
-    my $cir_color = 0xCCCCCCFF;
-    $surfs[0]->draw_circle( [100, 10], 20 , $cir_color); #no fill
-    is( $surfs[0]->[120][10], $cir_color);
+	local $TODO = 'Draw_Circle is not done yet';
+	my $cir_color = 0xCCCCCCFF;
+	$surfs[0]->draw_circle( [ 100, 10 ], 20, $cir_color ); #no fill
+	is( $surfs[0]->[120][10], $cir_color );
 }
 
 my $surf_dup = SDLx::Surface::duplicate( $surfs[1] );
@@ -123,17 +124,15 @@ my $surf_dup = SDLx::Surface::duplicate( $surfs[1] );
 is( $surf_dup->w,     $surfs[1]->w,     'Duplicate surf has same width' );
 is( $surf_dup->h,     $surfs[1]->h,     'Duplicate surf has same flags' );
 is( $surf_dup->flags, $surfs[1]->flags, 'Duplicate surf has same flags' );
-is(
-    $surf_dup->format->BitsPerPixel,
-    $surfs[1]->format->BitsPerPixel,
-    'Duplicate surf has same bpp'
+is( $surf_dup->format->BitsPerPixel,
+	$surfs[1]->format->BitsPerPixel,
+	'Duplicate surf has same bpp'
 );
 
 if ($videodriver) {
-    $ENV{SDL_VIDEODRIVER} = $videodriver;
-}
-else {
-    delete $ENV{SDL_VIDEODRIVER};
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+} else {
+	delete $ENV{SDL_VIDEODRIVER};
 }
 
 pass 'Final SegFault test';

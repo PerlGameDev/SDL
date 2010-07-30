@@ -47,9 +47,9 @@ my ( $rect_r,     $rect_g,      $rect_b ) = ( 0x00, 0x00, 0xff );
 my ( $rect_width, $rect_height, $rect_y ) = ( 100,  100,  190 );
 
 my $app = SDLx::App->new(
-    width  => $width,
-    height => $height,
-    depth  => $depth,
+	width  => $width,
+	height => $height,
+	depth  => $depth,
 );
 
 my $color = SDL::Video::map_RGB( $app->format, $rect_r, $rect_g, $rect_b, );
@@ -62,14 +62,14 @@ my $rect = create_rect();
 
 # your code here, perhaps
 for my $x ( 0 .. 640 ) {
-    $rect->x($x);
-    draw_frame(
-        $app,
-        bg         => $background,
-        bg_color   => $bg_color,
-        rect       => $rect,
-        rect_color => $color,
-    );
+	$rect->x($x);
+	draw_frame(
+		$app,
+		bg         => $background,
+		bg_color   => $bg_color,
+		rect       => $rect,
+		rect_color => $color,
+	);
 }
 
 # remove this line
@@ -81,39 +81,39 @@ my $old_rect = create_rect();
 
 # your code also here, perhaps
 for my $x ( 0 .. 640 ) {
-    $rect->x($x);
-    draw_undraw_rect(
-        $app,
-        rect       => $rect,
-        old_rect   => $old_rect,
-        rect_color => $color,
-        bg_color   => $bg_color,
-    );
-    $old_rect->x($x);
+	$rect->x($x);
+	draw_undraw_rect(
+		$app,
+		rect       => $rect,
+		old_rect   => $old_rect,
+		rect_color => $color,
+		bg_color   => $bg_color,
+	);
+	$old_rect->x($x);
 }
 
 # your code almost certainly follows; remove this line
 sleep 2;
 
 sub create_rect {
-    return SDL::Rect->new( 0, $rect_y, $rect_width, $rect_height, );
+	return SDL::Rect->new( 0, $rect_y, $rect_width, $rect_height, );
 }
 
 sub draw_frame {
-    my ( $app, %args ) = @_;
+	my ( $app, %args ) = @_;
 
-    SDL::Video::fill_rect( $app, $args{bg},   $args{bg_color} );
-    SDL::Video::fill_rect( $app, $args{rect}, $args{rect_color} );
-    SDL::Video::update_rects( $app, $args{bg} );
+	SDL::Video::fill_rect( $app, $args{bg},   $args{bg_color} );
+	SDL::Video::fill_rect( $app, $args{rect}, $args{rect_color} );
+	SDL::Video::update_rects( $app, $args{bg} );
 }
 
 sub draw_undraw_rect {
-    my ( $app, %args ) = @_;
+	my ( $app, %args ) = @_;
 
-    SDL::Video::fill_rect( $app, $args{old_rect}, $args{bg_color} );
-    SDL::Video::fill_rect( $app, $args{rect},     $args{rect_color} );
-    SDL::Video::update_rects( $app, $args{old_rect} );
-    SDL::Video::update_rects( $app, $args{rect} );
+	SDL::Video::fill_rect( $app, $args{old_rect}, $args{bg_color} );
+	SDL::Video::fill_rect( $app, $args{rect},     $args{rect_color} );
+	SDL::Video::update_rects( $app, $args{old_rect} );
+	SDL::Video::update_rects( $app, $args{rect} );
 }
 
 1;

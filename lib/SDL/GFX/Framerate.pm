@@ -15,8 +15,8 @@ bootstrap SDL::GFX::Framerate;
 use base 'Exporter';
 our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::GFX'} };
 our %EXPORT_TAGS = (
-    all  => \@EXPORT,
-    init => $SDL::Constants::EXPORT_TAGS{'SDL::GFX/init'}
+	all  => \@EXPORT,
+	init => $SDL::Constants::EXPORT_TAGS{'SDL::GFX/init'}
 );
 
 1;
