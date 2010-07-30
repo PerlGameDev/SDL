@@ -9,14 +9,10 @@ print "Has SDL                 = " . SDL::Config->has('SDL') . "\n";
 print "Has SDL_mixer           = " . SDL::Config->has('SDL_mixer') . "\n";
 print "Has SDL_image           = " . SDL::Config->has('SDL_image') . "\n";
 print "Has SDL_ttf             = " . SDL::Config->has('SDL_ttf') . "\n";
-print "Has SDL_gfx_framerate   = "
-  . SDL::Config->has('SDL_gfx_framerate') . "\n";
-print "Has SDL_gfx_imagefilter = "
-  . SDL::Config->has('SDL_gfx_imagefilter') . "\n";
-print "Has SDL_gfx_primitives  = "
-  . SDL::Config->has('SDL_gfx_primitives') . "\n";
-print "Has SDL_gfx_rotozoom    = "
-  . SDL::Config->has('SDL_gfx_rotozoom') . "\n";
+print "Has SDL_gfx_framerate   = " . SDL::Config->has('SDL_gfx_framerate') . "\n";
+print "Has SDL_gfx_imagefilter = " . SDL::Config->has('SDL_gfx_imagefilter') . "\n";
+print "Has SDL_gfx_primitives  = " . SDL::Config->has('SDL_gfx_primitives') . "\n";
+print "Has SDL_gfx_rotozoom    = " . SDL::Config->has('SDL_gfx_rotozoom') . "\n";
 print "Has SDL_net             = " . SDL::Config->has('SDL_net') . "\n";
 print "Has SDL_Pango           = " . SDL::Config->has('SDL_Pango') . "\n";
 print "Has SDL_sound           = " . SDL::Config->has('SDL_sound') . "\n";

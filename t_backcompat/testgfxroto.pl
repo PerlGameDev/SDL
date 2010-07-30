@@ -23,120 +23,117 @@ use SDL::Color;
 use SDL::Rect;
 use SDL::Config;
 
-use vars
-  qw/ $app $app_rect $background $event $sprite $sprite_rect $videoflags /;
+use vars qw/ $app $app_rect $background $event $sprite $sprite_rect $videoflags /;
 
 ## Test for SDL_gfx support
 
 die "Your system was not configured with SDL_gfx support!\n"
-  unless SDL::Config->has('SDL_gfx');
+	unless SDL::Config->has('SDL_gfx');
 
 ## User tweakable settings (via cmd-line)
 my %settings = (
-    'numsprites'    => 10,
-    'screen_width'  => 800,
-    'screen_height' => 600,
-    'video_bpp'     => 8,
-    'fast'          => 0,
-    'hw'            => 0,
-    'flip'          => 1,
-    'fullscreen'    => 0,
-    'bpp'           => undef,
+	'numsprites'    => 10,
+	'screen_width'  => 800,
+	'screen_height' => 600,
+	'video_bpp'     => 8,
+	'fast'          => 0,
+	'hw'            => 0,
+	'flip'          => 1,
+	'fullscreen'    => 0,
+	'bpp'           => undef,
 );
 
 ## Process commandline arguments
 
 sub get_cmd_args {
-    GetOptions(
-        "width:i"      => \$settings{screen_width},
-        "height:i"     => \$settings{screen_height},
-        "bpp:i"        => \$settings{bpp},
-        "fast!"        => \$settings{fast},
-        "hw!"          => \$settings{hw},
-        "flip!"        => \$settings{flip},
-        "fullscreen!"  => \$settings{fullscreen},
-        "numsprites=i" => \$settings{numsprites},
-    );
+	GetOptions(
+		"width:i"      => \$settings{screen_width},
+		"height:i"     => \$settings{screen_height},
+		"bpp:i"        => \$settings{bpp},
+		"fast!"        => \$settings{fast},
+		"hw!"          => \$settings{hw},
+		"flip!"        => \$settings{flip},
+		"fullscreen!"  => \$settings{fullscreen},
+		"numsprites=i" => \$settings{numsprites},
+	);
 }
 
 ## Initialize application options
 
 sub set_app_args {
-    $settings{bpp} ||= 8;    # default to 8 bits per pix
+	$settings{bpp} ||= 8; # default to 8 bits per pix
 
-    $videoflags |= SDL_HWACCEL    if $settings{hw};
-    $videoflags |= SDL_DOUBLEBUF  if $settings{flip};
-    $videoflags |= SDL_FULLSCREEN if $settings{fullscreen};
+	$videoflags |= SDL_HWACCEL    if $settings{hw};
+	$videoflags |= SDL_DOUBLEBUF  if $settings{flip};
+	$videoflags |= SDL_FULLSCREEN if $settings{fullscreen};
 }
 
 ## Setup
 
 sub init_game_context {
-    $app = SDLx::App->new(
-        -width  => $settings{screen_width},
-        -height => $settings{screen_height},
-        -title  => "testsprite",
-        -icon   => "data/logo.png",
-        -flags  => $videoflags,
-    );
+	$app = SDLx::App->new(
+		-width  => $settings{screen_width},
+		-height => $settings{screen_height},
+		-title  => "testsprite",
+		-icon   => "data/logo.png",
+		-flags  => $videoflags,
+	);
 
-    $app_rect = SDL::Rect->new(
-        -height => $settings{screen_height},
-        -width  => $settings{screen_width},
-    );
+	$app_rect = SDL::Rect->new(
+		-height => $settings{screen_height},
+		-width  => $settings{screen_width},
+	);
 
-    $background = $SDL::Color::black;
+	$background = $SDL::Color::black;
 
-    $sprite = SDL::Surface->new( -name => "data/logo.png" );
+	$sprite = SDL::Surface->new( -name => "data/logo.png" );
 
-    $sprite->display_format();
+	$sprite->display_format();
 
-    $sprite_rect = SDL::Rect->new(
-        -x      => 0,
-        -y      => 0,
-        -width  => $sprite->width,
-        -height => $sprite->height,
-    );
+	$sprite_rect = SDL::Rect->new(
+		-x      => 0,
+		-y      => 0,
+		-width  => $sprite->width,
+		-height => $sprite->height,
+	);
 
-    $event = SDL::Event->new();
+	$event = SDL::Event->new();
 }
 
 ## Prints diagnostics
 
 sub instruments {
-    if ( ( $app->flags & SDL_HWSURFACE ) == SDL_HWSURFACE ) {
-        printf("Screen is in video memory\n");
-    }
-    else {
-        printf("Screen is in system memory\n");
-    }
+	if ( ( $app->flags & SDL_HWSURFACE ) == SDL_HWSURFACE ) {
+		printf("Screen is in video memory\n");
+	} else {
+		printf("Screen is in system memory\n");
+	}
 
-    if ( ( $app->flags & SDL_DOUBLEBUF ) == SDL_DOUBLEBUF ) {
-        printf("Screen has double-buffering enabled\n");
-    }
+	if ( ( $app->flags & SDL_DOUBLEBUF ) == SDL_DOUBLEBUF ) {
+		printf("Screen has double-buffering enabled\n");
+	}
 
-    if ( ( $sprite->flags & SDL_HWSURFACE ) == SDL_HWSURFACE ) {
-        printf("Sprite is in video memory\n");
-    }
-    else {
-        printf("Sprite is in system memory\n");
-    }
+	if ( ( $sprite->flags & SDL_HWSURFACE ) == SDL_HWSURFACE ) {
+		printf("Sprite is in video memory\n");
+	} else {
+		printf("Sprite is in system memory\n");
+	}
 
-    # Run a sample blit to trigger blit (if posssible)
-    # acceleration before the check just after
-    put_sprite_rotated(
-        $sprite,
-        $settings{screen_width} / 2,
-        $settings{screen_height} / 2,
-        0, 0, 0
-    );
+	# Run a sample blit to trigger blit (if posssible)
+	# acceleration before the check just after
+	put_sprite_rotated(
+		$sprite,
+		$settings{screen_width} / 2,
+		$settings{screen_height} / 2,
+		0, 0, 0
+	);
 
-    if ( ( $sprite->flags & SDL_HWACCEL ) == SDL_HWACCEL ) {
-        printf("Sprite blit uses hardware acceleration\n");
-    }
-    if ( ( $sprite->flags & SDL_RLEACCEL ) == SDL_RLEACCEL ) {
-        printf("Sprite blit uses RLE acceleration\n");
-    }
+	if ( ( $sprite->flags & SDL_HWACCEL ) == SDL_HWACCEL ) {
+		printf("Sprite blit uses hardware acceleration\n");
+	}
+	if ( ( $sprite->flags & SDL_RLEACCEL ) == SDL_RLEACCEL ) {
+		printf("Sprite blit uses RLE acceleration\n");
+	}
 
 }
 
@@ -149,89 +146,90 @@ sub instruments {
 my %rotate_cache = ();
 
 sub generate_sprite_rotated {
-    my ( $surface, $angle, $zoom, $smooth ) = @_;
+	my ( $surface, $angle, $zoom, $smooth ) = @_;
 
-    $angle %= 360;
-    my $key = "$surface$angle$zoom$smooth";
+	$angle %= 360;
+	my $key = "$surface$angle$zoom$smooth";
 
-    if ( $rotate_cache{$key} ) {
-        return $rotate_cache{$key};
-    }
-    else {
-        my $sur = SDL::GFXRotoZoom( $surface, $angle, $zoom, $smooth );
+	if ( $rotate_cache{$key} ) {
+		return $rotate_cache{$key};
+	} else {
+		my $sur = SDL::GFXRotoZoom( $surface, $angle, $zoom, $smooth );
 
-        $rotate_cache{$key} = SDL::DisplayFormat($sur);
-    }
-    return $rotate_cache{$key};
+		$rotate_cache{$key} = SDL::DisplayFormat($sur);
+	}
+	return $rotate_cache{$key};
 }
 
 sub put_sprite_rotated {
-    my ( $surface, $x, $y, $angle, $zoom, $smooth ) = @_;
+	my ( $surface, $x, $y, $angle, $zoom, $smooth ) = @_;
 
-    my $roto = generate_sprite_rotated( $$surface, $angle, $zoom, $smooth );
+	my $roto = generate_sprite_rotated( $$surface, $angle, $zoom, $smooth );
 
-    die "Failed to create rotozoom surface" unless $roto;
+	die "Failed to create rotozoom surface" unless $roto;
 
-    my ( $w, $h ) = ( SDL::SurfaceW($roto), SDL::SurfaceH($roto) );
+	my ( $w, $h ) = ( SDL::SurfaceW($roto), SDL::SurfaceH($roto) );
 
-    my $dest_rect = SDL::Rect->new(
-        -x => $x - ( $w / 2 ),
-        -y => $y - ( $h / 2 ),
-        -width  => $w,
-        -height => $h
-    );
+	my $dest_rect = SDL::Rect->new(
+		-x => $x - ( $w / 2 ),
+		-y => $y - ( $h / 2 ),
+		-width  => $w,
+		-height => $h
+	);
 
-    SDL::SetColorKey( $roto, SDL_SRCCOLORKEY,
-        SDL::SurfacePixel( $roto, $w / 2, $h / 2 ) );
+	SDL::SetColorKey(
+		$roto, SDL_SRCCOLORKEY,
+		SDL::SurfacePixel( $roto, $w / 2, $h / 2 )
+	);
 
-    SDL::BlitSurface( $roto, 0, $$app, $$dest_rect );
+	SDL::BlitSurface( $roto, 0, $$app, $$dest_rect );
 }
 
 sub game_loop {
-    my $ox         = $settings{screen_width} >> 1;
-    my $oy         = $settings{screen_height} >> 1;
-    my $sectors    = 12;
-    my $angleDelta = 360 / $sectors;
-    my $zoom       = 1;
-    my $smooth     = 1;
+	my $ox         = $settings{screen_width} >> 1;
+	my $oy         = $settings{screen_height} >> 1;
+	my $sectors    = 12;
+	my $angleDelta = 360 / $sectors;
+	my $zoom       = 1;
+	my $smooth     = 1;
 
-    my $angle  = 0;
-    my $radius = 128;
+	my $angle  = 0;
+	my $radius = 128;
 
-  FRAME:
-    while (1) {
+	FRAME:
+	while (1) {
 
-        # process event queue
-        $event->pump;
-        if ( $event->poll ) {
-            my $etype = $event->type();
+		# process event queue
+		$event->pump;
+		if ( $event->poll ) {
+			my $etype = $event->type();
 
-            # handle quit events
-            last FRAME if ( $etype == SDL_QUIT() );
-            last FRAME if ( SDL::GetKeyState(SDLK_ESCAPE) );
-        }
+			# handle quit events
+			last FRAME if ( $etype == SDL_QUIT() );
+			last FRAME if ( SDL::GetKeyState(SDLK_ESCAPE) );
+		}
 
-        # needed for HW surface locking
-        #$app->lock() if $app->lockp();
-        #$app->unlock();
-        $app->flip if $settings{flip};
+		# needed for HW surface locking
+		#$app->lock() if $app->lockp();
+		#$app->unlock();
+		$app->flip if $settings{flip};
 
-        ################################################
-        # do some drawing
+		################################################
+		# do some drawing
 
-        $app->fill( $app_rect, $background );
+		$app->fill( $app_rect, $background );
 
-        $angle += 16;
+		$angle += 16;
 
-        put_sprite_rotated(
-            $sprite,
-            $settings{screen_width} / 2,
-            $settings{screen_height} / 2,
-            $angle, $zoom, $smooth
-        );
+		put_sprite_rotated(
+			$sprite,
+			$settings{screen_width} / 2,
+			$settings{screen_height} / 2,
+			$angle, $zoom, $smooth
+		);
 
-    }
-    print "Cache entries: " . scalar( keys %rotate_cache ) . "\n";
+	}
+	print "Cache entries: " . scalar( keys %rotate_cache ) . "\n";
 }
 
 ## Main program loop

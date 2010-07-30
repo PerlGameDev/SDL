@@ -42,24 +42,24 @@ use vars qw(@ISA $CurrentFont );
 @ISA = qw(SDL::Surface);
 
 sub new {
-    my $proto = shift;
-    my $class = ref($proto) || $proto;
-    my $self  = \SDL::SFont::NewFont(shift);
-    bless $self, $class;
-    return $self;
+	my $proto = shift;
+	my $class = ref($proto) || $proto;
+	my $self  = \SDL::SFont::NewFont(shift);
+	bless $self, $class;
+	return $self;
 }
 
 sub DESTROY {
-    my $self = shift;
-    SDL::FreeSurface($$self);
+	my $self = shift;
+	SDL::FreeSurface($$self);
 }
 
 sub use ($) {
-    my $self = shift;
-    $CurrentFont = $self;
-    if ( $self->isa('SDL::Font') ) {
-        SDL::SFont::UseFont($$self);
-    }
+	my $self = shift;
+	$CurrentFont = $self;
+	if ( $self->isa('SDL::Font') ) {
+		SDL::SFont::UseFont($$self);
+	}
 }
 
 1;

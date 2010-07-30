@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
-BEGIN {    # http://wiki.cpantesters.org/wiki/CPANAuthorNotes
-    use Config;
-    if ( !$Config{'useithreads'} ) {
-        print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
-        exit(0);
-    }
+BEGIN { # http://wiki.cpantesters.org/wiki/CPANAuthorNotes
+	use Config;
+	if ( !$Config{'useithreads'} ) {
+		print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
+		exit(0);
+	}
 }
 use strict;
 use SDL;
@@ -20,20 +20,19 @@ my $audiodriver = $ENV{SDL_AUDIODRIVER};
 $ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
 if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
-    plan( skip_all => 'Failed to init sound' );
-}
-else {
-    plan( tests => 45 );
+	plan( skip_all => 'Failed to init sound' );
+} else {
+	plan( tests => 45 );
 }
 my @done = qw/
-  audio_spec
-  open
-  pause
-  close
-  get_status
-  lock
-  unlock
-  /;
+	audio_spec
+	open
+	pause
+	close
+	get_status
+	lock
+	unlock
+	/;
 
 is( AUDIO_S16,      32784,  'AUDIO_S16 should be imported' );
 is( AUDIO_S16(),    32784,  'AUDIO_S16() should also be available' );
@@ -51,15 +50,11 @@ is( AUDIO_U16LSB,   0x0010, 'AUDIO_U16MSB should be imported' );
 is( AUDIO_U16LSB(), 0x0010, 'AUDIO_U16MSB() should also be available' );
 is( AUDIO_U8,       8,      'AUDIO_U8 should be imported' );
 is( AUDIO_U8(),     8,      'AUDIO_U8() should also be available' );
-ok(
-    ( SDL::Audio::AUDIO_U16SYS == AUDIO_U16LSB )
-      || ( SDL::Audio::AUDIO_U16SYS == AUDIO_U16MSB ),
-    'AUDIO_U16SYS should be imported'
+ok( ( SDL::Audio::AUDIO_U16SYS == AUDIO_U16LSB ) || ( SDL::Audio::AUDIO_U16SYS == AUDIO_U16MSB ),
+	'AUDIO_U16SYS should be imported'
 );
-ok(
-    ( SDL::Audio::AUDIO_U16SYS() == AUDIO_U16LSB() )
-      || ( SDL::Audio::AUDIO_U16SYS() == AUDIO_U16MSB() ),
-    'AUDIO_U16SYS() should also be available'
+ok( ( SDL::Audio::AUDIO_U16SYS() == AUDIO_U16LSB() ) || ( SDL::Audio::AUDIO_U16SYS() == AUDIO_U16MSB() ),
+	'AUDIO_U16SYS() should also be available'
 );
 
 is( SDL_AUDIO_PAUSED,    2, 'SDL_AUDIO_PAUSED should be imported' );
@@ -111,32 +106,31 @@ pass('Audio Closed');
 is( SDL::Audio::get_status, SDL_AUDIO_STOPPED, '[get_status stopped]' );
 
 my @left = qw/
-  audio_cvt
-  build_audio_cvt
-  convert_audio
-  mix_audio
-  /;
+	audio_cvt
+	build_audio_cvt
+	convert_audio
+	mix_audio
+	/;
 
 my $why =
-    '[Percentage Completion] '
-  . int( 100 * ( $#done + 1 ) / ( $#done + $#left + 2 ) )
-  . "\% implementation. "
-  . ( $#done + 1 ) . " / "
-  . ( $#done + $#left + 2 );
+	  '[Percentage Completion] '
+	. int( 100 * ( $#done + 1 ) / ( $#done + $#left + 2 ) )
+	. "\% implementation. "
+	. ( $#done + 1 ) . " / "
+	. ( $#done + $#left + 2 );
 
 TODO:
 {
-    local $TODO = $why;
-    fail "Not Implmented $_" foreach (@left)
+	local $TODO = $why;
+	fail "Not Implmented $_" foreach (@left)
 
 }
 print "$why\n";
 
 if ($audiodriver) {
-    $ENV{SDL_AUDIODRIVER} = $audiodriver;
-}
-else {
-    delete $ENV{SDL_AUDIODRIVER};
+	$ENV{SDL_AUDIODRIVER} = $audiodriver;
+} else {
+	delete $ENV{SDL_AUDIODRIVER};
 }
 
 sleep(1);
