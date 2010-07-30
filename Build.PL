@@ -41,335 +41,336 @@ eval "require $package" or croak "Require '$package' failed: $@\n";
 #            <to>   = location of build file to get name right
 #        <libraries> = list reqiured libraries, names the same as keys to hash %libraries
 my %subsystems = (
-    SDL => {
-        file => {
-            from => 'src/SDL.xs',
-            to   => 'lib/SDL_perl.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Time => {
-        file => {
-            from => 'src/Core/Time.xs',
-            to   => 'lib/SDL/Time.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Events => {
-        file => {
-            from => 'src/Core/Events.xs',
-            to   => 'lib/SDL/Events.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Event => {
-        file => {
-            from => 'src/Core/objects/Event.xs',
-            to   => 'lib/SDL/Event.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    GFX => {
-        file => {
-            from => 'src/GFX/GFX.xs',
-            to   => 'lib/SDL/GFX.xs',
-        },
-        libraries => [qw( SDL SDL_gfx_primitives )],
-    },
-    BlitFunc => {
-        file => {
-            from => 'src/GFX/BlitFunc.xs',
-            to   => 'lib/SDL/GFX/BlitFunc.xs',
-        },
-        libraries => [qw( SDL SDL_gfx_blitfunc )],
-    },
-    Framerate => {
-        file => {
-            from => 'src/GFX/Framerate.xs',
-            to   => 'lib/SDL/GFX/Framerate.xs',
-        },
-        libraries => [qw( SDL SDL_gfx_framerate )],
-    },
-    FPSManager => {
-        file => {
-            from => 'src/GFX/FPSManager.xs',
-            to   => 'lib/SDL/GFX/FPSManager.xs',
-        },
-        libraries => [qw( SDL SDL_gfx_framerate )],
-    },
-    ImageFilter => {
-        file => {
-            from => 'src/GFX/ImageFilter.xs',
-            to   => 'lib/SDL/GFX/ImageFilter.xs',
-        },
-        libraries => [qw( SDL SDL_gfx_imagefilter )],
-    },
-    Primitives => {
-        file => {
-            from => 'src/GFX/Primitives.xs',
-            to   => 'lib/SDL/GFX/Primitives.xs',
-        },
-        libraries => [qw( SDL SDL_gfx_primitives )],
-    },
-    Rotozoom => {
-        file => {
-            from => 'src/GFX/Rotozoom.xs',
-            to   => 'lib/SDL/GFX/Rotozoom.xs',
-        },
-        libraries => [qw( SDL SDL_gfx_rotozoom )],
-    },
-    MultiThread => {
-        file => {
-            from => 'src/Core/MultiThread.xs',
-            to   => 'lib/SDL/MultiThread.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Video => {
-        file => {
-            from => 'src/Core/Video.xs',
-            to   => 'lib/SDL/Video.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Audio => {
-        file => {
-            from => 'src/Core/Audio.xs',
-            to   => 'lib/SDL/Audio.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Rect => {
-        file => {
-            from => 'src/Core/objects/Rect.xs',
-            to   => 'lib/SDL/Rect.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Color => {
-        file => {
-            from => 'src/Core/objects/Color.xs',
-            to   => 'lib/SDL/Color.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Surface => {
-        file => {
-            from => 'src/Core/objects/Surface.xs',
-            to   => 'lib/SDL/Surface.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    SurfaceX => {
-        file => {
-            from => 'src/SDLx/Surface.xs',
-            to   => 'lib/SDLx/Surface.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    TimerX => {
-        file => {
-            from => 'src/SDLx/Timer.xs',
-            to   => 'lib/SDLx/Controller/Timer.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Overlay => {
-        file => {
-            from => 'src/Core/objects/Overlay.xs',
-            to   => 'lib/SDL/Overlay.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    RWOps => {
-        file => {
-            from => 'src/Core/objects/RWOps.xs',
-            to   => 'lib/SDL/RWOps.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    PixelFormat => {
-        file => {
-            from => 'src/Core/objects/PixelFormat.xs',
-            to   => 'lib/SDL/PixelFormat.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    LayerManagerX => {
-        file => {
-            from => 'src/SDLx/LayerManager.xs',
-            to   => 'lib/SDLx/LayerManager.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    LayerX => {
-        file => {
-            from => 'src/SDLx/Layer.xs',
-            to   => 'lib/SDLx/Layer.xs',
-        },
-        libraries => [qw( SDL SDL_image )],
-    },
-    AudioSpec => {
-        file => {
-            from => 'src/Core/objects/AudioSpec.xs',
-            to   => 'lib/SDL/AudioSpec.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    AudioCVT => {
-        file => {
-            from => 'src/Core/objects/AudioCVT.xs',
-            to   => 'lib/SDL/AudioCVT.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Mixer => {
-        file => {
-            from => 'src/Mixer/Mixer.xs',
-            to   => 'lib/SDL/Mixer.xs',
-        },
-        libraries => [qw( SDL SDL_mixer )],
-    },
-    MixerSamples => {
-        file => {
-            from => 'src/Mixer/Samples.xs',
-            to   => 'lib/SDL/Mixer/Samples.xs',
-        },
-        libraries => [qw( SDL SDL_mixer )],
-    },
-    MixerChannels => {
-        file => {
-            from => 'src/Mixer/Channels.xs',
-            to   => 'lib/SDL/Mixer/Channels.xs',
-        },
-        libraries => [qw( SDL SDL_mixer )],
-    },
-    MixerGroups => {
-        file => {
-            from => 'src/Mixer/Groups.xs',
-            to   => 'lib/SDL/Mixer/Groups.xs',
-        },
-        libraries => [qw( SDL SDL_mixer )],
-    },
-    MixerMusic => {
-        file => {
-            from => 'src/Mixer/Music.xs',
-            to   => 'lib/SDL/Mixer/Music.xs',
-        },
-        libraries => [qw( SDL SDL_mixer )],
-    },
-    MixerEffects => {
-        file => {
-            from => 'src/Mixer/Effects.xs',
-            to   => 'lib/SDL/Mixer/Effects.xs',
-        },
-        libraries => [qw( SDL SDL_mixer )],
-    },
-    MixChunk => {
-        file => {
-            from => 'src/Mixer/objects/MixChunk.xs',
-            to   => 'lib/SDL/Mixer/MixChunk.xs',
-        },
-        libraries => [qw( SDL SDL_mixer )],
-    },
-    MixMusic => {
-        file => {
-            from => 'src/Mixer/objects/MixMusic.xs',
-            to   => 'lib/SDL/Mixer/MixMusic.xs',
-        },
-        libraries => [qw( SDL SDL_mixer )],
-    },
-    Palette => {
-        file => {
-            from => 'src/Core/objects/Palette.xs',
-            to   => 'lib/SDL/Palette.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    VideoInfo => {
-        file => {
-            from => 'src/Core/objects/VideoInfo.xs',
-            to   => 'lib/SDL/VideoInfo.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Mouse => {
-        file => {
-            from => 'src/Core/Mouse.xs',
-            to   => 'lib/SDL/Mouse.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Cursor => {
-        file => {
-            from => 'src/Core/objects/Cursor.xs',
-            to   => 'lib/SDL/Cursor.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Joystick => {
-        file => {
-            from => 'src/Core/Joystick.xs',
-            to   => 'lib/SDL/Joystick.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    CDROM => {
-        file => {
-            from => 'src/Core/CDROM.xs',
-            to   => 'lib/SDL/CDROM.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    CDTrack => {
-        file => {
-            from => 'src/Core/objects/CDTrack.xs',
-            to   => 'lib/SDL/CDTrack.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    CD => {
-        file => {
-            from => 'src/Core/objects/CD.xs',
-            to   => 'lib/SDL/CD.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    TTF => {
-        file => {
-            from => 'src/TTF/TTF.xs',
-            to   => 'lib/SDL/TTF.xs',
-        },
-        libraries => [qw( SDL SDL_ttf )],
-    },
-    TTF_Font => {
-        file => {
-            from => 'src/TTF/objects/Font.xs',
-            to   => 'lib/SDL/TTF/Font.xs',
-        },
-        libraries => [qw( SDL SDL_ttf )],
-    },
-    Version => {
-        file => {
-            from => 'src/Core/objects/Version.xs',
-            to   => 'lib/SDL/Version.xs',
-        },
-        libraries => [qw( SDL )],
-    },
-    Image => {
-        file => {
-            from => 'src/Image.xs',
-            to   => 'lib/SDL/Image.xs',
-        },
-        libraries => [qw( SDL SDL_image )],
-    },
-    SFont => {
-        file => {
-            from => 'src/SDLx/SFont.xs',
-            to   => 'lib/SDLx/SFont.xs',
-        },
-        libraries => [qw( SDL SDL_image )],
-    },
+	SDL => {
+		file => {
+			from => 'src/SDL.xs',
+			to   => 'lib/SDL_perl.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Time => {
+		file => {
+			from => 'src/Core/Time.xs',
+			to   => 'lib/SDL/Time.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Events => {
+		file => {
+			from => 'src/Core/Events.xs',
+			to   => 'lib/SDL/Events.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Event => {
+		file => {
+			from => 'src/Core/objects/Event.xs',
+			to   => 'lib/SDL/Event.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	GFX => {
+		file => {
+			from => 'src/GFX/GFX.xs',
+			to   => 'lib/SDL/GFX.xs',
+		},
+		libraries => [qw( SDL SDL_gfx_primitives )],
+	},
+	BlitFunc => {
+		file => {
+			from => 'src/GFX/BlitFunc.xs',
+			to   => 'lib/SDL/GFX/BlitFunc.xs',
+		},
+		libraries => [qw( SDL SDL_gfx_blitfunc )],
+	},
+	Framerate => {
+		file => {
+			from => 'src/GFX/Framerate.xs',
+			to   => 'lib/SDL/GFX/Framerate.xs',
+		},
+		libraries => [qw( SDL SDL_gfx_framerate )],
+	},
+	FPSManager => {
+		file => {
+			from => 'src/GFX/FPSManager.xs',
+			to   => 'lib/SDL/GFX/FPSManager.xs',
+		},
+		libraries => [qw( SDL SDL_gfx_framerate )],
+	},
+	ImageFilter => {
+		file => {
+			from => 'src/GFX/ImageFilter.xs',
+			to   => 'lib/SDL/GFX/ImageFilter.xs',
+		},
+		libraries => [qw( SDL SDL_gfx_imagefilter )],
+	},
+	Primitives => {
+		file => {
+			from => 'src/GFX/Primitives.xs',
+			to   => 'lib/SDL/GFX/Primitives.xs',
+		},
+		libraries => [qw( SDL SDL_gfx_primitives )],
+	},
+	Rotozoom => {
+		file => {
+			from => 'src/GFX/Rotozoom.xs',
+			to   => 'lib/SDL/GFX/Rotozoom.xs',
+		},
+		libraries => [qw( SDL SDL_gfx_rotozoom )],
+	},
+	MultiThread => {
+		file => {
+			from => 'src/Core/MultiThread.xs',
+			to   => 'lib/SDL/MultiThread.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Video => {
+		file => {
+			from => 'src/Core/Video.xs',
+			to   => 'lib/SDL/Video.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Audio => {
+		file => {
+			from => 'src/Core/Audio.xs',
+			to   => 'lib/SDL/Audio.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Rect => {
+		file => {
+			from => 'src/Core/objects/Rect.xs',
+			to   => 'lib/SDL/Rect.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Color => {
+		file => {
+			from => 'src/Core/objects/Color.xs',
+			to   => 'lib/SDL/Color.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Surface => {
+		file => {
+			from => 'src/Core/objects/Surface.xs',
+			to   => 'lib/SDL/Surface.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	SurfaceX => {
+		file => {
+			from => 'src/SDLx/Surface.xs',
+			to   => 'lib/SDLx/Surface.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	TimerX => {
+		file => {
+			from => 'src/SDLx/Timer.xs',
+			to   => 'lib/SDLx/Controller/Timer.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Overlay => {
+		file => {
+			from => 'src/Core/objects/Overlay.xs',
+			to   => 'lib/SDL/Overlay.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	RWOps => {
+		file => {
+			from => 'src/Core/objects/RWOps.xs',
+			to   => 'lib/SDL/RWOps.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	PixelFormat => {
+		file => {
+			from => 'src/Core/objects/PixelFormat.xs',
+			to   => 'lib/SDL/PixelFormat.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	LayerManagerX => {
+		file => {
+			from => 'src/SDLx/LayerManager.xs',
+			to   => 'lib/SDLx/LayerManager.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	LayerX => {
+		file => {
+			from => 'src/SDLx/Layer.xs',
+			to   => 'lib/SDLx/Layer.xs',
+		},
+		libraries => [qw( SDL SDL_image )],
+	},
+	AudioSpec => {
+		file => {
+			from => 'src/Core/objects/AudioSpec.xs',
+			to   => 'lib/SDL/AudioSpec.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	AudioCVT => {
+		file => {
+			from => 'src/Core/objects/AudioCVT.xs',
+			to   => 'lib/SDL/AudioCVT.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Mixer => {
+		file => {
+			from => 'src/Mixer/Mixer.xs',
+			to   => 'lib/SDL/Mixer.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixerSamples => {
+		file => {
+			from => 'src/Mixer/Samples.xs',
+			to   => 'lib/SDL/Mixer/Samples.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixerChannels => {
+		file => {
+			from => 'src/Mixer/Channels.xs',
+			to   => 'lib/SDL/Mixer/Channels.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixerGroups => {
+		file => {
+			from => 'src/Mixer/Groups.xs',
+			to   => 'lib/SDL/Mixer/Groups.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixerMusic => {
+		file => {
+			from => 'src/Mixer/Music.xs',
+			to   => 'lib/SDL/Mixer/Music.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixerEffects => {
+		file => {
+			from => 'src/Mixer/Effects.xs',
+			to   => 'lib/SDL/Mixer/Effects.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixChunk => {
+		file => {
+			from => 'src/Mixer/objects/MixChunk.xs',
+			to   => 'lib/SDL/Mixer/MixChunk.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	MixMusic => {
+		file => {
+			from => 'src/Mixer/objects/MixMusic.xs',
+			to   => 'lib/SDL/Mixer/MixMusic.xs',
+		},
+		libraries => [qw( SDL SDL_mixer )],
+	},
+	Palette => {
+		file => {
+			from => 'src/Core/objects/Palette.xs',
+			to   => 'lib/SDL/Palette.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	VideoInfo => {
+		file => {
+			from => 'src/Core/objects/VideoInfo.xs',
+			to   => 'lib/SDL/VideoInfo.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Mouse => {
+		file => {
+			from => 'src/Core/Mouse.xs',
+			to   => 'lib/SDL/Mouse.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Cursor => {
+		file => {
+			from => 'src/Core/objects/Cursor.xs',
+			to   => 'lib/SDL/Cursor.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Joystick => {
+		file => {
+			from => 'src/Core/Joystick.xs',
+			to   => 'lib/SDL/Joystick.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	CDROM => {
+		file => {
+			from => 'src/Core/CDROM.xs',
+			to   => 'lib/SDL/CDROM.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	CDTrack => {
+		file => {
+			from => 'src/Core/objects/CDTrack.xs',
+			to   => 'lib/SDL/CDTrack.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	CD => {
+		file => {
+			from => 'src/Core/objects/CD.xs',
+			to   => 'lib/SDL/CD.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	TTF => {
+		file => {
+			from => 'src/TTF/TTF.xs',
+			to   => 'lib/SDL/TTF.xs',
+		},
+		libraries => [qw( SDL SDL_ttf )],
+	},
+	TTF_Font => {
+		file => {
+			from => 'src/TTF/objects/Font.xs',
+			to   => 'lib/SDL/TTF/Font.xs',
+		},
+		libraries => [qw( SDL SDL_ttf )],
+	},
+	Version => {
+		file => {
+			from => 'src/Core/objects/Version.xs',
+			to   => 'lib/SDL/Version.xs',
+		},
+		libraries => [qw( SDL )],
+	},
+	Image => {
+		file => {
+			from => 'src/Image.xs',
+			to   => 'lib/SDL/Image.xs',
+		},
+		libraries => [qw( SDL SDL_image )],
+	},
+	SFont => {
+		file => {
+			from => 'src/SDLx/SFont.xs',
+			to   => 'lib/SDLx/SFont.xs',
+		},
+		libraries => [qw( SDL SDL_image )],
+	},
+
 	#	SMPEG => {
 	#		file	=> {
 	#			from => 'src/SMPEG.xs',

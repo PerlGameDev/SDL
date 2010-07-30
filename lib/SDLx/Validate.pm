@@ -52,6 +52,7 @@ sub _make_color {
 	$t += 3 if $t < 3; #$t is 3 if rgb and 4 if rgba
 	my $list = $list_rgb || $list_rgba;
 	if ( !defined $arg or Scalar::Util::looks_like_number($arg) ) {
+
 		if ( !defined $arg or $arg < 0 ) {
 			Carp::carp("Color was a negative number")
 				if defined $arg and $arg < 0;
