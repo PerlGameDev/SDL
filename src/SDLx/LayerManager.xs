@@ -146,8 +146,6 @@ lmx_layer_by_position( manager, x, y )
     SDLx_LayerManager* manager
     int x
     int y
-    PREINIT:
-        char* CLASS = "SDL::Surface";
     CODE:
         int i;
         int match = -1;

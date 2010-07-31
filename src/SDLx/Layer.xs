@@ -115,8 +115,6 @@ layerx_h( layer )
 SV *
 layerx_surface( layer )
     SDLx_Layer *layer
-    PREINIT:
-        char* CLASS = "SDL::Surface";
     CODE:
         RETVAL = _sv_ref( layer->surface, sizeof(SDL_Surface *), sizeof(SDL_Surface), "SDL::Surface" );
     OUTPUT:
@@ -125,8 +123,6 @@ layerx_surface( layer )
 SV *
 layerx_clip( layer )
     SDLx_Layer *layer
-    PREINIT:
-        char* CLASS = "SDL::Rect";
     CODE:
         RETVAL = _sv_ref( layer->clip, sizeof(SDL_Rect *), sizeof(SDL_Rect), "SDL::Rect" );
     OUTPUT:
@@ -135,8 +131,6 @@ layerx_clip( layer )
 SV *
 layerx_pos( layer )
     SDLx_Layer *layer
-    PREINIT:
-        char* CLASS = "SDL::Rect";
     CODE:
         RETVAL = _sv_ref( layer->pos, sizeof(SDL_Rect *), sizeof(SDL_Rect), "SDL::Rect" );
     OUTPUT:
