@@ -18,7 +18,7 @@ usage: $0 [-hw] [-fullscreen] [-width 640] [-height 480] [-bpp 24]
 USAGE
 
 for ( 0 .. @ARGV - 1 ) {
-    $options{ $ARGV[$_] } = $ARGV[ $_ + 1 ] || 1;
+	$options{ $ARGV[$_] } = $ARGV[ $_ + 1 ] || 1;
 }
 
 $options{-flags} = SDL_SWSURFACE;
@@ -34,41 +34,39 @@ $options{-depth}  ||= $options{-bpp} || 8;
 my $app = SDLx::App->new(%options);
 
 sub DrawBox {
-    my ( $x, $y ) = @_;
+	my ( $x, $y ) = @_;
 
-    my ( $w, $h ) = ( int( rand(640) ), int( rand(480) ) );
+	my ( $w, $h ) = ( int( rand(640) ), int( rand(480) ) );
 
-    my $rect = SDL::Rect->new(
-        -width  => $w,
-        -height => $h,
-        -x      => ( $x - int( $w / 2 ) ),
-        -y      => ( $y - int( $h / 2 ) )
-    );
+	my $rect = SDL::Rect->new(
+		-width  => $w,
+		-height => $h,
+		-x      => ( $x - int( $w / 2 ) ),
+		-y      => ( $y - int( $h / 2 ) )
+	);
 
-    my $color =
-      SDL::Color->new( -r => rand(256), -g => rand(256), -b => rand(256) );
+	my $color = SDL::Color->new( -r => rand(256), -g => rand(256), -b => rand(256) );
 
-    $app->fill( $rect, $color );
-    $app->update($rect);
+	$app->fill( $rect, $color );
+	$app->update($rect);
 }
 
 $app->loop(
-    {
-        SDL_MOUSEBUTTONDOWN() => sub {
-            my ($event) = @_;
-            DrawBox( $event->button_x(), $event->button_y() );
-        },
-        SDL_KEYDOWN() => sub {
-            my ($event) = @_;
-            $app->warp( $options{-width} / 2, $options{-height} / 2 )
-              if ( $event->key_sym() == SDLK_SPACE );
-            $app->fullscreen()
-              if ( $event->key_sym() == SDLK_f );
-            exit(0) if ( $event->key_sym() == SDLK_ESCAPE );
-        },
-        SDL_QUIT() => sub {
-            exit(0);
-          }
-    }
+	{   SDL_MOUSEBUTTONDOWN() => sub {
+			my ($event) = @_;
+			DrawBox( $event->button_x(), $event->button_y() );
+		},
+		SDL_KEYDOWN() => sub {
+			my ($event) = @_;
+			$app->warp( $options{-width} / 2, $options{-height} / 2 )
+				if ( $event->key_sym() == SDLK_SPACE );
+			$app->fullscreen()
+				if ( $event->key_sym() == SDLK_f );
+			exit(0) if ( $event->key_sym() == SDLK_ESCAPE );
+		},
+		SDL_QUIT() => sub {
+			exit(0);
+			}
+	}
 );
 

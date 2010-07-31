@@ -21,6 +21,6 @@ my $channel = $mixer->play_channel( -1, $wave, 0 );
 
 # wait until it has finished playing
 while ( $mixer->playing($channel) ) {
-    SDL::Delay(10);
+	SDL::Delay(10);
 }
 

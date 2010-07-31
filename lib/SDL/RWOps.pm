@@ -15,8 +15,8 @@ bootstrap SDL::RWOps;
 use base 'Exporter';
 our @EXPORT      = @{ $SDL::Constants::EXPORT_TAGS{'SDL::RWOps'} };
 our %EXPORT_TAGS = (
-    all      => \@EXPORT,
-    defaults => $SDL::Constants::EXPORT_TAGS{'SDL::RWOps/defaults'}
+	all      => \@EXPORT,
+	defaults => $SDL::Constants::EXPORT_TAGS{'SDL::RWOps/defaults'}
 );
 
 1;
