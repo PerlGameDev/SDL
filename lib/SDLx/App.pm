@@ -17,7 +17,8 @@ use SDL::Events;
 use SDL::Surface;
 use SDL::PixelFormat;
 use SDLx::Surface;
-use base 'SDLx::Surface';
+use Data::Dumper;
+use base qw/SDLx::Surface SDLx::Controller/;
 
 sub new {
 	my $proto   = shift;
@@ -34,6 +35,7 @@ sub new {
 
 		SDL::init($init);
 	}
+
 	my $t   = $options{title}            || $options{t}   || $0;
 	my $it  = $options{icon_title}       || $options{it}  || $t;
 	my $ic  = $options{icon}             || $options{i}   || "";
@@ -103,16 +105,19 @@ sub new {
 		$SDLx::App::USING_OPENGL = 0;
 	}
 
-	my $self = SDL::Video::set_video_mode( $w, $h, $d, $f )
+	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
 		or croak SDL::get_error();
-	$self = SDLx::Surface->new( surface => $self );
+	$options{surface} = $surface;
+
+	my $self = SDLx::Surface->new(%options);
+
 	if ( $ic and -e $ic ) {
 		my $icon = SDL::Video::load_BMP($ic);
 		SDL::Video::wm_set_icon($$icon);
 	}
 
 	SDL::Video::wm_set_caption( $t, $it );
-
+	$self = SDLx::Controller->new( %{$self} );
 	bless $self, $class;
 	return $self;
 }

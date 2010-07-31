@@ -143,7 +143,7 @@ sub clip {
 sub x {
 	my ( $self, $x ) = @_;
 
-	if ($x) {
+	if ( defined $x ) {
 		$self->rect->x($x);
 	}
 
@@ -153,7 +153,7 @@ sub x {
 sub y {
 	my ( $self, $y ) = @_;
 
-	if ($y) {
+	if ( defined $y ) {
 		$self->rect->y($y);
 	}
 

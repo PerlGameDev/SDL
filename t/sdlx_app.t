@@ -37,7 +37,7 @@ use Test::More;
 use lib 't/lib';
 use SDL::TestTool;
 
-plan( tests => 13 );
+plan( tests => 15 );
 use_ok('SDLx::App');
 
 can_ok(
@@ -123,7 +123,25 @@ SKIP:
 		"fail to resize to bad size with $driver"
 	);
 	like( $@, qr/cannot set video/, "check error message" );
+
+
 }
+
+my $app = SDLx::App->new(
+	width  => 640,
+	height => 480,
+	noinit => 1
+);
+
+isa_ok( $app, 'SDLx::Controller', 'SDLx::App is a SDLx::Controller' );
+$app->add_event_handler( \&boo );
+$app->add_move_handler( sub { 1; } );
+$app->add_show_handler( sub { 1; } );
+
+#    $app->run();
+pass 'SDLx::App can run as a controller';
+
+sub boo { return 0; }
 
 if ($videodriver) {
 	$ENV{SDL_VIDEODRIVER} = $videodriver;
@@ -131,4 +149,4 @@ if ($videodriver) {
 	delete $ENV{SDL_VIDEODRIVER};
 }
 
-sleep(2);
+

@@ -110,6 +110,15 @@ $surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], [ 255, 255, 0, 255 ] );
 $surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], [ 255, 255, 0, 255 ], 1 );
 pass 'draw_line works';
 
+
+TODO:
+{
+	local $TODO = 'Draw_Circle is not done yet';
+	my $cir_color = 0xCCCCCCFF;
+	$surfs[0]->draw_circle( [ 100, 10 ], 20, $cir_color ); #no fill
+	is( $surfs[0]->[120][10], $cir_color );
+}
+
 my $surf_dup = SDLx::Surface::duplicate( $surfs[1] );
 
 is( $surf_dup->w,     $surfs[1]->w,     'Duplicate surf has same width' );

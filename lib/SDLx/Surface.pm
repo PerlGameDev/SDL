@@ -14,6 +14,7 @@ use SDLx::Surface;
 use SDLx::Surface::TiedMatrix;
 use SDL::GFX::Primitives;
 use SDL::PixelFormat;
+use SDLx::Validate;
 use Tie::Simple;
 
 use overload (
@@ -88,9 +89,7 @@ sub display {
 
 sub duplicate {
 	my $surface = shift;
-	Carp::croak 'SDLx::Surface or SDL::Surface for surface required'
-		unless ( $surface->isa('SDL::Surface')
-		|| $surface->isa('SDLx::Surface') );
+	SDLx::Validate::surface($surface);
 	require SDL::PixelFormat;
 	return SDLx::Surface->new(
 		width  => $surface->w,
@@ -141,10 +140,7 @@ sub _array {
 sub surface {
 	return $_[0]->{surface} unless $_[1];
 	my ( $self, $surface ) = @_;
-	Carp::croak 'surface accepts only SDL::Surface objects'
-		unless $surface->isa('SDL::Surface');
-
-	$self->{surface} = $surface;
+	$self->{surface} = SDLx::Validate::surface($surface);
 	return $self->{surface};
 }
 
@@ -182,34 +178,19 @@ sub clip_rect {
 sub blit {
 	my ( $self, $dest, $src_rect, $dest_rect ) = @_;
 
-	Carp::croak 'SDLx::Surface or SDL::Surface for dest required'
-		unless ( $dest->isa('SDL::Surface') || $dest->isa('SDLx::Surface') );
+	my $self_surface = $self->surface;
 
-	my $self_surface = $self;
-	$self_surface = $self->surface if $self->isa('SDLx::Surface');
-
-	my $dest_surface = $dest;
-	$dest_surface = $dest->surface if $dest->isa('SDLx::Surface');
+	my $dest_surface = SDLx::Validate::surface($dest);
 
 	$src_rect = SDL::Rect->new( 0, 0, $self_surface->w, $self_surface->h )
 		unless defined $src_rect;
 	$dest_rect = SDL::Rect->new( 0, 0, $dest_surface->w, $dest_surface->h )
 		unless defined $dest_rect;
 
-	Carp::croak 'Array ref or SDL::Rect for source rect required.'
-		unless ( ref($src_rect) eq 'ARRAY' ) || $src_rect->isa('SDL::Rect');
-	Carp::croak 'Array ref or SDL::Rect for dest rect required'
-		unless ( ref($dest_rect) eq 'ARRAY' ) || ( $dest_rect->isa('SDL::Rect') );
+	my $pass_src_rect = SDLx::Validate::rect($src_rect);
 
-	my $pass_src_rect = $src_rect;
-	$pass_src_rect = SDL::Rect->new( @{$src_rect} ) if ref $src_rect eq 'ARRAY';
+	my $pass_dest_rect = SDLx::Validate::rect($dest_rect);
 
-	my $pass_dest_rect = $dest_rect;
-	$pass_dest_rect = SDL::Rect->new( @{$dest_rect} )
-		if ref $dest_rect eq 'ARRAY';
-
-	Carp::croak 'Destination was not a surface'
-		unless $dest_surface->isa('SDL::Surface');
 	SDL::Video::blit_surface(
 		$self_surface, $pass_src_rect, $dest_surface,
 		$pass_dest_rect
@@ -255,28 +236,15 @@ sub update {
 
 sub draw_rect {
 	my ( $self, $rect, $color ) = @_;
-	Carp::croak "Rect needs to be a SDL::Rect or array ref or undef"
-		unless !defined($rect)
-			|| ref($rect) eq 'ARRAY'
-			|| $rect->isa('SDL::Rect');
-	require Scalar::Util;
-	if ( Scalar::Util::looks_like_number($color) ) {
-
-	} elsif ( $color->isa('SDL::Color') ) {
-		$color = ( $color->r << 24 ) + ( $color->g << 16 ) + ( $color->b << 8 ) + 0xFF;
+	$color = SDLx::Validate::num_rgba($color);
+	if ( defined $rect ) {
+		$rect = SDLx::Validate::rect($rect);
 	} else {
-		Carp::croak "Color needs to be a number or a SDL::Color";
+		$rect = SDL::Rect->new( 0, 0, $self->w, $self->h );
 	}
-
-	$rect = (
-		 !defined($rect) ? SDL::Rect->new( 0, 0, $self->w, $self->h )
-		: ref($rect) ? SDL::Rect->new( @{$rect} )
-		: $rect
-	);
 
 	SDL::Video::fill_rect( $self->surface, $rect, $color )
 		and Carp::croak "Error drawing rect: " . SDL::get_error();
-
 	return $self;
 }
 
@@ -327,15 +295,10 @@ sub draw_line {
 	return $self;
 }
 
-#TODO
-
-=pod
-
-sub draw_cirle{
-	my ($self, $center, $radius, $color, $antialias) = @_;
+sub draw_circle {
+	my ( $self, $center, $radius, $color, $antialias ) = @_;
 
 	return $self;
 }
-=cut 
 
 1;
