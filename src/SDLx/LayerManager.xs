@@ -12,6 +12,19 @@
 
 PerlInterpreter * perl = NULL;
 
+SV *_sv_ref( void *object, int p_size, int s_size, char *package )
+{
+    SV   *ref  = newSV( p_size );
+    void *copy = safemalloc( s_size );
+    memcpy( copy, object, s_size );
+
+    void** pointers = malloc(2 * sizeof(void*));
+    pointers[0]     = (void*)copy;
+    pointers[1]     = (void*)perl;
+
+    return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
+}
+
 int _calc_offset( SDL_Surface* surface, int x, int y )
 {
     int offset;
@@ -79,17 +92,7 @@ lmx_layer( manager, index )
         char* CLASS = "SDLx::Layer";
     CODE:
         if(index >= 0 && index < manager->length)
-        {
-            SV   *rectref  = newSV( sizeof(SDLx_Layer *) );
-            void *copyRect = safemalloc( sizeof(SDLx_Layer) );
-            memcpy( copyRect, (manager->layers)[index], sizeof(SDLx_Layer) );
-
-            void** pointers = malloc(2 * sizeof(void*));
-            pointers[0]     = (void*)copyRect;
-            pointers[1]     = (void*)perl;
-
-            RETVAL = newSVsv(sv_setref_pv(rectref, "SDLx::Layer", (void *)pointers));
-        }
+            RETVAL = _sv_ref( manager->layers[index], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" );
         else
             XSRETURN_UNDEF;
     OUTPUT:
@@ -167,17 +170,7 @@ lmx_layer_by_position( manager, x, y )
         }
 
         if(match >= 0)
-        {
-            SV   *rectref  = newSV( sizeof(SDLx_Layer *) );
-            void *copyRect = safemalloc( sizeof(SDLx_Layer) );
-            memcpy( copyRect, (manager->layers)[match], sizeof(SDLx_Layer) );
-
-            void** pointers = malloc(2 * sizeof(void*));
-            pointers[0]     = (void*)copyRect;
-            pointers[1]     = (void*)perl;
-
-            RETVAL = newSVsv(sv_setref_pv(rectref, "SDLx::Layer", (void *)pointers));
-        }
+            RETVAL = _sv_ref( manager->layers[match], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" );
         else
             XSRETURN_UNDEF;
     OUTPUT:

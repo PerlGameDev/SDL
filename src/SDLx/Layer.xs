@@ -12,6 +12,19 @@
 
 PerlInterpreter * perl = NULL;
 
+SV *_sv_ref( void *object, int p_size, int s_size, char *package )
+{
+    SV   *ref  = newSV( p_size );
+    void *copy = safemalloc( s_size );
+    memcpy( copy, object, s_size );
+
+    void** pointers = malloc(2 * sizeof(void*));
+    pointers[0]     = (void*)copy;
+    pointers[1]     = (void*)perl;
+
+    return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
+}
+
 MODULE = SDLx::Layer    PACKAGE = SDLx::Layer    PREFIX = layerx_
 
 SDLx_Layer *
@@ -105,15 +118,7 @@ layerx_surface( layer )
     PREINIT:
         char* CLASS = "SDL::Surface";
     CODE:
-        SV   *rectref  = newSV( sizeof(SDL_Surface *) );
-        void *copyRect = safemalloc( sizeof(SDL_Surface) );
-        memcpy( copyRect, layer->surface, sizeof(SDL_Surface) );
-
-        void** pointers = malloc(2 * sizeof(void*));
-        pointers[0]     = (void*)copyRect;
-        pointers[1]     = (void*)perl;
-
-        RETVAL = newSVsv(sv_setref_pv(rectref, "SDL::Surface", (void *)pointers));
+        RETVAL = _sv_ref( layer->surface, sizeof(SDL_Surface *), sizeof(SDL_Surface), "SDL::Surface" );
     OUTPUT:
         RETVAL
 
@@ -123,15 +128,7 @@ layerx_clip( layer )
     PREINIT:
         char* CLASS = "SDL::Rect";
     CODE:
-        SV   *rectref  = newSV( sizeof(SDL_Rect *) );
-        void *copyRect = safemalloc( sizeof(SDL_Rect) );
-        memcpy( copyRect, layer->clip, sizeof(SDL_Rect) );
-
-        void** pointers = malloc(2 * sizeof(void*));
-        pointers[0]     = (void*)copyRect;
-        pointers[1]     = (void*)perl;
-
-        RETVAL = newSVsv(sv_setref_pv(rectref, "SDL::Rect", (void *)pointers));
+        RETVAL = _sv_ref( layer->clip, sizeof(SDL_Rect *), sizeof(SDL_Rect), "SDL::Rect" );
     OUTPUT:
         RETVAL
 
@@ -141,15 +138,7 @@ layerx_pos( layer )
     PREINIT:
         char* CLASS = "SDL::Rect";
     CODE:
-        SV   *rectref  = newSV( sizeof(SDL_Rect *) );
-        void *copyRect = safemalloc( sizeof(SDL_Rect) );
-        memcpy( copyRect, layer->pos, sizeof(SDL_Rect) );
-
-        void** pointers = malloc(2 * sizeof(void*));
-        pointers[0]     = (void*)copyRect;
-        pointers[1]     = (void*)perl;
-
-        RETVAL = newSVsv(sv_setref_pv(rectref, "SDL::Rect", (void *)pointers));
+        RETVAL = _sv_ref( layer->pos, sizeof(SDL_Rect *), sizeof(SDL_Rect), "SDL::Rect" );
     OUTPUT:
         RETVAL
 
