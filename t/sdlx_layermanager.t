@@ -59,36 +59,26 @@ is    ( $layer3->data->{bb}, 'cc',          'SDLx::Layer->data->{}' );
 ############ SDLx::LayerManager #####################################################
 
 my $manager = SDLx::LayerManager->new();
-isa_ok( $manager, 'SDLx::LayerManager', 'SDLx::LayerManager->new' );
-is( $manager->length, 0, 'SDLx::LayerManager->length' );
-$manager->add($layer);  pass('SDLx::LayerManager->add');
-$manager->add($layer2); pass('SDLx::LayerManager->add');
-is( $manager->length, 2, 'SDLx::LayerManager->length' );
-isa_ok( $manager->layer(0), 'SDLx::Layer', 'SDLx::LayerManager->layer' );
-isa_ok( $manager->layer(1), 'SDLx::Layer', 'SDLx::LayerManager->layer' );
-is( $manager->layer(2),    undef, 'SDLx::LayerManager->layer' );
-is( $manager->layer(-3),   undef, 'SDLx::LayerManager->layer' );
-is( $manager->layer(0)->h, 120,   'SDLx::LayerManager->layer->h' );
-isa_ok( $manager->layer(0)->surface, 'SDL::Surface', 'SDLx::LayerManager->layer->surface' );
-is( $manager->layer(0)->surface->w, 180, 'SDLx::LayerManager->layer->surface->w' );
-
-#isa_ok( $manager->layers,      'ARRAY',        '[layers] returns an ARRAY' );
-#is(     $manager->layer(0)->x, 10,             '[layer(0)->x] is 10' );
-#        $manager->layer(0)->x(42);       pass( '[layer(0)->x(42)] set to 42' );
-#is(     $manager->layer(0)->x, 42,             '[layer(0)->x] is 42 now' );
-$manager->blit($display); pass('[blit] ran');
+isa_ok( $manager,                                        'SDLx::LayerManager', 'SDLx::LayerManager->new' );
+is    ( $manager->length,                                0,                    'SDLx::LayerManager->length' );
+        $manager->add($layer);                                            pass('SDLx::LayerManager->add');
+        $manager->add($layer2);                                           pass('SDLx::LayerManager->add');
+        $manager->add($layer3);                                           pass('SDLx::LayerManager->add');
+is    ( $manager->length,                                3,                    'SDLx::LayerManager->length' );
+isa_ok( $manager->layer(0),                              'SDLx::Layer',        'SDLx::LayerManager->layer' );
+isa_ok( $manager->layer(1),                              'SDLx::Layer',        'SDLx::LayerManager->layer' );
+is    ( $manager->layer(3),                              undef,                'SDLx::LayerManager->layer' );
+is    ( $manager->layer(-3),                             undef,                'SDLx::LayerManager->layer' );
+is    ( $manager->layer(0)->h,                           120,                  'SDLx::LayerManager->layer->h' );
+isa_ok( $manager->layer(0)->surface,                     'SDL::Surface',       'SDLx::LayerManager->layer->surface' );
+is    ( $manager->layer(0)->surface->w,                  180,                  'SDLx::LayerManager->layer->surface->w' );
+is    ( $manager->layer_by_position(10, 30),             undef,                'SDLx::LayerManager->layer_by_position' );
+isa_ok( $manager->layer_by_position(30, 50),             'SDLx::Layer',        'SDLx::LayerManager->layer_by_position' );
+is    ( $manager->layer_by_position(30, 50)->index,      0,                    'SDLx::LayerManager->layer_by_position->index' );
+is    ( $manager->layer_by_position(60, 60)->index,      2,                    'SDLx::LayerManager->layer_by_position->index' );
+is    ( $manager->layer_by_position(60, 60)->data->{aa}, 'bb',                 'SDLx::LayerManager->layer_by_position->data->{}' );
+        $manager->blit($display);                                         pass('SDLx::LayerManager->blit');
 SDL::Video::update_rect( $display, 0, 0, 0, 0 );
-
-
-#is( $manager->get_layer_by_position( 20, 130 ), 2 );
-
-#my $sprite4 =
-#  SDLx::Sprite->new( image => 'test/data/picture.bmp', x => 400, y => 20 );
-
-#$manager->add($sprite4, {});
-
-#my @layers_ahead = $manager->get_layers_ahead_layer(0);
-#is_deeply( \@layers_ahead, [ 1, 2 ] );
 
 sleep(2);
 

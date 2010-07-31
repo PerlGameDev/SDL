@@ -20,6 +20,7 @@ layerx_new( CLASS, surface, ... )
     SDL_Surface *surface
     CODE:
         RETVAL            = (SDLx_Layer *)safemalloc( sizeof(SDLx_Layer) );
+        RETVAL->index     = -1;
         RETVAL->surface   = (SDL_Surface *)safemalloc( sizeof(SDL_Surface) );
         RETVAL->clip      = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
         RETVAL->pos       = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
@@ -55,6 +56,14 @@ layerx_new( CLASS, surface, ... )
             (RETVAL->clip)->w = SvIV(ST(6));
         if(items > 7)
             (RETVAL->clip)->h = SvIV(ST(7));
+    OUTPUT:
+        RETVAL
+
+int
+layerx_index( layer )
+    SDLx_Layer *layer
+    CODE:
+        RETVAL = layer->index;
     OUTPUT:
         RETVAL
 

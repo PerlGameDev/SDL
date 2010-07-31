@@ -12,6 +12,36 @@
 
 PerlInterpreter * perl = NULL;
 
+int _calc_offset( SDL_Surface* surface, int x, int y )
+{
+    int offset;
+    offset  = (surface->pitch * y)/surface->format->BytesPerPixel;
+    offset += x;
+    return offset;
+}
+
+
+int _get_pixel( SDL_Surface * surface, int offset )
+{
+    int value = 0;
+    switch(surface->format->BytesPerPixel)
+    {
+        case 1:  value = ((Uint8  *)surface->pixels)[offset];
+                 break;
+        case 2:  value = ((Uint16 *)surface->pixels)[offset];
+                 break;
+        case 3:  value = ((Uint32)((Uint8 *)surface->pixels)[offset * surface->format->BytesPerPixel]     <<  0)
+                       + ((Uint32)((Uint8 *)surface->pixels)[offset * surface->format->BytesPerPixel + 1] <<  8)
+                       + ((Uint32)((Uint8 *)surface->pixels)[offset * surface->format->BytesPerPixel + 2] << 16);
+                 break;
+        case 4:  value = ((Uint32 *)surface->pixels)[offset];
+                 break;
+
+    }
+
+    return value;
+}
+
 MODULE = SDLx::LayerManager    PACKAGE = SDLx::LayerManager    PREFIX = lmx_
 
 SDLx_LayerManager *
@@ -29,6 +59,7 @@ lmx_add( manager, layer )
     SDLx_Layer *layer
     CODE:
         manager->layers[manager->length] = layer;
+        layer->index                     = manager->length;
         manager->length++;
 
 AV *
@@ -83,11 +114,9 @@ lmx_blit( manager, dest )
         int index = 0;
         while(index < manager->length)
         {
-            //SDLx_Layer *layer = *(manager->layers);
             SDLx_Layer *layer = (manager->layers)[index];
             
             SDL_BlitSurface(layer->surface, layer->clip, dest, layer->pos);
-            //SDL_UpdateRect(dest, 0, 0, 0, 0);
             
             index++;
         }
@@ -108,6 +137,51 @@ lmx_blit( manager, dest )
             $layers[$_]->{layer}->draw_xy($dest, $x + @{$attached_distance[$_]}[0], $y + @{$attached_distance[$_]}[1]);
         }
         */
+
+SV *
+lmx_layer_by_position( manager, x, y )
+    SDLx_LayerManager* manager
+    int x
+    int y
+    PREINIT:
+        char* CLASS = "SDL::Surface";
+    CODE:
+        int i;
+        int match = -1;
+        for( i = manager->length - 1; i >= 0 && match < 0; i-- )
+        {
+            SDL_Rect    *clip = manager->layers[i]->clip;
+            SDL_Rect    *pos  = manager->layers[i]->pos;
+            SDL_Surface *surf = manager->layers[i]->surface;
+            
+            if (   pos->x <= x && x <= pos->x + clip->w
+                && pos->y <= y && y <= pos->y + clip->h )
+            {
+                Uint8 r, g, b, a;
+                Uint32 pixel = _get_pixel(surf, _calc_offset(surf, x, y));
+                SDL_GetRGBA( pixel, surf->format, &r, &g, &b, &a );
+
+                if(a > 0)
+                    match = i;
+            }
+        }
+
+        if(match >= 0)
+        {
+            SV   *rectref  = newSV( sizeof(SDLx_Layer *) );
+            void *copyRect = safemalloc( sizeof(SDLx_Layer) );
+            memcpy( copyRect, (manager->layers)[match], sizeof(SDLx_Layer) );
+
+            void** pointers = malloc(2 * sizeof(void*));
+            pointers[0]     = (void*)copyRect;
+            pointers[1]     = (void*)perl;
+
+            RETVAL = newSVsv(sv_setref_pv(rectref, "SDLx::Layer", (void *)pointers));
+        }
+        else
+            XSRETURN_UNDEF;
+    OUTPUT:
+        RETVAL
 
 void
 lmx_DESTROY( manager )
