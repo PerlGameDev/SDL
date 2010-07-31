@@ -188,26 +188,6 @@ sub foreground {
 	return @attached_layers;
 }
 
-sub get_layer_by_position {
-	my $self = shift;
-	my ( $x, $y ) = @_;
-
-	for ( my $i = $#layers; $i > 0; $i-- ) {
-		if (   $layers[$i]->{layer}->x <= $x
-			&& $x <= $layers[$i]->{layer}->x + $layers[$i]->{layer}->clip()->w
-			&& $layers[$i]->{layer}->y <= $y
-			&& $y <= $layers[$i]->{layer}->y + $layers[$i]->{layer}->clip()->h )
-		{
-			my $pixel = $layers[$i]->{layer}->[ $x - $layers[$i]->{layer}->x ][ $y - $layers[$i]->{layer}->y ];
-			my ( $r, $g, $b, $a ) = @{ SDL::Video::get_RGBA( $layers[$i]->{layer}->surface->format, $pixel ) };
-
-			return $i if $a > 0;
-		}
-	}
-
-	return -1;
-}
-
 sub get_layers_ahead_layer {
 	my $self  = shift;
 	my $index = shift;
