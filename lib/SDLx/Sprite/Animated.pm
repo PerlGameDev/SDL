@@ -70,6 +70,7 @@ sub DESTROY {
 	delete $_sequences{ refaddr $self};
 	delete $_sequence{ refaddr $self};
 	delete $_started{ refaddr $self};
+	delete $_direction{ refaddr $self};
 }
 
 sub load {
