@@ -62,7 +62,7 @@ lmx_new( CLASS, ... )
     char* CLASS
     CODE:
         RETVAL = (SDLx_LayerManager *)safemalloc( sizeof(SDLx_LayerManager) );
-	/*  RETVAL->sv_layers = newAV(); */
+	    RETVAL->sv_layers = newAV();
         RETVAL->length = 0;
     OUTPUT:
         RETVAL
@@ -72,15 +72,15 @@ lmx_add( manager, layer )
     SDLx_LayerManager *manager
     SDLx_Layer *layer
     CODE:
-        manager->layers[manager->length] = layer;
+        //manager->layers[manager->length] = layer;
         layer->index                     = manager->length;
         layer->manager                   = (SDLx_LayerManager *)manager;
-	/* SV* sv = newSV_type(SVt_PV);
-	SvPV_set(sv, layer);
-	SvPOK_on(sv);
-	SvLEN_set(sv, 0);
-	SvCUR_set(sv, sizeof(layer) );
-	av_push( manager->sv_layers, sv);*/
+        SV* sv = newSV_type(SVt_PV);
+        SvPV_set(sv, layer);
+        SvPOK_on(sv);
+        SvLEN_set(sv, 0);
+        SvCUR_set(sv, sizeof(layer) );
+        av_push( manager->sv_layers, sv);
         manager->length++;
 
 AV *
@@ -100,11 +100,10 @@ lmx_layer( manager, index )
         char* CLASS = "SDLx::Layer";
     CODE:
         if(index >= 0 && index < manager->length)
-	 {
-	    //SV* sv = av_fetch( (AV *) manager->sv_layers, index, 0 );
-	   // SDLx_Layer* re_layer = SvRV( sv );
-            RETVAL = _sv_ref( manager->layers[index], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" );
-	 }
+        {
+            RETVAL = SvRV( *av_fetch( manager->sv_layers, index, 0 ) );
+            //RETVAL = _sv_ref( manager->layers[index], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" );
+        }
         else
             XSRETURN_UNDEF;
     OUTPUT:
@@ -129,7 +128,8 @@ lmx_blit( manager, dest )
         int index = 0;
         while(index < manager->length)
         {
-            SDLx_Layer *layer = (manager->layers)[index];
+            //SDLx_Layer *layer = (manager->layers)[index];
+            SDLx_Layer *layer = (SDLx_Layer *)SvRV(*av_fetch(manager->sv_layers, index, 0));
             
             SDL_BlitSurface(layer->surface, layer->clip, dest, layer->pos);
             
