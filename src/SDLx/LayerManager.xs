@@ -92,6 +92,7 @@ lmx_add( manager, bag )
 			   layer->index = av_len( manager->sv_layers );
 			   layer->manager = (SDLx_LayerManager *)manager;
 			   av_push( manager->sv_layers, bag);
+               SvREFCNT_inc(bag);
 		           manager->length++;
 		       }   
 
