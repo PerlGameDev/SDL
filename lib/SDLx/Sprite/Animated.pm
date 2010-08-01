@@ -276,6 +276,13 @@ sub _update_clip {
 	$clip->y( $frame->[1] * $_step_y{ refaddr $self} );
 }
 
+sub alpha_key {
+	my $self = shift;
+	$self->SUPER::alpha_key(@_);
+	$self->_restore_geometry;
+	return $self;
+}
+
 sub draw {
 	my ( $self, $surface ) = @_;
 
