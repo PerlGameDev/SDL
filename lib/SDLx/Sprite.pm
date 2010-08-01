@@ -8,7 +8,7 @@ use SDL::Image;
 use SDL::Rect;
 use SDL::Surface;
 use SDLx::Surface;
-use SDLx::Validate 'surfacex';
+use SDLx::Validate;
 
 use Carp ();
 
@@ -97,11 +97,8 @@ sub handle_surface {
 	# short-circuit
 	return $self->surface unless $surface;
 
-	Carp::croak 'surface accepts only SDL::Surface objects'
-		unless $surface->isa('SDL::Surface');
-
 	my $old_surface = $self->surface();
-	$self->surface($surface);
+	$self->surface( $surface );
 
 	# update our source and destination rects
 	$self->rect->w( $surface->w );
@@ -118,10 +115,7 @@ sub rect {
 	# short-circuit
 	return $self->{rect} unless $rect;
 
-	Carp::croak 'rect accepts only SDL::Rect objects'
-		unless $rect->isa('SDL::Rect');
-
-	return $self->{rect} = $rect;
+	return $self->{rect} = SDLx::Validate::rect($rect);
 }
 
 sub clip {
@@ -130,10 +124,7 @@ sub clip {
 	# short-circuit
 	return $self->{clip} unless $clip;
 
-	Carp::croak 'clip accepts only SDL::Rect objects'
-		unless $clip->isa('SDL::Rect');
-
-	return $self->{clip} = $clip;
+	return $self->{clip} = SDLx::Validate::rect($clip);
 }
 
 sub x {
@@ -157,16 +148,13 @@ sub y {
 }
 
 sub draw {
-	my ( $self, $surface ) = @_;
-	Carp::croak 'Surface needs to be defined' unless defined $surface;
-
+	my ( $self, $surface ) = @_;	
 	$self->{surface}->blit( $surface, $self->clip, $self->rect );
 	return $self;
 }
 
 sub draw_xy {
 	my ( $self, $surface, $x, $y ) = @_;
-	Carp::croak 'Surface needs to be defined' unless defined $surface;
 	$self->x($x);
 	$self->y($y);
 	return $self->draw($surface);
@@ -175,9 +163,7 @@ sub draw_xy {
 sub alpha_key {
 	my ( $self, $color ) = @_;
 
-	Carp::croak 'color must be a SDL::Color'
-		unless ref $color and $color->isa('SDL::Color');
-
+	$color = SDLx::Validate::color( $color );
 	Carp::croak 'SDL::Video::set_video_mode must be called first'
 		unless ref SDL::Video::get_video_surface();
 	$self->{alpha_key} = $color
@@ -248,11 +234,10 @@ sub rotation {
 sub surface {
 	my ( $self, $surface ) = @_;
 
-	if ($surface) {
-
-		$self->{surface} = SDLx::Validate::surfacex($surface);
+	if ( $surface )
+	{
+	$self->{surface} = SDLx::Validate::surfacex($surface);
 	}
-
 	return $self->{surface};
 }
 
