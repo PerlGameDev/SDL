@@ -43,8 +43,8 @@ sub new {
 
 	$self->_store_geometry( $w, $h );
 
-	$self->step_y( exists $options{step_y}                   ? $options{step_y}          : $self->clip->w );
-	$self->step_x( exists $options{step_x}                   ? $options{step_x}          : $self->clip->h );
+	$self->step_x( exists $options{step_x}                   ? $options{step_x}          : $self->clip->w );
+	$self->step_y( exists $options{step_y}                   ? $options{step_y}          : $self->clip->h );
 	$self->max_loops( exists $options{max_loops}             ? $options{max_loops}       : 0 );
 	$self->ticks_per_frame( exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
 	$self->type( exists $options{type}                       ? $options{type}            : 'circular' );
