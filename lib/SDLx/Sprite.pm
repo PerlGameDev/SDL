@@ -1,7 +1,7 @@
 package SDLx::Sprite;
 use strict;
 use warnings;
-
+use Scalar::Util 'refaddr';
 use SDL;
 use SDL::Video;
 use SDL::Image;
@@ -12,29 +12,29 @@ use base 'SDLx::Surface';
 
 use Carp ();
 
+# Inside out object
+my %_surface;
+my %_rect;
+my %_clip;
+my %_alpha_key;
+my %_alpha;
+my %_angle;
+
 sub new {
 	my ( $class, %options ) = @_;
 
-	my $self = {};
+	my $self = bless {}, ref $class || $class;
 	if ( exists $options{surface} ) {
-
-		$self = $class->SUPER::new( surface => $options{surface} );
-		$self->{orig_surface} = $options{surface};
-
 		$self->_init_rects(%options);
-		$self->handle_surface( $self->surface );
+		$self->_handle_surface( $options{surface} );
 	} elsif ( exists $options{image} ) {
 		my $surf = _construct_image( $options{image} );
-		$self = $class->SUPER::new( surface => $surf );
 		$self->_init_rects(%options);
-		$self->handle_surface($surf);
-		$self->{orig_surface} = $surf;
+		$self->_handle_surface($surf);
 	} elsif ( exists $options{width} && $options{height} ) {
-		$self = $class->SUPER::new(%options);
-		$self->{orig_surface} = $self->surface;
-
+		my $surf = SDLx::Surface->new(%options);
 		$self->_init_rects(%options);
-		$self->handle_surface( $self->surface );
+		$self->_handle_surface($surf);
 	} else {
 
 		Carp::croak "Need a surface => SDL::Surface, an image => name, or ( width => ... , height => ...)";
@@ -58,6 +58,23 @@ sub new {
 	$self->alpha_key( $options{alpha_key} ) if exists $options{alpha_key};
 	$self->alpha( $options{alpha} )         if exists $options{alpha};
 
+	return $self;
+}
+
+sub DESTROY {
+	my $self = shift;
+	delete $_surface{ refaddr $self};
+	delete $_rect{ refaddr $self};
+	delete $_clip{ refaddr $self};
+	delete $_alpha_key{ refaddr $self};
+	delete $_alpha{ refaddr $self};
+	delete $_angle{ refaddr $self};
+}
+
+sub load {
+	my ( $self, $image ) = @_;
+	my $surf = _construct_image($image);
+	$self->_handle_surface($surf);
 	return $self;
 }
 
@@ -86,16 +103,7 @@ sub _construct_image {
 	return $surface;
 }
 
-sub load {
-	my ( $self, $filename ) = @_;
-
-	my $surface = _construct_image($filename);
-	$self->{orig_surface} = $surface unless $self->{orig_surface};
-	$self->handle_surface($surface);
-	return $self;
-}
-
-sub handle_surface {
+sub _handle_surface {
 	my ( $self, $surface ) = @_;
 
 	# short-circuit
@@ -104,8 +112,8 @@ sub handle_surface {
 	Carp::croak 'surface accepts only SDL::Surface objects'
 		unless $surface->isa('SDL::Surface');
 
-	my $old_surface = $self->surface();
-	$self->surface($surface);
+	my $old_surface = $_surface{ refaddr $self};
+	$_surface{ refaddr $self} = $surface;
 
 	# update our source and destination rects
 	$self->rect->w( $surface->w );
@@ -120,24 +128,37 @@ sub rect {
 	my ( $self, $rect ) = @_;
 
 	# short-circuit
-	return $self->{rect} unless $rect;
+	return $_rect{ refaddr $self} unless $rect;
 
 	Carp::croak 'rect accepts only SDL::Rect objects'
 		unless $rect->isa('SDL::Rect');
 
-	return $self->{rect} = $rect;
+	return $_rect{ refaddr $self} = $rect;
 }
 
 sub clip {
 	my ( $self, $clip ) = @_;
 
 	# short-circuit
-	return $self->{clip} unless $clip;
+	return $_clip{ refaddr $self} unless $clip;
 
 	Carp::croak 'clip accepts only SDL::Rect objects'
 		unless $clip->isa('SDL::Rect');
 
-	return $self->{clip} = $clip;
+	return $_clip{ refaddr $self} = $clip;
+}
+
+sub surface {
+	my ( $self, $surface ) = @_;
+
+	# short-circuit
+	return $_surface{ refaddr $self} unless $surface;
+
+	Carp::croak 'clip accepts only SDL::Surface objects'
+		unless $surface->isa('SDL::Surface');
+
+	$self->_handle_surface($surface);
+	return $surface;
 }
 
 sub x {
@@ -158,6 +179,16 @@ sub y {
 	}
 
 	return $self->rect->y;
+}
+
+sub w {
+	my ($self) = @_;
+	return $self->surface->w;
+}
+
+sub h {
+	my ($self) = @_;
+	return $self->surface->h;
 }
 
 sub draw {
@@ -185,8 +216,8 @@ sub alpha_key {
 
 	Carp::croak 'SDL::Video::set_video_mode must be called first'
 		unless ref SDL::Video::get_video_surface();
-	$self->{alpha_key} = $color
-		unless $self->{alpha_key}; # keep a copy just in case
+	$_alpha_key{ refaddr $self} = $color
+		unless $_alpha_key{ refaddr $self}; # keep a copy just in case
 	$self->surface( SDL::Video::display_format( $self->surface ) );
 
 	if ( SDL::Video::set_color_key( $self->surface, SDL_SRCCOLORKEY, $color ) < 0 ) {
@@ -203,7 +234,7 @@ sub alpha {
 
 	$value = 0    if $value < 0;
 	$value = 0xff if $value > 0xff;
-	$self->{alpha} = $value; # keep a copy just in case
+	$_alpha{ refaddr $self} = $value; # keep a copy just in case
 	$self->surface( SDL::Video::display_format( $self->surface ) );
 	my $flags = SDL_SRCALPHA | SDL_RLEACCEL; #this should be predictive
 	if ( SDL::Video::set_alpha( $self->surface, $flags, $value ) < 0 ) {
@@ -216,38 +247,38 @@ sub alpha {
 sub rotation {
 	my ( $self, $angle, $smooth ) = @_;
 
-	if ( $angle && $self->{orig_surface} ) {
+	if ( $angle && $_surface{ refaddr $self} ) {
 
 		require SDL::GFX::Rotozoom;
 
 		my $rotated = SDL::GFX::Rotozoom::surface(
-			$self->{orig_surface}, #prevents rotting of the surface
+			$_surface{ refaddr $self}, #prevents rotting of the surface
 			$angle,
-			1,                     # zoom
+			1,                         # zoom
 			( defined $smooth && $smooth != 0 )
 		) or Carp::croak 'rotation error: ' . SDL::get_error;
 
 		#After rotation the surface is on a undefined background.
 		#This causes problems with alpha. So we create a surface with a fill of the src_color.
 		#This insures less artifacts.
-		if ( $self->{alpha_key} ) {
+		if ( $_alpha_key{ refaddr $self} ) {
 			my $background = SDLx::Surface::duplicate($rotated);
 			$background->draw_rect(
 				[ 0, 0, $background->w, $background->h ],
-				$self->{alpha_key}
+				$_alpha_key{ refaddr $self}
 			);
 			SDLx::Surface->new( surface => $rotated )->blit($background);
 
-			$self->handle_surface( $background->surface );
-			$self->alpha_key( $self->{alpha_key} );
+			$self->_handle_surface( $background->surface );
+			$self->alpha_key( $_alpha_key{ refaddr $self} );
 		} else {
-			$self->handle_surface($rotated);
+			$self->_handle_surface($rotated);
 		}
 
-		$self->alpha( $self->{alpha} ) if $self->{alpha};
-		$self->{angle} = $angle;
+		$self->alpha( $_alpha{ refaddr $self} ) if $_alpha{ refaddr $self};
+		$_angle{ refaddr $self} = $angle;
 	}
-	return $self->{angle};
+	return $_angle{ refaddr $self};
 }
 
 1;

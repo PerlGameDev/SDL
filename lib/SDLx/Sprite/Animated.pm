@@ -11,6 +11,21 @@ use base 'SDLx::Sprite';
 
 use Carp ();
 
+# inside out
+my %_ticks;
+my %_width;
+my %_height;
+my %_step_x;
+my %_step_y;
+my %_type;
+my %_max_loops;
+my %_ticks_per_frame;
+my %_current_frame;
+my %_current_loop;
+my %_sequences;
+my %_sequence;
+my %_started;
+
 sub new {
 	my ( $class, %options ) = @_;
 
@@ -22,35 +37,52 @@ sub new {
 
 	my $self = $class->SUPER::new(%options);
 
+	$_sequences{ refaddr $self} = $options{sequences};
+	$_sequence{ refaddr $self}  = $options{sequence};
+
 	$self->_store_geometry( $w, $h );
 
-	$self->step_x( exists $options{step_x}                   ? $options{step_x}          : $self->clip->w );
-	$self->step_y( exists $options{step_y}                   ? $options{step_y}          : $self->clip->h );
+	$self->step_y( exists $options{step_y}                   ? $options{step_y}          : 0 );
+	$self->step_x( exists $options{step_x}                   ? $options{step_x}          : 0 );
+	$self->type( exists $options{type}                       ? $options{type}            : 'circular' );
 	$self->max_loops( exists $options{max_loops}             ? $options{max_loops}       : 0 );
 	$self->ticks_per_frame( exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
-	$self->type( exists $options{type}                       ? $options{type}            : 'circular' );
 
-	$self->{ticks}     = 0;
-	$self->{direction} = 1;
+	$_ticks{ refaddr $self} = 0;
 
 	return $self;
 }
 
-sub load {
+sub DESTROY {
 	my $self = shift;
+	delete $_ticks{ refaddr $self};
+	delete $_width{ refaddr $self};
+	delete $_height{ refaddr $self};
+	delete $_step_x{ refaddr $self};
+	delete $_step_y{ refaddr $self};
+	delete $_type{ refaddr $self};
+	delete $_max_loops{ refaddr $self};
+	delete $_ticks_per_frame{ refaddr $self};
+	delete $_current_frame{ refaddr $self};
+	delete $_current_loop{ refaddr $self};
+	delete $_sequences{ refaddr $self};
+	delete $_sequence{ refaddr $self};
+	delete $_started{ refaddr $self};
+}
 
-	$self->SUPER::load(@_);
-
+sub load {
+	my $self  = shift;
+	my $image = shift;
+	$self->_handle_surface( SDLx::Sprite->new( image => $image ) );
 	$self->_restore_geometry;
-
 	return $self;
 }
 
 sub _store_geometry {
 	my ( $self, $w, $h ) = @_;
 
-	$self->{width}  = $w;
-	$self->{height} = $h;
+	$_width{ refaddr $self}  = $w;
+	$_height{ refaddr $self} = $h;
 
 	$self->_restore_geometry;
 }
@@ -58,60 +90,60 @@ sub _store_geometry {
 sub _restore_geometry {
 	my $self = shift;
 
-	$self->clip->w( $self->{width} );
-	$self->clip->h( $self->{height} );
-	$self->rect->w( $self->{width} );
-	$self->rect->h( $self->{height} );
+	$self->clip->w( $_width{ refaddr $self} )  if exists $_width{ refaddr $self};
+	$self->clip->h( $_height{ refaddr $self} ) if exists $_height{ refaddr $self};
+	$self->rect->w( $_width{ refaddr $self} )  if exists $_width{ refaddr $self};
+	$self->rect->h( $_height{ refaddr $self} ) if exists $_height{ refaddr $self};
 }
 
 sub step_y {
 	my ( $self, $step_y ) = @_;
 
 	if ($step_y) {
-		$self->{step_y} = $step_y;
+		$_step_y{ refaddr $self} = $step_y;
 	}
 
-	return $self->{step_y};
+	return $_step_y{ refaddr $self};
 }
 
 sub step_x {
 	my ( $self, $step_x ) = @_;
 
 	if ($step_x) {
-		$self->{step_x} = $step_x;
+		$_step_x{ refaddr $self} = $step_x;
 	}
 
-	return $self->{step_x};
+	return $_step_x{ refaddr $self};
 }
 
 sub type {
 	my ( $self, $type ) = @_;
 
 	if ($type) {
-		$self->{type} = lc $type;
+		$_type{ refaddr $self} = $type;
 	}
 
-	return $self->{type};
+	return $_type{ refaddr $self};
 }
 
 sub max_loops {
 	my ( $self, $max ) = @_;
 
-	if ( @_ > 1 ) {
-		$self->{max_loops} = $max;
+	if ($max) {
+		$_max_loops{ refaddr $self} = $max;
 	}
 
-	return $self->{max_loops};
+	return $_max_loops{ refaddr $self};
 }
 
 sub ticks_per_frame {
 	my ( $self, $ticks ) = @_;
 
 	if ($ticks) {
-		$self->{ticks_per_frame} = $ticks;
+		$_ticks_per_frame{ refaddr $self} = $ticks;
 	}
 
-	return $self->{ticks_per_frame};
+	return $_ticks_per_frame{ refaddr $self};
 }
 
 sub current_frame {
@@ -120,21 +152,21 @@ sub current_frame {
 	if ($frame) {
 
 		# TODO: Validate frame.
-		$self->{current_frame} = $frame;
+		$_current_frame{ refaddr $self} = $frame;
 	}
 
-	return $self->{current_frame};
+	return $_current_frame{ refaddr $self};
 }
 
 sub current_loop {
-	return $_[0]->{current_loop};
+	return $_current_loop{ refaddr $_[0] };
 }
 
 sub set_sequences {
 	my ( $self, %sequences ) = @_;
 
 	# TODO: Validate sequences.
-	$self->{sequences} = \%sequences;
+	$_sequences{ refaddr $self} = \%sequences;
 
 	return $self;
 }
@@ -145,54 +177,30 @@ sub sequence {
 	if ($sequence) {
 
 		#TODO: Validate sequence.
-		$self->{sequence}      = $sequence;
-		$self->{current_frame} = 1;
-		$self->{current_loop}  = 1;
-		$self->{direction}     = 1;
+		$_sequence{ refaddr $self}      = $sequence;
+		$_current_frame{ refaddr $self} = 0;
 		$self->_update_clip;
 	}
 
-	return $self->{sequence};
+	return $_sequence{ refaddr $self};
 }
 
 sub _sequence {
 	my $self = shift;
-	return $self->{sequences}->{ $self->{sequence} };
+	return $_sequences{ refaddr $self}{ $_sequence{ refaddr $self} };
 }
 
 sub _frame {
 	my $self = shift;
-	return $self->_sequence->[ $self->{current_frame} - 1 ];
+	return $self->_sequence->[ $_current_frame{ refaddr $self} ];
 }
 
 sub next {
 	my $self = shift;
 
-	return if @{ $self->_sequence } == 1;
-
-	return if $self->{max_loops} && $self->{current_loop} > $self->{max_loops};
-
-	my $next_frame = ( $self->{current_frame} - 1 + $self->{direction} ) % @{ $self->_sequence };
-
-	if ( $next_frame == 0 ) {
-		$self->{current_loop}++ if $self->{type} eq 'circular';
-
-		if ( $self->{type} eq 'reverse' ) {
-
-			if ( $self->{direction} == 1 ) {
-				$next_frame = @{ $self->_sequence } - 2;
-			} else {
-				$self->{current_loop}++;
-			}
-
-			$self->{direction} *= -1;
-		}
-	}
-	$self->{current_frame} = $next_frame + 1;
-
+	# TODO: direction, type, max_loops, current_loop
+	$_current_frame{ refaddr $self} = ( $_current_frame{ refaddr $self} + 1 ) % @{ $self->_sequence };
 	$self->_update_clip;
-
-	return $self;
 }
 
 # TODO
@@ -208,7 +216,7 @@ sub reset {
 	my $self = shift;
 
 	$self->stop;
-	$self->{current_frame} = 1;
+	$_current_frame{ refaddr $self} = 0;
 
 	return $self;
 }
@@ -216,7 +224,7 @@ sub reset {
 sub start {
 	my $self = shift;
 
-	$self->{started} = 1;
+	$_started{ refaddr $self} = 1;
 
 	return $self;
 }
@@ -224,7 +232,7 @@ sub start {
 sub stop {
 	my $self = shift;
 
-	$self->{started} = 0;
+	$_started{ refaddr $self} = 0;
 
 	return $self;
 }
@@ -235,17 +243,17 @@ sub _update_clip {
 	my $clip  = $self->clip;
 	my $frame = $self->_frame;
 
-	$clip->x( $frame->[0] * $self->step_x );
-	$clip->y( $frame->[1] * $self->step_y );
+	# TODO step_x, step_y
+	$clip->x( $frame->[0] * $clip->w );
+	$clip->y( $frame->[1] * $clip->h );
 }
 
 sub draw {
 	my ( $self, $surface ) = @_;
 
-	$self->{ticks}++;
+	$_ticks{ refaddr $self}++;
 	$self->next
-		if $self->{started}
-			&& $self->{ticks} % $self->{ticks_per_frame} == 0;
+		if $_started{ refaddr $self} && $_ticks{ refaddr $self} % $_ticks_per_frame{ refaddr $self} == 0;
 
 	Carp::croak 'destination must be a SDL::Surface'
 		unless ref $surface and $surface->isa('SDL::Surface');

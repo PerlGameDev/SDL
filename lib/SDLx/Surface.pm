@@ -22,19 +22,24 @@ use overload (
 	fallback => 1,
 );
 use SDL::Constants ':SDL::Video';
-our @ISA = qw(Exporter DynaLoader);
+our @ISA = qw(Exporter DynaLoader SDL::Surface);
 
 use SDL::Internal::Loader;
 internal_load_dlls(__PACKAGE__);
 
 bootstrap SDLx::Surface;
 
+# I won't use a module here for efficiency and simplification of the
+# hierarchy.
+# Inside out object
+my %_tied_array;
+
 sub new {
 	my ( $class, %options ) = @_;
-	my $self = bless {}, ref $class || $class;
+	my $self;
 
 	if ( $options{surface} ) {
-		$self->surface( $options{surface} );
+		$self = bless $options{surface}, $class;
 	} else {
 		my $width  = $options{width}  || $options{w};
 		my $height = $options{height} || $options{h};
@@ -48,12 +53,11 @@ sub new {
 			$options{bluemask}  ||= 0x0000FF00;
 			$options{alphamask} ||= 0x000000FF;
 
-			my $surface = SDL::Surface->new(
+			$self = bless SDL::Surface->new(
 				$options{flags},    $width,            $height,
 				$options{depth},    $options{redmask}, $options{greenmask},
 				$options{bluemask}, $options{alphamask}
-			);
-			$self->surface($surface);
+			), $class;
 		} else {
 			Carp::croak 'Provide surface, or atleast width and height';
 		}
@@ -62,6 +66,11 @@ sub new {
 		$self->draw_rect( undef, $options{color} );
 	}
 	return $self;
+}
+
+sub DESTROY {
+	my $self = shift;
+	delete $_tied_array{$$self};
 }
 
 sub display {
@@ -104,22 +113,20 @@ sub duplicate {
 
 sub _tied_array {
 	my ( $self, $array ) = @_;
-
 	if ($array) {
-		$self->{_tied_array} = $array if $array;
+		$_tied_array{$$self} = $array if $array;
 	}
-	return $self->{_tied_array};
+	return $_tied_array{$$self};
 }
 
 sub get_pixel {
 	my ( $self, $y, $x ) = @_;
-	return SDLx::Surface::get_pixel_xs( $self->{surface}, $x, $y );
+	return SDLx::Surface::get_pixel_xs( $self, $x, $y );
 }
 
 sub set_pixel {
 	my ( $self, $y, $x, $new_value ) = @_;
-	SDLx::Surface::set_pixel_xs( $self->{surface}, $x, $y, $new_value );
-
+	SDLx::Surface::set_pixel_xs( $self, $x, $y, $new_value );
 }
 
 sub _array {
@@ -137,39 +144,14 @@ sub _array {
 
 #ATTRIBUTE
 
-sub surface {
-	return $_[0]->{surface} unless $_[1];
-	my ( $self, $surface ) = @_;
-	$self->{surface} = SDLx::Validate::surface($surface);
-	return $self->{surface};
-}
+sub surface { $_[0] }
 
 #WRAPPING
-
-sub w {
-	$_[0]->surface->w();
-}
-
-sub h {
-	$_[0]->surface->h();
-}
-
-sub format {
-	$_[0]->surface->format();
-}
-
-sub pitch {
-	$_[0]->surface->pitch();
-}
-
-sub flags {
-	$_[0]->surface->flags();
-}
 
 sub clip_rect {
 
 	SDL::Video::set_clip_rect( $_[1] ) if $_[1] && $_[1]->isa('SDL::Rect');
-	SDL::Video::get_clip_rect( $_[0]->surface );
+	SDL::Video::get_clip_rect( $_[0] );
 
 }
 
@@ -215,20 +197,21 @@ sub flip {
 
 sub update {
 	my ( $self, $rects ) = @_;
+	my $surface = $self->surface;
 
 	if ( !defined($rects) || ( ref($rects) eq 'ARRAY' && !ref( $rects->[0] ) ) ) {
 		my @pass_rect = ();
 		@pass_rect = @{ $rects->[0] } if $rects->[0];
 		$pass_rect[0] |= 0;
 		$pass_rect[1] |= 0;
-		$pass_rect[2] |= $self->surface->w;
-		$pass_rect[3] |= $self->surface->h;
+		$pass_rect[2] |= $surface->w;
+		$pass_rect[3] |= $surface->h;
 
-		SDL::Video::update_rect( $self->surface(), @pass_rect );
+		SDL::Video::update_rect( $surface, @pass_rect );
 	} else {
 
 		#TODO: Validate each rect?
-		SDL::Video::update_rects( $self->surface(), @{$rects} );
+		SDL::Video::update_rects( $surface, @{$rects} );
 	}
 
 	return $self;

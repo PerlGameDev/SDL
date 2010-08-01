@@ -117,7 +117,7 @@ sub new {
 	}
 
 	SDL::Video::wm_set_caption( $t, $it );
-	$self = SDLx::Controller->new( %{$self} );
+	$self = $self->SDLx::Controller::new(%options);
 	bless $self, $class;
 	return $self;
 }
