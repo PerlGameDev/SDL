@@ -141,7 +141,8 @@ lmx_blit( manager, dest )
         while(index < manager->length)
         {
             //SDLx_Layer *layer = (manager->layers)[index];
-            SDLx_Layer *layer = (SDLx_Layer *)SvRV(*av_fetch(manager->sv_layers, index, 0));
+            //SDLx_Layer *layer = (SDLx_Layer *)SvRV(*av_fetch(manager->sv_layers, index, 0));
+            SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->sv_layers, index, 0));
             
             SDL_BlitSurface(layer->surface, layer->clip, dest, layer->pos);
             

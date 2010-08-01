@@ -38,7 +38,7 @@ is    ( $manager->length,                                    0,                 
         $manager->add($layer);                                                pass('SDLx::LayerManager->add');
         $manager->add($layer2);                                               pass('SDLx::LayerManager->add');
         $manager->add($layer3);                                               pass('SDLx::LayerManager->add');
-#        $manager->add(SDLx::Layer->new( $surface, 120, 120, { aa => 'bb', bb => 'cc' } ));                                               pass('SDLx::LayerManager->add');
+        $manager->add(SDLx::Layer->new( $surface, 120, 120, { aa => 'bb', bb => 'cc' } ));                                               pass('SDLx::LayerManager->add');
 
 isa_ok( $layer,                  'SDLx::Layer',  'SDLx::Layer->new');
 is    ( $layer->x,               20,             'SDLx::Layer->x' );
