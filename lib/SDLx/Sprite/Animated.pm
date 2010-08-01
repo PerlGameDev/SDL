@@ -25,6 +25,7 @@ my %_current_loop;
 my %_sequences;
 my %_sequence;
 my %_started;
+my %_direction;
 
 sub new {
 	my ( $class, %options ) = @_;
@@ -42,13 +43,14 @@ sub new {
 
 	$self->_store_geometry( $w, $h );
 
-	$self->step_y( exists $options{step_y}                   ? $options{step_y}          : 0 );
-	$self->step_x( exists $options{step_x}                   ? $options{step_x}          : 0 );
-	$self->type( exists $options{type}                       ? $options{type}            : 'circular' );
+	$self->step_y( exists $options{step_y}                   ? $options{step_y}          : $self->clip->w );
+	$self->step_x( exists $options{step_x}                   ? $options{step_x}          : $self->clip->h );
 	$self->max_loops( exists $options{max_loops}             ? $options{max_loops}       : 0 );
 	$self->ticks_per_frame( exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
+	$self->type( exists $options{type}                       ? $options{type}            : 'circular' );
 
-	$_ticks{ refaddr $self} = 0;
+	$_ticks{ refaddr $self}     = 0;
+	$_direction{ refaddr $self} = 1;
 
 	return $self;
 }
@@ -120,7 +122,7 @@ sub type {
 	my ( $self, $type ) = @_;
 
 	if ($type) {
-		$_type{ refaddr $self} = $type;
+		$_type{ refaddr $self} = lc $type;
 	}
 
 	return $_type{ refaddr $self};
@@ -129,7 +131,7 @@ sub type {
 sub max_loops {
 	my ( $self, $max ) = @_;
 
-	if ($max) {
+	if ( @_ > 1 ) {
 		$_max_loops{ refaddr $self} = $max;
 	}
 
@@ -159,7 +161,8 @@ sub current_frame {
 }
 
 sub current_loop {
-	return $_current_loop{ refaddr $_[0] };
+	my ($self) = @_;
+	return $_current_loop{ refaddr $self };
 }
 
 sub set_sequences {
@@ -178,7 +181,9 @@ sub sequence {
 
 		#TODO: Validate sequence.
 		$_sequence{ refaddr $self}      = $sequence;
-		$_current_frame{ refaddr $self} = 0;
+		$_current_frame{ refaddr $self} = 1;
+		$_current_loop{ refaddr $self}  = 1;
+		$_direction{ refaddr $self}     = 1;
 		$self->_update_clip;
 	}
 
@@ -192,15 +197,39 @@ sub _sequence {
 
 sub _frame {
 	my $self = shift;
-	return $self->_sequence->[ $_current_frame{ refaddr $self} ];
+	return $self->_sequence->[ $_current_frame{ refaddr $self} - 1 ];
 }
 
 sub next {
 	my $self = shift;
 
-	# TODO: direction, type, max_loops, current_loop
-	$_current_frame{ refaddr $self} = ( $_current_frame{ refaddr $self} + 1 ) % @{ $self->_sequence };
+	#$_{ refaddr $self}
+
+	return if @{ $self->_sequence } == 1;
+
+	return if $_max_loops{ refaddr $self} && $_current_loop{ refaddr $self } > $_max_loops{ refaddr $self};
+
+	my $next_frame = ( $_current_frame{ refaddr $self} - 1 + $_direction{ refaddr $self} ) % @{ $self->_sequence };
+
+	if ( $next_frame == 0 ) {
+		$_current_loop{ refaddr $self}++ if $_type{ refaddr $self} eq 'circular';
+
+		if ( $_type{ refaddr $self} eq 'reverse' ) {
+
+			if ( $_direction{ refaddr $self} == 1 ) {
+				$next_frame = @{ $self->_sequence } - 2;
+			} else {
+				$_current_loop{ refaddr $self}++;
+			}
+
+			$_direction{ refaddr $self} *= -1;
+		}
+	}
+	$_current_frame{ refaddr $self} = $next_frame + 1;
+
 	$self->_update_clip;
+
+	return $self;
 }
 
 # TODO
@@ -216,7 +245,7 @@ sub reset {
 	my $self = shift;
 
 	$self->stop;
-	$_current_frame{ refaddr $self} = 0;
+	$_current_frame{ refaddr $self} = 1;
 
 	return $self;
 }
@@ -243,9 +272,8 @@ sub _update_clip {
 	my $clip  = $self->clip;
 	my $frame = $self->_frame;
 
-	# TODO step_x, step_y
-	$clip->x( $frame->[0] * $clip->w );
-	$clip->y( $frame->[1] * $clip->h );
+	$clip->x( $frame->[0] * $_step_x{refaddr $self} );
+	$clip->y( $frame->[1] * $_step_y{refaddr $self} );
 }
 
 sub draw {
