@@ -25,13 +25,14 @@ sub surfacex {
 		unless @_ == 1;
 	if ( Scalar::Util::blessed($arg) and $arg->isa("SDL::Surface") ) {
 		require SDLx::Surface;
-		return SDLx::Surface->new(surface => $arg);
+		return SDLx::Surface->new( surface => $arg );
 	} elsif ( Scalar::Util::blessed($arg) and $arg->isa("SDLx::Surface") ) {
 		return $arg;
 	} else {
 		Carp::croak("Surface must be SDL::Surface or SDLx::Surface");
 	}
 }
+
 sub rect {
 	my ($arg) = @_;
 	Carp::croak("Wrong amount of arguments")

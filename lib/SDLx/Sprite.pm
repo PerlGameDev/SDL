@@ -98,7 +98,7 @@ sub handle_surface {
 	return $self->surface unless $surface;
 
 	my $old_surface = $self->surface();
-	$self->surface( $surface );
+	$self->surface($surface);
 
 	# update our source and destination rects
 	$self->rect->w( $surface->w );
@@ -148,7 +148,7 @@ sub y {
 }
 
 sub draw {
-	my ( $self, $surface ) = @_;	
+	my ( $self, $surface ) = @_;
 	$self->{surface}->blit( $surface, $self->clip, $self->rect );
 	return $self;
 }
@@ -163,7 +163,7 @@ sub draw_xy {
 sub alpha_key {
 	my ( $self, $color ) = @_;
 
-	$color = SDLx::Validate::color( $color );
+	$color = SDLx::Validate::color($color);
 	Carp::croak 'SDL::Video::set_video_mode must be called first'
 		unless ref SDL::Video::get_video_surface();
 	$self->{alpha_key} = $color
@@ -234,9 +234,8 @@ sub rotation {
 sub surface {
 	my ( $self, $surface ) = @_;
 
-	if ( $surface )
-	{
-	$self->{surface} = SDLx::Validate::surfacex($surface);
+	if ($surface) {
+		$self->{surface} = SDLx::Validate::surfacex($surface);
 	}
 	return $self->{surface};
 }
