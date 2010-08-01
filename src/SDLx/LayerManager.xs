@@ -25,6 +25,18 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
     return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
 }
 
+SDLx_Layer* bag_to_layer( SV * bag )
+{
+   SDLx_Layer * layer = NULL;
+
+	if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
+			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
+			   layer = (SDLx_Layer*)(pointers[0]);
+		       }   
+	return layer;
+
+}
+
 int _calc_offset( SDL_Surface* surface, int x, int y )
 {
     int offset;
@@ -62,26 +74,26 @@ lmx_new( CLASS, ... )
     char* CLASS
     CODE:
         RETVAL = (SDLx_LayerManager *)safemalloc( sizeof(SDLx_LayerManager) );
-	    RETVAL->sv_layers = newAV();
+	RETVAL->sv_layers = newAV();
         RETVAL->length = 0;
     OUTPUT:
         RETVAL
 
-void *
-lmx_add( manager, layer )
+void 
+lmx_add( manager, bag )
     SDLx_LayerManager *manager
-    SDLx_Layer *layer
+    SV* bag 
     CODE:
         //manager->layers[manager->length] = layer;
-        layer->index                     = manager->length;
-        layer->manager                   = (SDLx_LayerManager *)manager;
-        SV* sv = newSV_type(SVt_PV);
-        SvPV_set(sv, layer);
-        SvPOK_on(sv);
-        SvLEN_set(sv, 0);
-        SvCUR_set(sv, sizeof(layer) );
-        av_push( manager->sv_layers, sv);
-        manager->length++;
+	
+	if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
+			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
+			   SDLx_Layer * layer = (SDLx_Layer*)(pointers[0]);
+			   layer->index = av_len( manager->sv_layers );
+			   layer->manager = (SDLx_LayerManager *)manager;
+			   av_push( manager->sv_layers, bag);
+		           manager->length++;
+		       }   
 
 AV *
 lmx_layers( manager )
@@ -101,7 +113,7 @@ lmx_layer( manager, index )
     CODE:
         if(index >= 0 && index < manager->length)
         {
-            RETVAL = SvRV( *av_fetch( manager->sv_layers, index, 0 ) );
+             RETVAL = av_fetch( manager->sv_layers, index, 0 ) ;
             //RETVAL = _sv_ref( manager->layers[index], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" );
         }
         else
