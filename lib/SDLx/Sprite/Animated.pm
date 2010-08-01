@@ -2,6 +2,7 @@ package SDLx::Sprite::Animated;
 use strict;
 use warnings;
 
+use Scalar::Util 'refaddr';
 use SDL;
 use SDL::Video;
 use SDL::Rect;
@@ -76,7 +77,7 @@ sub DESTROY {
 sub load {
 	my $self  = shift;
 	my $image = shift;
-	$self->_handle_surface( SDLx::Sprite->new( image => $image ) );
+	$self->SUPER::load($image);
 	$self->_restore_geometry;
 	return $self;
 }

@@ -38,7 +38,6 @@ my $sprite = SDLx::Sprite::Animated->new(
 );
 
 isa_ok( $sprite, 'SDLx::Sprite' );
-isa_ok( $sprite, 'SDLx::Surface' );
 isa_ok( $sprite, 'SDLx::Sprite::Animated' );
 
 my $clip = $sprite->clip;
@@ -97,10 +96,10 @@ is( $rect->h, 48, 'rect->h after load' );
 
 $sprite->set_sequences( left => [ [ 1, 0 ], [ 1, 1 ], [ 1, 2 ] ], );
 
-my ($clip_w, $clip_h) = ($sprite->clip->w, $sprite->clip->h);
+my ( $clip_w, $clip_h ) = ( $sprite->clip->w, $sprite->clip->h );
 $sprite->alpha_key( SDL::Color->new( 0xfc, 0x00, 0xff ) );
-is( $sprite->clip->w, $clip_w, 'alpha_key() does not change clip width');
-is( $sprite->clip->h, $clip_h, 'alpha_key() does not change clip height');
+is( $sprite->clip->w, $clip_w, 'alpha_key() does not change clip width' );
+is( $sprite->clip->h, $clip_h, 'alpha_key() does not change clip height' );
 
 $sprite->sequence('left');
 
