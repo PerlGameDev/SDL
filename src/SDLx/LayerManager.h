@@ -11,7 +11,6 @@ typedef struct SDLx_Layer
 
 typedef struct SDLx_LayerManager
 {
-    SDLx_Layer *layers[256];
     AV *sv_layers;
     int length;
 } SDLx_LayerManager;
