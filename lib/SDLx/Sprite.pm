@@ -8,6 +8,7 @@ use SDL::Image;
 use SDL::Rect;
 use SDL::Surface;
 use SDLx::Surface;
+use SDLx::Validate 'surfacex';
 
 use Carp ();
 
@@ -248,11 +249,8 @@ sub surface {
 	my ( $self, $surface ) = @_;
 
 	if ($surface) {
-		if ( $surface->isa('SDLx::Surface') ) {
-			$self->{surface} = $surface;
-		} else {
-			$self->{surface} = SDLx::Surface->new( surface => $surface );
-		}
+
+		$self->{surface} = SDLx::Validate::surfacex($surface);
 	}
 
 	return $self->{surface};
