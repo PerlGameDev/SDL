@@ -62,6 +62,7 @@ lmx_new( CLASS, ... )
     char* CLASS
     CODE:
         RETVAL = (SDLx_LayerManager *)safemalloc( sizeof(SDLx_LayerManager) );
+	/*  RETVAL->sv_layers = newAV(); */
         RETVAL->length = 0;
     OUTPUT:
         RETVAL
@@ -74,6 +75,12 @@ lmx_add( manager, layer )
         manager->layers[manager->length] = layer;
         layer->index                     = manager->length;
         layer->manager                   = (SDLx_LayerManager *)manager;
+	/* SV* sv = newSV_type(SVt_PV);
+	SvPV_set(sv, layer);
+	SvPOK_on(sv);
+	SvLEN_set(sv, 0);
+	SvCUR_set(sv, sizeof(layer) );
+	av_push( manager->sv_layers, sv);*/
         manager->length++;
 
 AV *
@@ -93,7 +100,11 @@ lmx_layer( manager, index )
         char* CLASS = "SDLx::Layer";
     CODE:
         if(index >= 0 && index < manager->length)
+	 {
+	    //SV* sv = av_fetch( (AV *) manager->sv_layers, index, 0 );
+	   // SDLx_Layer* re_layer = SvRV( sv );
             RETVAL = _sv_ref( manager->layers[index], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" );
+	 }
         else
             XSRETURN_UNDEF;
     OUTPUT:
