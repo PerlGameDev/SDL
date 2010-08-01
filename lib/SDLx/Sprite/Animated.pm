@@ -272,8 +272,8 @@ sub _update_clip {
 	my $clip  = $self->clip;
 	my $frame = $self->_frame;
 
-	$clip->x( $frame->[0] * $_step_x{refaddr $self} );
-	$clip->y( $frame->[1] * $_step_y{refaddr $self} );
+	$clip->x( $frame->[0] * $_step_x{ refaddr $self} );
+	$clip->y( $frame->[1] * $_step_y{ refaddr $self} );
 }
 
 sub draw {
