@@ -153,6 +153,10 @@ is( $rect->y, 0,  'rect->y after third next' );
 is( $rect->w, 48, 'rect->w after third next' );
 is( $rect->h, 48, 'rect->h after third next' );
 
+is( $sprite->next,     $sprite, 'next() returns the object' );
+is( $sprite->previous, $sprite, 'previous() returns the object' );
+is( $sprite->reset,    $sprite, 'reset() returns the object' );
+
 $sprite = SDLx::Sprite::Animated->new(
 	image => 'test/data/hero.bmp',
 	rect  => SDL::Rect->new( 40, 50, 48, 48 ),

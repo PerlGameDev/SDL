@@ -6,6 +6,8 @@ nytprof*
 lib/SDLx/*.c
 lib/SDLx/*.xs
 lib/SDLx/*_def.old
+lib/SDLx/Controller/*.c
+lib/SDLx/Controller/*.xs
 lib/SDL/*.c
 lib/SDL/*.xs
 lib/SDL/*_def.old
@@ -24,6 +26,7 @@ lib/SDL/Pango/*_def.old
 lib/SDL/TTF/*.c
 lib/SDL/TTF/*.xs
 lib/SDL/TTF/*_def.old
+SDLPerl.app
 SDL_perl.c
 SDL_perl.xs
 SDL_perl_def.old
