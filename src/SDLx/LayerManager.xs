@@ -73,6 +73,7 @@ lmx_add( manager, layer )
     CODE:
         manager->layers[manager->length] = layer;
         layer->index                     = manager->length;
+        layer->manager                   = (SDLx_LayerManager *)manager;
         manager->length++;
 
 AV *
@@ -175,37 +176,94 @@ lmx_by_position( manager, x, y )
         RETVAL
 
 AV *
-lmx_layers_ahead( manager, layer )
+lmx_ahead( manager, index )
     SDLx_LayerManager *manager
-    SDLx_Layer        *layer
+    int               index
     CODE:
         AV *matches       = newAV();
         int matches_count = 0;
         int i;
+        SDLx_Layer *layer = manager->layers[index];
 
-        for( i = layer->index; i < manager->length; i++ )
+        for( i = index + 1; i < manager->length; i++ )
         {
             if(
-                # upper left point inside layer
+                // upper left point inside layer
                 (      layer->pos->x <= manager->layers[i]->pos->x
                     && manager->layers[i]->pos->x <= layer->pos->x + layer->clip->w
                     && layer->pos->y <= manager->layers[i]->pos->y
                     && manager->layers[i]->pos->y <= layer->pos->y + layer->clip->h
                 )
 
-                # upper right point inside layer
+                // upper right point inside layer
                 || (   layer->pos->x <= manager->layers[i]->pos->x + manager->layers[i]->clip->w
                     && manager->layers[i]->pos->x + manager->layers[i]->clip->w <= layer->pos->x + layer->clip->w
                     && layer->pos->y <= manager->layers[i]->pos->y
                     && manager->layers[i]->pos->y <= layer->pos->y + layer->clip->h )
 
-                # lower left point inside layer
+                // lower left point inside layer
                 || (   layer->pos->x <= manager->layers[i]->pos->x
                     && manager->layers[i]->pos->x <= layer->pos->x + layer->clip->w
                     && layer->pos->y <= manager->layers[i]->pos->y + manager->layers[i]->clip->h
                     && manager->layers[i]->pos->y + manager->layers[i]->clip->h <= layer->pos->y + layer->clip->h )
 
-                # lower right point inside layer
+                // lower right point inside layer
+                || (   layer->pos->x <= manager->layers[i]->pos->x + manager->layers[i]->clip->w
+                    && manager->layers[i]->pos->x + manager->layers[i]->clip->w <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y + manager->layers[i]->clip->h
+                    && manager->layers[i]->pos->y + manager->layers[i]->clip->h <= layer->pos->y + layer->clip->h )
+            )
+            {
+                // TODO checking transparency
+                av_store( matches, matches_count, _sv_ref( manager->layers[i], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" ) );
+                matches_count++;
+            }
+        }
+
+        /*
+        my @more_matches = ();
+        while ( scalar(@matches) && ( @more_matches = $self->get_layers_ahead_layer( $matches[$#matches] ) ) )
+        {
+            push @matches, @more_matches;
+        }*/
+
+        RETVAL = matches;
+    OUTPUT:
+        RETVAL
+
+AV *
+lmx_behind( manager, index )
+    SDLx_LayerManager *manager
+    int               index
+    CODE:
+        AV *matches       = newAV();
+        int matches_count = 0;
+        int i;
+        SDLx_Layer *layer = manager->layers[index];
+
+        for( i = index - 1; i >= 0; i-- )
+        {
+            if(
+                // upper left point inside layer
+                (      layer->pos->x <= manager->layers[i]->pos->x
+                    && manager->layers[i]->pos->x <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y
+                    && manager->layers[i]->pos->y <= layer->pos->y + layer->clip->h
+                )
+
+                // upper right point inside layer
+                || (   layer->pos->x <= manager->layers[i]->pos->x + manager->layers[i]->clip->w
+                    && manager->layers[i]->pos->x + manager->layers[i]->clip->w <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y
+                    && manager->layers[i]->pos->y <= layer->pos->y + layer->clip->h )
+
+                // lower left point inside layer
+                || (   layer->pos->x <= manager->layers[i]->pos->x
+                    && manager->layers[i]->pos->x <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y + manager->layers[i]->clip->h
+                    && manager->layers[i]->pos->y + manager->layers[i]->clip->h <= layer->pos->y + layer->clip->h )
+
+                // lower right point inside layer
                 || (   layer->pos->x <= manager->layers[i]->pos->x + manager->layers[i]->clip->w
                     && manager->layers[i]->pos->x + manager->layers[i]->clip->w <= layer->pos->x + layer->clip->w
                     && layer->pos->y <= manager->layers[i]->pos->y + manager->layers[i]->clip->h

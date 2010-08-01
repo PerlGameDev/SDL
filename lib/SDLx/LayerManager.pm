@@ -6,8 +6,6 @@ use SDLx::Surface;
 use SDLx::Sprite;
 use SDL::Events;
 
-#use overload ( '@{}' => \&_array, );
-
 our @ISA = qw(Exporter DynaLoader);
 
 use SDL::Internal::Loader;
@@ -22,27 +20,6 @@ my @attached_position = ();
 my $snapshot          = SDLx::Sprite->new( width => 800, height => 600 );
 my $must_redraw       = 1;
 
-#sub new {
-#    my $class   = shift;
-#    my %options = @_;
-#    my $self    = \%options;
-#
-#    bless( $self, $class );
-#
-#    return $self;
-#}
-
-#sub add {
-#    my $self    = shift;
-#    my $options = pop;
-#    my @layer   = @_;
-#
-#    push @layers, {layer => $_, options => $options} for @layer;
-#
-#    $must_redraw = 1;
-#    return $self;
-#}
-
 sub set {
 	my $self    = shift;
 	my $index   = shift;
@@ -52,17 +29,6 @@ sub set {
 	$layers[$index] = { layer => $layer, options => $options };
 	return $self;
 }
-
-#sub length {
-#    my $self = shift;
-#
-#    return scalar @layers;
-#}
-
-#sub _array {
-#  my $self = shift;
-#    return \@layers;
-#}
 
 #sub blit {
 #    my $self = shift;
@@ -186,119 +152,6 @@ sub foreground {
 	$must_redraw = 1;
 
 	return @attached_layers;
-}
-
-sub get_layers_ahead_layer {
-	my $self  = shift;
-	my $index = shift;
-
-	#my $map           = SDLx::Surface->new( surface => $self->{dest} );
-	my @matches = ();
-
-	#my @intersections = ();
-	my $layer_index = 0;
-
-	for (@layers) {
-		if ($layer_index > $index
-
-			&& (
-
-				# upper left point inside layer
-				(      $layers[$index]->{layer}->x <= $_->{layer}->x
-					&& $_->{layer}->x <= $layers[$index]->{layer}->x + $layers[$index]->{layer}->clip->w
-					&& $layers[$index]->{layer}->y <= $_->{layer}->y
-					&& $_->{layer}->y <= $layers[$index]->{layer}->y + $layers[$index]->{layer}->clip->h
-				)
-
-				# upper right point inside layer
-				|| (   $layers[$index]->{layer}->x <= $_->{layer}->x + $_->{layer}->clip->w
-					&& $_->{layer}->x + $_->{layer}->clip->w
-					<= $layers[$index]->{layer}->x + $layers[$index]->{layer}->clip->w
-					&& $layers[$index]->{layer}->y <= $_->{layer}->y
-					&& $_->{layer}->y <= $layers[$index]->{layer}->y + $layers[$index]->{layer}->clip->h )
-
-				# lower left point inside layer
-				|| (   $layers[$index]->{layer}->x <= $_->{layer}->x
-					&& $_->{layer}->x <= $layers[$index]->{layer}->x + $layers[$index]->{layer}->clip->w
-					&& $layers[$index]->{layer}->y <= $_->{layer}->y + $_->{layer}->clip->h
-					&& $_->{layer}->y + $_->{layer}->clip->h
-					<= $layers[$index]->{layer}->y + $layers[$index]->{layer}->clip->h )
-
-				# lower right point inside layer
-				|| (   $layers[$index]->{layer}->x <= $_->{layer}->x + $_->{layer}->clip->w
-					&& $_->{layer}->x + $_->{layer}->clip->w
-					<= $layers[$index]->{layer}->x + $layers[$index]->{layer}->clip->w
-					&& $layers[$index]->{layer}->y <= $_->{layer}->y + $_->{layer}->clip->h
-					&& $_->{layer}->y + $_->{layer}->clip->h
-					<= $layers[$index]->{layer}->y + $layers[$index]->{layer}->clip->h )
-			)
-			)
-		{
-			push( @matches, $layer_index ); # TODO checking transparency
-		}
-		$layer_index++;
-	}
-
-	my @more_matches = ();
-	while ( scalar(@matches) && ( @more_matches = $self->get_layers_ahead_layer( $matches[$#matches] ) ) ) {
-		push @matches, @more_matches;
-	}
-
-	return @matches;
-}
-
-sub get_layers_behind_layer {
-	my $self  = shift;
-	my $index = shift;
-
-	#my $map           = SDLx::Surface->new( surface => $self->{dest} );
-	my @matches = ();
-
-	#my @intersections = ();
-	my $layer_index = $#layers;
-
-	for ( reverse @layers ) {
-		if ($layer_index < $index
-
-			&& (
-
-				# upper left point inside layer
-				(      $layers[$index]->{layer}->x <= $_->{layer}->x
-					&& $_->{layer}->x <= $layers[$index]->{layer}->x + $layers[$index]->{layer}->clip->w
-					&& $layers[$index]->{layer}->y <= $_->{layer}->y
-					&& $_->{layer}->y <= $layers[$index]->{layer}->y + $layers[$index]->{layer}->clip->h
-				)
-
-				# upper right point inside layer
-				|| (   $layers[$index]->{layer}->x <= $_->{layer}->x + $_->{layer}->clip->w
-					&& $_->{layer}->x + $_->{layer}->clip->w
-					<= $layers[$index]->{layer}->x + $layers[$index]->{layer}->clip->w
-					&& $layers[$index]->{layer}->y <= $_->{layer}->y
-					&& $_->{layer}->y <= $layers[$index]->{layer}->y + $layers[$index]->{layer}->clip->h )
-
-				# lower left point inside layer
-				|| (   $layers[$index]->{layer}->x <= $_->{layer}->x
-					&& $_->{layer}->x <= $layers[$index]->{layer}->x + $layers[$index]->{layer}->clip->w
-					&& $layers[$index]->{layer}->y <= $_->{layer}->y + $_->{layer}->clip->h
-					&& $_->{layer}->y + $_->{layer}->clip->h
-					<= $layers[$index]->{layer}->y + $layers[$index]->{layer}->clip->h )
-
-				# lower right point inside layer
-				|| (   $layers[$index]->{layer}->x <= $_->{layer}->x + $_->{layer}->clip->w
-					&& $_->{layer}->x + $_->{layer}->clip->w
-					<= $layers[$index]->{layer}->x + $layers[$index]->{layer}->clip->w
-					&& $layers[$index]->{layer}->y <= $_->{layer}->y + $_->{layer}->clip->h
-					&& $_->{layer}->y + $_->{layer}->clip->h
-					<= $layers[$index]->{layer}->y + $layers[$index]->{layer}->clip->h )
-			)
-			)
-		{
-			push( @matches, $layer_index ); # TODO checking transparency
-		}
-		$layer_index--;
-	}
-
-	return @matches;
 }
 
 1;

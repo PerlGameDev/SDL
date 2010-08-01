@@ -8,7 +8,7 @@
 #endif
 
 #include <SDL.h>
-#include "SDLx/Layer.h"
+#include "SDLx/LayerManager.h"
 
 PerlInterpreter * perl = NULL;
 
@@ -27,12 +27,14 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
 
 MODULE = SDLx::Layer    PACKAGE = SDLx::Layer    PREFIX = layerx_
 
+
 SDLx_Layer *
 layerx_new( CLASS, surface, ... )
     char* CLASS
     SDL_Surface *surface
     CODE:
         RETVAL            = (SDLx_Layer *)safemalloc( sizeof(SDLx_Layer) );
+        //RETVAL->manager   = (SDLx_LayerManager *)safemalloc( sizeof(SDLx_LayerManager) );
         RETVAL->index     = -1;
         RETVAL->surface   = (SDL_Surface *)safemalloc( sizeof(SDL_Surface) );
         RETVAL->clip      = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
@@ -144,6 +146,116 @@ layerx_data( layer )
             XSRETURN_UNDEF;
         else
             RETVAL = layer->data;
+    OUTPUT:
+        RETVAL
+
+AV *
+layerx_ahead( layer )
+    SDLx_Layer *layer
+    CODE:
+        SDLx_LayerManager *manager = (SDLx_LayerManager *)layer->manager;
+        AV *matches                = newAV();
+        int matches_count          = 0;
+        int i;
+
+        for( i = layer->index + 1; i < manager->length; i++ )
+        {
+            if(
+                // upper left point inside layer
+                (      layer->pos->x <= manager->layers[i]->pos->x
+                    && manager->layers[i]->pos->x <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y
+                    && manager->layers[i]->pos->y <= layer->pos->y + layer->clip->h
+                )
+
+                // upper right point inside layer
+                || (   layer->pos->x <= manager->layers[i]->pos->x + manager->layers[i]->clip->w
+                    && manager->layers[i]->pos->x + manager->layers[i]->clip->w <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y
+                    && manager->layers[i]->pos->y <= layer->pos->y + layer->clip->h )
+
+                // lower left point inside layer
+                || (   layer->pos->x <= manager->layers[i]->pos->x
+                    && manager->layers[i]->pos->x <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y + manager->layers[i]->clip->h
+                    && manager->layers[i]->pos->y + manager->layers[i]->clip->h <= layer->pos->y + layer->clip->h )
+
+                // lower right point inside layer
+                || (   layer->pos->x <= manager->layers[i]->pos->x + manager->layers[i]->clip->w
+                    && manager->layers[i]->pos->x + manager->layers[i]->clip->w <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y + manager->layers[i]->clip->h
+                    && manager->layers[i]->pos->y + manager->layers[i]->clip->h <= layer->pos->y + layer->clip->h )
+            )
+            {
+                // TODO checking transparency
+                av_store( matches, matches_count, _sv_ref( manager->layers[i], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" ) );
+                matches_count++;
+            }
+        }
+
+        /*
+        my @more_matches = ();
+        while ( scalar(@matches) && ( @more_matches = $self->get_layers_ahead_layer( $matches[$#matches] ) ) )
+        {
+            push @matches, @more_matches;
+        }*/
+
+        RETVAL = matches;
+    OUTPUT:
+        RETVAL
+
+AV *
+layerx_behind( layer )
+    SDLx_Layer *layer
+    CODE:
+        SDLx_LayerManager *manager = (SDLx_LayerManager *)layer->manager;
+        AV *matches                = newAV();
+        int matches_count          = 0;
+        int i;
+
+        for( i = layer->index - 1; i >= 0; i-- )
+        {
+            if(
+                // upper left point inside layer
+                (      layer->pos->x <= manager->layers[i]->pos->x
+                    && manager->layers[i]->pos->x <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y
+                    && manager->layers[i]->pos->y <= layer->pos->y + layer->clip->h
+                )
+
+                // upper right point inside layer
+                || (   layer->pos->x <= manager->layers[i]->pos->x + manager->layers[i]->clip->w
+                    && manager->layers[i]->pos->x + manager->layers[i]->clip->w <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y
+                    && manager->layers[i]->pos->y <= layer->pos->y + layer->clip->h )
+
+                // lower left point inside layer
+                || (   layer->pos->x <= manager->layers[i]->pos->x
+                    && manager->layers[i]->pos->x <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y + manager->layers[i]->clip->h
+                    && manager->layers[i]->pos->y + manager->layers[i]->clip->h <= layer->pos->y + layer->clip->h )
+
+                // lower right point inside layer
+                || (   layer->pos->x <= manager->layers[i]->pos->x + manager->layers[i]->clip->w
+                    && manager->layers[i]->pos->x + manager->layers[i]->clip->w <= layer->pos->x + layer->clip->w
+                    && layer->pos->y <= manager->layers[i]->pos->y + manager->layers[i]->clip->h
+                    && manager->layers[i]->pos->y + manager->layers[i]->clip->h <= layer->pos->y + layer->clip->h )
+            )
+            {
+                // TODO checking transparency
+                av_store( matches, matches_count, _sv_ref( manager->layers[i], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" ) );
+                matches_count++;
+            }
+        }
+
+        /*
+        my @more_matches = ();
+        while ( scalar(@matches) && ( @more_matches = $self->get_layers_ahead_layer( $matches[$#matches] ) ) )
+        {
+            push @matches, @more_matches;
+        }*/
+
+        RETVAL = matches;
     OUTPUT:
         RETVAL
 
