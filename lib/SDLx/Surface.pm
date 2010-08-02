@@ -12,7 +12,6 @@ use SDL::Color;
 use SDL::Surface;
 use SDLx::Surface;
 use SDLx::Surface::TiedMatrix;
-use SDL::GFX::Primitives;
 use SDL::PixelFormat;
 use SDLx::Validate;
 use Tie::Simple;
@@ -238,6 +237,7 @@ sub draw_line {
 		unless ref($start) eq 'ARRAY';
 	Carp::croak "Error end needs an array ref [x,y]"
 		unless ref($end) eq 'ARRAY';
+	return unless eval{ require SDL::GFX::Primitives; 1};
 
 	my $result;
 	if ( Scalar::Util::looks_like_number($color) ) {
