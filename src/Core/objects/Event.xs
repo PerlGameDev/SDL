@@ -978,7 +978,6 @@ event_DESTROY(bag)
                               SvREFCNT_dec( (self->user).data2);
                        }
                        safefree(self);
-                       free(pointers);
                    }
                } else if (bag == 0) {
                    XSRETURN(0);
