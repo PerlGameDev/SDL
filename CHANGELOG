@@ -7,6 +7,7 @@ Revision history for Perl extension SDL_perl.
 	- Added and cleaned up SDLx::Validate [Blaizer, kthakore]
 	- More tests and clean up in SDLx::Sprite::Animated [jtpalmer]
   - Fixed free errors for SUSE [kthakore]
+  - Moved Surfaces classes to inside-out OOP [ruoso, jtpalmer]
 
 * 2.503
 	- Removed examples/adventure/
