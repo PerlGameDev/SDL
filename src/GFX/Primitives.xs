@@ -36,7 +36,7 @@
 
 void _svinta_free(Sint16* av, int len_from_av_len)
 {
-	if( av != NULL)
+	if( av == NULL)
 	  return;
 	
 	
