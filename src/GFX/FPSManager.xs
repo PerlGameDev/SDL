@@ -95,8 +95,6 @@ gfx_fps_DESTROY(bag)
 			   FPSmanager * fps = (FPSmanager*)(pointers[0]);
 			   if (PERL_GET_CONTEXT == pointers[1]) {
 			       pointers[0] = NULL;
-			       safefree( pointers );
-
 			       safefree(fps);
 			   }
 		       } else if (bag == 0) {
