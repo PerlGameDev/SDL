@@ -48,7 +48,7 @@ void effect_func(int chan, void *stream, int len, void *udata)
 		SPAGAIN;                               /* refresh stack pointer             */
 		
 		if(count == len + 1)
-			*(SV *)udata = *sv_2mortal(newSVsv(POPs));
+			*(SV *)udata = *(newSVsv(POPs));
 		
 		if(count)
 		{
