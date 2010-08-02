@@ -38,13 +38,8 @@ void _svinta_free(Sint16* av, int len_from_av_len)
 {
 	if( av == NULL)
 	  return;
-	
-	
-	int i;
-	for(i =0; i < len_from_av_len; i++)
-	{
-	  safefree( av + i  );
-	}
+	 safefree( av ); /* we only need to free the malloc'd array. It is one block. */
+	  av = NULL;
 	
 }	
 
@@ -54,12 +49,13 @@ Sint16* av_to_sint16 (AV* av)
 	if( len != -1)
 	{
 		int i;
-		Uint16* table = (Sint16 *)safemalloc(sizeof(Sint16)*(len));
+		Sint16* table = (Sint16 *)safemalloc(sizeof(Sint16)*(len+1));
 		for ( i = 0; i < len+1 ; i++ )
 		{ 
 			SV ** temp = av_fetch(av,i,0);
 			if( temp != NULL )
 			{
+
 				table[i] = (Sint16) SvIV ( *temp  );
 			}
 			else
@@ -68,6 +64,7 @@ Sint16* av_to_sint16 (AV* av)
 			}
 		}
 		return table;
+
 	}
 	return NULL;
 }
@@ -702,7 +699,7 @@ gfx_prim_polygon_color(dst, vx, vy, n, color)
 	CODE:
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
-		RETVAL       = polygonColor(dst, _vx, _vy, n, color);
+		RETVAL  =  polygonColor(dst, _vx, _vy, n, color);
 	  	_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
 	OUTPUT:
