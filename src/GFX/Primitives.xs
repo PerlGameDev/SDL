@@ -46,7 +46,6 @@ void _svinta_free(Sint16* av, int len_from_av_len)
 	  safefree( av + i  );
 	}
 	
-	safefree(av);
 }	
 
 Sint16* av_to_sint16 (AV* av)
@@ -704,7 +703,7 @@ gfx_prim_polygon_color(dst, vx, vy, n, color)
 		Sint16 * _vx = av_to_sint16(vx);
 		Sint16 * _vy = av_to_sint16(vy);
 		RETVAL       = polygonColor(dst, _vx, _vy, n, color);
-		_svinta_free( _vx, av_len(vx) );
+	  	_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
 	OUTPUT:
 		RETVAL
