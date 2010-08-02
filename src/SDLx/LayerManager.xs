@@ -49,7 +49,6 @@ int _get_pixel( SDL_Surface * surface, int offset )
                  break;
         case 4:  value = ((Uint32 *)surface->pixels)[offset];
                  break;
-
     }
 
     return value;
@@ -62,8 +61,7 @@ lmx_new( CLASS, ... )
     char* CLASS
     CODE:
         RETVAL = (SDLx_LayerManager *)safemalloc( sizeof(SDLx_LayerManager) );
-	RETVAL->sv_layers = newAV();
-        RETVAL->length = 0;
+        RETVAL->sv_layers = newAV();
     OUTPUT:
         RETVAL
 
@@ -72,17 +70,15 @@ lmx_add( manager, bag )
     SDLx_LayerManager *manager
     SV* bag 
     CODE:
-        //manager->layers[manager->length] = layer;
-	
-	if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
-			   SDLx_Layer * layer = (SDLx_Layer*)(pointers[0]);
-			   layer->index = av_len( manager->sv_layers );
-			   layer->manager = (SDLx_LayerManager *)manager;
-			   av_push( manager->sv_layers, bag);
-               SvREFCNT_inc(bag);
-		           manager->length++;
-		       }   
+        if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
+        {
+           void **pointers   = (void**)(SvIV((SV*)SvRV( bag ))); 
+           SDLx_Layer *layer = (SDLx_Layer *)(pointers[0]);
+           layer->index      = av_len( manager->sv_layers );
+           layer->manager    = manager;
+           av_push( manager->sv_layers, bag);
+           SvREFCNT_inc(bag);
+       }   
 
 AV *
 lmx_layers( manager )
@@ -100,10 +96,9 @@ lmx_layer( manager, index )
     PREINIT:
         char* CLASS = "SDLx::Layer";
     CODE:
-        if(index >= 0 && index < manager->length)
+        if(index >= 0 && index < av_len( manager->sv_layers ) + 1)
         {
              RETVAL = *av_fetch( manager->sv_layers, index, 0 ) ;
-            //RETVAL = _sv_ref( manager->layers[index], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" );
         }
         else
             XSRETURN_UNDEF;
@@ -114,7 +109,7 @@ int
 lmx_length( manager )
     SDLx_LayerManager *manager
     CODE:
-        RETVAL = manager->length;
+        RETVAL = av_len( manager->sv_layers ) + 1;
     OUTPUT:
         RETVAL
 
@@ -127,9 +122,8 @@ lmx_blit( manager, dest )
         //SDL_GetMouseState(&x, &y);
         
         int index = 0;
-        while(index < manager->length)
+        while(index < av_len( manager->sv_layers ) + 1)
         {
-            //SDLx_Layer *layer = (manager->layers)[index];
             SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->sv_layers, index, 0));
             
             SDL_BlitSurface(layer->surface, layer->clip, dest, layer->pos);
@@ -162,7 +156,7 @@ lmx_by_position( manager, x, y )
     CODE:
         int i;
         int match = -1;
-        for( i = manager->length - 1; i >= 0 && match < 0; i-- )
+        for( i = av_len( manager->sv_layers ); i >= 0 && match < 0; i-- )
         {
             SDLx_Layer *layer = (SDLx_Layer *)SvRV(*av_fetch(manager->sv_layers, i, 0));
             SDL_Rect    *clip = layer->clip;
@@ -182,7 +176,6 @@ lmx_by_position( manager, x, y )
         }
 
         if(match >= 0)
-            //RETVAL = _sv_ref( manager->layers[match], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" );
             RETVAL = *av_fetch(manager->sv_layers, match, 0);
         else
             XSRETURN_UNDEF;
@@ -199,7 +192,7 @@ lmx_ahead( manager, index )
         int i;
         SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->sv_layers, index, 0));
 
-        for( i = index + 1; i < manager->length; i++ )
+        for( i = index + 1; i < av_len( manager->sv_layers ) + 1; i++ )
         {
             SDLx_Layer *layer_ = bag_to_layer(*av_fetch(manager->sv_layers, i, 0));
             if(
@@ -230,7 +223,6 @@ lmx_ahead( manager, index )
             )
             {
                 // TODO checking transparency
-                //av_store( matches, matches_count, _sv_ref( manager->layers[i], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" ) );
                 av_store( matches, matches_count, *av_fetch(manager->sv_layers, i, 0) );
                 matches_count++;
             }
@@ -288,7 +280,6 @@ lmx_behind( manager, index )
             )
             {
                 // TODO checking transparency
-                //av_store( matches, matches_count, _sv_ref( manager->layers[i], sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" ) );
                 av_store( matches, matches_count, *av_fetch(manager->sv_layers, i, 0) );
                 matches_count++;
             }
@@ -307,6 +298,6 @@ lmx_behind( manager, index )
 
 void
 lmx_DESTROY( manager )
-    SDLx_LayerManager* manager
+    SDLx_LayerManager *manager
     CODE:
         safefree(manager);
