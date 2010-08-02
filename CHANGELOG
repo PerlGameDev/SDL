@@ -3,9 +3,10 @@ Revision history for Perl extension SDL_perl.
 * 2.510
 	- Using bmp file if libpng isnt available in t/sdlx_sfont.t [#177] [FROGGS]
 	- Moved SDLx::Controller::Timer to XS [#180]
-	- Added SDLx::Layermanager [FROGGS]
+	- Added SDLx::Layermanager (wip) [FROGGS]
 	- Added and cleaned up SDLx::Validate [Blaizer, kthakore]
 	- More tests and clean up in SDLx::Sprite::Animated [jtpalmer]
+  - Fixed free errors for SUSE [kthakore]
 
 * 2.503
 	- Removed examples/adventure/
