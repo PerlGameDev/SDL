@@ -25,18 +25,6 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
     return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
 }
 
-SDLx_Layer* bag_to_layer( SV * bag )
-{
-   SDLx_Layer * layer = NULL;
-
-	if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
-			   layer = (SDLx_Layer*)(pointers[0]);
-		       }   
-	return layer;
-
-}
-
 int _calc_offset( SDL_Surface* surface, int x, int y )
 {
     int offset;
@@ -209,11 +197,11 @@ lmx_ahead( manager, index )
         AV *matches       = newAV();
         int matches_count = 0;
         int i;
-        SDLx_Layer *layer = (SDLx_Layer *)SvRV(*av_fetch(manager->sv_layers, index, 0));
+        SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->sv_layers, index, 0));
 
         for( i = index + 1; i < manager->length; i++ )
         {
-            SDLx_Layer *layer_ = (SDLx_Layer *)SvRV(*av_fetch(manager->sv_layers, i, 0));
+            SDLx_Layer *layer_ = bag_to_layer(*av_fetch(manager->sv_layers, i, 0));
             if(
                 // upper left point inside layer
                 (      layer->pos->x <= layer_->pos->x
@@ -267,11 +255,11 @@ lmx_behind( manager, index )
         AV *matches       = newAV();
         int matches_count = 0;
         int i;
-        SDLx_Layer *layer = (SDLx_Layer *)SvRV(*av_fetch(manager->sv_layers, index, 0));
+        SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->sv_layers, index, 0));
 
         for( i = index - 1; i >= 0; i-- )
         {
-            SDLx_Layer *layer_ = (SDLx_Layer *)SvRV(*av_fetch(manager->sv_layers, i, 0));
+            SDLx_Layer *layer_ = bag_to_layer(*av_fetch(manager->sv_layers, i, 0));
             if(
                 // upper left point inside layer
                 (      layer->pos->x <= layer_->pos->x
