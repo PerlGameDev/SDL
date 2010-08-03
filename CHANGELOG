@@ -1,6 +1,6 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.510
+* 2.510 02 August 2010
 	- Using bmp file if libpng isnt available in t/sdlx_sfont.t [#177] [FROGGS]
 	- Moved SDLx::Controller::Timer to XS [#180]
 	- Added SDLx::Layermanager (wip) [FROGGS]
