@@ -19,7 +19,6 @@ typedef struct SDLx_Layer
 
 SDLx_Layer *bag_to_layer( SV *bag )
 {
-    //SDLx_Layer *layer = (SDLx_Layer *)safemalloc(sizeof(SDLx_Layer));
     SDLx_Layer *layer = NULL;
 
     if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
@@ -29,6 +28,19 @@ SDLx_Layer *bag_to_layer( SV *bag )
     }
     
     return layer;
+}
+
+SDL_Surface *bag_to_surface( SV *bag )
+{
+    SDL_Surface *surface = NULL;
+
+    if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
+    {
+       void **pointers = (void **)(SvIV((SV *)SvRV( bag ))); 
+       surface         = (SDL_Surface *)(pointers[0]);
+    }
+    
+    return surface;
 }
 
 int intersection( SDLx_Layer *layer1, SDLx_Layer *layer2 )

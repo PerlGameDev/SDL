@@ -118,9 +118,15 @@ layerx_h( layer )
         RETVAL
 
 SV *
-layerx_surface( layer )
+layerx_surface( layer, ... )
     SDLx_Layer *layer
     CODE:
+        if(items > 1)
+        {
+            SDL_Surface *surface = bag_to_surface(ST(1));
+            layer->surface       = SDL_ConvertSurface(surface, surface->format, surface->flags);
+        }
+    
         RETVAL = _sv_ref( layer->surface, sizeof(SDL_Surface *), sizeof(SDL_Surface), "SDL::Surface" );
     OUTPUT:
         RETVAL
@@ -142,9 +148,15 @@ layerx_pos( layer )
         RETVAL
 
 HV *
-layerx_data( layer )
+layerx_data( layer, ... )
     SDLx_Layer *layer
     CODE:
+        if(items > 1)
+        {
+            layer->data = (HV *)SvRV(ST(1));
+            SvREFCNT_inc(layer->data);
+        }
+
         if((HV *)NULL == layer->data)
             XSRETURN_UNDEF;
         else
@@ -204,6 +216,19 @@ layerx_detach_xy( layer, x = -1, y = -1 )
         av_store(RETVAL, 1, newSViv(layer->attached_pos->y));
     OUTPUT:
         RETVAL
+
+void
+layerx_foreground( bag )
+    SV *bag
+    CODE:
+        if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
+        {
+            void **pointers   = (void**)(SvIV((SV*)SvRV( bag ))); 
+            SDLx_Layer *layer = (SDLx_Layer *)(pointers[0]);
+            layer->index      = av_len( layer->manager->sv_layers );
+            av_push( layer->manager->sv_layers, bag);
+            SvREFCNT_inc(bag);
+        }
 
 void
 layerx_DESTROY( layer )

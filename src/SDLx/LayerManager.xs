@@ -64,13 +64,13 @@ lmx_add( manager, bag )
     CODE:
         if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
         {
-           void **pointers   = (void**)(SvIV((SV*)SvRV( bag ))); 
-           SDLx_Layer *layer = (SDLx_Layer *)(pointers[0]);
-           layer->index      = av_len( manager->sv_layers );
-           layer->manager    = manager;
-           av_push( manager->sv_layers, bag);
-           SvREFCNT_inc(bag);
-       }   
+            void **pointers   = (void**)(SvIV((SV*)SvRV( bag ))); 
+            SDLx_Layer *layer = (SDLx_Layer *)(pointers[0]);
+            layer->index      = av_len( manager->sv_layers );
+            layer->manager    = manager;
+            av_push( manager->sv_layers, bag);
+            SvREFCNT_inc(bag);
+        }
 
 AV *
 lmx_layers( manager )
