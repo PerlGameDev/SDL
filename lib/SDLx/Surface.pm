@@ -237,7 +237,14 @@ sub draw_line {
 		unless ref($start) eq 'ARRAY';
 	Carp::croak "Error end needs an array ref [x,y]"
 		unless ref($end) eq 'ARRAY';
-	return unless eval{ require SDL::GFX::Primitives; 1};
+    require SDL::Config;
+  
+    if ( SDL::Config->has('SDL_gfx_primitives') )
+    {
+       Carp::carp ("GFX not available");
+       return;   
+    }
+  	return unless eval{ require SDL::GFX::Primitives; 1};
 
 	my $result;
 	if ( Scalar::Util::looks_like_number($color) ) {
