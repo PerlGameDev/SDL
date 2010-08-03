@@ -39,6 +39,9 @@ layerx_new( CLASS, surface, ... )
         RETVAL->surface   = (SDL_Surface *)safemalloc( sizeof(SDL_Surface) );
         RETVAL->clip      = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
         RETVAL->pos       = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
+        RETVAL->attached     = 0;
+        RETVAL->attached_pos = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
+        RETVAL->attached_rel = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
         RETVAL->surface   = SDL_ConvertSurface(surface, surface->format, surface->flags);
         (RETVAL->pos)->x  = 0;
         (RETVAL->pos)->y  = 0;
@@ -153,53 +156,8 @@ AV *
 layerx_ahead( layer )
     SDLx_Layer *layer
     CODE:
-        SDLx_LayerManager *manager = (SDLx_LayerManager *)layer->manager;
-        AV *matches                = newAV();
-        int matches_count          = 0;
-        int i;
-
-        for( i = layer->index + 1; i < manager->length; i++ )
-        {
-	    SDLx_Layer *layer_ = bag_to_layer(*av_fetch(manager->sv_layers, i, 0));
-            if(
-                // upper left point inside layer
-                (      layer->pos->x <= layer_->pos->x
-                    && layer_->pos->x <= layer->pos->x + layer->clip->w
-                    && layer->pos->y <= layer_->pos->y
-                    && layer_->pos->y <= layer->pos->y + layer->clip->h
-                )
-
-                // upper right point inside layer
-                || (   layer->pos->x <= layer_->pos->x + layer_->clip->w
-                    && layer_->pos->x + layer_->clip->w <= layer->pos->x + layer->clip->w
-                    && layer->pos->y <= layer_->pos->y
-                    && layer_->pos->y <= layer->pos->y + layer->clip->h )
-
-                // lower left point inside layer
-                || (   layer->pos->x <= layer_->pos->x
-                    && layer_->pos->x <= layer->pos->x + layer->clip->w
-                    && layer->pos->y <= layer_->pos->y + layer_->clip->h
-                    && layer_->pos->y + layer_->clip->h <= layer->pos->y + layer->clip->h )
-
-                // lower right point inside layer
-                || (   layer->pos->x <= layer_->pos->x + layer_->clip->w
-                    && layer_->pos->x + layer_->clip->w <= layer->pos->x + layer->clip->w
-                    && layer->pos->y <= layer_->pos->y + layer_->clip->h
-                    && layer_->pos->y + layer_->clip->h <= layer->pos->y + layer->clip->h )
-            )
-            {
-                // TODO checking transparency
-                av_store( matches, matches_count, _sv_ref( layer_, sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" ) );
-                matches_count++;
-            }
-        }
-
-        /*
-        my @more_matches = ();
-        while ( scalar(@matches) && ( @more_matches = $self->get_layers_ahead_layer( $matches[$#matches] ) ) )
-        {
-            push @matches, @more_matches;
-        }*/
+        int count   = 0;
+        AV *matches = layers_ahead( layer, &count);
 
         RETVAL = matches;
     OUTPUT:
@@ -209,57 +167,27 @@ AV *
 layerx_behind( layer )
     SDLx_Layer *layer
     CODE:
-        SDLx_LayerManager *manager = (SDLx_LayerManager *)layer->manager;
-        AV *matches                = newAV();
-        int matches_count          = 0;
-        int i;
-
-        for( i = layer->index - 1; i >= 0; i-- )
-        {
-	    SDLx_Layer *layer_ = bag_to_layer(*av_fetch(manager->sv_layers, i, 0));
-            if(
-                // upper left point inside layer
-                (      layer->pos->x <= layer_->pos->x
-                    && layer_->pos->x <= layer->pos->x + layer->clip->w
-                    && layer->pos->y <= layer_->pos->y
-                    && layer_->pos->y <= layer->pos->y + layer->clip->h
-                )
-
-                // upper right point inside layer
-                || (   layer->pos->x <= layer_->pos->x + layer_->clip->w
-                    && layer_->pos->x + layer_->clip->w <= layer->pos->x + layer->clip->w
-                    && layer->pos->y <= layer_->pos->y
-                    && layer_->pos->y <= layer->pos->y + layer->clip->h )
-
-                // lower left point inside layer
-                || (   layer->pos->x <= layer_->pos->x
-                    && layer_->pos->x <= layer->pos->x + layer->clip->w
-                    && layer->pos->y <= layer_->pos->y + layer_->clip->h
-                    && layer_->pos->y + layer_->clip->h <= layer->pos->y + layer->clip->h )
-
-                // lower right point inside layer
-                || (   layer->pos->x <= layer_->pos->x + layer_->clip->w
-                    && layer_->pos->x + layer_->clip->w <= layer->pos->x + layer->clip->w
-                    && layer->pos->y <= layer_->pos->y + layer_->clip->h
-                    && layer_->pos->y + layer_->clip->h <= layer->pos->y + layer->clip->h )
-            )
-            {
-                // TODO checking transparency
-                av_store( matches, matches_count, _sv_ref( layer_, sizeof(SDLx_Layer *), sizeof(SDLx_Layer), "SDLx::Layer" ) );
-                matches_count++;
-            }
-        }
-
-        /*
-        my @more_matches = ();
-        while ( scalar(@matches) && ( @more_matches = $self->get_layers_ahead_layer( $matches[$#matches] ) ) )
-        {
-            push @matches, @more_matches;
-        }*/
+        int count   = 0;
+        AV *matches = layers_behind( layer, &count);
 
         RETVAL = matches;
     OUTPUT:
         RETVAL
+
+void
+layerx_attach( layer, x = -1, y = -1 )
+    SDLx_Layer *layer
+    int x
+    int y
+    CODE:
+        if(-1 == x || -1 == y)
+            SDL_GetMouseState(&x, &y);
+        
+        layer->attached        = 1;
+        layer->attached_pos->x = layer->pos->x;
+        layer->attached_pos->y = layer->pos->x;
+        layer->attached_rel->x = layer->pos->x - x;
+        layer->attached_rel->y = layer->pos->y - y;
 
 void
 layerx_DESTROY( layer )
