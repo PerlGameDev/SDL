@@ -13,6 +13,8 @@ Core
 
 =head2 2.502
 
+=over
+
 =item SDLx::App
 
 Now depends on L<SDLx::Surface>. To get the SDL::Surface, use C< ->surface() >. Alternatively L<SDLx::Surface::display()|SDLx::Surface/display>.
@@ -25,10 +27,11 @@ C< get_display > is now called L<SDLx::Surface::display|SDLx::Surface/display>.
 
 Has drastically changed, and is still volatile.
 
+=back
+
 =head2 2.500
 
 =over 
-
 
 =item SDL::App 
 
