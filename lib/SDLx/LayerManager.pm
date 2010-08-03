@@ -67,24 +67,24 @@ sub set {
 #    return $did_redraw;
 #}
 
-sub attach {
-	my $self = shift;
-
-	#my $dest = shift;
-	my $y = pop;
-	my $x = pop;
-
-	#$snapshot = SDLx::Sprite->new(width => $self->{dest}->w, height => $self->{dest}->h);
-	#$snapshot->blit_by($self->{dest});
-	$must_redraw       = 1;
-	@attached_distance = ();
-	@attached_position = ();
-	@attached_layers   = @_;
-	foreach (@layers) {
-		push( @attached_distance, [ $_->{layer}->x - $x, $_->{layer}->y - $y ] );
-		push( @attached_position, [ $_->{layer}->x,      $_->{layer}->y ] );
-	}
-}
+#sub attach {
+#	my $self = shift;
+#
+#	#my $dest = shift;
+#	my $y = pop;
+#	my $x = pop;
+#
+#	#$snapshot = SDLx::Sprite->new(width => $self->{dest}->w, height => $self->{dest}->h);
+#	#$snapshot->blit_by($self->{dest});
+#	$must_redraw       = 1;
+#	@attached_distance = ();
+#	@attached_position = ();
+#	@attached_layers   = @_;
+#	foreach (@layers) {
+#		push( @attached_distance, [ $_->{layer}->x - $x, $_->{layer}->y - $y ] );
+#		push( @attached_position, [ $_->{layer}->x,      $_->{layer}->y ] );
+#	}
+#}
 
 sub detach {
 	my $self = shift;

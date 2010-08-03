@@ -189,6 +189,22 @@ layerx_attach( layer, x = -1, y = -1 )
         layer->attached_rel->x = layer->pos->x - x;
         layer->attached_rel->y = layer->pos->y - y;
 
+AV *
+layerx_detach_xy( layer, x = -1, y = -1 )
+    SDLx_Layer *layer
+    int x
+    int y
+    CODE:
+        layer->attached = 0;
+        layer->pos->x   = x;
+        layer->pos->y   = y;
+        
+        RETVAL = newAV();
+        av_store(RETVAL, 0, newSViv(layer->attached_pos->x));
+        av_store(RETVAL, 1, newSViv(layer->attached_pos->y));
+    OUTPUT:
+        RETVAL
+
 void
 layerx_DESTROY( layer )
     SDLx_Layer *layer

@@ -222,10 +222,16 @@ lmx_attach( manager, ... )
         int y = -1;
         
         if(SvIOK(ST(items - 1)))
+        {
             y = SvIV(ST(items - 1));
+            items--;
+        }
         
         if(SvIOK(ST(items - 1)))
+        {
             x = SvIV(ST(items - 1));
+            items--;
+        }
         
         if(-1 == x || -1 == y)
             SDL_GetMouseState(&x, &y);
@@ -234,6 +240,7 @@ lmx_attach( manager, ... )
         for( i = 1; i < items; i++ )
         {
             SDLx_Layer *layer      = bag_to_layer(ST(i));
+            printf("%d %d\n", i, layer->index);
             layer->attached        = 1;
             layer->attached_pos->x = layer->pos->x;
             layer->attached_pos->y = layer->pos->x;
