@@ -1,6 +1,6 @@
 #include <EXTERN.h> /*  from the Perl distribution */
 #include <perl.h> /*  from the Perl distribution */
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 extern char **environ;
 
