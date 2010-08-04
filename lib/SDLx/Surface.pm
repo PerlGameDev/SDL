@@ -171,8 +171,17 @@ sub load {
         Carp::croak 'no SDL_image support found. Can only load bitmaps'
             if $@;
 
-        $surface = SDL::Image::load( $filename )
-            or Carp::croak "error loading image $filename: " . SDL::get_error;
+        if ($type) {
+            require SDL::RWOps;
+            my $file = SDL::RWOps->new_file($filename, "rb")
+                or Carp::croak "error loading file $filename: " . SDL::get_error;
+            $surface = SDL::Image::load_typed_rw($file, 1, $type)
+                or Carp::croak "error loading image $file: " . SDL::get_error;
+        }
+        else {
+            $surface = SDL::Image::load( $filename )
+                or Carp::croak "error loading image $filename: " . SDL::get_error;
+        }
     }
     return SDLx::Surface->new( surface => $surface);
 }
