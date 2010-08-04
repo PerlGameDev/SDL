@@ -28,7 +28,7 @@
 /*	dgoehrig@cpan.org */
 /* */
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #ifdef __cplusplus 
 extern "C" {
