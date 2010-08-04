@@ -77,6 +77,24 @@ int intersection( SDLx_Layer *layer1, SDLx_Layer *layer2 )
     return 0;
 }
 
+void av_clean(AV *av, int from, int to)
+{
+    int i;
+    int cleaned = 0;
+    for(i = from; i < to; i++)
+    {
+        SV *fetched = *av_fetch(av, i, 0);
+        while(&PL_sv_undef == fetched)
+        {
+            cleaned++;
+            fetched = *av_fetch(av, i + cleaned, 0);
+        }
+        
+        if(cleaned && i + cleaned <= to)
+            av_store(av, i, fetched);
+    }
+}
+
 AV *layers_behind( SDLx_Layer *layer, int *count )
 {
     AV *matches = newAV();

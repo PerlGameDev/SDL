@@ -66,7 +66,7 @@ lmx_add( manager, bag )
         {
             void **pointers   = (void**)(SvIV((SV*)SvRV( bag ))); 
             SDLx_Layer *layer = (SDLx_Layer *)(pointers[0]);
-            layer->index      = av_len( manager->sv_layers );
+            layer->index      = av_len( manager->sv_layers ) + 1;
             layer->manager    = manager;
             av_push( manager->sv_layers, bag);
             SvREFCNT_inc(bag);
