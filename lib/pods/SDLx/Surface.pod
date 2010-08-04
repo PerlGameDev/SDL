@@ -91,6 +91,28 @@ Sets the passed C<SDL::Rect> as the new clip_rect for the surface. Returns the S
 
 =head1 EXTENSIONS
 
+=head2 load
+
+ my $surface = SDLx::Surface->load( 'hero.png' );
+ my $surface = SDLx::Surface->load( 'hero.dat', 'bmp' );
+
+Loads the given image file into a I<new> SDLx::Surface surface. A new
+surface is B<always> created, even if you call it from an already crafted
+object. Croaks on errors such as no support built for that image extension
+or a file reading error (the error message is SDL::get_error and should
+give more details).
+
+Note that load() will automatically figure out the extension based on the
+filename you provide. If you wish to force an extension for whatever reason
+(like having a filename with a different extension or none at all), you can
+optionally pass the file type as a second parameter. Case is not relevant.
+
+If you don't have SDL_image in your build, only bitmap images will be
+supported.
+
+Returns the new Surface.
+
+
 =head2 blit 
 
  $sdlx_surface->blit( $dest, $src_rect, $dest_rect );
