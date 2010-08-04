@@ -22,7 +22,7 @@ sub new {
 		$self->_init_rects(%options);
 		$self->handle_surface( $self->surface );
 	} elsif ( exists $options{image} ) {
-		my $surf = _construct_image( $options{image} );
+		my $surf = SDLx::Surface->load( $options{image} );
 		$self->{surface} = SDLx::Surface->new( surface => $surf );
 		$self->_init_rects(%options);
 		$self->handle_surface($surf);
@@ -74,25 +74,10 @@ sub _init_rects {
 
 }
 
-sub _construct_image {
-	my $filename = shift;
-  #TODO: This should be in SDLx::Surface
-	require SDL::Config;
-	my $surface;
-	if ( SDL::Config->has('SDL_image') ) {
-		$surface = SDL::Image::load($filename) or Carp::croak SDL::get_error;
-	} else {
-		$surface = SDL::Video::load_BMP($filename)
-			or Carp::croak 'SDL_image was not enabled. Using SDL::Video::load_BMP. Failed with: ' . SDL::get_error;
-	}
-
-	return $surface;
-}
-
 sub load {
 	my ( $self, $filename ) = @_;
 
-	my $surface = _construct_image($filename);
+	my $surface = SDLx::Surface->load($filename);
 	$self->{orig_surface} = $surface unless $self->{orig_surface};
 	$self->handle_surface($surface);
 	return $self;

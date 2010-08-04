@@ -154,6 +154,29 @@ sub clip_rect {
 
 }
 
+sub load {
+    my ($self, $filename, $type) = @_;
+    my $surface;
+
+    # short-circuit if it's a bitmap
+    if ( ($type and lc $type eq 'bmp')
+        or lc substr($filename, -4, 4) eq '.bmp' )
+    {
+        $surface = SDL::Video::load_BMP( $filename )
+            or Carp::croak "error loading image $filename: " . SDL::get_error;
+    }
+    else {
+        # otherwise, make sure we can load first
+        eval { require SDL::Image; 1 };
+        Carp::croak 'no SDL_image support found. Can only load bitmaps'
+            if $@;
+
+        $surface = SDL::Image::load( $filename )
+            or Carp::croak "error loading image $filename: " . SDL::get_error;
+    }
+    return SDLx::Surface->new( surface => $surface);
+}
+
 #EXTENSTIONS
 
 sub blit {
