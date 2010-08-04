@@ -76,8 +76,15 @@ sub _init_rects {
 
 sub _construct_image {
 	my $filename = shift;
-	my $surface  = SDL::Image::load($filename)
-		or Carp::croak SDL::get_error;
+  #TODO: This should be in SDLx::Surface
+	require SDL::Config;
+	my $surface;
+	if ( SDL::Config->has('SDL_image') ) {
+		$surface = SDL::Image::load($filename) or Carp::croak SDL::get_error;
+	} else {
+		$surface = SDL::Video::load_BMP($filename)
+			or Carp::croak 'SDL_image was not enabled. Using SDL::Video::load_BMP. Failed with: ' . SDL::get_error;
+	}
 
 	return $surface;
 }
