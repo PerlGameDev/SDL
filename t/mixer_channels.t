@@ -78,7 +78,7 @@ is( SDL::Mixer::Channels::playing($playing_channel),
 is( SDL::Mixer::Channels::paused($playing_channel),
 	0, "[paused] channel $playing_channel is not paused"
 );
-
+ok($delay, 'delay definedness madness test #1');
 my $fading_channels = SDL::Mixer::Channels::fade_out_channel( $playing_channel, $delay );
 is( $fading_channels > 0,
 	1, "[fade_out_channel] $delay ms for $fading_channels channel(s)"
@@ -86,10 +86,13 @@ is( $fading_channels > 0,
 is( SDL::Mixer::Channels::fading_channel($playing_channel),
 	MIX_FADING_OUT, "[fading_channel] channel $playing_channel is fading out"
 );
-
+ok($delay, 'delay definedness madness test #2');
 SDL::delay($delay);
+ok($delay, 'delay definedness madness test #3');
 
 $playing_channel = SDL::Mixer::Channels::fade_in_channel( -1, $sample_chunk, 0, $delay );
+ok($delay, 'delay definedness madness test #4');
+
 isnt(
 	$playing_channel, -1,
 	"[fade_in_channel] $delay ms for channel $playing_channel"
@@ -97,8 +100,10 @@ isnt(
 is( SDL::Mixer::Channels::fading_channel($playing_channel),
 	MIX_FADING_IN, "[fading_channel] channel $playing_channel is fading in"
 );
+ok($delay, 'delay definedness madness test #5');
 
 SDL::delay($delay);
+ok($delay, 'delay definedness madness test #6');
 
 SDL::Mixer::Channels::pause(-1);
 pass '[pause] ran';
@@ -106,12 +111,15 @@ is( SDL::Mixer::Channels::paused($playing_channel),
 	1, "[paused] channel $playing_channel is paused"
 );
 
+
 SDL::delay( $delay / 4 );
+ok($delay, 'delay definedness madness test #7');
 
 SDL::Mixer::Channels::resume(-1);
 pass '[resume] ran';
 
 SDL::delay($delay);
+ok($delay, 'delay definedness madness test #8');
 
 is( SDL::Mixer::Channels::halt_channel($playing_channel),
 	0, "[halt_channel] stop channel $playing_channel"
@@ -121,25 +129,35 @@ is( SDL::Mixer::Channels::playing($playing_channel),
 );
 
 SDL::delay($delay);
+ok($delay, 'delay definedness madness test #9');
 
 $playing_channel = SDL::Mixer::Channels::play_channel_timed( -1, $sample_chunk, 0, $delay );
+ok($delay, 'delay definedness madness test #10');
+
 isnt(
 	$playing_channel, -1,
 	"[play_channel_timed] play $delay ms for channel $playing_channel"
 );
 SDL::delay( $delay / 4 );
+ok($delay, 'delay definedness madness test #11');
+
 my $expire_channel = SDL::Mixer::Channels::expire_channel( $playing_channel, $delay );
+ok($delay, 'delay definedness madness test #12');
+
 is( $expire_channel > 0,
 	1,
 	"[expire_channel] stops after $delay ms for $expire_channel channel(s)"
 );
 
 SDL::delay($delay);
+ok($delay, 'delay definedness madness test #13');
 
 $playing_channel = SDL::Mixer::Channels::fade_in_channel_timed(
 	-1, $sample_chunk, 0, $delay,
 	$delay * 2
 );
+ok($delay, 'delay definedness madness test #14');
+
 isnt(
 	$playing_channel, -1,
 	"[fade_in_channel_timed] play " . ( $delay * 2 ) . " ms after $delay ms fade in for channel $playing_channel"
@@ -151,6 +169,7 @@ isa_ok(
 );
 
 SDL::delay( $delay * 4 );
+ok($delay, 'delay definedness madness test #15');
 
 SDL::Mixer::close_audio();
 pass '[close_audio] ran';
