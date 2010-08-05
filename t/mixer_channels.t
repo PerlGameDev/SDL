@@ -46,7 +46,7 @@ my $callback = sub {
 SDL::Mixer::Channels::channel_finished($callback);
 pass '[channel_finished] registered callback';
 
-my $delay           = 100;
+my $delay           = 500;
 my $audio_test_file = 'test/data/silence.wav';
 
 if ( $ENV{'SDL_RELEASE_TESTING'} ) {
@@ -178,12 +178,12 @@ is( $finished > 0,
 	1, '[callback_finished] called the callback got ' . $finished
 );
 
-sleep 1;
-
 if ($audiodriver) {
 	$ENV{SDL_AUDIODRIVER} = $audiodriver;
 } else {
 	delete $ENV{SDL_AUDIODRIVER};
 }
+
+sleep(1);
 
 done_testing();
