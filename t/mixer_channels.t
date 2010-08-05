@@ -168,7 +168,7 @@ isa_ok(
 	'SDL::Mixer::MixChunk', '[get_chunk]'
 );
 
-SDL::delay( $delay * 4 );
+SDL::delay( 1000 );
 ok($delay, 'delay definedness madness test #15');
 
 SDL::Mixer::close_audio();
@@ -177,6 +177,8 @@ pass '[close_audio] ran';
 is( $finished > 0,
 	1, '[callback_finished] called the callback got ' . $finished
 );
+
+sleep 1;
 
 if ($audiodriver) {
 	$ENV{SDL_AUDIODRIVER} = $audiodriver;
