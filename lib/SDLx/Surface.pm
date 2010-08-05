@@ -6,15 +6,19 @@ require Exporter;
 require DynaLoader;
 use Carp ();
 use SDL;
-use SDL::Video;
 use SDL::Rect;
+use SDL::Video;
+use SDL::Image;
 use SDL::Color;
+use SDL::Config;
 use SDL::Surface;
-use SDLx::Surface;
-use SDLx::Surface::TiedMatrix;
 use SDL::PixelFormat;
-use SDLx::Validate;
+
+use SDL::GFX::Primitives;
+
 use Tie::Simple;
+use SDLx::Validate;
+use SDLx::Surface::TiedMatrix;
 
 use overload (
 	'@{}'    => '_array',
@@ -98,7 +102,6 @@ sub display {
 sub duplicate {
 	my $surface = shift;
 	SDLx::Validate::surface($surface);
-	require SDL::PixelFormat;
 	return SDLx::Surface->new(
 		width  => $surface->w,
 		height => $surface->h,
@@ -167,11 +170,14 @@ sub load {
     }
     else {
         # otherwise, make sure we can load first
-        eval { require SDL::Image; 1 };
+	#eval { require SDL::Image; 1 }; This doesn't work. As you can still load SDL::Image but can't call any functions.
+	#
         Carp::croak 'no SDL_image support found. Can only load bitmaps'
-            if $@;
+            unless SDL::Config->has('SDL_image');#this checks if we actually have that library. C Library != SDL::Image
 
-        if ($type) {
+        require SDL::Image;
+
+        if ($type) { #I don't understand what you are doing here
             require SDL::RWOps;
             my $file = SDL::RWOps->new_file($filename, "rb")
                 or Carp::croak "error loading file $filename: " . SDL::get_error;
@@ -269,12 +275,13 @@ sub draw_line {
 		unless ref($start) eq 'ARRAY';
 	Carp::croak "Error end needs an array ref [x,y]"
 		unless ref($end) eq 'ARRAY';
-	require SDL::Config;
 
 	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
 		Carp::carp("SDL_gfx_primitives support has not been compiled");
 		return;
 	}
+
+	require SDL::GFX::Primitives;
 
 	my $result;
 	if ( Scalar::Util::looks_like_number($color) ) {
