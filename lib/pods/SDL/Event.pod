@@ -9,17 +9,17 @@ Core, Events, Structure
 
 =head1 SYNOPSIS
 
- use SDL::Event;                             # for the event object itself
- use SDL::Events qw(pump_events poll_event); # functions for event queue handling
+ use SDL::Event;  # for the event object itself
+ use SDL::Events; # functions for event queue handling
  
  SDL::init(SDL_INIT_VIDEO);
  my $event = SDL::Event->new();
  
  while(1)
  {
-     pump_events();
+     SDL::Events::pump_events();
 
-     if(poll_event($event))
+     if(SDL::Events::poll_event($event))
      {
         if($event->type == SDL_MOUSEBUTTONDOWN)
         {
