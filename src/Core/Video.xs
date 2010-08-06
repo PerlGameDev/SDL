@@ -16,13 +16,6 @@ void _uinta_free(Uint16* av, int len_from_av_len)
 	if( av != NULL)
 	  return;
 	
-	
-	int i;
-	for(i =0; i < len_from_av_len; i++)
-	{
-	  safefree( av + i  );
-	}
-	
 	safefree(av);
 }
 
@@ -32,7 +25,7 @@ Uint16* av_to_uint16 (AV* av)
 	if( len != -1)
 	{
 		int i;
-		Uint16* table = (Uint16 *)safemalloc(sizeof(Uint16)*(len));
+		Uint16* table = (Uint16 *)safemalloc(sizeof(Uint16)*(len+1));
 		for ( i = 0; i < len+1 ; i++ )
 		{ 
 			SV ** temp = av_fetch(av,i,0);

@@ -54,7 +54,7 @@ time_add_timer ( interval, cmd )
 	CODE:
  	 if (perl_for_cb == NULL) {
 	   perl_my = PERL_GET_CONTEXT;
-	   perl_for_cb = perl_clone(perl_my, CLONEf_KEEP_PTR_TABLE);
+	   perl_for_cb = (PerlInterpreter *) perl_clone( (PerlInterpreter *) perl_my, CLONEf_KEEP_PTR_TABLE);
            PERL_SET_CONTEXT(perl_my);
          }
 	 RETVAL = SDL_AddTimer(interval,add_timer_cb,(void *)cmd);
