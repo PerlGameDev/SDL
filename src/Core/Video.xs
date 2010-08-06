@@ -16,13 +16,6 @@ void _uinta_free(Uint16* av, int len_from_av_len)
 	if( av != NULL)
 	  return;
 	
-	
-	int i;
-	for(i =0; i < len_from_av_len; i++)
-	{
-	  safefree( av + i  );
-	}
-	
 	safefree(av);
 }
 
