@@ -32,7 +32,7 @@ Uint16* av_to_uint16 (AV* av)
 	if( len != -1)
 	{
 		int i;
-		Uint16* table = (Uint16 *)safemalloc(sizeof(Uint16)*(len));
+		Uint16* table = (Uint16 *)safemalloc(sizeof(Uint16)*(len+1));
 		for ( i = 0; i < len+1 ; i++ )
 		{ 
 			SV ** temp = av_fetch(av,i,0);

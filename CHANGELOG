@@ -9,6 +9,7 @@ Revision history for Perl extension SDL_perl.
   - More delay add to test for syncing issues in VM test [FROGGS]
   - Used SDLx::Validate more [kthakore]
   - Applied patch for fink compatibiliet FULL_PERL [dmacks, kthakore]
+  - 2 Character fixe for set_gamma_ramp in  SDL::Video [kthakore]
 
 * 2.510 02 August 2010
 	- Using bmp file if libpng isnt available in t/sdlx_sfont.t [#177] [FROGGS]
