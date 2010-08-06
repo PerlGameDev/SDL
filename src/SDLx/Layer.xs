@@ -168,10 +168,7 @@ AV *
 layerx_ahead( layer )
     SDLx_Layer *layer
     CODE:
-        int count   = 0;
-        AV *matches = layers_ahead( layer, &count);
-
-        RETVAL = matches;
+        RETVAL = layers_ahead( layer );
     OUTPUT:
         RETVAL
 
@@ -179,10 +176,7 @@ AV *
 layerx_behind( layer )
     SDLx_Layer *layer
     CODE:
-        int count   = 0;
-        AV *matches = layers_behind( layer, &count);
-
-        RETVAL = matches;
+        RETVAL = layers_behind( layer );
     OUTPUT:
         RETVAL
 

@@ -68,9 +68,6 @@ is    ( $layer3->data->{bb},     'cc',           'SDLx::Layer->data->{}' );
 #isa_ok( $layer3->behind,         'ARRAY',        'SDLx::Layer->behind' );
 #isa_ok( $layer3->behind->[1],    'SDLx::Layer',  'SDLx::Layer->behind->[]' );
 #is    ( $layer3->behind->[1]->h, 120,            'SDLx::Layer->behind->[]->h' );
-is    ( $layer->foreground,       undef,           'SDLx::Layer->foreground' );
-is    ( $layer3->foreground,      undef,           'SDLx::Layer->foreground' );
-is    ( $layer2->foreground,      undef,           'SDLx::Layer->foreground' );
 
 
 ############ SDLx::LayerManager #####################################################
@@ -85,15 +82,18 @@ is    ( $manager->length,                          4,                    'SDLx::
 #is    ( $manager->layer(0)->surface->w,            180,                  'SDLx::LayerManager->layer->surface->w' );
 is    ( $manager->by_position(10, 30),             undef,                'SDLx::LayerManager->by_position' );
 isa_ok( $manager->by_position(30, 50),             'SDLx::Layer',        'SDLx::LayerManager->by_position' );
-#is    ( $manager->by_position(30, 50)->index,      0,                    'SDLx::LayerManager->by_position->index' );
-#is    ( $manager->by_position(60, 60)->index,      2,                    'SDLx::LayerManager->by_position->index' );
-#is    ( $manager->by_position(60, 60)->data->{aa}, 'bb',                 'SDLx::LayerManager->by_position->data->{}' );
-#isa_ok( $manager->ahead(0),                        'ARRAY',              'SDLx::LayerManager->ahead' );
-#isa_ok( $manager->ahead(0)->[0],                   'SDLx::Layer',        'SDLx::LayerManager->ahead->[]' );
-#is    ( $manager->ahead(0)->[0]->x,                60,                   'SDLx::LayerManager->ahead->[]->x' );
-#isa_ok( $manager->behind(2),                       'ARRAY',              'SDLx::LayerManager->behind' );
-#isa_ok( $manager->behind(2)->[1],                  'SDLx::Layer',        'SDLx::LayerManager->behind->[]' );
-#is    ( $manager->behind(2)->[1]->h, 120,          'SDLx::LayerManager->behind->[]->h' );
+is    ( $manager->by_position(30, 50)->index,      0,                    'SDLx::LayerManager->by_position->index' );
+is    ( $manager->by_position(60, 60)->index,      2,                    'SDLx::LayerManager->by_position->index' );
+is    ( $manager->by_position(60, 60)->data->{aa}, 'bb',                 'SDLx::LayerManager->by_position->data->{}' );
+isa_ok( $manager->ahead(0),                        'ARRAY',              'SDLx::LayerManager->ahead' );
+isa_ok( $manager->ahead(0)->[0],                   'SDLx::Layer',        'SDLx::LayerManager->ahead->[]' );
+is    ( $manager->ahead(0)->[0]->x,                60,                   'SDLx::LayerManager->ahead->[]->x' );
+isa_ok( $manager->behind(2),                       'ARRAY',              'SDLx::LayerManager->behind' );
+isa_ok( $manager->behind(2)->[1],                  'SDLx::Layer',        'SDLx::LayerManager->behind->[]' );
+is    ( $manager->behind(2)->[1]->h, 120,          'SDLx::LayerManager->behind->[]->h' );
+is    ( $layer->foreground,       undef,           'SDLx::Layer->foreground' );
+is    ( $layer3->foreground,      undef,           'SDLx::Layer->foreground' );
+is    ( $layer2->foreground,      undef,           'SDLx::Layer->foreground' );
         $manager->blit($display);                                             pass('SDLx::LayerManager->blit');
 SDL::Video::update_rect( $display, 0, 0, 0, 0 );
 

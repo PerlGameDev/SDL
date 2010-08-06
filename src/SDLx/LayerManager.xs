@@ -52,9 +52,8 @@ SDLx_LayerManager *
 lmx_new( CLASS, ... )
     char* CLASS
     CODE:
-        RETVAL = (SDLx_LayerManager *)safemalloc( sizeof(SDLx_LayerManager) );
+        RETVAL         = (SDLx_LayerManager *)safemalloc( sizeof(SDLx_LayerManager) );
         RETVAL->layers = newAV();
-        RETVAL->length = 0;
     OUTPUT:
         RETVAL
 
@@ -72,13 +71,12 @@ lmx_add( manager, bag )
             av_push( manager->layers, bag);
             SvREFCNT_inc(bag);
         }
-        manager->length++;
 
 AV *
 lmx_layers( manager )
     SDLx_LayerManager *manager
     CODE:
-        XSRETURN_UNDEF;
+        RETVAL = manager->layers;
     OUTPUT:
         RETVAL
 
@@ -90,11 +88,11 @@ lmx_layer( manager, index )
     PREINIT:
         char* CLASS = "SDLx::Layer";
     CODE:
-        /*if(index >= 0 && index < av_len( manager->sv_layers ) + 1)
+        if(index >= 0 && index < av_len( manager->layers ) + 1)
         {
-             RETVAL = *av_fetch( manager->sv_layers, index, 0 ) ;
+             RETVAL = *av_fetch( manager->layers, index, 0 ) ;
         }
-        else*/
+        else
             XSRETURN_UNDEF;
     OUTPUT:
         RETVAL
@@ -103,8 +101,7 @@ int
 lmx_length( manager )
     SDLx_LayerManager *manager
     CODE:
-        //RETVAL = av_len( manager->sv_layers ) + 1;
-        RETVAL = manager->length;
+        RETVAL = av_len( manager->layers ) + 1;
     OUTPUT:
         RETVAL
 
@@ -190,12 +187,9 @@ lmx_ahead( manager, index )
     SDLx_LayerManager *manager
     int               index
     CODE:
-        /*int matches_count = 0;
-        SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->sv_layers, index, 0));
-        AV *matches       = layers_ahead( layer, &matches_count);
-
-        RETVAL = matches;*/
-        XSRETURN_UNDEF;
+        SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
+        AV *matches       = layers_ahead( layer );
+        RETVAL            = matches;
     OUTPUT:
         RETVAL
 
@@ -204,12 +198,9 @@ lmx_behind( manager, index )
     SDLx_LayerManager *manager
     int               index
     CODE:
-        /*int matches_count = 0;
-        SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->sv_layers, index, 0));
-        AV *matches       = layers_behind( layer, &matches_count);
-
-        RETVAL = matches;*/
-        XSRETURN_UNDEF;
+        SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
+        AV *matches       = layers_behind( layer );
+        RETVAL            = matches;
     OUTPUT:
         RETVAL
 

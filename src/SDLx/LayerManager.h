@@ -1,14 +1,7 @@
 
-struct list
-{
-    SV *item;
-    struct list *next;
-};
-
 typedef struct SDLx_LayerManager
 {
     AV *layers;
-    int  length;
 } SDLx_LayerManager;
 
 typedef struct SDLx_Layer
@@ -84,66 +77,46 @@ int intersection( SDLx_Layer *layer1, SDLx_Layer *layer2 )
     return 0;
 }
 
-void av_clean(AV *av, int from, int to)
-{
-    /*int i;
-    int cleaned = 0;
-    for(i = from; i < to; i++)
-    {
-        SV *fetched = *av_fetch(av, i, 0);
-        while(&PL_sv_undef == fetched)
-        {
-            cleaned++;
-            fetched = *av_fetch(av, i + cleaned, 0);
-        }
-        
-        if(cleaned && i + cleaned <= to)
-            av_store(av, i, fetched);
-    }*/
-}
-
-AV *layers_behind( SDLx_Layer *layer, int *count )
+AV *layers_behind( SDLx_Layer *layer )
 {
     AV *matches = newAV();
-    /*
-    *count      = 0;
     int i;
+    int count = 0;
 
     for( i = layer->index - 1; i >= 0; i-- )
     {
-        SV *sv_layer2      = *av_fetch(layer->manager->sv_layers, i, 0);
-        SDLx_Layer *layer2 = bag_to_layer(sv_layer2);
+        SV *bag            = *av_fetch(layer->manager->layers, i, 0);
+        SDLx_Layer *layer2 = bag_to_layer(bag);
         if(intersection( layer, layer2 ))
         {
             // TODO checking transparency
-            SvREFCNT_inc(sv_layer2);
-            av_store( matches, *count, sv_layer2 );
-            *count++;
+            SvREFCNT_inc(bag);
+            av_store( matches, count, bag );
+            count++;
         }
-    }*/
+    }
     
     return matches;
 }
 
-AV *layers_ahead( SDLx_Layer *layer, int *count )
+AV *layers_ahead( SDLx_Layer *layer )
 {
     AV *matches = newAV();
-    /*
-    *count      = 0;
     int i;
+    int count = 0;
 
-    for( i = layer->index + 1; i <= av_len(layer->manager->sv_layers); i++ )
+    for( i = layer->index + 1; i <= av_len(layer->manager->layers); i++ )
     {
-        SV *sv_layer2      = *av_fetch(layer->manager->sv_layers, i, 0);
-        SDLx_Layer *layer2 = bag_to_layer(sv_layer2);
+        SV *bag            = *av_fetch(layer->manager->layers, i, 0);
+        SDLx_Layer *layer2 = bag_to_layer(bag);
         if(intersection( layer, layer2 ))
         {
             // TODO checking transparency
-            SvREFCNT_inc(sv_layer2);
-            av_store( matches, *count, sv_layer2 );
-            *count++;
+            SvREFCNT_inc(bag);
+            av_store( matches, count, bag );
+            count++;
         }
-    }*/
+    }
     
     return matches;
 }
