@@ -68,6 +68,9 @@ is    ( $layer3->data->{bb},     'cc',           'SDLx::Layer->data->{}' );
 #isa_ok( $layer3->behind,         'ARRAY',        'SDLx::Layer->behind' );
 #isa_ok( $layer3->behind->[1],    'SDLx::Layer',  'SDLx::Layer->behind->[]' );
 #is    ( $layer3->behind->[1]->h, 120,            'SDLx::Layer->behind->[]->h' );
+is    ( $layer->foreground,       undef,           'SDLx::Layer->foreground' );
+is    ( $layer3->foreground,      undef,           'SDLx::Layer->foreground' );
+is    ( $layer2->foreground,      undef,           'SDLx::Layer->foreground' );
 
 
 ############ SDLx::LayerManager #####################################################

@@ -222,41 +222,33 @@ layerx_foreground( bag )
     SV *bag
     CODE:
         SDLx_Layer *layer = bag_to_layer(bag);
+        SDLx_LayerManager *manager= layer->manager;
+        int index = layer->index; // we cant trust its value
         int i;
         
-        //for(i=0; i < av_len(layer->manager->sv_layers); i++)
-        //    printf("%d ", bag_to_layer(*av_fetch(layer->manager->sv_layers, i, 0))->index);
-        //printf("\n");
+        for(i=0; i <= av_len(manager->layers); i++)
+            printf("%d ", bag_to_layer(*av_fetch(manager->layers, i, 0))->index);
+        printf("\n");
         
-        i = layer->index;        
-        /*if(i < av_len(layer->manager->sv_layers) - 1)
-        {//if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
-            while(i < av_len(layer->manager->sv_layers) - 1)
+        for(i=0; i <= av_len(manager->layers); i++)
+        {
+            if(*av_fetch(manager->layers, i, 0) == bag) // what bag do we have? => finding the right layer index
             {
-                printf("%d <- %d\n", i, i + 1);
-                //void **pointers   = (void**)(SvIV((SV*)SvRV( bag ))); 
-                //SDLx_Layer *layer = (SDLx_Layer *)(pointers[0]);
-                //SV *fetched = *av_fetch( layer->manager->sv_layers, i + 1, 0 );
-                //SvREFCNT_inc(fetched);
-                //av_store( layer->manager->sv_layers, i, fetched );
-             
-                //av_splice( layer->manager->sv_layers, layer->index, 1 );
-                
-                //layer->index      = av_len( layer->manager->sv_layers );
-                //SvREFCNT_inc(bag);
-                
-                // TODO removing old layer
-                i++;
+                index = i;
+                break;
             }
-            
-            av_store( layer->manager->sv_layers, av_len(layer->manager->sv_layers), bag );
-        }*/
+        }
+
+        for(i=index; i <av_len(manager->layers); i++)
+        {
+            AvARRAY(manager->layers)[i] = AvARRAY(manager->layers)[i+1];
+        }
+        AvARRAY(manager->layers)[i] = bag;
+
         
-        //av_clean(layer->manager->sv_layers, 0, av_len(layer->manager->sv_layers));
-        
-        //for(i=0; i < av_len(layer->manager->sv_layers); i++)
-        //    printf("%d ", bag_to_layer(*av_fetch(layer->manager->sv_layers, i, 0))->index);
-        //printf("\n");
+        for(i=0; i <= av_len(manager->layers); i++)
+            printf("%d ", bag_to_layer(*av_fetch(manager->layers, i, 0))->index);
+        printf("\n");
 
 void
 layerx_DESTROY( layer )
