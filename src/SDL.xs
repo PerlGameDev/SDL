@@ -73,6 +73,10 @@ extern PerlInterpreter *parent_perl;
 
 #endif
 
+#if defined WINDOWS || defined WIN32 
+#include<windows.h> 
+   extern int SDL_RegisterApp (char*, Uint32, void*);
+#endif
 
 #ifndef NOSIGCATCH
 #include <execinfo.h>
@@ -131,6 +135,11 @@ XS(boot_SDL_perl)
 	PL_perl_destruct_level = 2;
 	GET_TLS_CONTEXT
 	boot_SDL();
+
+#if defined WINDOWS || defined WIN32
+  SDL_RegisterApp ("SDLPerl App", 0, GetModuleHandle (NULL));
+#endif
+
 }
 
 MODULE = SDL_perl	PACKAGE = SDL
