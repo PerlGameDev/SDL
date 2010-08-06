@@ -224,21 +224,21 @@ layerx_foreground( bag )
         SDLx_Layer *layer = bag_to_layer(bag);
         int i;
         
-        for(i=0; i < av_len(layer->manager->sv_layers); i++)
-            printf("%d ", bag_to_layer(*av_fetch(layer->manager->sv_layers, i, 0))->index);
-        printf("\n");
+        //for(i=0; i < av_len(layer->manager->sv_layers); i++)
+        //    printf("%d ", bag_to_layer(*av_fetch(layer->manager->sv_layers, i, 0))->index);
+        //printf("\n");
         
         i = layer->index;        
-        if(i < av_len(layer->manager->sv_layers) - 1)
+        /*if(i < av_len(layer->manager->sv_layers) - 1)
         {//if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
             while(i < av_len(layer->manager->sv_layers) - 1)
             {
                 printf("%d <- %d\n", i, i + 1);
                 //void **pointers   = (void**)(SvIV((SV*)SvRV( bag ))); 
                 //SDLx_Layer *layer = (SDLx_Layer *)(pointers[0]);
-                SV *fetched = *av_fetch( layer->manager->sv_layers, i + 1, 0 );
-                SvREFCNT_inc(fetched);
-                av_store( layer->manager->sv_layers, i, fetched );
+                //SV *fetched = *av_fetch( layer->manager->sv_layers, i + 1, 0 );
+                //SvREFCNT_inc(fetched);
+                //av_store( layer->manager->sv_layers, i, fetched );
              
                 //av_splice( layer->manager->sv_layers, layer->index, 1 );
                 
@@ -250,13 +250,13 @@ layerx_foreground( bag )
             }
             
             av_store( layer->manager->sv_layers, av_len(layer->manager->sv_layers), bag );
-        }
+        }*/
         
         //av_clean(layer->manager->sv_layers, 0, av_len(layer->manager->sv_layers));
         
-        for(i=0; i < av_len(layer->manager->sv_layers); i++)
-            printf("%d ", bag_to_layer(*av_fetch(layer->manager->sv_layers, i, 0))->index);
-        printf("\n");
+        //for(i=0; i < av_len(layer->manager->sv_layers); i++)
+        //    printf("%d ", bag_to_layer(*av_fetch(layer->manager->sv_layers, i, 0))->index);
+        //printf("\n");
 
 void
 layerx_DESTROY( layer )

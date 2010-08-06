@@ -72,7 +72,7 @@ is    ( $layer3->data->{bb},     'cc',           'SDLx::Layer->data->{}' );
 
 ############ SDLx::LayerManager #####################################################
 
-#is    ( $manager->length,                          4,                    'SDLx::LayerManager->length' );
+is    ( $manager->length,                          4,                    'SDLx::LayerManager->length' );
 #isa_ok( $manager->layer(0),                        'SDLx::Layer',        'SDLx::LayerManager->layer' );
 #isa_ok( $manager->layer(1),                        'SDLx::Layer',        'SDLx::LayerManager->layer' );
 #is    ( $manager->layer(3),                        undef,                'SDLx::LayerManager->layer' );

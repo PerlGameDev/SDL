@@ -53,7 +53,8 @@ lmx_new( CLASS, ... )
     char* CLASS
     CODE:
         RETVAL = (SDLx_LayerManager *)safemalloc( sizeof(SDLx_LayerManager) );
-        RETVAL->sv_layers = newAV();
+        RETVAL->layers = newAV();
+        RETVAL->length = 0;
     OUTPUT:
         RETVAL
 
@@ -66,11 +67,12 @@ lmx_add( manager, bag )
         {
             void **pointers   = (void**)(SvIV((SV*)SvRV( bag ))); 
             SDLx_Layer *layer = (SDLx_Layer *)(pointers[0]);
-            layer->index      = av_len( manager->sv_layers ) + 1;
+            layer->index      = av_len( manager->layers ) + 1;
             layer->manager    = manager;
-            av_push( manager->sv_layers, bag);
+            av_push( manager->layers, bag);
             SvREFCNT_inc(bag);
         }
+        manager->length++;
 
 AV *
 lmx_layers( manager )
@@ -88,11 +90,11 @@ lmx_layer( manager, index )
     PREINIT:
         char* CLASS = "SDLx::Layer";
     CODE:
-        if(index >= 0 && index < av_len( manager->sv_layers ) + 1)
+        /*if(index >= 0 && index < av_len( manager->sv_layers ) + 1)
         {
              RETVAL = *av_fetch( manager->sv_layers, index, 0 ) ;
         }
-        else
+        else*/
             XSRETURN_UNDEF;
     OUTPUT:
         RETVAL
@@ -101,7 +103,8 @@ int
 lmx_length( manager )
     SDLx_LayerManager *manager
     CODE:
-        RETVAL = av_len( manager->sv_layers ) + 1;
+        //RETVAL = av_len( manager->sv_layers ) + 1;
+        RETVAL = manager->length;
     OUTPUT:
         RETVAL
 
@@ -111,11 +114,11 @@ lmx_blit( manager, dest )
     SDL_Surface       *dest
     CODE:
         int index  = 0;
-        int length = av_len( manager->sv_layers ) + 1;
+        int length = av_len( manager->layers ) + 1;
         int attached_layers = 0;
         while(index < length)
         {
-            SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->sv_layers, index, 0));
+            SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
             
             if(layer->attached == 0)
                 SDL_BlitSurface(layer->surface, layer->clip, dest, layer->pos);
@@ -132,7 +135,7 @@ lmx_blit( manager, dest )
             index  = 0;
             while(index < length)
             {
-                SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->sv_layers, index, 0));
+                SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
                 
                 if(layer->attached == 1)
                 {
@@ -151,7 +154,7 @@ lmx_by_position( manager, x, y )
     int x
     int y
     CODE:
-        int i;
+        /*int i;
         int match = -1;
         for( i = av_len( manager->sv_layers ); i >= 0 && match < 0; i-- )
         {
@@ -176,7 +179,7 @@ lmx_by_position( manager, x, y )
             RETVAL = *av_fetch(manager->sv_layers, match, 0);
             SvREFCNT_inc(RETVAL);
         }
-        else
+        else*/
             XSRETURN_UNDEF;
     OUTPUT:
         RETVAL
@@ -186,11 +189,12 @@ lmx_ahead( manager, index )
     SDLx_LayerManager *manager
     int               index
     CODE:
-        int matches_count = 0;
+        /*int matches_count = 0;
         SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->sv_layers, index, 0));
         AV *matches       = layers_ahead( layer, &matches_count);
 
-        RETVAL = matches;
+        RETVAL = matches;*/
+        XSRETURN_UNDEF;
     OUTPUT:
         RETVAL
 
@@ -199,18 +203,12 @@ lmx_behind( manager, index )
     SDLx_LayerManager *manager
     int               index
     CODE:
-        int matches_count = 0;
+        /*int matches_count = 0;
         SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->sv_layers, index, 0));
         AV *matches       = layers_behind( layer, &matches_count);
 
-        /*
-        my @more_matches = ();
-        while ( scalar(@matches) && ( @more_matches = $self->get_layers_ahead_layer( $matches[$#matches] ) ) )
-        {
-            push @matches, @more_matches;
-        }*/
-
-        RETVAL = matches;
+        RETVAL = matches;*/
+        XSRETURN_UNDEF;
     OUTPUT:
         RETVAL
 

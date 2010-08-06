@@ -1,14 +1,21 @@
 
+struct list
+{
+    SV *item;
+    struct list *next;
+};
+
 typedef struct SDLx_LayerManager
 {
-    AV *sv_layers;
+    AV *layers;
+    int  length;
 } SDLx_LayerManager;
 
 typedef struct SDLx_Layer
 {
     SDLx_LayerManager *manager;
-    int               index;
-    int               attached;
+    int                index;
+    int                attached;
     SDL_Surface       *surface;
     SDL_Rect          *clip;
     SDL_Rect          *pos;
@@ -79,7 +86,7 @@ int intersection( SDLx_Layer *layer1, SDLx_Layer *layer2 )
 
 void av_clean(AV *av, int from, int to)
 {
-    int i;
+    /*int i;
     int cleaned = 0;
     for(i = from; i < to; i++)
     {
@@ -92,12 +99,13 @@ void av_clean(AV *av, int from, int to)
         
         if(cleaned && i + cleaned <= to)
             av_store(av, i, fetched);
-    }
+    }*/
 }
 
 AV *layers_behind( SDLx_Layer *layer, int *count )
 {
     AV *matches = newAV();
+    /*
     *count      = 0;
     int i;
 
@@ -112,7 +120,7 @@ AV *layers_behind( SDLx_Layer *layer, int *count )
             av_store( matches, *count, sv_layer2 );
             *count++;
         }
-    }
+    }*/
     
     return matches;
 }
@@ -120,6 +128,7 @@ AV *layers_behind( SDLx_Layer *layer, int *count )
 AV *layers_ahead( SDLx_Layer *layer, int *count )
 {
     AV *matches = newAV();
+    /*
     *count      = 0;
     int i;
 
@@ -134,7 +143,7 @@ AV *layers_ahead( SDLx_Layer *layer, int *count )
             av_store( matches, *count, sv_layer2 );
             *count++;
         }
-    }
+    }*/
     
     return matches;
 }
