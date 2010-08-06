@@ -34,7 +34,6 @@ layerx_new( CLASS, surface, ... )
     SDL_Surface *surface
     CODE:
         RETVAL            = (SDLx_Layer *)safemalloc( sizeof(SDLx_Layer) );
-        //RETVAL->manager   = (SDLx_LayerManager *)safemalloc( sizeof(SDLx_LayerManager) );
         RETVAL->index     = -1;
         RETVAL->surface   = (SDL_Surface *)safemalloc( sizeof(SDL_Surface) );
         RETVAL->clip      = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );

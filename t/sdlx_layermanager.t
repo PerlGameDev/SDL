@@ -62,24 +62,24 @@ isa_ok( $layer->data,            'HASH',         'SDLx::Layer->data' );
 is    ( $layer2->data,           undef,          'SDLx::Layer->data' );
 is    ( $layer->data->{id},      7,              'SDLx::Layer->data->{}' );
 is    ( $layer3->data->{bb},     'cc',           'SDLx::Layer->data->{}' );
-#isa_ok( $layer->ahead,           'ARRAY',        'SDLx::Layer->ahead' );
-#isa_ok( $layer->ahead->[0],      'SDLx::Layer',  'SDLx::Layer->ahead->[]' );
-#is    ( $layer->ahead->[0]->x,   60,             'SDLx::Layer->ahead->[]->x' );
-#isa_ok( $layer3->behind,         'ARRAY',        'SDLx::Layer->behind' );
-#isa_ok( $layer3->behind->[1],    'SDLx::Layer',  'SDLx::Layer->behind->[]' );
-#is    ( $layer3->behind->[1]->h, 120,            'SDLx::Layer->behind->[]->h' );
+isa_ok( $layer->ahead,           'ARRAY',        'SDLx::Layer->ahead' );
+isa_ok( $layer->ahead->[0],      'SDLx::Layer',  'SDLx::Layer->ahead->[]' );
+is    ( $layer->ahead->[0]->x,   60,             'SDLx::Layer->ahead->[]->x' );
+isa_ok( $layer3->behind,         'ARRAY',        'SDLx::Layer->behind' );
+isa_ok( $layer3->behind->[1],    'SDLx::Layer',  'SDLx::Layer->behind->[]' );
+is    ( $layer3->behind->[1]->h, 120,            'SDLx::Layer->behind->[]->h' );
 
 
 ############ SDLx::LayerManager #####################################################
 
 is    ( $manager->length,                          4,                    'SDLx::LayerManager->length' );
-#isa_ok( $manager->layer(0),                        'SDLx::Layer',        'SDLx::LayerManager->layer' );
-#isa_ok( $manager->layer(1),                        'SDLx::Layer',        'SDLx::LayerManager->layer' );
-#is    ( $manager->layer(3),                        undef,                'SDLx::LayerManager->layer' );
-#is    ( $manager->layer(-3),                       undef,                'SDLx::LayerManager->layer' );
-#is    ( $manager->layer(0)->h,                     120,                  'SDLx::LayerManager->layer->h' );
-#isa_ok( $manager->layer(0)->surface,               'SDL::Surface',       'SDLx::LayerManager->layer->surface' );
-#is    ( $manager->layer(0)->surface->w,            180,                  'SDLx::LayerManager->layer->surface->w' );
+isa_ok( $manager->layer(0),                        'SDLx::Layer',        'SDLx::LayerManager->layer' );
+isa_ok( $manager->layer(1),                        'SDLx::Layer',        'SDLx::LayerManager->layer' );
+is    ( $manager->layer(4),                        undef,                'SDLx::LayerManager->layer' );
+is    ( $manager->layer(-3),                       undef,                'SDLx::LayerManager->layer' );
+is    ( $manager->layer(0)->h,                     120,                  'SDLx::LayerManager->layer->h' );
+isa_ok( $manager->layer(0)->surface,               'SDL::Surface',       'SDLx::LayerManager->layer->surface' );
+is    ( $manager->layer(0)->surface->w,            180,                  'SDLx::LayerManager->layer->surface->w' );
 is    ( $manager->by_position(10, 30),             undef,                'SDLx::LayerManager->by_position' );
 isa_ok( $manager->by_position(30, 50),             'SDLx::Layer',        'SDLx::LayerManager->by_position' );
 is    ( $manager->by_position(30, 50)->index,      0,                    'SDLx::LayerManager->by_position->index' );

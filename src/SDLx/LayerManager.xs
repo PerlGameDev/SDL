@@ -91,6 +91,7 @@ lmx_layer( manager, index )
         if(index >= 0 && index < av_len( manager->layers ) + 1)
         {
              RETVAL = *av_fetch( manager->layers, index, 0 ) ;
+             SvREFCNT_inc(RETVAL);
         }
         else
             XSRETURN_UNDEF;
@@ -188,8 +189,7 @@ lmx_ahead( manager, index )
     int               index
     CODE:
         SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
-        AV *matches       = layers_ahead( layer );
-        RETVAL            = matches;
+        RETVAL            = layers_ahead( layer );
     OUTPUT:
         RETVAL
 
@@ -199,8 +199,7 @@ lmx_behind( manager, index )
     int               index
     CODE:
         SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
-        AV *matches       = layers_behind( layer );
-        RETVAL            = matches;
+        RETVAL            = layers_behind( layer );
     OUTPUT:
         RETVAL
 
