@@ -83,8 +83,8 @@ is    ( $manager->length,                          4,                    'SDLx::
 #is    ( $manager->layer(0)->h,                     120,                  'SDLx::LayerManager->layer->h' );
 #isa_ok( $manager->layer(0)->surface,               'SDL::Surface',       'SDLx::LayerManager->layer->surface' );
 #is    ( $manager->layer(0)->surface->w,            180,                  'SDLx::LayerManager->layer->surface->w' );
-#is    ( $manager->by_position(10, 30),             undef,                'SDLx::LayerManager->by_position' );
-#isa_ok( $manager->by_position(30, 50),             'SDLx::Layer',        'SDLx::LayerManager->by_position' );
+is    ( $manager->by_position(10, 30),             undef,                'SDLx::LayerManager->by_position' );
+isa_ok( $manager->by_position(30, 50),             'SDLx::Layer',        'SDLx::LayerManager->by_position' );
 #is    ( $manager->by_position(30, 50)->index,      0,                    'SDLx::LayerManager->by_position->index' );
 #is    ( $manager->by_position(60, 60)->index,      2,                    'SDLx::LayerManager->by_position->index' );
 #is    ( $manager->by_position(60, 60)->data->{aa}, 'bb',                 'SDLx::LayerManager->by_position->data->{}' );

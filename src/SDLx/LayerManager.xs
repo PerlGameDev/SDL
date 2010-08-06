@@ -154,11 +154,12 @@ lmx_by_position( manager, x, y )
     int x
     int y
     CODE:
-        /*int i;
-        int match = -1;
-        for( i = av_len( manager->sv_layers ); i >= 0 && match < 0; i-- )
+        int i;
+        SV *match = NULL;
+        for( i = av_len( manager->layers ); i >= 0 && match == NULL; i-- )
         {
-            SDLx_Layer  *layer = bag_to_layer(*av_fetch(manager->sv_layers, i, 0));
+            SV          *bag   = *av_fetch(manager->layers, i, 0);
+            SDLx_Layer  *layer = bag_to_layer(bag);
             SDL_Rect    *clip  = layer->clip;
             SDL_Rect    *pos   = layer->pos;
             SDL_Surface *surf  = layer->surface;
@@ -170,16 +171,16 @@ lmx_by_position( manager, x, y )
                 SDL_GetRGBA( pixel, surf->format, &r, &g, &b, &a );
 
                 if(a > 0)
-                    match = i;
+                    match = bag;
             }
         }
 
-        if(match >= 0)
+        if(match != NULL)
         {
-            RETVAL = *av_fetch(manager->sv_layers, match, 0);
+            RETVAL = match;
             SvREFCNT_inc(RETVAL);
         }
-        else*/
+        else
             XSRETURN_UNDEF;
     OUTPUT:
         RETVAL
