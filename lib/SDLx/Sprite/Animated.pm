@@ -40,7 +40,6 @@ sub new {
 	my $self = $class->SUPER::new(%options);
 
 	$_sequences{ refaddr $self} = $options{sequences};
-	$_sequence{ refaddr $self}  = $options{sequence};
 
 	$self->_store_geometry( $w, $h );
 
@@ -49,6 +48,7 @@ sub new {
 	$self->max_loops( exists $options{max_loops}             ? $options{max_loops}       : 0 );
 	$self->ticks_per_frame( exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
 	$self->type( exists $options{type}                       ? $options{type}            : 'circular' );
+	$self->sequence( $options{sequence} ) if exists $options{sequence};
 
 	$_ticks{ refaddr $self}     = 0;
 	$_direction{ refaddr $self} = 1;
