@@ -305,6 +305,62 @@ is( $clip->y,               48, 'clip->y after seventh next' );
 is( $sprite->current_frame, 2,  'sprite->current_frame after seventh next' );
 is( $sprite->current_loop,  2,  'sprite->current_loop after seventh next' );
 
+$sprite = SDLx::Sprite::Animated->new(
+	image => 'test/data/hero.bmp',
+	rect  => SDL::Rect->new( 40, 50, 48, 48 ),
+);
+$sprite->set_sequences( up => [ [ 0, 0 ], [ 0, 1 ], ], );
+$sprite->sequence('up');
+$clip = $sprite->clip;
+is( $clip->y, 0, 'clip->y after new' );
+
+$sprite->previous;
+is( $clip->y, 48, 'clip->y after first previous' );
+
+$sprite->previous;
+is( $clip->y, 0, 'clip->y after second previous' );
+
+$sprite->previous;
+is( $clip->y, 48, 'clip->y after third previous' );
+
+$sprite = SDLx::Sprite::Animated->new(
+	image => 'test/data/hero.bmp',
+	rect  => SDL::Rect->new( 40, 50, 48, 48 ),
+	type  => 'reverse'
+);
+$sprite->set_sequences( up => [ [ 0, 0 ], [ 0, 1 ], [ 0, 2 ], ], );
+$sprite->sequence('up');
+$clip = $sprite->clip;
+is( $clip->y, 0, 'clip->y after new with type = reverse' );
+
+$sprite->previous;
+is( $clip->y,               96, 'clip->y after first previous' );
+is( $sprite->current_frame, 3,  'sprite->current_frame after first previous' );
+
+$sprite->previous;
+is( $clip->y,               48, 'clip->y after second previous' );
+is( $sprite->current_frame, 2,  'sprite->current_frame after second previous' );
+
+$sprite->previous;
+is( $clip->y,               0, 'clip->y after third previous' );
+is( $sprite->current_frame, 1, 'sprite->current_frame after third previous' );
+
+$sprite->previous;
+is( $clip->y,               48, 'clip->y after fourth previous' );
+is( $sprite->current_frame, 2,  'sprite->current_frame after fourth previous' );
+
+$sprite->previous;
+is( $clip->y,               96, 'clip->y after fifth previous' );
+is( $sprite->current_frame, 3,  'sprite->current_frame after fifth previous' );
+
+$sprite->previous;
+is( $clip->y,               48, 'clip->y after sixth previous' );
+is( $sprite->current_frame, 2,  'sprite->current_frame after sixth previous' );
+
+$sprite->previous;
+is( $clip->y,               0, 'clip->y after seventh previous' );
+is( $sprite->current_frame, 1, 'sprite->current_frame after seventh previous' );
+
 done_testing;
 
 #reset the old video driver

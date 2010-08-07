@@ -227,9 +227,28 @@ sub next {
 	return $self;
 }
 
-# TODO
 sub previous {
 	my $self = shift;
+
+	return if $_max_loops{ refaddr $self} && $_current_loop{ refaddr $self } > $_max_loops{ refaddr $self};
+
+	$_ticks{ refaddr $self} = 0;
+
+	return if @{ $self->_sequence } == 1;
+
+	my $previous_frame = ( $_current_frame{ refaddr $self} - 1 - $_direction{ refaddr $self} ) % @{ $self->_sequence };
+
+    if ( $previous_frame == 0 ) {
+		if ( $_type{ refaddr $self} eq 'reverse' ) {
+
+			if ( $_direction{ refaddr $self} == -1 ) {
+				$previous_frame = 1;
+			}
+
+			$_direction{ refaddr $self} *= -1;
+		}
+    }
+	$_current_frame{ refaddr $self} = $previous_frame + 1;
 
 	$self->_update_clip;
 
