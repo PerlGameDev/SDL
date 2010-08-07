@@ -142,6 +142,14 @@ Uses $string to set the type of animation loop when it reaches the last
 frame in the strip. See the type() method below for information on
 available looping types.
 
+=item * sequences => { $string => [ [ $x1, $y1 ], [ $x2, $y2 ], ... ], ... }
+
+Uses the supplied hashref to define named sequences of frames.
+
+=item * sequence => $string
+
+Uses $string to set the current sequence.
+
 =back
 
 =head2 step_x()
@@ -210,6 +218,16 @@ Case is irrelevant for type(), so for example 'Circular', 'CIRCULAR' and
 to be lowercase.
 
 Default value is 'circular'.
+
+=head2 set_sequences( $string => [ [ $x1, $y1 ], [ $x2, $y2 ], ... ], ... )
+
+Uses the supplied hashref to define named sequences of frames. Replaces any
+previously defined sequences.
+
+=head2 sequence( $string )
+
+Uses $string to set the current sequence. Goes to the first frame in the
+sequence and resets the loop counter.
 
 =head2 next()
 
