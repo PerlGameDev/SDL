@@ -152,13 +152,6 @@ sub ticks_per_frame {
 
 sub current_frame {
 	my ( $self, $frame ) = @_;
-
-	if ($frame) {
-
-		# TODO: Validate frame.
-		$_current_frame{ refaddr $self} = $frame;
-	}
-
 	return $_current_frame{ refaddr $self};
 }
 
