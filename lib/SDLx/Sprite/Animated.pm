@@ -238,7 +238,7 @@ sub previous {
 
 	my $previous_frame = ( $_current_frame{ refaddr $self} - 1 - $_direction{ refaddr $self} ) % @{ $self->_sequence };
 
-    if ( $previous_frame == 0 ) {
+	if ( $previous_frame == 0 ) {
 		if ( $_type{ refaddr $self} eq 'reverse' ) {
 
 			if ( $_direction{ refaddr $self} == -1 ) {
@@ -247,7 +247,7 @@ sub previous {
 
 			$_direction{ refaddr $self} *= -1;
 		}
-    }
+	}
 	$_current_frame{ refaddr $self} = $previous_frame + 1;
 
 	$self->_update_clip;
