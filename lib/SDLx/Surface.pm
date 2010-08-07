@@ -328,4 +328,43 @@ sub draw_circle {
 	return $self;
 }
 
+=pod
+
+sub draw_trigon {
+	my ( $self, $center, $vextexes, $color) = @_;
+
+	return $self;
+}
+
+sub draw_arc {
+	my ( $self, $vector, $radius, $start, $end, $color ) = @_;
+
+	return $self;
+}
+
+sub draw_ellipse {
+	my ( $self, $center, $radius, $color, $antialias ) = @_;
+
+	return $self;
+}
+
+sub draw_polygon {
+	my ( $self, $vector, $color ) = @_;
+
+	return $self;
+
+}
+
+sub draw_bezier {
+	my ($self, $vector, $smooth, $color) = @_;
+
+}
+
+sub draw_text {
+	my ($self, $vector, $height, $color, %options ) = @_;
+
+}
+
+=cut
+
 1;
