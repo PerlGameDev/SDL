@@ -17,6 +17,8 @@ my %_width;
 my %_height;
 my %_step_x;
 my %_step_y;
+my %_offset_x;
+my %_offset_y;
 my %_type;
 my %_max_loops;
 my %_ticks_per_frame;
@@ -42,11 +44,15 @@ sub new {
 
 	$self->_store_geometry( $w, $h );
 
-	$self->step_x( exists $options{step_x}                   ? $options{step_x}          : $self->clip->w );
-	$self->step_y( exists $options{step_y}                   ? $options{step_y}          : $self->clip->h );
+	$self->step_x( exists $options{step_x} ? $options{step_x} : $self->clip->w );
+	$self->step_y( exists $options{step_y} ? $options{step_y} : $self->clip->h );
+	$_offset_x{ refaddr $self} = exists $options{clip} ? $options{clip}->x : 0;
+	$_offset_y{ refaddr $self} = exists $options{clip} ? $options{clip}->y : 0;
+
 	$self->max_loops( exists $options{max_loops}             ? $options{max_loops}       : 0 );
 	$self->ticks_per_frame( exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
 	$self->type( exists $options{type}                       ? $options{type}            : 'circular' );
+
 	$self->sequence( $options{sequence} ) if exists $options{sequence};
 
 	$_ticks{ refaddr $self}     = 0;
@@ -62,6 +68,8 @@ sub DESTROY {
 	delete $_height{ refaddr $self};
 	delete $_step_x{ refaddr $self};
 	delete $_step_y{ refaddr $self};
+	delete $_offset_x{ refaddr $self};
+	delete $_offset_y{ refaddr $self};
 	delete $_type{ refaddr $self};
 	delete $_max_loops{ refaddr $self};
 	delete $_ticks_per_frame{ refaddr $self};
@@ -283,8 +291,8 @@ sub _update_clip {
 	my $clip  = $self->clip;
 	my $frame = $self->_frame;
 
-	$clip->x( $frame->[0] * $_step_x{ refaddr $self} );
-	$clip->y( $frame->[1] * $_step_y{ refaddr $self} );
+	$clip->x( $_offset_x{ refaddr $self} + $frame->[0] * $_step_x{ refaddr $self} );
+	$clip->y( $_offset_y{ refaddr $self} + $frame->[1] * $_step_y{ refaddr $self} );
 }
 
 sub alpha_key {
