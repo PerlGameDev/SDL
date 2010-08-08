@@ -138,9 +138,9 @@ sub type {
 }
 
 sub max_loops {
-    my $self = shift;
+	my $self = shift;
 
-	if ( @_ ) {
+	if (@_) {
 		$_max_loops{ refaddr $self} = shift;
 	}
 
