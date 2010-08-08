@@ -361,6 +361,25 @@ $sprite->previous;
 is( $clip->y,               0, 'clip->y after seventh previous' );
 is( $sprite->current_frame, 1, 'sprite->current_frame after seventh previous' );
 
+$sprite = SDLx::Sprite::Animated->new(
+    image => 'test/data/hero.png',
+    rect  => SDL::Rect->new(40, 50, 48, 48),
+    clip  => SDL::Rect->new(48, 48, 48, 48),
+    sequences => { up => [ [ 0, 0 ], [ 0, 1 ] ] },
+    sequence  => 'up',
+);
+$clip = $sprite->clip;
+is( $clip->x, 48, 'clip->x after new with clip' );
+is( $clip->y, 48, 'clip->y after new with clip' );
+
+$sprite->next();
+is( $clip->x, 48, 'clip->x after first next' );
+is( $clip->y, 96, 'clip->y after first next' );
+
+$sprite->next();
+is( $clip->x, 48, 'clip->x after second next' );
+is( $clip->y, 48, 'clip->y after second next' );
+
 done_testing;
 
 #reset the old video driver
