@@ -201,7 +201,10 @@ sub sequence {
 
 	if ($sequence) {
 
-		#TODO: Validate sequence.
+		if ( !defined( $_sequences{ refaddr $self}{$sequence} ) ) {
+			warn 'Unknown sequence: ', $sequence;
+			return;
+		}
 		$_sequence{ refaddr $self}      = $sequence;
 		$_current_frame{ refaddr $self} = 1;
 		$_current_loop{ refaddr $self}  = 1;
