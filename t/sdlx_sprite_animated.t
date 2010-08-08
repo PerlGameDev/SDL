@@ -380,6 +380,27 @@ $sprite->next();
 is( $clip->x, 48, 'clip->x after second next' );
 is( $clip->y, 48, 'clip->y after second next' );
 
+$sprite = SDLx::Sprite::Animated->new(
+	image => 'test/data/hero.png',
+	rect  => SDL::Rect->new( 40, 50, 48, 48 ),
+);
+$clip = $sprite->clip;
+is( $clip->x, 0, 'clip->x after new with no sequences' );
+is( $clip->y, 0, 'clip->y after new with no sequences' );
+
+my $sequences = [
+	[ 0, 0 ],  [ 48, 0 ],  [ 96, 0 ],  [ 144, 0 ],  [ 192, 0 ],
+	[ 0, 48 ], [ 48, 48 ], [ 96, 48 ], [ 144, 48 ], [ 192, 48 ],
+	[ 0, 96 ], [ 48, 96 ], [ 96, 96 ], [ 144, 96 ], [ 192, 96 ],
+];
+
+foreach my $count ( 1 .. 20 ) {
+	$sprite->next;
+	my $s = $sequences->[ $count % @$sequences ];
+	is( $clip->x, $s->[0], 'clip->x after ' . $count . '-th next' );
+	is( $clip->y, $s->[1], 'clip->y after ' . $count . '-th next' );
+}
+
 done_testing;
 
 #reset the old video driver

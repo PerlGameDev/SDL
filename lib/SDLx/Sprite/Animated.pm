@@ -40,8 +40,6 @@ sub new {
 
 	my $self = $class->SUPER::new(%options);
 
-	$_sequences{ refaddr $self} = $options{sequences};
-
 	$self->_store_geometry( $w, $h );
 
 	$self->step_x( exists $options{step_x} ? $options{step_x} : $self->clip->w );
@@ -53,6 +51,11 @@ sub new {
 	$self->ticks_per_frame( exists $options{ticks_per_frame} ? $options{ticks_per_frame} : 1 );
 	$self->type( exists $options{type}                       ? $options{type}            : 'circular' );
 
+	if ( exists $options{sequences} ) {
+		$_sequences{ refaddr $self} = $options{sequences};
+	} else {
+		$self->_init_default_sequence();
+	}
 	$self->sequence( $options{sequence} ) if exists $options{sequence};
 
 	$_ticks{ refaddr $self}     = 0;
@@ -86,7 +89,24 @@ sub load {
 	my $image = shift;
 	$self->SUPER::load($image);
 	$self->_restore_geometry;
+	$self->_init_default_sequence;
 	return $self;
+}
+
+sub _init_default_sequence {
+	my $self = shift;
+
+	my $max_x = int( ( $self->surface->w - $_offset_x{ refaddr $self} ) / $self->step_x );
+	my $max_y = int( ( $self->surface->h - $_offset_y{ refaddr $self} ) / $self->step_y );
+
+	my @sequence;
+	foreach my $y ( 0 .. $max_y - 1 ) {
+		foreach my $x ( 0 .. $max_x - 1 ) {
+			push @sequence, [ $x, $y ];
+		}
+	}
+	$_sequences{ refaddr $self} = { 'default' => \@sequence };
+	$self->sequence('default');
 }
 
 sub _store_geometry {
