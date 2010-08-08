@@ -10,7 +10,7 @@ SDLx::App - a SDL perl extension
 Extension
 
 =head1 SYNOPSIS
-		
+
     use SDL;
     use SDLx::App; 
     use SDL::Event;
@@ -23,7 +23,7 @@ Extension
         depth  => 32
     ); 
 
-This is the manual way of doing things	
+This is the manual way of doing things
 
     my $event = SDL::Event->new; # create a new event 
     
@@ -35,7 +35,7 @@ This is the manual way of doing things
         exit if $type == SDL_QUIT; 
     }
 
-An alternative to the manual Event processing is the L<SDLx::App::loop> .
+An alternative to the manual Event processing is the L<SDLx::App::loop>.
 
 =head1 DESCRIPTION
 
@@ -53,49 +53,38 @@ C<SDLx::App::new> takes a series of named parameters:
 
 =over 4
 
-=item *
+=item * title
 
-title
+=item * icon_title
 
-=item *
+=item * icon
 
-icon_title
+=item * width
 
-=item *
+=item * height
 
-icon
+=item * depth
 
-=item *
+=item * flags
 
-width
-
-=item *
-
-height
-
-=item *
-
-depth
-
-=item *
-
-flags
-
-=item *
-
-resizeable
+=item * resizeable
 
 =back
 
-=head2 title
 
-C<SDLx::App::title> takes 0, 1, or 2  arguments.  It returns the current
-application window title.  If one parameter is passed, both the window
-title and icon title will be set to its value.  If two parameters are
-passed the window title will be set to the first, and the icon title
-to the second.
+=head2 title()
 
-=head2 delay
+=head2 title( $new_title )
+
+=head2 title( $window_title, $icon_title )
+
+C<SDLx::App::title> takes 0, 1, or 2 arguments. If no parameter is given,
+it returns the current application window title. If one parameter is
+passed, both the window title and icon title will be set to its value.
+If two parameters are passed the window title will be set to the first,
+and the icon title to the second.
+
+=head2 delay( $ms )
 
 C<SDLx::App::delay> takes 1 argument, and will sleep the application for
 that many ms.
@@ -108,10 +97,10 @@ C<SDLx::App::ticks> returns the number of ms since the application began.
 
 C<SDLx::App::error> returns the last error message set by the SDL.
 
-=head2 resize
+=head2 resize( $width, $height )
 
-C<SDLx::App::resize> takes a new height and width of the application
-if the application was originally created with the resizable option.
+C<SDLx::App::resize> takes a new width and height of the application. Only
+works if the application was originally created with the resizable option.
 
 =head2 fullscreen
 
@@ -119,32 +108,29 @@ C<SDLx::App::fullscreen> toggles the application in and out of fullscreen mode.
 
 =head2 iconify
 
-C<SDLx::App::iconify> iconifies the applicaiton window.
+C<SDLx::App::iconify> iconifies the application window.
 
-=head2 grab_input
+=head2 grab_input( $CONSTANT )
 
 C<SDLx::App::grab_input> can be used to change the input focus behavior of
-the application.  It takes one argument, which should be one of the following:
+the application. It takes one argument, which should be one of the following:
 
 =over 4
 
-=item *
-SDL_GRAB_QUERY
+=item * SDL_GRAB_QUERY
 
-=item *
-SDL_GRAB_ON
+=item * SDL_GRAB_ON
 
-=item *
-SDL_GRAB_OFF
+=item * SDL_GRAB_OFF
 
 =back
 
-=head2 loop
+=head2 loop( \%actions )
 
 C<SDLx::App::loop> is a simple event loop method which takes a reference to a hash
-of event handler subroutines.  The keys of the hash must be SDL event types such
-as SDL_QUIT(), SDL_KEYDOWN(), and the like.  The event method recieves as its parameter 
-the event object used in the loop.
+of event handler subroutines. The keys of the hash must be SDL event types such
+as SDL_QUIT(), SDL_KEYDOWN(), and the like. When called, the event method recieves
+as its parameter the event object used in the loop.
  
 Example:
 
@@ -165,13 +151,15 @@ Example:
 =head2 sync
 
 C<SDLx::App::sync> encapsulates the various methods of syncronizing the screen with the
-current video buffer.  C<SDLx::App::sync> will do a fullscreen update, using the double buffer
-or OpenGL buffer if applicable.  This is prefered to calling flip on the application window.
+current video buffer. C<SDLx::App::sync> will do a fullscreen update, using the double buffer
+or OpenGL buffer if applicable. This is prefered to calling flip on the application window.
 
-=head2 attribute ( attr, [value] )
+=head2 attribute( $attr )
 
-C<SDLx::App::attribute> allows one to set and get GL attributes.  By passing a value
-in addition to the attribute selector, the value will be set.  C<SDL:::App::attribute>
+=head2 attribute( $attr, $value )
+
+C<SDLx::App::attribute> allows one to get and set GL attributes. By passing a value
+in addition to the attribute selector, the value will be set. C<SDL:::App::attribute>
 always returns the current value of the given attribute, or croaks on failure.
 
 =head1 AUTHOR
@@ -183,4 +171,4 @@ Kartik Thakore
 
 L<perl> L<SDL::Surface> L<SDL::Event>  L<SDL::OpenGL>
 
-=cut	
+=cut
