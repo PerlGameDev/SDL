@@ -197,8 +197,6 @@ sub _frame {
 sub next {
 	my $self = shift;
 
-	#$_{ refaddr $self}
-
 	return if @{ $self->_sequence } == 1;
 
 	return if $_max_loops{ refaddr $self} && $_current_loop{ refaddr $self } > $_max_loops{ refaddr $self};
