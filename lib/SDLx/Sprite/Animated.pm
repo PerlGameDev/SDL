@@ -302,13 +302,9 @@ sub draw {
 	$surface = SDLx::Validate::surface($surface);
 
 	$_ticks{ refaddr $self}++;
-	$self->next
-		if $_started{ refaddr $self} && $_ticks{ refaddr $self} % $_ticks_per_frame{ refaddr $self} == 0;
+	$self->next if $_started{ refaddr $self} && $_ticks{ refaddr $self} % $_ticks_per_frame{ refaddr $self} == 0;
 
-	SDL::Video::blit_surface(
-		$self->surface, $self->clip, $surface,
-		$self->rect
-	);
+	SDL::Video::blit_surface( $self->surface, $self->clip, $surface, $self->rect );
 
 	return $self;
 }
