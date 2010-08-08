@@ -7,10 +7,9 @@ use SDL;
 use SDL::Video;
 use SDL::Rect;
 use SDLx::Sprite;
+use SDLx::Validate;
 
 use base 'SDLx::Sprite';
-
-use Carp ();
 
 # inside out
 my %_ticks;
@@ -300,12 +299,11 @@ sub alpha_key {
 sub draw {
 	my ( $self, $surface ) = @_;
 
+	$surface = SDLx::Validate::surface($surface);
+
 	$_ticks{ refaddr $self}++;
 	$self->next
 		if $_started{ refaddr $self} && $_ticks{ refaddr $self} % $_ticks_per_frame{ refaddr $self} == 0;
-
-	Carp::croak 'destination must be a SDL::Surface'
-		unless ref $surface and $surface->isa('SDL::Surface');
 
 	SDL::Video::blit_surface(
 		$self->surface, $self->clip, $surface,
