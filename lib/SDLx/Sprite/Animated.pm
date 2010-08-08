@@ -130,10 +130,10 @@ sub type {
 }
 
 sub max_loops {
-	my ( $self, $max ) = @_;
+    my $self = shift;
 
-	if ( @_ > 1 ) {
-		$_max_loops{ refaddr $self} = $max;
+	if ( @_ ) {
+		$_max_loops{ refaddr $self} = shift;
 	}
 
 	return $_max_loops{ refaddr $self};
