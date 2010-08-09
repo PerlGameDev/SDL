@@ -20,7 +20,10 @@ TODO: {
 }
 
 
-my $app = SDLx::Controller->new();
+my $app = SDLx::Controller->new(
+	dt     => 1,
+	min_ms => 5,
+);
 
 isa_ok( $app, 'SDLx::Controller' );
 
@@ -33,5 +36,19 @@ is( $app->move_handlers->[0], \&dummy_sub, 'handler added correctly' );
 $app->remove_move_handler( \&dummy_sub );
 
 is( scalar @{ $app->move_handlers }, 0, 'handler removed with coderef' );
+
+sub test_move {
+	my $part = shift;
+	ok( do {$part > 0 and $part <= 1}, "move handle \$_[0] of $part was > 0 and <= 1" );
+}
+sub test_show {
+	my $ticks = shift;
+	ok( $ticks >= 5, "show handle \$_[0] of $ticks was >= 5" );
+	$app->quit();
+}
+
+$app->add_move_handler(\&test_move);
+$app->add_show_handler(\&test_show);
+$app->run();
 
 done_testing;

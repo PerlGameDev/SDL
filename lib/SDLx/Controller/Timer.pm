@@ -58,7 +58,6 @@ sub get_ticks {
 		} else {
 			my $update = SDL::get_ticks();
 			my $diff   = $update - $self->{started_ticks};
-			$self->{started_ticks} = $update;
 			return $diff;
 		}
 	}
