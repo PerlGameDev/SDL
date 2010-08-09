@@ -31,7 +31,10 @@ sub new {
 	$_delta{ refaddr $self}->start(); # should do this after on_load
 	$_dt{ refaddr $self}             = $args{dt}     || 1;
 	$_min_ms{ refaddr $self}         = $args{min_ms} || 1;
-	$_fps{ refaddr $self}            = SDLx::FPS->new( $args{fps} ) if defined $args{fps};
+	if(defined $args{fps}) {
+		require SDLx::FPS;
+		$_fps{ refaddr $self} = SDLx::FPS->new( $args{fps} )
+	}
 	$_quit{ refaddr $self}           = $args{quit};
 	$_event{ refaddr $self}          = $args{event};
 	$_event_handlers{ refaddr $self} = $args{event_handlers};
@@ -57,7 +60,6 @@ sub DESTROY {
 
 sub run {
 	my $self = shift;
-	$_delta{ refaddr $self}->start();
 	while ( !$_quit{ refaddr $self} ) {
 		$self->_event;
 		my $delta_time = $_delta{ refaddr $self}->get_ticks();
