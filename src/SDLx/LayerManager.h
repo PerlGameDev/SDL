@@ -1,7 +1,10 @@
 
 typedef struct SDLx_LayerManager
 {
-    AV *layers;
+    AV          *layers;
+    SDL_Surface *saveshot;
+    SDL_Surface *dest;
+    int          saved;
 } SDLx_LayerManager;
 
 typedef struct SDLx_Layer
@@ -9,6 +12,7 @@ typedef struct SDLx_Layer
     SDLx_LayerManager *manager;
     int                index;
     int                attached;
+    int                touched;
     SDL_Surface       *surface;
     SDL_Rect          *clip;
     SDL_Rect          *pos;
@@ -115,6 +119,19 @@ AV *layers_ahead( SDLx_Layer *layer )
             SvREFCNT_inc(bag);
             av_store( matches, count, bag );
             count++;
+        }
+    }
+    
+    if(count)
+    {
+        AV *ahead = layers_ahead(bag_to_layer(*av_fetch(matches, av_len(matches), 0)));
+        if(av_len(ahead) >= 0)
+        {
+            for( i = 0; i <= av_len(ahead); i++ )
+            {
+                av_store( matches, count, *av_fetch(ahead, i, 0));
+                count++;
+            }
         }
     }
     

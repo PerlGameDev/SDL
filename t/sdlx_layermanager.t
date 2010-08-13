@@ -91,10 +91,10 @@ is    ( $manager->ahead(0)->[0]->x,                60,                   'SDLx::
 isa_ok( $manager->behind(2),                       'ARRAY',              'SDLx::LayerManager->behind' );
 isa_ok( $manager->behind(2)->[1],                  'SDLx::Layer',        'SDLx::LayerManager->behind->[]' );
 is    ( $manager->behind(2)->[1]->h, 120,          'SDLx::LayerManager->behind->[]->h' );
-is    ( $layer->foreground,       undef,           'SDLx::Layer->foreground' );
-is    ( $layer3->foreground,      undef,           'SDLx::Layer->foreground' );
-is    ( $layer2->foreground,      undef,           'SDLx::Layer->foreground' );
-        $manager->blit($display);                                             pass('SDLx::LayerManager->blit');
+isa_ok( $layer->foreground,                        'SDLx::Layer',        'SDLx::Layer->foreground' );
+isa_ok( $layer3->foreground,                       'SDLx::Layer',        'SDLx::Layer->foreground' );
+isa_ok( $layer2->foreground,                       'SDLx::Layer',        'SDLx::Layer->foreground' );
+        $manager->blit($display);                                   pass('SDLx::LayerManager->blit');
 SDL::Video::update_rect( $display, 0, 0, 0, 0 );
 
 sleep(2);

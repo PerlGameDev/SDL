@@ -33,23 +33,24 @@ layerx_new( CLASS, surface, ... )
     char* CLASS
     SDL_Surface *surface
     CODE:
-        RETVAL            = (SDLx_Layer *)safemalloc( sizeof(SDLx_Layer) );
-        RETVAL->index     = -1;
-        RETVAL->surface   = (SDL_Surface *)safemalloc( sizeof(SDL_Surface) );
-        RETVAL->clip      = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
-        RETVAL->pos       = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
+        RETVAL               = (SDLx_Layer *)safemalloc( sizeof(SDLx_Layer) );
+        RETVAL->index        = -1;
+        RETVAL->surface      = (SDL_Surface *)safemalloc( sizeof(SDL_Surface) );
+        RETVAL->clip         = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
+        RETVAL->pos          = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
+        RETVAL->touched      = 1;
         RETVAL->attached     = 0;
         RETVAL->attached_pos = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
         RETVAL->attached_rel = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
-        RETVAL->surface   = SDL_ConvertSurface(surface, surface->format, surface->flags);
-        (RETVAL->pos)->x  = 0;
-        (RETVAL->pos)->y  = 0;
-        (RETVAL->pos)->w  = (RETVAL->surface)->w;
-        (RETVAL->pos)->h  = (RETVAL->surface)->h;
-        (RETVAL->clip)->x = 0;
-        (RETVAL->clip)->y = 0;
-        (RETVAL->clip)->w = (RETVAL->surface)->w;
-        (RETVAL->clip)->h = (RETVAL->surface)->h;
+        RETVAL->surface      = SDL_ConvertSurface(surface, surface->format, surface->flags);
+        (RETVAL->pos)->x     = 0;
+        (RETVAL->pos)->y     = 0;
+        (RETVAL->pos)->w     = (RETVAL->surface)->w;
+        (RETVAL->pos)->h     = (RETVAL->surface)->h;
+        (RETVAL->clip)->x    = 0;
+        (RETVAL->clip)->y    = 0;
+        (RETVAL->clip)->w    = (RETVAL->surface)->w;
+        (RETVAL->clip)->h    = (RETVAL->surface)->h;
         
         if(SvROK(ST(items - 1)) && SVt_PVHV == SvTYPE(SvRV(ST(items - 1))))
         {
@@ -122,8 +123,10 @@ layerx_surface( layer, ... )
     CODE:
         if(items > 1)
         {
-            SDL_Surface *surface = bag_to_surface(ST(1));
-            layer->surface       = SDL_ConvertSurface(surface, surface->format, surface->flags);
+            SDL_Surface *surface  = bag_to_surface(ST(1));
+            layer->surface        = SDL_ConvertSurface(surface, surface->format, surface->flags);
+            layer->touched        = 1;
+            layer->manager->saved = 0;
         }
     
         RETVAL = _sv_ref( layer->surface, sizeof(SDL_Surface *), sizeof(SDL_Surface), "SDL::Surface" );
@@ -193,6 +196,7 @@ layerx_attach( layer, x = -1, y = -1 )
         layer->attached_pos->y = layer->pos->x;
         layer->attached_rel->x = layer->pos->x - x;
         layer->attached_rel->y = layer->pos->y - y;
+        layer->manager->saved = 0;
 
 AV *
 layerx_detach_xy( layer, x = -1, y = -1 )
@@ -203,6 +207,7 @@ layerx_detach_xy( layer, x = -1, y = -1 )
         layer->attached = 0;
         layer->pos->x   = x;
         layer->pos->y   = y;
+        layer->manager->saved = 0;
         
         RETVAL = newAV();
         av_store(RETVAL, 0, newSViv(layer->attached_pos->x));
@@ -210,20 +215,17 @@ layerx_detach_xy( layer, x = -1, y = -1 )
     OUTPUT:
         RETVAL
 
-void
+SV *
 layerx_foreground( bag )
     SV *bag
     CODE:
-        SDLx_Layer *layer = bag_to_layer(bag);
-        SDLx_LayerManager *manager= layer->manager;
-        int index = layer->index; // we cant trust its value
+        SDLx_Layer        *layer   = bag_to_layer(bag);
+        SDLx_LayerManager *manager = layer->manager;
+        int index                  = layer->index; // we cant trust its value
+        layer->manager->saved = 0;
         int i;
         
-        for(i=0; i <= av_len(manager->layers); i++)
-            printf("%d ", bag_to_layer(*av_fetch(manager->layers, i, 0))->index);
-        printf("\n");
-        
-        for(i=0; i <= av_len(manager->layers); i++)
+        for(i = 0; i <= av_len(manager->layers); i++)
         {
             if(*av_fetch(manager->layers, i, 0) == bag) // what bag do we have? => finding the right layer index
             {
@@ -232,16 +234,16 @@ layerx_foreground( bag )
             }
         }
 
-        for(i=index; i <av_len(manager->layers); i++)
+        for(i = index; i < av_len(manager->layers); i++)
         {
-            AvARRAY(manager->layers)[i] = AvARRAY(manager->layers)[i+1];
+            AvARRAY(manager->layers)[i] = AvARRAY(manager->layers)[i + 1];
+            bag_to_layer(AvARRAY(manager->layers)[i])->index = i;
         }
         AvARRAY(manager->layers)[i] = bag;
-
-        
-        for(i=0; i <= av_len(manager->layers); i++)
-            printf("%d ", bag_to_layer(*av_fetch(manager->layers, i, 0))->index);
-        printf("\n");
+        bag_to_layer(AvARRAY(manager->layers)[i])->index = i;
+        SvREFCNT_inc( bag );
+        RETVAL                      = newSVsv(bag);
+        SvREFCNT_inc(RETVAL);
 
 void
 layerx_DESTROY( layer )
