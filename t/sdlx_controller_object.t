@@ -33,4 +33,11 @@ is($av->[0], 19);
 is($av->[1], 10);
 is($av->[2], 0.0);
 
+my $hv = $obj->interpolate(0.5);
+
+isa_ok ( $hv, 'HASH'); 
+
+print Dumper $hv;
+
+
 done_testing;
