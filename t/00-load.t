@@ -63,7 +63,9 @@ BEGIN {
 		SDLx::Surface::TiedMatrix
 		SDLx::Surface::TiedMatrixRow
 
-
+		SDLx::Controller
+		SDLx::Controller::Object
+		SDLx::Controller::Timer
 
 		/;
 	plan tests => scalar @modules;
