@@ -38,4 +38,22 @@ my $hv = $obj->interpolate(0.5);
 
 isa_ok ( $hv, 'SDLx::Controller::State'); 
 
+is($hv->x, 1);
+is($hv->y, 2);
+is($hv->rotation, 5);
+
+
+$obj->update( 2, 0.5 );
+
+$hv = $obj->interpolate(0.5);
+
+isa_ok ( $hv, 'SDLx::Controller::State'); 
+
+is($hv->x, 1.75);
+is($hv->y, 3.625);
+is($hv->rotation, 7.6875);
+
+
+
+
 done_testing;

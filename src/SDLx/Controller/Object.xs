@@ -43,19 +43,19 @@ AV* acceleration_cb( SDLx_Object * obj, float t )
 	return array;
 }
 
-void evaluate(SDLx_Derivative* out, SDLx_State* initial, float t)
+void evaluate(SDLx_Object* obj, SDLx_Derivative* out, SDLx_State* initial, float t)
 {
 	out->dx = initial->v_x;
 	out->dy = initial->v_y;
 	out->drotation = initial->ang_v;
-	AV* accel = acceleration(initial, t);
+	AV* accel = acceleration_cb(obj, t);
 	out->dv_x = sv_nv(av_pop(accel));
 	out->dv_y = sv_nv(av_pop(accel));
 	out->dang_v = sv_nv(av_pop(accel));
 
 }
 
-void evaluate_dt(SDLx_Derivative* out, SDLx_State* initial, float t, float dt, SDLx_Derivative* d)
+void evaluate_dt(SDLx_Object* obj, SDLx_Derivative* out, SDLx_State* initial, float t, float dt, SDLx_Derivative* d)
 {
 	SDLx_State state;
 	state.x = initial->x + d->dx*dt;
@@ -70,7 +70,7 @@ void evaluate_dt(SDLx_Derivative* out, SDLx_State* initial, float t, float dt, S
 	out->dy = state.v_y;
 	out->drotation = state.ang_v;
 
-	AV* accel = acceleration(initial, t+dt);
+	AV* accel = acceleration_cb(obj, t+dt);
 	out->dv_x = sv_nv(av_pop(accel));
 	out->dv_y = sv_nv(av_pop(accel));
 	out->dang_v = sv_nv(av_pop(accel));
@@ -84,10 +84,10 @@ void integrate( SDLx_Object* object, float t, float dt)
 	SDLx_Derivative* c = (SDLx_Derivative *)safemalloc( sizeof(SDLx_Derivative) );
 	SDLx_Derivative* d = (SDLx_Derivative *)safemalloc( sizeof(SDLx_Derivative) );
 
-	 evaluate(a, state, t);
-	 evaluate_dt(b, state, t, dt*0.5f, a);
-	 evaluate_dt(c, state, t, dt*0.5f, b);
-	 evaluate_dt(d, state, t, dt, c);
+	 evaluate(object, a, state, t);
+	 evaluate_dt(object, b, state, t, dt*0.5f, a);
+	 evaluate_dt(object, c, state, t, dt*0.5f, b);
+	 evaluate_dt(object, d, state, t, dt, c);
 	
 	const float dxdt = 1.0f/6.0f * (a->dx + 2.0f*(b->dx + c->dx) + d->dx);
 	const float dv_xdt = 1.0f/6.0f * (a->dv_x + 2.0f*(b->dv_x + c->dv_x) + d->dv_x);

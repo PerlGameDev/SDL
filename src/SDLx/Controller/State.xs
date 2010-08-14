@@ -10,7 +10,7 @@
 #include "SDLx/Controller/Object.h"
 
 
-MODULE = SDLx::Controller::State    PACKAGE = SDLx::Controller::State    PREFIX = state__
+MODULE = SDLx::Controller::State    PACKAGE = SDLx::Controller::State    PREFIX = state_
 
 SDLx_State *
 state_new( CLASS, ... )
