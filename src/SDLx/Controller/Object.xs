@@ -16,17 +16,20 @@ AV* acceleration_cb( SDLx_Object * obj, float t )
 	dSP;
 	AV* array = newAV();
 	int count;
+	SV * eventref = newSV( sizeof(SDLx_State *) ); 	
+	void * copyState = safemalloc( sizeof(SDLx_State) );
+	memcpy( copyState, obj->current, sizeof(SDLx_State) );
+
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
+	
+		 void** pointers = malloc(2 * sizeof(void*));
+		  pointers[0] = (void*)copyState;
+		  pointers[1] = (void*)0;
 
 	XPUSHs( sv_2mortal(newSVnv(t)));
-	XPUSHs( sv_2mortal(newSVnv(obj->current->x)));
-	XPUSHs( sv_2mortal(newSVnv(obj->current->y)));
-	XPUSHs( sv_2mortal(newSVnv(obj->current->v_x)));
-	XPUSHs( sv_2mortal(newSVnv(obj->current->v_y)));
-	XPUSHs( sv_2mortal(newSVnv(obj->current->rotation)));
-	XPUSHs( sv_2mortal(newSVnv(obj->current->ang_v)));
+	XPUSHs( sv_setref_pv( eventref, "SDLx::Controller::State", (void *)pointers) );
 
 	PUTBACK;
 
@@ -119,18 +122,26 @@ objx_new( CLASS, ... )
        RETVAL = (SDLx_Object * ) safemalloc( sizeof(SDLx_Object) );
        RETVAL->previous = (SDLx_State * ) safemalloc( sizeof(SDLx_State) ); 
        RETVAL->current  = (SDLx_State * ) safemalloc( sizeof(SDLx_State) );
+	
+	RETVAL->current->x = 0;
+	RETVAL->current->y = 0;
+	RETVAL->current->v_x = 0;
+	RETVAL->current->v_y = 0;
+	RETVAL->current->rotation = 0;
+	RETVAL->current->ang_v = 0;
+
+        if(items > 1)
+            (RETVAL->current)->x = SvIV(ST(1));
         if(items > 2)
-            (RETVAL->current)->x = SvIV(ST(2));
+            (RETVAL->current)->y = SvIV(ST(2));
         if(items > 3)
-            (RETVAL->current)->y = SvIV(ST(3));
+            (RETVAL->current)->v_x = SvIV(ST(3));
         if(items > 4)
-            (RETVAL->current)->v_x = SvIV(ST(4));
+            (RETVAL->current)->v_y = SvIV(ST(4));
         if(items > 5)
-            (RETVAL->current)->v_y = SvIV(ST(5));
+            (RETVAL->current)->rotation = SvIV(ST(5));
         if(items > 6)
-            (RETVAL->current)->rotation = SvIV(ST(6));
-        if(items > 7)
-            (RETVAL->current)->ang_v = SvIV(ST(7));
+            (RETVAL->current)->ang_v = SvIV(ST(6));
 
        copy_state( RETVAL->previous, RETVAL->current);
     OUTPUT:
