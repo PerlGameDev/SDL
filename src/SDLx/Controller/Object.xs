@@ -10,7 +10,7 @@
 #include "SDLx/Controller/Object.h"
 
 
-AV* acceleration_cb( SDLx_Object * obj )
+AV* acceleration_cb( SDLx_Object * obj, float t )
 {
 
 	dSP;
@@ -26,6 +26,7 @@ AV* acceleration_cb( SDLx_Object * obj )
 	XPUSHs( sv_2mortal(newSVnv(obj->current->v_y)));
 	XPUSHs( sv_2mortal(newSVnv(obj->current->rotation)));
 	XPUSHs( sv_2mortal(newSVnv(obj->current->ang_v)));
+	XPUSHs( sv_2mortal(newSVnv(t)));
 
 	PUTBACK;
 
@@ -40,6 +41,73 @@ AV* acceleration_cb( SDLx_Object * obj )
 	LEAVE;
 
 	return array;
+}
+
+void evaluate(SDLx_Derivative* out, SDLx_State* initial, float t)
+{
+	out->dx = initial->v_x;
+	out->dy = initial->v_y;
+	out->drotation = initial->ang_v;
+//	AV* accel = acceleration(initial, t);
+//	output.dv_x = accel[0];
+//	output.dv_y = accel[1];
+//	output.dang_v = accel[2];
+
+}
+
+void evaluate_dt(SDLx_Derivative* out, SDLx_State* initial, float t, float dt, SDLx_Derivative* d)
+{
+	SDLx_State state;
+	state.x = initial->x + d->dx*dt;
+	state.y = initial->y + d->dy*dt;
+	state.rotation = initial->rotation + d->drotation*dt;
+
+	state.v_x = initial->v_x + d->dv_x*dt;
+	state.v_y = initial->v_y + d->dv_y*dt;
+	state.ang_v = initial->ang_v + d->dang_v*dt;
+
+	out->dx = state.v_x;
+	out->dy = state.v_y;
+	out->drotation = state.ang_v;
+
+//	AV* accel = acceleration(initial, t+dt);
+//	out->dv_x = accel[0];
+//	out->dv_y = accel[1];
+//	out->dang_v = accel[2];
+
+}
+
+void integrate( SDLx_Object* object, float t, float dt) 
+{
+	SDLx_State* state = object->current;
+	SDLx_Derivative* a = (SDLx_Derivative *)safemalloc( sizeof(SDLx_Derivative) );
+	SDLx_Derivative* b = (SDLx_Derivative *)safemalloc( sizeof(SDLx_Derivative) );
+	SDLx_Derivative* c = (SDLx_Derivative *)safemalloc( sizeof(SDLx_Derivative) );
+	SDLx_Derivative* d = (SDLx_Derivative *)safemalloc( sizeof(SDLx_Derivative) );
+
+	 evaluate(a, state, t);
+	 evaluate_dt(b, state, t, dt*0.5f, a);
+	 evaluate_dt(c, state, t, dt*0.5f, b);
+	 evaluate_dt(d, state, t, dt, c);
+	
+	const float dxdt = 1.0f/6.0f * (a->dx + 2.0f*(b->dx + c->dx) + d->dx);
+	const float dv_xdt = 1.0f/6.0f * (a->dv_x + 2.0f*(b->dv_x + c->dv_x) + d->dv_x);
+	const float dydt = 1.0f/6.0f * (a->dy + 2.0f*(b->dy + c->dy) + d->dy);
+	const float dv_ydt = 1.0f/6.0f * (a->dv_y + 2.0f*(b->dv_y + c->dv_y) + d->dv_y);
+	const float drotationdt = 1.0f/6.0f * (a->drotation + 2.0f*(b->drotation + c->drotation) + d->drotation);
+	const float dv_angdt = 1.0f/6.0f * (a->dang_v + 2.0f*(b->dang_v + c->dv_y) + d->dang_v);
+
+	state->x = state->x + dxdt*dt;
+	state->v_x = state->v_x + dv_xdt*dt;
+	state->y = state->y + dydt*dt;
+	state->v_y = state->v_y + dv_ydt*dt;
+	state->rotation = state->rotation + drotationdt*dt;
+	state->ang_v = state->ang_v + dv_angdt*dt;
+
+	safefree(a);
+	safefree(b);
+	safefree(c);
+	safefree(d);
 }
 
 
@@ -79,10 +147,11 @@ objx_set_acceleration(obj, callback)
 		
 
 AV*
-objx_acceleration(obj)
+objx_acceleration(obj, t)
 	SDLx_Object* obj
+	float t
 	CODE:
-	RETVAL = acceleration_cb(obj);
+	RETVAL = acceleration_cb(obj, t);
 	sv_2mortal((SV*)RETVAL);
 	OUTPUT:
 	RETVAL
@@ -95,16 +164,11 @@ objx_interpolate(obj, alpha)
 	PREINIT:
 	    char * CLASS = "SDLx::Controller::State";
 	CODE:
-	 RETVAL = (SDLx_State *)safemalloc(sizeof(SDLx_State ));
-	 RETVAL->x = obj->current->x * alpha + obj->previous->x * (1 - alpha);
-	 RETVAL->y = obj->current->y * alpha + obj->previous->y * (1 - alpha);
-	 RETVAL->v_x = obj->current->v_x * alpha + obj->previous->v_x * (1 - alpha);
-	 RETVAL->v_y = obj->current->v_y * alpha + obj->previous->v_y * (1 - alpha);
- 	 RETVAL->rotation = obj->current->rotation * alpha + obj->previous->rotation * (1 - alpha);
-	 RETVAL->ang_v = obj->current->ang_v * alpha + obj->previous->ang_v * (1 - alpha);
+	 SDLx_State* out =  (SDLx_State *)safemalloc(sizeof(SDLx_State )) ;
+	 interpolate( obj,out, alpha);
+	 RETVAL = out;
 	 OUTPUT:
 	 RETVAL 
-
 
 
 
