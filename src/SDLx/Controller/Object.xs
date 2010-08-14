@@ -20,13 +20,13 @@ AV* acceleration_cb( SDLx_Object * obj, float t )
 	SAVETMPS;
 	PUSHMARK(SP);
 
+	XPUSHs( sv_2mortal(newSVnv(t)));
 	XPUSHs( sv_2mortal(newSVnv(obj->current->x)));
 	XPUSHs( sv_2mortal(newSVnv(obj->current->y)));
 	XPUSHs( sv_2mortal(newSVnv(obj->current->v_x)));
 	XPUSHs( sv_2mortal(newSVnv(obj->current->v_y)));
 	XPUSHs( sv_2mortal(newSVnv(obj->current->rotation)));
 	XPUSHs( sv_2mortal(newSVnv(obj->current->ang_v)));
-	XPUSHs( sv_2mortal(newSVnv(t)));
 
 	PUTBACK;
 
@@ -48,10 +48,10 @@ void evaluate(SDLx_Derivative* out, SDLx_State* initial, float t)
 	out->dx = initial->v_x;
 	out->dy = initial->v_y;
 	out->drotation = initial->ang_v;
-//	AV* accel = acceleration(initial, t);
-//	output.dv_x = accel[0];
-//	output.dv_y = accel[1];
-//	output.dang_v = accel[2];
+	AV* accel = acceleration(initial, t);
+	out->dv_x = sv_nv(av_pop(accel));
+	out->dv_y = sv_nv(av_pop(accel));
+	out->dang_v = sv_nv(av_pop(accel));
 
 }
 
@@ -70,11 +70,10 @@ void evaluate_dt(SDLx_Derivative* out, SDLx_State* initial, float t, float dt, S
 	out->dy = state.v_y;
 	out->drotation = state.ang_v;
 
-//	AV* accel = acceleration(initial, t+dt);
-//	out->dv_x = accel[0];
-//	out->dv_y = accel[1];
-//	out->dang_v = accel[2];
-
+	AV* accel = acceleration(initial, t+dt);
+	out->dv_x = sv_nv(av_pop(accel));
+	out->dv_y = sv_nv(av_pop(accel));
+	out->dang_v = sv_nv(av_pop(accel));
 }
 
 void integrate( SDLx_Object* object, float t, float dt) 
@@ -170,7 +169,15 @@ objx_interpolate(obj, alpha)
 	 OUTPUT:
 	 RETVAL 
 
-
+void
+objx_update(obj, t, dt)
+	SDLx_Object* obj
+	float t
+	float dt
+	CODE:
+	       copy_state( obj->previous, obj->current);
+		integrate( obj, t, dt );
+	
 
 void
 objx_DESTROY( obj )
