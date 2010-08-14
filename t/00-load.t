@@ -65,6 +65,7 @@ BEGIN {
 
 		SDLx::Controller
 		SDLx::Controller::Object
+		SDLx::Controller::State
 		SDLx::Controller::Timer
 
 		/;

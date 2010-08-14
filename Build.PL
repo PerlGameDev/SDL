@@ -179,7 +179,14 @@ my %subsystems = (
 			from => 'src/SDLx/Controller/Object.xs',
 			to   => 'lib/SDLx/Controller/Object.xs',
 		},
-		libraries => [qw(  )],
+		libraries => [qw( SDL  )],
+	},
+	StateX => {
+		file => {
+			from => 'src/SDLx/Controller/State.xs',
+			to   => 'lib/SDLx/Controller/State.xs',
+		},
+		libraries => [qw( SDL  )],
 	},
 	Overlay => {
 		file => {

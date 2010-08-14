@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::More;
+use SDLx::Controller::State;
 use SDLx::Controller::Object;
 use lib 't/lib';
 use SDL::TestTool;
@@ -35,9 +36,6 @@ is($av->[2], 0.0);
 
 my $hv = $obj->interpolate(0.5);
 
-isa_ok ( $hv, 'HASH'); 
-
-print Dumper $hv;
-
+isa_ok ( $hv, 'SDLx::Controller::State'); 
 
 done_testing;

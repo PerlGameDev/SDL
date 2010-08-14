@@ -88,27 +88,24 @@ objx_acceleration(obj)
 	RETVAL
 	
 
-HV*
+SDLx_State *
 objx_interpolate(obj, alpha)
 	SDLx_Object* obj
 	float alpha
+	PREINIT:
+	    char * CLASS = "SDLx::Controller::State";
 	CODE:
-	 RETVAL = newHV();
-	 float x = obj->current->x * alpha + obj->previous->x * (1 - alpha);
-	 hv_stores( RETVAL, "x", newSVnv(x) );
-	 float y = obj->current->y * alpha + obj->previous->y * (1 - alpha);
-	 hv_stores( RETVAL, "y", newSVnv(y) );
-	 float v_x = obj->current->v_x * alpha + obj->previous->v_x * (1 - alpha);
-	 hv_stores( RETVAL, "v_x", newSVnv(v_x) );
-	 float v_y = obj->current->v_y * alpha + obj->previous->v_y * (1 - alpha);
-	 hv_stores( RETVAL, "v_y", newSVnv(v_y) );
-	 float rotation = obj->current->rotation * alpha + obj->previous->rotation * (1 - alpha);
-	 hv_stores( RETVAL, "rotation", newSVnv(rotation) );
-	 float ang_v = obj->current->ang_v * alpha + obj->previous->ang_v * (1 - alpha);
-	 hv_stores( RETVAL, "ang_v", newSVnv(ang_v) );
-	 sv_2mortal((SV*)RETVAL);
+	 RETVAL = (SDLx_State *)safemalloc(sizeof(SDLx_State ));
+	 RETVAL->x = obj->current->x * alpha + obj->previous->x * (1 - alpha);
+	 RETVAL->y = obj->current->y * alpha + obj->previous->y * (1 - alpha);
+	 RETVAL->v_x = obj->current->v_x * alpha + obj->previous->v_x * (1 - alpha);
+	 RETVAL->v_y = obj->current->v_y * alpha + obj->previous->v_y * (1 - alpha);
+ 	 RETVAL->rotation = obj->current->rotation * alpha + obj->previous->rotation * (1 - alpha);
+	 RETVAL->ang_v = obj->current->ang_v * alpha + obj->previous->ang_v * (1 - alpha);
 	 OUTPUT:
 	 RETVAL 
+
+
 
 
 void
