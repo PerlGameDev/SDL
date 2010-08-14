@@ -161,6 +161,7 @@ sub ACTION_build {
 		${ Alien::SDL::ConfigData->config('build_params') }{'title'} || 'n.a.'
 	);
 	$self->SUPER::ACTION_build;
+  $self->ACTION_bundle;
 }
 
 # both special to MacOS/Darwin, somebody should review whether it is still necessary
