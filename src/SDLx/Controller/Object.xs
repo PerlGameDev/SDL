@@ -10,6 +10,39 @@
 #include "SDLx/Controller/Object.h"
 
 
+AV* acceleration_cb( SDLx_Object * obj )
+{
+
+	dSP;
+	AV* array = newAV();
+	int count;
+	ENTER;
+	SAVETMPS;
+	PUSHMARK(SP);
+
+	XPUSHs( sv_2mortal(newSVnv(obj->current->x)));
+	XPUSHs( sv_2mortal(newSVnv(obj->current->y)));
+	XPUSHs( sv_2mortal(newSVnv(obj->current->v_x)));
+	XPUSHs( sv_2mortal(newSVnv(obj->current->v_y)));
+	XPUSHs( sv_2mortal(newSVnv(obj->current->rotation)));
+	XPUSHs( sv_2mortal(newSVnv(obj->current->ang_v)));
+
+	PUTBACK;
+
+	count = call_sv(obj->acceleration, G_ARRAY);
+
+	SPAGAIN;
+	int i;
+	for( i =0; i < count ; i++)
+	 av_push( array, newSVnv(POPn));
+
+	FREETMPS;
+	LEAVE;
+
+	return array;
+}
+
+
 MODULE = SDLx::Controller::Object    PACKAGE = SDLx::Controller::Object    PREFIX = objx_
 
 SDLx_Object *
@@ -36,6 +69,24 @@ objx_new( CLASS, ... )
     OUTPUT:
 	RETVAL 
 
+
+void
+objx_set_acceleration(obj, callback)
+	SDLx_Object* obj
+	SV* callback
+	CODE:
+	obj->acceleration = callback;	
+		
+
+AV*
+objx_acceleration(obj)
+	SDLx_Object* obj
+	CODE:
+	RETVAL = acceleration_cb(obj);
+	sv_2mortal((SV*)RETVAL);
+	OUTPUT:
+	RETVAL
+	
 
 void
 objx_DESTROY( obj )
