@@ -14,12 +14,11 @@ can_ok(
 
 TODO: {
 	local $TODO = 'methods not implemented yet';
-	can_ok( 'SDLx::Controller::Object', qw( ) );
+	can_ok( 'SDLx::Controller::Object', qw( foo ) );
 }
 
 
-my $obj = SDLx::Controller::Object->new(0,1,2,3,4,5,6);
-
+my $obj = SDLx::Controller::Object->new( x=> 1, y=> 2, v_x => 3, v_y => 4, rot => 5, ang_v => 6);
 
 isa_ok( $obj, 'SDLx::Controller::Object' );
 my $s = sub { pass 'ran accel'; return (0.0,10,19)};

@@ -116,7 +116,7 @@ void integrate( SDLx_Object* object, float t, float dt)
 MODULE = SDLx::Controller::Object    PACKAGE = SDLx::Controller::Object    PREFIX = objx_
 
 SDLx_Object *
-objx_new( CLASS, ... )
+objx_make( CLASS, ... )
     char * CLASS
     CODE:
        RETVAL = (SDLx_Object * ) safemalloc( sizeof(SDLx_Object) );
