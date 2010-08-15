@@ -1,0 +1,90 @@
+#include "EXTERN.h"
+#include "perl.h"
+#include "XSUB.h"
+#include "ppport.h"
+
+#ifndef aTHX_
+#define aTHX_
+#endif
+
+#include "SDLx/Controller/Object.h"
+
+
+MODULE = SDLx::Controller::State    PACKAGE = SDLx::Controller::State    PREFIX = state_
+
+SDLx_State *
+state_new( CLASS, ... )
+    char * CLASS
+    CODE:
+       RETVAL = (SDLx_State * ) safemalloc( sizeof(SDLx_State) );
+        if(items > 2)
+            RETVAL->x = SvIV(ST(2));
+        if(items > 3)
+            RETVAL->y = SvIV(ST(3));
+        if(items > 4)
+            RETVAL->v_x = SvIV(ST(4));
+        if(items > 5)
+            RETVAL->v_y = SvIV(ST(5));
+        if(items > 6)
+            RETVAL->rotation = SvIV(ST(6));
+        if(items > 7)
+            RETVAL->ang_v = SvIV(ST(7));
+    OUTPUT:
+	RETVAL 
+
+float
+state_x(state)
+	SDLx_State * state
+	CODE:
+		RETVAL = state->x;
+	OUTPUT:
+		RETVAL
+
+float
+state_y(state)
+	SDLx_State * state
+	CODE:
+		RETVAL = state->y;
+	OUTPUT:
+		RETVAL
+
+float
+state_v_x(state)
+	SDLx_State * state
+	CODE:
+		RETVAL = state->v_x;
+	OUTPUT:
+		RETVAL
+
+float
+state_v_y(state)
+	SDLx_State * state
+	CODE:
+		RETVAL = state->v_y;
+	OUTPUT:
+		RETVAL
+
+float
+state_rotation(state)
+	SDLx_State * state
+	CODE:
+		RETVAL = state->rotation;
+	OUTPUT:
+		RETVAL
+
+float
+state_ang_v(state)
+	SDLx_State * state
+	CODE:
+		RETVAL = state->ang_v;
+	OUTPUT:
+		RETVAL
+
+void
+state_DESTROY( obj )
+	SDLx_State *obj
+	CODE: 
+	safefree(obj);
+
+
+

@@ -38,7 +38,11 @@
 #endif
 
 #include <SDL.h>
+
+#ifdef HAVE_SDL_IMAGE
 #include <SDL_image.h>
+#endif 
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -46,7 +50,7 @@
 #define HAVE_TLS_CONTEXT
 #endif
 
-#include "SFont.h"
+#include "SDLx/SFont.h"
 
 
 SFont_FontInfo InternalFont;
@@ -275,7 +279,12 @@ st_new ( CLASS, filename )
 	char *filename
 	CODE:
 	/*	warn( "[xs] new" ); */
+#ifdef HAVE_SDL_IMAGE
 		RETVAL = IMG_Load(filename);
+#else
+    SDL_SetError("SDL_image not available for SFont. Using SDL_loadBMP instead of IMG_loadBMP.");
+    RETVAL = SDL_LoadBMP(filename);
+#endif
 		SFont_InitFont(RETVAL);
 	OUTPUT:
 		RETVAL
