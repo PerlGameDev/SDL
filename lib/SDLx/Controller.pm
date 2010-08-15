@@ -1,12 +1,15 @@
 package SDLx::Controller;
 use strict;
 use warnings;
+use Carp;
+use Time::HiRes qw( time sleep );
 use SDL;
 use SDL::Event;
 use SDL::Events;
 use SDLx::Controller::Timer;
 use Scalar::Util 'refaddr';
-
+use SDLx::Controller::Object;
+use SDLx::Controller::State;
 # inside out, so this can work as the superclass of another
 # SDL::Surface subclass
 my %_delta;
@@ -69,6 +72,31 @@ sub run {
 	}
 }
 
+sub run_test {
+	my $self = shift;
+	my $quit = 0; 
+	my $t            = 0.0;
+	my $dt           = 0.01;
+	my $current_time = 0.0;
+	my $accumulator  = 0.0;
+    while ( !$_quit{ refaddr $self} ) {
+		$self->_event;
+
+    my $new_time   = time;
+    my $delta_time = $new_time - $current_time;
+    $current_time = $new_time;
+    $delta_time = 0.25 if ( $delta_time > 0.25 );
+    $accumulator += $delta_time;
+    while ( $accumulator >= $dt ) {
+        $accumulator -= $dt;
+        $self->_move( $t, $dt );
+        $t += $dt;
+    }
+    $self->_show( $accumulator / $dt );
+   }
+
+}
+
 sub _event {
 	my $self = shift;
 
@@ -83,9 +111,10 @@ sub _event {
 
 sub _move {
 	my $self        = shift;
+	my $t 		= shift;
 	my $delta_ticks = shift;
 	foreach my $move_handler ( @{ $_move_handlers{ refaddr $self} } ) {
-		$move_handler->($delta_ticks);
+		$move_handler->($delta_ticks, $t);
 	}
 }
 
@@ -98,6 +127,27 @@ sub _show {
 }
 
 sub quit { $_quit{ refaddr $_[0] } = 1 }
+
+sub add_object {
+	my ($self, $obj, $render ) = @_;
+
+	croak "Object is needed" unless $obj && $obj->isa('SDLx::Controller::Object');
+	 
+	$self->add_move_handler( sub { $obj->update( $_[1], $_[0] ) } );
+	
+	if( $render )
+	{
+	my $show = sub { my $state = $obj->interpolate( $_[0] );  $render->($state);  };
+	$self->add_show_handler( $show 	);
+	}
+	else
+	{
+		carp "Render callback not provide" ;
+	
+	}
+
+
+}
 
 sub _add_handler {
 	my ( $arr_ref, $handler ) = @_;

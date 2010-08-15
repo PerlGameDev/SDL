@@ -24,6 +24,7 @@ isa_ok( $obj, 'SDLx::Controller::Object' );
 my $s = sub { pass 'ran accel'; return (0.0,10,19)};
 
 $obj->set_acceleration( $s);
+
 my $av =  $obj->acceleration( 1);
 
 
