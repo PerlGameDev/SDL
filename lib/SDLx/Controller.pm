@@ -132,8 +132,8 @@ sub add_object {
 	my ($self, $obj, $render, @params ) = @_;
 
 	croak "Object is needed" unless $obj && $obj->isa('SDLx::Controller::Object');
-	 
-	$self->add_move_handler( sub { $obj->update( $_[1], $_[0] ) } );
+	my $move = sub { $obj->update( $_[1], $_[0] ) } ;
+	$self->add_move_handler( $move  );
 	
 	if( $render )
 	{
