@@ -8,7 +8,7 @@
 #endif
 
 #include <SDL.h>
-#include "SDLx/Layer.h"
+#include "SDLx/LayerManager.h"
 
 PerlInterpreter * perl = NULL;
 
@@ -27,25 +27,30 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
 
 MODULE = SDLx::Layer    PACKAGE = SDLx::Layer    PREFIX = layerx_
 
+
 SDLx_Layer *
 layerx_new( CLASS, surface, ... )
     char* CLASS
     SDL_Surface *surface
     CODE:
-        RETVAL            = (SDLx_Layer *)safemalloc( sizeof(SDLx_Layer) );
-        RETVAL->index     = -1;
-        RETVAL->surface   = (SDL_Surface *)safemalloc( sizeof(SDL_Surface) );
-        RETVAL->clip      = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
-        RETVAL->pos       = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
-        RETVAL->surface   = SDL_ConvertSurface(surface, surface->format, surface->flags);
-        (RETVAL->pos)->x  = 0;
-        (RETVAL->pos)->y  = 0;
-        (RETVAL->pos)->w  = (RETVAL->surface)->w;
-        (RETVAL->pos)->h  = (RETVAL->surface)->h;
-        (RETVAL->clip)->x = 0;
-        (RETVAL->clip)->y = 0;
-        (RETVAL->clip)->w = (RETVAL->surface)->w;
-        (RETVAL->clip)->h = (RETVAL->surface)->h;
+        RETVAL               = (SDLx_Layer *)safemalloc( sizeof(SDLx_Layer) );
+        RETVAL->index        = -1;
+        RETVAL->surface      = (SDL_Surface *)safemalloc( sizeof(SDL_Surface) );
+        RETVAL->clip         = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
+        RETVAL->pos          = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
+        RETVAL->touched      = 1;
+        RETVAL->attached     = 0;
+        RETVAL->attached_pos = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
+        RETVAL->attached_rel = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
+        RETVAL->surface      = SDL_ConvertSurface(surface, surface->format, surface->flags);
+        (RETVAL->pos)->x     = 0;
+        (RETVAL->pos)->y     = 0;
+        (RETVAL->pos)->w     = (RETVAL->surface)->w;
+        (RETVAL->pos)->h     = (RETVAL->surface)->h;
+        (RETVAL->clip)->x    = 0;
+        (RETVAL->clip)->y    = 0;
+        (RETVAL->clip)->w    = (RETVAL->surface)->w;
+        (RETVAL->clip)->h    = (RETVAL->surface)->h;
         
         if(SvROK(ST(items - 1)) && SVt_PVHV == SvTYPE(SvRV(ST(items - 1))))
         {
@@ -113,11 +118,17 @@ layerx_h( layer )
         RETVAL
 
 SV *
-layerx_surface( layer )
+layerx_surface( layer, ... )
     SDLx_Layer *layer
-    PREINIT:
-        char* CLASS = "SDL::Surface";
     CODE:
+        if(items > 1)
+        {
+            SDL_Surface *surface  = bag_to_surface(ST(1));
+            layer->surface        = SDL_ConvertSurface(surface, surface->format, surface->flags);
+            layer->touched        = 1;
+            layer->manager->saved = 0;
+        }
+    
         RETVAL = _sv_ref( layer->surface, sizeof(SDL_Surface *), sizeof(SDL_Surface), "SDL::Surface" );
     OUTPUT:
         RETVAL
@@ -125,8 +136,6 @@ layerx_surface( layer )
 SV *
 layerx_clip( layer )
     SDLx_Layer *layer
-    PREINIT:
-        char* CLASS = "SDL::Rect";
     CODE:
         RETVAL = _sv_ref( layer->clip, sizeof(SDL_Rect *), sizeof(SDL_Rect), "SDL::Rect" );
     OUTPUT:
@@ -135,17 +144,21 @@ layerx_clip( layer )
 SV *
 layerx_pos( layer )
     SDLx_Layer *layer
-    PREINIT:
-        char* CLASS = "SDL::Rect";
     CODE:
         RETVAL = _sv_ref( layer->pos, sizeof(SDL_Rect *), sizeof(SDL_Rect), "SDL::Rect" );
     OUTPUT:
         RETVAL
 
 HV *
-layerx_data( layer )
+layerx_data( layer, ... )
     SDLx_Layer *layer
     CODE:
+        if(items > 1)
+        {
+            layer->data = (HV *)SvRV(ST(1));
+            SvREFCNT_inc(layer->data);
+        }
+
         if((HV *)NULL == layer->data)
             XSRETURN_UNDEF;
         else
@@ -153,10 +166,89 @@ layerx_data( layer )
     OUTPUT:
         RETVAL
 
+AV *
+layerx_ahead( layer )
+    SDLx_Layer *layer
+    CODE:
+        RETVAL = layers_ahead( layer );
+    OUTPUT:
+        RETVAL
+
+AV *
+layerx_behind( layer )
+    SDLx_Layer *layer
+    CODE:
+        RETVAL = layers_behind( layer );
+    OUTPUT:
+        RETVAL
+
+void
+layerx_attach( layer, x = -1, y = -1 )
+    SDLx_Layer *layer
+    int x
+    int y
+    CODE:
+        if(-1 == x || -1 == y)
+            SDL_GetMouseState(&x, &y);
+        
+        layer->attached        = 1;
+        layer->attached_pos->x = layer->pos->x;
+        layer->attached_pos->y = layer->pos->x;
+        layer->attached_rel->x = layer->pos->x - x;
+        layer->attached_rel->y = layer->pos->y - y;
+        layer->manager->saved = 0;
+
+AV *
+layerx_detach_xy( layer, x = -1, y = -1 )
+    SDLx_Layer *layer
+    int x
+    int y
+    CODE:
+        layer->attached = 0;
+        layer->pos->x   = x;
+        layer->pos->y   = y;
+        layer->manager->saved = 0;
+        
+        RETVAL = newAV();
+        av_store(RETVAL, 0, newSViv(layer->attached_pos->x));
+        av_store(RETVAL, 1, newSViv(layer->attached_pos->y));
+    OUTPUT:
+        RETVAL
+
+SV *
+layerx_foreground( bag )
+    SV *bag
+    CODE:
+        SDLx_Layer        *layer   = bag_to_layer(bag);
+        SDLx_LayerManager *manager = layer->manager;
+        int index                  = layer->index; // we cant trust its value
+        layer->manager->saved = 0;
+        int i;
+        
+        for(i = 0; i <= av_len(manager->layers); i++)
+        {
+            if(*av_fetch(manager->layers, i, 0) == bag) // what bag do we have? => finding the right layer index
+            {
+                index = i;
+                break;
+            }
+        }
+
+        for(i = index; i < av_len(manager->layers); i++)
+        {
+            AvARRAY(manager->layers)[i] = AvARRAY(manager->layers)[i + 1];
+            bag_to_layer(AvARRAY(manager->layers)[i])->index = i;
+        }
+        AvARRAY(manager->layers)[i] = bag;
+        bag_to_layer(AvARRAY(manager->layers)[i])->index = i;
+        SvREFCNT_inc( bag );
+        RETVAL                      = newSVsv(bag);
+        SvREFCNT_inc(RETVAL);
+
 void
 layerx_DESTROY( layer )
     SDLx_Layer *layer
-    CODE:
+CODE:
         //if((HV *)NULL != layer->data) // Attempt to free unreferenced scalar
             //SvREFCNT_dec(layer->data);
         safefree(layer);
