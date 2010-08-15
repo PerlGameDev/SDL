@@ -12,6 +12,9 @@
 
 AV* acceleration_cb( SDLx_Object * obj, float t )
 {
+	SV* tmpsv;
+	if( !(SvROK(obj->acceleration) && (tmpsv = (SV*)SvRV(obj->acceleration)) &&  SvTYPE(tmpsv) == SVt_PVCV ) )
+	croak( "Object doesn not contain an acceleration callback" );
 
 	dSP;
 	AV* array = newAV();
@@ -122,7 +125,8 @@ objx_make( CLASS, ... )
        RETVAL = (SDLx_Object * ) safemalloc( sizeof(SDLx_Object) );
        RETVAL->previous = (SDLx_State * ) safemalloc( sizeof(SDLx_State) ); 
        RETVAL->current  = (SDLx_State * ) safemalloc( sizeof(SDLx_State) );
-	
+       RETVAL->acceleration = newSViv(-1);	
+
 	RETVAL->current->x = 0;
 	RETVAL->current->y = 0;
 	RETVAL->current->v_x = 0;
