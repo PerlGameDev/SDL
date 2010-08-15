@@ -12,9 +12,13 @@
 
 AV* acceleration_cb( SDLx_Object * obj, float t )
 {
+	
 	SV* tmpsv;
-	if( !(SvROK(obj->acceleration) && (tmpsv = (SV*)SvRV(obj->acceleration)) &&  SvTYPE(tmpsv) == SVt_PVCV ) )
-	croak( "Object doesn not contain an acceleration callback" );
+	if( !(SvROK(obj->acceleration) && (tmpsv = obj->acceleration) ) )
+	{
+		croak( "Object doesn't not contain an acceleration callback" );
+	}
+
 
 	dSP;
 	AV* array = newAV();
@@ -157,7 +161,12 @@ objx_set_acceleration(obj, callback)
 	SDLx_Object* obj
 	SV* callback
 	CODE:
-	obj->acceleration = callback;	
+
+	SV* tmpsv;
+	if( !(SvROK(callback) && (tmpsv = (SV*)SvRV(callback)) &&  SvTYPE(tmpsv) == SVt_PVCV ) )
+		croak( "Acceleration callback needs to be a code ref, %p", callback );
+
+	obj->acceleration = SvRV( newRV_inc(callback) );	
 		
 
 AV*
@@ -198,6 +207,7 @@ void
 objx_DESTROY( obj )
 	SDLx_Object *obj
 	CODE: 
+	SvREFCNT_dec(obj->acceleration);
 	safefree(obj->previous);
 	safefree(obj->current);
 	safefree(obj);

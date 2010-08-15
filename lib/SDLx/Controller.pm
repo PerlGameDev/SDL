@@ -129,7 +129,7 @@ sub _show {
 sub quit { $_quit{ refaddr $_[0] } = 1 }
 
 sub add_object {
-	my ($self, $obj, $render ) = @_;
+	my ($self, $obj, $render, @params ) = @_;
 
 	croak "Object is needed" unless $obj && $obj->isa('SDLx::Controller::Object');
 	 
@@ -137,7 +137,7 @@ sub add_object {
 	
 	if( $render )
 	{
-	my $show = sub { my $state = $obj->interpolate( $_[0] );  $render->($state);  };
+	my $show = sub { my $state = $obj->interpolate( $_[0] );  $render->($state, @params);  };
 	$self->add_show_handler( $show 	);
 	}
 	else
