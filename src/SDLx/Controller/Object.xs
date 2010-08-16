@@ -23,10 +23,9 @@ AV* acceleration_cb( SDLx_Object * obj, float t )
 	dSP;
 	AV* array = newAV();
 	int count;
-	SV * eventref = newSV( sizeof(SDLx_State *) ); 	
+	SV * stateref = newSV( sizeof(SDLx_State *) ); 	
 	void * copyState = safemalloc( sizeof(SDLx_State) );
 	memcpy( copyState, obj->current, sizeof(SDLx_State) );
-
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
@@ -34,9 +33,10 @@ AV* acceleration_cb( SDLx_Object * obj, float t )
 		 void** pointers = malloc(2 * sizeof(void*));
 		  pointers[0] = (void*)copyState;
 		  pointers[1] = (void*)0;
+	SV * state_obj = sv_setref_pv( stateref, "SDLx::Controller::State", (void *)pointers);
 
 	XPUSHs( sv_2mortal(newSVnv(t)));
-	XPUSHs( sv_setref_pv( eventref, "SDLx::Controller::State", (void *)pointers) );
+	XPUSHs( state_obj  );
 
 	PUTBACK;
 
@@ -46,6 +46,8 @@ AV* acceleration_cb( SDLx_Object * obj, float t )
 	int i;
 	for( i =0; i < count ; i++)
 	 av_push( array, newSVnv(POPn));
+
+//	copy_state(obj->current, copyState);
 
 	FREETMPS;
 	LEAVE;
@@ -192,6 +194,26 @@ objx_interpolate(obj, alpha)
 	 RETVAL = out;
 	 OUTPUT:
 	 RETVAL 
+
+SDLx_State *
+objx_current ( obj, ... )
+	SDLx_Object *obj
+	PREINIT:
+	   char * CLASS = "SDLx::Controller::State";
+	CODE:
+		RETVAL = obj->current;
+	OUTPUT:
+		RETVAL
+
+SDLx_State *
+objx_previous ( obj, ... )
+	SDLx_Object *obj
+	PREINIT:
+	   char * CLASS = "SDLx::Controller::State";
+	CODE:
+		RETVAL = obj->previous;
+	OUTPUT:
+		RETVAL
 
 void
 objx_update(obj, t, dt)
