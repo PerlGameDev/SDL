@@ -43,13 +43,14 @@ AV* acceleration_cb( SDLx_Object * obj, float t )
 	count = call_sv(obj->acceleration, G_ARRAY);
 
 	SPAGAIN;
-	warn( "state %p, state->x %f", copyState, ((SDLx_State *)copyState)->x );
+//	warn( "state %p, state->x %f", copyState, ((SDLx_State *)copyState)->x );
 	int i;
 	for( i =0; i < count ; i++)
 	 av_push( array, newSVnv(POPn));
 
-//	copy_state(obj->current, copyState);
-
+//	warn ("before obj->current->x %f", obj->current->x);
+	copy_state(obj->current, (SDLx_State *)copyState);
+//	warn ("after obj->current->x %f", obj->current->x);
 	FREETMPS;
 	LEAVE;
 
