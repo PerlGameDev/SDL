@@ -90,7 +90,7 @@ void
 state_DESTROY( obj )
 	SDLx_State *obj
 	CODE: 
-	safefree(obj);
-
+	  if (obj->owned == 0)
+	   safefree(obj);	
 
 

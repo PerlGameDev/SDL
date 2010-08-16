@@ -141,6 +141,8 @@ objx_make( CLASS, ... )
 	RETVAL->current->v_y = 0;
 	RETVAL->current->rotation = 0;
 	RETVAL->current->ang_v = 0;
+	RETVAL->current->owned = 1;
+	RETVAL->previous->owned = 1;
 
         if(items > 1)
             (RETVAL->current)->x = SvIV(ST(1));
