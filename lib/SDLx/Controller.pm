@@ -76,7 +76,7 @@ sub run_test {
 	my $self = shift;
 	my $quit = 0; 
 	my $t            = 0.0;
-	my $dt           = 0.01;
+	my $dt           = $_dt{ refaddr $self};
 	my $current_time = 0.0;
 	my $accumulator  = 0.0;
     while ( !$_quit{ refaddr $self} ) {

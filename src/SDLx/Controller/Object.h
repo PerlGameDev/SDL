@@ -17,6 +17,9 @@ typedef struct SDLx_State
 	// Rotation
 	float rotation;
 	float ang_v; 
+	// owned by an object or not?
+	int owned;
+	
 } SDLx_State;
 
 typedef struct Derivative

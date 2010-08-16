@@ -33,49 +33,55 @@ state_new( CLASS, ... )
 	RETVAL 
 
 float
-state_x(state)
+state_x(state, ...)
 	SDLx_State * state
 	CODE:
+		if (items > 1 ) state->x = SvNV(ST(1)); 
 		RETVAL = state->x;
 	OUTPUT:
 		RETVAL
 
 float
-state_y(state)
+state_y(state, ...)
 	SDLx_State * state
 	CODE:
+		if (items > 1 ) state->y = SvNV(ST(1)); 
 		RETVAL = state->y;
 	OUTPUT:
 		RETVAL
 
 float
-state_v_x(state)
+state_v_x(state, ...)
 	SDLx_State * state
 	CODE:
+		if (items > 1 ) state->v_x = SvNV(ST(1));	
 		RETVAL = state->v_x;
 	OUTPUT:
 		RETVAL
 
 float
-state_v_y(state)
+state_v_y(state, ...)
 	SDLx_State * state
 	CODE:
+		if (items > 1 ) state->v_y = SvNV(ST(1));
 		RETVAL = state->v_y;
 	OUTPUT:
 		RETVAL
 
 float
-state_rotation(state)
+state_rotation(state, ...)
 	SDLx_State * state
 	CODE:
+		if (items > 1 ) state->rotation = SvNV((ST(1)));
 		RETVAL = state->rotation;
 	OUTPUT:
 		RETVAL
 
 float
-state_ang_v(state)
+state_ang_v(state, ...)
 	SDLx_State * state
 	CODE:
+		if (items > 1 ) state->ang_v = SvNV((ST(1)));
 		RETVAL = state->ang_v;
 	OUTPUT:
 		RETVAL
@@ -84,7 +90,7 @@ void
 state_DESTROY( obj )
 	SDLx_State *obj
 	CODE: 
-	safefree(obj);
-
+	  if (obj->owned == 0)
+	   safefree(obj);	
 
 
