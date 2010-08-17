@@ -142,9 +142,15 @@ layerx_clip( layer )
         RETVAL
 
 SV *
-layerx_pos( layer )
+layerx_pos( layer, ... )
     SDLx_Layer *layer
     CODE:
+        if(items == 3)
+        {
+            layer->attached = 2;
+            layer->pos->x   = SvIV(ST(1));
+            layer->pos->y   = SvIV(ST(2));
+        }
         RETVAL = _sv_ref( layer->pos, sizeof(SDL_Rect *), sizeof(SDL_Rect), "SDL::Rect" );
     OUTPUT:
         RETVAL

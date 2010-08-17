@@ -81,7 +81,7 @@ int intersection( SDLx_Layer *layer1, SDLx_Layer *layer2 )
     return 0;
 }
 
-AV *layers_behind( SDLx_Layer *layer )
+AV *layers_behind( SDLx_Layer *layer)
 {
     AV *matches = newAV();
     int i;

@@ -178,7 +178,10 @@ lmx_blit( manager, dest )
                     layer->pos->x  = x + layer->attached_rel->x;
                     layer->pos->y  = y + layer->attached_rel->y;
                     SDL_BlitSurface(layer->surface, layer->clip, dest, layer->pos);
-                    did_something  = 1;
+                }
+                else if(layer->attached == 2)
+                {
+                    SDL_BlitSurface(layer->surface, layer->clip, dest, layer->pos);
                 }
                 
                 index++;
