@@ -26,6 +26,7 @@ AV* acceleration_cb( SDLx_Object * obj, float t )
 	SV * stateref = newSV( sizeof(SDLx_State *) ); 	
 	void * copyState = safemalloc( sizeof(SDLx_State) );
 	memcpy( copyState, obj->current, sizeof(SDLx_State) );
+	((SDLx_State *)copyState)->owned = 0; //conditional free
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
@@ -195,6 +196,7 @@ objx_interpolate(obj, alpha)
 	CODE:
 	 SDLx_State* out =  (SDLx_State *)safemalloc(sizeof(SDLx_State )) ;
 	 interpolate( obj,out, alpha);
+	 out->owned = 0; //condition free 
 	 RETVAL = out;
 	 OUTPUT:
 	 RETVAL 

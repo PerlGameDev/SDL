@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.512
+  - More tests and implemented more of SDLx::Sprite::Animated [jtpalmer]
+
 * 2.511 06 August 2010
   - Added fixes for image and gfx uses in Surface [kthakore, garu]
   - Added raw, binary mode image detection to SDLx::Surafce [garu]
