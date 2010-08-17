@@ -1,0 +1,80 @@
+
+=head1 NAME
+
+SDLx::Layer - Extension ...
+
+=head1 CATEGORY 
+
+Extension
+
+=head1 SYNOPSIS
+
+  use SDLx::Layer;
+  use SDLx::LayerManager;
+
+=head1 DESCRIPTION
+
+
+=head1 METHODS
+
+=head2 new
+
+=head2 index
+
+=head2 x
+
+=head2 y
+
+=head2 w
+
+=head2 h
+
+=head2 surface
+
+=head2 clip
+
+=head2 pos
+
+=head2 data
+
+=head2 ahead
+
+=head2 behind
+
+=head2 attach
+
+=head2 detach_xy
+
+=head2 foreground
+
+=head1 BUGS
+
+Report at sdlperl.ath.cx
+
+=head1 SUPPORT
+
+#sdl irc.perl.org
+
+=head1 AUTHOR
+
+    Tobias Leich
+    CPAN ID: FROGGS
+    ---
+    froggs@cpan.org
+    http://sdl.perl.org
+
+=head1 COPYRIGHT
+
+This program is free software; you can redistribute
+it and/or modify it under the same terms as Perl itself.
+
+The full text of the license can be found in the
+LICENSE file included with this module.
+
+
+=head1 SEE ALSO
+
+perl(1), SDL(2).
+
+=cut
+
