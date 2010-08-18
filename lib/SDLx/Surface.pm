@@ -395,7 +395,7 @@ sub draw_gfx_text {
 	}
 
 
-  	Carp::croak "Error drawing line: " . SDL::get_error() if ( $result == -1 );
+  	Carp::croak "Error drawing text: " . SDL::get_error() if ( $result == -1 );
 
 	  return $self;
 }
