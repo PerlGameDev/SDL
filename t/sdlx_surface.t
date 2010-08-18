@@ -104,11 +104,27 @@ pass 'SDL::Rect array update';
 $surfs[0]->draw_rect( [ 0, 0, 10, 20 ], 0xFF00FFFF );
 pass 'draw_rect works';
 
+SKIP:
+{
+    skip ('SDL_gfx_primitives needed', 2) unless SDL::Config->has('SDL_gfx_primitives');
+$surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], 0xff00ff );
 $surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], 0xff00ffff );
 $surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], 0xff00ffff, 1 );
 $surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], [ 255, 255, 0, 255 ] );
 $surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], [ 255, 255, 0, 255 ], 1 );
 pass 'draw_line works';
+
+$surfs[1]->draw_gfx_text( [0,0], 0xffffffff, "fooo");
+$surfs[1]->draw_gfx_text( [10,10], [20,20,20,20], "fooo");
+my $f = '';
+open( my $FH, '<', 'test/data/5x7.fnt');
+binmode ($FH);
+read($FH, $f, 4096);
+close ($FH);
+my $font =  {data=>$f, cw => 5, ch => 7};
+$surfs[1]->draw_gfx_text( [0,0], 0xffffffff, "fooo", $font );
+pass 'draw_gfx_text works';
+}
 
 
 TODO:

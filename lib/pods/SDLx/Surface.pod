@@ -165,6 +165,26 @@ Draws a line on the surface. Antialias is turned on if $antialias is true.
 
 Returns $self
 
+=head2 draw_gfx_text
+
+Draw text using gfx (not pretty but fast) at give vector, color.
+
+ $surf->draw_gfx_text( [0,0], 0xffffffff, "fooo");
+ $surf->draw_gfx_text( [10,10], [20,20,20,20], "fooo");
+
+You can also set the gfx font but passing a hash reference as shown below.
+
+ my $f = '';
+ open( my $FH, '<', 'test/data/5x7.fnt');
+ binmode ($FH);
+ read($FH, $f, 4096);
+ close ($FH);
+ 
+ my $font =  {data=>$f, cw => 5, ch => 7};
+ $surf->draw_gfx_text( [0,0], 0xffffffff, "fooo", $font );
+
+Returns $self
+
 =head1 AUTHOR
 
  kthakore 
