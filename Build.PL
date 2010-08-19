@@ -557,6 +557,7 @@ my $build = $package->new(
 		'Alien::SDL'         => '1.413',
 		'File::Find'         => '0',
 		'File::ShareDir'     => '0',
+    'Tie::Simple'        => '0'
 
 	},
 	build_requires => {
@@ -567,6 +568,10 @@ my $build = $package->new(
 		'File::ShareDir'    => '0',
 		'Tie::Simple'       => '0'
 	},
+  requires => {
+    'Tie::Simple'       => '0'
+  },
+
 	build_recommends => {
 		'Pod::ToDemo' => '0.20'
 
