@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-SDLx::LayerManager - Extension ...
+SDLx::LayerManager - Extension for managing layers in a 2D world
 
 =head1 CATEGORY 
 
@@ -11,9 +11,30 @@ Extension
 
   use SDLx::Layer;
   use SDLx::LayerManager;
+  
+  use SDL::Image;
+  use SDL::Surface;
+  use SDL::Video;
+  
+  # creating layers
+  my $layer1 = SDLx::Layer->new( SDL::Image::load('image1.png'), {userdata => '7'} );
+  my $layer2 = SDLx::Layer->new( SDL::Image::load('image2.png'), 100, 200, {userdata => '42'} );
+  
+  # creating the manager that holds the layers
+  my $layermanager = SDLx::LayerManager->new();
+  $layermanager->add( $layer1 );
+  $layermanager->add( $layer2 );
+  
+  my $display = # create your video surface here
+  
+  $layermanager->blit( $display );
+  
+  # accessing the layer at point(x,y)
+  print( $layermanager->by_position( 150, 200 )->data->{userdata} ); # should print '42'
 
 =head1 DESCRIPTION
 
+The LayerManager ...
 
 =head1 METHODS
 
@@ -30,6 +51,8 @@ Extension
 =head2 blit
 
 =head2 by_position
+
+  my $layer = $layermanager->by_position( $x, $y );
 
 =head2 ahead
 
