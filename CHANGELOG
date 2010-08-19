@@ -14,6 +14,7 @@ Revision history for Perl extension SDL_perl.
 	- Added drawing for circles in SDLx::Surface [kthakore]
 	- Fixed test issues [FROGGS]
 	- Added Layer and Layer Managers [FROGGS]
+	- Added SDLx::Sound [rflipo]
 
 * 2.511 06 August 2010
 	- Added fixes for image and gfx uses in Surface [kthakore, garu]

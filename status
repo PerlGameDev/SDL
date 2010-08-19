@@ -1,0 +1,122 @@
+[Alien::SDL] Build option used:
+	Source code build: SDL-1.2.14 & co. (RECOMMENDED)
+	builds: SDL, SDL_(image|mixer|ttf|net|gfx|Pango)
+	needs preinstalled: (freetype2|pango)-devel
+Building SDL
+RGBA on surface is  0xffffffffffffffff at t/sdlx_surface.t line 126.
+Color we put in is  0xffffffff at t/sdlx_surface.t line 127.
+
+#   Failed test 'draw_rect uses correct red for 0xffffffff'
+#   at t/sdlx_surface.t line 128.
+#          got: '0xffffffffffffffff'
+#     expected: '0xffffffff'
+RGBA on surface is  0xffffffffffff00ff at t/sdlx_surface.t line 126.
+Color we put in is  0xffff00ff at t/sdlx_surface.t line 127.
+
+#   Failed test 'draw_rect uses correct red for 0xffff00ff'
+#   at t/sdlx_surface.t line 128.
+#          got: '0xffffffffffff00ff'
+#     expected: '0xffff00ff'
+RGBA on surface is  0xffffffffff00ffff at t/sdlx_surface.t line 126.
+Color we put in is  0xff00ffff at t/sdlx_surface.t line 127.
+
+#   Failed test 'draw_rect uses correct red for 0xff00ffff'
+#   at t/sdlx_surface.t line 128.
+#          got: '0xffffffffff00ffff'
+#     expected: '0xff00ffff'
+RGBA on surface is  0x00ffffff at t/sdlx_surface.t line 126.
+Color we put in is  0x00ffffff at t/sdlx_surface.t line 127.
+RGBA on surface is  0xffffffffff0000ff at t/sdlx_surface.t line 126.
+Color we put in is  0xff0000ff at t/sdlx_surface.t line 127.
+
+#   Failed test 'draw_rect uses correct red for 0xff0000ff'
+#   at t/sdlx_surface.t line 128.
+#          got: '0xffffffffff0000ff'
+#     expected: '0xff0000ff'
+RGBA on surface is  0x00ff00ff at t/sdlx_surface.t line 126.
+Color we put in is  0x00ff00ff at t/sdlx_surface.t line 127.
+RGBA on surface is  0x0000ffff at t/sdlx_surface.t line 126.
+Color we put in is  0x0000ffff at t/sdlx_surface.t line 127.
+RGBA on surface is  0x000000ff at t/sdlx_surface.t line 126.
+Color we put in is  0x000000ff at t/sdlx_surface.t line 127.
+RGBA on surface is  0x204080ff at t/sdlx_surface.t line 126.
+Color we put in is  0x204080ff at t/sdlx_surface.t line 127.
+RGBA on surface is  0xffffffff802040ff at t/sdlx_surface.t line 126.
+Color we put in is  0x802040ff at t/sdlx_surface.t line 127.
+
+#   Failed test 'draw_rect uses correct red for 0x802040ff'
+#   at t/sdlx_surface.t line 128.
+#          got: '0xffffffff802040ff'
+#     expected: '0x802040ff'
+RGBA on surface is  0x408020ff at t/sdlx_surface.t line 126.
+Color we put in is  0x408020ff at t/sdlx_surface.t line 127.
+# Looks like you failed 5 tests of 56.
+t/sdlx_surface.t .. 
+ok 1 - [display] works
+ok 2 - The object isa SDLx::Surface
+ok 3 - The object isa SDL::Surface
+ok 4 - Right color returned
+ok 5 - Right color returned
+ok 6 - Correct Y value
+ok 7 - Correct X value
+ok 8 - The object isa SDLx::Surface
+ok 9 - The object isa SDL::Surface
+ok 10 - Right color returned
+ok 11 - Right color returned
+ok 12 - Correct Y value
+ok 13 - Correct X value
+ok 14 - The object isa SDLx::Surface
+ok 15 - The object isa SDL::Surface
+ok 16 - Right color returned
+ok 17 - Right color returned
+ok 18 - Correct Y value
+ok 19 - Correct X value
+ok 20 - The object isa SDLx::Surface
+ok 21 - The object isa SDL::Surface
+ok 22 - Right color returned
+ok 23 - Right color returned
+ok 24 - Correct Y value
+ok 25 - Correct X value
+ok 26 - Checking source pixel is 0
+ok 27 - Checking dest pixel is 0
+ok 28 - Checking that source pixel got written
+ok 29 - Pixel blitted from one surface to another
+ok 30 - Pixel by_blitted to another surface with offset
+ok 31 - Fill color worked
+ok 32 - Fliped the surface
+ok 33 - update all surface
+ok 34 - Single rect update
+ok 35 - SDL::Rect array update
+not ok 36 - draw_rect uses correct red for 0xffffffff
+not ok 37 - draw_rect uses correct red for 0xffff00ff
+not ok 38 - draw_rect uses correct red for 0xff00ffff
+ok 39 - draw_rect uses correct red for 0x00ffffff
+not ok 40 - draw_rect uses correct red for 0xff0000ff
+ok 41 - draw_rect uses correct red for 0x00ff00ff
+ok 42 - draw_rect uses correct red for 0x0000ffff
+ok 43 - draw_rect uses correct red for 0x000000ff
+ok 44 - draw_rect uses correct red for 0x204080ff
+not ok 45 - draw_rect uses correct red for 0x802040ff
+ok 46 - draw_rect uses correct red for 0x408020ff
+ok 47 - draw_line works
+ok 48 - draw_gfx_text works
+ok 49
+ok 50 - draw_circle works
+ok 51 - draw_circle_filled works
+ok 52 - Duplicate surf has same width
+ok 53 - Duplicate surf has same flags
+ok 54 - Duplicate surf has same flags
+ok 55 - Duplicate surf has same bpp
+ok 56 - Final SegFault test
+1..56
+Dubious, test returned 5 (wstat 1280, 0x500)
+Failed 5/56 subtests 
+
+Test Summary Report
+-------------------
+t/sdlx_surface.t (Wstat: 1280 Tests: 56 Failed: 5)
+  Failed tests:  36-38, 40, 45
+  Non-zero exit status: 5
+Files=1, Tests=56,  0 wallclock secs ( 0.04 usr  0.01 sys +  0.10 cusr  0.01 csys =  0.16 CPU)
+Result: FAIL
+Failed 1/1 test programs. 5/56 subtests failed.
