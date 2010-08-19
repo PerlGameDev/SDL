@@ -1,10 +1,26 @@
 #!perl -T
 # basic testing of SDLx::Sound
 
-use Test::More tests => 8;
-use lib 't/lib';
-use lib 'lib';
+BEGIN {
+	use Config;
+	if ( !$Config{'useithreads'} ) {
+		print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
+		exit(0);
+	}
 
+  use Test::More tests => 8;
+	use lib 't/lib';
+	use SDL::TestTool;
+
+	$audiodriver = $ENV{SDL_AUDIODRIVER};
+	$ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
+	if ( !SDL::TestTool->init(SDL_INIT_AUDIO) ) {
+		plan( skip_all => 'Failed to init sound' );
+	} elsif ( !SDL::Config->has('SDL_mixer') ) {
+		plan( skip_all => 'SDL_mixer support not compiled' );
+	}
+} 
 my $fase2 = 1;
 
 # load
@@ -60,3 +76,12 @@ ok( my $snd2 = SDLx::Sound->new(
 }
 
 diag( "Testing SDLx::Sound $SDLx::Sound::VERSION, Perl $], $^X" );           
+
+
+if ($audiodriver) {
+	$ENV{SDL_AUDIODRIVER} = $audiodriver;
+} else {
+	delete $ENV{SDL_AUDIODRIVER};
+}
+
+
