@@ -10,8 +10,10 @@ BEGIN {
 
   use Test::More tests => 8;
 	use lib 't/lib';
+  use SDL;
 	use SDL::TestTool;
   use SDL::Config;
+  use SDLx::Sound;
 
 	$audiodriver = $ENV{SDL_AUDIODRIVER};
 	$ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
@@ -26,7 +28,6 @@ my $fase2 = 1;
 
 # load
 # NOTE: use ok is tested in t/00-load.t so we can bail out
-use SDLx::Sound;
 
 # methods
 can_ok(

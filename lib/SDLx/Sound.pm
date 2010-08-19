@@ -18,38 +18,39 @@ sub new {
   my $class = shift;
   my $self = {@_};
   bless ($self, $class);
-  _initAudio() unless $audio_ok;
-  _initMixer();
+   _initAudio() unless $audio_ok;
+  $self->{supported} = _initMixer();
   return $self;
 }
 
 sub _initAudio {
     SDL::Mixer::open_audio( 44100, AUDIO_S16SYS, 2, 4096 );
     my ($status, $freq, $format, $channels) = @{ SDL::Mixer::query_spec() };
-
-    #Carp::carp ' Asked for freq, format, channels ' . join( ' ', ( 44100, AUDIO_S16SYS, 2,) );
-    #Carp::carp  ' Got back status,  freq, format, channels ' . join( ' ', ( $status, $freq, $format, $channels ) );
-
     $audioInited = 1 if $status == 1;
+    return ($status, $freq, $format, $channels); #TODO: Save this information in $self;
 }
 
 sub _initMixer {
     my $init_flags = SDL::Mixer::init( MIX_INIT_MP3 | MIX_INIT_MOD | MIX_INIT_FLAC | MIX_INIT_OGG );
-    
-    #print("We have MP3 support!\n")  if $init_flags & MIX_INIT_MP3;
-    #print("We have MOD support!\n")  if $init_flags & MIX_INIT_MOD;
-    #print("We have FLAC support!\n") if $init_flags & MIX_INIT_FLAC;
-    #print("We have OGG support!\n")  if $init_flags & MIX_INIT_OGG;
+   
+    my %init = ();
+
+     $init{ mp3 }  = 1  if $init_flags & MIX_INIT_MP3;
+     $init{ mod }  = 1  if $init_flags & MIX_INIT_MOD;
+     $init{ flac } = 1  if $init_flags & MIX_INIT_FLAC;
+     $init{ ogg }  = 1  if $init_flags & MIX_INIT_OGG;
+
+     return \%$init
 }
 
 sub load {
     my $self = shift;
-    my $self->{files} = {@_};
+     $self->{files} = {@_};
 }
 
 sub unload {
     my $self = shift;
-    my $self->{files} = {};
+     $self->{files} = {};
 }
 
 sub play {
