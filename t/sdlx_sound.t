@@ -11,6 +11,7 @@ BEGIN {
   use Test::More tests => 8;
 	use lib 't/lib';
 	use SDL::TestTool;
+  use SDL::Config;
 
 	$audiodriver = $ENV{SDL_AUDIODRIVER};
 	$ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
@@ -75,7 +76,7 @@ ok( my $snd2 = SDLx::Sound->new(
 );
 }
 
-diag( "Testing SDLx::Sound $SDLx::Sound::VERSION, Perl $], $^X" );           
+#diag( "Testing SDLx::Sound $SDLx::Sound::VERSION, Perl $], $^X" );           
 
 
 if ($audiodriver) {
