@@ -8,8 +8,9 @@ BEGIN {
 		exit(0);
 	}
 
-  use Test::More tests => 8;
+  use Test::More tests => 7;
 	use lib 't/lib';
+	use lib 'lib';
   use SDL;
 	use SDL::TestTool;
   use SDL::Config;
@@ -24,7 +25,7 @@ BEGIN {
 		plan( skip_all => 'SDL_mixer support not compiled' );
 	}
 } 
-my $fase2 = 1;
+my $fase2 = 0;
 
 # load
 # NOTE: use ok is tested in t/00-load.t so we can bail out
