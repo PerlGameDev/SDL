@@ -65,7 +65,7 @@ sub play {
            $play = 0;
        }
     } else {
-       carp("bacapibungundum! WHAT? ".$self->{files}."\n".$_[0]."\n");
+       carp("No newline ".$self->{files}."\n".$_[0]."\n");
        $play = 0;
     }
     return $play;
