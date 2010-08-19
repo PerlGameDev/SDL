@@ -1,0 +1,207 @@
+package SDLx::Sound;
+
+use SDL;
+use SDL::Audio;
+use SDL::Mixer;
+use Carp ();
+
+=head1 NAME
+
+SDLx::Sound
+
+=head1 VERSION
+
+Version 0.01_01
+
+
+=head1 SYNOPSIS
+
+    use SDLx::Sound;
+
+    my $snd = SDLx::Sound->new();
+    
+    # loads and plays a single sound now
+    $snd->play('myfile.wav');
+
+    # load a single file
+    $snd->load('theSound.aif');
+
+    # plays it or all loaded files
+    $snd->play();
+
+    # more sounds
+    my %files = (
+        chanell_01 => "/my_sound1.wav",
+        chanell_02 => "/my_sound2.ogg"
+    );
+
+    # times sounds bangs
+    my %times = (
+        chanell_01 => 0,      # start
+        chanell_01 => 1256,   # miliseconds
+        chanell_02 => 2345
+    );
+    
+    # Load files in channels for realtime play
+    $snd->load(%files);
+
+    # sets sound channel_01 loudness
+    $snd->loud('channel_01', 80);       # loud at 80%
+    $snd->play(%times);                 # play loaded files at times
+    $snd->play;                         # play again
+
+    # plays sound channel_01 at 578 miliseconds from now
+    $snd->play('channel_01', 578);
+
+    # fades sound 
+    $snd->fade('channel_02', 2345, 3456, -20);
+
+    # in a single act do the wole Sound
+    my $snd = SDLx::Sound->new(
+        files => (
+            chanell_01 => "/my_sound1.wav",
+            chanell_02 => "/my_sound2.ogg"
+ 
+        ), 
+        loud  => (
+            channel_01 => 80,
+            channel_02 => 75
+        ),
+        times => (
+            chanell_01 => 0,      # start
+            chanell_01 => 1256,   # miliseconds
+            chanell_02 => 2345
+        ),
+        fade  => (
+            chanell_02 => [2345, 3456, -20]
+        )
+    )->play();
+
+=head1 DESCRIPTION
+
+
+You can think about the SDLx::Sound at 2 aproaches. 
+
+=over 4
+
+=item * A simple sound or 
+
+=item * The sound of your game or app. 
+
+=back
+
+Your application will say what the best aproach.
+
+In a taste that resembles to perl and to SDL, our SDLx:Sound hooks at SDL::Audio and SDL::Mixer with a gracefull and simple interface that can offer to monks a modern perlish way to manage sounds.
+
+An SDLx::Sound object can load sounds from filesystem, play it, adjust this loudness level or stops the sound. 
+
+Each sound will play in the next available channel, so it can be handled isolately.
+
+=head1 METHODS
+
+=head2 new
+
+Returns a new instance of SDLx::Sound
+
+=cut
+
+sub new {
+    my $class = shift;
+    my $self = {@_};
+    bless ($self, $class);
+    return $self;
+}
+
+=head2 load
+
+=cut
+
+sub load {
+    my $self = shift;
+    my $self->{file} = $_[0];
+    warn "Loadind ". $self->{file} ."\n"; 
+}
+
+=head2 play
+
+=cut
+
+sub play {
+}
+
+=head2 loud
+
+=cut
+
+sub loud {
+}
+
+=head2 stop
+
+=cut
+
+sub stop {
+}
+
+
+=head1 AUTHOR
+
+Monsenhor, C<< <ricardo.filipo at mitologica.com.br> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to C<bug-sdlx-sound at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=SDLx-Sound>.  I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
+
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc SDLx::Sound
+
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=SDLx-Sound>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/SDLx-Sound>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/SDLx-Sound>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/SDLx-Sound/>
+
+=back
+
+
+=head1 ACKNOWLEDGEMENTS
+
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright 2010 Monsenhor.
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See http://dev.perl.org/licenses/ for more information.
+
+
+=cut
+
+1; # End of SDLx::Sound
