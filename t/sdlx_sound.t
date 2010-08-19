@@ -8,7 +8,8 @@ use lib 'lib';
 my $fase2 = 1;
 
 # load
-use_ok( 'SDLx::Sound' );
+# NOTE: use ok is tested in t/00-load.t so we can bail out
+use SDLx::Sound;
 
 # methods
 can_ok(
