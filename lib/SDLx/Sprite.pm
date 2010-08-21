@@ -141,12 +141,14 @@ sub y {
 
 sub draw {
 	my ( $self, $surface ) = @_;
+	SDLx::Validate::surface($surface);
 	$self->{surface}->blit( $surface, $self->clip, $self->rect );
 	return $self;
 }
 
 sub draw_xy {
 	my ( $self, $surface, $x, $y ) = @_;
+	SDLx::Validate::surface($surface);
 	$self->x($x);
 	$self->y($y);
 	return $self->draw($surface);
