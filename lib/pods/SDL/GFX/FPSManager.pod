@@ -43,3 +43,7 @@ Returns the C<lastticks>.
 
 Returns the C<rate>.
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+

@@ -77,8 +77,8 @@ C<volume_chunk> let you set and get the volume of a chunk. When a chunk is creat
 
 If you pass C<-1> as C<$new_volume> you just get its volume without changing it.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Tobias Leich [FROGGS]
+See L<SDL/AUTHORS>.
 
 =cut

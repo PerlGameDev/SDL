@@ -80,4 +80,8 @@ Frame offset to the beginning of this track
 
 L<SDL::CDROM>, L<SDL::CD>
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

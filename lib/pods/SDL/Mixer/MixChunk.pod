@@ -35,4 +35,8 @@ length of audio data in bytes
 
 Per-sample volume, 0-128 (normally C<MIX_MAX_VOLUME> after loading)
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

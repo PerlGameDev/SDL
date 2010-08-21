@@ -96,4 +96,9 @@ set to 4096.
 
 To be documented.
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
+
 =cut

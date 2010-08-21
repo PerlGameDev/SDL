@@ -402,4 +402,8 @@ Same as L<SDL::get_error>
 
 L<SDL>, L<SDL::Surface>, L<SDL::Video>, L<SDL::RWOps>
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

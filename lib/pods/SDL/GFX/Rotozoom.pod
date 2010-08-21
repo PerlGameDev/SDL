@@ -138,3 +138,9 @@ Export tag: ':smoothing'
  		RETVAL = rotateSurface90Degrees(pSurf, numClockwiseTurns);
  	OUTPUT:
  		RETVAL
+
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
+

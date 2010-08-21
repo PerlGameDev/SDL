@@ -68,4 +68,8 @@ if not, it returns the h component of the rectangle.
 
 L<SDL::Surface>
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

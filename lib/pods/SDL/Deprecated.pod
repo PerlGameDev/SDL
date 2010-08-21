@@ -43,4 +43,8 @@ SDL::Game::Rect has migrated to SDLx::Rect namespace. Same reasoning as above.
 
 =back
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

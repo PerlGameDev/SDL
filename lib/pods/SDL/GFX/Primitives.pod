@@ -218,4 +218,5 @@ Example:
 
 =head1 AUTHORS
 
-Tobias Leich [FROGGS]
+See L<SDL/AUTHORS>.
+

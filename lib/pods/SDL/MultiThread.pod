@@ -13,5 +13,8 @@ TODO, Core, MultiThread
 
 This module is not an object. 
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
 
 =cut

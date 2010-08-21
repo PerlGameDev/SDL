@@ -106,9 +106,10 @@ For example, if you wanted a 9 pixel crosshair you might do the following:
 
 The hotspot is offset by 4 pixels because a crosshair clicks from the center instead of the top left.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-David J. Goehrig, Tobias Leich, Blaizer
+See L<SDL/AUTHORS>.
+
 
 =head1 SEE ALSO
 

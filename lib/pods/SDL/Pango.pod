@@ -232,9 +232,9 @@ Example:
 
 Creates a new surface and draws the text/markup. You can specify the attributes of the surfaces using L<SDL::Pango::set_surface_create_args>.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Tobias Leich [FROGGS]
+See L<SDL/AUTHORS>.
 
 =head1 SEE ALSO
 

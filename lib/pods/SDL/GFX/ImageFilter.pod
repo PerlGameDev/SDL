@@ -545,3 +545,9 @@ void
 gfx_image_restore_stack()
 	CODE:
 		SDL_imageFilterRestoreStack();
+
+
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+

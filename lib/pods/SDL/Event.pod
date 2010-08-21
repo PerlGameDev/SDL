@@ -561,7 +561,9 @@ screen updates will still report success even though the application will no lon
 
 B<Note>: The macro SDL_QuitRequested will return non-zero if a quit event is pending 
 
-=head1 AUTHOR
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
 
 =head1 SEE ALSO
 

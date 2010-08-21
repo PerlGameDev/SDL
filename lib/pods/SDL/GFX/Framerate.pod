@@ -44,4 +44,7 @@ Get the currently set framerate of the manager.
 Generate a delay to accomodate currently set framerate. Call once in thegraphics/rendering loop. 
 If the computer cannot keep up with the rate (i.e.drawing too slow), the delay is zero and the delay interpolation is reset.
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
 

@@ -58,4 +58,8 @@ Examples:
 
 L<SDL::CD>, L<SDL::CDTrack>
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

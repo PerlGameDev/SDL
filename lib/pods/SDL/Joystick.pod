@@ -238,4 +238,8 @@ Closes a previously opened joystick. See L<SDL::Joystick::new|/new>
 
  SDL::Joystick::close($joystick) if SDL::Joystick::opened(0);
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

@@ -13,4 +13,8 @@ Mixer, Structure
 
 This structure is not directly usable. SDL Perl bindings handle the construction and destruction for you.
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

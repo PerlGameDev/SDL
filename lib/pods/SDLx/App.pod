@@ -162,10 +162,9 @@ C<SDLx::App::attribute> allows one to get and set GL attributes. By passing a va
 in addition to the attribute selector, the value will be set. C<SDL:::App::attribute>
 always returns the current value of the given attribute, or croaks on failure.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-David J. Goehrig
-Kartik Thakore
+See L<SDL/AUTHORS>.
 
 =head1 SEE ALSO
 

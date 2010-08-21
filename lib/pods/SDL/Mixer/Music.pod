@@ -221,8 +221,8 @@ Returns C<1> if the music is paused, otherwise C<0>.
 
 Returns C<1> if the music is playing sound, otherwise C<0>. It does'nt check if the music is paused.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Tobias Leich [FROGGS]
+See L<SDL/AUTHORS>.
 
 =cut

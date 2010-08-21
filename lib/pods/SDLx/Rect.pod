@@ -192,10 +192,6 @@ Receives a HASH REF and returns the a (key, value) list with the key and value o
 Returns a HASH REF of all the key and value pairs that intersect with the Rect. If no collisions are found an empty hash ref is returned. 
 
 
-=head1 AUTHOR
-
-Breno G. de Oliveira, C<< <garu at cpan.org> >>
-
 =head1 BUGS
 
 Please report any bugs or feature requests to the bug tracker. I will be notified, and then you'll automatically be notified of progress on your bug as we make changes.
@@ -207,14 +203,15 @@ You can find documentation for this module with the perldoc command.
 
     perldoc SDLx::Rect
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
 
 =head1 ACKNOWLEDGEMENTS
 
-Many thanks to all SDL_Perl contributors, and to the authors of pygame.rect, in which this particular module is heavily based.
+Many thanks to the authors of pygame.rect, in which this particular module is heavily based.
 
 =head1 COPYRIGHT & LICENSE
-
-Copyright 2009 Breno G. de Oliveira, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

@@ -130,4 +130,9 @@ Below we can use SDL::Events as normal:
 
 L<perl> L<SDLx::App> L<OpenGL> 
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
+
 =cut

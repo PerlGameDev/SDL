@@ -186,4 +186,8 @@ C<get_chunk> gets the most recent sample chunk played on channel. This chunk may
 
 B<Note>: Never pass C<-1> to this function!
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

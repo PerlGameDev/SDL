@@ -52,13 +52,9 @@ You tell me! at sdlperl.ath.cx
 
 #sdl irc.perl.org
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-    Kartik Thakore
-    CPAN ID: KTHAKORE
-    ---
-    kthakore@cpan.org
-    http://sdl.perl.org
+See L<SDL/AUTHORS>.
 
 =head1 COPYRIGHT
 

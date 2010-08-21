@@ -17,9 +17,9 @@ Pango, Structure
 
 Creates a new SDL::Pango context object. See L<SDL::Pango>.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Tobias Leich [FROGGS]
+See L<SDL/AUTHORS>.
 
 =head1 SEE ALSO
 

@@ -1388,9 +1388,9 @@ Example:
 Toggles the application between windowed and fullscreen mode, if supported. (X11 is the only target currently supported, BeOS support 
 is experimental).
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-magnet, Tobias Leich (FROGGS)
+See L<SDL/AUTHORS>.
 
 =head1 SEE ALSO
 

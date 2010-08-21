@@ -45,4 +45,8 @@ Returns the minor version number.
 
 Returns the patch version number.
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

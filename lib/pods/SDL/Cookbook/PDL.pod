@@ -82,4 +82,9 @@ When blitting the new surface check for the return value to see if there has bee
 If the error message is 'Blit combination not supported' that means that the BPP is incorrect or incosistent with the dimensions.
 After that a simple update_rect will so your new surface on the screen.
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
+
 =cut
