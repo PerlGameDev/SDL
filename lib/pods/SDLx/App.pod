@@ -54,20 +54,28 @@ C<SDLx::App::new> takes a series of named parameters:
 =over 4
 
 =item * title
+the window title. Defaults to the file name. Shorter alias: 't'
 
 =item * icon_title
+the icon title. Defaults to file name. Shortcut: 'it'
 
 =item * icon
+the icon itself. Defaults to none. Shortcut: 'i'
 
 =item * width
+Window width, in pixels. Defaults to 800. Shortcut: 'w'
 
 =item * height
+Window height, in pixels. Defaults to 600. Shortcut: 'h'
 
 =item * depth
+Screen depth. Defaults to 16. Shortcut: 'd'.
 
 =item * flags
+Any flags you want to pass to L<SDL::Video> upon initialization. Defaults to SDL_ANYFORMAT. Flags should be I<or'ed> together if you're passing more than one (flags => FOO|BAR). Shortcut: 'f'.
 
 =item * resizeable
+Set this to a true value to make the window resizeable by the user. Default is off.
 
 =back
 
