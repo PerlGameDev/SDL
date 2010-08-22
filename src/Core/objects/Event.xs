@@ -11,10 +11,13 @@
 
 SV* new_data( SV* thing )
 {
+  SV* new_thing;
  if (  SvROK( thing ) ) 
-    return  newRV_inc(SvRV(thing ) );
+  {  new_thing = SvRV(thing); }
  else
-    return  SvREFCNT_inc(thing); 
+   { new_thing = thing;  }
+
+    return  SvREFCNT_inc(newRV_inc(new_thing)); 
 
 }
 
@@ -901,8 +904,8 @@ event_user_data1 ( event, ... )
 	PPCODE: 
 		SDL_UserEvent * a = &(event->user);
 		if ( items > 1)
-			a->data1 = new_data( ST(1) ); 
-		 if (!a->data1)
+			 a->data1 = new_data( ST(1) );
+ 		 if (!a->data1)
 		  XSRETURN_EMPTY;
 		  ST(0) = a->data1;
 		  XSRETURN(1);
