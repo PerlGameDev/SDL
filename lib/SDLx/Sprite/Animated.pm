@@ -291,6 +291,7 @@ sub reset {
 
 	$self->stop;
 	$_current_frame{ refaddr $self} = 1;
+	$self->_update_clip;
 
 	return $self;
 }
