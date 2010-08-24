@@ -34,21 +34,51 @@ Extension
 
 =head1 DESCRIPTION
 
-The LayerManager ...
+SDLx::LayerManager is a package to handle a bunch of layers. A layer (see SDLx::Layer) is an SDL::Surface, the position of the surface on screen and some additional information.
+
+The layermanager gives you the opportunity to obtain the layer at a given point on screen and get the layers that are ahead or behind a layer.
+
+You will even be able to attach one or more layers to the mouse, e.g. for simulation some drag&drop functionality.
 
 =head1 METHODS
 
 =head2 new
 
+  my $layermanager = SDLx::LayerManager->new();
+
+This creates your layermanager object. It doesn't take any parameters.
+
 =head2 add
+
+  $layermanager->add( $layer );
+  $layermanager->add( SDLx::Layer->new( $surface, $x, $y, $options ) );
+
+Call C<add> to push an SDLx::Layer object to the layermanager.
 
 =head2 layers
 
+  my @layers = @{ $layermanager->layers };
+  my $first_layer = $layermanager->layers->[0];
+
+The method C<layers> returns all layers that were added before.
+
 =head2 layer
+
+  my $layer = $layermanager->layer( $index );
+
+To obtain only one layer at index C<$index> use this function. C<$index> ranges from C<0> to C<lenght - 1>.
 
 =head2 length
 
+  my $length = $layermanager->length();
+
+This method returns the count of the added layers.
+
 =head2 blit
+
+  $layermanager->blit( $surface );
+
+This method blits all layers to the surface (e.g. your video surface).
 
 =head2 by_position
 
