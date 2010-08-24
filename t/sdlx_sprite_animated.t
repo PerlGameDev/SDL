@@ -158,9 +158,30 @@ is( $rect->y, 0,  'rect->y after third next' );
 is( $rect->w, 48, 'rect->w after third next' );
 is( $rect->h, 48, 'rect->h after third next' );
 
-is( $sprite->next,     $sprite, 'next() returns the object' );
+is( $sprite->next, $sprite, 'next() returns the object' );
+
+is( $sprite->current_frame, 2, 'sprite->current_frame after next' );
+
 is( $sprite->previous, $sprite, 'previous() returns the object' );
-is( $sprite->reset,    $sprite, 'reset() returns the object' );
+
+is( $sprite->current_frame, 1, 'sprite->current_frame after previous' );
+
+$sprite->next;
+is( $sprite->current_frame, 2, 'sprite->current_frame before reset' );
+
+is( $clip->x, 48, 'clip->x before reset' );
+is( $clip->y, 48, 'clip->y before reset' );
+is( $clip->w, 48, 'clip->w before reset' );
+is( $clip->h, 48, 'clip->h before reset' );
+
+is( $sprite->reset, $sprite, 'reset() returns the object' );
+
+is( $sprite->current_frame, 1, 'sprite->current_frame after reset' );
+
+is( $clip->x, 48, 'clip->x after reset' );
+is( $clip->y, 0,  'clip->y after reset' );
+is( $clip->w, 48, 'clip->w after reset' );
+is( $clip->h, 48, 'clip->h after reset' );
 
 $sprite = SDLx::Sprite::Animated->new(
 	image => 'test/data/hero.bmp',
