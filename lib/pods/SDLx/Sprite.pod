@@ -141,7 +141,7 @@ be used together with 'rect' (see above).
 
 =item * draw_xy => $surface, $x, $y
 
-A shortcut to draw at coordinates quickly. Calles x() , y() and draw()
+A shortcut to draw at coordinates quickly. Calls x() , y() and draw()
 
 =item * rotation => $degrees, [$smooth]
 
@@ -149,7 +149,7 @@ Uses $degrees as the angle to rotate the surface to, in degrees
 (0..360, remember? :). This option is only available if your compiled SDL
 library has support for GFX (see L<< Alien::SDL >> for details).
 
-if $smooth is set the spirte is antialiased. This may mess with your alpha_key.
+if $smooth is set the sprite is antialiased. This may mess with your alpha_key.
 
 =item * alpha_key => SDL::Color
 
