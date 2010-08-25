@@ -265,11 +265,7 @@ Returns the own Sprite object, to allow method chaining.
 
 =head1 AUTHORS
 
-Dustin Mays, C<< <dork.fish.wat@gmail.com> >>
-
-Breno G. de Oliveira, C<< <garu at cpan.org> >>
-
-Kartik thakore C<< <kthakore at cpan.org> >>
+See L<SDL/AUTHORS>.
 
 =head1 SEE ALSO
 

@@ -60,4 +60,9 @@ if not, it returns the blue component of the color.
 
 L<SDL::Surface>
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
+
 =cut

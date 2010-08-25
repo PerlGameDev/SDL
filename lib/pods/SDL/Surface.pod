@@ -137,4 +137,8 @@ Returns a reference to the surface's pixels.
 
 L<SDL>, L<SDL::PixelFormat>, L<SDL::Video>, L<SDL::Rect>
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

@@ -102,4 +102,8 @@ Halts the channels by the given group id.
 
 Retuns C<0>.
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

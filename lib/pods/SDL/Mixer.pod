@@ -195,12 +195,12 @@ Example:
  
  printf("%s, %s, %s, %s\n", $status, $freq, $format, $channels);
 
-=head1 AUTHORS 
-
-Tobias Leich [FROGGS]
-
 =head1 SEE ALSO
 
 L<perl>, L<SDL::Mixer::Channels>, L<SDL::Mixer::Effects>, L<SDL::Mixer::Groups>, L<SDL::Mixer::Music>.
+
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
 
 =cut

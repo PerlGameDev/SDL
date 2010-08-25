@@ -563,3 +563,8 @@ If $state is SDL_QUERY then the current state is returned, otherwise the new pro
 =head1 SEE ALSO
 
 L<SDL::Event>, L<SDL::Video>
+
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+

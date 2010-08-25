@@ -21,3 +21,7 @@ Starting an OpenGL app with SDLx::App. L<SDL::Cookbook::OpenGL>
 
 Sending textures to Perl OpenGL. L<SDL::Cookbook::POGL>
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+

@@ -97,6 +97,9 @@ see L<SDL::Video::lock_YUV_overlay>, L<SDL::Video::unload_YUV_overlay>
 
 This will be set to 1 if the overlay is hardware accelerated.
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
 
 =cut
 

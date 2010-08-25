@@ -303,6 +303,8 @@ of the moon.
 
 Copyright 2009 Nelson Ferraz, all rights reserved.
 
+Updated and maintained by the SDL Perl project. See L<SDL/AUTHORS>.
+
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 

@@ -33,4 +33,8 @@ Fetches the SDL_Color at the provide index in palette
 
 L<SDL::Color> L<SDL::Surface>
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

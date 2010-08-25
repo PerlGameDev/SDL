@@ -141,12 +141,9 @@ Removes all handlers from the respective calling queue.
 
 Quick access to removing all handlers at once.
 
-
 =head1 AUTHORS
 
-Kartik Thakore
-
-Breno G. de Oliveira
+See L<SDL/AUTHORS>.
 
 =head2 ACKNOWLEGDEMENTS
 

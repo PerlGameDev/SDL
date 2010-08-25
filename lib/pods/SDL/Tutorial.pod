@@ -91,15 +91,11 @@ basic image loading and animation
 
 =back
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 chromatic, E<lt>chromatic@wgz.orgE<gt>. 
 
-nelson ferraz, E<lt>nferraz@cpan.orgE<gt>. 
-
-Updated by kthakore and garu.
-
-Written for and maintained by the Perl SDL project, L<http://sdl.perl.org/>.
+Written for and maintained by the Perl SDL project, L<http://sdl.perl.org/>. See L<SDL/AUTHORS> for details.
 
 =head1 COPYRIGHT
 

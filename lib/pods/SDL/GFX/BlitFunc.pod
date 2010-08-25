@@ -9,3 +9,7 @@ TODO, GFX
 
 =head1 METHODS
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+

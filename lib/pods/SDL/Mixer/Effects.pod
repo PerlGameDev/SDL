@@ -186,4 +186,8 @@ If you pass C<1> to C<$flip> it simple reverse stereo, swaps left and right chan
 B<Note>: Using a flip of C<0>, will cause the effect to unregister itself from channel. You cannot unregister it any other way, unless you use 
 L<SDL::Mixer::Effects::register> on the channel. 
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

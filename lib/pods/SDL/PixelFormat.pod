@@ -87,4 +87,8 @@ Overall surface alpha value
 
 L<SDL::Surface>
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

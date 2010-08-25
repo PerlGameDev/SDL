@@ -71,4 +71,8 @@ The current state of the mouse cursor can be queried by passing C<SDL_QUERY>, ei
 
 L<SDL::Cursor>
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

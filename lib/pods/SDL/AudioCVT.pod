@@ -70,8 +70,8 @@ C<buf> must be C<len*len_mult> bytes in size (calculated)
 
 Final audio size is C<len*len_ratio>
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Tobias Leich
+See L<SDL/AUTHORS>.
 
 =cut

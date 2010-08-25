@@ -131,6 +131,9 @@ If it couldn't write that exact number of blocks, or the write didn't work at al
 SDL::rw_close calls the close function in an SDL::RWOps structure. It only takes one parameter, an  SDL::RWOps structure. 
 Returns 0 on success, -1 on error. 
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
 
 
 =cut
