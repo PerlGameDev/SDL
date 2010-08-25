@@ -84,9 +84,25 @@ This method blits all layers to the surface (e.g. your video surface).
 
   my $layer = $layermanager->by_position( $x, $y );
 
+C<by_position> returns the C<SDLx::Layer> object at point C<$x $y>, which is not fully transparent at this pixel.
+
 =head2 ahead
 
+  my @layers = @{ $layermanager->ahead( $index ) };
+
+This method returns all layers that are ahead of the given layer indicated by C<$index>.
+Ahead means that a layer has a higher z-index and is blitted over the given layer.
+
+B<Note>: This method doesn't check for transparency. This will change in future versions.
+
 =head2 behind
+
+  my @layers = @{ $layermanager->behind( $index ) };
+
+This method returns all layers that are behind of the given layer indicated by C<$index>.
+Behind means that a layer has a lower z-index and is blitted before the given layer.
+
+B<Note>: This method doesn't check for transparency. This will change in future versions.
 
 =head2 attach
 
