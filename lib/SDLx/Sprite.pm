@@ -5,7 +5,7 @@ use warnings;
 use SDL;
 use SDL::Video;
 use SDL::Image;
-use SDL::Rect;
+use SDLx::Rect;
 use SDL::Surface;
 use SDLx::Surface;
 use SDLx::Validate;
@@ -64,12 +64,12 @@ sub _init_rects {
 	$self->rect(
 		exists $options{rect}
 		? $options{rect}
-		: SDL::Rect->new( 0, 0, 0, 0 )
+		: SDLx::Rect->new( 0, 0, 0, 0 )
 	);
 	$self->clip(
 		exists $options{clip}
 		? $options{clip}
-		: SDL::Rect->new( 0, 0, 0, 0 )
+		: SDLx::Rect->new( 0, 0, 0, 0 )
 	);
 
 }
