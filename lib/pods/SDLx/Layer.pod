@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-SDLx::Layer - Extension ...
+SDLx::Layer - Storage object for surface and position information
 
 =head1 CATEGORY 
 
