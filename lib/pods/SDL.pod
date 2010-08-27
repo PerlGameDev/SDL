@@ -203,6 +203,8 @@ Gabor Szabo (szabgab) <szabgab@gmail.com>
 
 Guillaue Cottenceau (gc) <gc@mandrakesoft.com>
 
+Heikki MehtE<195>nen (hmehta/hejki) <heikki@mehtanen.fi>
+
 James King
 
 James Wright <jwright@cpan.org>
