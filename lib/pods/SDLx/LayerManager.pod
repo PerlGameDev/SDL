@@ -126,7 +126,16 @@ The other layers are positioned relative to the backmost layer just like before.
 
 =head2 detach_back
 
+  $layermanager->detach_back( );
+
+C<detach_back> detaches the prevously attached layers back to the position where they were attached.
+
 =head2 foreground
+
+  $layermanager->foreground( $layer );
+  $layermanager->foreground( @layers );
+
+This method moves the given layer(s) to the foreground so that they are blittet at last on top of the other layers.
 
 =head1 BUGS
 
