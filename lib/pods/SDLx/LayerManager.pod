@@ -106,7 +106,23 @@ B<Note>: This method doesn't check for transparency. This will change in future 
 
 =head2 attach
 
+  $layermanager->attach( $layer,  $x, $y );
+  $layermanager->attach( @layers, $x, $y );
+
+This function makes the given layer(s) sticky to the mouse. If you move the mouse the layer(s) will follow.
+The layermanager blits these layers at last, so they will appear on top of all layers.
+
+C<$x> and C<$y> should be set to the coords of the mouse, e.g. the coords of the mouse click.
+If you omit C<$x> and C<$y> the layermanager obtains them via SDL::Events::get_mouse_state.
+
+B<Note>: The z-index is not changed for the given layers.
+
 =head2 detach_xy
+
+  $layermanager->detach_xy( $x, $y );
+
+C<detach_xy> detaches the prevously attached layers to the given coords. The upper left corner of the backmost layer will be at C<$x> and C<$y>.
+The other layers are positioned relative to the backmost layer just like before.
 
 =head2 detach_back
 
