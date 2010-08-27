@@ -135,7 +135,7 @@ C<detach_back> detaches the prevously attached layers back to the position where
   $layermanager->foreground( $layer );
   $layermanager->foreground( @layers );
 
-This method moves the given layer(s) to the foreground so that they are blittet at last on top of the other layers.
+This method moves the given layer(s) to the foreground so that they are blittet on top of the other layers.
 
 =head1 BUGS
 

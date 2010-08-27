@@ -11,41 +11,152 @@ Extension
 
   use SDLx::Layer;
   use SDLx::LayerManager;
+  
+  use SDL::Image;
+  use SDL::Surface;
+  use SDL::Video;
+  
+  # creating layers
+  my $layer1 = SDLx::Layer->new( SDL::Image::load('image1.png'), {userdata => '7'} );
+  my $layer2 = SDLx::Layer->new( SDL::Image::load('image2.png'), 100, 200, {userdata => '42'} );
+  
+  # creating the manager that holds the layers
+  my $layermanager = SDLx::LayerManager->new();
+  $layermanager->add( $layer1 );
+  $layermanager->add( $layer2 );
+  
+  my $display = # create your video surface here
+  
+  $layer1->foreground;
+  printf( "%s\n", $layer1->behind->[0]->data->{userdata} ); # prints 42
 
 =head1 DESCRIPTION
 
+A layer (see SDLx::Layer) is an SDL::Surface, the position of the surface on screen and some additional information, e.g. ingame states.
 
 =head1 METHODS
 
 =head2 new
 
+  my $layer = SDLx::Layer->new( $surface );
+  my $layer = SDLx::Layer->new( $surface,                                   %data );
+  my $layer = SDLx::Layer->new( $surface, $pos_x,                           %data );
+  my $layer = SDLx::Layer->new( $surface, $pos_x, $pos_y,                   %data );
+  my $layer = SDLx::Layer->new( $surface, $pos_x, $pos_y, $clip_w,          %data );
+  my $layer = SDLx::Layer->new( $surface, $pos_x, $pos_y, $clip_w, $clip_h, %data );
+
+This constructs the layer object. See how you can omit the position and dimension of the layer. The hash C<%data> is for your use only.
+The layer object just pass it through.
+
 =head2 index
+
+  my $index = $layer->index;
+
+The method C<index> represents the z-index ot this layer within its layermanager.
 
 =head2 x
 
+  my $x = $layer->x;
+
+This is a shortcut for $layer->pos->x.
+
 =head2 y
+
+  my $y = $layer->y;
+
+This is a shortcut for $layer->pos->y.
 
 =head2 w
 
+  my $w = $layer->w;
+
+This is a shortcut for $layer->clip->w.
+
 =head2 h
+
+  my $h = $layer->h;
+
+This is a shortcut for $layer->pos->h.
 
 =head2 surface
 
-=head2 clip
+  my $surface = $layer->surface;
+  my $surface = $layer->surface( $new_surface );
+
+B<Example>:
+
+  SDL::Video::blit_surface( $layer->surface, $layer->clip, $destination_surface, $layer->pos );
+
+This method let you retrive the current or set a new surface.
 
 =head2 pos
 
+  my $rect = $layer->pos;
+
+The method C<pos> returns an SDL::Rect object. The pos x and y are stored there.
+
+B<Example>:
+
+  SDL::Video::blit_surface( $layer->surface, $layer->clip, $destination_surface, $layer->pos );
+
+=head2 clip
+
+  my $rect = $layer->clip;
+
+The method C<clip> returns an SDL::Rect object. The clip width and height are stored there.
+
+B<Example>:
+
+  SDL::Video::blit_surface( $layer->surface, $layer->clip, $destination_surface, $layer->pos );
+
 =head2 data
+
+  my %data = %{ $layer->data };
+  my %data = %{ $layer->data( %new_data) };
+
+This method returns the hash C<%data>. You can set C<%data> by passing a hash.
 
 =head2 ahead
 
+  my @layers = $layer->ahead;
+
+This method returns all layers that are ahead of the given layer.
+Ahead means that a layer has a higher z-index and is blitted over the given layer.
+
+B<Note>: This method doesn't check for transparency. This will change in future versions.
+
 =head2 behind
+
+  my @layers = $layer->behind;
+
+This method returns all layers that are behind of the given layer.
+Behind means that a layer has a lower z-index and is blitted over the given layer.
+
+B<Note>: This method doesn't check for transparency. This will change in future versions.
 
 =head2 attach
 
+  $layer->attach( $x, $y );
+
+This function makes the given layer sticky to the mouse. If you move the mouse the layer will follow.
+The layermanager blits this layer at last, so they will appear on top of all layers.
+
+C<$x> and C<$y> should be set to the coords of the mouse, e.g. the coords of the mouse click.
+If you omit C<$x> and C<$y> the layer obtains them via SDL::Events::get_mouse_state.
+
+B<Note>: The z-index is not changed for the given layer.
+
 =head2 detach_xy
 
+  $layer->detach_xy( $x, $y );
+
+C<detach_xy> detaches the prevously attached layer to the given coords. The upper left corner of this layer will be at C<$x> and C<$y>.
+
 =head2 foreground
+
+  $layer->foreground;
+
+This method moves the given layer to the foreground so that it is blittet on top of the other layers.
 
 =head1 BUGS
 
