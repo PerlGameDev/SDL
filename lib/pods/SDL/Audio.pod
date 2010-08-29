@@ -286,5 +286,9 @@ Unlocks a previous C<lock> call.
 
 Shuts down audio processing and closes the audio device.  
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut
 

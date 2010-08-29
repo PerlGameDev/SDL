@@ -185,7 +185,7 @@ You can also set the gfx font but passing a hash reference as shown below.
 
 Returns $self
 
-=head1 AUTHOR
+=head1 AUTHORS
 
- kthakore 
+See L<SDL/AUTHORS>.
 

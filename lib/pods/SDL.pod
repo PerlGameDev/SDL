@@ -159,8 +159,122 @@ C<SDL::delay> doesn't return anything.
  # Delay for half a second
  SDL::delay(500);
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-magnet, kthakore, Blaizer
+=head2 Project Founder
 
-=cut
+David J. Goehrig
+
+=head2 Current Maintainers
+
+Kartik Thakore (kthakore)
+
+Tobias Leich (FROGGS)
+
+=head2 Core Developers and Contributors
+
+The following people have dedicated blood sweat and tears to making SDL Perl possible.
+
+See the L<impact graph|http://github.com/kthakore/SDL_perl/graphs/impact> on our github repository.
+
+Andy Bakun <sdlperl@thwartedefforts.org>
+
+Benedikt Meurer <bmeurer@fwdn.de>
+
+Blaise Roth (Blaizer) <blaiseroth@gmail.com>
+
+Breno G. de Oliveira (garu)
+
+Brian Cassidy (bricas)
+
+chromatic <chromatic@wgz.org>
+
+Daniel Mantovani <daniel.oliveira.mantovani@gmail.com>
+
+Daniel Ruoso http://daniel.ruoso.com/
+
+David J. Goehrig <dgoehrig@cpan.org>
+
+Dustin Mays (dorkfish) <dork.fish.wat.@gmail.com>
+
+Fedora
+
+Gabor Szabo (szabgab) <szabgab@gmail.com>
+
+Guillaue Cottenceau (gc) <gc@mandrakesoft.com>
+
+Heikki MehtE<195>nen (hmehta/hejki) <heikki@mehtanen.fi>
+
+James King
+
+James Wright <jwright@cpan.org>
+
+Jeffrey T. Palmer (jtpalmer) <jeffrey.t.palmer@gmail.com>
+
+Kartik Thakore (kthakore) <thakore.kartik@gmail.com>
+
+KatrinaTheLamia
+
+kmx <kmx@cpan.org>
+
+Luke
+
+Michael Lamertz <mike@perl-ronin.de>
+
+morgoth.666
+
+Peter BARABAS <z0d@artifact.hu>
+
+Russell Valentine <russ_allegro@yahoo.com>
+
+Ryan Hanlon
+
+Stephane Desneux <sdx@desneux.com>
+
+Tels <http://www.bloodgate.com>
+
+Thomas Tongue
+
+Tobias Leich (FROGGS)
+
+Tony C
+
+Yuval Kogman (nothingmuch)
+
+Wayne Keenan <wayne@metaverse.fsnet.co.uk>
+
+If you would like to contribute to SDL Perl, please post a message on the mailing list:
+
+sdl-devel@perl.org
+
+And request access to the github repository. Or drop us a line on #sdl over at irc.perl.org
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2002-2010 SDL Authors as listed above, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=head1 DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
+OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
+ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH
+YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
+NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE
+LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL,
+OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE
+THE SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.

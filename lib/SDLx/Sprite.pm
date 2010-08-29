@@ -5,7 +5,7 @@ use warnings;
 use SDL;
 use SDL::Video;
 use SDL::Image;
-use SDL::Rect;
+use SDLx::Rect;
 use SDL::Surface;
 use SDLx::Surface;
 use SDLx::Validate;
@@ -64,12 +64,12 @@ sub _init_rects {
 	$self->rect(
 		exists $options{rect}
 		? $options{rect}
-		: SDL::Rect->new( 0, 0, 0, 0 )
+		: SDLx::Rect->new( 0, 0, 0, 0 )
 	);
 	$self->clip(
 		exists $options{clip}
 		? $options{clip}
-		: SDL::Rect->new( 0, 0, 0, 0 )
+		: SDLx::Rect->new( 0, 0, 0, 0 )
 	);
 
 }
@@ -141,12 +141,14 @@ sub y {
 
 sub draw {
 	my ( $self, $surface ) = @_;
+	SDLx::Validate::surface($surface);
 	$self->{surface}->blit( $surface, $self->clip, $self->rect );
 	return $self;
 }
 
 sub draw_xy {
 	my ( $self, $surface, $x, $y ) = @_;
+	SDLx::Validate::surface($surface);
 	$self->x($x);
 	$self->y($y);
 	return $self->draw($surface);

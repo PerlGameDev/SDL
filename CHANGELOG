@@ -2,6 +2,7 @@ Revision history for Perl extension SDL_perl.
 
 * 2.512
   - More tests and implemented more of SDLx::Sprite::Animated [jtpalmer]
+  - Changed from SDL::Rect -> SDLx::Rect in SDLx::Sprite [hmehta]
 
 * 2.511 06 August 2010
   - Added fixes for image and gfx uses in Surface [kthakore, garu]

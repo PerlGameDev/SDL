@@ -102,4 +102,8 @@ Width and height of the current video mode, or of the desktop mode if C<SDL_GetV
 
 L<SDL::Video>, L<SDL::PixelFormat>
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut

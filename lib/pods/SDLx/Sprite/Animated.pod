@@ -288,16 +288,9 @@ If you want to restart autoplay from the initial frame, just do:
 
   $sprite->reset->start;
 
-
 =head1 AUTHORS
 
-Jeffrey T. Palmer C<< <jeffrey.t.palmer at gmail.com> >>
-
-Dustin Mays, C<< <dork.fish.wat@gmail.com> >>
-
-Breno G. de Oliveira, C<< <garu at cpan.org> >>
-
-Kartik thakore C<< <kthakore at cpan.org> >>
+See L<SDL/AUTHORS>.
 
 =head1 SEE ALSO
 

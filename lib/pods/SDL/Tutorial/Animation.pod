@@ -181,9 +181,8 @@ animating images
 
 chromatic, E<lt>chromatic@wgz.orgE<gt>
 
-updated by kthakore, E<lt>kthakore@cpan.orgE<gt>
-
 Written for and maintained by the Perl SDL project, L<http://sdl.perl.org/>.
+See L<SDL/AUTHORS>.
 
 =head1 BUGS
 

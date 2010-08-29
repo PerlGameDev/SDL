@@ -15,7 +15,6 @@ The constants are exported by default. You can avoid this by doing:
 
  use SDL::TTF ();
 
-
 and access them directly:
 
  SDL::TTF::TTF_HINTING_NORMAL;
@@ -521,22 +520,22 @@ version 2.3.5
 
 Example:
 
-	use SDL;
-	use SDL::Rect;
-	use SDL::Video;
-	use SDL::Color;
-	use SDL::TTF;
-	use SDL::TTF::Font;
+ use SDL;
+ use SDL::Rect;
+ use SDL::Video;
+ use SDL::Color;
+ use SDL::TTF;
+ use SDL::TTF::Font;
 
-	SDL::init(SDL_INIT_VIDEO);
-	SDL::TTF::init();
-	my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
-	my $font    = SDL::TTF::open_font('test/data/aircut3.ttf', '24');
-	die 'Coudnt make font '. SDL::get_error if !$font;
-	my $surface = SDL::TTF::render_text_solid($font, 'Hallo!', SDL::Color->new(0xFF,0xFF,0xFF));
-	SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(10, 10, 640, 480));
-	SDL::Video::update_rect($display, 0, 0, 0, 0);
-	SDL::delay(5000);
+ SDL::init(SDL_INIT_VIDEO);
+ SDL::TTF::init();
+ my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
+ my $font    = SDL::TTF::open_font('test/data/aircut3.ttf', '24');
+ die 'Coudnt make font '. SDL::get_error if !$font;
+ my $surface = SDL::TTF::render_text_solid($font, 'Hallo!', SDL::Color->new(0xFF,0xFF,0xFF));
+ SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(10, 10, 640, 480));
+ SDL::Video::update_rect($display, 0, 0, 0, 0);
+ SDL::delay(5000);
 
 =head4 render_utf8_solid
 
@@ -666,9 +665,9 @@ Render the unicode encoded text onto a new surface. After that you can blit this
 
 B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode>.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
-Tobias Leich [FROGGS]
+See L<SDL/AUTHORS>.
 
 =head1 SEE ALSO
 

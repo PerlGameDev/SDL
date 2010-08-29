@@ -136,9 +136,6 @@ is( SDL_GRAB_ON(),    1,  'SDL_GRAB_ON() should also be available' );
 is( SDL_GRAB_QUERY,   -1, 'SDL_GRAB_QUERY should be imported' );
 is( SDL_GRAB_QUERY(), -1, 'SDL_GRAB_QUERY() should also be available' );
 
-#testing get_video_surface
-#SDL::init(SDL_INIT_VIDEO);
-
 #needs to be done before set_video_mode
 my $glVal = SDL::Video::GL_load_library('this/should/fail');
 
@@ -246,20 +243,6 @@ SKIP:
 	);
 }
 SDL::delay(100);
-
-my $zero = [ 0, 0, 0, 0 ];
-SDL::Video::set_gamma_ramp( $zero, $zero, $zero );
-pass '[set_gamma_ramp] ran';
-
-my ( $r, $g, $b ) = ( [], [], [] );
-SDL::Video::get_gamma_ramp( $r, $g, $b );
-pass '[get_gamma_ramp] ran got ' . @{$r};
-is( @{$r}, 256, '[get_gamma_ramp] got 256 gamma ramp red back' );
-is( @{$g}, 256, '[get_gamma_ramp] got 256 gamma ramp green back' );
-is( @{$b}, 256, '[get_gamma_ramp] got 256 gamma ramp blue back' );
-
-SDL::Video::set_gamma( 1.0, 1.0, 1.0 );
-pass '[set_gamma] ran ';
 
 my @b_w_colors;
 

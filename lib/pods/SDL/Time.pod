@@ -66,4 +66,8 @@ This ID is the return value of the C<SDL::Time::add_timer> function.
 
 C<SDL::Time::remove_timer> returns C<0> on success or C<-1> on error.
 
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
 =cut
