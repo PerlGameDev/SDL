@@ -165,6 +165,24 @@ Draws a line on the surface. Antialias is turned on if $antialias is true.
 
 Returns $self
 
+=head2 draw_circle
+
+ $sdlx_surface->draw_circle( [$x1, $y1], $radius, \@color ); 
+
+Draws an unfilled circle at C<($x1,$y1)> of size $radius and $color.
+
+Returns $self
+
+=head2 draw_circle_filled
+
+ $sdlx_surface->draw_filled_circle( [$x1, $y1], $radius, \@color ); 
+
+Draws an B<filled> circle at C<($x1,$y1)> of size $radius and $color.
+
+Returns $self
+
+
+
 =head2 draw_gfx_text
 
 Draw text using gfx (not pretty but fast) at give vector, color.

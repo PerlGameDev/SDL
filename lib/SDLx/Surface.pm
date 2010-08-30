@@ -323,6 +323,30 @@ sub draw_line {
 sub draw_circle {
 	my ( $self, $center, $radius, $color, $antialias ) = @_;
 
+        unless ( SDL::Config->has('SDL_gfx_primitives') ) {
+		Carp::carp("SDL_gfx_primitives support has not been compiled");
+		return;
+	}
+
+        Carp::carp "Center needs to be an array of format [x,y]" unless (ref $center eq 'ARRAY' && scalar @$center == 2);
+         SDLx::Validate::list_rgba($color);
+
+	SDL::GFX::Primitives::circle_RGBA($self->surface, @{$center}, $radius, @{$color});
+	return $self;
+}
+
+sub draw_circle_filled {
+	my ( $self, $center, $radius, $color, $antialias ) = @_;
+
+        unless ( SDL::Config->has('SDL_gfx_primitives') ) {
+		Carp::carp("SDL_gfx_primitives support has not been compiled");
+		return;
+	}
+
+        Carp::carp "Center needs to be an array of format [x,y]" unless (ref $center eq 'ARRAY' && scalar @$center == 2);
+         SDLx::Validate::list_rgba($color);
+
+	SDL::GFX::Primitives::filled_circle_RGBA($self->surface, @{$center}, $radius, @{$color});
 	return $self;
 }
 
