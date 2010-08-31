@@ -89,7 +89,7 @@ sub run_test {
     $accumulator += $delta_time;
     while ( $accumulator >= $dt ) {
         $accumulator -= $dt;
-        $self->_move( $t, $dt );
+        $self->_move( $dt, $t );
         $t += $dt;
     }
     $self->_show( $accumulator / $dt );
@@ -111,8 +111,8 @@ sub _event {
 
 sub _move {
 	my $self        = shift;
-	my $t 		= shift;
 	my $delta_ticks = shift;
+	my $t 		= shift;
 	foreach my $move_handler ( @{ $_move_handlers{ refaddr $self} } ) {
 		$move_handler->($delta_ticks, $t);
 	}
