@@ -79,6 +79,7 @@ Set this to a true value to make the window resizeable by the user. Default is o
 
 =back
 
+=head1 METHODS
 
 =head2 title()
 
@@ -133,29 +134,6 @@ the application. It takes one argument, which should be one of the following:
 
 =back
 
-=head2 loop( \%actions )
-
-C<SDLx::App::loop> is a simple event loop method which takes a reference to a hash
-of event handler subroutines. The keys of the hash must be SDL event types such
-as SDL_QUIT(), SDL_KEYDOWN(), and the like. When called, the event method recieves
-as its parameter the event object used in the loop.
- 
-Example:
-
-    my $app = SDLx::App->new(
-        title  => "test.app", 
-        width  => 800, 
-        height => 600, 
-        depth  => 32
-    );
-    
-    my %actions = (
-        SDL_QUIT()    => sub { exit(0); },
-        SDL_KEYDOWN() => sub { print "Key Pressed" },
-    );
-    
-    $app->loop( \%actions );
-
 =head2 sync
 
 C<SDLx::App::sync> encapsulates the various methods of syncronizing the screen with the
@@ -169,6 +147,30 @@ or OpenGL buffer if applicable. This is prefered to calling flip on the applicat
 C<SDLx::App::attribute> allows one to get and set GL attributes. By passing a value
 in addition to the attribute selector, the value will be set. C<SDL:::App::attribute>
 always returns the current value of the given attribute, or croaks on failure.
+
+=head1 CALLBACKS
+
+C<SDLx::App> is a C<SDLx::Controller>. Use the event, show and handlers to run the app.
+
+  use SDL;
+  use SDLx::App;
+ 
+  use SDL::Event; #Where ever the event call back is processed
+
+  my $app = SDLx::App->new( width => 200, height => 200);
+
+  $app->add_event_handler( sub{ return 0 if $_[0]->type == SDL_QUIT; return 1});
+
+  $app->add_show_handler( sub{ $app->update() } );
+
+  $app->add_move_handler( 
+  sub{ 
+  #calc your physics here 
+  } );
+
+  $app->run();
+
+see L<SDLx::Controller> for more details.
 
 =head1 AUTHORS
 
