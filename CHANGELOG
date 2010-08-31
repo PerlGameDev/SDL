@@ -1,22 +1,23 @@
 Revision history for Perl extension SDL_perl.
 
 * 2.512
-  - More tests and implemented more of SDLx::Sprite::Animated [jtpalmer]
-  - Changed from SDL::Rect -> SDLx::Rect in SDLx::Sprite [hmehta]
-  - Added drawing for circles in SDLx::Surface [kthakore]
-  - Fixed test issues [FROGGS]
+	- More tests and implemented more of SDLx::Sprite::Animated [jtpalmer]
+	- Changed from SDL::Rect -> SDLx::Rect in SDLx::Sprite [hmehta]
+	- Added drawing for circles in SDLx::Surface [kthakore]
+	- Fixed test issues [FROGGS]
+	- Added Layer and Layer Managers [FROGGS]
 
 * 2.511 06 August 2010
-  - Added fixes for image and gfx uses in Surface [kthakore, garu]
-  - Added raw, binary mode image detection to SDLx::Surafce [garu]
-  - Minor doc fixes
-  - Major segfaults in SDL::GFX::Primitives fixed [kthakore]
-  - Issues with double free fixed for -DDEBUGGING tests [kthakore]
-  - More delay add to test for syncing issues in VM test [FROGGS]
-  - Used SDLx::Validate more [kthakore]
-  - Applied patch for fink compatibiliet FULL_PERL [dmacks, kthakore]
-  - 2 Character fix for set_gamma_ramp in  SDL::Video [kthakore]
-  - Added register for windows [kthakore]
+	- Added fixes for image and gfx uses in Surface [kthakore, garu]
+	- Added raw, binary mode image detection to SDLx::Surafce [garu]
+	- Minor doc fixes
+	- Major segfaults in SDL::GFX::Primitives fixed [kthakore]
+	- Issues with double free fixed for -DDEBUGGING tests [kthakore]
+	- More delay add to test for syncing issues in VM test [FROGGS]
+	- Used SDLx::Validate more [kthakore]
+	- Applied patch for fink compatibiliet FULL_PERL [dmacks, kthakore]
+	- 2 Character fix for set_gamma_ramp in  SDL::Video [kthakore]
+	- Added register for windows [kthakore]
 
 * 2.510 02 August 2010
 	- Using bmp file if libpng isnt available in t/sdlx_sfont.t [#177] [FROGGS]
@@ -24,8 +25,8 @@ Revision history for Perl extension SDL_perl.
 	- Added SDLx::Layermanager (wip) [FROGGS]
 	- Added and cleaned up SDLx::Validate [Blaizer, kthakore]
 	- More tests and clean up in SDLx::Sprite::Animated [jtpalmer]
-  - Fixed free errors for SUSE [kthakore]
-  - Moved Surfaces classes to inside-out OOP [ruoso, jtpalmer]
+	- Fixed free errors for SUSE [kthakore]
+	- Moved Surfaces classes to inside-out OOP [ruoso, jtpalmer]
 
 * 2.503
 	- Removed examples/adventure/
