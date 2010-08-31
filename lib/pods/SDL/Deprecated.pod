@@ -11,6 +11,16 @@ Core
 
 =head1 RELEASES
 
+=head2 2.513
+
+=over 
+
+=item SDLx::App
+
+C<SDLx::App::loop()> is depreceated.
+
+=back
+
 =head2 2.502
 
 =over

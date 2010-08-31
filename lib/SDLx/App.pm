@@ -179,16 +179,6 @@ sub grab_input {
 	SDL::Video::wm_grab_input($mode);
 }
 
-sub loop {
-	my ( $self, $href ) = @_;
-	my $event = SDL::Event->new();
-	while ( SDL::Events::wait_event($event) ) {
-		if ( ref( $$href{ $event->type() } ) eq "CODE" ) {
-			&{ $$href{ $event->type() } }($event);
-		}
-	}
-}
-
 sub sync {
 	my $self = shift;
 	if ($SDLx::App::USING_OPENGL) {
