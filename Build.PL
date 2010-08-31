@@ -568,7 +568,10 @@ my $build = $package->new(
         'File::ShareDir'    => '0',
         'Tie::Simple'       => '0'
     },
-    requires => { 'Tie::Simple' => '0' },
+    requires => { 
+	'Tie::Simple' => '0',
+	'CPAN'        => '1.92'
+    },
 
     build_recommends => {
         'Pod::ToDemo' => '0.20'
