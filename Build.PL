@@ -582,7 +582,7 @@ my $build = $package->new(
     meta_merge => {
         resources => {
             bugtracker => 'http://sdlperl.ath.cx/projects/SDLPerl',
-            repository => 'http://github.com/kthakore/SDL_perl'
+            repository => 'http://github.com/PerlGameDev/SDL'
         }
     },
     dist_abstract => 'SDL bindings to Perl',
