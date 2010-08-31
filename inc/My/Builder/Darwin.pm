@@ -18,7 +18,7 @@ sub build_bundle {
 	my $bundle_contents = "SDLPerl.app/Contents";
 	system "mkdir -p \"$bundle_contents\"";
 	mkdir "$bundle_contents/MacOS", 0755;
-	my $Perl = ($ENV{'FULLPERL'} or $^X or 'perl') ;
+	my $Perl = ( $ENV{'FULLPERL'} or $^X or 'perl' );
 	my $cflags; #= Alien::SDL->config('cflags');
 	$cflags = ' ' . `$Perl -MExtUtils::Embed -e ccopts`;
 	chomp($cflags);

@@ -10,6 +10,7 @@ use SDLx::Controller::Timer;
 use Scalar::Util 'refaddr';
 use SDLx::Controller::Object;
 use SDLx::Controller::State;
+
 # inside out, so this can work as the superclass of another
 # SDL::Surface subclass
 my %_delta;
@@ -73,27 +74,27 @@ sub run {
 }
 
 sub run_test {
-	my $self = shift;
-	my $quit = 0; 
+	my $self         = shift;
+	my $quit         = 0;
 	my $t            = 0.0;
 	my $dt           = $_dt{ refaddr $self};
 	my $current_time = 0.0;
 	my $accumulator  = 0.0;
-    while ( !$_quit{ refaddr $self} ) {
+	while ( !$_quit{ refaddr $self} ) {
 		$self->_event;
 
-    my $new_time   = time;
-    my $delta_time = $new_time - $current_time;
-    $current_time = $new_time;
-    $delta_time = 0.25 if ( $delta_time > 0.25 );
-    $accumulator += $delta_time;
-    while ( $accumulator >= $dt ) {
-        $accumulator -= $dt;
-        $self->_move( $dt, $t );
-        $t += $dt;
-    }
-    $self->_show( $accumulator / $dt );
-   }
+		my $new_time   = time;
+		my $delta_time = $new_time - $current_time;
+		$current_time = $new_time;
+		$delta_time = 0.25 if ( $delta_time > 0.25 );
+		$accumulator += $delta_time;
+		while ( $accumulator >= $dt ) {
+			$accumulator -= $dt;
+			$self->_move( $dt, $t );
+			$t += $dt;
+		}
+		$self->_show( $accumulator / $dt );
+	}
 
 }
 
@@ -112,9 +113,9 @@ sub _event {
 sub _move {
 	my $self        = shift;
 	my $delta_ticks = shift;
-	my $t 		= shift;
+	my $t           = shift;
 	foreach my $move_handler ( @{ $_move_handlers{ refaddr $self} } ) {
-		$move_handler->($delta_ticks, $t);
+		$move_handler->( $delta_ticks, $t );
 	}
 }
 
@@ -129,21 +130,18 @@ sub _show {
 sub quit { $_quit{ refaddr $_[0] } = 1 }
 
 sub add_object {
-	my ($self, $obj, $render, @params ) = @_;
+	my ( $self, $obj, $render, @params ) = @_;
 
 	croak "Object is needed" unless $obj && $obj->isa('SDLx::Controller::Object');
-	my $move = sub { $obj->update( $_[1], $_[0] ) } ;
-	$self->add_move_handler( $move  );
-	
-	if( $render )
-	{
-	my $show = sub { my $state = $obj->interpolate( $_[0] );  $render->($state, @params);  };
-	$self->add_show_handler( $show 	);
-	}
-	else
-	{
-		carp "Render callback not provide" ;
-	
+	my $move = sub { $obj->update( $_[1], $_[0] ) };
+	$self->add_move_handler($move);
+
+	if ($render) {
+		my $show = sub { my $state = $obj->interpolate( $_[0] ); $render->( $state, @params ); };
+		$self->add_show_handler($show);
+	} else {
+		carp "Render callback not provide";
+
 	}
 
 

@@ -158,38 +158,37 @@ sub clip_rect {
 }
 
 sub load {
-    my ($self, $filename, $type) = @_;
-    my $surface;
+	my ( $self, $filename, $type ) = @_;
+	my $surface;
 
-    # short-circuit if it's a bitmap
-    if ( ($type and lc $type eq 'bmp')
-        or lc substr($filename, -4, 4) eq '.bmp' )
-    {
-        $surface = SDL::Video::load_BMP( $filename )
-            or Carp::croak "error loading image $filename: " . SDL::get_error;
-    }
-    else {
-        # otherwise, make sure we can load first
-	#eval { require SDL::Image; 1 }; This doesn't work. As you can still load SDL::Image but can't call any functions.
-	#
-        Carp::croak 'no SDL_image support found. Can only load bitmaps'
-            unless SDL::Config->has('SDL_image');#this checks if we actually have that library. C Library != SDL::Image
+	# short-circuit if it's a bitmap
+	if ( ( $type and lc $type eq 'bmp' )
+		or lc substr( $filename, -4, 4 ) eq '.bmp' )
+	{
+		$surface = SDL::Video::load_BMP($filename)
+			or Carp::croak "error loading image $filename: " . SDL::get_error;
+	} else {
 
-        require SDL::Image;
+		# otherwise, make sure we can load first
+		#eval { require SDL::Image; 1 }; This doesn't work. As you can still load SDL::Image but can't call any functions.
+		#
+		Carp::croak 'no SDL_image support found. Can only load bitmaps'
+			unless SDL::Config->has('SDL_image'); #this checks if we actually have that library. C Library != SDL::Image
 
-        if ($type) { #I don't understand what you are doing here
-            require SDL::RWOps;
-            my $file = SDL::RWOps->new_file($filename, "rb")
-                or Carp::croak "error loading file $filename: " . SDL::get_error;
-            $surface = SDL::Image::load_typed_rw($file, 1, $type)
-                or Carp::croak "error loading image $file: " . SDL::get_error;
-        }
-        else {
-            $surface = SDL::Image::load( $filename )
-                or Carp::croak "error loading image $filename: " . SDL::get_error;
-        }
-    }
-    return SDLx::Surface->new( surface => $surface);
+		require SDL::Image;
+
+		if ($type) {                              #I don't understand what you are doing here
+			require SDL::RWOps;
+			my $file = SDL::RWOps->new_file( $filename, "rb" )
+				or Carp::croak "error loading file $filename: " . SDL::get_error;
+			$surface = SDL::Image::load_typed_rw( $file, 1, $type )
+				or Carp::croak "error loading image $file: " . SDL::get_error;
+		} else {
+			$surface = SDL::Image::load($filename)
+				or Carp::croak "error loading image $filename: " . SDL::get_error;
+		}
+	}
+	return SDLx::Surface->new( surface => $surface );
 }
 
 #EXTENSTIONS
@@ -323,36 +322,36 @@ sub draw_line {
 sub draw_circle {
 	my ( $self, $center, $radius, $color, $antialias ) = @_;
 
-        unless ( SDL::Config->has('SDL_gfx_primitives') ) {
+	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
 		Carp::carp("SDL_gfx_primitives support has not been compiled");
 		return;
 	}
 
-        Carp::carp "Center needs to be an array of format [x,y]" unless (ref $center eq 'ARRAY' && scalar @$center == 2);
-         SDLx::Validate::list_rgba($color);
+	Carp::carp "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	SDLx::Validate::list_rgba($color);
 
-	SDL::GFX::Primitives::circle_RGBA($self->surface, @{$center}, $radius, @{$color});
+	SDL::GFX::Primitives::circle_RGBA( $self->surface, @{$center}, $radius, @{$color} );
 	return $self;
 }
 
 sub draw_circle_filled {
 	my ( $self, $center, $radius, $color, $antialias ) = @_;
 
-        unless ( SDL::Config->has('SDL_gfx_primitives') ) {
+	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
 		Carp::carp("SDL_gfx_primitives support has not been compiled");
 		return;
 	}
 
-        Carp::carp "Center needs to be an array of format [x,y]" unless (ref $center eq 'ARRAY' && scalar @$center == 2);
-         SDLx::Validate::list_rgba($color);
+	Carp::carp "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	SDLx::Validate::list_rgba($color);
 
-	SDL::GFX::Primitives::filled_circle_RGBA($self->surface, @{$center}, $radius, @{$color});
+	SDL::GFX::Primitives::filled_circle_RGBA( $self->surface, @{$center}, $radius, @{$color} );
 	return $self;
 }
 
 
 sub draw_trigon {
-	my ( $self, $center, $vextexes, $color) = @_;
+	my ( $self, $center, $vextexes, $color ) = @_;
 
 	return $self;
 }
@@ -377,51 +376,49 @@ sub draw_polygon {
 }
 
 sub draw_bezier {
-	my ($self, $vector, $smooth, $color) = @_;
+	my ( $self, $vector, $smooth, $color ) = @_;
 
 }
 
 
 sub draw_gfx_text {
-	my ($self, $vector, $color, $text, $font ) = @_;
+	my ( $self, $vector, $color, $text, $font ) = @_;
 
-  unless ( SDL::Config->has('SDL_gfx_primitives') ) {
+	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
 		Carp::carp("SDL_gfx_primitives support has not been compiled");
 		return;
 	}
 
-  if( $font )
-  {
-  if( ref($font) eq 'HASH' && exists $font->{data} && exists $font->{cw} && exists $font->{ch} )
-  {
-      SDL::GFX::Primitives::set_font( $font->{data}, $font->{cw}, $font->{ch} );
-  }
-  else
-  {
-     Carp::carp "Set font data as a hash of type \n \$font = {data => \$data, cw => \$cw,  ch => \$ch}. \n Refer to perldoc SDL::GFX::Primitives set_font for initializing this variables.";
-  }
-  }
-  Carp::croak "vector needs to be an array ref of size 2. [x,y] " unless(  ref($vector) eq 'ARRAY' && scalar(@$vector) == 2 );
+	if ($font) {
+		if ( ref($font) eq 'HASH' && exists $font->{data} && exists $font->{cw} && exists $font->{ch} ) {
+			SDL::GFX::Primitives::set_font( $font->{data}, $font->{cw}, $font->{ch} );
+		} else {
+			Carp::carp
+				"Set font data as a hash of type \n \$font = {data => \$data, cw => \$cw,  ch => \$ch}. \n Refer to perldoc SDL::GFX::Primitives set_font for initializing this variables.";
+		}
+	}
+	Carp::croak "vector needs to be an array ref of size 2. [x,y] "
+		unless ( ref($vector) eq 'ARRAY' && scalar(@$vector) == 2 );
 
- 
-  my $result;
-  if ( Scalar::Util::looks_like_number($color) ) {
-			$result = SDL::GFX::Primitives::string_color(
-				$self->surface, $vector->[0], $vector->[1], $text,
-				$color
-			);
+
+	my $result;
+	if ( Scalar::Util::looks_like_number($color) ) {
+		$result = SDL::GFX::Primitives::string_color(
+			$self->surface, $vector->[0], $vector->[1], $text,
+			$color
+		);
 	} elsif ( ref($color) eq 'ARRAY' && scalar(@$color) >= 4 ) {
 
-			$result = SDL::GFX::Primitives::string_RGBA(
-				$self->surface, $vector->[0], $vector->[1], $text, 
-				@$color
-			);
+		$result = SDL::GFX::Primitives::string_RGBA(
+			$self->surface, $vector->[0], $vector->[1], $text,
+			@$color
+		);
 	}
 
 
-  	Carp::croak "Error drawing text: " . SDL::get_error() if ( $result == -1 );
+	Carp::croak "Error drawing text: " . SDL::get_error() if ( $result == -1 );
 
-	  return $self;
+	return $self;
 }
 
 

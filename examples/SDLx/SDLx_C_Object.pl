@@ -9,7 +9,7 @@ use SDL::Events;
 use SDLx::Controller::Object;
 my $app = SDLx::App->new( w => 200, h => 200, title => "timestep" );
 
-#The initial x and y for this object. 
+#The initial x and y for this object.
 my $spring = SDLx::Controller::Object->new( x => 100, y => 100 );
 
 #we have a constant x velocity of 20
@@ -24,7 +24,7 @@ my $accel = sub {
 	my $k  = 10;
 	my $b  = 1;
 	my $ax = ( ( -1 * $k ) * ( $state->x ) - $b * $state->v_x );
-	
+
 	return ( $ax, 0, 0 );
 };
 $spring->set_acceleration($accel);
@@ -45,7 +45,7 @@ my $event = sub {
 $app->add_event_handler($event);
 
 #clear the screen
-$app->add_show_handler( sub{ $app->draw_rect([0,0,$app->w, $app->h], 0x000000)} );
+$app->add_show_handler( sub { $app->draw_rect( [ 0, 0, $app->w, $app->h ], 0x000000 ) } );
 
 #add the spring
 $app->add_object( $spring, $render );
@@ -55,12 +55,12 @@ $app->add_object(
 	$constant,
 	sub {
 		my $state = shift;
-		$app->draw_rect( [ $state->x, $state->y, 4,       4 ],       0xFFFFFF );
+		$app->draw_rect( [ $state->x, $state->y, 4, 4 ], 0xFFFFFF );
 	}
 );
 
 #add the final update
-$app->add_show_handler( sub{ $app->update() } );
+$app->add_show_handler( sub { $app->update() } );
 
 $app->run_test();
 
