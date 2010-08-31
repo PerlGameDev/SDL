@@ -127,13 +127,11 @@ pass 'draw_gfx_text works';
 }
 
 
-TODO:
-{
-	local $TODO = 'Draw_Circle is not done yet';
-	my $cir_color = 0xCCCCCCFF;
-	$surfs[0]->draw_circle( [ 100, 10 ], 20, $cir_color ); #no fill
-	is( $surfs[0]->[120][10], $cir_color );
-}
+my $cir_color = [255,0,0,255];
+$surfs[0]->draw_circle( [ 100, 10 ], 20, $cir_color ); #no fill
+$surfs[0]->draw_circle_filled( [ 100, 10 ], 20, $cir_color ); #fill
+
+isnt( $surfs[0]->[100][10], 0 );
 
 my $surf_dup = SDLx::Surface::duplicate( $surfs[1] );
 
