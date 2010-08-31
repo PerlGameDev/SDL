@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::More;
+use SDL;
 use SDLx::Controller::State;
 use SDLx::Controller::Object;
 use lib 't/lib';
