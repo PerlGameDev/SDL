@@ -8,7 +8,7 @@ use SDL::Event;
 use SDL::Events;
 use SDLx::Controller::Timer;
 use Scalar::Util 'refaddr';
-use SDLx::Controller::Object;
+use SDLx::Controller::Interface;
 use SDLx::Controller::State;
 
 # inside out, so this can work as the superclass of another
@@ -132,7 +132,7 @@ sub quit { $_quit{ refaddr $_[0] } = 1 }
 sub add_object {
 	my ( $self, $obj, $render, @params ) = @_;
 
-	croak "Object is needed" unless $obj && $obj->isa('SDLx::Controller::Object');
+	croak "Interface is needed" unless $obj && $obj->isa('SDLx::Controller::Interface');
 	my $move = sub { $obj->update( $_[1], $_[0] ) };
 	$self->add_move_handler($move);
 
