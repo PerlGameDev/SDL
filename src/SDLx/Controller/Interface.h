@@ -1,4 +1,4 @@
-// Defines Controller Object structs
+// Defines Controller Interface structs
 //
 #include "EXTERN.h"
 #include "perl.h"
@@ -33,7 +33,7 @@ typedef struct Derivative
 
 } SDLx_Derivative;
 
-typedef struct SDLx_Object
+typedef struct SDLx_Interface
 {
 
 	// states to hold
@@ -46,7 +46,7 @@ typedef struct SDLx_Object
 	SV* interpolate;
 	SV* integrate;
 
-} SDLx_Object;
+} SDLx_Interface;
 
 void copy_state( SDLx_State * a, SDLx_State * b )
 {
@@ -60,7 +60,7 @@ void copy_state( SDLx_State * a, SDLx_State * b )
 }
 
 
-void interpolate( SDLx_Object* obj, SDLx_State* out, float alpha )
+void interpolate( SDLx_Interface* obj, SDLx_State* out, float alpha )
 {
 	 out->x = obj->current->x * alpha + obj->previous->x * (1 - alpha);
 	 out->y = obj->current->y * alpha + obj->previous->y * (1 - alpha);

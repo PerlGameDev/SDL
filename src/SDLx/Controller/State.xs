@@ -7,7 +7,7 @@
 #define aTHX_
 #endif
 
-#include "SDLx/Controller/Object.h"
+#include "SDLx/Controller/Interface.h"
 
 
 MODULE = SDLx::Controller::State    PACKAGE = SDLx::Controller::State    PREFIX = state_

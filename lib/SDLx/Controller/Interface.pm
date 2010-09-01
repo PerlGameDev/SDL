@@ -1,4 +1,4 @@
-package SDLx::Controller::Object;
+package SDLx::Controller::Interface;
 use strict;
 use warnings;
 
@@ -19,11 +19,11 @@ sub new {
 	push @args, ( $foo{rot}   || 0 );
 	push @args, ( $foo{ang_v} || 0 );
 
-	return SDLx::Controller::Object->make(@args);
+	return SDLx::Controller::Interface->make(@args);
 }
 
 internal_load_dlls(__PACKAGE__);
-bootstrap SDLx::Controller::Object;
+bootstrap SDLx::Controller::Interface;
 
 
 1;

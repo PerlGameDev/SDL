@@ -7,16 +7,16 @@
 #define aTHX_
 #endif
 
-#include "SDLx/Controller/Object.h"
+#include "SDLx/Controller/Interface.h"
 
 
-AV* acceleration_cb( SDLx_Object * obj, float t )
+AV* acceleration_cb( SDLx_Interface * obj, float t )
 {
 	
 	SV* tmpsv;
 	if( !(SvROK(obj->acceleration) && (tmpsv = obj->acceleration) ) )
 	{
-		croak( "Object doesn't not contain an acceleration callback" );
+		croak( "Interface doesn't not contain an acceleration callback" );
 	}
 
 
@@ -58,7 +58,7 @@ AV* acceleration_cb( SDLx_Object * obj, float t )
 	return array;
 }
 
-void evaluate(SDLx_Object* obj, SDLx_Derivative* out, SDLx_State* initial, float t)
+void evaluate(SDLx_Interface* obj, SDLx_Derivative* out, SDLx_State* initial, float t)
 {
 	out->dx = initial->v_x;
 	out->dy = initial->v_y;
@@ -70,7 +70,7 @@ void evaluate(SDLx_Object* obj, SDLx_Derivative* out, SDLx_State* initial, float
 
 }
 
-void evaluate_dt(SDLx_Object* obj, SDLx_Derivative* out, SDLx_State* initial, float t, float dt, SDLx_Derivative* d)
+void evaluate_dt(SDLx_Interface* obj, SDLx_Derivative* out, SDLx_State* initial, float t, float dt, SDLx_Derivative* d)
 {
 	SDLx_State state;
 	state.x = initial->x + d->dx*dt;
@@ -91,7 +91,7 @@ void evaluate_dt(SDLx_Object* obj, SDLx_Derivative* out, SDLx_State* initial, fl
 	out->dang_v = sv_nv(av_pop(accel));
 }
 
-void integrate( SDLx_Object* object, float t, float dt) 
+void integrate( SDLx_Interface* object, float t, float dt) 
 {
 	SDLx_State* state = object->current;
 	SDLx_Derivative* a = (SDLx_Derivative *)safemalloc( sizeof(SDLx_Derivative) );
@@ -125,13 +125,13 @@ void integrate( SDLx_Object* object, float t, float dt)
 }
 
 
-MODULE = SDLx::Controller::Object    PACKAGE = SDLx::Controller::Object    PREFIX = objx_
+MODULE = SDLx::Controller::Interface    PACKAGE = SDLx::Controller::Interface    PREFIX = objx_
 
-SDLx_Object *
+SDLx_Interface *
 objx_make( CLASS, ... )
     char * CLASS
     CODE:
-       RETVAL = (SDLx_Object * ) safemalloc( sizeof(SDLx_Object) );
+       RETVAL = (SDLx_Interface * ) safemalloc( sizeof(SDLx_Interface) );
        RETVAL->previous = (SDLx_State * ) safemalloc( sizeof(SDLx_State) ); 
        RETVAL->current  = (SDLx_State * ) safemalloc( sizeof(SDLx_State) );
        RETVAL->acceleration = newSViv(-1);	
@@ -165,7 +165,7 @@ objx_make( CLASS, ... )
 
 void
 objx_set_acceleration(obj, callback)
-	SDLx_Object* obj
+	SDLx_Interface* obj
 	SV* callback
 	CODE:
 
@@ -178,7 +178,7 @@ objx_set_acceleration(obj, callback)
 
 AV*
 objx_acceleration(obj, t)
-	SDLx_Object* obj
+	SDLx_Interface* obj
 	float t
 	CODE:
 	RETVAL = acceleration_cb(obj, t);
@@ -189,7 +189,7 @@ objx_acceleration(obj, t)
 
 SDLx_State *
 objx_interpolate(obj, alpha)
-	SDLx_Object* obj
+	SDLx_Interface* obj
 	float alpha
 	PREINIT:
 	    char * CLASS = "SDLx::Controller::State";
@@ -203,7 +203,7 @@ objx_interpolate(obj, alpha)
 
 SDLx_State *
 objx_current ( obj, ... )
-	SDLx_Object *obj
+	SDLx_Interface *obj
 	PREINIT:
 	   char * CLASS = "SDLx::Controller::State";
 	CODE:
@@ -213,7 +213,7 @@ objx_current ( obj, ... )
 
 SDLx_State *
 objx_previous ( obj, ... )
-	SDLx_Object *obj
+	SDLx_Interface *obj
 	PREINIT:
 	   char * CLASS = "SDLx::Controller::State";
 	CODE:
@@ -223,7 +223,7 @@ objx_previous ( obj, ... )
 
 void
 objx_update(obj, t, dt)
-	SDLx_Object* obj
+	SDLx_Interface* obj
 	float t
 	float dt
 	CODE:
@@ -233,7 +233,7 @@ objx_update(obj, t, dt)
 
 void
 objx_DESTROY( obj )
-	SDLx_Object *obj
+	SDLx_Interface *obj
 	CODE: 
 	SvREFCNT_dec(obj->acceleration);
 	safefree(obj->previous);

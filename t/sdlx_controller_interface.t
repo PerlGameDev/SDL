@@ -3,25 +3,25 @@ use warnings;
 use Test::More;
 use SDL;
 use SDLx::Controller::State;
-use SDLx::Controller::Object;
+use SDLx::Controller::Interface;
 use lib 't/lib';
 use SDL::TestTool;
 use Data::Dumper;
 
 can_ok(
-	'SDLx::Controller::Object',
+	'SDLx::Controller::Interface',
 	qw( new ) #meh, put the rest in later
 );
 
 TODO: {
 	local $TODO = 'methods not implemented yet';
-	can_ok( 'SDLx::Controller::Object', qw( foo ) );
+	can_ok( 'SDLx::Controller::Interface', qw( foo ) );
 }
 
 
-my $obj = SDLx::Controller::Object->new( x => 1, y => 2, v_x => 3, v_y => 4, rot => 5, ang_v => 6 );
+my $obj = SDLx::Controller::Interface->new( x => 1, y => 2, v_x => 3, v_y => 4, rot => 5, ang_v => 6 );
 
-isa_ok( $obj, 'SDLx::Controller::Object' );
+isa_ok( $obj, 'SDLx::Controller::Interface' );
 my $s = sub { pass 'ran accel'; return ( 0.0, 10, 19 ) };
 
 $obj->set_acceleration($s);
@@ -55,7 +55,7 @@ is( $hv->x,        1.75 );
 is( $hv->y,        3.625 );
 is( $hv->rotation, 7.6875 );
 
-$obj = SDLx::Controller::Object->new( x => 1, y => 2, v_x => 3, v_y => 4, rot => 5, ang_v => 6 );
+$obj = SDLx::Controller::Interface->new( x => 1, y => 2, v_x => 3, v_y => 4, rot => 5, ang_v => 6 );
 
 
 $obj->set_acceleration( sub { $_[1]->x(2); pass '[state] is mutable'; return ( 0.0, 10, 19 ) } );

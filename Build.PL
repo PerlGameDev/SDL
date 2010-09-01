@@ -174,10 +174,10 @@ my %subsystems = (
 		},
 		libraries => [qw( SDL )],
 	},
-	ObjectX => {
+	InterfaceX => {
 		file => {
-			from => 'src/SDLx/Controller/Object.xs',
-			to   => 'lib/SDLx/Controller/Object.xs',
+			from => 'src/SDLx/Controller/Interface.xs',
+			to   => 'lib/SDLx/Controller/Interface.xs',
 		},
 		libraries => [qw( SDL  )],
 	},

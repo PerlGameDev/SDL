@@ -64,7 +64,7 @@ BEGIN {
 		SDLx::Surface::TiedMatrixRow
 
 		SDLx::Controller
-		SDLx::Controller::Object
+		SDLx::Controller::Interface
 		SDLx::Controller::State
 		SDLx::Controller::Timer
 
