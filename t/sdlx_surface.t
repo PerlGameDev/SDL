@@ -124,14 +124,16 @@ SKIP:
 	my $font = { data => $f, cw => 5, ch => 7 };
 	$surfs[1]->draw_gfx_text( [ 0, 0 ], 0xffffffff, "fooo", $font );
 	pass 'draw_gfx_text works';
+	my $cir_color = [ 255, 0, 0, 255 ];
+	$surfs[0]->draw_circle( [ 100, 10 ], 20, $cir_color ); #no fill
+	$surfs[0]->draw_circle_filled( [ 100, 10 ], 20, $cir_color ); #fill
+
+	isnt( $surfs[0]->[100][10], 0 );
+	pass 'draw_circle works';
+	pass 'draw_circle_filled works';
+
 }
 
-
-my $cir_color = [ 255, 0, 0, 255 ];
-$surfs[0]->draw_circle( [ 100, 10 ], 20, $cir_color ); #no fill
-$surfs[0]->draw_circle_filled( [ 100, 10 ], 20, $cir_color ); #fill
-
-isnt( $surfs[0]->[100][10], 0 );
 
 my $surf_dup = SDLx::Surface::duplicate( $surfs[1] );
 
