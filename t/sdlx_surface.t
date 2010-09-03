@@ -7,6 +7,7 @@ use SDL::Rect;
 use SDLx::Surface;
 use SDL::PixelFormat;
 use SDL::Video;
+use Data::Dumper;
 use lib 't/lib';
 use SDL::TestTool;
 
@@ -117,16 +118,13 @@ my @colors = (
 
 foreach my $c (@colors) {
 	my $color = ( $c->[0] << 24 ) + ( $c->[1] << 16 ) + ( $c->[2] << 8 ) + $c->[3];
-	$surfs[0]->draw_rect( [ 0, 0, 10, 20 ], $color );
+	$surfs[0]->draw_rect( [ 0, 0, 10, 20 ], $c );
 
-    my $num = sprintf('0x%08x', $color);
+        my $num = sprintf('0x%08x', $color);
 
-	my $rgba = SDL::Video::get_RGB( $app->format(), $surfs[0]->[0][0] );
-	is( $rgba->[0], $c->[0], "draw_rect uses correct red for $num" );
-	is( $rgba->[1], $c->[1], "draw_rect uses correct green for $num" );
-	is( $rgba->[2], $c->[2], "draw_rect uses correct blue for $num" );
+	my $rgba = sprintf('0x%08x', $surfs[0]->[0][0] );
 
-	#is($rgba->[3], $c->[3], "draw_rect uses correct alpha for $num");
+	is( $rgba, $num, "draw_rect uses correct color ($rgba)  for $num" );
 }
 
 SKIP:

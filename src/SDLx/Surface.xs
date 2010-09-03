@@ -61,10 +61,10 @@ int _calc_offset ( SDL_Surface* surface, int x, int y )
 }
 
 
-int _get_pixel(SDL_Surface * surface, int offset)
+unsigned int _get_pixel(SDL_Surface * surface, int offset)
 {
 
-	int value;
+	unsigned int value;
 		switch(surface->format->BytesPerPixel)
 		{
 			case 1:  value = ((Uint8  *)surface->pixels)[offset];
@@ -108,7 +108,7 @@ surfacex_pixel_array ( surface )
 	OUTPUT:
 		RETVAL
 
-int
+unsigned int
 surfacex_get_pixel_xs ( surface, x, y )
 	SDL_Surface *surface
 	int x
