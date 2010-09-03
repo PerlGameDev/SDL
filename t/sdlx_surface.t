@@ -126,7 +126,8 @@ foreach my $c (@colors) {
 
 	is( $rgba, $num, "draw_rect uses correct color ($rgba)  for $num" );
 }
-
+$surfs[0]->draw_rect( [ 0, 0, 10, 20 ], 0xFF00FFFF );
+pass 'draw_rect works';
 SKIP:
 {
 	skip( 'SDL_gfx_primitives needed', 2 ) unless SDL::Config->has('SDL_gfx_primitives');
