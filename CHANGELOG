@@ -1,5 +1,10 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.513
+	- Made SDLx::Controller::Interface [kthakore]
+	- Fixed unsigned int bug for get_pixels from surface [kthakore]
+	- Several document fixes 
+
 * 2.512
 	- More tests and implemented more of SDLx::Sprite::Animated [jtpalmer]
 	- Changed from SDL::Rect -> SDLx::Rect in SDLx::Sprite [hmehta]
