@@ -120,7 +120,7 @@ sub eval_imgur {
 
 warn 'eval';
 
-return "Can't run $_[0]" if $_[0] =~ /fork|unlink|eval|threads|while/;
+return "Can't run $_[0]" if $_[0] =~ /fork|unlink|threads|while/;
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy';
