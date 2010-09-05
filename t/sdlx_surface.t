@@ -86,14 +86,14 @@ push @surfs,
 	SDLx::Surface->new(
 	w     => 1,
 	h     => 1,
-	color => 0xAABBCCFF,
+	color => 0x204080FF,
 	);
 
 my $fill = SDL::Video::get_RGBA( $app->format(), $surfs[-1]->[0][0] );
 
-is( $fill->[0], 0xAA, 'Fill color red worked' );
-is( $fill->[1], 0xBB, 'Fill color green worked' );
-is( $fill->[2], 0xCC, 'Fill color blue worked' );
+is( $fill->[0], 0x20, 'Fill color red worked' );
+is( $fill->[1], 0x40, 'Fill color green worked' );
+is( $fill->[2], 0x80, 'Fill color blue worked' );
 is( $fill->[3], 0xFF, 'Fill color alpha worked' );
 
 $surfs[1]->flip();
@@ -108,17 +108,17 @@ $surfs[0]->update( [ SDL::Rect->new( 0, 1, 2, 3 ), SDL::Rect->new( 2, 4, 5, 6 ) 
 pass 'SDL::Rect array update';
 
 my @colors = (
-	[ 255, 255, 255, 255 ],
-	[ 255, 255, 0,   255 ],
-	[ 255, 0,   255, 255 ],
-	[ 0,   255, 255, 255 ],
-	[ 255, 0,   0,   255 ],
-	[ 0,   255, 0,   255 ],
-	[ 0,   0,   255, 255 ],
-	[ 0,   0,   0,   255 ],
-	[ 32,  64,  128, 255 ],
-	[ 128, 32,  64,  255 ],
-	[ 64,  128, 32,  255 ],
+	[ 0xFF, 0xFF, 0xFF, 0xFF ],
+	[ 0xFF, 0xFF, 0x00, 0xFF ],
+	[ 0xFF, 0x00, 0xFF, 0xFF ],
+	[ 0x00, 0xFF, 0xFF, 0xFF ],
+	[ 0xFF, 0x00, 0x00, 0xFF ],
+	[ 0x00, 0xFF, 0x00, 0xFF ],
+	[ 0x00, 0x00, 0xFF, 0xFF ],
+	[ 0x00, 0x00, 0x00, 0xFF ],
+	[ 0x20, 0x40, 0x80, 0xFF ],
+	[ 0x80, 0x20, 0x40, 0xFF ],
+	[ 0x40, 0x80, 0x20, 0xFF ],
 );
 
 foreach my $c (@colors) {
