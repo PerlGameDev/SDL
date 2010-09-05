@@ -8,6 +8,24 @@ use SDLx::Validate; #use_ok is checked in t/00-load.t
 use lib 't/lib';
 use SDL::TestTool;
 
+my @colors_rgb = ( '0x204080', '[0x20, 0x40, 0x80]', 'SDL::Color->new(0x20, 0x40, 0x80)' );
+foreach (@colors_rgb) {
+	is_deeply(
+		[ SDLx::Validate::map_rgb(eval) ],
+		[ 0x20, 0x40, 0x80 ],
+		"map_rgb($_) is (0x20, 0x40, 0x80) before app is initialized."
+	);
+}
+
+my @colors_rgba = ( '0x204080FF', '[0x20, 0x40, 0x80, 0xFF]', 'SDL::Color->new(0x20, 0x40, 0x80)' );
+foreach (@colors_rgba) {
+	is_deeply(
+		[ SDLx::Validate::map_rgba(eval) ],
+		[ 0x20, 0x40, 0x80, 0xFF ],
+		"map_rgba($_) is (0x20, 0x40, 0x80, 0xFF) before app is initialized."
+	);
+}
+
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
