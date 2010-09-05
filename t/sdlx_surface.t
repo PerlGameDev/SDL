@@ -120,9 +120,9 @@ foreach my $c (@colors) {
 	my $color = ( $c->[0] << 24 ) + ( $c->[1] << 16 ) + ( $c->[2] << 8 ) + $c->[3];
 	$surfs[0]->draw_rect( [ 0, 0, 10, 20 ], $c );
 
-        my $num = sprintf('0x%08x', $color);
+	my $num = sprintf( '0x%08x', $color );
 
-	my $rgba = sprintf('0x%08x', $surfs[0]->[0][0] );
+	my $rgba = sprintf( '0x%08x', $surfs[0]->[0][0] );
 
 	is( $rgba, $num, "draw_rect uses correct color ($rgba)  for $num" );
 }
