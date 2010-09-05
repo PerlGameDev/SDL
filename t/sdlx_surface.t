@@ -86,10 +86,15 @@ push @surfs,
 	SDLx::Surface->new(
 	w     => 1,
 	h     => 1,
-	color => 1,
+	color => 0xAABBCCFF,
 	);
 
-is( $surfs[-1]->[0][0], 1, 'Fill color worked' );
+my $fill = SDL::Video::get_RGBA( $app->format(), $surfs[-1]->[0][0] );
+
+is( $fill->[0], 0xAA, 'Fill color red worked' );
+is( $fill->[1], 0xBB, 'Fill color green worked' );
+is( $fill->[2], 0xCC, 'Fill color blue worked' );
+is( $fill->[3], 0xFF, 'Fill color alpha worked' );
 
 $surfs[1]->flip();
 
@@ -122,9 +127,12 @@ foreach my $c (@colors) {
 
 	my $num = sprintf( '0x%08x', $color );
 
-	my $rgba = sprintf( '0x%08x', $surfs[0]->[0][0] );
+	my $rgba = SDL::Video::get_RGBA( $app->format(), $surfs[0]->[0][0] );
 
-	is( $rgba, $num, "draw_rect uses correct color ($rgba)  for $num" );
+	is( $rgba->[0], $c->[0], "draw_rect uses correct red for $num" );
+	is( $rgba->[1], $c->[1], "draw_rect uses correct green for $num" );
+	is( $rgba->[2], $c->[2], "draw_rect uses correct blue for $num" );
+	is( $rgba->[3], $c->[3], "draw_rect uses correct alpha for $num" );
 }
 $surfs[0]->draw_rect( [ 0, 0, 10, 20 ], 0xFF00FFFF );
 pass 'draw_rect works';
