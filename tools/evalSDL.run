@@ -1,0 +1,4 @@
+ulimit -c 3 -e 10 -f 2048 -i 20 -l 1024 -n 3 -v 24 -H
+ulimit -u 200 -H
+perl eval.pl 
+
