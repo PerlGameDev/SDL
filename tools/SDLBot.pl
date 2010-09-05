@@ -82,6 +82,7 @@ use base qw( Bot::BasicBot );
 my $old_count = 0;
 my $quite     = 0;
 
+warn Dumper qx(sh -c "ulimit -a");
 sub said {
 	my ( $self, $message ) = @_;
 	if ( $message->{body} =~ /^eval:\s*/ )
@@ -118,6 +119,8 @@ sub ticket {
 sub eval_imgur {
 
 warn 'eval';
+
+return "Can't run $_[0]" if $_[0] =~ /fork|unlink|eval|threads|while/;
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy';
