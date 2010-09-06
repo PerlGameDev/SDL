@@ -51,119 +51,115 @@ sub rect {
 	}
 }
 
-sub _make_color {
-	my ( $t, $arg ) = @_;
-	Carp::croak("Wrong amount of arguments")
-		unless @_ == 2;
-	my ( $num_rgb, $num_rgba, $list_rgb, $list_rgba, $error );
-	      $t == 0 ? ( $num_rgb   = 1 )
-		: $t == 1 ? ( $num_rgba  = 1 )
-		: $t == 3 ? ( $list_rgb  = 1 )
-		: $t == 4 ? ( $list_rgba = 1 )
-		:           ( $error     = 1 );
-	Carp::croak("\$t invalid. You shouldn't be calling this directly anyway")
-		if $error;
-	$t += 3 if $t < 3; #$t is 3 if rgb and 4 if rgba
-	my $list = $list_rgb || $list_rgba;
-	if ( !defined $arg or Scalar::Util::looks_like_number($arg) ) {
+sub _color_number {
+	if ( !defined $_[0] || $_[0] < 0 ) {
+		Carp::carp("Color was a negative number") if defined $_[0] && $_[0] < 0;
+		if ( $_[1] ) {
+			$_[0] = 0x000000FF;
+		} else {
+			$_[0] = 0x000000;
+		}
+	} else {
+		if ( $_[1] && $_[0] > 0xFFFFFFFF ) {
+			Carp::carp("Color was number greater than maximum expected: 0xFFFFFFFF");
+			$_[0] = 0xFFFFFFFF;
+		} elsif ( !$_[1] && $_[0] > 0xFFFFFF ) {
+			Carp::carp("Color was number greater than maximum expected: 0xFFFFFF");
+			$_[0] = 0xFFFFFF;
+		}
+	}
+}
 
-		if ( !defined $arg or $arg < 0 ) {
-			Carp::carp("Color was a negative number")
-				if defined $arg and $arg < 0;
-			if ($num_rgb) {
-				return 0;
-			} elsif ($num_rgba) {
-				return 0xFF;
-			} elsif ($list_rgb) {
-				return ( 0, 0, 0 );
+sub _color_arrayref {
+	my $length = $_[1] ? 4 : 3;
+	foreach my $i ( 0 .. $length - 1 ) {
+		Carp::croak("All values in color arrayref must be numbers or undef")
+			unless !defined $_[0]->[$i] || Scalar::Util::looks_like_number( $_[0]->[$i] );
+		if ( !defined $_[0]->[$i] ) {
+			if ( $i == 3 ) { # alpha
+				$_[0]->[$i] = 0xFF;
 			} else {
-				return ( 0, 0, 0, 0xFF );
+				$_[0]->[$i] = 0;
 			}
-		} elsif ( $arg > 0x100**$t - 1 ) {
-			Carp::carp( "Color was number greater than maximum expected: 0x" . "FF" x $t );
-			return (
-				  $num_rgb  ? 0xFFFFFF
-				: $num_rgba ? 0xFFFFFFFF
-				: (0xFF) x $t
-			);
+		} elsif ( $_[0]->[$i] > 0xFF ) {
+			Carp::carp("Number in color arrayref was greater than maximum expected: 0xFF");
+			$_[0]->[$i] = 0xFF;
+		} elsif ( $_[0]->[$i] < 0 ) {
+			Carp::carp("Number in color arrayref was negative");
+			$_[0]->[$i] = 0;
 		}
-		if ($list_rgb) {
-			return ( $arg >> 16 & 0xFF, $arg >> 8 & 0xFF, $arg & 0xFF );
-		} elsif ($list_rgba) {
-			return (
-				$arg >> 24, $arg >> 16 & 0xFF, $arg >> 8 & 0xFF,
-				$arg & 0xFF
-			);
-		} else {
-			return $arg;
-		}
-	} elsif ( Scalar::Util::blessed($arg) and $arg->isa("SDL::Color") ) {
-		if ($num_rgb) {
-			return ( ( $arg->r << 16 ) + ( $arg->g << 8 ) + ( $arg->b ) );
-		} elsif ($num_rgba) {
-			return ( ( $arg->r << 24 ) + ( $arg->g << 16 ) + ( $arg->b << 8 ) + (0xFF) );
-		} elsif ($list_rgb) {
-			return ( $arg->r, $arg->g, $arg->b );
-		} else {
-			return ( $arg->r, $arg->g, $arg->b, 0xFF );
-		}
-	} elsif ( ref $arg eq "ARRAY" ) {
-		Carp::carp("Color arrayref had more values than maximum expected: $t")
-			if @$arg > $t;
-		for ( 0 .. $t - 1 ) {
-			my $c = \$$arg[$_];
-			Carp::croak("All values in color arrayref must be numbers or undef")
-				unless !defined $$c
-					or Scalar::Util::looks_like_number($$c);
-			if ( !defined $$c ) {
-				if ( $_ == 3 ) { # $_ is 3 when doing alpha
-					$$c = 0xFF;
-				} else {
-					$$c = 0;
-				}
-			} elsif ( $$c > 0xFF ) {
-				Carp::carp("Number in color arrayref was greater than maximum expected: 0xFF");
-				$$c = 0xFF;
-			} elsif ( $$c < 0 ) {
-				Carp::carp("Number in color arrayref was negative");
-				$$c = 0;
-			}
-		}
-		if ($num_rgb) {
-			return ( ( $arg->[0] << 16 ) + ( $arg->[1] << 8 ) + ( $arg->[2] ) );
-		} elsif ($num_rgba) {
-			return ( ( $arg->[0] << 24 ) + ( $arg->[1] << 16 ) + ( $arg->[2] << 8 ) + ( $arg->[3] ) );
-		} else {
-			return @$arg;
-		}
+	}
+}
+
+sub _color_format {
+	if ( !defined $_[0] || Scalar::Util::looks_like_number( $_[0] ) ) {
+		_color_number(@_);
+		return 'number';
+	} elsif ( ref $_[0] eq "ARRAY" ) {
+		_color_arrayref(@_);
+		return 'arrayref';
+	} elsif ( Scalar::Util::blessed( $_[0] ) || $_[0]->isa("SDL::Color") ) {
+		return 'SDLx::Color';
 	} else {
 		Carp::croak("Color must be number or arrayref or SDLx::Color");
 	}
 }
 
 sub num_rgb {
-	return ( _make_color( 0, @_ ) );
+	my ($color) = @_;
+	my $format = _color_format($color);
+	if ( $format eq 'number' ) {
+		return $color;
+	} elsif ( $format eq 'arrayref' ) {
+		return ( $color->[0] << 16 ) + ( $color->[1] << 8 ) + ( $color->[2] );
+	} elsif ( $format eq 'SDLx::Color' ) {
+		return ( $color->r << 16 ) + ( $color->g << 8 ) + $color->b;
+	}
 }
 
 sub num_rgba {
-	return ( _make_color( 1, @_ ) );
+	my ($color) = @_;
+	my $format = _color_format( $color, 1 );
+	if ( $format eq 'number' ) {
+		return $color;
+	} elsif ( $format eq 'arrayref' ) {
+		return ( $color->[0] << 24 ) + ( $color->[1] << 16 ) + ( $color->[2] << 8 ) + ( $color->[3] );
+	} elsif ( $format eq 'SDLx::Color' ) {
+		return ( $color->r << 24 ) + ( $color->g << 16 ) + ( $color->b << 8 ) + 0xFF;
+	}
 }
 
 sub list_rgb {
-	return ( _make_color( 3, @_ ) );
+	my ($color) = @_;
+	my $format = _color_format($color);
+	if ( $format eq 'number' ) {
+		return ( $color >> 16 & 0xFF, $color >> 8 & 0xFF, $color & 0xFF );
+	} elsif ( $format eq 'arrayref' ) {
+		return @$color;
+	} elsif ( $format eq 'SDLx::Color' ) {
+		return ( $color->r, $color->g, $color->b );
+	}
 }
 
 sub list_rgba {
-	return ( _make_color( 4, @_ ) );
+	my ($color) = @_;
+	my $format = _color_format( $color, 1 );
+	if ( $format eq 'number' ) {
+		return ( $color >> 24 & 0xFF, $color >> 16 & 0xFF, $color >> 8 & 0xFF, $color & 0xFF );
+	} elsif ( $format eq 'arrayref' ) {
+		return @$color;
+	} elsif ( $format eq 'SDLx::Color' ) {
+		return ( $color->r, $color->g, $color->b, 0xFF );
+	}
 }
 
 sub color {
 	require SDL::Color;
-	return SDL::Color->new( _make_color( 3, @_ ) );
+	return SDL::Color->new( list_rgb(@_) );
 }
 
 sub map_rgb {
-	my @color = _make_color( 3, @_ );
+	my @color = list_rgb(@_);
 
 	require SDLx::Surface;
 	my $display = eval { SDLx::Surface::display() };
@@ -174,7 +170,7 @@ sub map_rgb {
 }
 
 sub map_rgba {
-	my @color = _make_color( 4, @_ );
+	my @color = list_rgba(@_);
 
 	require SDLx::Surface;
 	my $display = eval { SDLx::Surface::display() };
