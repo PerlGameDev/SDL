@@ -11,18 +11,18 @@ use SDL::TestTool;
 my @colors_rgb = ( '0x204080', '[0x20, 0x40, 0x80]', 'SDL::Color->new(0x20, 0x40, 0x80)' );
 foreach (@colors_rgb) {
 	is_deeply(
-		[ SDLx::Validate::map_rgb(eval) ],
+		SDLx::Validate::map_rgb(eval),
 		[ 0x20, 0x40, 0x80 ],
-		"map_rgb($_) is (0x20, 0x40, 0x80) before app is initialized."
+		"map_rgb($_) is [0x20, 0x40, 0x80] before app is initialized."
 	);
 }
 
 my @colors_rgba = ( '0x204080FF', '[0x20, 0x40, 0x80, 0xFF]', 'SDL::Color->new(0x20, 0x40, 0x80)' );
 foreach (@colors_rgba) {
 	is_deeply(
-		[ SDLx::Validate::map_rgba(eval) ],
+		SDLx::Validate::map_rgba(eval),
 		[ 0x20, 0x40, 0x80, 0xFF ],
-		"map_rgba($_) is (0x20, 0x40, 0x80, 0xFF) before app is initialized."
+		"map_rgba($_) is [0x20, 0x40, 0x80, 0xFF] before app is initialized."
 	);
 }
 
@@ -79,7 +79,7 @@ my @blacks_rgb = ( 'undef', 0, '[0, 0, 0]', '[]', 'SDL::Color->new(0, 0, 0)', );
 for (@blacks_rgb) {
 	is( SDLx::Validate::num_rgb(eval), 0, "num_rgb($_) is 0x000000" );
 	is_deeply(
-		[ SDLx::Validate::list_rgb(eval) ],
+		SDLx::Validate::list_rgb(eval),
 		[ 0, 0, 0 ],
 		"list_rgb($_) is [0, 0, 0]"
 	);
@@ -92,7 +92,7 @@ my @whites_rgb = ( '0xFFFEFD', '[0xFF, 0xFE, 0xFD]', 'SDL::Color->new(0xFF, 0xFE
 for (@whites_rgb) {
 	is( SDLx::Validate::num_rgb(eval), 0xFFFEFD, "num_rgb($_) is 0xFFFEFD" );
 	is_deeply(
-		[ SDLx::Validate::list_rgb(eval) ],
+		SDLx::Validate::list_rgb(eval),
 		[ 0xFF, 0xFE, 0xFD ],
 		"list_rgb($_) is [0xFF, 0xFE, 0xFD]"
 	);
@@ -113,7 +113,7 @@ my @blacks_rgba = (
 for (@blacks_rgba) {
 	is( SDLx::Validate::num_rgba(eval), 0xFF, "num_rgba($_) is 0x000000FF" );
 	is_deeply(
-		[ SDLx::Validate::list_rgba(eval) ],
+		SDLx::Validate::list_rgba(eval),
 		[ 0, 0, 0, 0xFF ],
 		"list_rgba($_) is [0, 0, 0, 0xFF]"
 	);
@@ -131,7 +131,7 @@ for (@whites_rgba) {
 		0xFFFEFDFF, "num_rgba($_) is 0xFFFEFDFF"
 	);
 	is_deeply(
-		[ SDLx::Validate::list_rgba(eval) ],
+		SDLx::Validate::list_rgba(eval),
 		[ 0xFF, 0xFE, 0xFD, 0xFF ],
 		"list_rgba($_) is [0xFF, 0xFE, 0xFD, 0xFF]"
 	);
