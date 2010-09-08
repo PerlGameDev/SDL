@@ -159,25 +159,17 @@ sub color {
 }
 
 sub map_rgb {
-	my $color = list_rgb(@_);
-
-	require SDLx::Surface;
-	my $display = eval { SDLx::Surface::display() };
-	return $color if $@;
+	my ( $color, $format ) = @_;
 
 	require SDL::Video;
-	return SDL::Video::map_RGB( $display->format(), @$color );
+	return SDL::Video::map_RGB( $format, @{ list_rgb($color) } );
 }
 
 sub map_rgba {
-	my $color = list_rgba(@_);
-
-	require SDLx::Surface;
-	my $display = eval { SDLx::Surface::display() };
-	return $color if $@;
+	my ( $color, $format ) = @_;
 
 	require SDL::Video;
-	return SDL::Video::map_RGBA( $display->format(), @$color );
+	return SDL::Video::map_RGBA( $format, @{ list_rgba($color) } );
 }
 
 1;

@@ -89,7 +89,7 @@ push @surfs,
 	color => 0x204080FF,
 	);
 
-my $fill = SDL::Video::get_RGBA( $app->format(), $surfs[-1]->[0][0] );
+my $fill = SDL::Video::get_RGBA( $surfs[-1]->surface()->format(), $surfs[-1]->[0][0] );
 
 is( $fill->[0], 0x20, 'Fill color red worked' );
 is( $fill->[1], 0x40, 'Fill color green worked' );
@@ -127,7 +127,7 @@ foreach my $c (@colors) {
 
 	my $num = sprintf( '0x%08x', $color );
 
-	my $rgba = SDL::Video::get_RGBA( $app->format(), $surfs[0]->[0][0] );
+	my $rgba = SDL::Video::get_RGBA( $surfs[0]->surface()->format(), $surfs[0]->[0][0] );
 
 	is( $rgba->[0], $c->[0], "draw_rect uses correct red for $num" );
 	is( $rgba->[1], $c->[1], "draw_rect uses correct green for $num" );

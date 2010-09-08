@@ -8,24 +8,6 @@ use SDLx::Validate; #use_ok is checked in t/00-load.t
 use lib 't/lib';
 use SDL::TestTool;
 
-my @colors_rgb = ( '0x204080', '[0x20, 0x40, 0x80]', 'SDL::Color->new(0x20, 0x40, 0x80)' );
-foreach (@colors_rgb) {
-	is_deeply(
-		SDLx::Validate::map_rgb(eval),
-		[ 0x20, 0x40, 0x80 ],
-		"map_rgb($_) is [0x20, 0x40, 0x80] before app is initialized."
-	);
-}
-
-my @colors_rgba = ( '0x204080FF', '[0x20, 0x40, 0x80, 0xFF]', 'SDL::Color->new(0x20, 0x40, 0x80)' );
-foreach (@colors_rgba) {
-	is_deeply(
-		SDLx::Validate::map_rgba(eval),
-		[ 0x20, 0x40, 0x80, 0xFF ],
-		"map_rgba($_) is [0x20, 0x40, 0x80, 0xFF] before app is initialized."
-	);
-}
-
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
@@ -72,8 +54,9 @@ for (@rects_positive) {
 	);
 }
 
-my $mapped_black = SDL::Video::map_RGBA( $app->format, 0,    0,    0,    0xFF );
-my $mapped_white = SDL::Video::map_RGBA( $app->format, 0xFF, 0xFE, 0xFD, 0xFF );
+my $format       = $app->format;
+my $mapped_black = SDL::Video::map_RGBA( $format, 0x00, 0x00, 0x00, 0xFF );
+my $mapped_white = SDL::Video::map_RGBA( $format, 0xFF, 0xFE, 0xFD, 0xFF );
 
 my @blacks_rgb = ( 'undef', 0, '[0, 0, 0]', '[]', 'SDL::Color->new(0, 0, 0)', );
 for (@blacks_rgb) {
@@ -83,7 +66,7 @@ for (@blacks_rgb) {
 		[ 0, 0, 0 ],
 		"list_rgb($_) is [0, 0, 0]"
 	);
-	is( SDLx::Validate::map_rgb(eval), $mapped_black, "num_rgb($_) is $mapped_black" );
+	is( SDLx::Validate::map_rgb( eval, $format ), $mapped_black, "map_rgb($_, $format) is $mapped_black" );
 	my $c = SDLx::Validate::color(eval);
 	is_deeply( [ $c->r, $c->g, $c->b ], [ 0, 0, 0 ], "color($_) is (0, 0, 0)" );
 }
@@ -96,7 +79,7 @@ for (@whites_rgb) {
 		[ 0xFF, 0xFE, 0xFD ],
 		"list_rgb($_) is [0xFF, 0xFE, 0xFD]"
 	);
-	is( SDLx::Validate::map_rgb(eval), $mapped_white, "num_rgb($_) is $mapped_white" );
+	is( SDLx::Validate::map_rgb( eval, $format ), $mapped_white, "map_rgb($_, $format) is $mapped_white" );
 	my $c = SDLx::Validate::color(eval);
 	is_deeply(
 		[ $c->r, $c->g, $c->b ],
@@ -117,7 +100,7 @@ for (@blacks_rgba) {
 		[ 0, 0, 0, 0xFF ],
 		"list_rgba($_) is [0, 0, 0, 0xFF]"
 	);
-	is( SDLx::Validate::map_rgba(eval), $mapped_black, "map_rgba($_) is $mapped_black" );
+	is( SDLx::Validate::map_rgba( eval, $format ), $mapped_black, "map_rgba($_, $format) is $mapped_black" );
 }
 
 my @whites_rgba = (
@@ -135,7 +118,7 @@ for (@whites_rgba) {
 		[ 0xFF, 0xFE, 0xFD, 0xFF ],
 		"list_rgba($_) is [0xFF, 0xFE, 0xFD, 0xFF]"
 	);
-	is( SDLx::Validate::map_rgba(eval), $mapped_white, "map_rgba($_) is $mapped_white" );
+	is( SDLx::Validate::map_rgba( eval, $format ), $mapped_white, "map_rgba($_, $format) is $mapped_white" );
 }
 
 isnt( SDLx::Validate::num_rgba(0), 0xFF, "num_rgba(0) isn't 0x000000FF" );
