@@ -209,8 +209,7 @@ event_key_sym ( event, ... )
 		
 		if( items > 1 )
 		{
-			SDLKey *kp  = (SDLKey * )SvPV( ST(1), PL_na) ;
-			b->sym = *kp;
+			b->sym = SvIV( ST(1) );
 		}
 
 		RETVAL = b->sym;
