@@ -15,6 +15,31 @@ Core, Extension
  use SDLx::App;
  use SDLx::Controller::Interface;
 
+ #SDLx::App is an controller
+ my $app = SDLx::App->new(width => 200, height => 200 ); 
+
+ my $ball = SDLx::Controller::Interface->new( x=> 10, y => 50, v_x => 10, v_y=> 20 );
+ #Set the initial state of the ball's physics, this is optional
+
+ $ball->set_acceleration( sub { my $current_state = shift;
+	return( 0, -10, 0 ); #Return accelerations (x,y,rotation)
+	});
+
+ my $ball_render = sub {
+ my $state = shift;
+ 
+ $app->draw_rect( undef, 0 );
+
+ $app->draw_rect( [$state->x, $state->y, 10,10], [255,0,0,255] );
+ 
+ $app->update();
+ };
+
+
+ $app->add_object( $ball, $ball_render ); 
+
+ $app->run_test();
+
 =head1 DESCRIPTION
 
 =head1 METHODS
