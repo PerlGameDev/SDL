@@ -52,53 +52,59 @@ sub rect {
 }
 
 sub _color_number {
-	if ( !defined $_[0] || $_[0] < 0 ) {
-		Carp::carp("Color was a negative number") if defined $_[0] && $_[0] < 0;
-		if ( $_[1] ) {
-			$_[0] = 0x000000FF;
+	my ( $color, $alpha ) = @_;
+	if ( !defined $color || $color < 0 ) {
+		Carp::carp("Color was a negative number") if defined $color && $color < 0;
+		if ($alpha) {
+			return 0x000000FF;
 		} else {
-			$_[0] = 0x000000;
+			return 0x000000;
 		}
 	} else {
-		if ( $_[1] && $_[0] > 0xFFFFFFFF ) {
+		if ( $alpha && $color > 0xFFFFFFFF ) {
 			Carp::carp("Color was number greater than maximum expected: 0xFFFFFFFF");
-			$_[0] = 0xFFFFFFFF;
-		} elsif ( !$_[1] && $_[0] > 0xFFFFFF ) {
+			return 0xFFFFFFFF;
+		} elsif ( !$alpha && $color > 0xFFFFFF ) {
 			Carp::carp("Color was number greater than maximum expected: 0xFFFFFF");
-			$_[0] = 0xFFFFFF;
+			return 0xFFFFFF;
 		}
 	}
+	return $color;
 }
 
 sub _color_arrayref {
-	my $length = $_[1] ? 4 : 3;
+	my ( $color, $alpha ) = @_;
+	my @valid;
+	my $length = $alpha ? 4 : 3;
 	foreach my $i ( 0 .. $length - 1 ) {
 		Carp::croak("All values in color arrayref must be numbers or undef")
-			unless !defined $_[0]->[$i] || Scalar::Util::looks_like_number( $_[0]->[$i] );
-		if ( !defined $_[0]->[$i] ) {
+			unless !defined $color->[$i] || Scalar::Util::looks_like_number( $color->[$i] );
+		if ( !defined $color->[$i] ) {
 			if ( $i == 3 ) { # alpha
-				$_[0]->[$i] = 0xFF;
+				$valid[$i] = 0xFF;
 			} else {
-				$_[0]->[$i] = 0;
+				$valid[$i] = 0;
 			}
-		} elsif ( $_[0]->[$i] > 0xFF ) {
+		} elsif ( $color->[$i] > 0xFF ) {
 			Carp::carp("Number in color arrayref was greater than maximum expected: 0xFF");
-			$_[0]->[$i] = 0xFF;
-		} elsif ( $_[0]->[$i] < 0 ) {
+			$valid[$i] = 0xFF;
+		} elsif ( $color->[$i] < 0 ) {
 			Carp::carp("Number in color arrayref was negative");
-			$_[0]->[$i] = 0;
+			$valid[$i] = 0;
+		} else {
+			$valid[$i] = $color->[$i];
 		}
 	}
+	return \@valid;
 }
 
 sub _color_format {
-	if ( !defined $_[0] || Scalar::Util::looks_like_number( $_[0] ) ) {
-		_color_number(@_);
+	my ($color) = @_;
+	if ( !defined $color || Scalar::Util::looks_like_number($color) ) {
 		return 'number';
-	} elsif ( ref $_[0] eq "ARRAY" ) {
-		_color_arrayref(@_);
+	} elsif ( ref $color eq "ARRAY" ) {
 		return 'arrayref';
-	} elsif ( Scalar::Util::blessed( $_[0] ) || $_[0]->isa("SDL::Color") ) {
+	} elsif ( Scalar::Util::blessed($color) || $color->isa("SDL::Color") ) {
 		return 'SDLx::Color';
 	} else {
 		Carp::croak("Color must be number or arrayref or SDLx::Color");
@@ -109,9 +115,10 @@ sub num_rgb {
 	my ($color) = @_;
 	my $format = _color_format($color);
 	if ( $format eq 'number' ) {
-		return $color;
+		return _color_number($color);
 	} elsif ( $format eq 'arrayref' ) {
-		return ( $color->[0] << 16 ) + ( $color->[1] << 8 ) + ( $color->[2] );
+		my $c = _color_arrayref($color);
+		return ( $c->[0] << 16 ) + ( $c->[1] << 8 ) + ( $c->[2] );
 	} elsif ( $format eq 'SDLx::Color' ) {
 		return ( $color->r << 16 ) + ( $color->g << 8 ) + $color->b;
 	}
@@ -119,11 +126,12 @@ sub num_rgb {
 
 sub num_rgba {
 	my ($color) = @_;
-	my $format = _color_format( $color, 1 );
+	my $format = _color_format($color);
 	if ( $format eq 'number' ) {
-		return $color;
+		return _color_number( $color, 1 );
 	} elsif ( $format eq 'arrayref' ) {
-		return ( $color->[0] << 24 ) + ( $color->[1] << 16 ) + ( $color->[2] << 8 ) + ( $color->[3] );
+		my $c = _color_arrayref( $color, 1 );
+		return ( $c->[0] << 24 ) + ( $c->[1] << 16 ) + ( $c->[2] << 8 ) + ( $c->[3] );
 	} elsif ( $format eq 'SDLx::Color' ) {
 		return ( $color->r << 24 ) + ( $color->g << 16 ) + ( $color->b << 8 ) + 0xFF;
 	}
@@ -133,9 +141,10 @@ sub list_rgb {
 	my ($color) = @_;
 	my $format = _color_format($color);
 	if ( $format eq 'number' ) {
-		return [ $color >> 16 & 0xFF, $color >> 8 & 0xFF, $color & 0xFF ];
+		my $n = _color_number($color);
+		return [ $n >> 16 & 0xFF, $n >> 8 & 0xFF, $n & 0xFF ];
 	} elsif ( $format eq 'arrayref' ) {
-		return $color;
+		return _color_arrayref($color);
 	} elsif ( $format eq 'SDLx::Color' ) {
 		return [ $color->r, $color->g, $color->b ];
 	}
@@ -145,9 +154,10 @@ sub list_rgba {
 	my ($color) = @_;
 	my $format = _color_format( $color, 1 );
 	if ( $format eq 'number' ) {
-		return [ $color >> 24 & 0xFF, $color >> 16 & 0xFF, $color >> 8 & 0xFF, $color & 0xFF ];
+		my $n = _color_number( $color, 1 );
+		return [ $n >> 24 & 0xFF, $n >> 16 & 0xFF, $n >> 8 & 0xFF, $n & 0xFF ];
 	} elsif ( $format eq 'arrayref' ) {
-		return $color;
+		return _color_arrayref( $color, 1 );
 	} elsif ( $format eq 'SDLx::Color' ) {
 		return [ $color->r, $color->g, $color->b, 0xFF ];
 	}
