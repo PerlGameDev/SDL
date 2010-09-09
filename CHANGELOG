@@ -5,6 +5,7 @@ Revision history for Perl extension SDL_perl.
 	- Fixed unsigned int bug for get_pixels from surface [kthakore]
 	- Several document fixes 
 	- Minor additions to SDLx::Sprite::Animated [jtpalmer]
+	- Added a fix for writing key_sym for a SDL::Event [kthakore]
 
 * 2.512
 	- More tests and implemented more of SDLx::Sprite::Animated [jtpalmer]
