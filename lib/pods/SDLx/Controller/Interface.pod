@@ -1,0 +1,42 @@
+
+=pod
+
+=head1 NAME
+
+SDLx::Controller::Interface - Interface Physics and Rendering with the Controller with callbacks
+
+=head1 CATEGORY
+
+Core, Extension
+
+=head1 SYNOPSIS
+
+ use SDL;
+ use SDLx::App;
+ use SDLx::Controller::Interface;
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 set_acceleration
+
+=head2 current
+
+=head2 previous
+
+=head1 OTHER METHODS
+
+=head2 acceleration
+
+=head2 interpolate
+
+=head2 evaluate
+
+=head2 update
+
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
+=cut
