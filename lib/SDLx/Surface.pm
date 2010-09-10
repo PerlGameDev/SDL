@@ -255,7 +255,7 @@ sub update {
 
 sub draw_rect {
 	my ( $self, $rect, $color ) = @_;
-	$color = SDLx::Validate::map_rgba( $color, $self->surface->format );
+	$color = SDLx::Validate::num_rgba( $color, $self->surface->format );
 	if ( defined $rect ) {
 		$rect = SDLx::Validate::rect($rect);
 	} else {
@@ -280,32 +280,34 @@ sub draw_line {
 		return;
 	}
 
+	my $possible_color;
+
 	my $result;
-	if ( Scalar::Util::looks_like_number($color) ) {
+	if ( $possible_color = SDLx::Validate::num_rgba($color) ) {
 		if ($antialias) {
 			$result = SDL::GFX::Primitives::aaline_color(
 				$self->surface, @$start,
-				@$end,          $color
+				@$end,          $possible_color
 			);
 		} else {
 
 			$result = SDL::GFX::Primitives::line_color(
 				$self->surface, @$start, @$end,
-				$color
+				$possible_color
 			);
 		}
-	} elsif ( ref($color) eq 'ARRAY' && scalar(@$color) >= 4 ) {
+	} elsif ( $possible_color = SDLx::Validate::list_rgba($color) ) {
 
 		if ($antialias) {
 			$result = SDL::GFX::Primitives::aaline_RGBA(
 				$self->surface, @$start, @$end,
-				@$color
+				@$possible_color
 			);
 		} else {
 
 			$result = SDL::GFX::Primitives::line_RGBA(
 				$self->surface, @$start, @$end,
-				@$color
+				@$possible_color
 			);
 		}
 
@@ -328,7 +330,7 @@ sub draw_circle {
 	}
 
 	Carp::carp "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
-	SDLx::Validate::list_rgba($color);
+	$color = SDLx::Validate::list_rgba($color);
 
 	SDL::GFX::Primitives::circle_RGBA( $self->surface, @{$center}, $radius, @{$color} );
 	return $self;
@@ -343,7 +345,7 @@ sub draw_circle_filled {
 	}
 
 	Carp::carp "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
-	SDLx::Validate::list_rgba($color);
+	$color = SDLx::Validate::list_rgba($color);
 
 	SDL::GFX::Primitives::filled_circle_RGBA( $self->surface, @{$center}, $radius, @{$color} );
 	return $self;
