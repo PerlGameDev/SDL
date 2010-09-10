@@ -303,9 +303,9 @@ sub draw_circle {
 	}
 
 	Carp::carp "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
-	$color = SDLx::Validate::list_rgba($color);
+	$color = SDLx::Validate::num_rgba($color);
 
-	SDL::GFX::Primitives::circle_RGBA( $self->surface, @{$center}, $radius, @{$color} );
+	SDL::GFX::Primitives::circle_color( $self->surface, @{$center}, $radius, $color );
 	return $self;
 }
 
@@ -318,9 +318,9 @@ sub draw_circle_filled {
 	}
 
 	Carp::carp "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
-	$color = SDLx::Validate::list_rgba($color);
+	$color = SDLx::Validate::num_rgba($color);
 
-	SDL::GFX::Primitives::filled_circle_RGBA( $self->surface, @{$center}, $radius, @{$color} );
+	SDL::GFX::Primitives::filled_circle_color( $self->surface, @{$center}, $radius, $color );
 	return $self;
 }
 
