@@ -387,16 +387,10 @@ sub draw_gfx_text {
 
 
 	my $result;
-	if ( Scalar::Util::looks_like_number($color) ) {
+	if ( my $possible_color = SDLx::Validate::num_rgba($color) ) {
 		$result = SDL::GFX::Primitives::string_color(
 			$self->surface, $vector->[0], $vector->[1], $text,
-			$color
-		);
-	} elsif ( ref($color) eq 'ARRAY' && scalar(@$color) >= 4 ) {
-
-		$result = SDL::GFX::Primitives::string_RGBA(
-			$self->surface, $vector->[0], $vector->[1], $text,
-			@$color
+			$possible_color
 		);
 	}
 
