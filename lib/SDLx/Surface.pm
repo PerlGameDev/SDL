@@ -280,23 +280,13 @@ sub draw_line {
 		return;
 	}
 
+	$color = SDLx::Validate::num_rgba($color);
+
 	my $result;
-	if ( my $possible_color = SDLx::Validate::num_rgba($color) ) {
-		if ($antialias) {
-			$result = SDL::GFX::Primitives::aaline_color(
-				$self->surface, @$start,
-				@$end,          $possible_color
-			);
-		} else {
-
-			$result = SDL::GFX::Primitives::line_color(
-				$self->surface, @$start, @$end,
-				$possible_color
-			);
-		}
+	if ($antialias) {
+		$result = SDL::GFX::Primitives::aaline_color( $self->surface, @$start, @$end, $color );
 	} else {
-		Carp::croak "Color needs to be a number or array ref [r,g,b,a,...]";
-
+		$result = SDL::GFX::Primitives::line_color( $self->surface, @$start, @$end, $color );
 	}
 
 	Carp::croak "Error drawing line: " . SDL::get_error() if ( $result == -1 );
@@ -385,15 +375,9 @@ sub draw_gfx_text {
 	Carp::croak "vector needs to be an array ref of size 2. [x,y] "
 		unless ( ref($vector) eq 'ARRAY' && scalar(@$vector) == 2 );
 
+	$color = SDLx::Validate::num_rgba($color);
 
-	my $result;
-	if ( my $possible_color = SDLx::Validate::num_rgba($color) ) {
-		$result = SDL::GFX::Primitives::string_color(
-			$self->surface, $vector->[0], $vector->[1], $text,
-			$possible_color
-		);
-	}
-
+	my $result = SDL::GFX::Primitives::string_color( $self->surface, $vector->[0], $vector->[1], $text, $color );
 
 	Carp::croak "Error drawing text: " . SDL::get_error() if ( $result == -1 );
 
