@@ -39,7 +39,7 @@ Core, Extension
  };
 
 
- $app->add_object( $ball, $ball_render ); 
+ $ball->attach( $app, $ball_render, @params ); 
 
  $app->run_test();
 
@@ -48,6 +48,8 @@ Core, Extension
 =head1 METHODS
 
 =head2 set_acceleration
+
+=head2 attach
 
 =head2 current
 
