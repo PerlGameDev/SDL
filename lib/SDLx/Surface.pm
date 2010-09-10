@@ -280,10 +280,8 @@ sub draw_line {
 		return;
 	}
 
-	my $possible_color;
-
 	my $result;
-	if ( $possible_color = SDLx::Validate::num_rgba($color) ) {
+	if ( my $possible_color = SDLx::Validate::num_rgba($color) ) {
 		if ($antialias) {
 			$result = SDL::GFX::Primitives::aaline_color(
 				$self->surface, @$start,
@@ -296,21 +294,6 @@ sub draw_line {
 				$possible_color
 			);
 		}
-	} elsif ( $possible_color = SDLx::Validate::list_rgba($color) ) {
-
-		if ($antialias) {
-			$result = SDL::GFX::Primitives::aaline_RGBA(
-				$self->surface, @$start, @$end,
-				@$possible_color
-			);
-		} else {
-
-			$result = SDL::GFX::Primitives::line_RGBA(
-				$self->surface, @$start, @$end,
-				@$possible_color
-			);
-		}
-
 	} else {
 		Carp::croak "Color needs to be a number or array ref [r,g,b,a,...]";
 
