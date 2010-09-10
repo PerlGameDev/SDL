@@ -41,7 +41,7 @@ Core, Extension
 
  $ball->attach( $app, $ball_render, @params ); 
 
- $app->run_test();
+ $app->run();
 
 =head1 DESCRIPTION
 

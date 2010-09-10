@@ -48,11 +48,10 @@ $app->add_event_handler($event);
 $app->add_show_handler( sub { $app->draw_rect( [ 0, 0, $app->w, $app->h ], 0x000000 ) } );
 
 #add the spring
-$app->add_object( $spring, $render );
+$spring->attach($app, $render );
 
 #add the constant_velocity
-$app->add_object(
-	$constant,
+$constant->attach( $app,
 	sub {
 		my $state = shift;
 		$app->draw_rect( [ $state->x, $state->y, 4, 4 ], 0xFFFFFF );
@@ -62,7 +61,7 @@ $app->add_object(
 #add the final update
 $app->add_show_handler( sub { $app->update() } );
 
-$app->run_test();
+$app->run();
 
 
 

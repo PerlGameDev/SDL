@@ -212,4 +212,4 @@ system propagates it.
 To exit the demo, just close the window normally.
 EOT
 
-$game->run_test();
+$game->run();
