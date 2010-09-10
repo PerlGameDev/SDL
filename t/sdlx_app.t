@@ -27,7 +27,7 @@ can_ok(
 		warp
 		fullscreen
 		iconify
-		grab_input	
+		grab_input
 		sync
 		attribute
 		/

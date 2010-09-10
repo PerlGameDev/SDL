@@ -21,9 +21,12 @@ Core, Extension
  my $ball = SDLx::Controller::Interface->new( x=> 10, y => 50, v_x => 10, v_y=> 20 );
  #Set the initial state of the ball's physics, this is optional
 
- $ball->set_acceleration( sub { my $current_state = shift;
-	return( 0, -10, 0 ); #Return accelerations (x,y,rotation)
-	});
+ $ball->set_acceleration( 
+        sub { 
+              my $current_state = shift;
+	      return( 0, -10, 0 ); #Return accelerations (x,y,rotation)
+	    }
+        );
 
  my $ball_render = sub {
  my $state = shift;

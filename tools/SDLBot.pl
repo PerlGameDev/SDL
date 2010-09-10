@@ -1,4 +1,5 @@
 package MouseImgur;
+
 # Imgur.pm
 # simple perl module for uploading pics to imgur.com
 
@@ -8,21 +9,21 @@ use strict;
 use warnings;
 use Mouse; # a use Mouse instead
 
-has 'key' => (is => 'rw', isa => 'Str');
+has 'key' => ( is => 'rw', isa => 'Str' );
 
 # errors:
 # 0 -- no api key
 # -1 -- problem with the file
 sub upload {
-	my $self = shift;
+	my $self       = shift;
 	my $image_path = shift;
-	return 0 unless($self->key);
+	return 0 unless ( $self->key );
 	my $res;
-	if($image_path =~ /http:\/\//)	{
+	if ( $image_path =~ /http:\/\// ) {
 		$res = $image_path;
 	} else {
 		my $fh;
-		open $fh,"<", $image_path or return -1;
+		open $fh, "<", $image_path or return -1;
 		$res = _read_file($image_path);
 	}
 	$res = $self->_upload($res);
@@ -36,10 +37,10 @@ sub _read_file {
 	my $fh;
 	open $fh, "<", $fname or return -1;
 	binmode $fh;
-	return encode_base64(join("" => <$fh>));
+	return encode_base64( join( "" => <$fh> ) );
 }
 
-# errors: 
+# errors:
 # 1000 	 No image selected
 # 1001 	Image failed to upload
 # 1002 	Image larger than 10MB
@@ -49,14 +50,14 @@ sub _read_file {
 # 1006 	Upload failed during the copy process
 # 1007 	Upload failed during thumbnail process
 sub _upload {
-	my $self = shift;
+	my $self  = shift;
 	my $image = shift;
-	return undef unless($image);
-	my $user_a = LWP::UserAgent->new(agent => "Perl");
-	my $res = $user_a->post('http://imgur.com/api/upload.xml', ['image' => $image, 'key' => $self->key]);
-	if($res->content =~ /<original_image>(.*?)<\/original_image>/)	{
+	return undef unless ($image);
+	my $user_a = LWP::UserAgent->new( agent => "Perl" );
+	my $res = $user_a->post( 'http://imgur.com/api/upload.xml', [ 'image' => $image, 'key' => $self->key ] );
+	if ( $res->content =~ /<original_image>(.*?)<\/original_image>/ ) {
 		return $1;
-	} elsif ($res->content =~ /<error_code>(\d+)<\/error_code>/) {
+	} elsif ( $res->content =~ /<error_code>(\d+)<\/error_code>/ ) {
 		return $1;
 	} else {
 		return -3;
@@ -83,15 +84,15 @@ my $old_count = 0;
 my $quite     = 0;
 
 warn Dumper qx(sh -c "ulimit -a");
+
 sub said {
 	my ( $self, $message ) = @_;
-	if ( $message->{body} =~ /^eval:\s*/ )
-	{
-	
+	if ( $message->{body} =~ /^eval:\s*/ ) {
+
 		$message->{body} =~ s/^.+?eval://;
-		warn 'Got '.$message->{body};
+		warn 'Got ' . $message->{body};
 		return eval_imgur( $message->{body} );
-	
+
 	}
 	my $return = ticket($message);
 	return $return if $return;
@@ -118,44 +119,43 @@ sub ticket {
 
 sub eval_imgur {
 
-warn 'eval';
+	warn 'eval';
 
-return "Can't run $_[0]" if $_[0] =~ /fork|unlink|threads|while/;
+	return "Can't run $_[0]" if $_[0] =~ /fork|unlink|threads|while/;
 
-my $videodriver = $ENV{SDL_VIDEODRIVER};
-$ENV{SDL_VIDEODRIVER} = 'dummy';
+	my $videodriver = $ENV{SDL_VIDEODRIVER};
+	$ENV{SDL_VIDEODRIVER} = 'dummy';
 
-my $key = '26447813009ded6a7e83986738085949';
+	my $key = '26447813009ded6a7e83986738085949';
 
-my $imgur = MouseImgur->new(key=>$key);
+	my $imgur = MouseImgur->new( key => $key );
 
-my $app = SDLx::Surface->new( width => 200, height => 200);
+	my $app = SDLx::Surface->new( width => 200, height => 200 );
 
-my $e = eval $_[0];
+	my $e = eval $_[0];
 
-warn 'Got eval: '.$@;
+	warn 'Got eval: ' . $@;
 
-if( $@ )
-{
+	if ($@) {
 
-	$e = $@; 
-	$e .= SDL::get_error();
-	return $e;
-}
-my $image = 'foo'.rand(1000).'.bmp';
+		$e = $@;
+		$e .= SDL::get_error();
+		return $e;
+	}
+	my $image = 'foo' . rand(1000) . '.bmp';
 
-SDL::Video::save_BMP( $app, $image);
+	SDL::Video::save_BMP( $app, $image );
 
-my $result = $imgur->upload($image);
+	my $result = $imgur->upload($image);
 
-my $r = "Imgur Upload: $result\n";
+	my $r = "Imgur Upload: $result\n";
 
-unlink $image;
+	unlink $image;
 
-$ENV{SDL_VIDEODRIVER} = $videodriver;
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
 
 
-return $r;
+	return $r;
 
 }
 
