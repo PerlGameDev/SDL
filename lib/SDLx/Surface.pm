@@ -255,7 +255,7 @@ sub update {
 
 sub draw_rect {
 	my ( $self, $rect, $color ) = @_;
-	$color = SDLx::Validate::num_rgba( $color, $self->surface->format );
+	$color = SDLx::Validate::map_rgba( $color, $self->surface->format );
 	if ( defined $rect ) {
 		$rect = SDLx::Validate::rect($rect);
 	} else {
