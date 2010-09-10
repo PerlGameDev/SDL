@@ -109,23 +109,7 @@ sub _show {
 
 sub quit { $_quit{ refaddr $_[0] } = 1 }
 
-sub add_object {
-	my ( $self, $obj, $render, @params ) = @_;
 
-	croak "Interface is needed" unless $obj && $obj->isa('SDLx::Controller::Interface');
-	my $move = sub { $obj->update( $_[1], $_[0] ) };
-	$self->add_move_handler($move);
-
-	if ($render) {
-		my $show = sub { my $state = $obj->interpolate( $_[0] ); $render->( $state, @params ); };
-		$self->add_show_handler($show);
-	} else {
-		carp "Render callback not provide";
-
-	}
-
-
-}
 
 sub _add_handler {
 	my ( $arr_ref, $handler ) = @_;

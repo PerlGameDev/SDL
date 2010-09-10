@@ -1,6 +1,7 @@
 package SDLx::Controller::Interface;
 use strict;
 use warnings;
+use Carp qw/confess/;
 
 our @ISA = qw(Exporter DynaLoader);
 
@@ -20,6 +21,23 @@ sub new {
 	push @args, ( $foo{ang_v} || 0 );
 
 	return SDLx::Controller::Interface->make(@args);
+}
+
+
+sub attach {
+	my ( $self, $controller, $render, @params ) = @_;
+
+	Carp::confess "An SDLx::Controller is needed" unless $controller && $controller->isa('SDLx::Controller');
+	my $move = sub { $self->update( $_[1], $_[0] ) };
+	$controller->add_move_handler($move);
+
+	if ($render) {
+		my $show = sub { my $state = $self->interpolate( $_[0] ); $render->( $state, @params ); };
+		$controller->add_show_handler($show);
+	} else {
+		Carp::confess "Render callback not provided";
+
+	}
 }
 
 internal_load_dlls(__PACKAGE__);
