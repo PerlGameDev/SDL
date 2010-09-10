@@ -400,7 +400,7 @@ is( $clip->y,               0, 'clip->y after seventh previous' );
 is( $sprite->current_frame, 1, 'sprite->current_frame after seventh previous' );
 
 $sprite = SDLx::Sprite::Animated->new(
-	image     => 'test/data/hero.png',
+	image     => 'test/data/hero.bmp',
 	rect      => SDL::Rect->new( 40, 50, 48, 48 ),
 	clip      => SDL::Rect->new( 48, 48, 48, 48 ),
 	sequences => { up => [ [ 0, 0 ], [ 0, 1 ] ] },
@@ -419,7 +419,7 @@ is( $clip->x, 48, 'clip->x after second next' );
 is( $clip->y, 48, 'clip->y after second next' );
 
 $sprite = SDLx::Sprite::Animated->new(
-	image => 'test/data/hero.png',
+	image => 'test/data/hero.bmp',
 	rect  => SDL::Rect->new( 40, 50, 48, 48 ),
 );
 $clip = $sprite->clip;
