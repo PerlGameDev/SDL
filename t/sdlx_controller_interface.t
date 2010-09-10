@@ -2,11 +2,17 @@ use strict;
 use warnings;
 use Test::More;
 use SDL;
+use SDLx::App;
+use SDLx::Controller;
 use SDLx::Controller::State;
 use SDLx::Controller::Interface;
 use lib 't/lib';
 use SDL::TestTool;
 use Data::Dumper;
+
+my $videodriver = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
 
 can_ok(
 	'SDLx::Controller::Interface',
@@ -64,6 +70,47 @@ $obj->acceleration(1);
 my $a   = $obj->current;
 my $a_x = $a->x();
 is( $a_x, 2, '[obj/state] acceleration callback copies staet back to current' );
+
+SKIP:
+{
+	skip 'No Video', 1 unless SDL::TestTool->init(SDL_INIT_VIDEO);
+
+  my $dummy = SDLx::App->new();
+
+  my $controller = SDLx::Controller->new( dt => 0.2 );
+
+  my $interface  = SDLx::Controller::Interface->new( );
+  my $event_called = 0;
+
+  require SDL::Event;
+  require SDL::Events; 
+  my $eve = SDL::Event->new();
+
+  SDL::Events::push_event($eve);
+  my $counts = [0,0,0];  
+  $controller->add_event_handler( sub { $counts->[0]++; return 0 if $interface->current->x; return 0 } );
+  
+  $interface->set_acceleration( sub { die if $counts->[1] > 100; $counts->[1]++; isa_ok( $_[1], 'SDLx::Controller::State', '[Controller] called acceleration and gave us a state'), return( 10, 10, 10)});
+
+  $interface->attach( $controller, sub{  $counts->[2]++;
+					isa_ok( $_[0], 'SDLx::Controller::State', '[Controller] called render and gave us a state') 
+				      }
+		    );
+
+  
+  $controller->run();
+
+  is_deeply( $counts, [1,4,1]);
+
+}  
+
+
+if ($videodriver) {
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+} else {
+	delete $ENV{SDL_VIDEODRIVER};
+}
+
 
 done_testing;
 

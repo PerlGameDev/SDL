@@ -6,6 +6,7 @@ use Time::HiRes qw( time sleep );
 use SDL;
 use SDL::Event;
 use SDL::Events;
+use SDL::Video;
 use SDLx::Controller::Timer;
 use Scalar::Util 'refaddr';
 use SDLx::Controller::Interface;
@@ -80,7 +81,6 @@ sub run {
 
 sub _event {
 	my $self = shift;
-
 	$_event{ refaddr $self} = SDL::Event->new() unless $_event{ refaddr $self};
 	while ( SDL::Events::poll_event( $_event{ refaddr $self} ) ) {
 		SDL::Events::pump_events();
@@ -123,6 +123,7 @@ sub add_move_handler {
 }
 
 sub add_event_handler {
+	Carp::confess 'SDLx::App or a Display (SDL::Video::get_video_mode) must be made' unless SDL::Video::get_video_surface();
 	$_[0]->remove_all_event_handlers if !$_event_handlers{ refaddr $_[0] };
 	return _add_handler( $_event_handlers{ refaddr $_[0] }, $_[1] );
 }
