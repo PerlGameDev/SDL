@@ -6,14 +6,14 @@ use SDLx::App;
 use SDL::Event;
 use SDL::Events;
 
-use SDLx::Controller::Object;
+use SDLx::Controller::Interface;
 my $app = SDLx::App->new( w => 200, h => 200, title => "timestep" );
 
 #The initial x and y for this object.
-my $spring = SDLx::Controller::Object->new( x => 100, y => 100 );
+my $spring = SDLx::Controller::Interface->new( x => 100, y => 100 );
 
 #we have a constant x velocity of 20
-my $constant = SDLx::Controller::Object->new( x => 0, y => 20, v_x => 20 );
+my $constant = SDLx::Controller::Interface->new( x => 0, y => 20, v_x => 20 );
 
 #NO need to send an acceleration for x,y or rotation
 $constant->set_acceleration( sub { return ( 0, 0, 0 ) } );

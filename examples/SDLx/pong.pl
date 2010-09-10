@@ -90,7 +90,6 @@ sub init {
 my $game = SDLx::Controller->new( dt => 0.1 );
 
 sub on_move {
-	my $t  = shift;
 	my $dt = shift;
 	$dt = $dt / 1000;
 	paddle_confine( $paddle,  $dt, $app->h );

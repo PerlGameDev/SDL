@@ -61,7 +61,6 @@ sub init {
 my $game = SDLx::Controller->new();
 
 sub on_move {
-	my $t  = shift;
 	my $dt = shift;
 	$dt = $dt / 1000;
 	$ball->{x} += $ball->{x_vel} * $dt;
