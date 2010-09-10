@@ -54,26 +54,6 @@ sub DESTROY {
 }
 
 sub run {
-	my $self = shift;
-	$_quit{ refaddr $self} = 0;
-	my $accumulator = 0;
-	while ( !$_quit{ refaddr $self} ) {
-		$self->_event;
-		my $delta_time = $_delta{ refaddr $self}->get_ticks();
-		$accumulator += $delta_time;
-
-		while ( $accumulator >= $_dt{ refaddr $self} && !$_quit{ refaddr $self} ) {
-			$self->_move( $_dt{ refaddr $self} );
-			$accumulator -= $_dt{ refaddr $self};
-
-			#update how much real time we have animated
-		}
-		$_delta{ refaddr $self}->start();
-		$self->_show($delta_time);
-	}
-}
-
-sub run_test {
 	my $self         = shift;
 	my $quit         = 0;
 	my $t            = 0.0;
