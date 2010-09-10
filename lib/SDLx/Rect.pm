@@ -17,7 +17,7 @@ sub new {
 	unless ($$self) {
 
 		#require Carp;
-		croak SDL::get_error();
+		Carp::confess SDL::get_error();
 	}
 	bless $self, $class;
 	return $self;
@@ -266,7 +266,7 @@ sub move {
 	if ( not defined $x or not defined $y ) {
 
 		#require Carp;
-		croak "must receive x and y positions as argument";
+		Carp::confess "must receive x and y positions as argument";
 	}
 	return $self->new(
 		-top    => $self->top + $y,
@@ -281,7 +281,7 @@ sub move_ip {
 	if ( not defined $x or not defined $y ) {
 
 		#require Carp;
-		croak "must receive x and y positions as argument";
+		Carp::confess "must receive x and y positions as argument";
 	}
 	$self->x( $self->x + $x );
 	$self->y( $self->y + $y );
@@ -294,7 +294,7 @@ sub inflate {
 	if ( not defined $x or not defined $y ) {
 
 		#require Carp;
-		croak "must receive x and y positions as argument";
+		Carp::confess "must receive x and y positions as argument";
 	}
 
 	return $self->new(
@@ -310,7 +310,7 @@ sub inflate_ip {
 	if ( not defined $x or not defined $y ) {
 
 		#require Carp;
-		croak "must receive x and y positions as argument";
+		Carp::confess "must receive x and y positions as argument";
 	}
 
 	$self->x( $self->x - ( $x / 2 ) );
@@ -338,7 +338,7 @@ sub clamp {
 	my ( $self, $rect ) = (@_);
 
 	unless ( $rect->isa('SDL::Rect') ) {
-		croak "must receive an SDL::Rect-based object";
+		Carp::confess "must receive an SDL::Rect-based object";
 	}
 
 	my $x = _get_clamp_coordinates( $self->x, $self->w, $rect->x, $rect->w );
@@ -351,7 +351,7 @@ sub clamp_ip {
 	my ( $self, $rect ) = (@_);
 
 	unless ( $rect->isa('SDL::Rect') ) {
-		croak "must receive an SDL::Rect-based object";
+		Carp::confess "must receive an SDL::Rect-based object";
 	}
 
 	my $x = _get_clamp_coordinates( $self->x, $self->w, $rect->x, $rect->w );
@@ -433,7 +433,7 @@ sub clip {
 	my ( $self, $rect ) = (@_);
 
 	unless ( $rect->isa('SDL::Rect') ) {
-		croak "must receive an SDL::Rect-based object";
+		Carp::confess "must receive an SDL::Rect-based object";
 	}
 
 	my ( $x, $y, $w, $h ) = _get_intersection_coordinates( $self, $rect );
@@ -445,7 +445,7 @@ sub clip_ip {
 	my ( $self, $rect ) = (@_);
 
 	unless ( $rect->isa('SDL::Rect') ) {
-		croak "must receive an SDL::Rect-based object";
+		Carp::confess "must receive an SDL::Rect-based object";
 	}
 
 	my ( $x, $y, $w, $h ) = _get_intersection_coordinates( $self, $rect );
@@ -482,7 +482,7 @@ sub union {
 	my ( $self, $rect ) = (@_);
 
 	unless ( $rect->isa('SDL::Rect') ) {
-		croak "must receive an SDL::Rect-based object";
+		Carp::confess "must receive an SDL::Rect-based object";
 	}
 
 	my ( $x, $y, $w, $h ) = _test_union( $self, $rect );
@@ -493,7 +493,7 @@ sub union_ip {
 	my ( $self, $rect ) = (@_);
 
 	unless ( $rect->isa('SDL::Rect') ) {
-		croak "must receive an SDL::Rect-based object";
+		Carp::confess "must receive an SDL::Rect-based object";
 	}
 
 	my ( $x, $y, $w, $h ) = _test_union( $self, $rect );
@@ -520,7 +520,7 @@ sub _test_unionall {
 
 			# TODO: better error message, maybe saying which item
 			# is the bad one (by list position)
-			croak "must receive an array reference of SDL::Rect-based objects";
+			Carp::confess "must receive an array reference of SDL::Rect-based objects";
 		}
 
 		$left = $rect->x if $rect->x < $left; # MIN
@@ -538,7 +538,7 @@ sub unionall {
 	my ( $self, $rects ) = (@_);
 
 	unless ( defined $rects and ref $rects eq 'ARRAY' ) {
-		croak "must receive an array reference of SDL::Rect-based objects";
+		Carp::confess "must receive an array reference of SDL::Rect-based objects";
 	}
 
 	my ( $x, $y, $w, $h ) = _test_unionall( $self, $rects );
@@ -550,7 +550,7 @@ sub unionall_ip {
 	my ( $self, $rects ) = (@_);
 
 	unless ( defined $rects and ref $rects eq 'ARRAY' ) {
-		croak "must receive an array reference of SDL::Rect-based objects";
+		Carp::confess "must receive an array reference of SDL::Rect-based objects";
 	}
 
 	my ( $x, $y, $w, $h ) = _test_unionall( $self, $rects );
@@ -583,7 +583,7 @@ sub fit {
 	my ( $self, $rect ) = (@_);
 
 	unless ( $rect->isa('SDL::Rect') ) {
-		croak "must receive an SDL::Rect-based object";
+		Carp::confess "must receive an SDL::Rect-based object";
 	}
 
 	my ( $x, $y, $w, $h ) = _check_fit( $self, $rect );
@@ -595,7 +595,7 @@ sub fit_ip {
 	my ( $self, $rect ) = (@_);
 
 	unless ( $rect->isa('SDL::Rect') ) {
-		croak "must receive an SDL::Rect-based object";
+		Carp::confess "must receive an SDL::Rect-based object";
 	}
 
 	my ( $x, $y, $w, $h ) = _check_fit( $self, $rect );
@@ -627,7 +627,7 @@ sub contains {
 	my ( $self, $rect ) = (@_);
 
 	unless ( $rect->isa('SDL::Rect') ) {
-		croak "must receive an SDL::Rect-based object";
+		Carp::confess "must receive an SDL::Rect-based object";
 	}
 
 	my $contained =
@@ -645,7 +645,7 @@ sub collidepoint {
 	my ( $self, $x, $y ) = (@_);
 
 	unless ( defined $x and defined $y ) {
-		croak "must receive (x,y) as arguments";
+		Carp::confess "must receive (x,y) as arguments";
 	}
 
 	my $inside =
@@ -672,7 +672,7 @@ sub colliderect {
 	my ( $self, $rect ) = (@_);
 
 	unless ( $rect->isa('SDL::Rect') ) {
-		croak "must receive an SDL::Rect-based object";
+		Carp::confess "must receive an SDL::Rect-based object";
 	}
 
 	return _do_rects_intersect( $self, $rect );
@@ -682,7 +682,7 @@ sub collidelist {
 	my ( $self, $rects ) = (@_);
 
 	unless ( defined $rects and ref $rects eq 'ARRAY' ) {
-		croak "must receive an array reference of SDL::Rect-based objects";
+		Carp::confess "must receive an array reference of SDL::Rect-based objects";
 	}
 
 	for ( my $i = 0; $i < @{$rects}; $i++ ) {
@@ -697,7 +697,7 @@ sub collidelistall {
 	my ( $self, $rects ) = (@_);
 
 	unless ( defined $rects and ref $rects eq 'ARRAY' ) {
-		croak "must receive an array reference of SDL::Rect-based objects";
+		Carp::confess "must receive an array reference of SDL::Rect-based objects";
 	}
 
 	my @collisions = ();
@@ -713,12 +713,12 @@ sub collidehash {
 	my ( $self, $rects ) = (@_);
 
 	unless ( defined $rects and ref $rects eq 'HASH' ) {
-		croak "must receive an hash reference of SDL::Rect-based objects";
+		Carp::confess "must receive an hash reference of SDL::Rect-based objects";
 	}
 
 	while ( my ( $key, $value ) = each %{$rects} ) {
 		unless ( $value->isa('SDL::Rect') ) {
-			croak "hash element of key '$key' is not an SDL::Rect-based object";
+			Carp::confess "hash element of key '$key' is not an SDL::Rect-based object";
 		}
 
 		if ( _do_rects_intersect( $self, $value ) ) {
@@ -732,13 +732,13 @@ sub collidehashall {
 	my ( $self, $rects ) = (@_);
 
 	unless ( defined $rects and ref $rects eq 'HASH' ) {
-		croak "must receive an hash reference of SDL::Rect-based objects";
+		Carp::confess "must receive an hash reference of SDL::Rect-based objects";
 	}
 
 	my %collisions = ();
 	while ( my ( $key, $value ) = each %{$rects} ) {
 		unless ( $value->isa('SDL::Rect') ) {
-			croak "hash element of key '$key' is not an SDL::Rect-based object";
+			Carp::confess "hash element of key '$key' is not an SDL::Rect-based object";
 		}
 
 		if ( _do_rects_intersect( $self, $value ) ) {

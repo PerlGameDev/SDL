@@ -62,7 +62,7 @@ sub new {
 				$options{bluemask}, $options{alphamask}
 			), $class;
 		} else {
-			Carp::croak 'Provide surface, or atleast width and height';
+			Carp::confess 'Provide surface, or atleast width and height';
 		}
 	}
 	if ( exists $options{color} ) {
@@ -94,7 +94,7 @@ sub display {
 		);
 		return SDLx::Surface->new( surface => $surface );
 	} else {
-		Carp::croak 'set_video_mode externally or atleast provide width and height';
+		Carp::confess 'set_video_mode externally or atleast provide width and height';
 	}
 
 }
@@ -166,13 +166,13 @@ sub load {
 		or lc substr( $filename, -4, 4 ) eq '.bmp' )
 	{
 		$surface = SDL::Video::load_BMP($filename)
-			or Carp::croak "error loading image $filename: " . SDL::get_error;
+			or Carp::confess "error loading image $filename: " . SDL::get_error;
 	} else {
 
 		# otherwise, make sure we can load first
 		#eval { require SDL::Image; 1 }; This doesn't work. As you can still load SDL::Image but can't call any functions.
 		#
-		Carp::croak 'no SDL_image support found. Can only load bitmaps'
+		Carp::confess 'no SDL_image support found. Can only load bitmaps'
 			unless SDL::Config->has('SDL_image'); #this checks if we actually have that library. C Library != SDL::Image
 
 		require SDL::Image;
@@ -180,12 +180,12 @@ sub load {
 		if ($type) {                              #I don't understand what you are doing here
 			require SDL::RWOps;
 			my $file = SDL::RWOps->new_file( $filename, "rb" )
-				or Carp::croak "error loading file $filename: " . SDL::get_error;
+				or Carp::confess "error loading file $filename: " . SDL::get_error;
 			$surface = SDL::Image::load_typed_rw( $file, 1, $type )
-				or Carp::croak "error loading image $file: " . SDL::get_error;
+				or Carp::confess "error loading image $file: " . SDL::get_error;
 		} else {
 			$surface = SDL::Image::load($filename)
-				or Carp::croak "error loading image $filename: " . SDL::get_error;
+				or Carp::confess "error loading image $filename: " . SDL::get_error;
 		}
 	}
 	return SDLx::Surface->new( surface => $surface );
@@ -224,8 +224,8 @@ sub blit_by {
 }
 
 sub flip {
-	Carp::croak "surface is not defined" unless $_[0]->surface();
-	Carp::croak "Error flipping surface: " . SDL::get_error()
+	Carp::confess "surface is not defined" unless $_[0]->surface();
+	Carp::confess "Error flipping surface: " . SDL::get_error()
 		if ( SDL::Video::flip( $_[0]->surface() ) == -1 );
 	return $_[0];
 
@@ -263,20 +263,20 @@ sub draw_rect {
 	}
 
 	SDL::Video::fill_rect( $self->surface, $rect, $color )
-		and Carp::croak "Error drawing rect: " . SDL::get_error();
+		and Carp::confess "Error drawing rect: " . SDL::get_error();
 	return $self;
 }
 
 sub draw_line {
 	my ( $self, $start, $end, $color, $antialias ) = @_;
 
-	Carp::croak "Error start needs an array ref [x,y]"
+	Carp::confess "Error start needs an array ref [x,y]"
 		unless ref($start) eq 'ARRAY';
-	Carp::croak "Error end needs an array ref [x,y]"
+	Carp::confess "Error end needs an array ref [x,y]"
 		unless ref($end) eq 'ARRAY';
 
 	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
-		Carp::carp("SDL_gfx_primitives support has not been compiled");
+		Carp::cluck("SDL_gfx_primitives support has not been compiled");
 		return;
 	}
 
@@ -289,7 +289,7 @@ sub draw_line {
 		$result = SDL::GFX::Primitives::line_color( $self->surface, @$start, @$end, $color );
 	}
 
-	Carp::croak "Error drawing line: " . SDL::get_error() if ( $result == -1 );
+	Carp::confess "Error drawing line: " . SDL::get_error() if ( $result == -1 );
 
 	return $self;
 }
@@ -298,11 +298,11 @@ sub draw_circle {
 	my ( $self, $center, $radius, $color, $antialias ) = @_;
 
 	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
-		Carp::carp("SDL_gfx_primitives support has not been compiled");
+		Carp::cluck("SDL_gfx_primitives support has not been compiled");
 		return;
 	}
 
-	Carp::carp "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
 	$color = SDLx::Validate::num_rgba($color);
 
 	SDL::GFX::Primitives::circle_color( $self->surface, @{$center}, $radius, $color );
@@ -313,11 +313,11 @@ sub draw_circle_filled {
 	my ( $self, $center, $radius, $color, $antialias ) = @_;
 
 	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
-		Carp::carp("SDL_gfx_primitives support has not been compiled");
+		Carp::cluck("SDL_gfx_primitives support has not been compiled");
 		return;
 	}
 
-	Carp::carp "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
 	$color = SDLx::Validate::num_rgba($color);
 
 	SDL::GFX::Primitives::filled_circle_color( $self->surface, @{$center}, $radius, $color );
@@ -360,7 +360,7 @@ sub draw_gfx_text {
 	my ( $self, $vector, $color, $text, $font ) = @_;
 
 	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
-		Carp::carp("SDL_gfx_primitives support has not been compiled");
+		Carp::cluck("SDL_gfx_primitives support has not been compiled");
 		return;
 	}
 
@@ -368,18 +368,18 @@ sub draw_gfx_text {
 		if ( ref($font) eq 'HASH' && exists $font->{data} && exists $font->{cw} && exists $font->{ch} ) {
 			SDL::GFX::Primitives::set_font( $font->{data}, $font->{cw}, $font->{ch} );
 		} else {
-			Carp::carp
+			Carp::cluck
 				"Set font data as a hash of type \n \$font = {data => \$data, cw => \$cw,  ch => \$ch}. \n Refer to perldoc SDL::GFX::Primitives set_font for initializing this variables.";
 		}
 	}
-	Carp::croak "vector needs to be an array ref of size 2. [x,y] "
+	Carp::confess "vector needs to be an array ref of size 2. [x,y] "
 		unless ( ref($vector) eq 'ARRAY' && scalar(@$vector) == 2 );
 
 	$color = SDLx::Validate::num_rgba($color);
 
 	my $result = SDL::GFX::Primitives::string_color( $self->surface, $vector->[0], $vector->[1], $text, $color );
 
-	Carp::croak "Error drawing text: " . SDL::get_error() if ( $result == -1 );
+	Carp::confess "Error drawing text: " . SDL::get_error() if ( $result == -1 );
 
 	return $self;
 }

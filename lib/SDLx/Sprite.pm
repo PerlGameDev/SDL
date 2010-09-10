@@ -33,16 +33,16 @@ sub new {
 		$self->_init_rects(%options);
 		$self->handle_surface( $self->surface );
 	} else {
-		Carp::croak "Need a surface => SDL::Surface, an image => name, or ( width => ... , height => ...)";
+		Carp::confess "Need a surface => SDL::Surface, an image => name, or ( width => ... , height => ...)";
 	}
 
 	# short-circuit
 	return $self unless %options;
 
-	Carp::croak 'rect cannot be instantiated together with x or y'
+	Carp::confess 'rect cannot be instantiated together with x or y'
 		if exists $options{rect} and ( exists $options{x} or exists $options{y} );
 
-	Carp::croak 'image and surface cannot be instantiated together'
+	Carp::confess 'image and surface cannot be instantiated together'
 		if exists $options{image} and exists $options{surface};
 
 	# note: ordering here is somewhat important. If you change anything,
@@ -158,14 +158,14 @@ sub alpha_key {
 	my ( $self, $color ) = @_;
 
 	$color = SDLx::Validate::color($color);
-	Carp::croak 'SDL::Video::set_video_mode must be called first'
+	Carp::confess 'SDL::Video::set_video_mode must be called first'
 		unless ref SDL::Video::get_video_surface();
 	$self->{alpha_key} = $color
 		unless $self->{alpha_key}; # keep a copy just in case
 	$self->surface( SDL::Video::display_format( $self->surface ) );
 
 	if ( SDL::Video::set_color_key( $self->surface, SDL_SRCCOLORKEY, $color ) < 0 ) {
-		Carp::croak ' alpha_key died :' . SDL::get_error;
+		Carp::confess ' alpha_key died :' . SDL::get_error;
 	}
 
 	return $self;
@@ -182,7 +182,7 @@ sub alpha {
 	$self->surface( SDL::Video::display_format( $self->surface ) );
 	my $flags = SDL_SRCALPHA | SDL_RLEACCEL; #this should be predictive
 	if ( SDL::Video::set_alpha( $self->surface, $flags, $value ) < 0 ) {
-		Carp::croak 'alpha died :' . SDL::get_error;
+		Carp::confess 'alpha died :' . SDL::get_error;
 	}
 
 	return $self;
@@ -200,7 +200,7 @@ sub rotation {
 			$angle,
 			1,                     # zoom
 			( defined $smooth && $smooth != 0 )
-		) or Carp::croak 'rotation error: ' . SDL::get_error;
+		) or Carp::confess 'rotation error: ' . SDL::get_error;
 
 		#After rotation the surface is on a undefined background.
 		#This causes problems with alpha. So we create a surface with a fill of the src_color.

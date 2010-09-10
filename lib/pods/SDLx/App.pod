@@ -145,7 +145,7 @@ or OpenGL buffer if applicable. This is prefered to calling flip on the applicat
 
 C<SDLx::App::attribute> allows one to get and set GL attributes. By passing a value
 in addition to the attribute selector, the value will be set. C<SDL:::App::attribute>
-always returns the current value of the given attribute, or croaks on failure.
+always returns the current value of the given attribute, or Carp::confesss on failure.
 
 =head1 CALLBACKS
 

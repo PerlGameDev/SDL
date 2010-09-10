@@ -123,7 +123,8 @@ sub add_move_handler {
 }
 
 sub add_event_handler {
-	Carp::confess 'SDLx::App or a Display (SDL::Video::get_video_mode) must be made' unless SDL::Video::get_video_surface();
+	Carp::confess 'SDLx::App or a Display (SDL::Video::get_video_mode) must be made'
+		unless SDL::Video::get_video_surface();
 	$_[0]->remove_all_event_handlers if !$_event_handlers{ refaddr $_[0] };
 	return _add_handler( $_event_handlers{ refaddr $_[0] }, $_[1] );
 }
@@ -142,7 +143,7 @@ sub _remove_handler {
 				} 0 .. $#{$handlers_ref}
 		)[0];                               #only the first coderef
 		if ( !defined $id ) {
-			Carp::carp("$id is not currently a handler of this type");
+			Carp::cluck("$id is not currently a handler of this type");
 			return;
 		}
 	}

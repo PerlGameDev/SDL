@@ -186,7 +186,7 @@ Returns the object's internal surface, or undef if there is none.
 If you pass a SDL::Surface to it, it will overwrite the original surface
 with it, while returning the B<old> (previous) surface. Note that, as such,
 it will return C<undef> if you use it without having previously loaded
-either an image or a previous surface. It will croak if you pass anything
+either an image or a previous surface. It will Carp::confess if you pass anything
 that's not an SDL::Surface object (or SDL::Surface subclassed objects).
 
 =head2 rect()

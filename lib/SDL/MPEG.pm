@@ -42,7 +42,7 @@ sub new {
 
 	my $self;
 	if ( $options{-from} ) {
-		croak "SDL::MPEG::new -from requires a SDL::Video object\n"
+		Carp::confess "SDL::MPEG::new -from requires a SDL::Video object\n"
 			unless $options{-from}->isa('SDL::Video');
 
 		$self = \SDL::SMPEGGetInfo( ${ $options{-from} } );

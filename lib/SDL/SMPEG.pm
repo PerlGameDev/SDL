@@ -19,7 +19,7 @@ sub new {
 	my $info = SDL::MPEG->new();
 
 	my $self = \SDL::NewSMPEG( $n, $$info, $a );
-	croak SDL::GetError() unless $$self;
+	Carp::confess SDL::GetError() unless $$self;
 	bless $self, $class;
 	$self->audio(1);
 	$self->video(1);
@@ -47,7 +47,7 @@ sub volume {
 }
 
 sub display {
-	croak "SDL::SMPEG::Display requires a SDL::Surface\n"
+	Carp::confess "SDL::SMPEG::Display requires a SDL::Surface\n"
 		unless $_[1]->isa('SDL::Surface');
 	SDL::SMPEGSetDisplay( ${ $_[0] }, ${ $_[1] }, 0 );
 }
@@ -88,7 +88,7 @@ sub loop {
 }
 
 sub region {
-	croak "SDL::SMPEG::region requires a SDL::Rect\n"
+	Carp::confess "SDL::SMPEG::region requires a SDL::Rect\n"
 		unless $_[1]->isa('SDL::Rect');
 	SDL::SMPEGDisplayRegion( ${ $_[0] }, ${ $_[1] } );
 }

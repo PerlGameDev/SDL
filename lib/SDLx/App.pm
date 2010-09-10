@@ -106,7 +106,7 @@ sub new {
 	}
 
 	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
-		or croak SDL::get_error();
+		or Carp::confess SDL::get_error();
 	$options{surface} = $surface;
 
 	my $self = SDLx::Surface->new(%options);
@@ -195,7 +195,7 @@ sub attribute {
 		SDL::Video::GL_set_attribute( $mode, $value );
 	}
 	my $returns = SDL::Video::GL_get_attribute($mode);
-	croak "SDLx::App::attribute failed to get GL attribute"
+	Carp::confess "SDLx::App::attribute failed to get GL attribute"
 		if ( $$returns[0] < 0 );
 	$$returns[1];
 }

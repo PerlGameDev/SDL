@@ -52,15 +52,15 @@ sub new {
 	$self->{-fg}   = $options{-foreground} || $options{-fg} || $SDL::Color::black;
 	$self->{-bg}   = $options{-background} || $options{-bg} || $SDL::Color::white;
 
-	croak "SDL::TTFont::new requires a -name\n"
+	Carp::confess "SDL::TTFont::new requires a -name\n"
 		unless ( $$self{-name} );
 
-	croak "SDL::TTFont::new requires a -size\n"
+	Carp::confess "SDL::TTFont::new requires a -size\n"
 		unless ( $$self{-size} );
 
 	$self->{-font} = SDL::TTFOpenFont( $self->{-name}, $self->{-size} );
 
-	croak "Could not open font $$self{-name}, ", SDL::GetError(), "\n"
+	Carp::confess "Could not open font $$self{-name}, ", SDL::GetError(), "\n"
 		unless ( $self->{-font} );
 
 	bless $self, $class;
@@ -76,7 +76,7 @@ sub DESTROY {
 sub print {
 	my ( $self, $surface, $x, $y, @text ) = @_;
 
-	croak "Print requies an SDL::Surface"
+	Carp::confess "Print requies an SDL::Surface"
 		unless ( ref($surface) && $surface->isa("SDL::Surface") );
 
 	SDL::FreeSurface( $self->{-surface} ) if ( $$self{-surface} );
@@ -86,7 +86,7 @@ sub print {
 		$self->{-fg},  $self->{-bg},  join( "",  @text )
 	);
 
-	croak "Could not print \"", join( "", @text ), "\" to surface, ", SDL::GetError(), "\n"
+	Carp::confess "Could not print \"", join( "", @text ), "\" to surface, ", SDL::GetError(), "\n"
 		unless ( $$self{-surface} );
 }
 
@@ -177,7 +177,7 @@ sub unicode_blended {
 	$$self{-mode} = SDL::UNICODE_BLENDED();
 }
 
-croak "Could not initialize True Type Fonts\n"
+Carp::confess "Could not initialize True Type Fonts\n"
 	if ( SDL::TTFInit() < 0 );
 
 1;

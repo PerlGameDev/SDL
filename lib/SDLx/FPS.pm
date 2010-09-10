@@ -10,7 +10,7 @@ sub new {
 	if ( ref $args[0] ) {
 		my %options = %{ $args[0] };
 		if ( @args > 1 ) {
-			Carp::carp("Extra arguments are not taken when hash is specified");
+			Carp::cluck("Extra arguments are not taken when hash is specified");
 		}
 		for (
 			grep {
@@ -19,11 +19,11 @@ sub new {
 			} keys %options
 			)
 		{
-			Carp::carp("Unrecognized constructor hash key: $_");
+			Carp::cluck("Unrecognized constructor hash key: $_");
 		}
 		@args = ( @options{qw/fps framecount rateticks lastticks rate/} );
 	} elsif ( @args > 4 ) {
-		Carp::carp("Too many arguments given");
+		Carp::cluck("Too many arguments given");
 	}
 	my $fps = $class->SDL::GFX::FPSManager::new(
 		map defined() ? $_ : 0,
