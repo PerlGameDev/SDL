@@ -87,11 +87,11 @@ sub init {
 	return $a;
 }
 
-my $game = SDLx::Controller->new( dt => 0.1 );
+my $game = SDLx::Controller->new( dt => 0.002 );
 
 sub on_move {
 	my $dt = shift;
-	$dt = $dt / 1000;
+	#$dt = $dt / 1000;
 	paddle_confine( $paddle,  $dt, $app->h );
 	paddle_confine( $paddle2, $dt, $app->h );
 
@@ -211,4 +211,4 @@ system propagates it.
 To exit the demo, just close the window normally.
 EOT
 
-$game->run();
+$game->run_test();
