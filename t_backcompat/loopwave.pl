@@ -4,12 +4,12 @@ use SDL;
 use SDL::Event;
 use Carp;
 
-confess "Could not initialize SDL: ", SDL::GetError()
+Carp::confess "Could not initialize SDL: ", SDL::GetError()
 	if ( 0 > SDL::Init(SDL_INIT_AUDIO) );
 
 $ARGV[0] ||= 'data/sample.wav';
 
-confess "usage: $0 [wavefile]\n"
+Carp::confess "usage: $0 [wavefile]\n"
 	if ( in $ARGV[0], qw/ -h --help -? / );
 
 my ( $wav_spec, $wav_buffer, $wav_len, $wav_pos ) = ( 0, 0, 0, 0 );
@@ -49,10 +49,10 @@ $wave = SDL::LoadWAV( $ARGV[0], $spec );
 
 ( $wav_spec, $wav_buffer, $wav_len ) = @$wave;
 
-confess "Could not load wav file $ARGV[0], ", SDL::GetError(), "\n"
+Carp::confess "Could not load wav file $ARGV[0], ", SDL::GetError(), "\n"
 	unless ($wav_len);
 
-confess "Could not open audio ", SDL::GetError()
+Carp::confess "Could not open audio ", SDL::GetError()
 	if ( 0 > SDL::OpenAudio( $wav_spec, $fillerup ) );
 
 SDL::PauseAudio(0);

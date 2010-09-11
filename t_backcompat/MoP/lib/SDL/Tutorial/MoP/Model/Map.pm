@@ -28,7 +28,7 @@ my $tile_size = 10;
 
 my $path = module_file( 'SDL::Tutorial::MoP', 'data/tiles.bmp' );
 my $tiles = SDL::Video::load_BMP($path);
-confess 'Error: ' . SDL::get_error() if ( !$tiles );
+Carp::confess 'Error: ' . SDL::get_error() if ( !$tiles );
 
 my $map_surface; # the image(s) of the current map are here
 my $is_up_to_date = 0;
@@ -49,7 +49,7 @@ sub new {
 sub init {
 	my ( $self, %params ) = @_;
 
-	$self->load_map() || cluck("load_map() failed");
+	$self->load_map() || Carp::cluck("load_map() failed");
 	$self->x(0);
 	$self->y(0);
 	$self->w( $self->surface()->w() );
@@ -61,7 +61,7 @@ sub init {
 sub notify {
 	my ( $self, $event ) = (@_);
 
-	print cluck( sprintf( "Notify '%s'in Map", $event->{name} ) )
+	print Carp::cluck( sprintf( "Notify '%s'in Map", $event->{name} ) )
 		if $self->{EDEBUG};
 
 	my %event_action = (
@@ -94,7 +94,7 @@ sub load_map {
 		$_surface      = undef;
 		return 1;
 	} else {
-		cluck("Could not load bitmap $_path.");
+		Carp::cluck("Could not load bitmap $_path.");
 		return -1;
 	}
 }
@@ -111,7 +111,7 @@ sub get_tile_by_index {
 	my $self = shift;
 	my $index = shift || 0;
 
-	cluck 'Unable to load tiles ' . SDL::get_error() if ( !$tiles );
+	Carp::cluck 'Unable to load tiles ' . SDL::get_error() if ( !$tiles );
 
 	my $x = ( $index * $tile_size ) % $tiles->w;
 	my $y = int( ( $index * $tile_size ) / $tiles->w ) * $tile_size;
