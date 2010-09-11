@@ -15,27 +15,25 @@ Core, Extension
  use SDLx::App;
  use SDLx::Controller::Interface;
 
- #SDLx::App is an controller
+ #SDLx::App is a controller
  my $app = SDLx::App->new(width => 200, height => 200 ); 
 
  my $ball = SDLx::Controller::Interface->new( x=> 10, y => 50, v_x => 10, v_y=> 20 );
  #Set the initial state of the ball's physics, this is optional
 
  $ball->set_acceleration( 
-        sub { 
+    sub { 
               my $current_state = shift;
-	      return( 0, -10, 0 ); #Return accelerations (x,y,rotation)
-	    }
-        );
+              return( 0, -10, 0 ); #Return accelerations (x,y,rotation)
+        }
+ );
 
  my $ball_render = sub {
- my $state = shift;
+       my $state = shift;
  
- $app->draw_rect( undef, 0 );
-
- $app->draw_rect( [$state->x, $state->y, 10,10], [255,0,0,255] );
- 
- $app->update();
+       $app->draw_rect( undef, 0 );
+       $app->draw_rect( [$state->x, $state->y, 10,10], [255,0,0,255] );
+       $app->update();
  };
 
 
@@ -49,20 +47,22 @@ Core, Extension
 
 =head2 set_acceleration
 
-Allows you to set the acceleration callback for defining the inferface's behaviour in terms of x,y and rotation.
+Allows you to set the acceleration callback for defining the inferface's
+behaviour in terms of x,y and rotation.
 
   $interface->set_acceleration ( 
       sub {
          my ($time, $current_state) = @_; 
        
-         return ( $acc_x, $acc_y, $torque );
+         return ( $accel_x, $accel_y, $torque );
       }
   );
 
-These accelerations are arbitary and can be set to any frame of reference. Your render callback will handle how to 
-interpert it. 
+These accelerations are arbitary and can be set to any frame of reference.
+Your render callback will handle how to interpert it. 
 
-The callback will recieve the time and the current state as a C<SDLx::Controller::State>.
+The callback will recieve the time and the current state as a
+C<SDLx::Controller::State> element.
 
 =head2 attach
 
@@ -70,14 +70,16 @@ Attaches the interface to a controller with a render callback
 
   $interface->attach( $controller, $render, @params );
 
-Where $render is a callback that recieves the interpolated C<SDLx::Controller::State>. 
+Where $render is a callback that receives the interpolated
+C<SDLx::Controller::State>.
 
   my $render = sub {
-                       my ($state) = shift; my @params = @_; 
-                       #draw the current $state.
-                   };
+        my ($state, @params) = @_; 
+        # draw the current $state.
+  };
 
-The @params are any extra parameters you would like to pass to the $render callback.
+The @params are any extra parameters you would like to pass to the $render
+callback.
 
 =head2 current
 
