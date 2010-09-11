@@ -37,7 +37,7 @@ sub attach {
 
 	if ($render) {
 		my $show = sub { my $state = $self->interpolate( $_[0] ); $render->( $state, @params ); };
-		$controller{ refaddr $self }->[2] = $controller->add_show_handler($show);
+		$_controller{ refaddr $self }->[2] = $controller->add_show_handler($show);
 	} else {
 		Carp::confess "Render callback not provided";
 
@@ -47,9 +47,9 @@ sub attach {
 sub deattach {
 	my ( $self) = @_;
         my $controller = $_controller{ refaddr $self }; 
-	return unless $conroller;
-	$controller->[0]->remove_move_handler($self->[1]);
-	$controller->[0]->remove_show_handler($self->[2]);
+	return unless $controller;
+	$controller->[0]->remove_move_handler($controller->[1]);
+	$controller->[0]->remove_show_handler($controller->[2]);
 }
 
 internal_load_dlls(__PACKAGE__);

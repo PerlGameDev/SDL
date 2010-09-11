@@ -112,6 +112,10 @@ SKIP:
 
 	is_deeply( $counts, [ 1, 4, 1 ] );
 
+	$interface->deattach();
+
+	pass ('Interface was able to deattach ');
+
 }
 
 
