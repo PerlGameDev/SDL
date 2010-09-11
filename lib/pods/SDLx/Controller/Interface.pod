@@ -23,8 +23,8 @@ Core, Extension
 
  $ball->set_acceleration( 
     sub { 
-              my $current_state = shift;
-              return( 0, -10, 0 ); #Return accelerations (x,y,rotation)
+              my ($time, $current_state) = @_;
+              return( 0, -10, 0 ); # Return accelerations (x,y,rotation)
         }
  );
 
@@ -59,9 +59,9 @@ behaviour in terms of x,y and rotation.
   );
 
 These accelerations are arbitary and can be set to any frame of reference.
-Your render callback will handle how to interpert it. 
+Your render callback will handle how to interpret it.
 
-The callback will recieve the time and the current state as a
+The callback will receive the time and the current state as a
 C<SDLx::Controller::State> element.
 
 =head2 attach
