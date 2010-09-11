@@ -71,52 +71,49 @@ my $a   = $obj->current;
 my $a_x = $a->x();
 is( $a_x, 2, '[obj/state] acceleration callback copies staet back to current' );
 
-SKIP:
-{
-	skip 'No Video', 1 unless SDL::TestTool->init(SDL_INIT_VIDEO);
 
-	my $dummy = SDLx::App->new();
+my $dummy = SDLx::App->new();
 
-	my $controller = SDLx::Controller->new( dt => 0.2 );
+my $controller = SDLx::Controller->new( dt => 0.2 );
 
-	my $interface    = SDLx::Controller::Interface->new();
-	my $event_called = 0;
+my $interface    = SDLx::Controller::Interface->new();
+my $event_called = 0;
 
-	require SDL::Event;
-	require SDL::Events;
-	my $eve = SDL::Event->new();
+require SDL::Event;
+require SDL::Events;
+my $eve = SDL::Event->new();
 
-	SDL::Events::push_event($eve);
-	my $counts = [ 0, 0, 0 ];
-	$controller->add_event_handler( sub { $counts->[0]++; return 0 if $interface->current->x; return 0 } );
+SDL::Events::push_event($eve);
+my $counts = [ 0, 0, 0 ];
+$controller->add_event_handler( sub { $counts->[0]++; return 0 if $interface->current->x; return 0 } );
 
-	$interface->set_acceleration(
-		sub {
-			die
-				if $counts->[1] > 100; $counts->[1]++;
-			isa_ok( $_[1], 'SDLx::Controller::State', '[Controller] called acceleration and gave us a state' ),
-				return ( 10, 10, 10 );
-		}
-	);
+$interface->set_acceleration(
+	sub {
+		die
+			if $counts->[1] > 100; $counts->[1]++;
+		isa_ok( $_[1], 'SDLx::Controller::State', '[Controller] called acceleration and gave us a state' ),
+			return ( 10, 10, 10 );
+	}
+);
 
-	$interface->attach(
-		$controller,
-		sub {
-			$counts->[2]++;
-			isa_ok( $_[0], 'SDLx::Controller::State', '[Controller] called render and gave us a state' );
-		}
-	);
+$interface->attach(
+	$controller,
+	sub {
+		$counts->[2]++;
+		isa_ok( $_[0], 'SDLx::Controller::State', '[Controller] called render and gave us a state' );
+	}
+);
 
 
-	$controller->run();
+$controller->run();
 
-	is_deeply( $counts, [ 1, 4, 1 ] );
+is_deeply( $counts, [ 1, 4, 1 ] );
 
-	$interface->deattach();
+$interface->deattach();
 
-	pass ('Interface was able to deattach ');
+pass('Interface was able to deattach ');
 
-}
+
 
 
 if ($videodriver) {
