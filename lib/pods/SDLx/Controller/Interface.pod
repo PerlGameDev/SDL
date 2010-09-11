@@ -41,6 +41,8 @@ Core, Extension
 
  $app->run();
 
+ $ball->detach(); #can be called at anytime (for example when ball 'dies')
+
 =head1 DESCRIPTION
 
 =head1 METHODS
@@ -92,6 +94,12 @@ Returns the current state of the interface as a C<SDLx::Controller::State>.
   my $previous_state = $interface->previous();
 
 Returns the previous state of the interface as a C<SDLx::Controller::State>.
+
+=head2 detach
+
+  $interface->detach();
+
+If $interface has been C<attach()>'ed to any controller it will be detached now.
 
 =head1 OTHER METHODS
 

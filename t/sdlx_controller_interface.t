@@ -109,7 +109,7 @@ $controller->run();
 
 is_deeply( $counts, [ 1, 4, 1 ] );
 
-$interface->deattach();
+$interface->detach();
 
 pass('Interface was able to deattach ');
 

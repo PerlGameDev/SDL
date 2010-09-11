@@ -44,7 +44,7 @@ sub attach {
 	}
 }
 
-sub deattach {
+sub detach {
 	my ( $self) = @_;
         my $controller = $_controller{ refaddr $self }; 
 	return unless $controller;
