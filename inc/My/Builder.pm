@@ -65,7 +65,7 @@ sub find_subsystems {
 		my $param;
 		for my $library ( @{ $subsystem->{libraries} } ) {
 			my $lib = $libraries->{$library}
-				or croak "Unknown library '$library' for '$name'\n";
+				or Carp::confess "Unknown library '$library' for '$name'\n";
 			my $h =
 				ref( $lib->{header} ) eq 'ARRAY'
 				? $lib->{header}

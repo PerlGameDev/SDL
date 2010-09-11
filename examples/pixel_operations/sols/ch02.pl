@@ -44,12 +44,12 @@ sub render {
 }
 
 sub main {
-	carp 'Unable to init SDL: ' . SDL::get_error()
+	Carp::cluck 'Unable to init SDL: ' . SDL::get_error()
 		if ( SDL::init(SDL_INIT_VIDEO) < 0 );
 
 	$screen = SDL::Video::set_video_mode( 640, 480, 32, SDL_SWSURFACE );
 
-	carp 'Unable to set 640x480x32 video' . SDL::get_error() if ( !$screen );
+	Carp::cluck 'Unable to set 640x480x32 video' . SDL::get_error() if ( !$screen );
 
 	while (1) {
 

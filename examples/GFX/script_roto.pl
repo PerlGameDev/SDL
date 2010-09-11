@@ -16,7 +16,7 @@ SDL::Video::fill_rect(
 	SDL::Rect->new( 0, 0, $display->w, $display->h ), $pixel
 );
 
-croak SDL::get_error if !$display;
+Carp::confess SDL::get_error if !$display;
 
 my $src = SDL::Video::load_BMP('test/data/picture.bmp');
 my $temp_surf;
@@ -43,20 +43,20 @@ sub draw {
 foreach ( 1 .. 360 ) {
 
 	$temp_surf = SDL::GFX::Rotozoom::surface( $src, $_, $_ / 180, 1 );
-	croak SDL::get_error if !$temp_surf;
+	Carp::confess SDL::get_error if !$temp_surf;
 	draw( $temp_surf, 2 );
 }
 
 $temp_surf = SDL::GFX::Rotozoom::surface_xy( $src, 1, 1, 1, 1 );
-croak SDL::get_error if !$temp_surf;
+Carp::confess SDL::get_error if !$temp_surf;
 draw( $temp_surf, 1000 );
 
 $temp_surf = SDL::GFX::Rotozoom::zoom_surface( $src, 1, 1, 1 );
-croak SDL::get_error if !$temp_surf;
+Carp::confess SDL::get_error if !$temp_surf;
 draw( $temp_surf, 1000 );
 
 $temp_surf = SDL::GFX::Rotozoom::shrink_surface( $src, 1, 1 );
-croak SDL::get_error if !$temp_surf;
+Carp::confess SDL::get_error if !$temp_surf;
 draw( $temp_surf, 1000 );
 
 SDL::delay(1000);

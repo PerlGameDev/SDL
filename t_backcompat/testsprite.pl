@@ -77,7 +77,7 @@ sub init_game_context {
 
 	$sprite = SDL::Video::load_BMP("data/icon.bmp");
 
-	croak 'Cannot make sprite:' . SDL::get_error() if !$sprite;
+	Carp::confess 'Cannot make sprite:' . SDL::get_error() if !$sprite;
 
 	# Set transparent pixel as the pixel at (0,0)
 

@@ -32,7 +32,7 @@ my %platforms = (
 );
 my $package = 'My::Builder::' . ( $platforms{$^O} || 'Unix' );
 print "Gonna use '$package' class ...\n";
-eval "require $package" or croak "Require '$package' failed: $@\n";
+eval "require $package" or Carp::confess "Require '$package' failed: $@\n";
 
 ### subsystems to build
 #    <subsystem>

@@ -41,15 +41,15 @@ my $diff = 'MoP/../../';
 $diff = '../' if ( $^O =~ /linux/ );
 my $path = catpath( $volume, catfile( $dirs, $diff . 'tiles.bmp' ) );
 my $tiles = SDL::Video::load_BMP($path);
-croak 'Error: ' . SDL::get_error() if ( !$tiles );
+Carp::confess 'Error: ' . SDL::get_error() if ( !$tiles );
 
 sub draw_map {
-	carp 'Unable to init SDL: ' . SDL::get_error()
+	Carp::cluck 'Unable to init SDL: ' . SDL::get_error()
 		if ( SDL::init(SDL_INIT_VIDEO) < 0 );
 
 	$screen = SDL::Video::set_video_mode( 640, 480, 32, SDL_SWSURFACE );
 
-	carp 'Unable to set 640x480x32 video ' . SDL::get_error() if ( !$screen );
+	Carp::cluck 'Unable to set 640x480x32 video ' . SDL::get_error() if ( !$screen );
 
 	move_map(MOP_LEFT);
 
@@ -92,7 +92,7 @@ sub move_map {
 sub get_tile {
 	my $index = shift || 0;
 
-	carp 'Unable to load tiles ' . SDL::get_error() if ( !$tiles );
+	Carp::cluck 'Unable to load tiles ' . SDL::get_error() if ( !$tiles );
 
 	my $x = ( $index * $tile_size ) % $tiles->w;
 	my $y = int( ( $index * $tile_size ) / $tiles->w ) * $tile_size;

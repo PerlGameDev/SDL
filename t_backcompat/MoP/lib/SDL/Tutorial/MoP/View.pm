@@ -122,8 +122,8 @@ sub map_move {
 sub draw_map {
 	my $self = shift;
 
-	carp('There is no surface to draw to') unless $self->{app};
-	carp('There are no tiles to draw') unless $map->tiles;
+	Carp::cluck('There is no surface to draw to') unless $self->{app};
+	Carp::cluck('There are no tiles to draw') unless $map->tiles;
 
 	# blitting the whole map-surface to app-surface
 	my $srect = SDL::Rect->new( 0,         0,         $map->w(),     $map->h() );     #we want all of map;
@@ -143,7 +143,7 @@ sub draw_scene {
 
 	$self->draw_map();
 
-	carp('There is no surface to draw to') unless $self->{app};
+	Carp::cluck('There is no surface to draw to') unless $self->{app};
 
 	$self->{count} = $self->{count} + 1;
 

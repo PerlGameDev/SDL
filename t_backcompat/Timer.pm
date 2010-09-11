@@ -42,7 +42,7 @@ sub new {
 	my $func      = shift;
 	my (%options) = @_;
 
-	croak "SDL::Timer::new no delay specified\n"
+	Carp::confess "SDL::Timer::new no delay specified\n"
 		unless ( $options{-delay} );
 	$$self{-delay} = $options{-delay} || $options{-d} || 0;
 	$$self{-times} = $options{-times} || $options{-t} || 0;
@@ -52,7 +52,7 @@ sub new {
 		$$self{-routine} = sub { &$func; $$self{-delay} };
 	}
 	$$self{-timer} = SDL::NewTimer( $$self{-delay}, $$self{-routine} );
-	croak "Could not create timer, ", SDL::get_error(), "\n"
+	Carp::confess "Could not create timer, ", SDL::get_error(), "\n"
 		unless ( $self->{-timer} );
 	bless $self, $class;
 	return $self;

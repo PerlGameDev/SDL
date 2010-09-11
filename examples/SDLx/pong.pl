@@ -71,7 +71,7 @@ sub init {
 
 	# Initing video
 	# Die here if we cannot make video init
-	croak 'Cannot init  ' . SDL::get_error()
+	Carp::confess 'Cannot init  ' . SDL::get_error()
 		if ( SDL::init(SDL_INIT_VIDEO) == -1 );
 
 	# Create our display window
@@ -81,7 +81,7 @@ sub init {
 		SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_HWACCEL
 	);
 
-	croak 'Cannot init video mode 800x600x32: ' . SDL::get_error()
+	Carp::confess 'Cannot init video mode 800x600x32: ' . SDL::get_error()
 		unless $a;
 
 	return $a;

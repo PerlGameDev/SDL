@@ -6,7 +6,7 @@ sub new {
 	my $self  = $class->SUPER::new(@_);
 	unless ( ref $self ) {
 		require Carp;
-		Carp::croak SDL::GetError();
+		Carp::confess SDL::GetError();
 	}
 	return bless $self => $class;
 
