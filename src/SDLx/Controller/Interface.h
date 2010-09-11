@@ -45,10 +45,6 @@ typedef struct SDLx_Interface
 	SV* evaluate;
 	SV* interpolate;
 	SV* integrate;
-	// Holds the index from controller's callback
-	// This way we can dettach
-	int move_index;
-	int render_index;
 
 } SDLx_Interface;
 

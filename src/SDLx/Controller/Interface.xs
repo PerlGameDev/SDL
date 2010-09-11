@@ -230,25 +230,6 @@ objx_update(obj, t, dt)
 	       copy_state( obj->previous, obj->current);
 		integrate( obj, t, dt );
 
-int
-objx__move_index ( obj, ... )
-	SDLx_Interface* obj
-	CODE:
-		if (items > 1 ) obj->move_index = SvIV(ST(1)); 
-		RETVAL = obj->move_index;
-	OUTPUT:
-		RETVAL
-
-int
-objx__render_index ( obj, ... )
-	SDLx_Interface* obj
-	CODE:
-		if (items > 1 ) obj->render_index = SvIV(ST(1)); 
-		RETVAL = obj->render_index;
-	OUTPUT:
-		RETVAL
-
-
 
 void
 objx_DESTROY( obj )
