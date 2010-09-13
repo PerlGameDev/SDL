@@ -8,13 +8,13 @@ BEGIN {
 		exit(0);
 	}
 
-  use Test::More tests => 7;
+	use Test::More tests => 7;
 	use lib 't/lib';
 	use lib 'lib';
-  use SDL;
+	use SDL;
 	use SDL::TestTool;
-  use SDL::Config;
-  use SDLx::Sound;
+	use SDL::Config;
+	use SDLx::Sound;
 
 	$audiodriver = $ENV{SDL_AUDIODRIVER};
 	$ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
@@ -32,16 +32,16 @@ my $fase2 = 0;
 
 # methods
 can_ok(
-	'SDLx::Sound', qw/
+		'SDLx::Sound', qw/
 		new
-                load
-                unload
-                play
-                stop
-                loud
-                fade
+		load
+		unload
+		play
+		stop
+		loud
+		fade
 		/
-);
+      );
 
 ok (my $snd = SDLx::Sound->new(), 'Can be instantiated');
 ok (my $snd2 = SDLx::Sound->new(), 'Can be instantiated again');
@@ -54,28 +54,28 @@ ok ($snd->play('test/data/sample.wav'), 'Can play a wav');
 
 SKIP:
 {
-skip 'complex tests', 1 unless $fase2;
+	skip 'complex tests', 1 unless $fase2;
 # in a single act do the wole Sound
-ok( my $snd2 = SDLx::Sound->new(
-    files => (
-        chanell_01 => "test/data/sample.wav",
-        chanell_02 => "test/data/tribe_i.wav"
+	ok( my $snd2 = SDLx::Sound->new(
+				files => (
+					chanell_01 => "test/data/sample.wav",
+					chanell_02 => "test/data/tribe_i.wav"
 
-    ),
-    loud  => (
-        channel_01 => 80,
-        channel_02 => 75
-    ),
-    bangs => (
-        chanell_01 => 0,      # start
-        chanell_01 => 1256,   # miliseconds
-        chanell_02 => 2345
-    ),
-    fade  => (
-        chanell_02 => [2345, 3456, -20]
-    )
-)->play()
-);
+					),
+				loud  => (
+					channel_01 => 80,
+					channel_02 => 75
+					),
+				bangs => (
+					chanell_01 => 0,      # start
+					chanell_01 => 1256,   # miliseconds
+					chanell_02 => 2345
+					),
+				fade  => (
+					chanell_02 => [2345, 3456, -20]
+					)
+				)->play()
+	  );
 }
 
 #diag( "Testing SDLx::Sound $SDLx::Sound::VERSION, Perl $], $^X" );           

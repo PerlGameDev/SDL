@@ -1,18 +1,11 @@
-package SDLx::Sound;
-
-use SDL;
-use SDL::Audio;
-use SDL::Mixer;
-use Carp ();
 
 =head1 NAME
 
 SDLx::Sound
 
-=head1 VERSION
+=head1 CATEGORY
 
-Version 0.01_01
-
+Extension
 
 =head1 SYNOPSIS
 
@@ -104,104 +97,29 @@ Each sound will play in the next available channel, so it can be handled isolate
 
 Returns a new instance of SDLx::Sound
 
-=cut
-
-sub new {
-    my $class = shift;
-    my $self = {@_};
-    bless ($self, $class);
-    return $self;
-}
-
 =head2 load
 
-=cut
-
-sub load {
-    my $self = shift;
-    my $self->{file} = $_[0];
-    warn "Loadind ". $self->{file} ."\n"; 
-}
 
 =head2 play
 
-=cut
+ $sdlx_sound->play('file.wav');
 
-sub play {
-}
+Play a file
 
-=head2 loud
+=head2 pause
 
-=cut
-
-sub loud {
-}
+=head2 resume
 
 =head2 stop
 
-=cut
 
-sub stop {
-}
+=head1 AUTHORS
 
+See L<SDL/AUTHORS>.
 
-=head1 AUTHOR
-
-Monsenhor, C<< <ricardo.filipo at mitologica.com.br> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-sdlx-sound at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=SDLx-Sound>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc SDLx::Sound
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=SDLx-Sound>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/SDLx-Sound>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/SDLx-Sound>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/SDLx-Sound/>
-
-=back
-
-
-=head1 ACKNOWLEDGEMENTS
-
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2010 Monsenhor.
+=head1 COPYRIGHT & LICENSE
 
 This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
-
-See http://dev.perl.org/licenses/ for more information.
+under the same terms as Perl itself.
 
 
-=cut
-
-1; # End of SDLx::Sound
