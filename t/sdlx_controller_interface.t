@@ -11,8 +11,7 @@ use SDL::TestTool;
 use Data::Dumper;
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};
-$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
-
+$ENV{SDL_VIDEODRIVER} = 'dummy';
 
 can_ok(
 	'SDLx::Controller::Interface',

@@ -23,7 +23,7 @@ plan( skip_all => "author tests not required for installation" )
 	unless ( $ENV{AUTOMATED_TESTING} or $ENV{SDL_RELEASE_TESTING} );
 
 my $audiodriver = $ENV{SDL_AUDIODRIVER};
-$ENV{SDL_AUDIODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+$ENV{SDL_AUDIODRIVER} = 'dummy'; # unless $ENV{SDL_RELEASE_TESTING};
 
 plan( skip_all => 'Failed to init sound' )
 	unless SDL::TestTool->init(SDL_INIT_AUDIO);
@@ -54,12 +54,16 @@ sub callback {
 		}
 	}
 	isnt $p, 0, '[callback] tested $p = ' . $p;
-}
 
+}
 die 'AudioMixer, Unable to open audio: ' . SDL::get_error()
 	if ( SDL::Audio::open( $desired, $obtained ) < 0 );
 
 SDL::Audio::pause(0);
+
+sleep(1);
+
+SDL::Audio::close();
 
 if ($audiodriver) {
 	$ENV{SDL_AUDIODRIVER} = $audiodriver;
@@ -67,8 +71,8 @@ if ($audiodriver) {
 	delete $ENV{SDL_AUDIODRIVER};
 }
 
-sleep(1);
 
-SDL::Audio::close();
 
 done_testing();
+
+
