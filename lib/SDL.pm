@@ -90,34 +90,4 @@ sub set_error {
 	SDL::set_error_real( sprintf( $format, @arguments ) );
 }
 
-=pod
-#TODO: Make this unload correct for some mem leak fix 
-END{
-	return if ($^O =~ 'VMS' || $^O =~ 'darwin');
-	my $first = pop( @SDL::Internal::Loader::LIBREFS);
-	my $dont_unload = '(^'.$first.'$';
-
-	$dont_unload .= '|^'.$_.'$' foreach @SDL::Internal::Loader::LIBREFS;
-
-	$dont_unload .= ')';
-
-	warn $dont_unload;
-
-	foreach my $libref ( reverse @DynaLoader::dl_librefs)
-	{
-		  unless ($libref =~ /$dont_unload/)
-		  {
-			  print STDERR 'unloading '.$libref.' ';
-			DynaLoader::dl_unload_file($libref);
-			
-	    	 }
-		 else
-		 {
-				  print STDERR 'not unloading '.$libref.' ';
-		
-		 }
-	}
-}
-=cut
-
 1;
