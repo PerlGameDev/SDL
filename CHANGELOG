@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.515
+	- Added SDLx::Sound [rflipo] 
+
 * 2.514
 	- Made SDLx::Controller::Interface [kthakore]
 	- Fixed unsigned int bug for get_pixels from surface [kthakore]

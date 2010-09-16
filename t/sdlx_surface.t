@@ -180,11 +180,6 @@ is( $surf_dup->format->BitsPerPixel,
 	'Duplicate surf has same bpp'
 );
 
-
-#TTF test
-
-$surf_dup->draw_ttf_text( [10,10], 'test/data/aircut3.ttf', 24, 0xFF00FFFF, 'Foo');
-
 if ($videodriver) {
 	$ENV{SDL_VIDEODRIVER} = $videodriver;
 } else {
