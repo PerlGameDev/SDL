@@ -55,7 +55,7 @@ sub unload {
 
 sub play {
     my $self = shift;
-    $self->{files} = {@_} if @_;
+    $self->{files} = {@_} if $#_ > 0 &&  @_;
     my $play = 1;
     if (-e $_[0]) {
        my $music = SDL::Mixer::Music::load_MUS($_[0])
