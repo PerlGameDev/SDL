@@ -1,0 +1,125 @@
+
+=head1 NAME
+
+SDLx::Sound
+
+=head1 CATEGORY
+
+Extension
+
+=head1 SYNOPSIS
+
+    use SDLx::Sound;
+
+    my $snd = SDLx::Sound->new();
+    
+    # loads and plays a single sound now
+    $snd->play('myfile.wav');
+
+    # load a single file
+    $snd->load('theSound.aif');
+
+    # plays it or all loaded files
+    $snd->play();
+
+    # more sounds
+    my %files = (
+        chanell_01 => "/my_sound1.wav",
+        chanell_02 => "/my_sound2.ogg"
+    );
+
+    # times sounds bangs
+    my %times = (
+        chanell_01 => 0,      # start
+        chanell_01 => 1256,   # miliseconds
+        chanell_02 => 2345
+    );
+    
+    # Load files in channels for realtime play
+    $snd->load(%files);
+
+    # sets sound channel_01 loudness
+    $snd->loud('channel_01', 80);       # loud at 80%
+    $snd->play(%times);                 # play loaded files at times
+    $snd->play;                         # play again
+
+    # plays sound channel_01 at 578 miliseconds from now
+    $snd->play('channel_01', 578);
+
+    # fades sound 
+    $snd->fade('channel_02', 2345, 3456, -20);
+
+    # in a single act do the wole Sound
+    my $snd = SDLx::Sound->new(
+        files => (
+            chanell_01 => "/my_sound1.wav",
+            chanell_02 => "/my_sound2.ogg"
+ 
+        ), 
+        loud  => (
+            channel_01 => 80,
+            channel_02 => 75
+        ),
+        times => (
+            chanell_01 => 0,      # start
+            chanell_01 => 1256,   # miliseconds
+            chanell_02 => 2345
+        ),
+        fade  => (
+            chanell_02 => [2345, 3456, -20]
+        )
+    )->play();
+
+=head1 DESCRIPTION
+
+
+You can think about the SDLx::Sound at 2 aproaches. 
+
+=over 4
+
+=item * A simple sound or 
+
+=item * The sound of your game or app. 
+
+=back
+
+Your application will say what the best aproach.
+
+In a taste that resembles to perl and to SDL, our SDLx:Sound hooks at SDL::Audio and SDL::Mixer with a gracefull and simple interface that can offer to monks a modern perlish way to manage sounds.
+
+An SDLx::Sound object can load sounds from filesystem, play it, adjust this loudness level or stops the sound. 
+
+Each sound will play in the next available channel, so it can be handled isolately.
+
+=head1 METHODS
+
+=head2 new
+
+Returns a new instance of SDLx::Sound
+
+=head2 load
+
+
+=head2 play
+
+ $sdlx_sound->play('file.wav');
+
+Play a file
+
+=head2 pause
+
+=head2 resume
+
+=head2 stop
+
+
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
+=head1 COPYRIGHT & LICENSE
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+

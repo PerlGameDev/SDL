@@ -68,6 +68,8 @@ BEGIN {
 		SDLx::Controller::State
 		SDLx::Controller::Timer
 
+    SDLx::Sound
+
 		/;
 	plan tests => scalar @modules;
 
