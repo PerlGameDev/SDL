@@ -1,7 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
 * 2.515
-	- Added SDLx::Sound [rflipo] 
+	- Added preliminary SDLx::Sound [rflipo] 
+	- Added preliminary SDLx::TTF [kthakore]
 
 * 2.514
 	- Made SDLx::Controller::Interface [kthakore]
