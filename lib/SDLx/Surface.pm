@@ -15,6 +15,8 @@ use SDL::Surface;
 use SDL::PixelFormat;
 
 use SDL::GFX::Primitives;
+use SDL::TTF;
+use SDL::TTF::Font;
 
 use Tie::Simple;
 use SDLx::Validate;
@@ -36,6 +38,9 @@ bootstrap SDLx::Surface;
 # hierarchy.
 # Inside out object
 my %_tied_array;
+
+# Keep track of if TTF was inited or not
+my %_ttf;
 
 sub new {
 	my ( $class, %options ) = @_;
@@ -69,11 +74,6 @@ sub new {
 		$self->draw_rect( undef, $options{color} );
 	}
 	return $self;
-}
-
-sub DESTROY {
-	my $self = shift;
-	delete $_tied_array{$$self};
 }
 
 sub display {
@@ -384,5 +384,48 @@ sub draw_gfx_text {
 	return $self;
 }
 
+sub draw_ttf_text {
+	my ( $self, $position, $font, $size, $color, $text, $style ) = @_;
+	
+	unless ( SDL::Config->has('SDL_ttf') ) {
+		Carp::cluck("SDL_ttf support has not been compiled");
+	}
+	unless ( SDL::TTF::was_init() )
+	{
+	   Carp::cluck ("Cannot init TTF: " . SDL::get_error() ) unless SDL::TTF::init() == 0;
+	   $_ttf{ $$self } = {};
+	   $_ttf{ $$self }->{inited} = 1;	
+	   $_ttf{ $$self }->{style} = {
+		normal => TTF_STYLE_NORMAL,
+		bold   => TTF_STYLE_BOLD,
+		italic => TTF_STYLE_ITALIC,
+		underline => TTF_STYLE_UNDERLINE,
+		strikethrough => TTF_STYLE_STRIKETHROUGH
+		};
+	}
+
+	my $ttf_font;
+	unless (my $ttf_font = SDL::TTF::open_font($font, $size ))
+	{
+	
+   	   Carp::cluck ("Cannot make a TTF font from location ($font) or size($size), due to: ". SDL::get_error );
+
+	} 
+	
+	if (  $style && ( my $t_style = $_ttf{ $$self }->{style}->{$style} )  )
+	{
+		 SDL::TTF::set_font_style($ttf_font, $t_style);
+	}
+	
+}
+
+
+
+sub DESTROY {
+	my $self = shift;
+	delete $_tied_array{$$self};
+	SDL::TTF::quit if $_ttf{$$self}->{inited};
+	delete $_ttf{$$self};
+}
 
 1;
