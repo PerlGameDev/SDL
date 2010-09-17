@@ -1,4 +1,3 @@
-#!perl -T
 # basic testing of SDLx::Sound
 
 BEGIN {
