@@ -1,5 +1,7 @@
 # basic testing of SDLx::Sound
 
+my $audiodriver;
+
 BEGIN {
 	use Config;
 	if ( !$Config{'useithreads'} ) {
@@ -7,7 +9,7 @@ BEGIN {
 		exit(0);
 	}
 
-	use Test::More tests => 7;
+	use Test::More;
 	use lib 't/lib';
 	use lib 'lib';
 	use SDL;
@@ -86,4 +88,4 @@ if ($audiodriver) {
 	delete $ENV{SDL_AUDIODRIVER};
 }
 
-
+done_testing();
