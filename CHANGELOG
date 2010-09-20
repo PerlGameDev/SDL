@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.516
+  - Fix for test plan in t/sdlx_sound [FROGGS]
+
 * 2.515
 	- Added preliminary SDLx::Sound [rflipo] 
 	- Added preliminary SDLx::TTF [kthakore]
