@@ -169,7 +169,7 @@ objx_set_acceleration(obj, callback)
 	SV* callback
 	CODE:
 
-	SV* tmpsv;
+	SV* tmpsv = NULL;
 	if( !(SvROK(callback) && (tmpsv = (SV*)SvRV(callback)) &&  SvTYPE(tmpsv) == SVt_PVCV ) )
 		croak( "Acceleration callback needs to be a code ref, %p", callback );
 
