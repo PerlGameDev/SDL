@@ -189,60 +189,59 @@ sub load {
 #EXTENSTIONS
 
 sub blit {
-	my ( $self, $dest, $src_rect, $dest_rect ) = @_;
+	my ( $src, $dest, $src_rect, $dest_rect ) = @_;
 
-	my $self_surface = $self->surface;
+	$src = SDLx::Validate::surface($src);
+	$dest = SDLx::Validate::surface($dest);
 
-	my $dest_surface = SDLx::Validate::surface($dest);
-
-	$src_rect = SDL::Rect->new( 0, 0, $self_surface->w, $self_surface->h )
-		unless defined $src_rect;
-	$dest_rect = SDL::Rect->new( 0, 0, $dest_surface->w, $dest_surface->h )
-		unless defined $dest_rect;
-
-	my $pass_src_rect = SDLx::Validate::rect($src_rect);
-
-	my $pass_dest_rect = SDLx::Validate::rect($dest_rect);
+	if(defined $src_rect) {
+		$src_rect = SDLx::Validate::rect($src_rect);
+	}
+	else {
+		$src_rect = SDL::Rect->new( 0, 0, $src->w, $src->h );
+	}
+	if(defined $dest_rect) {
+		$dest_rect = SDLx::Validate::rect($dest_rect);
+	}
+	else {
+		$dest_rect = SDL::Rect->new( 0, 0, $dest->w, $dest->h );
+	}
 
 	SDL::Video::blit_surface(
-		$self_surface, $pass_src_rect, $dest_surface,
-		$pass_dest_rect
+		$src, $src_rect,
+		$dest, $dest_rect
 	);
 
-	return $self
-
+	return $src;
 }
 
 sub blit_by {
-	my ( $self, $src, $src_rect, $dest_rect ) = @_;
-	SDLx::Surface::blit( $src, $self, $src_rect, $dest_rect );
+	my ( $dest, $src, $src_rect, $dest_rect ) = @_;
+	SDLx::Surface::blit( $src, $dest, $src_rect, $dest_rect );
 }
 
 sub flip {
-	Carp::confess "surface is not defined" unless $_[0]->surface();
+	Carp::confess "surface is not defined" unless $_[0];
 	Carp::confess "Error flipping surface: " . SDL::get_error()
-		if ( SDL::Video::flip( $_[0]->surface() ) == -1 );
+		if ( SDL::Video::flip( $_[0] ) == -1 );
 	return $_[0];
 
 }
 
 sub update {
 	my ( $self, $rects ) = @_;
-	my $surface = $self->surface;
+	my $surface = $self;
 
 	if ( !defined($rects) || ( ref($rects) eq 'ARRAY' && !ref( $rects->[0] ) ) ) {
-		my @pass_rect = ();
-		@pass_rect = @{ $rects->[0] } if $rects->[0];
-		$pass_rect[0] |= 0;
-		$pass_rect[1] |= 0;
-		$pass_rect[2] |= $surface->w;
-		$pass_rect[3] |= $surface->h;
+		my @rect = @{$rects} if defined $rects;
+		$rect[0] ||= 0;
+		$rect[1] ||= 0;
+		$rect[2] ||= $surface->w;
+		$rect[3] ||= $surface->h;
 
-		SDL::Video::update_rect( $surface, @pass_rect );
+		SDL::Video::update_rect( $surface, @rect );
 	} else {
-
-		#TODO: Validate each rect?
-		SDL::Video::update_rects( $surface, @{$rects} );
+		SDL::Video::update_rects( $surface, map { SDLx::Validate::rect($_) } @{$rects} );
 	}
 
 	return $self;
@@ -250,14 +249,14 @@ sub update {
 
 sub draw_rect {
 	my ( $self, $rect, $color ) = @_;
-	$color = SDLx::Validate::map_rgba( $color, $self->surface->format );
+	$color = SDLx::Validate::map_rgba( $color, $self->format );
 	if ( defined $rect ) {
 		$rect = SDLx::Validate::rect($rect);
 	} else {
 		$rect = SDL::Rect->new( 0, 0, $self->w, $self->h );
 	}
 
-	SDL::Video::fill_rect( $self->surface, $rect, $color )
+	SDL::Video::fill_rect( $self, $rect, $color )
 		and Carp::confess "Error drawing rect: " . SDL::get_error();
 	return $self;
 }
@@ -279,9 +278,9 @@ sub draw_line {
 
 	my $result;
 	if ($antialias) {
-		$result = SDL::GFX::Primitives::aaline_color( $self->surface, @$start, @$end, $color );
+		$result = SDL::GFX::Primitives::aaline_color( $self, @$start, @$end, $color );
 	} else {
-		$result = SDL::GFX::Primitives::line_color( $self->surface, @$start, @$end, $color );
+		$result = SDL::GFX::Primitives::line_color( $self, @$start, @$end, $color );
 	}
 
 	Carp::confess "Error drawing line: " . SDL::get_error() if ( $result == -1 );
@@ -300,7 +299,7 @@ sub draw_circle {
 	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
 	$color = SDLx::Validate::num_rgba($color);
 
-	SDL::GFX::Primitives::circle_color( $self->surface, @{$center}, $radius, $color );
+	SDL::GFX::Primitives::circle_color( $self, @{$center}, $radius, $color );
 	return $self;
 }
 
@@ -315,7 +314,7 @@ sub draw_circle_filled {
 	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
 	$color = SDLx::Validate::num_rgba($color);
 
-	SDL::GFX::Primitives::filled_circle_color( $self->surface, @{$center}, $radius, $color );
+	SDL::GFX::Primitives::filled_circle_color( $self, @{$center}, $radius, $color );
 	return $self;
 }
 
@@ -372,7 +371,7 @@ sub draw_gfx_text {
 
 	$color = SDLx::Validate::num_rgba($color);
 
-	my $result = SDL::GFX::Primitives::string_color( $self->surface, $vector->[0], $vector->[1], $text, $color );
+	my $result = SDL::GFX::Primitives::string_color( $self, $vector->[0], $vector->[1], $text, $color );
 
 	Carp::confess "Error drawing text: " . SDL::get_error() if ( $result == -1 );
 
