@@ -229,11 +229,11 @@ sub flip {
 }
 
 sub update {
-	my ( $self, $rects ) = @_;
-	my $surface = $self;
+	my ( $surface, $rects ) = @_;
 
 	if ( !defined($rects) || ( ref($rects) eq 'ARRAY' && !ref( $rects->[0] ) ) ) {
-		my @rect = @{$rects} if defined $rects;
+		my @rect;
+		@rect = @{$rects} if $rects;
 		$rect[0] ||= 0;
 		$rect[1] ||= 0;
 		$rect[2] ||= $surface->w;
