@@ -244,7 +244,7 @@ sub update {
 		SDL::Video::update_rects( $surface, map { SDLx::Validate::rect($_) } @{$rects} );
 	}
 
-	return $self;
+	return $surface;
 }
 
 sub draw_rect {
