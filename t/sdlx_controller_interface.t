@@ -10,12 +10,6 @@ use lib 't/lib';
 use SDL::TestTool;
 use Data::Dumper;
 
-use Config;
-if ( !$Config{'useithreads'} ) {
-	print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
-	exit(0);
-}
-
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy';
 
@@ -77,7 +71,7 @@ my $a_x = $a->x();
 is( $a_x, 2, '[obj/state] acceleration callback copies staet back to current' );
 
 
-my $dummy = SDLx::App->new();
+my $dummy = SDLx::App->new( init => SDL_INIT_VIDEO );
 
 my $controller = SDLx::Controller->new( dt => 0.2 );
 
