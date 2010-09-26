@@ -3,7 +3,7 @@ Revision history for Perl extension SDL_perl.
 * 2.517
         - Fix for 2 tests: interface, layermanager
 	- Refactor SDLx::Surface code [Blaizer]
-	
+	- Gave SDL::Mixer::Init same signature for varying versions of SDL_Mixer [kthakore]	
 
 * 2.516
         - Fix for test plan in t/sdlx_sound [FROGGS]
