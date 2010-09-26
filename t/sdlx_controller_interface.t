@@ -10,18 +10,24 @@ use lib 't/lib';
 use SDL::TestTool;
 use Data::Dumper;
 
+use Config;
+if ( !$Config{'useithreads'} ) {
+	print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
+	exit(0);
+}
+
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy';
 
 can_ok(
-	'SDLx::Controller::Interface',
-	qw( new ) #meh, put the rest in later
-);
+		'SDLx::Controller::Interface',
+		qw( new ) #meh, put the rest in later
+      );
 
 TODO: {
-	local $TODO = 'methods not implemented yet';
-	can_ok( 'SDLx::Controller::Interface', qw( foo ) );
-}
+	      local $TODO = 'methods not implemented yet';
+	      can_ok( 'SDLx::Controller::Interface', qw( foo ) );
+      }
 
 
 my $obj = SDLx::Controller::Interface->new( x => 1, y => 2, v_x => 3, v_y => 4, rot => 5, ang_v => 6 );
@@ -87,21 +93,21 @@ my $counts = [ 0, 0, 0 ];
 $controller->add_event_handler( sub { $counts->[0]++; return 0 if $interface->current->x; return 0 } );
 
 $interface->set_acceleration(
-	sub {
+		sub {
 		die
-			if $counts->[1] > 100; $counts->[1]++;
+		if $counts->[1] > 100; $counts->[1]++;
 		isa_ok( $_[1], 'SDLx::Controller::State', '[Controller] called acceleration and gave us a state' ),
-			return ( 10, 10, 10 );
-	}
-);
+		return ( 10, 10, 10 );
+		}
+		);
 
 $interface->attach(
-	$controller,
-	sub {
+		$controller,
+		sub {
 		$counts->[2]++;
 		isa_ok( $_[0], 'SDLx::Controller::State', '[Controller] called render and gave us a state' );
-	}
-);
+		}
+		);
 
 
 $controller->run();
