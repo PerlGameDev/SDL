@@ -51,7 +51,8 @@ mixer_quit()
 #else
 
 int
-mixer_init( )
+mixer_init( flags )
+	int flags
 	CODE:
 		warn("SDL_mixer >= 1.2.10 needed for SDL::Mixer::init( flags )");
 		XSRETURN_UNDEF;
@@ -60,7 +61,6 @@ mixer_init( )
 
 void
 mixer_quit( index )
-	int index
 	CODE:
 		warn("SDL_mixer >= 1.2.10 needed for SDL::Mixer::quit()");
 
