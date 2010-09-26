@@ -4,7 +4,6 @@ use Test::More;
 use SDL;
 use SDL::Surface;
 use SDL::Rect;
-use SDL::Image;
 use SDLx::LayerManager;
 use SDLx::Layer;
 use SDLx::Surface;
@@ -23,7 +22,7 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 }
 
 my $display = SDL::Video::set_video_mode( 800, 600, 32, SDL_SWSURFACE );
-my $surface = SDL::Image::load('test/data/picture.bmp');
+my $surface = SDL::Video::load_BMP('test/data/picture.bmp');
 
 ############# SDLx::Layer ###########################################################
 
