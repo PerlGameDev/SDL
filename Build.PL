@@ -558,11 +558,11 @@ my $build = $package->new(
 		'File::Find'         => '0',
 		'File::ShareDir'     => '0',
 		'Tie::Simple'        => '0',
-		'IO::CaptureOutput'  => '0',
+		'Capture::Tiny'      => '0',
 	},
 	build_requires => {
 		'Test::Simple'      => '0.88',
-		'IO::CaptureOutput' => '0',
+		'Capture::Tiny'     => '0',
 		'Test::Most'        => '0.21',
 		'Alien::SDL'        => '1.413',
 		'File::ShareDir'    => '0',

@@ -1,7 +1,7 @@
 package SDL::TestTool;
 use strict;
 use warnings;
-use IO::CaptureOutput qw(capture);
+use Capture::Tiny qw(capture);
 use SDL;
 use SDL::AudioSpec;
 use SDL::Audio;
@@ -36,7 +36,7 @@ sub init {
 		SDL::quit();
 	}
 
-	capture { SDL::init($init) } \$stdout, \$stderr;
+	($stdout, $stderr ) = capture { SDL::init($init) };
 	if ( $stderr ne '' ) {
 		warn 'Init ' . $inits{$init} . ' failed with SDL error: ' . SDL::get_error() . "\nand stderr $stderr\n";
 	}

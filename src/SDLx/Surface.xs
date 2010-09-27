@@ -114,10 +114,15 @@ surfacex_get_pixel_xs ( surface, x, y )
 	int x
 	int y
 	CODE:
-		if( x < 0 || y < 0 || x > surface->w || y > surface->h)
-		{
-		    croak(" Invalid location for pixel (%d, %d) on surface dims (%d, %d)", x,y,surface->w, surface->h);
-		}
+		if( x < 0  )
+           x = 0;
+        else if ( x > surface->w)
+           x = surface->w;
+
+        if ( y < 0 )
+           y = 0;
+        else if ( y > surface->h)
+           y = surface->h;	
 
 		int offset;
 		offset =  _calc_offset( surface, x, y);
