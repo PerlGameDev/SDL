@@ -238,7 +238,21 @@ sub update {
 		$rect[1] ||= 0;
 		$rect[2] ||= $surface->w;
 		$rect[3] ||= $surface->h;
-
+		
+		foreach(0..1)
+		{
+			$rect[$_] = 0 if $rect[$_] < 0;
+		}
+		
+		foreach(0,2)
+		{
+			$rect[$_] = $surface->w if $rect[$_] > $surface->w;
+		}
+		
+		foreach(1,3)
+		{
+			$rect[$_] = $surface->h if $rect[$_] > $surface->h;
+		}	
 		SDL::Video::update_rect( $surface, @rect );
 	} else {
 		SDL::Video::update_rects( $surface, map { SDLx::Validate::rect($_) } @{$rects} );
