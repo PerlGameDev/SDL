@@ -16,6 +16,8 @@ use SDLx::Controller::State;
 # SDL::Surface subclass
 my %_delta;
 my %_dt;
+my %_min_ms;
+my %_fps;
 my %_quit;
 my %_event;
 my %_event_handlers;
@@ -32,7 +34,12 @@ sub new {
 	my %args = @_;
 	$_delta{ refaddr $self} = SDLx::Controller::Timer->new();
 	$_delta{ refaddr $self}->start(); # should do this after on_load
-	$_dt{ refaddr $self}             = $args{dt} || 0.1;
+	$_dt{ refaddr $self}             = $args{dt}     || 1;
+	$_min_ms{ refaddr $self}         = $args{min_ms} || 1;
+	if(defined $args{fps}) {
+		require SDLx::FPS;
+		$_fps{ refaddr $self} = SDLx::FPS->new( $args{fps} )
+	}
 	$_quit{ refaddr $self}           = $args{quit};
 	$_event{ refaddr $self}          = $args{event};
 	$_event_handlers{ refaddr $self} = $args{event_handlers};
@@ -47,6 +54,8 @@ sub DESTROY {
 
 	delete $_delta{ refaddr $self};
 	delete $_dt{ refaddr $self};
+	delete $_min_ms{ refaddr $self};
+	delete $_fps{ refaddr $self};
 	delete $_quit{ refaddr $self};
 	delete $_event{ refaddr $self};
 	delete $_event_handlers{ refaddr $self};
@@ -55,6 +64,7 @@ sub DESTROY {
 }
 
 sub run {
+<<<<<<< HEAD
 	my $self         = shift;
 	my $quit         = 0;
 	my $t            = 0.0;
@@ -75,6 +85,35 @@ sub run {
 			$t += $dt;
 		}
 		$self->_show( $accumulator / $dt );
+=======
+	my $self = shift;
+	while ( !$_quit{ refaddr $self} ) {
+		$self->_event;
+		my $delta_time = $_delta{ refaddr $self}->get_ticks();
+		next if $delta_time < $_min_ms{ refaddr $self};
+		my $delta_copy = $delta_time;
+		
+		while ( $delta_copy > $_dt{ refaddr $self} and !$_quit{ refaddr $self} ) {
+			$self->_move( 1 ); #a full move
+			$delta_copy -= $_dt{ refaddr $self};
+		}
+		$self->_move( $delta_copy / $_dt{ refaddr $self} ); #a partial move
+		
+		$_delta{ refaddr $self}->start();
+		$self->_show($delta_time);
+	}
+}
+
+sub run_fps {
+	my $self = shift;
+	while ( !$_quit{ refaddr $self} ) {
+		my $delta_time = $_delta{ refaddr $self}->get_ticks(); #only need this to give to _show()
+		$self->_event;
+		$self->_move;
+		$_delta{ refaddr $self}->start();
+		$self->_show($delta_time);
+		$_fps{ refaddr $self}->delay();
+>>>>>>> fbdb9487323f6a442301ec8da06fcd2ffe5e9401
 	}
 
 }

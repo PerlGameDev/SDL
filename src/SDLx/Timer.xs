@@ -107,7 +107,6 @@ timerx_get_ticks ( timer )
 		   {
 			int update = SDL_GetTicks();
 			int diff = update - timer->started_ticks;
-			timer->started_ticks = update;
 			RETVAL = diff;
 		   }
 		}
