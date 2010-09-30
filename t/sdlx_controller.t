@@ -7,7 +7,7 @@ use SDL::Video;
 use SDL::Color;
 use SDLx::Controller;
 use lib 't/lib';
-use SDL::TestTool;
+# use SDL::TestTool;
 
 can_ok(
 	'SDLx::Controller',
@@ -21,8 +21,8 @@ TODO: {
 
 
 my $app = SDLx::Controller->new(
-	dt     => 1,
-	min_ms => 5,
+	dt     => 0.1,
+	min_ms => 0.5,
 );
 
 isa_ok( $app, 'SDLx::Controller' );
@@ -43,7 +43,7 @@ sub test_move {
 }
 sub test_show {
 	my $ticks = shift;
-	ok( $ticks >= 5, "show handle \$_[0] of $ticks was >= 5" );
+	ok( $ticks >= 0.5, "show handle \$_[0] of $ticks was >= 0.5" );
 	$app->quit();
 }
 
