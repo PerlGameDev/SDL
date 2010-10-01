@@ -27,15 +27,22 @@ my $app = SDLx::Controller->new(
 
 isa_ok( $app, 'SDLx::Controller' );
 
-sub dummy_sub {1}
+sub dummy_sub  {1}
+sub dummy_sub2 {1}
 
-is( $app->add_move_handler( \&dummy_sub ), 0, 'index got from added handler' );
+$index_1 = $app->add_move_handler( \&dummy_sub );
+$index_2 = $app->add_move_handler( \&dummy_sub2 );
+
+is($index_1 , 0, 'index got from added handler' );
+is($index_2 , 1, 'index got from added handler' );
 
 is( $app->move_handlers->[0], \&dummy_sub, 'handler added correctly' );
+is( $app->move_handlers->[1], \&dummy_sub2, 'handler added correctly' );
 
 $app->remove_move_handler( \&dummy_sub );
+$app->remove_move_handler( $index_2 );
 
-is( scalar @{ $app->move_handlers }, 0, 'handler removed with coderef' );
+is( scalar @{ $app->move_handlers }, 0, 'handlers removed correctly' );
 
 sub test_move {
 	my $part = shift;
