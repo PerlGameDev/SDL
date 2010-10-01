@@ -15,7 +15,7 @@ use SDLx::Controller::State;
 # inside out, so this can work as the superclass of another
 # SDL::Surface subclass
 my %_dt;
-my %_min_s;
+my %_min_t;
 my %_quit;
 my %_event;
 my %_event_handlers;
@@ -28,7 +28,7 @@ sub new {
 	bless $self, ref $self || $self;
 	
 	$_dt{ refaddr $self}             = $args{dt} || 0.1;
-	$_min_s{ refaddr $self}          = $args{min_s} || 0;
+	$_min_t{ refaddr $self}          = $args{min_t} || 0;
 	$_quit{ refaddr $self}           = $args{quit};
 	$_event{ refaddr $self}          = $args{event};
 	$_event_handlers{ refaddr $self} = $args{event_handlers};
@@ -53,14 +53,14 @@ sub DESTROY {
 sub run {
 	my ($self)       = @_;
 	my $dt           = $_dt{ refaddr $self};
-	my $min_s        = $_min_s{ refaddr $self};
+	my $min_t        = $_min_t{ refaddr $self};
 	my $current_time = Time::HiRes::time;
 	while ( !$_quit{ refaddr $self} ) {
 		$self->_event;
 
 		my $new_time   = Time::HiRes::time;
 		my $delta_time = $new_time - $current_time;
-		next if $delta_time < $_min_s;
+		next if $delta_time < $_min_t;
 		$current_time = $new_time;
 		my $delta_copy = $delta_time;
 
@@ -73,7 +73,7 @@ sub run {
 		$self->_show( $delta_time );
 		
 		$dt    = $_dt{ refaddr $self};    #these can change
-		$min_s = $_min_s{ refaddr $self}; #during the cycle
+		$min_t = $_min_t{ refaddr $self}; #during the cycle
 	}
 
 }
@@ -113,12 +113,12 @@ sub dt {
 	$_dt{ refaddr $self};
 }
 
-sub min_s {
+sub min_t {
 	my ($self, $arg) = @_;
 	
-	$_min_s{ refaddr $self} = $arg if defined $arg;
+	$_min_t{ refaddr $self} = $arg if defined $arg;
 	
-	$_min_s{ refaddr $self};
+	$_min_t{ refaddr $self};
 }
 
 

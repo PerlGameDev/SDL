@@ -22,7 +22,7 @@ TODO: {
 
 my $app = SDLx::Controller->new(
 	dt     => 0.1,
-	min_ms => 0.5,
+	min_t => 0.5,
 );
 
 isa_ok( $app, 'SDLx::Controller' );
