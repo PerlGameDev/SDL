@@ -14,9 +14,8 @@ use SDLx::Controller::State;
 
 # inside out, so this can work as the superclass of another
 # SDL::Surface subclass
-my %_delta;
 my %_dt;
-my %_min_ms;
+my %_min_s;
 my %_quit;
 my %_event;
 my %_event_handlers;
@@ -24,17 +23,12 @@ my %_move_handlers;
 my %_show_handlers;
 
 sub new {
-	my $self = shift;
-	my $class = ref $self || $self;
-	my $a;
-	$self = ref $self ? $self : \$a;
-	bless $self, $class;
-
-	my %args = @_;
-	$_delta{ refaddr $self} = SDLx::Controller::Timer->new();
-	$_delta{ refaddr $self}->start(); # should do this after on_load
+	my ($self, %args) = @_;
+	$self = ref $self ? $self : \my $a;
+	bless $self, ref $self || $self;
+	
 	$_dt{ refaddr $self}             = $args{dt} || 0.1;
-	$_min_ms{ refaddr $self}         = $args{min_ms} || 0;
+	$_min_s{ refaddr $self}          = $args{min_s} || 0;
 	$_quit{ refaddr $self}           = $args{quit};
 	$_event{ refaddr $self}          = $args{event};
 	$_event_handlers{ refaddr $self} = $args{event_handlers};
@@ -59,13 +53,14 @@ sub DESTROY {
 sub run {
 	my ($self)       = @_;
 	my $dt           = $_dt{ refaddr $self};
+	my $min_s        = $_min_s{ refaddr $self};
 	my $current_time = Time::HiRes::time;
 	while ( !$_quit{ refaddr $self} ) {
 		$self->_event;
 
 		my $new_time   = Time::HiRes::time;
 		my $delta_time = $new_time - $current_time;
-		next if $delta_time < $_min_ms{ refaddr $self};
+		next if $delta_time < $_min_s;
 		$current_time = $new_time;
 		my $delta_copy = $delta_time;
 
@@ -77,13 +72,14 @@ sub run {
 		
 		$self->_show( $delta_time );
 		
-		$dt = $_dt{ refaddr $self}; #the dt may have changed
+		$dt    = $_dt{ refaddr $self};    #these can change
+		$min_s = $_min_s{ refaddr $self}; #during the cycle
 	}
 
 }
 
 sub _event {
-	my $self = shift;
+	my ($self) = @_;
 	$_event{ refaddr $self} = SDL::Event->new() unless $_event{ refaddr $self};
 	while ( SDL::Events::poll_event( $_event{ refaddr $self} ) ) {
 		SDL::Events::pump_events();
@@ -94,17 +90,14 @@ sub _event {
 }
 
 sub _move {
-	my $self        = shift;
-	my $delta_ticks = shift;
-	my $t           = shift;
+	my ($self, $move_portion) = @_;
 	foreach my $move_handler ( @{ $_move_handlers{ refaddr $self} } ) {
-		$move_handler->( $delta_ticks, $t );
+		$move_handler->( $move_portion );
 	}
 }
 
 sub _show {
-	my $self        = shift;
-	my $delta_ticks = shift;
+	my ($self, $delta_ticks) = @_;
 	foreach my $event_handler ( @{ $_show_handlers{ refaddr $self} } ) {
 		$event_handler->($delta_ticks);
 	}
@@ -120,12 +113,12 @@ sub dt {
 	$_dt{ refaddr $self};
 }
 
-sub min_ms {
+sub min_s {
 	my ($self, $arg) = @_;
 	
-	$_min_ms{ refaddr $self} = $arg if defined $arg;
+	$_min_s{ refaddr $self} = $arg if defined $arg;
 	
-	$_min_ms{ refaddr $self};
+	$_min_s{ refaddr $self};
 }
 
 
