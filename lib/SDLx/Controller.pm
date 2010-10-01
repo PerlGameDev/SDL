@@ -28,7 +28,8 @@ sub new {
 		bless $self, ref $self;
 	}
 	else {
-		$self = bless \my $a, $self;
+		my $a;
+		$self = bless \$a, $self;
 	}
 	
 	$_dt{ refaddr $self}             = $args{dt} || 0.1;
