@@ -24,8 +24,12 @@ my %_show_handlers;
 
 sub new {
 	my ($self, %args) = @_;
-	$self = ref $self ? $self : \my $a;
-	bless $self, ref $self || $self;
+	if(ref $self) {
+		bless $self, ref $self;
+	}
+	else {
+		$self = bless \my $a, $self;
+	}
 	
 	$_dt{ refaddr $self}             = $args{dt} || 0.1;
 	$_min_t{ refaddr $self}          = $args{min_t} || 0;
@@ -41,7 +45,6 @@ sub new {
 sub DESTROY {
 	my $self = shift;
 
-	delete $_delta{ refaddr $self};
 	delete $_dt{ refaddr $self};
 	delete $_quit{ refaddr $self};
 	delete $_event{ refaddr $self};
@@ -60,7 +63,7 @@ sub run {
 
 		my $new_time   = Time::HiRes::time;
 		my $delta_time = $new_time - $current_time;
-		next if $delta_time < $_min_t;
+		next if $delta_time < $min_t;
 		$current_time = $new_time;
 		my $delta_copy = $delta_time;
 

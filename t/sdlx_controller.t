@@ -30,8 +30,8 @@ isa_ok( $app, 'SDLx::Controller' );
 sub dummy_sub  {1}
 sub dummy_sub2 {1}
 
-$index_1 = $app->add_move_handler( \&dummy_sub );
-$index_2 = $app->add_move_handler( \&dummy_sub2 );
+my $index_1 = $app->add_move_handler( \&dummy_sub );
+my $index_2 = $app->add_move_handler( \&dummy_sub2 );
 
 is($index_1 , 0, 'index got from added handler' );
 is($index_2 , 1, 'index got from added handler' );
