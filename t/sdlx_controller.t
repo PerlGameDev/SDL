@@ -11,7 +11,13 @@ use lib 't/lib';
 
 can_ok(
 	'SDLx::Controller',
-	qw( new ) #meh, put the rest in later
+	qw(
+		new quit dt min_t
+		add_move_handler add_event_handler add_show_handler
+		remove_move_handler remove_event_handler remove_show_handler
+		remove_all_move_handlers remove_all_event_handlers remove_all_show_handlers
+		move_handlers event_handlers show_handlers
+	)
 );
 
 TODO: {
