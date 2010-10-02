@@ -7,6 +7,8 @@ use SDL;
 use SDL::Event;
 use SDL::Events;
 use SDL::Video;
+use SDLx::Controller::Interface;
+use SDLx::Controller::State;
 use Scalar::Util 'refaddr';
 
 # inside out, so this can work as the superclass of another
