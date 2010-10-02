@@ -7,15 +7,13 @@ use SDL;
 use SDL::Event;
 use SDL::Events;
 use SDL::Video;
-use SDLx::Controller::Timer;
 use Scalar::Util 'refaddr';
-use SDLx::Controller::Interface;
-use SDLx::Controller::State;
 
 # inside out, so this can work as the superclass of another
 # SDL::Surface subclass
 my %_dt;
 my %_min_t;
+my %_current_time;
 my %_quit;
 my %_event;
 my %_event_handlers;
@@ -34,6 +32,7 @@ sub new {
 	
 	$_dt{ refaddr $self}             = $args{dt} || 0.1;
 	$_min_t{ refaddr $self}          = $args{min_t} || 0;
+	# $_current_time{ refaddr $self}   = $args{current_time} || 0; #no point
 	$_quit{ refaddr $self}           = $args{quit};
 	$_event{ refaddr $self}          = $args{event};
 	$_event_handlers{ refaddr $self} = $args{event_handlers};
@@ -47,6 +46,8 @@ sub DESTROY {
 	my $self = shift;
 
 	delete $_dt{ refaddr $self};
+	delete $_min_t{ refaddr $self};
+	delete $_current_time{ refaddr $self};
 	delete $_quit{ refaddr $self};
 	delete $_event{ refaddr $self};
 	delete $_event_handlers{ refaddr $self};
@@ -58,14 +59,14 @@ sub run {
 	my ($self)       = @_;
 	my $dt           = $_dt{ refaddr $self};
 	my $min_t        = $_min_t{ refaddr $self};
-	my $current_time = Time::HiRes::time;
+	$_current_time{ refaddr $self} = Time::HiRes::time;
 	while ( !$_quit{ refaddr $self} ) {
 		$self->_event;
 
 		my $new_time   = Time::HiRes::time;
-		my $delta_time = $new_time - $current_time;
+		my $delta_time = $new_time - $_current_time{ refaddr $self};
 		next if $delta_time < $min_t;
-		$current_time = $new_time;
+		$_current_time{ refaddr $self} = $new_time;
 		my $delta_copy = $delta_time;
 
 		while ( $delta_copy > $dt ) {
@@ -82,13 +83,26 @@ sub run {
 
 }
 
+sub pause {
+	my ($self, $callback) = @_;
+	$callback ||= sub {1};
+	my $event = SDL::Event->new();
+	while(1) {
+		SDL::Events::wait_event($event) or Carp::confess("pause failed waiting for an event");
+		if($callback->($event)) {
+			$_current_time{ refaddr $self} = Time::HiRes::time; #so run doesn't catch up with the time paused
+			last;
+		}
+	}
+}
+
 sub _event {
 	my ($self) = @_;
 	$_event{ refaddr $self} = SDL::Event->new() unless $_event{ refaddr $self};
 	while ( SDL::Events::poll_event( $_event{ refaddr $self} ) ) {
 		SDL::Events::pump_events();
 		foreach my $event_handler ( @{ $_event_handlers{ refaddr $self} } ) {
-			$self->quit unless $event_handler->( $_event{ refaddr $self} );
+			$event_handler->( $_event{ refaddr $self} );
 		}
 	}
 }
