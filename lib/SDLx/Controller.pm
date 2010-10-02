@@ -78,8 +78,8 @@ sub run {
 			$t += $dt;
 		}
 		my $step = $delta_copy / $dt;
-		$t += $dt * $step;
 		$self->_move( $step, $t ); #a partial move
+		$t += $dt * $step;
 		
 		$self->_show( $delta_time );
 		
@@ -108,22 +108,22 @@ sub _event {
 	while ( SDL::Events::poll_event( $_event{ refaddr $self} ) ) {
 		SDL::Events::pump_events();
 		foreach my $event_handler ( @{ $_event_handlers{ refaddr $self} } ) {
-			$event_handler->( $_event{ refaddr $self} );
+			$event_handler->( $_event{ refaddr $self}, $self );
 		}
 	}
 }
 
 sub _move {
-	my ($self, $move_portion) = @_;
+	my ($self, $move_portion, $t) = @_;
 	foreach my $move_handler ( @{ $_move_handlers{ refaddr $self} } ) {
-		$move_handler->( $move_portion );
+		$move_handler->( $move_portion, $t, $self );
 	}
 }
 
 sub _show {
 	my ($self, $delta_ticks) = @_;
 	foreach my $event_handler ( @{ $_show_handlers{ refaddr $self} } ) {
-		$event_handler->($delta_ticks);
+		$event_handler->( $delta_ticks, $self );
 	}
 }
 
