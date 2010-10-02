@@ -36,7 +36,7 @@ sub new {
 	$_min_t{ refaddr $self}          = $args{min_t} || 0;
 	# $_current_time{ refaddr $self}   = $args{current_time} || 0; #no point
 	$_quit{ refaddr $self}           = $args{quit};
-	$_event{ refaddr $self}          = $args{event};
+	$_event{ refaddr $self}          = $args{event} || SDL::Event->new();
 	$_event_handlers{ refaddr $self} = $args{event_handlers};
 	$_move_handlers{ refaddr $self}  = $args{move_handlers};
 	$_show_handlers{ refaddr $self}  = $args{show_handlers};
@@ -95,7 +95,7 @@ sub pause {
 	my $event = SDL::Event->new();
 	while(1) {
 		SDL::Events::wait_event($event) or Carp::confess("pause failed waiting for an event");
-		if($callback->($event)) {
+		if($callback->($event, $self)) {
 			$_current_time{ refaddr $self} = Time::HiRes::time; #so run doesn't catch up with the time paused
 			last;
 		}
@@ -104,7 +104,6 @@ sub pause {
 
 sub _event {
 	my ($self) = @_;
-	$_event{ refaddr $self} = SDL::Event->new() unless $_event{ refaddr $self};
 	while ( SDL::Events::poll_event( $_event{ refaddr $self} ) ) {
 		SDL::Events::pump_events();
 		foreach my $event_handler ( @{ $_event_handlers{ refaddr $self} } ) {
@@ -128,23 +127,6 @@ sub _show {
 }
 
 sub quit { $_quit{ refaddr $_[0] } = 1 }
-
-sub dt {
-	my ($self, $arg) = @_;
-	
-	$_dt{ refaddr $self} = $arg if defined $arg;
-	
-	$_dt{ refaddr $self};
-}
-
-sub min_t {
-	my ($self, $arg) = @_;
-	
-	$_min_t{ refaddr $self} = $arg if defined $arg;
-	
-	$_min_t{ refaddr $self};
-}
-
 
 sub _add_handler {
 	my ( $arr_ref, $handler ) = @_;
@@ -218,6 +200,30 @@ sub remove_all_show_handlers {
 sub move_handlers  { $_move_handlers{ refaddr $_[0] } }
 sub event_handlers { $_event_handlers{ refaddr $_[0] } }
 sub show_handlers  { $_show_handlers{ refaddr $_[0] } }
+
+sub dt {
+	my ($self, $arg) = @_;
+	
+	$_dt{ refaddr $self} = $arg if defined $arg;
+	
+	$_dt{ refaddr $self};
+}
+
+sub min_t {
+	my ($self, $arg) = @_;
+	
+	$_min_t{ refaddr $self} = $arg if defined $arg;
+	
+	$_min_t{ refaddr $self};
+}
+
+sub current_time {
+	my ($self, $arg) = @_;
+	
+	$_current_time{ refaddr $self} = $arg if defined $arg;
+	
+	$_current_time{ refaddr $self};
+}
 
 1; #not 42 man!
 
