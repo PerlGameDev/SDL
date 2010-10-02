@@ -61,6 +61,7 @@ sub run {
 	my ($self)       = @_;
 	my $dt           = $_dt{ refaddr $self};
 	my $min_t        = $_min_t{ refaddr $self};
+	my $t            = 0.0;
 	$_current_time{ refaddr $self} = Time::HiRes::time;
 	while ( !$_quit{ refaddr $self} ) {
 		$self->_event;
@@ -72,10 +73,13 @@ sub run {
 		my $delta_copy = $delta_time;
 
 		while ( $delta_copy > $dt ) {
-			$self->_move( 1 ); #a full move
+			$self->_move( 1, $t ); #a full move
 			$delta_copy -= $dt;
+			$t += $dt;
 		}
-		$self->_move( $delta_copy / $dt ); #a partial move
+		my $step = $delta_copy / $dt;
+		$t += $dt * $step;
+		$self->_move( $step, $t ); #a partial move
 		
 		$self->_show( $delta_time );
 		
