@@ -88,8 +88,8 @@ $controller->add_event_handler( sub { $counts->[0]++; return 0 if $interface->cu
 
 $interface->set_acceleration(
 		sub {
-		die
-		if $counts->[1] > 100; $counts->[1]++;
+		$controller->quit() if $counts->[1] > 100; 
+		$counts->[1]++;
 		isa_ok( $_[1], 'SDLx::Controller::State', '[Controller] called acceleration and gave us a state' ),
 		return ( 10, 10, 10 );
 		}
@@ -106,7 +106,7 @@ $interface->attach(
 
 $controller->run();
 
-is_deeply( $counts, [ 1, 4, 1 ] );
+is_deeply( $counts, [ 1, 104, 26 ] );
 
 $interface->detach();
 

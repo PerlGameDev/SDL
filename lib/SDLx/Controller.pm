@@ -103,7 +103,7 @@ sub pause {
 }
 
 sub _event {
-	my ($self) = @_;
+	my ($self) = shift;
 	while ( SDL::Events::poll_event( $_event{ refaddr $self} ) ) {
 		SDL::Events::pump_events();
 		foreach my $event_handler ( @{ $_event_handlers{ refaddr $self} } ) {
