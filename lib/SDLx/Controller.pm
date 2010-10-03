@@ -16,7 +16,7 @@ use Scalar::Util 'refaddr';
 my %_dt;
 my %_min_t;
 my %_current_time;
-my %_quit;
+my %_stop;
 my %_event;
 my %_event_handlers;
 my %_move_handlers;
@@ -38,7 +38,7 @@ sub new {
 	$_dt{ refaddr $self}                 = defined $args{dt}    ? $args{dt}    : 0.1;
 	$_min_t{ refaddr $self}              = defined $args{min_t} ? $args{min_t} : 1 / 60;
 #	$_current_time{ refaddr $self}       = $args{current_time} || 0; #no point
-	$_quit{ refaddr $self}               = $args{quit};
+	$_stop{ refaddr $self}               = $args{stop};
 	$_event{ refaddr $self}              = $args{event} || SDL::Event->new();
 	$_event_handlers{ refaddr $self}     = $args{event_handlers};
 	$_move_handlers{ refaddr $self}      = $args{move_handlers};
@@ -56,7 +56,7 @@ sub DESTROY {
 	delete $_dt{ refaddr $self};
 	delete $_min_t{ refaddr $self};
 	delete $_current_time{ refaddr $self};
-	delete $_quit{ refaddr $self};
+	delete $_stop{ refaddr $self};
 	delete $_event{ refaddr $self};
 	delete $_event_handlers{ refaddr $self};
 	delete $_move_handlers{ refaddr $self};
@@ -72,7 +72,7 @@ sub run {
 	my $min_t        = $_min_t{ refaddr $self};
 	my $t            = 0.0;
 	$_current_time{ refaddr $self} = Time::HiRes::time;
-	while ( !$_quit{ refaddr $self} ) {
+	while ( !$_stop{ refaddr $self} ) {
 		$self->_event;
 
 		my $new_time   = Time::HiRes::time;
@@ -135,7 +135,7 @@ sub _show {
 	}
 }
 
-sub quit { $_quit{ refaddr $_[0] } = 1 }
+sub stop { $_stop{ refaddr $_[0] } = 1 }
 
 sub _add_handler {
 	my ( $hash_ref, $num_ref, $handler ) = @_;

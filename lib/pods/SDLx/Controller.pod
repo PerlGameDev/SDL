@@ -73,7 +73,7 @@ Returns the new object.
 =head2 run
 
 After creating and setting up your handlers (see below), call this method to
-activate the main loop. The main loop will run until C<quit> is called.
+activate the main loop. The main loop will run until C<stop> is called.
 
 All hooked functions will be called during the main loop, in this order:
 
@@ -90,7 +90,7 @@ All hooked functions will be called during the main loop, in this order:
 Please refer to each handler below for information on received arguments.
 Note that the second argument every callback recieves is the C<SDLx::Controller> object.
 
-=head2 quit
+=head2 stop
 
 Returns from the C<run> loop.
 
@@ -137,13 +137,13 @@ order. Returns the order queue number of the added callback.
 The first argument passed to registered callbacks is the L<< SDL::Event >> object.
 The second is the C<SDLx::Controller> object.
 
- sub quit {
+ sub stop {
     my ($event, $app) = @_;
     if($event->type == SDL_QUIT) {
-        $controller->quit;
+        $controller->stop;
     }
  }
- $controller->add_event_handler(\&quit);
+ $controller->add_event_handler(\&stop);
 
 =head2 add_move_handler
 

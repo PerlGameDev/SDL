@@ -12,7 +12,7 @@ use lib 't/lib';
 can_ok(
 	'SDLx::Controller',
 	qw(
-		new quit dt min_t
+		new run stop pause dt min_t current_time
 		add_move_handler add_event_handler add_show_handler
 		remove_move_handler remove_event_handler remove_show_handler
 		remove_all_move_handlers remove_all_event_handlers remove_all_show_handlers
@@ -57,7 +57,7 @@ sub test_move {
 sub test_show {
 	my $ticks = shift;
 	ok( $ticks >= 0.5, "show handle \$_[0] of $ticks was >= 0.5" );
-	$app->quit();
+	$app->stop();
 }
 
 $app->add_move_handler(\&test_move);
