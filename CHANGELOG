@@ -1,12 +1,13 @@
 Revision history for Perl extension SDL_perl.
 
 * 2.517
-        - Fix for 2 tests: interface, layermanager
+	- Major refactor of SDLx::Controller [Blaizer]
+	- Fix for 2 tests: interface, layermanager
 	- Refactor SDLx::Surface code [Blaizer]
 	- Gave SDL::Mixer::Init same signature for varying versions of SDL_Mixer [kthakore]	
 
 * 2.516
-        - Fix for test plan in t/sdlx_sound [FROGGS]
+	- Fix for test plan in t/sdlx_sound [FROGGS]
 
 * 2.515
 	- Added preliminary SDLx::Sound [rflipo] 
@@ -69,14 +70,14 @@ Revision history for Perl extension SDL_perl.
 	- Fixes for exec.h stack dumper during testing
 	- Added version guard for SDLx::GFX [FROGGS]	
 	- Modified SDLx::Sprite to inherit from SDLx::Surface
-                
+
 * 2.501  July 10 2010
 	- Fixes tests for SDLx::TTF and SDL::Surface [FROGGS, kthakore] 
 	- Makes ptr to pixels READONLY for some safety
 	- *nix users gets a stack dumper of segfault
 
 * 2.500  July 9 2010
- 
+
 	- Fixed Memory Leaks due to perl desturct level 
 	- Fixed Memory leak in SDL::Mixer::Music 
 	- Fixed the test on SDLx::Sprite

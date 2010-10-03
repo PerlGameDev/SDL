@@ -11,7 +11,7 @@ Core
 
 =head1 RELEASES
 
-=head2 2.5xx
+=head2 2.517
 
 Major changes to C<SDLx::Controller>.
 
