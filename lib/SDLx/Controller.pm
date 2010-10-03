@@ -107,7 +107,7 @@ sub _event {
 	while ( SDL::Events::poll_event( $_event{ refaddr $self} ) ) {
 		SDL::Events::pump_events();
 		foreach my $event_handler ( @{ $_event_handlers{ refaddr $self} } ) {
-			next unless $_;
+			next unless $event_handler;
 			$event_handler->( $_event{ refaddr $self}, $self );
 		}
 	}
@@ -116,16 +116,16 @@ sub _event {
 sub _move {
 	my ($self, $move_portion, $t) = @_;
 	foreach my $move_handler ( @{ $_move_handlers{ refaddr $self} } ) {
-		next unless $_;
+		next unless $move_handler;
 		$move_handler->( $move_portion, $self, $t );
 	}
 }
 
 sub _show {
 	my ($self, $delta_ticks) = @_;
-	foreach my $event_handler ( @{ $_show_handlers{ refaddr $self} } ) {
-		next unless $_;
-		$event_handler->( $delta_ticks, $self );
+	foreach my $show_handler ( @{ $_show_handlers{ refaddr $self} } ) {
+		next unless $show_handler;
+		$show_handler->( $delta_ticks, $self );
 	}
 }
 
