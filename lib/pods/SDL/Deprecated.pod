@@ -20,8 +20,6 @@ C<quit> is now C<stop>. Event handlers no longer end C<run> on returning false. 
 The first argument to move handlers is the step portion instead of C<dt>.
 The second argument to move handlers, the C<t> value, is now the third argument.
 
-The handle holders are now hashes instead of arrays.
-
 C<min_t> will limit apps to a framerate of 60 by default.
 
 =head2 2.513

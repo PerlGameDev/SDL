@@ -21,9 +21,6 @@ my %_event;
 my %_event_handlers;
 my %_move_handlers;
 my %_show_handlers;
-my %_event_handlers_num;
-my %_move_handlers_num;
-my %_show_handlers_num;
 
 sub new {
 	my ($self, %args) = @_;
@@ -43,9 +40,6 @@ sub new {
 	$_event_handlers{ refaddr $self}     = $args{event_handlers};
 	$_move_handlers{ refaddr $self}      = $args{move_handlers};
 	$_show_handlers{ refaddr $self}      = $args{show_handlers};
-	$_event_handlers_num{ refaddr $self} = 0;
-	$_move_handlers_num{ refaddr $self}  = 0;
-	$_show_handlers_num{ refaddr $self}  = 0;
 
 	return $self;
 }
@@ -61,9 +55,6 @@ sub DESTROY {
 	delete $_event_handlers{ refaddr $self};
 	delete $_move_handlers{ refaddr $self};
 	delete $_show_handlers{ refaddr $self};
-	delete $_event_handlers_num{ refaddr $self};
-	delete $_move_handlers_num{ refaddr $self};
-	delete $_show_handlers_num{ refaddr $self};
 }
 
 sub run {
@@ -115,8 +106,7 @@ sub _event {
 	my ($self) = shift;
 	while ( SDL::Events::poll_event( $_event{ refaddr $self} ) ) {
 		SDL::Events::pump_events();
-		my @event_handlers = values %{ $_event_handlers{ refaddr $self} };
-		foreach my $event_handler ( @event_handlers ) {
+		foreach my $event_handler ( @{ $_event_handlers{ refaddr $self} } ) {
 			$event_handler->( $_event{ refaddr $self}, $self );
 		}
 	}
@@ -124,16 +114,14 @@ sub _event {
 
 sub _move {
 	my ($self, $move_portion, $t) = @_;
-	my @move_handlers = values %{ $_move_handlers{ refaddr $self} };
-	foreach my $move_handler ( @move_handlers ) {
+	foreach my $move_handler ( @{ $_move_handlers{ refaddr $self} } ) {
 		$move_handler->( $move_portion, $self, $t );
 	}
 }
 
 sub _show {
 	my ($self, $delta_ticks) = @_;
-	my @show_handlers = values %{ $_show_handlers{ refaddr $self} };
-	foreach my $event_handler ( @show_handlers ) {
+	foreach my $event_handler ( @{ $_show_handlers{ refaddr $self} } ) {
 		$event_handler->( $delta_ticks, $self );
 	}
 }
@@ -141,46 +129,45 @@ sub _show {
 sub stop { $_stop{ refaddr $_[0] } = 1 }
 
 sub _add_handler {
-	my ( $hash_ref, $num_ref, $handler ) = @_;
-	$hash_ref->{$$num_ref} = $handler;
-	$$num_ref++;
-	return $$num_ref-1;
+	my ( $arr_ref, $handler ) = @_;
+	push @{$arr_ref}, $handler;
+	return $#{$arr_ref};
 }
 
 sub add_move_handler {
 	$_[0]->remove_all_move_handlers if !$_move_handlers{ refaddr $_[0] };
-	return _add_handler( $_move_handlers{ refaddr $_[0]}, \$_move_handlers_num{ refaddr $_[0]}, $_[1] );
+	return _add_handler( $_move_handlers{ refaddr $_[0]}, $_[1] );
 }
 
 sub add_event_handler {
 	Carp::confess 'SDLx::App or a Display (SDL::Video::get_video_mode) must be made'
 		unless SDL::Video::get_video_surface();
 	$_[0]->remove_all_event_handlers if !$_event_handlers{ refaddr $_[0] };
-	return _add_handler( $_event_handlers{ refaddr $_[0]}, \$_event_handlers_num{ refaddr $_[0]}, $_[1] );
+	return _add_handler( $_event_handlers{ refaddr $_[0]}, $_[1] );
 }
 
 sub add_show_handler {
 	$_[0]->remove_all_show_handlers if !$_show_handlers{ refaddr $_[0] };
-	return _add_handler( $_show_handlers{ refaddr $_[0]}, \$_show_handlers_num{ refaddr $_[0]}, $_[1] );
+	return _add_handler( $_show_handlers{ refaddr $_[0]}, $_[1] );
 }
 
 sub _remove_handler {
-	my ( $hash_ref, $id ) = @_;
+	my ( $arr_ref, $id ) = @_;
 	if ( ref $id ) {
 		($id) = grep { 
-					$id eq $hash_ref->{$_}
-				} keys %{$hash_ref};
+					$id eq $arr_ref->[$_]
+				} 0..$#{$arr_ref};
 				
 		if ( !defined $id ) {
 			Carp::cluck("$id is not currently a handler of this type");
 			return;
 		}
 	}
-	elsif(!defined $hash_ref->{$id}) {
+	elsif(!defined $arr_ref->[$id]) {
 		Carp::cluck("$id is not currently a handler of this type");
 		return;
 	}
-	return delete( $hash_ref->{$id} );
+	return delete( $arr_ref->[$id] );
 }
 
 sub remove_move_handler {
@@ -202,15 +189,15 @@ sub remove_all_handlers {
 }
 
 sub remove_all_move_handlers {
-	$_move_handlers{ refaddr $_[0] } = {};
+	$_move_handlers{ refaddr $_[0] } = [];
 }
 
 sub remove_all_event_handlers {
-	$_event_handlers{ refaddr $_[0] } = {};
+	$_event_handlers{ refaddr $_[0] } = [];
 }
 
 sub remove_all_show_handlers {
-	$_show_handlers{ refaddr $_[0] } = {};
+	$_show_handlers{ refaddr $_[0] } = [];
 }
 
 sub move_handlers  { $_move_handlers{ refaddr $_[0] } }

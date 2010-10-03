@@ -42,13 +42,13 @@ my $index_2 = $app->add_move_handler( \&dummy_sub2 );
 is($index_1 , 0, 'index got from added handler' );
 is($index_2 , 1, 'index got from added handler' );
 
-is( $app->move_handlers->{0}, \&dummy_sub, 'handler added correctly' );
-is( $app->move_handlers->{1}, \&dummy_sub2, 'handler added correctly' );
+is( $app->move_handlers->[0], \&dummy_sub, 'handler added correctly' );
+is( $app->move_handlers->[1], \&dummy_sub2, 'handler added correctly' );
 
 $app->remove_move_handler( \&dummy_sub );
 $app->remove_move_handler( $index_2 );
 
-is( scalar keys %{ $app->move_handlers }, 0, 'handlers removed correctly' );
+is( scalar @{ $app->move_handlers }, 0, 'handlers removed correctly' );
 
 sub test_move {
 	my $part = shift;
