@@ -32,7 +32,7 @@ sub attach {
 	Carp::confess "An SDLx::Controller is needed" unless $controller && $controller->isa('SDLx::Controller');
 
         $_controller{ refaddr $self } = [ $controller ];
-	my $move = sub { $self->update( $_[1], $_[2]->dt )};
+	my $move = sub { $self->update( $_[2], $_[1]->dt )};
 	$_controller{ refaddr $self }->[1] = $controller->add_move_handler($move);
 
 	if ($render) {

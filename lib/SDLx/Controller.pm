@@ -115,7 +115,7 @@ sub _event {
 	my ($self) = shift;
 	while ( SDL::Events::poll_event( $_event{ refaddr $self} ) ) {
 		SDL::Events::pump_events();
-		foreach my $event_handler ( @{ $_event_handlers{ refaddr $self} } ) {
+		foreach my $event_handler ( values %{ $_event_handlers{ refaddr $self} } ) {
 			$event_handler->( $_event{ refaddr $self}, $self );
 		}
 	}
@@ -123,14 +123,14 @@ sub _event {
 
 sub _move {
 	my ($self, $move_portion, $t) = @_;
-	foreach my $move_handler ( @{ $_move_handlers{ refaddr $self} } ) {
-		$move_handler->( $move_portion, $t, $self );
+	foreach my $move_handler ( values %{ $_move_handlers{ refaddr $self} } ) {
+		$move_handler->( $move_portion, $self, $t );
 	}
 }
 
 sub _show {
 	my ($self, $delta_ticks) = @_;
-	foreach my $event_handler ( @{ $_show_handlers{ refaddr $self} } ) {
+	foreach my $event_handler ( values %{ $_show_handlers{ refaddr $self} } ) {
 		$event_handler->( $delta_ticks, $self );
 	}
 }
@@ -139,9 +139,9 @@ sub quit { $_quit{ refaddr $_[0] } = 1 }
 
 sub _add_handler {
 	my ( $hash_ref, $num_ref, $handler ) = @_;
-	${$hash_ref}{$$numref} = $handler;
-	$$numref++;
-	return $$numref-1;
+	$hash_ref->{$$num_ref} = $handler;
+	$$num_ref++;
+	return $$num_ref-1;
 }
 
 sub add_move_handler {
@@ -164,20 +164,20 @@ sub add_show_handler {
 sub _remove_handler {
 	my ( $hash_ref, $id ) = @_;
 	if ( ref $id ) {
-		($id) = grep {
-					$id eq ${$hash_ref}{$_} #coderef matches with input
-				} values %{$hash_ref}
+		($id) = grep { 
+					$id eq $hash_ref->{$_}
+				} keys %{$hash_ref};
 				
 		if ( !defined $id ) {
 			Carp::cluck("$id is not currently a handler of this type");
 			return;
 		}
 	}
-	else {
-		Carp::cluck("$id is not currently a handler of this type") unless defined ${$hash_ref}{$id};
+	elsif(!defined $hash_ref->{$id}) {
+		Carp::cluck("$id is not currently a handler of this type");
 		return;
 	}
-	return delete( ${$hash_ref}{$id} );
+	return delete( $hash_ref->{$id} );
 }
 
 sub remove_move_handler {
