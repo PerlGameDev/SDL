@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-SDLx::Controller - Handles the loops for event, movement and rendering
+SDLx::Controller - Handles the loops for events, movement and rendering
 
 =head1 SYNOPSIS
 
@@ -49,17 +49,22 @@ ease.
 
  SDLx::Controller->new(
      dt    => 0.5,
-	 min_t => 1 / 60,
-	 event => $event_object,
+     min_t => 0,
+     event => $event_object,
  );
 
 The C<dt> parameter specifies the length, in seconds, of a full movement step, and defaults to 0.1.
+The C<dt> can  be anything and the game can still look the same.
+It is only when you change the C<dt> without changing all the things in the movement step that are being multiplied by the first move argument that it will make a difference.
+If you lower the C<dt>, everything will move faster than it did with it set higher, and vice-versa.
+This is useful to add slo-mo and fast-forward features to the game, all you would have to do is change the C<dt>.
 
-C<min_t> specifies the minimum time, in seconds, that has to accumulate before any move or show handlers are called, and defaults to 0.
-Setting this to C<1 / 60> ensures that the controller can update the screen at a maximum of 60 times per second.
+C<min_t> specifies the minimum time, in seconds, that has to accumulate before any move or show handlers are called, and defaults to 1 / 60.
+Having the C<min_t> to 1 / 60 ensures that the controller can update the screen at a maximum of 60 times per second.
 A "V-Sync" such as this is necessary to prevent video "tear", which occurs when the app is updating faster than the monitor can display.
+Setting it to 0, as in the example, will let the app run as fast as it possibly can.
 
-C<event> is a SDL::Event object that events going to the event callbacks are polled in to. Defaults to C<SDL::Event->new()>.
+C<event> is a SDL::Event object that events going to the event callbacks are polled in to. Defaults to C<< SDL::Event->new() >>.
 
 All parameters are optional.
 
@@ -83,7 +88,7 @@ All hooked functions will be called during the main loop, in this order:
 =back
 
 Please refer to each handler below for information on received arguments.
-Note that the last argument each callback recieves is the C<SDLx::Controller> object.
+Note that the second argument every callback recieves is the C<SDLx::Controller> object.
 
 =head2 quit
 
@@ -107,13 +112,13 @@ This can be used to easily implement a pause when the app loses focus:
              if($e->active_gain) {
                  return 1;
              }
-			 else {
+             else {
                  $controller->pause(\&focus);
                  # recursive, but only once since the window
                  # can't lose focus again without gaining is first
              }
-		 }
-	 }
+         }
+     }
      return 0;
  }
 
@@ -133,10 +138,10 @@ The first argument passed to registered callbacks is the L<< SDL::Event >> objec
 The second is the C<SDLx::Controller> object.
 
  sub quit {
-    my ($event, $controller) = @_;
+    my ($event, $app) = @_;
     if($event->type == SDL_QUIT) {
         $controller->quit;
-	 }
+    }
  }
  $controller->add_event_handler(\&quit);
 
@@ -152,15 +157,16 @@ Movement values should be multiplied by this value.
 The full steps correspond to the amount of C<dt> passed between calls, and the partial step corresponds to the call with the remaining time less than C<dt>.
 The argument can be 0 if no time has passed since the last cycle. Set a C<min_t> if you need to protect against this.
 
-The second argument passed to the callbacks is the total amount of C<dt> passed. The third is the C<SDLx::Controller> object.
+The second argument passed to the callbacks is the C<SDLx::Controller> object.
+The third is the total amount of time passed since the call of C<run>.
 
 You should use these handlers to update your in-game objects, check collisions, etc.
 so you can check and/or update it as necessary.
 
  sub move_ball {
-     my ($step, $t, $controller) = @_;
-	 $ball->move_x( $ball->x_vel * $step );
-	 $ball->move_y( $ball->y_vel * $step );
+     my ($step, $app, $t) = @_;
+     $ball->move_x( $ball->x_vel * $step );
+     $ball->move_y( $ball->y_vel * $step );
  }
 
 =head2 add_show_handler
@@ -171,6 +177,14 @@ All registered callbacks will be triggered in order, once per run of the C<run> 
 
 The first argument passed is the number of ticks since the previous call.
 The second is the C<SDLx::Controller> object.
+
+ sub show_ball {
+     my ($delta, $app) = @_;
+     $app->draw_rect(
+         [ $ball->x, $ball->y, $ball->size, $ball->size ],
+         $ball->colour
+     );
+ }
 
 =head2 remove_move_handler( $index )
 
