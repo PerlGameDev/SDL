@@ -20,7 +20,7 @@ my $ball = {
 	y     => 0,
 	w     => 20,
 	h     => 20,
-	vel   => 200,
+	vel   => 20,
 	x_vel => 0,
 	y_vel => 0,
 
@@ -32,7 +32,7 @@ my $r_ball = {
 	w       => 20,
 	h       => 20,
 	radians => 0,
-	rot_vel => 50,
+	rot_vel => 10,
 	radius  => 100,
 	c_x     => $app->w / 2,
 	c_y     => $app->h / 2,
@@ -62,7 +62,6 @@ my $game = SDLx::Controller->new();
 
 sub on_move {
 	my $dt = shift;
-	$dt = $dt / 1000;
 	$ball->{x} += $ball->{x_vel} * $dt;
 
 	$ball->{y} += $ball->{y_vel} * $dt;
@@ -103,10 +102,9 @@ sub on_event {
 		$ball->{x_vel} -= $ball->{vel} if $key == SDLK_RIGHT;
 
 	} elsif ( $event->type == SDL_QUIT ) {
-		return 0;
+		$_[0]->stop;
 	}
 
-	return 1;
 }
 
 sub on_show {
