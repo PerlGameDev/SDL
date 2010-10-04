@@ -37,8 +37,7 @@ my $render = sub {
 
 #an event handler to exit
 my $event = sub {
-	return 0 if $_[0]->type == SDL_QUIT;
-	return 1;
+	$_[1]->stop if $_[0]->type == SDL_QUIT;
 };
 
 
