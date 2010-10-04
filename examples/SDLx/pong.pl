@@ -87,7 +87,7 @@ sub init {
 	return $a;
 }
 
-my $game = SDLx::Controller->new( dt => 0.002 );
+my $game = SDLx::Controller->new( dt => 0.2 );
 
 sub on_move {
 	my $dt = shift;
@@ -144,10 +144,8 @@ sub on_event {
 		$paddle->{y_vel} += $paddle->{vel} if $key == SDLK_UP;
 		$paddle->{y_vel} -= $paddle->{vel} if $key == SDLK_DOWN;
 	} elsif ( $event->type == SDL_QUIT ) {
-		return 0;
+		$_[1]->stop();
 	}
-
-	return 1;
 }
 
 #
