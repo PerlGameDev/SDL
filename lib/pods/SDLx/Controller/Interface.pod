@@ -7,7 +7,7 @@ SDLx::Controller::Interface - Interface Physics and Rendering with the Controlle
 
 =head1 CATEGORY
 
-Core, Extension
+Extension, Controller
 
 =head1 SYNOPSIS
 
