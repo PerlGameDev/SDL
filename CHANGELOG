@@ -2,6 +2,7 @@ Revision history for Perl extension SDL_perl.
 
 * TBD
 	- Removed build option -fPIC for windows [FROGGS]
+	- Throw a warning for missing thread support instead of compile these funtions [FROGGS]
 
 * 2.518
 	- Major refactor of SDLx::Controller [Blaizer]
