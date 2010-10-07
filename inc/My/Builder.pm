@@ -137,9 +137,8 @@ sub set_file_flags {
 			extra_compiler_flags => [
 				( split( ' ', $arch . $debug . $self->notes('sdl_cflags') ) ),
 				@{ $param->{defines} },
-				(   defined $Config{usethreads}
-					? ( '-DUSE_THREADS', '-fPIC' )
-					: ('-fPIC')
+				(   defined $Config{usethreads} ? '-DUSE_THREADS' : '',
+					$^O ne 'MSWin32' ? '-fPIC' : ''
 				),
 			],
 			extra_linker_flags => [
