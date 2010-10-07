@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* TBD
+	- Removed build option -fPIC for windows [FROGGS]
+
 * 2.518
 	- Major refactor of SDLx::Controller [Blaizer]
 	- Refactor SDLx::Surface code [Blaizer]
