@@ -128,22 +128,35 @@ audiospec_samples ( audiospec, ... )
 		RETVAL = audiospec->samples;
 	OUTPUT:
 		RETVAL
-		
+
+#ifdef USE_THREADS
+
 void
 audiospec_callback( audiospec, cb )
 	SDL_AudioSpec *audiospec
 	char* cb
 	CODE:
 		/* the audio callback will happen in a different thread. */
-                /* so we're going to leave a cloned interpreter available */
-                /* but still remain in the current one. */
+		/* so we're going to leave a cloned interpreter available */
+		/* but still remain in the current one. */
 		if (perl_for_audio_cb == NULL) {
-		  perl_my = PERL_GET_CONTEXT;
-		  perl_for_audio_cb = perl_clone(perl_my, CLONEf_KEEP_PTR_TABLE);
-                  PERL_SET_CONTEXT(perl_my);
-                }
+			perl_my = PERL_GET_CONTEXT;
+			perl_for_audio_cb = perl_clone(perl_my, CLONEf_KEEP_PTR_TABLE);
+			PERL_SET_CONTEXT(perl_my);
+		}
 		audiospec->userdata = cb;
 		audiospec->callback = audio_callback;
+
+#else
+
+void
+audiospec_callback( audiospec, cb )
+	SDL_AudioSpec *audiospec
+	char* cb
+	CODE:
+		warn("Perl need to be compiled with 'useithreads' for SDL::AudioSpec::callback( cb )");
+
+#endif
 
 void
 audiospec_DESTROY(self)

@@ -93,6 +93,8 @@ MODULE = SDL::Mixer::Effects 	PACKAGE = SDL::Mixer::Effects    PREFIX = mixeff_
 
 #ifdef HAVE_SDL_MIXER
 
+#ifdef USE_THREADS
+
 int
 mixeff_register(channel, func, done, arg)
 	int channel
@@ -127,24 +129,35 @@ mixeff_register(channel, func, done, arg)
 				
 				RETVAL = registered_effects;
 				registered_effects++;
-							
 			}
-			else	
+			else
 			{
-			   warn( "Maximum effects allowed is 32 " );
-			   RETVAL = -1;
+				warn( "Maximum effects allowed is 32 " );
+				RETVAL = -1;
 			}
 		}
 		else
 		{
 			RETVAL = -1;
 		}
-				
-		
-		
-		
 	OUTPUT:
 		RETVAL
+
+#else
+
+int
+mixeff_register(channel, func, done, arg)
+	int channel
+	char *func
+	char *done
+	SV *arg
+	CODE:
+		warn("Perl need to be compiled with 'useithreads' for SDL::Mixer::Effects::register( channel, func, done, arg )");
+		XSRETURN_UNDEF;
+	OUTPUT:
+		RETVAL
+
+#endif
 
 int
 mixeff_unregister( channel, func )
@@ -218,6 +231,8 @@ mixeff_set_reverse_stereo( channel, flip )
 	OUTPUT:
 		RETVAL
 
+#ifdef USE_THREADS
+
 void
 mixeff_set_post_mix(func = NULL, arg = NULL)
 	SV *func
@@ -236,5 +251,16 @@ mixeff_set_post_mix(func = NULL, arg = NULL)
 		}
 		else
 			Mix_SetPostMix(NULL, NULL);
+
+#else
+
+void
+mixeff_set_post_mix(func = NULL, arg = NULL)
+	SV *func
+	SV *arg
+	CODE:
+		warn("Perl need to be compiled with 'useithreads' for SDL::Mixer::Effects::set_post_mix( func, arg )");
+
+#endif
 
 #endif
