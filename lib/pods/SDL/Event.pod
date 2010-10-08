@@ -539,8 +539,8 @@ programmer, the only requirement is that type is a value from C<SDL_USEREVENT> t
 
  my $event = SDL::Event->new();
     $event->type ( SDL_USEREVENT + 3 );
-    $event->event_code(10);
-    $event->data1('hello event');
+    $event->user_code(10);
+    $event->user_data1('hello event');
 
  SDL::Events::push_event($event);
 
