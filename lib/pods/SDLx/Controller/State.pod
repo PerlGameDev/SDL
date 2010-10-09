@@ -1,0 +1,72 @@
+=pod
+
+=head1 NAME
+
+SDLx::Controller::State - the state of a SDLx::Controller::Interface
+
+=head1 CATEGORY
+
+Extension, Controller
+
+=head1 SYNOPSIS
+
+  # you'll most likely get a State object from a SDLx::Controller::Interface
+  # object. Just in case, here's how you would construct one by hand:
+  my $state1 = SDLx::Controller::State->new;
+  my $state2 = SDLx::Controller::State->new( $x, $y, $v_x, $v_y, $rotation, $ang_v );
+
+  # attributes are just simple accessors:
+  $state->x(10);
+  $state->x;      # 10
+
+  # same goes for the rest:
+  $state->y;
+  $state->ang_v;
+
+  # etc.
+
+=head1 DESCRIPTION
+
+A state object is a simple container for any given state inside a running
+L<SDLx::Controller::Interface> instance.
+
+=head1 METHODS
+
+=head2 new()
+
+=head2 new( $x, $y, $v_x, $v_y, $rotation, $ang_v )
+
+Creates a new state container object. Can optionally set the initial value
+of all its attributes (see below).
+
+=head1 ACCESSORS
+
+=head2 x
+
+Accessor to get/set the x value, usually used to position the item or check for collisions.
+
+=head2 y
+
+Accessor to get/set the y value, usually used to position the item or check for collisions.
+
+=head2 v_x
+
+Accessor to get/set the x velocity of the instance, for moving objects dynamically.
+
+=head2 v_y
+
+Accessor to get/set the y velocity of the instance, for moving objects dynamically.
+
+=head2 rotation
+
+Accessor to get/set the rotation of the object, in degrees (0..360).
+
+=head2 ang_v
+
+Accessor to get/set the angular velocity, for rotating objects dynamically.
+
+=head2 AUTHORS
+
+See L<SDL/AUTHORS>
+
+=cut
