@@ -98,7 +98,7 @@ This gives you the SDL::Version object which SDL_ttf was present at compile time
  my $success = SDL::TTF::init();
 
 Initialize the truetype font API.
-This must be called before using other functions in this library, except L<SDL::TTF::was_init> and L<SDL::TTF::linked_version>.
+This must be called before using other functions in this library, except L<SDL::TTF::was_init|SDL::TTF/"was_init"> and L<SDL::TTF::linked_version|SDL::TTF/"linked_version">.
 SDL does not have to be initialized before this call.
 
 Returns: C<0> on success, C<-1> on any error.
@@ -108,16 +108,16 @@ Returns: C<0> on success, C<-1> on any error.
  my $was_init = SDL::TTF::was_init();
 
 Query the initilization status of the truetype font API.
-You may, of course, use this before L<SDL::TTF::init> to avoid initializing twice in a row. Or use this to determine if you need to call 
-L<SDL::TTF::quit>.
+You may, of course, use this before L<SDL::TTF::init|SDL::TTF/"init"> to avoid initializing twice in a row. Or use this to determine if you need to 
+call L<SDL::TTF::quit|SDL::TTF/"quit">.
 
 =head3 quit
 
  SDL::TTF::quit();
 
 Shutdown and cleanup the truetype font API.
-After calling this the SDL::TTF functions should not be used, excepting L<SDL::TTF::was_init>. You may, of course, use L<SDL::TTF::init> to 
-use the functionality again
+After calling this the SDL::TTF functions should not be used, excepting L<SDL::TTF::was_init|SDL::TTF/"was_init">. You may, of course, use 
+L<SDL::TTF::init|SDL::TTF/"init"> to use the functionality again
 
 =head2 Management functions
 
@@ -140,14 +140,14 @@ Example:
 
  my $font = SDL::TTF::open_font($font_file, $point_size, $face_index);
 
-This is the same as L<SDL::TTF::open_font>, except you can specify the face index of a font file containing multiple faces. 
+This is the same as L<SDL::TTF::open_font|SDL::TTF/"open_font">, except you can specify the face index of a font file containing multiple faces. 
 This can load TTF and FON files. 
 
 =head3 open_font_RW
 
  my $font = SDL::TTF::open_font_RW($rwops_object, $free, $point_size);
 
-This is the same as L<SDL::TTF::open_font>, except you can pass an L<SDL::RWOps>-object. If you pass true as C<$free>, the L<SDL::RWOps>-object
+This is the same as L<SDL::TTF::open_font|SDL::TTF/"open_font">, except you can pass an L<SDL::RWOps>-object. If you pass true as C<$free>, the L<SDL::RWOps>-object
 will be freed by SDL_ttf library. Don't do this, perl will free this object for you.
 
 Example:
@@ -158,7 +158,7 @@ Example:
 
  my $font = SDL::TTF::open_font_index_RW($rwops_object, $free, $point_size, $face_index);
 
-This is the same as L<SDL::TTF::open_font_index>, except you can pass an L<SDL::RWOps>-object. If you pass true as C<$free>, the 
+This is the same as L<SDL::TTF::open_font_index|SDL::TTF/"open_font_index">, except you can pass an L<SDL::RWOps>-object. If you pass true as C<$free>, the 
 L<SDL::RWOps>-object will be freed by SDL_ttf library. Don't do this, perl will free this object for you.
 
 =head2 Attributes
@@ -323,7 +323,7 @@ B<Note>: at least SDL_ttf 2.0.10 needed
 
 Get the maximum pixel height of all glyphs of the loaded font. You may use this height for rendering text as close together vertically as 
 possible, though adding at least one pixel height to it will space it so they can't touch. Remember that SDL_ttf doesn't handle multiline 
-printing, so you are responsible for line spacing, see the L<SDL::TTF::font_line_skip> as well.
+printing, so you are responsible for line spacing, see the L<SDL::TTF::font_line_skip|SDL::TTF/"font_line_skip"> as well.
 
 =head4 font_ascent
 
@@ -359,7 +359,7 @@ Example:
 
  my $font_line_skip = SDL::TTF::font_line_skip($font);
  
-Get the recommended pixel height of a rendered line of text of the loaded font. This is usually larger than the L<SDL::TTF::font_height> of the 
+Get the recommended pixel height of a rendered line of text of the loaded font. This is usually larger than the L<SDL::TTF::font_height|SDL::TTF/"font_height"> of the 
 font.
 
 =head3 Face attributes
@@ -443,14 +443,14 @@ Example:
  my ($width, $height) = @{ SDL::TTF::size_text($font, $text) };
 
 Calculate the resulting surface size of the LATIN1 encoded text rendered using C<$font>. No actual rendering is done, however correct kerning 
-is done to get the actual width. The height returned is the same as you can get using L<SDL::TTF::font_height>.
+is done to get the actual width. The height returned is the same as you can get using L<SDL::TTF::font_height|SDL::TTF/"font_height">.
 
 =head4 size_utf8
 
  my ($width, $height) = @{ SDL::TTF::size_utf8($font, $text) };
 
 Calculate the resulting surface size of the UTF8 encoded text rendered using C<$font>. No actual rendering is done, however correct kerning is 
-done to get the actual width. The height returned in h is the same as you can get using L<SDL::TTF::font_height>.
+done to get the actual width. The height returned in h is the same as you can get using L<SDL::TTF::font_height|SDL::TTF/"font_height">.
 
 Note that the first example uses the same text as in the LATIN1 example, that is because plain ASCII is UTF8 compatible.
 
@@ -473,7 +473,7 @@ Examples:
  my ($width, $height) = @{ SDL::TTF::size_unicode($font, $text) };
 
 Calculate the resulting surface size of the UNICODE encoded text rendered using C<$font>. No actual rendering is done, however correct kerning 
-is done to get the actual width. The height returned in h is the same as you can get using L<SDL::TTF::font_height>.
+is done to get the actual width. The height returned in h is the same as you can get using L<SDL::TTF::font_height|SDL::TTF/"font_height">.
 
 C<$text> has to be:
 
@@ -505,7 +505,7 @@ You may use Unicode::String for this.
 
 Render the unicode encoded char onto a new surface, using the Solid mode. After that you can blit this surface to your display-surface.
 
-B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode>.
+B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode|SDL::TTF/"size_unicode">.
 
 B<Note>: L<See space-character bug|http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=374062>. You have to upgrade libfreetype2 to at least version 2.3.5
 
@@ -552,7 +552,7 @@ version 2.3.5
 
 Render the unicode encoded text onto a new surface, using the Solid mode. After that you can blit this surface to your display-surface.
 
-B<Note>: The unicode test has to be passed exactly like for L<SDL::TTF::size_unicode>.
+B<Note>: The unicode test has to be passed exactly like for L<SDL::TTF::size_unicode|SDL::TTF/"size_unicode">.
 
 B<Note>: L<See space-character bug|http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=374062>. You have to upgrade libfreetype2 to at least 
 version 2.3.5
@@ -566,7 +566,7 @@ version 2.3.5
 Render the unicode encoded char onto a new surface. The surface is filled with C<$background_color>. After that you can blit this surface to 
 your display-surface.
 
-B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode>.
+B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode|SDL::TTF/"size_unicode">.
 
 =head4 render_text_shaded
 
@@ -612,7 +612,7 @@ your display-surface.
 Render the unicode encoded text onto a new surface. The surface is filled with C<$background_color>. After that you can blit this surface to 
 your display-surface.
 
-B<Note>: The unicode text has to be passed exactly like for L<SDL::TTF::size_unicode>.
+B<Note>: The unicode text has to be passed exactly like for L<SDL::TTF::size_unicode|SDL::TTF/"size_unicode">.
 
 =head3 Blended
 
@@ -622,7 +622,7 @@ B<Note>: The unicode text has to be passed exactly like for L<SDL::TTF::size_uni
 
 Render the unicode encoded char onto a new surface. After that you can blit this surface to your display-surface.
 
-B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode>.
+B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode|SDL::TTF/"size_unicode">.
 
 =head4 render_text_blended
 
@@ -663,7 +663,7 @@ Render the UTF8 encoded text onto a new surface. After that you can blit this su
 
 Render the unicode encoded text onto a new surface. After that you can blit this surface to your display-surface.
 
-B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode>.
+B<Note>: The unicode char has to be passed exactly like for L<SDL::TTF::size_unicode|SDL::TTF/"size_unicode">.
 
 =head1 AUTHORS
 
