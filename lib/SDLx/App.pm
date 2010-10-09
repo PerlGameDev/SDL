@@ -52,6 +52,7 @@ sub new {
 	my $bas = $options{blue_accum_size}  || $options{bas} || 0;
 	my $aas = $options{alpha_accum_size} || $options{aas} || 0;
 	my $db  = $options{double_buffer}    || $options{db}  || 0;
+	my $eoq = $options{exit_on_quit}     || $options{eoq} || 0;
 
 	my $bs = $options{buffer_size}  || $options{bs} || 0;
 	my $st = $options{stencil_size} || $options{st} || 0;
@@ -119,6 +120,9 @@ sub new {
 	SDL::Video::wm_set_caption( $t, $it );
 	$self = $self->SDLx::Controller::new(%options);
 	bless $self, $class;
+
+	$self->add_event_handler( \&_exit_on_quit ) if $eoq;
+
 	return $self;
 }
 
@@ -198,6 +202,13 @@ sub attribute {
 	Carp::confess "SDLx::App::attribute failed to get GL attribute"
 		if ( $$returns[0] < 0 );
 	$$returns[1];
+}
+
+sub _exit_on_quit {
+   my ($event, $app) = @_;
+
+    $app->stop() if $event->type == SDL_QUIT;
+
 }
 
 1;
