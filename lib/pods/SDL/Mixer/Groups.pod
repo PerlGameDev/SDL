@@ -27,24 +27,24 @@ The following functions are affected by this setting:
 
 =item *
 
-L<SDL::Mixer::Channels::play_channel>
+L<SDL::Mixer::Channels::play_channel|SDL::Mixer::Channels/"play_channel">
 
 =item *
 
-L<SDL::Mixer::Channels::play_channel_timed>
+L<SDL::Mixer::Channels::play_channel_timed|SDL::Mixer::Channels/"play_channel_timed">
 
 =item *
 
-L<SDL::Mixer::Channels::fade_in_channel>
+L<SDL::Mixer::Channels::fade_in_channel|SDL::Mixer::Channels/"fade_in_channel">
 
 =item *
 
-L<SDL::Mixer::Channels::fade_in_channel_timed>
+L<SDL::Mixer::Channels::fade_in_channel_timed|SDL::Mixer::Channels/"fade_in_channel_timed">
 
 =back
 
 Returns: The number of channels reserved. Never fails, but may return less channels than you ask for, depending on the number of channels 
-previously allocated (see L<SDL::Mixer::Channels::allocate_channels>).
+previously allocated (see L<SDL::Mixer::Channels::allocate_channels|SDL::Mixer::Channels/"allocate_channels">).
 
 =head2 group_channel
 

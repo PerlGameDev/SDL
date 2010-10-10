@@ -87,7 +87,7 @@ Example:
 
 Remove the registered effect function from the effect list for channel.
 If the channel is active the registered effect will have its C<$done_callback> function called, if it was specified in 
-L<SDL::Mixer::Effects::register>.
+L<SDL::Mixer::Effects::register|SDL::Mixer::Effects/"register">.
 
 Returns: Zero on errors, such as invalid channel, or effect function not registered on channel. 
 
@@ -98,7 +98,7 @@ B<Note>: Do not use this on a threaded perl. This will crash.
  SDL::Mixer::Effects::unregister_all( $channel );
 
 This removes all effects registered to C<$channel>. If the channel is active all the registered effects will have their C<$done_callback> 
-functions called, if they were specified in L<SDL::Mixer::Effects::register>.
+functions called, if they were specified in L<SDL::Mixer::Effects::register|SDL::Mixer::Effects/"register">.
 
 Returns: Zero on errors, such as channel not existing. 
 
@@ -110,8 +110,9 @@ B<Note>: Do not use this on a threaded perl. This will crash.
 
 Hook a processor function to the postmix stream for post processing effects. You may just be reading the data and displaying it, or you may be 
 altering the stream to add an echo. This processor is never really finished, until you call it without arguments.
-There can only be one postmix function used at a time through this method. Use L<SDL::Mixer::Effects::register> with MIX_CHANNEL_POST to use multiple postmix processors.
-This postmix processor is run AFTER all the registered postmixers set up by L<SDL::Mixer::Effects::register>. 
+There can only be one postmix function used at a time through this method. Use L<SDL::Mixer::Effects::register|SDL::Mixer::Effects/"register"> 
+with MIX_CHANNEL_POST to use multiple postmix processors.
+This postmix processor is run AFTER all the registered postmixers set up by L<SDL::Mixer::Effects::register|SDL::Mixer::Effects/"register">. 
 
 B<Note>: Do not use this on a threaded perl. This will crash.
 
@@ -122,7 +123,7 @@ B<Note>: Do not use this on a threaded perl. This will crash.
 This effect simulates a simple attenuation of volume due to distance. The volume never quite reaches silence, even at max distance (C<255>).
 
 NOTE: Using a distance of C<0> will cause the effect to unregister itself from channel. You cannot unregister it any other way, unless you use 
-L<SDL::Mixer::Effects::unregister_all> on the channel.
+L<SDL::Mixer::Effects::unregister_all|SDL::Mixer::Effects/"unregister_all"> on the channel.
 
 Returns: Zero on errors, such as an invalid channel, or if Mix_RegisterEffect failed. 
 
@@ -130,14 +131,14 @@ Returns: Zero on errors, such as an invalid channel, or if Mix_RegisterEffect fa
 
  SDL::Mixer::Effects::set_panning( $channel, $left, $right );
 
-This effect will only work on stereo audio. Meaning you called L<SDL::Mixer::open_audio> with 2 channels. 
+This effect will only work on stereo audio. Meaning you called L<SDL::Mixer::open_audio|SDL::Mixer/"open_audio"> with 2 channels. 
 
 B<Note>: Setting both left and right to 255 will unregister the effect from channel. You cannot unregister it any other way, unless you use 
-L<SDL::Mixer::Effects::unregister_all> on the channel.
+L<SDL::Mixer::Effects::unregister_all|SDL::Mixer::Effects/"unregister_all"> on the channel.
 
 B<Note>: Using this function on a mono audio device will not register the effect, nor will it return an error status.
 
-Returns: Zero on errors, such as bad channel, or if L<SDL::Mixer::Effects::register> failed. 
+Returns: Zero on errors, such as bad channel, or if L<SDL::Mixer::Effects::register|SDL::Mixer::Effects/"register"> failed. 
 
 =head2 set_position
 
@@ -173,9 +174,9 @@ So you can see it goes clockwise starting at directly in front.
 C<$distance> is C<0>(close/loud) to C<255>(far/quiet).
 
 B<Note>: Using angle and distance of C<0>, will cause the effect to unregister itself from channel. You cannot unregister it any other way, 
-unless you use L<SDL::Mixer::Effects::unregister_all> on the channel.
+unless you use L<SDL::Mixer::Effects::unregister_all|SDL::Mixer::Effects/"unregister_all"> on the channel.
 
-Returns: Zero on errors, such as an invalid channel, or if C<SDL::Mixer::Effects::register> failed. 
+Returns: Zero on errors, such as an invalid channel, or if L<SDL::Mixer::Effects::register|SDL::Mixer::Effects/"register"> failed. 
 
 =head2 set_reverse_stereo
 
@@ -184,7 +185,7 @@ Returns: Zero on errors, such as an invalid channel, or if C<SDL::Mixer::Effects
 If you pass C<1> to C<$flip> it simple reverse stereo, swaps left and right channel sound.
 
 B<Note>: Using a flip of C<0>, will cause the effect to unregister itself from channel. You cannot unregister it any other way, unless you use 
-L<SDL::Mixer::Effects::register> on the channel. 
+L<SDL::Mixer::Effects::register|SDL::Mixer::Effects/"register"> on the channel. 
 
 =head1 AUTHORS
 
