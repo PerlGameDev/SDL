@@ -146,6 +146,9 @@ sub _array {
 
 sub surface { $_[0] }
 
+sub width { $_[0]->w }
+sub height { $_[0]->h }
+
 #WRAPPING
 
 sub clip_rect {
