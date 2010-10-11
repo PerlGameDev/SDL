@@ -76,4 +76,4 @@ sub write_xy {
     return;
 }
 
-42;
+1;
