@@ -2,6 +2,7 @@ package SDLx::Text;
 use SDL;
 use SDL::Video;
 use SDL::TTF;
+use SDLx::Validate;
 use Carp ();
 
 sub new {
@@ -11,6 +12,9 @@ sub new {
         or Carp::croak 'must provide font filename';
 
     my $color = $options{'color'} || [255, 0, 0];
+
+    $color = SDLx::Validate::list_rgba($color);
+
     my $size = $options{'size'} || 24;
 
     my $self = bless {}, ref($class) || $class;
@@ -25,7 +29,7 @@ sub new {
 
     SDL::TTF::init;
     $self->{_font} = SDL::TTF::open_font($file, $size);
-    Carp::croak 'Error opening font: ' . SDL::get_error
+    Carp::cluck 'Error opening font: ' . SDL::get_error
         unless $self->{_font};
 
     $self->{_color} = SDL::Color->new( @$color );
