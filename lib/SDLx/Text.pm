@@ -17,7 +17,7 @@ sub new {
 
 	my $color = $options{'color'} || [255, 0, 0];
 
-	$color = SDLx::Validate::list_rgba($color);
+	$color = SDLx::Validate::color($color);
 
 	my $size = $options{'size'} || 24;
 
@@ -38,7 +38,7 @@ sub new {
 	Carp::cluck 'Error opening font: ' . SDL::get_error
 		unless $self->{_font};
 
-	$self->{_color} = SDL::Color->new( @$color );
+	$self->{_color} = $color;
 
 	return $self;
 }
