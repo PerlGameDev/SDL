@@ -174,6 +174,13 @@ my %subsystems = (
 		},
 		libraries => [qw( SDL )],
 	},
+	ValidateX => {
+		file => {
+			from => 'src/SDLx/Validate.xs',
+			to   => 'lib/SDLx/Validate.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	InterfaceX => {
 		file => {
 			from => 'src/SDLx/Controller/Interface.xs',
