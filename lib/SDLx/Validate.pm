@@ -4,6 +4,17 @@ use strict;
 use warnings;
 use Carp;
 use Scalar::Util ();
+use Memoize;
+
+memoize('SDLx::Validate::rect');
+memoize('SDLx::Validate::_color_arrayref');
+memoize('SDLx::Validate::_color_number');
+memoize('SDLx::Validate::_color_format');
+memoize('SDLx::Validate::list_rgba');
+memoize('SDLx::Validate::list_rgb');
+memoize('SDLx::Validate::num_rgba');
+memoize('SDLx::Validate::num_rgb');
+
 
 sub surface {
 	my ($arg) = @_;
