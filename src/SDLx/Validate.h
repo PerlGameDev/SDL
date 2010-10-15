@@ -31,7 +31,7 @@ SV *_color_number( SV *color, SV *alpha )
 AV *_color_arrayref( AV *color, SV *alpha )
 {
     AV *retval = newAV();
-    int length = alpha ? 4 : 3;
+    int length = SvUV(alpha) != 0 ? 4 : 3;
     int i      = 0;
     for(i = 0; i < length; i++)
     {
