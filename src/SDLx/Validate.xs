@@ -45,7 +45,7 @@ SV* val__color_number( color, alpha)
 	
 	     }
 
-		RETVAL = newSViv( retval );
+		RETVAL = newSVuv( retval );
 	    
 	    
 	     
