@@ -1,4 +1,32 @@
 
+SDL_Color *bag_to_color( SV *bag )
+{
+    SDL_Color *color = NULL;
+
+    if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
+    {
+       void **pointers = (void **)(SvIV((SV *)SvRV( bag ))); 
+       color           = (SDL_Color *)(pointers[0]);
+    }
+    
+    return color;
+}
+
+char *_color_format( SV *color )
+{
+    char *retval = NULL;
+    if( !SvOK(color) || SvIOK(color) )
+        retval = "number";
+    else if( sv_derived_from(color, "ARRAY") )
+        retval = "arrayref";
+    else if( sv_isobject(color) && sv_derived_from(color, "SDL::Color") )
+        retval = "SDLx::Color";
+    else
+        warn("Color must be number or arrayref or SDLx::Color");
+
+    return retval;
+}
+
 SV *_color_number( SV *color, SV *alpha )
 {
     int          c      = SvIV(color);

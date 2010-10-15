@@ -84,20 +84,6 @@ sub _color_arrayref {
 	return \@valid;
 }
 
-sub num_rgb {
-	my ($color) = @_;
-	my $format = _color_format($color);
-	if ( $format eq 'number' ) {
-		no warnings 'uninitialized';
-		return _color_number($color, 0);
-	} elsif ( $format eq 'arrayref' ) {
-		my $c = _color_arrayref($color);
-		return ( $c->[0] << 16 ) + ( $c->[1] << 8 ) + ( $c->[2] );
-	} elsif ( $format eq 'SDLx::Color' ) {
-		return ( $color->r << 16 ) + ( $color->g << 8 ) + $color->b;
-	}
-}
-
 sub num_rgba {
 	my ($color) = @_;
 	my $format = _color_format($color);
