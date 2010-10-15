@@ -8,7 +8,7 @@
 #endif
 
 #include <SDL.h>
-#include <SDLx/Validate.h>
+#include "SDLx/Validate.h"
 
 MODULE = SDLx::Validate 	PACKAGE = SDLx::Validate    PREFIX = val_
 
