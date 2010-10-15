@@ -101,6 +101,7 @@ sub num_rgb {
 	my ($color) = @_;
 	my $format = _color_format($color);
 	if ( $format eq 'number' ) {
+		no warnings 'uninitialized';
 		return _color_number($color, 0);
 	} elsif ( $format eq 'arrayref' ) {
 		my $c = _color_arrayref($color);
@@ -114,6 +115,7 @@ sub num_rgba {
 	my ($color) = @_;
 	my $format = _color_format($color);
 	if ( $format eq 'number' ) {
+		no warnings 'uninitialized';
 		return _color_number( $color, 1 );
 	} elsif ( $format eq 'arrayref' ) {
 		my $c = _color_arrayref( $color, 1 );
@@ -127,6 +129,7 @@ sub list_rgb {
 	my ($color) = @_;
 	my $format = _color_format($color);
 	if ( $format eq 'number' ) {
+		no warnings 'uninitialized';
 		my $n = _color_number($color, 0);
 		return [ $n >> 16 & 0xFF, $n >> 8 & 0xFF, $n & 0xFF ];
 	} elsif ( $format eq 'arrayref' ) {
@@ -140,6 +143,7 @@ sub list_rgba {
 	my ($color) = @_;
 	my $format = _color_format( $color, 1 );
 	if ( $format eq 'number' ) {
+		no warnings 'uninitialized';
 		my $n = _color_number( $color, 1 );
 		return [ $n >> 24 & 0xFF, $n >> 16 & 0xFF, $n >> 8 & 0xFF, $n & 0xFF ];
 	} elsif ( $format eq 'arrayref' ) {
