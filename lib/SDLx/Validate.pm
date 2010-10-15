@@ -84,19 +84,6 @@ sub _color_arrayref {
 	return \@valid;
 }
 
-sub _color_format {
-	my ($color) = @_;
-	if ( !defined $color || Scalar::Util::looks_like_number($color) ) {
-		return 'number';
-	} elsif ( ref $color eq "ARRAY" ) {
-		return 'arrayref';
-	} elsif ( Scalar::Util::blessed($color) || $color->isa("SDL::Color") ) {
-		return 'SDLx::Color';
-	} else {
-		Carp::confess("Color must be number or arrayref or SDLx::Color");
-	}
-}
-
 sub num_rgb {
 	my ($color) = @_;
 	my $format = _color_format($color);
@@ -141,7 +128,7 @@ sub list_rgb {
 
 sub list_rgba {
 	my ($color) = @_;
-	my $format = _color_format( $color, 1 );
+	my $format = _color_format( $color );
 	if ( $format eq 'number' ) {
 		no warnings 'uninitialized';
 		my $n = _color_number( $color, 1 );
