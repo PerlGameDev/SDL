@@ -54,7 +54,7 @@ SV* val__color_number( color, alpha)
 	RETVAL
 
 AV *
-val__c_aref( color, ... )
+val__color_arrayref( color, ... )
     AV *color
     CODE:
         RETVAL = newAV();
@@ -84,5 +84,6 @@ val__c_aref( color, ... )
                     av_push(RETVAL, newSVuv(c));
             }
         }
+	sv_2mortal((SV*)RETVAL);
     OUTPUT:
         RETVAL
