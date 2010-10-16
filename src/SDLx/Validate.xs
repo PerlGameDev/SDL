@@ -56,7 +56,7 @@ val_num_rgb( color )
         }
         else if( 0 == strcmp("SDLx::Color", format) )
         {
-            SDL_Color *_color = bag_to_color( color );
+            SDL_Color *_color = (SDL_Color*) bag_to_obj( color );
 	    unsigned int v = ( (_color->r) << 16 ) + ( (_color->g) << 8 ) + _color->b;
             RETVAL            = newSVuv( v );
         }
@@ -82,7 +82,7 @@ val_num_rgba( color )
         }
         else if( 0 == strcmp("SDLx::Color", format) )
         {
-            SDL_Color *_color = bag_to_color( color );
+            SDL_Color *_color = (SDL_Color*)bag_to_obj( color );
             unsigned int v    = (((_color->r) << 24) + ((_color->g) << 16) + ((_color->b) << 8) + 0xFF) ;
             RETVAL            = newSVuv( v );
         }
@@ -111,7 +111,8 @@ SV *
 val_rect( r )
     SV* r
     CODE:
-        RETVAL = rect( r );
+	int new_ = 0;
+        RETVAL = rect( r, &new_ );
     OUTPUT:
         RETVAL
 

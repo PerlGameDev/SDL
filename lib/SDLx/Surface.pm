@@ -267,20 +267,6 @@ sub update {
 	return $surface;
 }
 
-sub draw_rect {
-	my ( $self, $rect, $color ) = @_;
-	$color = SDLx::Validate::map_rgba( $color, $self->format );
-	if ( defined $rect ) {
-		$rect = SDLx::Validate::rect($rect);
-	} else {
-		$rect = SDL::Rect->new( 0, 0, $self->w, $self->h );
-	}
-
-	SDL::Video::fill_rect( $self, $rect, $color )
-		and Carp::confess "Error drawing rect: " . SDL::get_error();
-	return $self;
-}
-
 sub draw_line {
 	my ( $self, $start, $end, $color, $antialias ) = @_;
 
