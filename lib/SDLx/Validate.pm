@@ -39,51 +39,6 @@ sub surfacex {
 	}
 }
 
-sub rect {
-	my ($arg) = @_;
-	Carp::confess("Wrong amount of arguments")
-		unless @_ == 1;
-	if ( !defined $arg ) {
-		return SDL::Rect->new( 0, 0, 0, 0 );
-	} elsif ( ref $arg eq "ARRAY" ) {
-		Carp::cluck("Rect arrayref had more than 4 values")
-			if @$arg > 4;
-		require SDL::Rect;
-		return SDL::Rect->new( map { $_ || 0 } @$arg[ 0 .. 3 ] );
-	} elsif ( Scalar::Util::blessed($arg) and $arg->isa("SDL::Rect") ) {
-		return $arg;
-	} else {
-		Carp::confess("Rect must be arrayref or SDL::Rect or undef");
-	}
-}
-
-
-sub _color_arrayref {
-	my ( $color, $alpha ) = @_;
-	my @valid;
-	my $length = $alpha ? 4 : 3;
-	foreach my $i ( 0 .. $length - 1 ) {
-		Carp::confess("All values in color arrayref must be numbers or undef")
-			unless !defined $color->[$i] || Scalar::Util::looks_like_number( $color->[$i] );
-		if ( !defined $color->[$i] ) {
-			if ( $i == 3 ) { # alpha
-				$valid[$i] = 0xFF;
-			} else {
-				$valid[$i] = 0;
-			}
-		} elsif ( $color->[$i] > 0xFF ) {
-			Carp::cluck("Number in color arrayref was greater than maximum expected: 0xFF");
-			$valid[$i] = 0xFF;
-		} elsif ( $color->[$i] < 0 ) {
-			Carp::cluck("Number in color arrayref was negative");
-			$valid[$i] = 0;
-		} else {
-			$valid[$i] = $color->[$i];
-		}
-	}
-	return \@valid;
-}
-
 sub num_rgba {
 	my ($color) = @_;
 	my $format = _color_format($color);

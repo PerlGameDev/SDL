@@ -62,3 +62,11 @@ val_num_rgb( color )
             XSRETURN_UNDEF;
     OUTPUT:
         RETVAL
+
+SV* 
+val_rect( r )
+    SV* r
+    CODE:
+	RETVAL = rect( r );
+    OUTPUT:
+	RETVAL
