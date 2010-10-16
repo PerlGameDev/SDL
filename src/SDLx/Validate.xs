@@ -70,3 +70,13 @@ val_rect( r )
         RETVAL = rect( r );
     OUTPUT:
         RETVAL
+
+SV *
+val_surface( s )
+    SV* s
+    CODE:
+        RETVAL = surface(s);
+        if(NULL == RETVAL)
+            XSRETURN_UNDEF;
+    OUTPUT:
+        RETVAL

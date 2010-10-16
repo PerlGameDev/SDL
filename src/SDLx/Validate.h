@@ -49,11 +49,21 @@ SV *rect( SV *rect)
         return rect;
     }
     else
-        warn("Rect must be number or arrayref or SDL::Rect or undef");
+        croak("Rect must be number or arrayref or SDL::Rect or undef");
 
     return retval;
 }
 
+SV *surface( SV *surface )
+{
+    if( sv_isobject(surface) && sv_derived_from(surface, "SDL::Surface"))
+    {
+        SvREFCNT_inc(surface);
+        return surface;
+    }
+    croak("Surface must be SDL::Surface or SDLx::Surface");
+    return NULL;
+}
 
 SDL_Color *bag_to_color( SV *bag )
 {
@@ -78,7 +88,7 @@ char *_color_format( SV *color )
     else if( sv_isobject(color) && sv_derived_from(color, "SDL::Color") )
         retval = "SDLx::Color";
     else
-        warn("Color must be number or arrayref or SDLx::Color");
+        croak("Color must be number or arrayref or SDLx::Color");
 
     return retval;
 }
@@ -92,19 +102,19 @@ SV *_color_number( SV *color, SV *alpha )
     if( !SvOK(color) || color < 0 )
     {
         if( color < 0 )
-        warn("Color was a negative number");
+        croak("Color was a negative number");
         retval = a == 1 ? 0x000000FF : 0;
     }
     else
     {
         if( a == 1 && (c > 0xFFFFFFFF) )
         {
-            warn("Color was number greater than maximum expected: 0xFFFFFFFF");
+            croak("Color was number greater than maximum expected: 0xFFFFFFFF");
             retval = 0xFFFFFFFF; 
         }
         else if ( a != 1 && ( c > 0xFFFFFF) )
         {
-            warn("Color was number greater than maximum expected: 0xFFFFFF");
+            croak("Color was number greater than maximum expected: 0xFFFFFF");
             retval = 0xFFFFFF;
         }
     }
@@ -128,12 +138,12 @@ AV *_color_arrayref( AV *color, SV *alpha )
             int c = SvIV(*av_fetch(color, i, 0));
             if( c > 0xFF )
             {
-                warn("Number in color arrayref was greater than maximum expected: 0xFF");
+                croak("Number in color arrayref was greater than maximum expected: 0xFF");
                 av_push(retval, newSVuv(0xFF));
             }
             else if( c < 0 )
             {
-                warn("Number in color arrayref was negative");
+                croak("Number in color arrayref was negative");
                 av_push(retval, newSVuv(0));
             }
             else
