@@ -76,14 +76,14 @@ val_num_rgba( color )
         }
         else if( 0 == strcmp("arrayref", format) )
         {
-            AV *c  = _color_arrayref( (AV *)SvRV(color), newSVuv(1) );
-	    unsigned int v = (SvUV(AvARRAY(c)[0]) << 24) + (SvUV(AvARRAY(c)[1]) << 16) + (SvUV(AvARRAY(c)[2]) << 8) + SvUV(AvARRAY(c)[3] );
-            RETVAL = newSVuv(v);
+            AV *c          = _color_arrayref( (AV *)SvRV(color), newSVuv(1) );
+            unsigned int v = (SvUV(AvARRAY(c)[0]) << 24) + (SvUV(AvARRAY(c)[1]) << 16) + (SvUV(AvARRAY(c)[2]) << 8) + SvUV(AvARRAY(c)[3] );
+            RETVAL         = newSVuv(v);
         }
         else if( 0 == strcmp("SDLx::Color", format) )
         {
             SDL_Color *_color = bag_to_color( color );
-	    unsigned int v = (((_color->r) << 24) + ((_color->g) << 16) + ((_color->b) << 8) + 0xFF) ;
+            unsigned int v    = (((_color->r) << 24) + ((_color->g) << 16) + ((_color->b) << 8) + 0xFF) ;
             RETVAL            = newSVuv( v );
         }
         else
