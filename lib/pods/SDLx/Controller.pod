@@ -9,19 +9,22 @@ Extension, Controller
 
 =head1 SYNOPSIS
 
-  use SDLx::Controller;
+ use SDLx::Controller;
 
-  # create our controller object
-  my $app = SDLx::Controller->new;
+ # create our controller object
+ my $app = SDLx::Controller->new;
+ 
+ # we could also do:
+ my $app = SDLx::App->new;
+ # because App is also a controller
 
-  # register some callbacks
-  $app->add_event_handler( \&on_event );
-  $app->add_move_handler( \&on_move );
-  $app->add_show_handler( \&on_show );
+ # register some callbacks
+ $app->add_event_handler( \&on_event );
+ $app->add_move_handler( \&on_move );
+ $app->add_show_handler( \&on_show );
 
-  # run our game loop
-  $app->run;
-
+ # run our game loop
+ $app->run;
 
 =head2 DESCRIPTION
 
@@ -64,11 +67,11 @@ If you lower the C<dt>, everything will move faster than it did with it set high
 This is useful to add slo-mo and fast-forward features to the game, all you would have to do is change the C<dt>.
 
 C<min_t> specifies the minimum time, in seconds, that has to accumulate before any move or show handlers are called, and defaults to 1 / 60.
-Having the C<min_t> to 1 / 60 ensures that the controller can update the screen at a maximum of 60 times per second.
+Having the C<min_t> at 1 / 60 ensures that the controller can update the screen at a maximum of 60 times per second.
 A "V-Sync" such as this is necessary to prevent video "tear", which occurs when the app is updating faster than the monitor can display.
-Setting it to 0, as in the example, will let the app run as fast as it possibly can.
+Setting it to 0, as seen above, will let the app run as fast as it possibly can.
 
-C<event> is a SDL::Event object that events going to the event callbacks are polled in to. Defaults to C<< SDL::Event->new() >>.
+C<event> is a SDL::Event object that events going to the event callbacks are polled in to. It defaults to C<< SDL::Event->new() >>.
 
 All parameters are optional.
 
@@ -105,19 +108,24 @@ Attempts to pause the application with a call to C<SDL::Events::wait_event>. See
 Takes 1 argument which is a callback. The application waits for the next event with C<wait_event>.
 When one is recieved, it is passed to the callback as the first argument, along with the C<SDLx::Controller> object as the second argument.
 If the callback then returns a true value, C<pause> will return.
-If the callback returns a false value, C<pause> will indefinitely wait for more events, repeating the process, until the callback returns true.
+If the callback returns a false value, C<pause> will repeat the process.
 
 This can be used to easily implement a pause when the app loses focus:
 
- sub focus {
-     my ($e, $controller) = @_;
-     if($e->type == SDL_ACTIVEEVENT) {
+ sub window {
+     my ($e, $app) = @_;
+     if($e->type == SDL_QUIT) {
+		 $app->stop;
+         # quit handling is here so that the app
+         # can be stopped while paused
+     }
+     elsif($e->type == SDL_ACTIVEEVENT) {
          if($e->active_state & SDL_APPINPUTFOCUS) {
              if($e->active_gain) {
                  return 1;
              }
              else {
-                 $controller->pause(\&focus);
+                 $app->pause(\&window);
                  # recursive, but only once since the window
                  # can't lose focus again without gaining is first
              }
@@ -144,10 +152,10 @@ The second is the C<SDLx::Controller> object.
  sub stop {
     my ($event, $app) = @_;
     if($event->type == SDL_QUIT) {
-        $controller->stop;
+        $app->stop;
     }
  }
- $controller->add_event_handler(\&stop);
+ $app->add_event_handler(\&stop);
 
 =head2 add_move_handler
 
@@ -159,7 +167,7 @@ and once more for any remaining time less than C<dt>.
 The first argument passed to the callbacks is the portion of the step, which will be 1 for a full step, and less than 1 for a partial step.
 Movement values should be multiplied by this value.
 The full steps correspond to the amount of C<dt> passed between calls, and the partial step corresponds to the call with the remaining time less than C<dt>.
-The argument can be 0 if no time has passed since the last cycle. Set a C<min_t> if you need to protect against this.
+The argument can be 0 if no time has passed since the last cycle. If you need to protect against this, set a C<min_t>, or put a C<< return unless $_[0] >> at the start of every move handler.
 
 The second argument passed to the callbacks is the C<SDLx::Controller> object.
 The third is the total amount of time passed since the call of C<run>.
@@ -179,7 +187,7 @@ Register a callback to render objects. You can add as many subs as you need.
 Returns the order queue number of the added callback.
 All registered callbacks will be triggered in order, once per run of the C<run> loop.
 
-The first argument passed is the number of ticks since the previous call.
+The first argument passed is the time, in seconds, since the previous call.
 The second is the C<SDLx::Controller> object.
 
  sub show_ball {

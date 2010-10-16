@@ -181,7 +181,7 @@ Andy Bakun <sdlperl@thwartedefforts.org>
 
 Benedikt Meurer <bmeurer@fwdn.de>
 
-Blaise Roth (Blaizer) <blaiseroth@gmail.com>
+Blaise Roth (Blaizer) <blaizer@cpan.org>
 
 Breno G. de Oliveira (garu)
 
