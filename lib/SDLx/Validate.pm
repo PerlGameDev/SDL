@@ -8,35 +8,29 @@ require DynaLoader;
 our @ISA = qw(Exporter DynaLoader);
 
 
-use Carp;
+use Carp ();
 use Scalar::Util ();
 
 sub surface {
 	my ($arg) = @_;
-	Carp::confess("Wrong amount of arguments")
-		unless @_ == 1;
 	if ( Scalar::Util::blessed($arg) and $arg->isa("SDL::Surface") ) {
 		return $arg;
-	} elsif ( Scalar::Util::blessed($arg) and $arg->isa("SDLx::Surface") ) {
-		require SDLx::Surface;
-		return $arg->surface();
-	} else {
-		Carp::confess("Surface must be SDL::Surface or SDLx::Surface");
 	}
+	Carp::confess("Surface must be SDL::Surface or SDLx::Surface");
 }
 
 sub surfacex {
 	my ($arg) = @_;
-	Carp::confess("Wrong amount of arguments")
-		unless @_ == 1;
-	if ( Scalar::Util::blessed($arg) and $arg->isa("SDL::Surface") ) {
-		require SDLx::Surface;
-		return SDLx::Surface->new( surface => $arg );
-	} elsif ( Scalar::Util::blessed($arg) and $arg->isa("SDLx::Surface") ) {
-		return $arg;
-	} else {
-		Carp::confess("Surface must be SDL::Surface or SDLx::Surface");
+	if ( Scalar::Util::blessed($arg)) {
+		if ( $arg->isa("SDLx::Surface") ) {
+			return $arg;
+		}
+		if( $arg->isa("SDL::Surface") ) {
+			require SDLx::Surface;
+			return SDLx::Surface->new( surface => $arg );
+		}
 	}
+	Carp::confess("Surface must be SDL::Surface or SDLx::Surface");
 }
 
 sub num_rgba {
