@@ -64,6 +64,30 @@ val_num_rgb( color )
         RETVAL
 
 SV *
+val_num_rgba( color )
+    SV *color
+    CODE:
+        char *format = _color_format( color );
+        if( 0 == strcmp("number", format) )
+        {
+            RETVAL = _color_number(color, newSVuv(1));
+        }
+        else if( 0 == strcmp("arrayref", format) )
+        {
+            AV *c  = _color_arrayref( (AV *)SvRV(color), newSVuv(1) );
+            RETVAL = newSVuv((SvUV(AvARRAY(c)[0]) << 24) + (SvUV(AvARRAY(c)[1]) << 16) + (SvUV(AvARRAY(c)[2]) << 8) + SvUV(AvARRAY(c)[3]));
+        }
+        else if( 0 == strcmp("SDLx::Color", format) )
+        {
+            SDL_Color *_color = bag_to_color( color );
+            RETVAL            = newSVuv(((_color->r) << 24) + ((_color->g) << 16) + ((_color->b) << 8) + 0xFF);
+        }
+        else
+            XSRETURN_UNDEF;
+    OUTPUT:
+        RETVAL
+
+SV *
 val_rect( r )
     SV* r
     CODE:
