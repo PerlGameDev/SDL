@@ -97,7 +97,7 @@ SV *_color_number( SV *color, SV *alpha )
 {
     int    c      = SvIV(color);
     int    a      = SvIV(alpha);
-    Uint32 retval = SvUV(color);
+    unsigned int retval = SvUV(color);
 
     if( !SvOK(color) || color < 0 )
     {
