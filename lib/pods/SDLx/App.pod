@@ -36,6 +36,7 @@ This is the manual way of doing things
     }
 
 An alternative to the manual Event processing is through the L<SDLx::Controller> module. L<SDLx::App> is a Controller so see the CALLBACKS section below.
+
 =head1 DESCRIPTION
 
 L<SDLx::App> controls the root window of the of your SDL based application.

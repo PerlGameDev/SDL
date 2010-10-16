@@ -133,21 +133,19 @@ sub set_file_flags {
 
 	while ( my ( $subsystem, $param ) = each %build_systems ) {
 		my $sub_file = $self->notes('subsystems')->{$subsystem}{file}{to};
+		my $extra_compiler_flags = [
+			( split( ' ', $arch . $debug . $self->notes('sdl_cflags') ) ),
+			@{ $param->{defines} },
+		];
+		push(@{$extra_compiler_flags}, '-DUSE_THREADS') if defined $Config{usethreads};
+		push(@{$extra_compiler_flags}, '-fPIC')         if $^O ne 'MSWin32';
 		$file_flags{$sub_file} = {
-			extra_compiler_flags => [
-				( split( ' ', $arch . $debug . $self->notes('sdl_cflags') ) ),
-				@{ $param->{defines} },
-				(   defined $Config{usethreads}
-					? ( '-DUSE_THREADS', '-fPIC' )
-					: ('-fPIC')
-				),
-			],
+			extra_compiler_flags => $extra_compiler_flags,
 			extra_linker_flags => [
 				( split( ' ', $self->notes('sdl_libs') ) ),
 				@{ $param->{links} },
 			],
-			},
-			;
+		};
 	}
 	$self->notes( 'file_flags' => \%file_flags );
 }

@@ -77,67 +77,67 @@ Available type constants:
 
 =item *
 
-L<SDL_ACTIVEEVENT|/active> - Application visibility event structure 
+L<SDL_ACTIVEEVENT|/Application_visibility_events> - Application visibility event structure 
 
 =item *
 
-L<SDL_KEYDOWN|/active> - Keyboard event structure 
+L<SDL_KEYDOWN|/Keyboard_events> - Keyboard event structure 
 
 =item *
 
-L<SDL_KEYUP|/active> - Keyboard event structure 
+L<SDL_KEYUP|/Keyboard_events> - Keyboard event structure 
 
 =item *
 
-L<SDL_MOUSEMOTION|/active> - Mouse motion event structure 
+L<SDL_MOUSEMOTION|/Mouse_motion_events> - Mouse motion event structure 
 
 =item *
 
-L<SDL_MOUSEBUTTONDOWN|/active> - Mouse button event structure 
+L<SDL_MOUSEBUTTONDOWN|/Mouse_button_events> - Mouse button event structure 
 
 =item *
 
-L<SDL_MOUSEBUTTONUP|/button> - Mouse button event structure 
+L<SDL_MOUSEBUTTONUP|/Mouse_button_events> - Mouse button event structure 
 
 =item *
 
-L<SDL_JOYAXISMOTION|/active> - Joystick axis motion event structure 
+L<SDL_JOYAXISMOTION|/Joystick_axis_events> - Joystick axis motion event structure 
 
 =item *
 
-L<SDL_JOYBALLMOTION|/active> - Joystick trackball motion event structure 
+L<SDL_JOYBALLMOTION|/Joystrick_trackball_events> - Joystick trackball motion event structure 
 
 =item *
 
-L<SDL_JOYHATMOTION|/active> - Joystick hat position change event structure 
+L<SDL_JOYHATMOTION|/Joystick_hat_events> - Joystick hat position change event structure 
 
 =item *
 
-L<SDL_JOYBUTTONDOWN|/active> - Joystick button event structure 
+L<SDL_JOYBUTTONDOWN|/Joystick_button_events> - Joystick button event structure 
 
 =item *
 
-L<SDL_JOYBUTTONUP|/active> - Joystick button event structure 
+L<SDL_JOYBUTTONUP|/Joystick_button_events> - Joystick button event structure 
 
 =item *
 
-L<SDL_VIDEORESIZE|/active> - Window resize event structure 
+L<SDL_VIDEORESIZE|/Window_resize_events> - Window resize event structure 
 
 =item *
 
-L<SDL_VIDEOEXPOSE|/active> - Window expose event 
+L<SDL_VIDEOEXPOSE|/Window_expose_events> - Window expose event 
 
 =item *
 
-L<SDL_QUIT|/active> - Quit requested event 
+L<SDL_QUIT|/Quit_event> - Quit requested event 
 
 =item *
 
-L<SDL_USEREVENT|/active> - A user-defined event type 
+L<SDL_USEREVENT|/User_defined_events> - A user-defined event type 
 
 =item *
 
-L<SDL_SYSWMEVENT|/active> - Platform-dependent window manager event. 
+L<SDL_SYSWMEVENT|/System_window_manager_events> - Platform-dependent window manager event. 
 
 =back
 
@@ -281,7 +281,7 @@ then an C<SDL_RELEASED> when released and pressed again. For these keys C<KEYUP>
 analogous to the state of the caps lock and num lock LEDs rather than the keys themselves. 
 These special cases are required for compatibility with Sun workstations.
 
-B<Note:> Repeating C<SDL_KEYDOWN> events will occur if key repeat is enabled (see C<SDL_EnableKeyRepeat>). 
+B<Note:> Repeating C<SDL_KEYDOWN> events will occur if key repeat is enabled (see L<SDL::Events::enable_key_repeat|SDL::Events/"enable_key_repeat">). 
 
 =head3 key_state
 
@@ -315,7 +315,7 @@ C<mod> stores the current state of the keyboard modifiers as explained in SDL_Ge
 
 =head3 key_unicode
 
-The C<unicode> field is only used when UNICODE translation is enabled with SDL_EnableUNICODE. 
+The C<unicode> field is only used when UNICODE translation is enabled with L<SDL::Events::enable_unicode|SDL::Events/"enable_unicode">. 
 If C<unicode> is non-zero then this is the UNICODE character corresponding to the keypress. 
 If the high 9 bits of the character are 0, then this maps to the equivalent ASCII character:
 
@@ -343,7 +343,7 @@ button states (C<motion_state>).
 
 =head3 motion_state
 
-The button state can be interpreted using the C<SDL_BUTTON> macro (see SDL_GetMouseState). 
+The button state can be interpreted using the C<SDL_BUTTON> macro (see L<SDL::Events::get_mouse_state|SDL::Events/"get_mouse_state">). 
 
 =head3 motion_x, motion_y
 
@@ -359,9 +359,9 @@ This is currently only implemented on Windows and Linux/Unix-alikes.
 
 =head2 Mouse button events
 
-When a mouse button press or release is detected the number of the button pressed (from 1 to 255, 
-with 1 usually being the left button and 2 the right) is placed into C<button_button>, the position of the mouse 
-when this event occured is stored in the C<button_x> and the C<button_y> fields. Like SDL_KeyboardEvent, 
+When a mouse button press or release is detected, the number of the button pressed (from 1 to 255, 
+with 1 usually being the left button and 2 the right) is placed into C<button_button>. The position of the mouse 
+when this event occured is stored in the C<button_x> and the C<button_y> fields. Like a keyboard event,
 information on whether the event was a press or a release event is stored in both the C<button_type> 
 and C<button_state> fields, but this should be obvious.
 
@@ -539,8 +539,8 @@ programmer, the only requirement is that type is a value from C<SDL_USEREVENT> t
 
  my $event = SDL::Event->new();
     $event->type ( SDL_USEREVENT + 3 );
-    $event->event_code(10);
-    $event->data1('hello event');
+    $event->user_code(10);
+    $event->user_data1('hello event');
 
  SDL::Events::push_event($event);
 

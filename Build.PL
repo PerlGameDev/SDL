@@ -174,6 +174,13 @@ my %subsystems = (
 		},
 		libraries => [qw( SDL )],
 	},
+	ValidateX => {
+		file => {
+			from => 'src/SDLx/Validate.xs',
+			to   => 'lib/SDLx/Validate.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	InterfaceX => {
 		file => {
 			from => 'src/SDLx/Controller/Interface.xs',
@@ -554,7 +561,7 @@ my $build = $package->new(
 	dist_version_from  => 'lib/SDL.pm',
 	configure_requires => {
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL'         => '1.414',
+		'Alien::SDL'         => '1.418',
 		'File::Find'         => '0',
 		'File::ShareDir'     => '0',
 		'Tie::Simple'        => '0',
@@ -564,7 +571,7 @@ my $build = $package->new(
 		'Test::Simple'      => '0.88',
 		'Capture::Tiny'     => '0',
 		'Test::Most'        => '0.21',
-		'Alien::SDL'        => '1.414',
+		'Alien::SDL'        => '1.418',
 		'File::ShareDir'    => '0',
 		'Tie::Simple'       => '0'
 	},

@@ -123,6 +123,9 @@ sub get_pixel {
 
 sub set_pixel {
 	my ( $self, $y, $x, $new_value ) = @_;
+
+	$new_value = SDLx::Validate::num_rgba($new_value);
+
 	SDLx::Surface::set_pixel_xs( $self, $x, $y, $new_value );
 }
 
@@ -142,6 +145,9 @@ sub _array {
 #ATTRIBUTE
 
 sub surface { $_[0] }
+
+sub width { $_[0]->w }
+sub height { $_[0]->h }
 
 #WRAPPING
 

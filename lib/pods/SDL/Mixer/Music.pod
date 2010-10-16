@@ -15,7 +15,7 @@ Mixer
 
  my $music = SDL::Mixer::Music::load_MUS( $file );
 
-C<load_MUS> loads a music file into a C<SDL::Mixer::MixMusic> structure. This can be passed to L<SDL::Mixer::Music::play_music>.
+C<load_MUS> loads a music file into a C<SDL::Mixer::MixMusic> structure. This can be passed to L<play_music|SDL::Mixer::Music/"play_music">.
 
 =head2 hook_music
 
@@ -30,7 +30,7 @@ Using a custom music player and the internal music player is not possible, the c
 
 To stop the custom music player call C<hook_music()> without arguments.
 
-B<Note>: NEVER call C<SDL::Mixer> functions, nor L<SDL::Audio::lock>, from a callback function.
+B<Note>: NEVER call C<SDL::Mixer> functions, nor L<SDL::Audio::lock|SDL::Audio/"lock">, from a callback function.
 
 B<Note>: At program termination also call C<SDL::Mixer::Music::hook_music()> to stop this callback.
 
@@ -58,10 +58,11 @@ Example:
 
  SDL::Mixer::Music::hook_music_finished( 'main::callback' );
 
-This callback is called when music called by e.g. L<SDL::Mixer::Music::play_music> or L<SDL::Mixer::Music::fade_in_music> stops naturally. 
+This callback is called when music called by e.g. L<SDL::Mixer::Music::play_music|SDL::Mixer::Music/"play_music"> or 
+L<SDL::Mixer::Music::fade_in_music|SDL::Mixer::Music/"fade_in_music"> stops naturally. 
 This happens when the music is over or is fading out.
 
-B<Note>: If you play music via L<SDL::Mixer::Music::hook_music>, this callback will never be called.
+B<Note>: If you play music via L<SDL::Mixer::Music::hook_music|SDL::Mixer::Music/"hook_music">, this callback will never be called.
 
 Example:
 
@@ -88,7 +89,7 @@ Example:
 
  my $position = SDL::Mixer::Music::get_music_hook_data();
 
-Returns the C<position> (first) parameter that will be passed to L<SDL::Mixer::Music::hook_music>'s callback.
+Returns the C<position> (first) parameter that will be passed to L<SDL::Mixer::Music::hook_music|SDL::Mixer::Music/"hook_music">'s callback.
 
 =head2 play_music
 
@@ -110,7 +111,7 @@ Example:
 
  my $music = SDL::Mixer::Music::fade_in_music( $mix_music, $loops, $ms );
 
-Same as L<SDL::Mixer::Music::play_music> but you can specify the fade-in time by C<$ms>.
+Same as L<SDL::Mixer::Music::play_music|SDL::Mixer::Music/"play_music"> but you can specify the fade-in time by C<$ms>.
 
 =head2 fade_out_music
 
@@ -202,7 +203,7 @@ Jumps to position seconds from the beginning of the song.
 =item MP3
 
 Jumps to position seconds from the current position in the stream.
-So you may want to call L<SDL::Mixer::Music::rewind_music> before this.
+So you may want to call L<SDL::Mixer::Music::rewind_music|SDL::Mixer::Music/"rewind_music"> before this.
 Does not go in reverse... negative values do nothing. 
 
 =back

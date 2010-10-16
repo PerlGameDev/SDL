@@ -10,7 +10,7 @@ GFX
 =head1	DESCRIPTION
 
 All functions take an SDL::Surface object as first parameter. This can be a new surface that will be blittet afterwads, can be an surface 
-obtained by L<SDL::Video::set_video_mode> or can be an L<SDLx::App>.
+obtained by L<SDL::Video::set_video_mode|SDL::Video/"set_video_mode"> or can be an L<SDLx::App>.
 
 The C<color> values for the C<_color> functions are C<0xRRGGBBAA> (32bit), even if the surface uses e. g. 8bit colors.
 

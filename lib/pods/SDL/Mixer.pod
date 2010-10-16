@@ -163,7 +163,7 @@ of SDL should take this parameter only as a hint, then read back the value that 
 desired audio type is not supported. 
 
 B<Note>: When already initialized, this function will not re-initialize SDL_mixer, nor fail. It will merely increment the number of times 
-L<SDL::Mixer::close_audio> must be called to actually get it to uninitialize. This serves as a very simplistic method for multiple application 
+L<SDL::Mixer::close_audio|SDL::Mixer/"close_audio"> must be called to actually get it to uninitialize. This serves as a very simplistic method for multiple application 
 components to use SDL_mixer without necessitating a great deal of inter-component awareness. Be warned however that in such a situation, the 
 latest components to initialize SDL_mixer will probably not get the SDL_mixer settings they're expecting. 
 

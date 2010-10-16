@@ -55,7 +55,7 @@ If a surface is passed to 'surface =>' that is loaded. Otherwise you can define 
 
 =head2 display
 
-If L<SDLx::App::new> or L<SDL::Video::get_video_mode> called before then:
+If L<SDLx::App::new|SDLx::App/"new"> or L<SDL::Video::get_video_mode|SDL::Video/"get_video_mode"> called before then:
 
  my $appx = SDLx::Surface::display(); 
 
@@ -69,7 +69,7 @@ or you can also pass flags and depth.
 
 You can also use the keys C<w> and C<h> in place of C<width> and C<height>, as with C<new>.
 
-Get or create the main display surface and attach to a SDLx::Surface.
+Get or create the main display surface and attach to a C<SDLx::Surface>.
 
 =head2 duplicate
 
@@ -87,8 +87,8 @@ Returns the inner SDL::Surface's respective attribute. See C<SDL::Surface>.
 
 =head2 clip_rect
 
-Sets the passed C<SDL::Rect> as the new clip_rect for the surface. Returns the SDL::Surface's clip_rect. See C<SDL::Video::get_clip_rect> and C<SDL::Video::set_clip_rect>.
-
+Sets the passed C<SDL::Rect> as the new clip_rect for the surface. Returns the SDL::Surface's clip_rect. See 
+L<SDL::Video::get_clip_rect|SDL::Video/"get_clip_rect"> and L<SDL::Video::set_clip_rect|SDL::Video/"set_clip_rect">.
 =head1 EXTENSIONS
 
 =head2 load
@@ -117,8 +117,9 @@ Returns the new Surface.
 
  $sdlx_surface->blit( $dest, $src_rect, $dest_rect );
 
-Blits SDLx::Surface onto $dest surface. 
-$src_rect or $dest_rect are optional. If $src_rect is ommited, it will be the size of the entire surface. If $dest_rect is ommited, it will be blitted at C<(0, 0)>. $src_rect or $dest_rect can be array refs or SDL::Rect. $dest can be SDLx::Surface or SDL::Surface.
+Blits C<SDLx::Surface> onto $dest surface. 
+$src_rect or $dest_rect are optional. If $src_rect is ommited, it will be the size of the entire surface. If $dest_rect is ommited, 
+it will be blitted at C<(0, 0)>. $src_rect or $dest_rect can be array refs or C<SDL::Rect>. $dest can be C<SDLx::Surface> or C<SDL::Surface>.
 
 Returns $self
 
@@ -131,7 +132,7 @@ This is useful when the surface you have isn't an C<SDLx::Surface>, but the surf
 
 =head2 flip
 
-Applies L<SDL::Video::flip> to the Surface, with error checking.
+Applies L<SDL::Video::flip|SDL::Video/"flip"> to the Surface, with error checking.
 
 Returns $self
 
@@ -142,7 +143,8 @@ Returns $self
  
  $sdlx_surface->update( [ SDL::Rect->new(0,0,1,2) ... ]); # defined rects are updated
 
-Applies L<SDL::Video::update_rect> for no rect or 1 array ref. Applies L<SDL::Video::update_rects> for array of L<SDL::Rect>s. 
+Applies L<SDL::Video::update_rect|SDL::Video/"update_rect"> for no rect or 1 array ref. Applies 
+L<SDL::Video::update_rects|SDL::Video/"update_rects"> for array of L<SDL::Rect>s. 
 
 Returns $self
 

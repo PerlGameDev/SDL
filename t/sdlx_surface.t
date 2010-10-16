@@ -68,6 +68,10 @@ foreach my $a (@surfs) {
 is( $surfs[0]->[1][2], 0, 'Checking source pixel is 0' );
 is( $surfs[1]->[1][2], 0, 'Checking dest pixel is 0' );
 
+$surfs[0]->[4][4] = [255,255,0,255];
+
+is( $surfs[0]->[4][4] , 0xFFFF00FF, "Surface can set pixel with other color values");
+
 $surfs[0]->[1][2] = 0x00FF00FF;
 
 is( $surfs[0]->[1][2], 0x00FF00FF, 'Checking that source pixel got written' );

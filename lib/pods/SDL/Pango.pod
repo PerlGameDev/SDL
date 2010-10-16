@@ -101,7 +101,7 @@ Neutral
 
  SDL::Pango::init();
 
-Initialize the Glib and Pango API. This must be called before using other functions in this library, excepting L<SDL::Pango::was_init>. 
+Initialize the Glib and Pango API. This must be called before using other functions in this library, excepting L<SDL::Pango::was_init|SDL::Pango/"was_init">. 
 SDL does not have to be initialized before this call.
 
 Returns: always C<0>. 
@@ -110,7 +110,7 @@ Returns: always C<0>.
 
  my $was_init = SDL::Pango::was_init();
 
-Query the initilization status of the Glib and Pango API. You may, of course, use this before L<SDL::Pango::init> to avoid initilizing twice 
+Query the initilization status of the Glib and Pango API. You may, of course, use this before L<SDL::Pango::init|SDL::Pango/"init"> to avoid initilizing twice 
 in a row.
 
 Returns: Non-zero when already initialized. Zero when not initialized.
@@ -212,7 +212,7 @@ Draws the text or markup to an existing surface at position C<$x>/C<$y>.
 
  SDL::Pango::set_surface_create_args($context, $flags, $bits, $r_mask, $g_mask, $b_mask, $a_mask);
 
-Sets the argumet that are used when creating a surface via L<SDL::Pango::create_surface_draw>.
+Sets the argumet that are used when creating a surface via L<SDL::Pango::create_surface_draw|SDL::Pango/"create_surface_draw">.
 
 Example:
 
@@ -230,7 +230,7 @@ Example:
 
  my $surface = SDL::Pango::create_surface_draw($context);
 
-Creates a new surface and draws the text/markup. You can specify the attributes of the surfaces using L<SDL::Pango::set_surface_create_args>.
+Creates a new surface and draws the text/markup. You can specify the attributes of the surfaces using L<SDL::Pango::set_surface_create_args|SDL::Pango/"set_surface_create_args">.
 
 =head1 AUTHORS
 

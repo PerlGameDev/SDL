@@ -3,6 +3,10 @@
 
 SDLx::Controller - Handles the loops for events, movement and rendering
 
+=head1 CATEGORY
+
+Extension, Controller
+
 =head1 SYNOPSIS
 
   use SDLx::Controller;

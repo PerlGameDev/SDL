@@ -153,7 +153,7 @@ if $smooth is set the sprite is antialiased. This may mess with your alpha_key.
 
 =item * alpha_key => SDL::Color
 
-MUST CALL L<< SDL::Video::get_video_mode >> prior to this. 
+MUST CALL L<SDL::Video::get_video_mode|SDL::Video/"get_video_mode"> prior to this. 
 
 Uses the provided L<< SDL::Color >> object (or an array reference with red,
 green and blue values) as the color to be turned into transparent

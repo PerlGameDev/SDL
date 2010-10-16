@@ -1,5 +1,13 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.519
+	- Removed build option -fPIC for windows [FROGGS]
+	- Throw a warning for missing thread support instead of compile these funtions [FROGGS]
+	- SDLx::Surface has alias for w,h [kthakore]
+	- SDLx::Surface can use array color format for pixels
+	- SDLx::Text added [garu]
+	- SDLx::App->new() has exit on quit option 
+
 * 2.518
 	- Major refactor of SDLx::Controller [Blaizer]
 	- Refactor SDLx::Surface code [Blaizer]

@@ -69,7 +69,6 @@ pango_get_layout_height(context)
 void
 pango_set_default_color(context, ...)
 	SDLPango_Context *context
-	/*const SDLPango_Matrix *color_matrix */
 	CODE:
 		if(items == 3) /* context, foreground, background */
 		{

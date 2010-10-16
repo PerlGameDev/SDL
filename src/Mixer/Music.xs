@@ -134,6 +134,8 @@ mixmus_free_music( music )
 	CODE:
 		Mix_FreeMusic(music);
 
+#ifdef USE_THREADS
+
 void
 mixmus_hook_music( func = NULL, arg = 0 )
 	char *func
@@ -174,6 +176,23 @@ mixmus_hook_music_finished( func = NULL )
 		}
 		else
 			Mix_HookMusicFinished(NULL);
+
+#else
+
+void
+mixmus_hook_music( func = NULL, arg = 0 )
+	char *func
+	int arg
+	CODE:
+		warn("Perl need to be compiled with 'useithreads' for SDL::Mixer::Music::hook_music( func, arg )");
+
+void
+mixmus_hook_music_finished( func = NULL )
+	char *func
+	CODE:
+		warn("Perl need to be compiled with 'useithreads' for SDL::Mixer::Music::hook_music_finished( func )");
+
+#endif
 
 int
 mixmus_get_music_hook_data()
