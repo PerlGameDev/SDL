@@ -1,3 +1,4 @@
+#include <SDL.h>
 
 SV *obj_make( int size_ptr,  void* obj, char* CLASS )
 {
@@ -233,5 +234,33 @@ AV* __list_rgba( SV* color )
         }
 
 	return RETVAL;
+
+}
+
+
+unsigned int __map_rgb( SV* color, SDL_PixelFormat* format )
+{
+	Uint8 r,b,g;
+	AV* a;
+	a = __list_rgb( color );
+	r = SvUV(*av_fetch(a, 0, 0));
+	b = SvUV(*av_fetch(a, 1, 0));
+	g = SvUV(*av_fetch(a, 2, 0));
+
+	return SDL_MapRGB( format, r,b,g ); 
+
+}
+
+unsigned int __map_rgba( SV* color, SDL_PixelFormat* format )
+{
+	Uint8 r,b,g,a;
+	AV* ar;
+	ar = __list_rgba( color );
+	r = SvUV(*av_fetch(ar, 0, 0));
+	b = SvUV(*av_fetch(ar, 1, 0));
+	g = SvUV(*av_fetch(ar, 2, 0));
+	a =  SvUV(*av_fetch(ar,3, 0));
+
+	return SDL_MapRGBA( format, r,b,g,a ); 
 
 }

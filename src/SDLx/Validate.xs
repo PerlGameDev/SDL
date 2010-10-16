@@ -124,3 +124,21 @@ val_surface( s )
             XSRETURN_UNDEF;
     OUTPUT:
         RETVAL
+
+SV *
+val_map_rgb( color, format)
+    SV* color
+    SDL_PixelFormat * format
+    CODE:
+	RETVAL = newSVuv( __map_rgb( color, format ) );
+    OUTPUT:
+	RETVAL
+
+SV *
+val_map_rgba( color, format)
+    SV* color
+    SDL_PixelFormat * format
+    CODE:
+	RETVAL = newSVuv( __map_rgb( color, format ) );
+    OUTPUT:
+	RETVAL

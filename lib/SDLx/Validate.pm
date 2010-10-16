@@ -31,21 +31,6 @@ sub color {
 	return SDL::Color->new( @{ list_rgb(@_) } );
 }
 
-sub map_rgb {
-	my ( $color, $format ) = @_;
-
-	require SDL::Video;
-	return SDL::Video::map_RGB( $format, @{ list_rgb($color) } );
-}
-
-sub map_rgba {
-	my ( $color, $format ) = @_;
-
-	require SDL::Video;
-	return SDL::Video::map_RGBA( $format, @{ list_rgba($color) } );
-}
-
-
 bootstrap SDLx::Validate;
 
 1;
