@@ -26,47 +26,6 @@ sub surfacex {
 	Carp::confess("Surface must be SDL::Surface or SDLx::Surface");
 }
 
-sub num_rgba {
-	my ($color) = @_;
-	my $format = _color_format($color);
-	if ( $format eq 'number' ) {
-		no warnings 'uninitialized';
-		return _color_number( $color, 1 );
-	} elsif ( $format eq 'arrayref' ) {
-		my $c = _color_arrayref( $color, 1 );
-		return ( $c->[0] << 24 ) + ( $c->[1] << 16 ) + ( $c->[2] << 8 ) + ( $c->[3] );
-	} elsif ( $format eq 'SDLx::Color' ) {
-		return ( $color->r << 24 ) + ( $color->g << 16 ) + ( $color->b << 8 ) + 0xFF;
-	}
-}
-
-sub list_rgb {
-	my ($color) = @_;
-	my $format = _color_format($color);
-	if ( $format eq 'number' ) {
-		no warnings 'uninitialized';
-		my $n = _color_number($color, 0);
-		return [ $n >> 16 & 0xFF, $n >> 8 & 0xFF, $n & 0xFF ];
-	} elsif ( $format eq 'arrayref' ) {
-		return _color_arrayref($color);
-	} elsif ( $format eq 'SDLx::Color' ) {
-		return [ $color->r, $color->g, $color->b ];
-	}
-}
-
-sub list_rgba {
-	my ($color) = @_;
-	my $format = _color_format( $color );
-	if ( $format eq 'number' ) {
-		my $n = _color_number( $color, 1 );
-		return [ $n >> 24 & 0xFF, $n >> 16 & 0xFF, $n >> 8 & 0xFF, $n & 0xFF ];
-	} elsif ( $format eq 'arrayref' ) {
-		return _color_arrayref( $color, 1 );
-	} elsif ( $format eq 'SDLx::Color' ) {
-		return [ $color->r, $color->g, $color->b, 0xFF ];
-	}
-}
-
 sub color {
 	require SDL::Color;
 	return SDL::Color->new( @{ list_rgb(@_) } );
