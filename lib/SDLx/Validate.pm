@@ -12,14 +12,6 @@ $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /Use of uninitialized value in
 use Carp ();
 use Scalar::Util ();
 
-sub surface {
-	my ($arg) = @_;
-	if ( Scalar::Util::blessed($arg) and $arg->isa("SDL::Surface") ) {
-		return $arg;
-	}
-	Carp::confess("Surface must be SDL::Surface or SDLx::Surface");
-}
-
 sub surfacex {
 	my ($arg) = @_;
 	if ( Scalar::Util::blessed($arg)) {
