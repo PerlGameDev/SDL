@@ -7,6 +7,7 @@ require Exporter;
 require DynaLoader;
 our @ISA = qw(Exporter DynaLoader);
 
+$SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /Use of uninitialized value in subroutine entry/};
 
 use Carp ();
 use Scalar::Util ();
@@ -65,7 +66,6 @@ sub list_rgba {
 	my ($color) = @_;
 	my $format = _color_format( $color );
 	if ( $format eq 'number' ) {
-		no warnings 'uninitialized';
 		my $n = _color_number( $color, 1 );
 		return [ $n >> 24 & 0xFF, $n >> 16 & 0xFF, $n >> 8 & 0xFF, $n & 0xFF ];
 	} elsif ( $format eq 'arrayref' ) {
