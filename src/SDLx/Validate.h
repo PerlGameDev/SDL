@@ -253,13 +253,13 @@ unsigned int __map_rgb( SV* color, SDL_PixelFormat* format )
 
 unsigned int __map_rgba( SV* color, SDL_PixelFormat* format )
 {
-	Uint8 r,b,g,a;
+	int r,b,g,a;
 	AV* ar;
 	ar = __list_rgba( color );
 	r = SvUV(*av_fetch(ar, 0, 0));
 	b = SvUV(*av_fetch(ar, 1, 0));
 	g = SvUV(*av_fetch(ar, 2, 0));
-	a =  SvUV(*av_fetch(ar,3, 0));
+	a = SvUV(*av_fetch(ar, 3, 0));
 
 	return SDL_MapRGBA( format, r,b,g,a ); 
 

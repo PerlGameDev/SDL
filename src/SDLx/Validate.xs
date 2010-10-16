@@ -139,6 +139,6 @@ val_map_rgba( color, format)
     SV* color
     SDL_PixelFormat * format
     CODE:
-	RETVAL = newSVuv( __map_rgb( color, format ) );
+	RETVAL = newSVuv( __map_rgba( color, format ) );
     OUTPUT:
 	RETVAL
