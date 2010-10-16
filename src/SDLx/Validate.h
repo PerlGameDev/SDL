@@ -153,3 +153,41 @@ AV *_color_arrayref( AV *color, SV *alpha )
     sv_2mortal((SV*)retval);
     return retval;
 }
+
+
+AV* __list_rgb( SV* color )
+{
+        char *format = _color_format(color);
+        AV* RETVAL       = newAV();
+        if ( 0 == strcmp("number", format) )
+        {
+            RETVAL = newAV();
+            sv_2mortal((SV *)RETVAL);
+            unsigned int _color = SvUV(_color_number(color, newSVuv(0)));
+            av_push(RETVAL, newSVuv(_color >> 16 & 0xFF));
+            av_push(RETVAL, newSVuv(_color >>  8 & 0xFF));
+            av_push(RETVAL, newSVuv(_color       & 0xFF));
+        }
+        else if ( 0 == strcmp("arrayref", format) )
+        {
+            RETVAL = _color_arrayref((AV *)SvRV(color), newSVuv(0));
+        }
+        else if ( 0 == strcmp("SDLx::Color", format) )
+        {
+            RETVAL = newAV();
+            sv_2mortal((SV *)RETVAL);
+            SDL_Color *_color = bag_to_color(color);
+            av_push(RETVAL, newSVuv(_color->r));
+            av_push(RETVAL, newSVuv(_color->g));
+            av_push(RETVAL, newSVuv(_color->b));
+        }
+        else
+        {
+            RETVAL = newAV();
+            sv_2mortal((SV *)RETVAL);
+            av_push(RETVAL, newSVuv(0));
+            av_push(RETVAL, newSVuv(0));
+            av_push(RETVAL, newSVuv(0));
+        }
+	return RETVAL;
+}
