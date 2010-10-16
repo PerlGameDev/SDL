@@ -21,7 +21,7 @@ SDLx::Controller - Handles the loops for events, movement and rendering
 
 =head2 DESCRIPTION
 
-The core of a SDL application/game is the main loop, where you handle events
+The core of an SDL application/game is the main loop, where you handle events
 and display your elements on the screen until something signals the end of
 the program. This usually goes in the form of:
 
