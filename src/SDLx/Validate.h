@@ -1,58 +1,56 @@
 
 SV *obj_make( int size_ptr,  void* obj, char* CLASS )
 {
-	SV * objref = newSV( size_ptr );
-        void** pointers = malloc(2 * sizeof(void*));
-		  pointers[0] = (void*)obj;
-		  pointers[1] = (void*)PERL_GET_CONTEXT;
+    SV *   objref   = newSV( size_ptr );
+    void** pointers = malloc(2 * sizeof(void*));
+    pointers[0]     = (void*)obj;
+    pointers[1]     = (void*)PERL_GET_CONTEXT;
 
-	sv_setref_pv( objref, CLASS, (void *)pointers) ;
-	
-	return objref;
+    sv_setref_pv( objref, CLASS, (void *)pointers);
 
+    return objref;
 }
 
 SV *rect( SV *rect)
 {
     SV *retval = NULL;
- //we hand this over to perl to handle
+    //we hand this over to perl to handle
 
     if( !SvOK(rect) )
-        {
-         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
-	 r->x = 0; r->y =0; r->w =0; r->h =0;
-	 retval = obj_make( sizeof( SDL_Rect *), (void *)(r), "SDL::Rect" );		
-	}
+    {
+        SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
+        r->x        = 0;
+        r->y        = 0;
+        r->w        = 0;
+        r->h        = 0;
+        retval      = obj_make( sizeof( SDL_Rect *), (void *)(r), "SDL::Rect" );
+    }
     else if( sv_derived_from(rect, "ARRAY") )
-        {	
-         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
- 	 int ra[4];
-	 int i = 0;
-	 AV* recta = (AV*)SvRV(rect);
-	 for(i=0;i < 4; i++)
-	  { 
-	    SV* iv = av_shift(recta);
-	    if( !SvOK( iv ) || iv == &PL_sv_undef )
-		{
-		  ra[i] = 0;
-		}
-	    else
-		{
-		  ra[i] = SvIV( iv );
-		}
-	  }	
+    {
+        SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
+        int ra[4];
+        int i       = 0;
+        AV* recta   = (AV*)SvRV(rect);
+        for(i = 0; i < 4; i++)
+        { 
+            SV* iv = av_shift(recta);
+            if( !SvOK( iv ) || iv == &PL_sv_undef )
+                ra[i] = 0;
+            else
+                ra[i] = SvIV( iv );
+        }
 
-	 r->x = ra[0]; r->y = ra[1]; r->w = ra[2]; r->h= ra[3];	
-	 retval = obj_make( sizeof( SDL_Rect *), (void *)(r), "SDL::Rect" );
-
-	}
+        r->x   = ra[0]; r->y = ra[1]; r->w = ra[2]; r->h= ra[3];
+        retval = obj_make( sizeof( SDL_Rect *), (void *)(r), "SDL::Rect" );
+    }
     else if( sv_isobject(rect) && sv_derived_from(rect, "SDL::Rect") )
-        {
-	    SvREFCNT_inc(rect); //Incase an anonymous rect is passed in. We should detect this some how.
-	    return rect;
-	}
+    {
+        SvREFCNT_inc(rect); //Incase an anonymous rect is passed in. We should detect this some how.
+        return rect;
+    }
     else
         warn("Rect must be number or arrayref or SDL::Rect or undef");
+
     return retval;
 }
 
@@ -63,8 +61,8 @@ SDL_Color *bag_to_color( SV *bag )
 
     if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
     {
-       void **pointers = (void **)(SvIV((SV *)SvRV( bag ))); 
-       color           = (SDL_Color *)(pointers[0]);
+        void **pointers = (void **)(SvIV((SV *)SvRV( bag ))); 
+        color           = (SDL_Color *)(pointers[0]);
     }
     
     return color;

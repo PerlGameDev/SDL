@@ -63,10 +63,10 @@ val_num_rgb( color )
     OUTPUT:
         RETVAL
 
-SV* 
+SV *
 val_rect( r )
     SV* r
     CODE:
-	RETVAL = rect( r );
+        RETVAL = rect( r );
     OUTPUT:
-	RETVAL
+        RETVAL
