@@ -194,33 +194,6 @@ sub load {
 
 #EXTENSTIONS
 
-sub blit {
-	my ( $src, $dest, $src_rect, $dest_rect ) = @_;
-
-	$src = SDLx::Validate::surface($src);
-	$dest = SDLx::Validate::surface($dest);
-
-	if(defined $src_rect) {
-		$src_rect = SDLx::Validate::rect($src_rect);
-	}
-	else {
-		$src_rect = SDL::Rect->new( 0, 0, $src->w, $src->h );
-	}
-	if(defined $dest_rect) {
-		$dest_rect = SDLx::Validate::rect($dest_rect);
-	}
-	else {
-		$dest_rect = SDL::Rect->new( 0, 0, $dest->w, $dest->h );
-	}
-
-	SDL::Video::blit_surface(
-		$src, $src_rect,
-		$dest, $dest_rect
-	);
-
-	return $src;
-}
-
 sub blit_by {
 	my ( $dest, $src, $src_rect, $dest_rect ) = @_;
 	SDLx::Surface::blit( $src, $dest, $src_rect, $dest_rect );
