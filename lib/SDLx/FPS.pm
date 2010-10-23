@@ -129,7 +129,7 @@ Return the C<rate>.
 
 =head1 AUTHORS
 
-Blaise Roth, C<< <blaiseroth@gmail.com> >>
+See L<SDL/AUTHORS>.
 
 =head1 SEE ALSO
 
