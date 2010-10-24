@@ -1,5 +1,11 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.520
+	- Moved SDLx::Validate to XS
+	- Moved SDLx::Surface (blit, draw_rect) to XS
+	- Created SDLx::Text [garu]
+	- Added exit_on_quit feature for SDLx::App
+
 * 2.519
 	- Removed build option -fPIC for windows [FROGGS]
 	- Throw a warning for missing thread support instead of compile these funtions [FROGGS]
