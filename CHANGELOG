@@ -5,6 +5,7 @@ Revision history for Perl extension SDL_perl.
 	- Moved SDLx::Surface (blit, draw_rect) to XS
 	- Created SDLx::Text [garu]
 	- Added exit_on_quit feature for SDLx::App
+	- Added antialias flag for SDLx::Surface::draw_circle
 
 * 2.519
 	- Removed build option -fPIC for windows [FROGGS]
