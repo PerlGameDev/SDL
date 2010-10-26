@@ -165,6 +165,7 @@ SKIP:
 	foreach my $cir_color (@colors_t) {
 		my $cir_color = [ 255, 0, 0, 255 ];
 		$surfs[0]->draw_circle( [ 100, 10 ], 20, $cir_color ); #no fill
+		$surfs[0]->draw_circle( [ 102, 12 ], 22, $cir_color , 1 );
 		$surfs[0]->draw_circle_filled( [ 100, 10 ], 20, $cir_color ); #fill
 		isnt( $surfs[0]->[100][10], 0 );
 		pass 'draw_circle works';

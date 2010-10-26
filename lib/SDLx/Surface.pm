@@ -278,12 +278,19 @@ sub draw_circle {
 	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
 	$color = SDLx::Validate::num_rgba($color);
 
-	SDL::GFX::Primitives::circle_color( $self, @{$center}, $radius, $color );
+	unless( $antialias )
+	{
+		SDL::GFX::Primitives::circle_color( $self, @{$center}, $radius, $color );
+	}
+	else
+	{
+		SDL::GFX::Primitives::aacircle_color( $self, @{$center}, $radius, $color );
+	}
 	return $self;
 }
 
 sub draw_circle_filled {
-	my ( $self, $center, $radius, $color, $antialias ) = @_;
+	my ( $self, $center, $radius, $color) = @_;
 
 	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
 		Carp::cluck("SDL_gfx_primitives support has not been compiled");
@@ -294,6 +301,7 @@ sub draw_circle_filled {
 	$color = SDLx::Validate::num_rgba($color);
 
 	SDL::GFX::Primitives::filled_circle_color( $self, @{$center}, $radius, $color );
+
 	return $self;
 }
 

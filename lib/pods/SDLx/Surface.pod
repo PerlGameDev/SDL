@@ -169,10 +169,10 @@ Returns $self
 
 =head2 draw_circle
 
- $sdlx_surface->draw_circle( [$x1, $y1], $radius, \@color ); 
+ $sdlx_surface->draw_circle( [$x1, $y1], $radius, \@color, $antialias ); 
 
 Draws an unfilled circle at C<($x1,$y1)> of size $radius and $color.
-
+Antialias is turned on if $antialias is true. 
 Returns $self
 
 =head2 draw_circle_filled
@@ -180,7 +180,7 @@ Returns $self
  $sdlx_surface->draw_filled_circle( [$x1, $y1], $radius, \@color ); 
 
 Draws an B<filled> circle at C<($x1,$y1)> of size $radius and $color.
-
+Antialias is turned on automatically. 
 Returns $self
 
 
