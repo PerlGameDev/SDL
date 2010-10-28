@@ -9,6 +9,17 @@ use SDLx::Sprite::Animated;
 use lib 't/lib';
 use SDL::TestTool;
 
+
+my $videodriver = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
+	plan( skip_all => 'Failed to init video' );
+} elsif ( !SDL::Config->has('SDL_image') ) {
+	plan( skip_all => 'SDL_image support not compiled' );
+}
+
+
 can_ok(
 	'SDLx::Sprite::Animated',
 	qw( new rect clip load surface x y w h draw alpha_key
@@ -19,15 +30,6 @@ can_ok(
 TODO: {
 	local $TODO = 'methods not implemented yet';
 	can_ok( 'SDLx::Sprite', qw( add remove zoom ) );
-}
-
-my $videodriver = $ENV{SDL_VIDEODRIVER};
-$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
-
-if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
-	plan( skip_all => 'Failed to init video' );
-} elsif ( !SDL::Config->has('SDL_image') ) {
-	plan( skip_all => 'SDL_image support not compiled' );
 }
 
 my $disp = SDL::Video::set_video_mode( 300, 300, 32, SDL_ANYFORMAT );
