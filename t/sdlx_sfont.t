@@ -8,9 +8,6 @@ use SDL::Surface;
 use SDLx::SFont;
 use lib 't/lib';
 use SDL::TestTool;
-
-can_ok( 'SDLx::SFont', qw( new ) );
-
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
@@ -22,6 +19,9 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 } elsif ( !SDL::Config->has('SDL_image') ) {
 	plan( skip_all => 'SDL_image support not compiled' );
 }
+
+can_ok( 'SDLx::SFont', qw( new ) );
+
 
 #Make a surface
 #Select a font
