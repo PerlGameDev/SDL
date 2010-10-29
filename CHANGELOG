@@ -7,6 +7,7 @@ Revision history for Perl extension SDL_perl.
 	- Added exit_on_quit feature for SDLx::App
 	- Added antialias flag for SDLx::Surface::draw_circle
 	- Fixed test plan errors on sdlx_sprite* and sdlx_sfont
+	- Darwin: setting arch to systems arch for gcc [FROGGS]
 
 * 2.519
 	- Removed build option -fPIC for windows [FROGGS]
