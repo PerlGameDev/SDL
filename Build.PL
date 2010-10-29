@@ -572,6 +572,7 @@ my $build = $package->new(
 		'Capture::Tiny'     => '0',
 		'Test::Most'        => '0.21',
 		'Alien::SDL'        => '1.419',
+		'File::Find'        => '0',
 		'File::ShareDir'    => '0',
 		'Tie::Simple'       => '0'
 	},
@@ -627,23 +628,4 @@ $build->notes( 'build_systems', $build_systems );
 $build->notes( 'sdl_cflags',    Alien::SDL->config('cflags') );
 $build->notes( 'sdl_libs',      Alien::SDL->config('libs') );
 $build->set_file_flags(); # creates notes('file_flags')
-
-=pod
-
-##TODO: MacOSx Arch Fix.
-# Move this to appropriate place
-my $sdl_lib_name = 'libSDL.dylib'; #get the right extentions dynamically
-my $sdl_lib = Alien::SDL->config('prefix')."/lib/$sdl_lib_name"; 
-#Note 'prefix' is not set when Alien::SDL is built with preinstall SDL
-
-my $lipo_out = 'lipo -info '.$sdl_lib;
-my $arch = $1 if $lipo_out = m/architecture:\s*(\w+)\b/;
-
-my $lddflags = $build->config( 'lddflags' );
-my $ccflags = $build->config( 'cflags' );
-my $ldflags = $build->config( 'ldflags' );
-
-## foreach of above strip -arch foo and add -arch $arch
-=cut 
-
 $build->create_build_script();

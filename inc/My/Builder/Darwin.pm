@@ -4,6 +4,7 @@ package My::Builder::Darwin;
 use strict;
 use warnings;
 use Alien::SDL;
+use File::Find qw(find);
 use Cwd;
 use base 'My::Builder';
 
@@ -18,19 +19,23 @@ sub build_bundle {
 	my $bundle_contents = "SDLPerl.app/Contents";
 	system "mkdir -p \"$bundle_contents\"";
 	mkdir "$bundle_contents/MacOS", 0755;
-	my $Perl = ( $ENV{'FULLPERL'} or $^X or 'perl' );
-	my $cflags; #= Alien::SDL->config('cflags');
-	$cflags = ' ' . `$Perl -MExtUtils::Embed -e ccopts`;
-	chomp($cflags);
-	$cflags .= ' ' . Alien::SDL->config('cflags');
-	my $libs;   #= Alien::SDL->config('libs');
-	$libs = ' ' . `$Perl -MExtUtils::Embed -e ldopts`;
-	chomp($libs);
-	$libs .= ' ' . Alien::SDL->config('libs') . ' -lSDLmain';
-	chomp($libs);
-	my $arch = ' ';
-	$arch = '-arch' . $ENV{SDL_ARCH} if $ENV{SDL_ARCH};
-	my $cmd = "gcc $arch -o \"$bundle_contents/MacOS/SDLPerl\"  MacOSX/main.c $cflags $libs ";
+	my $Perl    = ( $ENV{'FULLPERL'} or $^X or 'perl' );
+	my $cflags  = `$Perl -MExtUtils::Embed -e ccopts` . ' ' . Alien::SDL->config('cflags');
+	my $libs    = `$Perl -MExtUtils::Embed -e ldopts` . ' ' . Alien::SDL->config('libs') . ' -lSDLmain';
+	my $arch    = '';
+	my $sdl_lib = '';
+	$sdl_lib    = Alien::SDL->config('ld_shlib_map')->{SDL} || _find_SDL_lib();
+	$arch       = $1             if $sdl_lib && `lipo -info $sdl_lib` =~ m/\s(\w+)s*$/;
+	$arch       = $ENV{SDL_ARCH} if $ENV{SDL_ARCH};
+
+	if($arch) {
+		$cflags =~ s/\b-arch \w+\s//g;
+		$libs   =~ s/\b-arch \w+\s//g;
+		$arch   = "-arch $arch";
+	}
+
+	my $cmd = "gcc $arch -o \"$bundle_contents/MacOS/SDLPerl\" MacOSX/main.c $cflags $libs";
+	$cmd    =~ s/\s+/\s/g;
 	print STDERR $cmd . "\n";
 	system($cmd);
 
@@ -55,5 +60,43 @@ sub ACTION_test {
 		die 'Errors in Testing. Can\'t continue' if $?;
 	}
 }
+
+sub _find_SDL_lib {
+  my $inc_lib_candidates = {
+    '/usr/local/include' => '/usr/local/lib',
+    '/usr/include'       => '/usr/lib',
+    '/usr/X11R6/include' => '/usr/X11R6/lib',
+  };
+
+  if( -e '/usr/lib64'  && $Config{'myarchname'} =~ /64/) {
+    $inc_lib_candidates->{'/usr/include'} = '/usr/lib64'
+  }
+
+  if( exists $ENV{SDL_LIB} && exists $ENV{SDL_INC} ) {
+    $inc_lib_candidates->{$ENV{SDL_INC}} = $ENV{SDL_LIB};
+  }
+
+  foreach (keys %$inc_lib_candidates) {
+    my $ld = $inc_lib_candidates->{$_};
+    next unless -d $ld;
+    my ($found_lib) = _find_file($ld, qr/[\/\\]lib\QSDLmain\E[\-\d\.]*\.(so|dylib|bundle[\d\.]*|a|dll.a)$/);
+    return $found_lib if $found_lib;
+  }
+
+  return 0;
+}
+
+sub _find_file {
+  my ($dir, $re) = @_;
+  my @files;
+  $re ||= qr/.*/;
+  {
+    #hide warning "Can't opendir(...): Permission denied - fix for http://rt.cpan.org/Public/Bug/Display.html?id=57232
+    no warnings;
+    find({ wanted => sub { push @files, rel2abs($_) if /$re/ }, follow => 1, no_chdir => 1 , follow_skip => 2}, $dir);
+  };
+  return @files;
+}
+
 
 1;
