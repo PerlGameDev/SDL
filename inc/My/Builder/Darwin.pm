@@ -25,7 +25,9 @@ sub build_bundle {
 	my $libs    = `$Perl -MExtUtils::Embed -e ldopts` . ' ' . Alien::SDL->config('libs') . ' -lSDLmain';
 	my $arch    = '';
 	my $sdl_lib = '';
-	$sdl_lib    = Alien::SDL->config('ld_shlib_map')->{SDL} || _find_SDL_lib();
+	$sdl_lib    = Alien::SDL->config('ld_shlib_map') && Alien::SDL->config('ld_shlib_map')->{SDL}
+	            ? Alien::SDL->config('ld_shlib_map')->{SDL}
+	            : _find_SDL_lib();
 	$arch       = $1             if $sdl_lib && `lipo -info $sdl_lib` =~ m/\s(\w+)s*$/;
 	$arch       = $ENV{SDL_ARCH} if $ENV{SDL_ARCH};
 
