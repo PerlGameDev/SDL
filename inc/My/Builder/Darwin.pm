@@ -6,6 +6,7 @@ use warnings;
 use Alien::SDL;
 use File::Find qw(find);
 use Cwd;
+use Config;
 use base 'My::Builder';
 
 sub special_build_settings {
