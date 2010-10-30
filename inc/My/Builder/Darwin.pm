@@ -38,7 +38,7 @@ sub build_bundle {
 	}
 
 	my $cmd = "gcc $arch -o \"$bundle_contents/MacOS/SDLPerl\" MacOSX/main.c $cflags $libs";
-	$cmd    =~ s/\s+/\s/g;
+	$cmd    =~ s/\s+/ /g;
 	print STDERR $cmd . "\n";
 	system($cmd);
 
