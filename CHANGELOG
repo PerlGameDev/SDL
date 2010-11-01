@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.522
+	- Fixed mistakes in inc/My/Builder/Darwin.pm [FROGGS]
+
 * 2.521
 	- Fixed manifest (missing src/SDLx/Validate.h) [FROGGS]
 	- Updated Alien::SDL's version to 1.421 [FROGGS]
