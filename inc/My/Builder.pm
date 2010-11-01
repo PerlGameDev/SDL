@@ -39,6 +39,8 @@ use File::Spec;
 use Config;
 use Alien::SDL::ConfigData;
 
+our $config = {};
+
 # Module::Build doesn't seem to have a way to use separate flags for separate
 # XS files, so here's the override that makes separate files build correctly:
 sub process_xs {

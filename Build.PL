@@ -585,6 +585,7 @@ my $build = $package->new(
 		'Pod::ToDemo' => '0.20'
 
 	},
+	config   => $My::Builder::config,
 	c_source => 'src',
 	xs_files => \%xs,
 	meta_add => {},
