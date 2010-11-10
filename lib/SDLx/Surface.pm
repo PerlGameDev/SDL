@@ -368,6 +368,7 @@ sub draw_gfx_text {
 sub DESTROY {
 	my $self = shift;
 	delete $_tied_array{$$self};
+	SDL::Surface::DESTROY($self);
 }
 
 1;
