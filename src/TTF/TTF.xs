@@ -151,7 +151,6 @@ ttf_open_font(file, ptsize)
 	PREINIT:
 		char* CLASS = "SDL::TTF::Font";
 	CODE:
-		RETVAL = safemalloc(sizeof(TTF_Font *));
 		RETVAL = TTF_OpenFont(file, ptsize);
 	OUTPUT:
 		RETVAL
@@ -164,7 +163,6 @@ ttf_open_font_index(file, ptsize, index)
 	PREINIT:
 		char* CLASS = "SDL::TTF::Font";
 	CODE:
-		RETVAL = safemalloc(sizeof(TTF_Font *));
 		RETVAL = TTF_OpenFontIndex(file, ptsize, index);
 	OUTPUT:
 		RETVAL
@@ -177,7 +175,6 @@ ttf_open_font_RW(src, freesrc, ptsize)
 	PREINIT:
 		char* CLASS = "SDL::TTF::Font";
 	CODE:
-		RETVAL = safemalloc(sizeof(TTF_Font *));
 		RETVAL = TTF_OpenFontRW(src, freesrc, ptsize);
 	OUTPUT:
 		RETVAL
@@ -191,7 +188,6 @@ ttf_open_font_index_RW(src, freesrc, ptsize, index)
 	PREINIT:
 		char* CLASS = "SDL::TTF::Font";
 	CODE:
-		RETVAL = safemalloc(sizeof(TTF_Font *));
 		RETVAL = TTF_OpenFontIndexRW(src, freesrc, ptsize, index);
 	OUTPUT:
 		RETVAL
