@@ -194,7 +194,7 @@ surfacex_draw_rect ( surface, rt, color )
 	}
     SDL_FillRect(surface, &r_rect, m_color);
 
-SV *
+void
 surfacex_blit( src, dest, ... )
     SV *src
     SV *dest
@@ -229,5 +229,4 @@ surfacex_blit( src, dest, ... )
         }
         
         SDL_BlitSurface( _src, &_src_rect, _dest, &_dest_rect );
-    OUTPUT:
-        src
+   
