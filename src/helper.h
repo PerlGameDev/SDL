@@ -2,6 +2,8 @@
 #ifndef SDL_PERL_HELPER_H
 #define SDL_PERL_HELPER_H
 
+PerlInterpreter * perl = NULL;
+
 void *bag2obj( SV *bag )
 {
     void *obj = NULL;
@@ -37,7 +39,7 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
 
     void** pointers = malloc(2 * sizeof(void*));
     pointers[0]     = (void*)copy;
-    pointers[1]     = (void*)PERL_GET_CONTEXT;
+    pointers[1]     = (void*)perl;
 
     return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
 }
