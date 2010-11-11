@@ -19,7 +19,7 @@ SV *rect( SV *rect, int* new_rect_made)
     else if( sv_derived_from(rect, "ARRAY") )
     {
         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
-	(*new_rect_made) = 1;
+		(*new_rect_made) = 1;
         int ra[4];
         int i       = 0;
         AV* recta   = (AV*)SvRV(rect);
@@ -37,13 +37,13 @@ SV *rect( SV *rect, int* new_rect_made)
     }
     else if( sv_isobject(rect) && sv_derived_from(rect, "SDL::Rect") )
     {
-	(*new_rect_made) = 0;
-        SvREFCNT_inc(rect); //Incase an anonymous rect is passed in. We should detect this some how.
-        return rect;
+		(*new_rect_made) = 0;
+       	retval = rect;
     }
     else
         croak("Rect must be number or arrayref or SDL::Rect or undef");
 
+	 SvREFCNT_inc(rect);
     return retval;
 }
 
