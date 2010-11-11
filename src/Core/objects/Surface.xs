@@ -183,6 +183,7 @@ surface_DESTROY(bag)
                        /*warn("Freed surface %p and pixels %p \n", surface, surface->pixels); */
                        pointers[0] = NULL;
                        SDL_FreeSurface(surface);
+					   safefree(pointers);
                    }
                } else if (bag == 0) {
                    XSRETURN(0);

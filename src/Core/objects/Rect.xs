@@ -84,7 +84,8 @@ rect_DESTROY(bag)
 			   SDL_Rect * rect = (SDL_Rect*)(pointers[0]);
 			   if (PERL_GET_CONTEXT == pointers[1]) {
 			       pointers[0] = NULL;
-			       safefree(rect);
+				       safefree(rect);
+					   safefree(pointers);
 			   }
 		       } else if (bag == 0) {
 			   XSRETURN(0);
