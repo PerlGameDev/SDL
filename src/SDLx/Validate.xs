@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -56,7 +57,7 @@ val_num_rgb( color )
         }
         else if( 0 == strcmp("SDLx::Color", format) )
         {
-            SDL_Color *_color = (SDL_Color*) bag_to_obj( color );
+            SDL_Color *_color = (SDL_Color*) bag2obj( color );
 	    unsigned int v = ( (_color->r) << 16 ) + ( (_color->g) << 8 ) + _color->b;
             RETVAL            = newSVuv( v );
         }
@@ -82,7 +83,7 @@ val_num_rgba( color )
         }
         else if( 0 == strcmp("SDLx::Color", format) )
         {
-            SDL_Color *_color = (SDL_Color*)bag_to_obj( color );
+            SDL_Color *_color = (SDL_Color*)bag2obj( color );
             unsigned int v    = (((_color->r) << 24) + ((_color->g) << 16) + ((_color->b) << 8) + 0xFF) ;
             RETVAL            = newSVuv( v );
         }

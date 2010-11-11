@@ -1,16 +1,5 @@
 #include <SDL.h>
-
-SV *obj_make( int size_ptr,  void* obj, char* CLASS )
-{
-    SV *   objref   = newSV( size_ptr );
-    void** pointers = malloc(2 * sizeof(void*));
-    pointers[0]     = (void*)obj;
-    pointers[1]     = (void*)PERL_GET_CONTEXT;
-
-    sv_setref_pv( objref, CLASS, (void *)pointers);
-
-    return objref;
-}
+#include "helper.h"
 
 SV *rect( SV *rect, int* new_rect_made)
 {
@@ -25,7 +14,7 @@ SV *rect( SV *rect, int* new_rect_made)
         r->y        = 0;
         r->w        = 0;
         r->h        = 0;
-        retval      = obj_make( sizeof( SDL_Rect *), (void *)(r), "SDL::Rect" );
+        retval      = obj2bag( sizeof( SDL_Rect *), (void *)(r), "SDL::Rect" );
     }
     else if( sv_derived_from(rect, "ARRAY") )
     {
@@ -44,7 +33,7 @@ SV *rect( SV *rect, int* new_rect_made)
         }
 
         r->x   = ra[0]; r->y = ra[1]; r->w = ra[2]; r->h= ra[3];
-        retval = obj_make( sizeof( SDL_Rect *), (void *)(r), "SDL::Rect" );
+        retval = obj2bag( sizeof( SDL_Rect *), (void *)(r), "SDL::Rect" );
     }
     else if( sv_isobject(rect) && sv_derived_from(rect, "SDL::Rect") )
     {
@@ -67,19 +56,6 @@ SV *surface( SV *surface )
     }
     croak("Surface must be SDL::Surface or SDLx::Surface");
     return NULL;
-}
-
-void *bag_to_obj( SV *bag )
-{
-    void *obj = NULL;
-
-    if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
-    {
-        void **pointers = (void **)(SvIV((SV *)SvRV( bag ))); 
-        obj           = (void *)(pointers[0]);
-    }
-    
-    return obj;
 }
 
 char *_color_format( SV *color )
@@ -180,7 +156,7 @@ AV* __list_rgb( SV* color )
         {
             RETVAL = newAV();
             sv_2mortal((SV *)RETVAL);
-            SDL_Color *_color = (SDL_Color *)bag_to_obj(color);
+            SDL_Color *_color = (SDL_Color *)bag2obj(color);
             av_push(RETVAL, newSVuv(_color->r));
             av_push(RETVAL, newSVuv(_color->g));
             av_push(RETVAL, newSVuv(_color->b));
@@ -220,7 +196,7 @@ AV* __list_rgba( SV* color )
         {
             RETVAL = newAV();
             sv_2mortal((SV *)RETVAL);
-            SDL_Color *_color = (SDL_Color*)bag_to_obj(color);
+            SDL_Color *_color = (SDL_Color*)bag2obj(color);
             av_push(RETVAL, newSVuv(_color->r));
             av_push(RETVAL, newSVuv(_color->g));
             av_push(RETVAL, newSVuv(_color->b));

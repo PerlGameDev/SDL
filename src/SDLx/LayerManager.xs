@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -9,21 +10,6 @@
 
 #include <SDL.h>
 #include "SDLx/LayerManager.h"
-
-PerlInterpreter * perl = NULL;
-
-SV *_sv_ref( void *object, int p_size, int s_size, char *package )
-{
-    SV   *ref  = newSV( p_size );
-    void *copy = safemalloc( s_size );
-    memcpy( copy, object, s_size );
-
-    void** pointers = malloc(2 * sizeof(void*));
-    pointers[0]     = (void*)copy;
-    pointers[1]     = (void*)perl;
-
-    return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
-}
 
 int _get_pixel( SDL_Surface *surface, int x, int y )
 {
@@ -66,8 +52,7 @@ lmx_add( manager, bag )
     CODE:
         if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
         {
-            void **pointers   = (void**)(SvIV((SV*)SvRV( bag ))); 
-            SDLx_Layer *layer = (SDLx_Layer *)(pointers[0]);
+            SDLx_Layer *layer = (SDLx_Layer *)bag2obj(bag);
             layer->index      = av_len( manager->layers ) + 1;
             layer->manager    = manager;
             layer->touched    = 1;
@@ -123,7 +108,7 @@ lmx_blit( manager, dest )
         
         while(index < length)
         {
-            SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
+            SDLx_Layer *layer = (SDLx_Layer *)bag2obj(*av_fetch(manager->layers, index, 0));
             
             if(layer->attached == 0)
             {
@@ -164,7 +149,7 @@ lmx_blit( manager, dest )
             index = 0;
             while(index < length)
             {
-                SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
+                SDLx_Layer *layer = (SDLx_Layer *)bag2obj(*av_fetch(manager->layers, index, 0));
                 
                 if(layer->attached == 1)
                 {
@@ -201,7 +186,7 @@ lmx_by_position( manager, x, y )
         for( i = av_len( manager->layers ); i >= 0 && match == NULL; i-- )
         {
             SV          *bag   = *av_fetch(manager->layers, i, 0);
-            SDLx_Layer  *layer = bag_to_layer(bag);
+            SDLx_Layer  *layer = (SDLx_Layer *)bag2obj(bag);
             SDL_Rect    *clip  = layer->clip;
             SDL_Rect    *pos   = layer->pos;
             SDL_Surface *surf  = layer->surface;
@@ -232,7 +217,7 @@ lmx_ahead( manager, index )
     SDLx_LayerManager *manager
     int               index
     CODE:
-        SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
+        SDLx_Layer *layer = (SDLx_Layer *)bag2obj(*av_fetch(manager->layers, index, 0));
         RETVAL            = layers_ahead( layer );
     OUTPUT:
         RETVAL
@@ -242,7 +227,7 @@ lmx_behind( manager, index )
     SDLx_LayerManager *manager
     int               index
     CODE:
-        SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
+        SDLx_Layer *layer = (SDLx_Layer *)bag2obj(*av_fetch(manager->layers, index, 0));
         RETVAL            = layers_behind( layer );
     OUTPUT:
         RETVAL
@@ -273,7 +258,7 @@ lmx_attach( manager, ... )
         int i;
         for( i = 1; i < items; i++ )
         {
-            SDLx_Layer *layer      = bag_to_layer(ST(i));
+            SDLx_Layer *layer      = (SDLx_Layer *)bag2obj(ST(i));
             layer->attached        = 1;
             layer->attached_pos->x = layer->pos->x;
             layer->attached_pos->y = layer->pos->y;
@@ -296,7 +281,7 @@ lmx_detach_xy( manager, x = -1, y = -1 )
         int offset_y = 0;
         while(index < length)
         {
-            SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
+            SDLx_Layer *layer = (SDLx_Layer *)bag2obj(*av_fetch(manager->layers, index, 0));
             
             if(layer->attached == 1)
             {
@@ -330,7 +315,7 @@ lmx_detach_back( manager )
         int length = av_len( manager->layers ) + 1;
         while(index < length)
         {
-            SDLx_Layer *layer = bag_to_layer(*av_fetch(manager->layers, index, 0));
+            SDLx_Layer *layer = (SDLx_Layer *)bag2obj(*av_fetch(manager->layers, index, 0));
             
             if(layer->attached == 1)
             {
@@ -352,7 +337,7 @@ lmx_foreground( manager, ... )
         int x;
         for(x = 1; x < items; x++)
         {
-            SDLx_Layer        *layer   = bag_to_layer(ST(x));
+            SDLx_Layer        *layer   = (SDLx_Layer *)bag2obj(ST(x));
             SDLx_LayerManager *manager = layer->manager;
             int index                  = layer->index; // we cant trust its value
             int i;

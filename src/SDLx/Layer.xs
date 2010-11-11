@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -9,21 +10,6 @@
 
 #include <SDL.h>
 #include "SDLx/LayerManager.h"
-
-PerlInterpreter * perl = NULL;
-
-SV *_sv_ref( void *object, int p_size, int s_size, char *package )
-{
-    SV   *ref  = newSV( p_size );
-    void *copy = safemalloc( s_size );
-    memcpy( copy, object, s_size );
-
-    void** pointers = malloc(2 * sizeof(void*));
-    pointers[0]     = (void*)copy;
-    pointers[1]     = (void*)perl;
-
-    return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
-}
 
 MODULE = SDLx::Layer    PACKAGE = SDLx::Layer    PREFIX = layerx_
 
@@ -123,7 +109,7 @@ layerx_surface( layer, ... )
     CODE:
         if(items > 1)
         {
-            SDL_Surface *surface  = bag_to_surface(ST(1));
+            SDL_Surface *surface  = (SDL_Surface *)bag2obj(ST(1));
             layer->surface        = SDL_ConvertSurface(surface, surface->format, surface->flags);
             layer->touched        = 1;
             layer->manager->saved = 0;
@@ -225,7 +211,7 @@ SV *
 layerx_foreground( bag )
     SV *bag
     CODE:
-        SDLx_Layer        *layer   = bag_to_layer(bag);
+        SDLx_Layer        *layer   = (SDLx_Layer *)bag2obj(bag);
         SDLx_LayerManager *manager = layer->manager;
         int index                  = layer->index; // we cant trust its value
         layer->manager->saved = 0;
@@ -243,10 +229,10 @@ layerx_foreground( bag )
         for(i = index; i < av_len(manager->layers); i++)
         {
             AvARRAY(manager->layers)[i] = AvARRAY(manager->layers)[i + 1];
-            bag_to_layer(AvARRAY(manager->layers)[i])->index = i;
+            ((SDLx_Layer *)bag2obj(AvARRAY(manager->layers)[i]))->index = i;
         }
         AvARRAY(manager->layers)[i] = bag;
-        bag_to_layer(AvARRAY(manager->layers)[i])->index = i;
+        ((SDLx_Layer *)bag2obj(AvARRAY(manager->layers)[i]))->index = i;
         SvREFCNT_inc( bag );
         RETVAL                      = newSVsv(bag);
         SvREFCNT_inc(RETVAL);
