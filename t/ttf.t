@@ -7,6 +7,7 @@ use SDL::Surface;
 use SDL::Overlay;
 use SDL::Rect;
 use SDL::Video;
+use SDL::PixelFormat;
 
 BEGIN {
 	use Test::More;
