@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -159,7 +160,7 @@ audiospec_callback( audiospec, cb )
 #endif
 
 void
-audiospec_DESTROY(self)
-	SDL_AudioSpec *self
+audiospec_DESTROY(bag)
+	SV *bag
 	CODE:
-		safefree( (char *)self );
+		objDESTROY(bag, safefree);
