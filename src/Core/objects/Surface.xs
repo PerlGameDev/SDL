@@ -4,6 +4,7 @@
 #define NEED_newRV_noinc_GLOBAL
 #define NEED_newSV_type_GLOBAL
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -70,13 +71,13 @@ surface_new_from (CLASS, pixels, width, height, depth, pitch, Rmask = 0xFF000000
 		RETVAL
 
 
-SDL_PixelFormat *
+SV *
 surface_format ( surface )
 	SDL_Surface *surface
 	PREINIT:
 		char* CLASS = "SDL::PixelFormat";
 	CODE:
-		RETVAL = surface->format;
+		RETVAL = cpy2bag( surface->format, sizeof(SDL_PixelFormat *), sizeof(SDL_PixelFormat), "SDL::PixelFormat" );
 	OUTPUT:
 		RETVAL
 
