@@ -7,6 +7,7 @@ use SDL::Rect;
 use SDL::Video;
 use SDL::Image;
 use SDL::Surface;
+use SDL::PixelFormat;
 
 use Test::More;
 use lib 't/lib';
