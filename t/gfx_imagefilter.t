@@ -7,6 +7,7 @@ use SDL::Config;
 use SDL::Video;
 use SDL::Version;
 use SDL::Surface;
+use SDL::PixelFormat;
 use SDL::GFX;
 use SDL::GFX::ImageFilter;
 use Test::More;
