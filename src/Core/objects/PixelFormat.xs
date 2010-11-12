@@ -175,13 +175,4 @@ void
 pixelformat_DESTROY ( bag )
 	SV *bag
 	CODE:
-		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			void** pointers  = (void**)(SvIV((SV*)SvRV( bag )));
-			SDL_PixelFormat * format = (SDL_PixelFormat *)(pointers[0]);
-			if (PERL_GET_CONTEXT == pointers[1]) {
-				pointers[0] = NULL;
-				if ( format )
-					safefree(format);
-				safefree(pointers);
-			}
-		}
+		objDESTROY(bag, safefree);

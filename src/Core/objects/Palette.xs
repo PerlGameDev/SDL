@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -41,8 +42,7 @@ palette_colors ( palette )
 			av_push(RETVAL,newSViv( PTR2IV( palette->colors + i ) ) );
 		}
 	OUTPUT:
-		RETVAL		
-
+		RETVAL
 
 SDL_Color *
 palette_color_index ( palette, index )
@@ -59,13 +59,4 @@ void
 palette_DESTROY ( bag )
 	SV *bag
 	CODE:
-	if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-		void** pointers       = (void**)(SvIV((SV*)SvRV( bag )));
-		SDL_Palette * palette = (SDL_Palette *)(pointers[0]);
-		if (PERL_GET_CONTEXT == pointers[1]) {
-			pointers[0] = NULL;
-			safefree(palette);
-			safefree(pointers);
-		}
-	}
-
+		objDESTROY(bag, safefree);

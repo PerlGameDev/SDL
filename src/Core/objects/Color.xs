@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -69,12 +70,4 @@ void
 color_DESTROY ( bag )
 	SV *bag
 	CODE:
-		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			void** pointers  = (void**)(SvIV((SV*)SvRV( bag )));
-			SDL_Color* color = (SDL_Color *)(pointers[0]);
-			if (PERL_GET_CONTEXT == pointers[1]) {
-				pointers[0] = NULL;
-				safefree(color);
-				safefree(pointers);
-			}
-		}
+		objDESTROY(bag, safefree);

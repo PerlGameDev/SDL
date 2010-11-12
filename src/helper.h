@@ -40,6 +40,22 @@ SV *cpy2bag( void *object, int p_size, int s_size, char *package )
     return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
 }
 
+void objDESTROY(SV *bag, void (* callback)(void *object))
+{
+    if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
+    {
+        void** pointers = (void**)(SvIV((SV*)SvRV( bag )));
+        void* object = pointers[0];
+        if (PERL_GET_CONTEXT == pointers[1])
+        {
+            pointers[0] = NULL;
+            if(object)
+                callback(object);
+            safefree(pointers);
+        }
+    }
+}
+
 SV *_sv_ref( void *object, int p_size, int s_size, char *package )
 {
     SV   *ref  = newSV( p_size );

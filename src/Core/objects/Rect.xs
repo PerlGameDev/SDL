@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -79,17 +80,4 @@ void
 rect_DESTROY(bag)
 	SV *bag
 	CODE:
-		if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) ) {
-			   void** pointers = (void**)(SvIV((SV*)SvRV( bag ))); 
-			   SDL_Rect * rect = (SDL_Rect*)(pointers[0]);
-			   if (PERL_GET_CONTEXT == pointers[1]) {
-			       pointers[0] = NULL;
-				       safefree(rect);
-					   safefree(pointers);
-			   }
-		       } else if (bag == 0) {
-			   XSRETURN(0);
-		       } else {
-			   XSRETURN_UNDEF;
-		       }
-		
+		objDESTROY(bag, safefree);
