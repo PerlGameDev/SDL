@@ -144,7 +144,7 @@ sub on_event {
 		$paddle->{y_vel} += $paddle->{vel} if $key == SDLK_UP;
 		$paddle->{y_vel} -= $paddle->{vel} if $key == SDLK_DOWN;
 	} elsif ( $event->type == SDL_QUIT ) {
-		$_[1]->stop();
+		$app->stop();
 	}
 }
 
