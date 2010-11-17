@@ -31,9 +31,12 @@ sub _initAudio {
 }
 
 sub _initMixer {
-    my $init_flags = SDL::Mixer::init( MIX_INIT_MP3 | MIX_INIT_MOD | MIX_INIT_FLAC | MIX_INIT_OGG );
-   
+    my $init_flags = SDL::Mixer::init( MIX_INIT_MP3 | MIX_INIT_MOD | MIX_INIT_FLAC | MIX_INIT_OGG );	  
+ 
     my %init = ();
+
+	# Short circuit if we have and older version of SDL_Mixer
+	return \%$init unless $init_flags;
 
      $init{ mp3 }  = 1  if $init_flags & MIX_INIT_MP3;
      $init{ mod }  = 1  if $init_flags & MIX_INIT_MOD;
