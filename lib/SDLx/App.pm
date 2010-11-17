@@ -114,7 +114,7 @@ sub new {
 
 	if ( $ic and -e $ic ) {
 		my $icon = SDL::Video::load_BMP($ic);
-		SDL::Video::wm_set_icon($$icon);
+		SDL::Video::wm_set_icon($icon);
 	}
 
 	SDL::Video::wm_set_caption( $t, $it );
