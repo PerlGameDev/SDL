@@ -4,6 +4,7 @@ Revision history for Perl extension SDL_perl.
 	- Cleaned up how O_OBJECTs are free'd [FROGGS]
 	- SDLx::Surface now DESTROYs the SDL::Surface saving memory [kthakore]
 	- Fixed Icon value for the SDLx::App constructor useage [kthakore]
+	- Added short circuit for varying SDL_Mixer versions for SDLx::Sound [kthakore]
 
 * 2.522
 	- Fixed mistakes in inc/My/Builder/Darwin.pm [FROGGS]
