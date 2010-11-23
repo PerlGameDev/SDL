@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.524
+	- Fix for t/mixer_channels.t.bak 
+
 * 2.523 
 	- Cleaned up how O_OBJECTs are free'd [FROGGS]
 	- SDLx::Surface now DESTROYs the SDL::Surface saving memory [kthakore]
