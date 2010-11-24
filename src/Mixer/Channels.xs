@@ -21,15 +21,15 @@ static int sdl_perl_use_smpeg_audio = 0;
 #endif
 #endif
 
-PerlInterpreter * perl_for_cb = NULL;
-static SV * cb                = (SV*)NULL;
+PerlInterpreter * context = NULL;
+static SV * cb            = (SV*)NULL;
 
 void callback(int channel)
 {
-	if(NULL == perl_for_cb)
+	if(NULL == context)
 		return;
 	
-	PERL_SET_CONTEXT(perl_for_cb);
+	PERL_SET_CONTEXT(context);
 
 	dSP;
 	ENTER;
@@ -163,8 +163,9 @@ void
 mixchan_channel_finished( fn )
 	SV* fn
 	CODE:
-		perl_for_cb = PERL_GET_CONTEXT;
-	
+		if(context == NULL)
+			context = PERL_GET_CONTEXT;
+
 		if (cb == (SV*)NULL)
             cb = newSVsv(fn);
         else

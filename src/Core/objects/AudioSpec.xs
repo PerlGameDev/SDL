@@ -12,9 +12,7 @@
 #define HAVE_TLS_CONTEXT
 #endif
 
-PerlInterpreter * perl_my = NULL;
-
-PerlInterpreter * perl_for_audio_cb = NULL;
+PerlInterpreter * context = NULL;
 
 #include <SDL.h>
 #include <SDL_audio.h>
@@ -23,9 +21,7 @@ PerlInterpreter * perl_for_audio_cb = NULL;
 void
 audio_callback ( void* data, Uint8 *stream, int len )
 {
-
-	PERL_SET_CONTEXT(perl_for_audio_cb); 
-	
+	PERL_SET_CONTEXT(context);
 	dSP;
 
         char* string = (char*)stream;
@@ -140,11 +136,8 @@ audiospec_callback( audiospec, cb )
 		/* the audio callback will happen in a different thread. */
 		/* so we're going to leave a cloned interpreter available */
 		/* but still remain in the current one. */
-		if (perl_for_audio_cb == NULL) {
-			perl_my = PERL_GET_CONTEXT;
-			perl_for_audio_cb = perl_clone(perl_my, CLONEf_KEEP_PTR_TABLE);
-			PERL_SET_CONTEXT(perl_my);
-		}
+		if (context == NULL)
+			context = PERL_GET_CONTEXT;
 		audiospec->userdata = cb;
 		audiospec->callback = audio_callback;
 
