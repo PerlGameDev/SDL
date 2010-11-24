@@ -33,7 +33,6 @@
 #ifdef USE_THREADS
 PerlInterpreter *parent_perl = NULL;
 extern PerlInterpreter *parent_perl;
-#if defined WINDOWS || defined WIN32 
 PerlInterpreter *current_perl = NULL;
 #define GET_TLS_CONTEXT eval_pv("require DynaLoader;", TRUE); \
         if(!current_perl) { \
@@ -45,15 +44,6 @@ PerlInterpreter *current_perl = NULL;
             if(!PERL_GET_CONTEXT) { \
                 PERL_SET_CONTEXT(current_perl); \
             }
-#else
-#define GET_TLS_CONTEXT parent_perl = PERL_GET_CONTEXT; \
-        eval_pv("require DynaLoader;", TRUE);
-#define ENTER_TLS_CONTEXT { \
-            if(!PERL_GET_CONTEXT) { \
-                PerlInterpreter *my_perl = perl_clone(parent_perl, CLONEf_KEEP_PTR_TABLE); \
-                PERL_SET_CONTEXT(my_perl); \
-            }
-#endif
 #define LEAVE_TLS_CONTEXT }
 #else
 #define GET_TLS_CONTEXT         /* TLS context not enabled */
