@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use Test::Most 'bail';
 use Test::Strict;
+use File::Spec 'catfile';
 
 BEGIN {
 	my @modules = qw /
@@ -81,9 +82,12 @@ BEGIN {
 		use_ok $_ ;
 
 		my $file = $_;
-		$file  =~ s/::/\//g;
 
-		$file = 'lib/'.$file.'.pm';
+		my @files = split /::/, $file;
+
+		$file = File::Spec->catfile( 'lib', @files );
+
+		$file = $file.'.pm';
 
 		syntax_ok $file ;
 	
