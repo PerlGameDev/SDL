@@ -1,5 +1,6 @@
 package SDLx::Sound;
-
+use strict;
+use warnings;
 use Carp;
 
 use SDL;
@@ -18,7 +19,7 @@ sub new {
   my $class = shift;
   my $self = {@_};
   bless ($self, $class);
-   _initAudio() unless $audio_ok;
+   _initAudio() unless $audioInited;
   $self->{supported} = _initMixer();
   return $self;
 }
@@ -36,14 +37,14 @@ sub _initMixer {
     my %init = ();
 
 	# Short circuit if we have and older version of SDL_Mixer
-	return \%$init unless $init_flags;
+	return \%init unless $init_flags;
 
      $init{ mp3 }  = 1  if $init_flags & MIX_INIT_MP3;
      $init{ mod }  = 1  if $init_flags & MIX_INIT_MOD;
      $init{ flac } = 1  if $init_flags & MIX_INIT_FLAC;
      $init{ ogg }  = 1  if $init_flags & MIX_INIT_OGG;
 
-     return \%$init
+     return \%init
 }
 
 sub load {

@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::Most 'bail';
+use Test::Strict;
 
 BEGIN {
 	my @modules = qw /
@@ -68,10 +69,27 @@ BEGIN {
 		SDLx::Controller::State
 		SDLx::Controller::Timer
 
-    SDLx::Sound
+		SDLx::Sound
 
 		/;
-	plan tests => scalar @modules;
 
-	use_ok $_ foreach @modules;
+	my $tests = scalar @modules;
+	plan tests => $tests * 4;
+
+	foreach( @modules )
+	{
+		use_ok $_ ;
+
+		my $file = $_;
+		$file  =~ s/::/\//g;
+
+		$file = 'lib/'.$file.'.pm';
+
+		syntax_ok $file ;
+	
+		strict_ok $file ;
+
+		warnings_ok $file;
+
+	}
 }

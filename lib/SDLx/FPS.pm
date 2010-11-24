@@ -1,5 +1,6 @@
 package SDLx::FPS;
 use strict;
+use warnings;
 use SDL::GFX::Framerate;
 use SDL::GFX::FPSManager;
 use Carp;
