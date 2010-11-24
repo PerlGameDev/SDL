@@ -30,16 +30,31 @@
 #ifndef SDL_PERL_DEFINES_H
 #define SDL_PERL_DEFINES_H
 
-#ifdef HAVE_TLS_CONTEXT
+#ifdef USE_THREADS
 PerlInterpreter *parent_perl = NULL;
 extern PerlInterpreter *parent_perl;
-#define GET_TLS_CONTEXT parent_perl =  PERL_GET_CONTEXT;
-#define ENTER_TLS_CONTEXT \
-        PerlInterpreter *current_perl = PERL_GET_CONTEXT; \
-	        PERL_SET_CONTEXT(parent_perl); { \
-			                PerlInterpreter *my_perl = parent_perl;
-#define LEAVE_TLS_CONTEXT \
-					        } PERL_SET_CONTEXT(current_perl);
+#if defined WINDOWS || defined WIN32 
+PerlInterpreter *current_perl = NULL;
+#define GET_TLS_CONTEXT eval_pv("require DynaLoader;", TRUE); \
+        if(!current_perl) { \
+            parent_perl = PERL_GET_CONTEXT; \
+            current_perl = perl_clone(parent_perl, CLONEf_KEEP_PTR_TABLE); \
+            PERL_SET_CONTEXT(parent_perl); \
+        }
+#define ENTER_TLS_CONTEXT { \
+            if(!PERL_GET_CONTEXT) { \
+                PERL_SET_CONTEXT(current_perl); \
+            }
+#else
+#define GET_TLS_CONTEXT parent_perl = PERL_GET_CONTEXT; \
+        eval_pv("require DynaLoader;", TRUE);
+#define ENTER_TLS_CONTEXT { \
+            if(!PERL_GET_CONTEXT) { \
+                PerlInterpreter *my_perl = perl_clone(parent_perl, CLONEf_KEEP_PTR_TABLE); \
+                PERL_SET_CONTEXT(my_perl); \
+            }
+#endif
+#define LEAVE_TLS_CONTEXT }
 #else
 #define GET_TLS_CONTEXT         /* TLS context not enabled */
 #define ENTER_TLS_CONTEXT       /* TLS context not enabled */
