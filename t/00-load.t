@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use Test::Most 'bail';
-use Test::Strict;
 use File::Spec 'catfile';
 
 BEGIN {
@@ -75,7 +74,13 @@ BEGIN {
 		/;
 
 	my $tests = scalar @modules;
-	plan tests => $tests * 4;
+
+
+	eval 'require Test::Strict';
+
+	my $load_test_strict = 0;
+
+	$load_test_strict = 1 unless $@;
 
 	foreach( @modules )
 	{
@@ -88,12 +93,22 @@ BEGIN {
 		$file = File::Spec->catfile( 'lib', @files );
 
 		$file = $file.'.pm';
+		
+		if( $load_test_strict )
+		{
+		eval 'Test::Strict::syntax_ok $file';
+		pass unless $@;	
+		eval 'Test::Stict::strict_ok $file';
+		pass unless $@;
+		eval 'Test::Strict::warnings_ok $file';
+		pass unless $@;
+		}
+		else
+		{
+			pass; pass; pass;
 
-		syntax_ok $file ;
-	
-		strict_ok $file ;
-
-		warnings_ok $file;
-
+		}
 	}
 }
+
+done_testing();
