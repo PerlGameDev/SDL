@@ -75,40 +75,40 @@ BEGIN {
 
 	my $tests = scalar @modules;
 
-
-	eval 'require Test::Strict';
-
 	my $load_test_strict = 0;
 
-	$load_test_strict = 1 unless $@;
+	if( $ENV{RELEASE_TESTING})
+	{
 
+		eval 'require Test::Strict';
+		$load_test_strict = 1 unless $@;
+	}
 	foreach( @modules )
 	{
 		use_ok $_ ;
-
-		my $file = $_;
-
-		my @files = split /::/, $file;
-
-		$file = File::Spec->catfile( 'lib', @files );
-
-		$file = $file.'.pm';
-		
 		if( $load_test_strict )
 		{
-		eval 'Test::Strict::syntax_ok $file';
-		pass unless $@;	
-		eval 'Test::Stict::strict_ok $file';
-		pass unless $@;
-		eval 'Test::Strict::warnings_ok $file';
-		pass unless $@;
-		}
-		else
-		{
-			pass; pass; pass;
+
+
+			my $file = $_;
+
+			my @files = split /::/, $file;
+
+			$file = File::Spec->catfile( 'lib', @files );
+
+			$file = $file.'.pm';
+
+			eval 'Test::Strict::syntax_ok $file';
+			pass unless $@;	
+			eval 'Test::Stict::strict_ok $file';
+			pass unless $@;
+			eval 'Test::Strict::warnings_ok $file';
+			pass unless $@;
 
 		}
 	}
+
+
 }
 
 done_testing();
