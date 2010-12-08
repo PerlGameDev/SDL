@@ -3,6 +3,7 @@
 #include "XSUB.h"
 #include "ppport.h"
 #include "helper.h"
+#include "defines.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -12,8 +13,6 @@
 #define HAVE_TLS_CONTEXT
 #endif
 
-PerlInterpreter * context = NULL;
-
 #include <SDL.h>
 #include <SDL_audio.h>
 
@@ -21,7 +20,7 @@ PerlInterpreter * context = NULL;
 void
 audio_callback ( void* data, Uint8 *stream, int len )
 {
-	PERL_SET_CONTEXT(context);
+	ENTER_TLS_CONTEXT;
 	dSP;
 
         char* string = (char*)stream;
@@ -50,8 +49,7 @@ audio_callback ( void* data, Uint8 *stream, int len )
 
 	FREETMPS;
 	LEAVE;
-	
-
+	LEAVE_TLS_CONTEXT;
 }
 
 MODULE = SDL::AudioSpec 	PACKAGE = SDL::AudioSpec    PREFIX = audiospec_
@@ -134,10 +132,7 @@ audiospec_callback( audiospec, cb )
 	char* cb
 	CODE:
 		/* the audio callback will happen in a different thread. */
-		/* so we're going to leave a cloned interpreter available */
-		/* but still remain in the current one. */
-		if (context == NULL)
-			context = PERL_GET_CONTEXT;
+		GET_TLS_CONTEXT;
 		audiospec->userdata = cb;
 		audiospec->callback = audio_callback;
 
