@@ -2,22 +2,19 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "defines.h"
 
 #include <SDL.h>
 
 #ifdef HAVE_SDL_MIXER
 #include <SDL_mixer.h>
 
-PerlInterpreter *perl_my      = NULL;
-PerlInterpreter *perl_for_cb  = NULL;
-PerlInterpreter *perl_for_fcb = NULL;
-char            *cb           = NULL;
-char            *fcb          = NULL;
+char *cb  = NULL;
+char *fcb = NULL;
 
 void mix_func(void *udata, Uint8 *stream, int len)
 {
-	PERL_SET_CONTEXT(perl_for_cb);
-	
+	ENTER_TLS_CONTEXT;
 	dSP;                                       /* initialize stack pointer          */
 	ENTER;                                     /* everything created after here     */
 	SAVETMPS;                                  /* ...is a temporary variable.       */
@@ -30,7 +27,7 @@ void mix_func(void *udata, Uint8 *stream, int len)
 
 	if(cb != NULL)
 	{
-        int count = call_pv(cb, G_ARRAY);      /* call the function                 */
+		int count = call_pv(cb, G_ARRAY);      /* call the function                 */
 		SPAGAIN;                               /* refresh stack pointer             */
 		
 		if(count == len + 1)
@@ -46,19 +43,20 @@ void mix_func(void *udata, Uint8 *stream, int len)
 
 	FREETMPS;                                  /* free that return value            */
 	LEAVE;                                     /* ...and the XPUSHed "mortal" args. */
+	LEAVE_TLS_CONTEXT;
 }
 
 void mix_finished(void)
 {
-	PERL_SET_CONTEXT(perl_for_fcb);
-	
+	ENTER_TLS_CONTEXT;
 	dSP;                                       /* initialize stack pointer          */
 	PUSHMARK(SP);                              /* remember the stack pointer        */
 
 	if(fcb != NULL)
 	{
-        call_pv(fcb, G_DISCARD|G_VOID);        /* call the function                 */
+		call_pv(fcb, G_DISCARD|G_VOID);        /* call the function                 */
 	}
+    LEAVE_TLS_CONTEXT;
 }
 
 #endif
@@ -121,9 +119,8 @@ mixmus_load_MUS( filename )
 	CODE:
 		Mix_Music * mixmusic;
 		mixmusic = Mix_LoadMUS(filename);
-		if (mixmusic == NULL) {
-		  fprintf(stderr, "Could not load %s\n", filename);
-		}
+		if (mixmusic == NULL)
+			fprintf(stderr, "Could not load %s\n", filename);
 		RETVAL = mixmusic;
 	OUTPUT:
 		RETVAL
@@ -143,20 +140,19 @@ mixmus_hook_music( func = NULL, arg = 0 )
 	CODE:
 		if(func != NULL)
 		{
-			if (perl_for_cb == NULL) {
-				perl_my     = PERL_GET_CONTEXT;
-				perl_for_cb = perl_clone(perl_my, CLONEf_KEEP_PTR_TABLE);
-				PERL_SET_CONTEXT(perl_my);
-			}
-		
+			GET_TLS_CONTEXT;
 			cb           = func;
 			void *arg2   = safemalloc(sizeof(int));
 			*(int*) arg2 = arg;
 			Mix_HookMusic(&mix_func, arg2);
-			safefree(arg2);
 		}
 		else
+		{
 			Mix_HookMusic(NULL, NULL);
+			void *arg2 = Mix_GetMusicHookData();
+			if(arg2 != NULL)
+				safefree(arg2);
+		}
 
 void
 mixmus_hook_music_finished( func = NULL )
@@ -164,14 +160,8 @@ mixmus_hook_music_finished( func = NULL )
 	CODE:
 		if(func != NULL)
 		{
-			if (perl_for_fcb == NULL) {
-				perl_my      = PERL_GET_CONTEXT;
-				perl_for_fcb = perl_clone(perl_my, CLONEf_KEEP_PTR_TABLE);
-				PERL_SET_CONTEXT(perl_my);
-			}
-
+			GET_TLS_CONTEXT;
 			fcb = func;
-
 			Mix_HookMusicFinished(&mix_finished);
 		}
 		else
