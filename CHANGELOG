@@ -1,9 +1,10 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.525_1
+* 2.525_2
 	- Fixed bug with SDL::Mixer::Music::hook_music, arg was freed too early [FROGGS]
 	- Added Module::Build::SDL, a helper for creating SDL based modules [kthakore]
 	- AudioSpec callbacks are using *_TLS_CONTEXT macros [FROGGS]
+	- SDL::Timer is using *_TLS_CONTEXT macros [FROGGS]
 	- Fixed typo in MANIFEST.SKIP file, scripts-folder is now in dist [FROGGS]
 
 * 2.524
