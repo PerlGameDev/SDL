@@ -179,7 +179,7 @@ init ( flags )
 #ifndef WIN32
 #ifdef HAVE_TLS_CONTEXT 
 
-		call_atexit(PERL_GET_CONTEXT, (void*)sdl_perl_atexit,0);
+		call_atexit(PERL_GET_CONTEXT, (void*)sdl_perl_atexit);
 #else
 		atexit(sdl_perl_atexit);
 #endif
