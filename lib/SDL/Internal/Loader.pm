@@ -9,6 +9,15 @@ our @LIBREFS = ();
 use SDL::ConfigData;
 use Alien::SDL;
 
+if($^O eq 'openbsd') {
+	my $alien_libdir = Alien::SDL->config('prefix') . '/lib';
+	if($alien_libdir && (!defined $ENV{LD_LIBRARY_PATH} || $ENV{LD_LIBRARY_PATH} !~ /$alien_libdir/)) {
+		$ENV{LD_LIBRARY_PATH} = $ENV{LD_LIBRARY_PATH}
+		                      ? "$alien_libdir:$ENV{LD_LIBRARY_PATH}"
+		                      : $alien_libdir;
+	}
+}
+
 # SDL::Internal::Loader is a king of "Dynaloader kung-fu" that is
 # necessary in situations when you install Allien::SDL from sources
 # or from prebuilt binaries as in these scenarios the SDL stuff is

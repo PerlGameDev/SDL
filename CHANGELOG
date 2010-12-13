@@ -6,6 +6,8 @@ Revision history for Perl extension SDL_perl.
 	- AudioSpec callbacks are using *_TLS_CONTEXT macros [FROGGS]
 	- SDL::Timer is using *_TLS_CONTEXT macros [FROGGS]
 	- Fixed typo in MANIFEST.SKIP file, scripts-folder is now in dist [FROGGS]
+	- Setting LD_LIBRARY_PATH to Alien::SDL's libdir for OpenBSD [FROGGS]
+	- Using UV instead of IV for SDL::Event attributes [kthakore]
 
 * 2.524
 	- Fix for t/mixer_channels.t.bak 
