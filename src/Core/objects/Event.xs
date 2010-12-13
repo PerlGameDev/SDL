@@ -62,7 +62,7 @@ event_type ( event, ... )
 	CODE:
 		if( items > 1 )
 		{
-			event->type = SvIV( ST(1) );
+			event->type = SvUV( ST(1) );
 		}
 
 		RETVAL = event->type;
@@ -87,7 +87,7 @@ event_active_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 
 		RETVAL = a->type;
@@ -103,7 +103,7 @@ event_active_gain ( event, ... )
 	
 		if( items > 1 )
 		{
-			a->gain = SvIV( ST(1) );
+			a->gain = SvUV( ST(1) );
 		}
 
 		RETVAL = a->gain;
@@ -118,7 +118,7 @@ event_active_state ( event, ... )
 
 		if( items > 1 )
 		{
-			a->state = SvIV( ST(1) );
+			a->state = SvUV( ST(1) );
 		}
 
 		RETVAL = a->state;
@@ -144,7 +144,7 @@ event_key_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 
 		RETVAL = a->type;
@@ -159,7 +159,7 @@ event_key_state ( event, ... )
 
 		if( items > 1 )
 		{
-			a->state = SvIV( ST(1) );
+			a->state = SvUV( ST(1) );
 		}
 
 		RETVAL = a->state;
@@ -193,7 +193,7 @@ event_key_scancode ( event, ... )
 		
 		if( items > 1 )
 		{
-			b->scancode = SvIV( ST(1) );
+			b->scancode = SvUV( ST(1) );
 		}
 
 		RETVAL = b->scancode;
@@ -209,7 +209,7 @@ event_key_sym ( event, ... )
 		
 		if( items > 1 )
 		{
-			b->sym = SvIV( ST(1) );
+			b->sym = SvUV( ST(1) );
 		}
 
 		RETVAL = b->sym;
@@ -225,7 +225,7 @@ event_key_mod ( event, ... )
 		
 		if( items > 1 )
 		{
-			b->mod = SvIV( ST(1) );
+			b->mod = SvUV( ST(1) );
 		}
 
 		RETVAL = b->mod;
@@ -241,7 +241,7 @@ event_key_unicode ( event, ... )
 		
 		if( items > 1 )
 		{
-			b->unicode = SvIV( ST(1) );
+			b->unicode = SvUV( ST(1) );
 		}
 
 		RETVAL = b->unicode;
@@ -266,7 +266,7 @@ event_motion_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 
 		RETVAL = a->type;
@@ -281,7 +281,7 @@ event_motion_state ( event, ... )
 
 		if( items > 1 )
 		{
-			a->state = SvIV( ST(1) );
+			a->state = SvUV( ST(1) );
 		}
 
 		RETVAL = a->state;
@@ -296,7 +296,7 @@ event_motion_x ( event, ... )
 
 		if( items > 1 )
 		{
-			a->x = SvIV( ST(1) );
+			a->x = SvUV( ST(1) );
 		}
 
 		RETVAL = a->x;
@@ -311,7 +311,7 @@ event_motion_y ( event, ... )
 
 		if( items > 1 )
 		{
-			a->y = SvIV( ST(1) );
+			a->y = SvUV( ST(1) );
 		}
 
 		RETVAL = a->y;
@@ -326,7 +326,7 @@ event_motion_xrel ( event, ... )
 
 		if( items > 1 )
 		{
-			a->xrel = SvIV( ST(1) );
+			a->xrel = SvUV( ST(1) );
 		}
 
 		RETVAL = a->xrel;
@@ -342,7 +342,7 @@ event_motion_yrel ( event, ... )
 
 		if( items > 1 )
 		{
-			a->yrel = SvIV( ST(1) );
+			a->yrel = SvUV( ST(1) );
 		}
 
 		RETVAL = a->yrel;
@@ -367,7 +367,7 @@ event_button_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 	
 		RETVAL = a->type;
@@ -382,7 +382,7 @@ event_button_which ( event, ... )
 
 		if( items > 1 )
 		{
-			a->which = SvIV( ST(1) );
+			a->which = SvUV( ST(1) );
 		}
 
 		RETVAL = a->which;
@@ -397,7 +397,7 @@ event_button_button ( event, ... )
 
  		if( items > 1 )
 		{
-			a->button = SvIV( ST(1) );
+			a->button = SvUV( ST(1) );
 		}
 
 		RETVAL = a->button;
@@ -412,7 +412,7 @@ event_button_state ( event, ... )
 
 		if( items > 1 )
 		{
-			a->state = SvIV( ST(1) );
+			a->state = SvUV( ST(1) );
 		}
 
 		RETVAL = a->state;
@@ -427,7 +427,7 @@ event_button_x ( event, ... )
 
 		if( items > 1 )
 		{
-			a->x = SvIV( ST(1) );
+			a->x = SvUV( ST(1) );
 		}
 
 		RETVAL = a->x;
@@ -442,7 +442,7 @@ event_button_y ( event, ... )
 
 		if( items > 1 )
 		{
-			a->y = SvIV( ST(1) );
+			a->y = SvUV( ST(1) );
 		}
 
 		RETVAL = a->y;
@@ -467,7 +467,7 @@ event_jaxis_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 
 		RETVAL = a->type;
@@ -482,7 +482,7 @@ event_jaxis_which ( event, ... )
 
 		if( items > 1 )
 		{
-			a->which = SvIV( ST(1) );
+			a->which = SvUV( ST(1) );
 		}
 
 		RETVAL = a->which;
@@ -497,7 +497,7 @@ event_jaxis_axis ( event, ... )
 
  		if( items > 1 )
 		{
-			a->axis = SvIV( ST(1) );
+			a->axis = SvUV( ST(1) );
 		}
 
 		RETVAL = a->axis;
@@ -512,7 +512,7 @@ event_jaxis_value ( event, ... )
 
 		if( items > 1 )
 		{
-			a->value = SvIV( ST(1) );
+			a->value = SvUV( ST(1) );
 		}
 
 		RETVAL = a->value;
@@ -537,7 +537,7 @@ event_jball_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 		
 		RETVAL = event->type;
@@ -552,7 +552,7 @@ event_jball_which ( event, ... )
 
 		if( items > 1 )
 		{
-			a->which = SvIV( ST(1) );
+			a->which = SvUV( ST(1) );
 		}
 		
 		RETVAL = a->which;
@@ -567,7 +567,7 @@ event_jball_ball ( event, ... )
 
 		if( items > 1 )
 		{
-			a->ball = SvIV( ST(1) );
+			a->ball = SvUV( ST(1) );
 		}
 		
 		RETVAL = a->ball;
@@ -582,7 +582,7 @@ event_jball_xrel ( event, ... )
 
 		if( items > 1 )
 		{
-			a->xrel = SvIV( ST(1) );
+			a->xrel = SvUV( ST(1) );
 		}
 
 		RETVAL = a->xrel;
@@ -597,7 +597,7 @@ event_jball_yrel ( event, ... )
 
 		if( items > 1 )
 		{
-			a->yrel = SvIV( ST(1) );
+			a->yrel = SvUV( ST(1) );
 		}
 
 		RETVAL = a->yrel;
@@ -624,7 +624,7 @@ event_jhat_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->which = SvIV( ST(1) );
+			a->which = SvUV( ST(1) );
 		}
 
 		RETVAL = a->type;
@@ -639,7 +639,7 @@ event_jhat_which ( event, ... )
 
 		if( items > 1 )
 		{
-			a->which = SvIV( ST(1) );
+			a->which = SvUV( ST(1) );
 		}
 
 		RETVAL = a->which;
@@ -654,7 +654,7 @@ event_jhat_hat ( event, ... )
 
 		if( items > 1 )
 		{
-			a->hat = SvIV( ST(1) );
+			a->hat = SvUV( ST(1) );
 		}
 
 		RETVAL = a->hat;
@@ -669,7 +669,7 @@ event_jhat_value ( event, ... )
 
 		if( items > 1 )
 		{
-			a->value = SvIV( ST(1) );
+			a->value = SvUV( ST(1) );
 		}
 
 		RETVAL = a->value;
@@ -696,7 +696,7 @@ event_jbutton_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 
 		RETVAL = a->type;
@@ -711,7 +711,7 @@ event_jbutton_which ( event, ... )
 
 		if( items > 1 )
 		{
-			a->which = SvIV( ST(1) );
+			a->which = SvUV( ST(1) );
 		}
 
 		RETVAL = a->which;
@@ -726,7 +726,7 @@ event_jbutton_button ( event, ... )
 
 		if( items > 1 )
 		{
-			a->button = SvIV( ST(1) );
+			a->button = SvUV( ST(1) );
 		}
 
 		RETVAL = a->button;
@@ -741,7 +741,7 @@ event_jbutton_state ( event, ... )
 
 		if( items > 1 )
 		{
-			a->state = SvIV( ST(1) );
+			a->state = SvUV( ST(1) );
 		}
 
 		RETVAL = a->state;
@@ -768,7 +768,7 @@ event_resize_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 
 		RETVAL = a->type;
@@ -782,7 +782,7 @@ event_resize_w ( event, ... )
 		SDL_ResizeEvent * a = &(event->resize);
 		if( items > 1 )
 		{
-			a->w = SvIV( ST(1) );
+			a->w = SvUV( ST(1) );
 		}
 
 		RETVAL = a->w;
@@ -797,7 +797,7 @@ event_resize_h ( event, ... )
 
 		if( items > 1 )
 		{
-			a->h = SvIV( ST(1) );
+			a->h = SvUV( ST(1) );
 		}
 
 		RETVAL = a->h;
@@ -822,7 +822,7 @@ event_expose_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 
 		RETVAL = a->type;
@@ -847,7 +847,7 @@ event_quit_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 
 		RETVAL = a->type;
@@ -872,7 +872,7 @@ event_user_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 
 		RETVAL = a->type;
@@ -887,7 +887,7 @@ event_user_code ( event, ... )
 
 		if( items > 1 )
 		{
-			a->code = SvIV( ST(1) );
+			a->code = SvUV( ST(1) );
 		}
 
 		RETVAL = (int)a->code;
@@ -936,7 +936,7 @@ event_syswm_type ( event, ... )
 
 		if( items > 1 )
 		{
-			a->type = SvIV( ST(1) );
+			a->type = SvUV( ST(1) );
 		}
 
 		RETVAL = a->type;

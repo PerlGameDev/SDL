@@ -1,7 +1,7 @@
 TYPEMAP
 const Uint16 *		T_PTR
 const Sint16 *		T_PTR
-Uint8			T_U_CHAR
+Uint8			T_UV
 Uint8 *			T_PTR
 const Uint8*		T_PTR
 Uint8 **		T_PTR
