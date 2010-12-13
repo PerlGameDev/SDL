@@ -1,3 +1,5 @@
+#define NEED_eval_pv
+#include "ppport.h"
 /* */
 /* defines.h */
 /* */

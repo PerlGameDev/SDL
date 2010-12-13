@@ -87,10 +87,10 @@ void handler(int sig) {
   void *array[10];
   size_t size;
 
-   //get void*'s for all entries on the stack
+   /*get void*'s for all entries on the stack */
      size = backtrace(array, 10);
   
-    // print out all the frames to stderr
+    /* print out all the frames to stderr */
          fprintf(stderr, "Error: signal %d:\n", sig);
            backtrace_symbols_fd(array, size, 2);
       exit(1);
@@ -179,7 +179,7 @@ init ( flags )
 #ifndef WIN32
 #ifdef HAVE_TLS_CONTEXT 
 
-		Perl_call_atexit(PERL_GET_CONTEXT, (void*)sdl_perl_atexit,0);
+		call_atexit(PERL_GET_CONTEXT, (void*)sdl_perl_atexit,0);
 #else
 		atexit(sdl_perl_atexit);
 #endif

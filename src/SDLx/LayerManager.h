@@ -1,3 +1,4 @@
+#include "ppport.h"
 
 #include "helper.h"
 
@@ -26,26 +27,26 @@ typedef struct SDLx_Layer
 int intersection( SDLx_Layer *layer1, SDLx_Layer *layer2 )
 {
     if(
-        // upper left point inside layer
+        /* upper left point inside layer */
         (   layer1->pos->x <= layer2->pos->x
             && layer2->pos->x < layer1->pos->x + layer1->clip->w
             && layer1->pos->y <= layer2->pos->y
             && layer2->pos->y < layer1->pos->y + layer1->clip->h
         )
 
-        // upper right point inside layer
+        /* upper right point inside layer */
         || (   layer1->pos->x < layer2->pos->x + layer2->clip->w
             && layer2->pos->x + layer2->clip->w <= layer1->pos->x + layer1->clip->w
             && layer1->pos->y <= layer2->pos->y
             && layer2->pos->y < layer1->pos->y + layer1->clip->h )
 
-        // lower left point inside layer
+        /* lower left point inside layer */
         || (   layer1->pos->x <= layer2->pos->x
             && layer2->pos->x < layer1->pos->x + layer1->clip->w
             && layer1->pos->y < layer2->pos->y + layer2->clip->h
             && layer2->pos->y + layer2->clip->h <= layer1->pos->y + layer1->clip->h )
 
-        // lower right point inside layer
+        /* lower right point inside layer */
         || (   layer1->pos->x < layer2->pos->x + layer2->clip->w
             && layer2->pos->x + layer2->clip->w <= layer1->pos->x + layer1->clip->w
             && layer1->pos->y < layer2->pos->y + layer2->clip->h
@@ -69,7 +70,7 @@ AV *layers_behind( SDLx_Layer *layer)
         SDLx_Layer *layer2 = (SDLx_Layer *)bag2obj(bag);
         if(intersection( layer, layer2 ) || intersection( layer2, layer ))
         {
-            // TODO checking transparency
+            /* TODO checking transparency */
             SvREFCNT_inc(bag);
             av_store( matches, count, bag );
             count++;
@@ -104,7 +105,7 @@ AV *layers_ahead( SDLx_Layer *layer )
         SDLx_Layer *layer2 = (SDLx_Layer *)bag2obj(bag);
         if(intersection( layer, layer2 ) || intersection( layer2, layer ))
         {
-            // TODO checking transparency
+            /* TODO checking transparency */
             SvREFCNT_inc(bag);
             av_store( matches, count, bag );
             count++;

@@ -191,7 +191,7 @@ surfacex_draw_rect ( surface, rt, color )
 		r_rect.y = v_rect->y;
 		r_rect.w = v_rect->w;
 		r_rect.h = v_rect->h;
-//		if( newly_created_rect == 1 ) {  safefree( v_rect); }
+/*		if( newly_created_rect == 1 ) {  safefree( v_rect); } */
 	}
     SDL_FillRect(surface, &r_rect, m_color);
 

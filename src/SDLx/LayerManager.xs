@@ -339,14 +339,14 @@ lmx_foreground( manager, ... )
         {
             SDLx_Layer        *layer   = (SDLx_Layer *)bag2obj(ST(x));
             SDLx_LayerManager *manager = layer->manager;
-            int index                  = layer->index; // we cant trust its value
+            int index                  = layer->index; /* we cant trust its value */
             int i;
             
             SV *fetched;
             for(i = 0; i <= av_len(manager->layers); i++)
             {
                 fetched = *av_fetch(manager->layers, i, 0);
-                if(fetched == ST(x)) // what bag do we have? => finding the right layer index
+                if(fetched == ST(x)) /* what bag do we have? => finding the right layer index */
                 {
                     index = i;
                     break;

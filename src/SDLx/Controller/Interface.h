@@ -1,23 +1,22 @@
-// Defines Controller Interface structs
-//
+/* Defines Controller Interface structs */
+/* */
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
-#include "ppport.h"
 
 
 typedef struct SDLx_State
 {
-	// Position
+	/* Position */
 	float x; 
 	float y;
-	// Velocity
+	/* Velocity */
 	float v_x;
 	float v_y;
-	// Rotation
+	/* Rotation */
 	float rotation;
 	float ang_v; 
-	// owned by an object or not?
+	/* owned by an object or not? */
 	int owned;
 	
 } SDLx_State;
@@ -36,11 +35,11 @@ typedef struct Derivative
 typedef struct SDLx_Interface
 {
 
-	// states to hold
+	/* states to hold */
 	SDLx_State* previous;
 	SDLx_State* current;
 
-	// subs to callback 
+	/* subs to callback  */
 	SV* acceleration;
 	SV* evaluate;
 	SV* interpolate;

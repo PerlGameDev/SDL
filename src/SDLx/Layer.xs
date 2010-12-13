@@ -41,7 +41,7 @@ layerx_new( CLASS, surface, ... )
         if(SvROK(ST(items - 1)) && SVt_PVHV == SvTYPE(SvRV(ST(items - 1))))
         {
             RETVAL->data = (HV *)SvRV(ST(items - 1));
-            //if(SvREFCNT(RETVAL->data) < 2)
+            /*if(SvREFCNT(RETVAL->data) < 2) */
                 SvREFCNT_inc(RETVAL->data);
             items--;
         }
@@ -213,13 +213,13 @@ layerx_foreground( bag )
     CODE:
         SDLx_Layer        *layer   = (SDLx_Layer *)bag2obj(bag);
         SDLx_LayerManager *manager = layer->manager;
-        int index                  = layer->index; // we cant trust its value
+        int index                  = layer->index; /* we cant trust its value */
         layer->manager->saved = 0;
         int i;
         
         for(i = 0; i <= av_len(manager->layers); i++)
         {
-            if(*av_fetch(manager->layers, i, 0) == bag) // what bag do we have? => finding the right layer index
+            if(*av_fetch(manager->layers, i, 0) == bag) /* what bag do we have? => finding the right layer index */
             {
                 index = i;
                 break;
@@ -241,6 +241,6 @@ void
 layerx_DESTROY( layer )
     SDLx_Layer *layer
 CODE:
-        //if((HV *)NULL != layer->data) // Attempt to free unreferenced scalar
-            //SvREFCNT_dec(layer->data);
+        /*if((HV *)NULL != layer->data) // Attempt to free unreferenced scalar */
+            /*SvREFCNT_dec(layer->data); */
         safefree(layer);

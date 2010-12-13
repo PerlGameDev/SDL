@@ -26,7 +26,7 @@ AV* acceleration_cb( SDLx_Interface * obj, float t )
 	SV * stateref = newSV( sizeof(SDLx_State *) ); 	
 	void * copyState = safemalloc( sizeof(SDLx_State) );
 	memcpy( copyState, obj->current, sizeof(SDLx_State) );
-	((SDLx_State *)copyState)->owned = 0; //conditional free
+	((SDLx_State *)copyState)->owned = 0; /*conditional free */
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
@@ -44,14 +44,14 @@ AV* acceleration_cb( SDLx_Interface * obj, float t )
 	count = call_sv(obj->acceleration, G_ARRAY);
 
 	SPAGAIN;
-//	warn( "state %p, state->x %f", copyState, ((SDLx_State *)copyState)->x );
+/*	warn( "state %p, state->x %f", copyState, ((SDLx_State *)copyState)->x ); */
 	int i;
 	for( i =0; i < count ; i++)
 	 av_push( array, newSVnv(POPn));
 
-//	warn ("before obj->current->x %f", obj->current->x);
+/*	warn ("before obj->current->x %f", obj->current->x); */
 	copy_state(obj->current, (SDLx_State *)copyState);
-//	warn ("after obj->current->x %f", obj->current->x);
+/*	warn ("after obj->current->x %f", obj->current->x); */
 	FREETMPS;
 	LEAVE;
 
@@ -196,7 +196,7 @@ objx_interpolate(obj, alpha)
 	CODE:
 	 SDLx_State* out =  (SDLx_State *)safemalloc(sizeof(SDLx_State )) ;
 	 interpolate( obj,out, alpha);
-	 out->owned = 0; //condition free 
+	 out->owned = 0; /*condition free  */
 	 RETVAL = out;
 	 OUTPUT:
 	 RETVAL 
