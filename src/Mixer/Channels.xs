@@ -3,6 +3,7 @@
 #include "XSUB.h"
 #define NEED_sv_2pv_flag
 #include "ppport.h"
+#include "defines.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -21,15 +22,11 @@ static int sdl_perl_use_smpeg_audio = 0;
 #endif
 #endif
 
-PerlInterpreter * context = NULL;
-static SV * cb            = (SV*)NULL;
+static SV * cb = (SV*)NULL;
 
 void callback(int channel)
 {
-	if(NULL == context)
-		return;
-	
-	PERL_SET_CONTEXT(context);
+	ENTER_TLS_CONTEXT;
 
 	dSP;
 	ENTER;
@@ -44,6 +41,7 @@ void callback(int channel)
 
 	FREETMPS;
 	LEAVE;
+	LEAVE_TLS_CONTEXT;
 }
 
 MODULE = SDL::Mixer::Channels 	PACKAGE = SDL::Mixer::Channels    PREFIX = mixchan_
@@ -163,8 +161,7 @@ void
 mixchan_channel_finished( fn )
 	SV* fn
 	CODE:
-		if(context == NULL)
-			context = PERL_GET_CONTEXT;
+		GET_TLS_CONTEXT;
 
 		if (cb == (SV*)NULL)
             cb = newSVsv(fn);

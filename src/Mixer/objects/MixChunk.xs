@@ -2,6 +2,8 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
+#include "defines.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -11,6 +13,12 @@
 
 #ifdef HAVE_SDL_MIXER
 #include <SDL_mixer.h>
+
+void _free_mixchunk(void *object)
+{
+	Mix_FreeChunk((Mix_Chunk *)object);
+}
+
 #endif
 
 MODULE = SDL::Mixer::MixChunk 	PACKAGE = SDL::Mixer::MixChunk    PREFIX = mixchunk_
@@ -48,9 +56,9 @@ mixchunk_volume ( mixchunk, ... )
 		RETVAL
 
 void
-mixchunk_DESTROY(mixchunk)
-	Mix_Chunk *mixchunk
+mixchunk_DESTROY(bag)
+	SV *bag
 	CODE:
-		Mix_FreeChunk(mixchunk);
+		objDESTROY(bag, _free_mixchunk);
 
 #endif
