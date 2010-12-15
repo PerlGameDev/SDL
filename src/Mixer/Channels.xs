@@ -26,7 +26,7 @@ static SV * cb = (SV*)NULL;
 
 void callback(int channel)
 {
-	ENTER_TLS_CONTEXT;
+	PERL_SET_CONTEXT(parent_perl);
 
 	dSP;
 	ENTER;
@@ -41,7 +41,6 @@ void callback(int channel)
 
 	FREETMPS;
 	LEAVE;
-	LEAVE_TLS_CONTEXT;
 }
 
 MODULE = SDL::Mixer::Channels 	PACKAGE = SDL::Mixer::Channels    PREFIX = mixchan_
@@ -161,7 +160,7 @@ void
 mixchan_channel_finished( fn )
 	SV* fn
 	CODE:
-		GET_TLS_CONTEXT;
+		parent_perl = PERL_GET_CONTEXT;
 
 		if (cb == (SV*)NULL)
             cb = newSVsv(fn);
