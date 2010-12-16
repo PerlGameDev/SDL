@@ -3,6 +3,7 @@
 #include "XSUB.h"
 #define NEED_sv_2pv_flag
 #include "ppport.h"
+#include "defines.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -21,15 +22,12 @@ static int sdl_perl_use_smpeg_audio = 0;
 #endif
 #endif
 
-PerlInterpreter * context = NULL;
-static SV * cb            = (SV*)NULL;
+#ifdef USE_THREADS
+static SV * cb = (SV*)NULL;
 
 void callback(int channel)
 {
-	if(NULL == context)
-		return;
-	
-	PERL_SET_CONTEXT(context);
+	PERL_SET_CONTEXT(parent_perl);
 
 	dSP;
 	ENTER;
@@ -45,6 +43,7 @@ void callback(int channel)
 	FREETMPS;
 	LEAVE;
 }
+#endif
 
 MODULE = SDL::Mixer::Channels 	PACKAGE = SDL::Mixer::Channels    PREFIX = mixchan_
 
@@ -159,19 +158,29 @@ mixchan_fade_out_channel ( which, ms )
 	OUTPUT:
 		RETVAL
 
+#ifdef USE_THREADS
+
 void
 mixchan_channel_finished( fn )
 	SV* fn
 	CODE:
-		if(context == NULL)
-			context = PERL_GET_CONTEXT;
-
 		if (cb == (SV*)NULL)
-            cb = newSVsv(fn);
+			cb = newSVsv(fn);
         else
-            SvSetSV(cb, fn);
-			
+			SvSetSV(cb, fn);
+
+		parent_perl = PERL_GET_CONTEXT;
 		Mix_ChannelFinished(&callback);
+
+#else
+
+void
+mixchan_channel_finished( fn )
+	SV* fn
+	CODE:
+		warn("Perl need to be compiled with 'useithreads' for SDL::Mixer::Channels::channel_finished( cb )");
+
+#endif
 
 int
 mixchan_playing( channel )
