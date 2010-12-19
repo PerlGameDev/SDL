@@ -5,6 +5,7 @@ use vars qw(@ISA @EXPORT @EXPORT_OK);
 require Exporter;
 require DynaLoader;
 use SDL::Constants ':SDL::Image';
+use SDL::Surface;
 our @ISA = qw(Exporter DynaLoader);
 
 use SDL::Internal::Loader;
