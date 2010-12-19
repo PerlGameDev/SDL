@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -138,17 +139,14 @@ videoinfo_video_mem( videoinfo )
 		RETVAL
 
 
-SDL_PixelFormat *
+SV *
 videoinfo_vfmt( videoinfo )
 
 	SDL_VideoInfo *videoinfo
-
 	PREINIT:
-	
-		char* CLASS = "SDL::PixelFormat";	
-	
+		char* CLASS = "SDL::PixelFormat";
 	CODE:
-		RETVAL = videoinfo->vfmt;
+		RETVAL = cpy2bag( videoinfo->vfmt, sizeof(SDL_PixelFormat *), sizeof(SDL_PixelFormat), "SDL::PixelFormat" );
 	OUTPUT:
 		RETVAL
 
