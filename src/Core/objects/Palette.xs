@@ -44,14 +44,14 @@ palette_colors ( palette )
 	OUTPUT:
 		RETVAL
 
-SDL_Color *
+SV *
 palette_color_index ( palette, index )
 	SDL_Palette *palette
 	int index
 	PREINIT:
 		char * CLASS = "SDL::Color";
 	CODE:
-		RETVAL = (SDL_Color *)(palette->colors + index);
+		RETVAL = cpy2bag( (SDL_Color *)(palette->colors + index), sizeof(SDL_Color *), sizeof(SDL_Color), "SDL::Color" );
 	OUTPUT:
 		RETVAL
 
