@@ -13,11 +13,11 @@ use File::Find qw[finddepth];
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use Alien::SDL;
 
-sub create_build_script {
+sub new {
   my $self = shift;
   my %args = @_;  
-  $args{share_dir} ||= 'data'; #set default sharedir name 'data'
-  $self->SUPER::create_build_script(%args);
+  $args{share_dir} ||= 'data'; #set default sharedir name 'data' instead of 'share'
+  $self->SUPER::new(%args);
 }
 
 sub ACTION_par {
