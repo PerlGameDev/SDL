@@ -44,7 +44,7 @@ SV *rect( SV *rect, int* new_rect_made)
     else
         croak("Rect must be number or arrayref or SDL::Rect or undef");
 
-	 SvREFCNT_inc(rect);
+	SvREFCNT_inc(rect);
     return retval;
 }
 
@@ -106,6 +106,7 @@ SV *_color_number( SV *color, SV *alpha )
 AV *_color_arrayref( AV *color, SV *alpha )
 {
     AV *retval = newAV();
+		retval = (AV*)sv_2mortal((SV*)retval);
     int length = SvTRUE(alpha) ? 4 : 3;
     int i      = 0;
     for(i = 0; i < length; i++)
@@ -131,7 +132,7 @@ AV *_color_arrayref( AV *color, SV *alpha )
                 av_push(retval, newSVuv(c));
         }
     }
-    return sv_2mortal((SV*)retval);
+    return retval;
 
 }
 
@@ -143,7 +144,7 @@ AV* __list_rgb( SV* color )
         if ( 0 == strcmp("number", format) )
         {
             RETVAL = newAV();
-            RETVAL = sv_2mortal((SV *)RETVAL);
+            RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
             unsigned int _color = SvUV(_color_number(color, newSVuv(0)));
             av_push(RETVAL, newSVuv(_color >> 16 & 0xFF));
             av_push(RETVAL, newSVuv(_color >>  8 & 0xFF));
@@ -151,12 +152,12 @@ AV* __list_rgb( SV* color )
         }
         else if ( 0 == strcmp("arrayref", format) )
         {
-            RETVAL = _color_arrayref((AV *)SvRV(color), newSVuv(0));
+            RETVAL = _color_arrayref((AV *)SvRV(color), sv_2mortal(newSVuv(0)));
         }
         else if ( 0 == strcmp("SDLx::Color", format) )
         {
             RETVAL = newAV();
-            RETVAL = sv_2mortal((SV *)RETVAL);
+            RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
             SDL_Color *_color = (SDL_Color *)bag2obj(color);
             av_push(RETVAL, newSVuv(_color->r));
             av_push(RETVAL, newSVuv(_color->g));
@@ -165,7 +166,7 @@ AV* __list_rgb( SV* color )
         else
         {
             RETVAL = newAV();
-            RETVAL = sv_2mortal((SV *)RETVAL);
+            RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
             av_push(RETVAL, newSVuv(0));
             av_push(RETVAL, newSVuv(0));
             av_push(RETVAL, newSVuv(0));
@@ -182,8 +183,8 @@ AV* __list_rgba( SV* color )
         if ( 0 == strcmp("number", format) )
         {
             RETVAL = newAV();
-            RETVAL = sv_2mortal((SV *)RETVAL);
-            unsigned int _color = SvUV(_color_number(color, newSVuv(1)));
+            RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
+            unsigned int _color = SvUV(_color_number(color, sv_2mortal(newSVuv(1))));
             av_push(RETVAL, newSVuv(_color >> 24 & 0xFF));
             av_push(RETVAL, newSVuv(_color >> 16 & 0xFF));
             av_push(RETVAL, newSVuv(_color >>  8 & 0xFF));
@@ -191,12 +192,12 @@ AV* __list_rgba( SV* color )
         }
         else if ( 0 == strcmp("arrayref", format) )
         {
-            RETVAL = _color_arrayref((AV *)SvRV(color), newSVuv(1));
+            RETVAL = _color_arrayref((AV *)SvRV(color), sv_2mortal(newSVuv(1)));
         }
         else if ( 0 == strcmp("SDLx::Color", format) )
         {
             RETVAL = newAV();
-            RETVAL = sv_2mortal((SV *)RETVAL);
+            RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
             SDL_Color *_color = (SDL_Color*)bag2obj(color);
             av_push(RETVAL, newSVuv(_color->r));
             av_push(RETVAL, newSVuv(_color->g));
@@ -206,7 +207,7 @@ AV* __list_rgba( SV* color )
         else
         {
             RETVAL = newAV();
-            RETVAL = sv_2mortal((SV *)RETVAL);
+            RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
             av_push(RETVAL, newSVuv(0));
             av_push(RETVAL, newSVuv(0));
             av_push(RETVAL, newSVuv(0));
