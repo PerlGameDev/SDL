@@ -114,7 +114,7 @@ O_OBJECT
         void** pointers = malloc(2 * sizeof(void*));
         pointers[0] = (void*)$var;
         pointers[1] = (void*)PERL_GET_CONTEXT;
-        sv_setref_pv( $arg, CLASS, (void*)pointers );
+        sv_setref_pv( $arg, CLASS, (void*)pointers ); 
     } else {
         XSRETURN_UNDEF;
     }

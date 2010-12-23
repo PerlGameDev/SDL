@@ -10,7 +10,7 @@ SV *rect( SV *rect, int* new_rect_made)
     if( !SvOK(rect) )
     {
         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
-	(*new_rect_made) = 1;
+		(*new_rect_made) = 1;
         r->x        = 0;
         r->y        = 0;
         r->w        = 0;
@@ -20,7 +20,7 @@ SV *rect( SV *rect, int* new_rect_made)
     else if( sv_derived_from(rect, "ARRAY") )
     {
         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
-		(*new_rect_made) = 1;
+	   		(*new_rect_made) = 1;
         int ra[4];
         int i       = 0;
         AV* recta   = (AV*)SvRV(rect);

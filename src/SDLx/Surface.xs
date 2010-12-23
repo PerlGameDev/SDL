@@ -186,14 +186,18 @@ surfacex_draw_rect ( surface, rt, color )
 	if( SvOK(rt) )
 	{
 		int newly_created_rect = 0;
-		SDL_Rect* v_rect = (SDL_Rect*)bag2obj(rect( rt, &newly_created_rect ));
+		SV* foo = rect( rt, &newly_created_rect );
+		SDL_Rect* v_rect = (SDL_Rect*)bag2obj(foo);
 		r_rect.x = v_rect->x;
 		r_rect.y = v_rect->y;
 		r_rect.w = v_rect->w;
 		r_rect.h = v_rect->h;
-/*		if( newly_created_rect == 1 ) {  safefree( v_rect); } */
+		SDL_FillRect(surface, &r_rect, m_color);
+		SvREFCNT_dec(foo);
+		//if( newly_created_rect == 1 ) {  safefree( v_rect); } 
 	}
-    SDL_FillRect(surface, &r_rect, m_color);
+	else
+    	SDL_FillRect(surface, &r_rect, m_color);
 
 void
 surfacex_blit( src, dest, ... )
@@ -208,9 +212,14 @@ surfacex_blit( src, dest, ... )
         SDL_Rect _src_rect;
         SDL_Rect _dest_rect;
         int newly_created_rect = 0;
-        
+       	SV* s_rect_sv, *d_rect_sv; 
+		int mall_sr = 0; int mall_dr = 0;
         if( items > 2 && SvOK(ST(2)) )
-            _src_rect = *(SDL_Rect *)bag2obj( rect(ST(2), &newly_created_rect) );
+        { 
+			s_rect_sv =  rect(ST(2), &newly_created_rect);
+			_src_rect = *(SDL_Rect *)bag2obj( s_rect_sv );
+			mall_sr = 1;
+		}
         else
         {
             _src_rect.x = 0;
@@ -220,7 +229,11 @@ surfacex_blit( src, dest, ... )
         }
         
         if( items > 3 && SvOK(ST(3)) )
-            _dest_rect = *(SDL_Rect *)bag2obj( rect(ST(3), &newly_created_rect) );
+		{
+			d_rect_sv = rect(ST(3), &newly_created_rect);
+            _dest_rect = *(SDL_Rect *)bag2obj( d_rect_sv );
+			mall_dr = 1;
+		}
         else
         {
             _dest_rect.x = 0;
@@ -230,4 +243,9 @@ surfacex_blit( src, dest, ... )
         }
         
         SDL_BlitSurface( _src, &_src_rect, _dest, &_dest_rect );
+		if ( mall_sr == 1 )
+			SvREFCNT_dec( s_rect_sv);
+		if ( mall_dr == 1 )
+			SvREFCNT_dec( d_rect_sv );
+
    

@@ -23,7 +23,6 @@ SV *obj2bag( int size_ptr,  void *obj, char *CLASS )
     pointers[0]     = (void*)obj;
     pointers[1]     = (void*)PERL_GET_CONTEXT;
     sv_setref_pv( objref, CLASS, (void *)pointers);
-    
     return objref;
 }
 
@@ -37,7 +36,8 @@ SV *cpy2bag( void *object, int p_size, int s_size, char *package )
     pointers[0]     = (void*)copy;
     pointers[1]     = (void*)PERL_GET_CONTEXT;
 
-    return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
+    SV* a = newSVsv(sv_setref_pv(ref, package, (void *)pointers));
+	return a;
 }
 
 void objDESTROY(SV *bag, void (* callback)(void *object))
@@ -48,7 +48,7 @@ void objDESTROY(SV *bag, void (* callback)(void *object))
         void* object = pointers[0];
         if (PERL_GET_CONTEXT == pointers[1])
         {
-            pointers[0] = NULL;
+			pointers[0] = NULL;
             if(object)
                 callback(object);
             safefree(pointers);
@@ -67,6 +67,13 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
     pointers[1]     = (void*)perl;
 
     return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
+}
+
+void print_pointer( const char* message, void* pointer )
+{
+
+	warn( "%s %p", message, pointer);
+
 }
 
 #endif
