@@ -131,8 +131,8 @@ AV *_color_arrayref( AV *color, SV *alpha )
                 av_push(retval, newSVuv(c));
         }
     }
-    sv_2mortal((SV*)retval);
-    return retval;
+    return sv_2mortal((SV*)retval);
+
 }
 
 
@@ -143,7 +143,7 @@ AV* __list_rgb( SV* color )
         if ( 0 == strcmp("number", format) )
         {
             RETVAL = newAV();
-            sv_2mortal((SV *)RETVAL);
+            RETVAL = sv_2mortal((SV *)RETVAL);
             unsigned int _color = SvUV(_color_number(color, newSVuv(0)));
             av_push(RETVAL, newSVuv(_color >> 16 & 0xFF));
             av_push(RETVAL, newSVuv(_color >>  8 & 0xFF));
@@ -156,7 +156,7 @@ AV* __list_rgb( SV* color )
         else if ( 0 == strcmp("SDLx::Color", format) )
         {
             RETVAL = newAV();
-            sv_2mortal((SV *)RETVAL);
+            RETVAL = sv_2mortal((SV *)RETVAL);
             SDL_Color *_color = (SDL_Color *)bag2obj(color);
             av_push(RETVAL, newSVuv(_color->r));
             av_push(RETVAL, newSVuv(_color->g));
@@ -165,7 +165,7 @@ AV* __list_rgb( SV* color )
         else
         {
             RETVAL = newAV();
-            sv_2mortal((SV *)RETVAL);
+            RETVAL = sv_2mortal((SV *)RETVAL);
             av_push(RETVAL, newSVuv(0));
             av_push(RETVAL, newSVuv(0));
             av_push(RETVAL, newSVuv(0));
@@ -182,7 +182,7 @@ AV* __list_rgba( SV* color )
         if ( 0 == strcmp("number", format) )
         {
             RETVAL = newAV();
-            sv_2mortal((SV *)RETVAL);
+            RETVAL = sv_2mortal((SV *)RETVAL);
             unsigned int _color = SvUV(_color_number(color, newSVuv(1)));
             av_push(RETVAL, newSVuv(_color >> 24 & 0xFF));
             av_push(RETVAL, newSVuv(_color >> 16 & 0xFF));
@@ -196,7 +196,7 @@ AV* __list_rgba( SV* color )
         else if ( 0 == strcmp("SDLx::Color", format) )
         {
             RETVAL = newAV();
-            sv_2mortal((SV *)RETVAL);
+            RETVAL = sv_2mortal((SV *)RETVAL);
             SDL_Color *_color = (SDL_Color*)bag2obj(color);
             av_push(RETVAL, newSVuv(_color->r));
             av_push(RETVAL, newSVuv(_color->g));
@@ -206,7 +206,7 @@ AV* __list_rgba( SV* color )
         else
         {
             RETVAL = newAV();
-            sv_2mortal((SV *)RETVAL);
+            RETVAL = sv_2mortal((SV *)RETVAL);
             av_push(RETVAL, newSVuv(0));
             av_push(RETVAL, newSVuv(0));
             av_push(RETVAL, newSVuv(0));
