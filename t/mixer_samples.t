@@ -51,9 +51,12 @@ my @left = qw/
 	quick_load_RAW
 	/;
 
-SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 );
+my $can_open = SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 );
 
-my $version = SDL::Mixer::linked_version();
+unless($can_open == 0) 
+{
+	plan( skip_all => 'Cannot open audio :'.SDL::get_error() );
+}my $version = SDL::Mixer::linked_version();
 printf(
 	"got version: %d.%d.%d\n",
 	$version->major, $version->minor, $version->patch

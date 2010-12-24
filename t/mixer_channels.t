@@ -32,8 +32,14 @@ use SDL::Mixer::Samples;
 use threads;
 use threads::shared;
 
+my $can_open = SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 );
 
-is( SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 ),
+unless($can_open == 0) 
+{
+	plan( skip_all => 'Cannot open audio :'.SDL::get_error() );
+}
+
+is( $can_open ,
 	0, '[open_audio] ran'
 );
 
