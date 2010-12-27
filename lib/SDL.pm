@@ -90,4 +90,32 @@ sub set_error {
 	SDL::set_error_real( sprintf( $format, @arguments ) );
 }
 
+
+# Hints for Inline.pm
+sub Inline
+{
+    my $language = shift;
+    if ($language ne 'C') {
+	warn "Warning: SDL.pm does not provide Inline hints for the $language language\n";
+	return
+    }
+
+	require Alien::SDL;
+    require File::Spec;
+	my $libs = Alien::SDL->config('libs');
+	my $cflags = Alien::SDL->config('cflags');
+	my $path;
+	my $sdl_typemap = File::Spec->catfile( 'SDL', 'typemap' );
+	 grep { my $find = File::Spec->catfile( $_, $sdl_typemap );
+			$path = $find if -e $find } @INC;
+    return {
+	LIBS => $libs,
+	CCFLAGS => $cflags,	
+	TYPEMAPS => $path,
+    };
+
+
+
+}
+
 1;
