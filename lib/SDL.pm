@@ -112,6 +112,7 @@ sub Inline
 	LIBS => $libs,
 	CCFLAGS => $cflags,	
 	TYPEMAPS => $path,
+	AUTO_INCLUDE => '#include <SDL.h>'
     };
 
 
