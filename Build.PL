@@ -589,6 +589,7 @@ my $build = $package->new(
 	c_source => 'src',
 	xs_files => \%xs,
 	meta_add => {},
+	typemap_files => { 'typemap' => 'lib/SDL/typemap' },
 
 	#create_readme => 1, ### make sense only if there is some POD doc in the file specified by dist_version_from
 	meta_merge => {
@@ -629,4 +630,5 @@ $build->notes( 'build_systems', $build_systems );
 $build->notes( 'sdl_cflags',    Alien::SDL->config('cflags') );
 $build->notes( 'sdl_libs',      Alien::SDL->config('libs') );
 $build->set_file_flags(); # creates notes('file_flags')
+$build->add_build_element('typemap');
 $build->create_build_script();
