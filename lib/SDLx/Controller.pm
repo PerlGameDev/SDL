@@ -32,29 +32,32 @@ sub new {
 		$self = bless \$a, $self;
 	}
 	
-	$_dt{ refaddr $self}                 = defined $args{dt}    ? $args{dt}    : 0.1;
-	$_min_t{ refaddr $self}              = defined $args{min_t} ? $args{min_t} : 1 / 60;
-#	$_current_time{ refaddr $self}       = $args{current_time} || 0; #no point
-	$_stop{ refaddr $self}               = $args{stop};
-	$_event{ refaddr $self}              = $args{event} || SDL::Event->new();
-	$_event_handlers{ refaddr $self}     = $args{event_handlers};
-	$_move_handlers{ refaddr $self}      = $args{move_handlers};
-	$_show_handlers{ refaddr $self}      = $args{show_handlers};
+	my $ref = refaddr $self;
+	
+	$_dt{ $ref }                 = defined $args{dt}    ? $args{dt}    : 0.1;
+	$_min_t{ $ref }              = defined $args{min_t} ? $args{min_t} : 1 / 60;
+#	$_current_time{ $ref }       = $args{current_time} || 0; #no point
+	$_stop{ $ref }               = $args{stop};
+	$_event{ $ref }              = $args{event} || SDL::Event->new();
+	$_event_handlers{ $ref }     = $args{event_handlers};
+	$_move_handlers{ $ref }      = $args{move_handlers};
+	$_show_handlers{ $ref }      = $args{show_handlers};
 
 	return $self;
 }
 
 sub DESTROY {
 	my $self = shift;
+	my $ref = refaddr $self;
 
-	delete $_dt{ refaddr $self};
-	delete $_min_t{ refaddr $self};
-	delete $_current_time{ refaddr $self};
-	delete $_stop{ refaddr $self};
-	delete $_event{ refaddr $self};
-	delete $_event_handlers{ refaddr $self};
-	delete $_move_handlers{ refaddr $self};
-	delete $_show_handlers{ refaddr $self};
+	delete $_dt{ $ref};
+	delete $_min_t{ $ref};
+	delete $_current_time{ $ref};
+	delete $_stop{ $ref};
+	delete $_event{ $ref};
+	delete $_event_handlers{ $ref};
+	delete $_move_handlers{ $ref};
+	delete $_show_handlers{ $ref};
 }
 
 sub run {
