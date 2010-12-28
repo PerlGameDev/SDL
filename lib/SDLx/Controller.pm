@@ -72,7 +72,7 @@ sub run {
 
 	$_current_time{ $ref } = Time::HiRes::time;
 	while ( !$_stop{ $ref } ) {
-		$self->_event;
+		$self->_event($ref);
 
 		my $new_time   = Time::HiRes::time;
 		my $delta_time = $new_time - $_current_time{ $ref };
@@ -81,15 +81,15 @@ sub run {
 		my $delta_copy = $delta_time;
 
 		while ( $delta_copy > $dt ) {
-			$self->_move( 1, $t ); #a full move
+			$self->_move( $ref, 1, $t ); #a full move
 			$delta_copy -= $dt;
 			$t += $dt;
 		}
 		my $step = $delta_copy / $dt;
-		$self->_move( $step, $t ); #a partial move
+		$self->_move( $ref, $step, $t ); #a partial move
 		$t += $dt * $step;
 		
-		$self->_show( $delta_time );
+		$self->_show( $ref, $delta_time );
 		
 		$dt    = $_dt{ $ref};    #these can change
 		$min_t = $_min_t{ $ref}; #during the cycle
@@ -112,8 +112,7 @@ sub pause {
 }
 
 sub _event {
-	my ($self) = shift;
-	my $ref = refaddr $self; 
+	my ($self, $ref) = @_;
 	while ( SDL::Events::poll_event( $_event{ $ref} ) ) {
 		SDL::Events::pump_events();
 		foreach my $event_handler ( @{ $_event_handlers{ $ref} } ) {
@@ -124,8 +123,7 @@ sub _event {
 }
 
 sub _move {
-	my ($self, $move_portion, $t) = @_;
-	my $ref = refaddr $self;
+	my ($self, $ref, $move_portion, $t) = @_;
 	foreach my $move_handler ( @{ $_move_handlers{ $ref} } ) {
 		next unless $move_handler;
 		$move_handler->( $move_portion, $self, $t );
@@ -133,8 +131,7 @@ sub _move {
 }
 
 sub _show {
-	my ($self, $delta_ticks) = @_;
-	my $ref = refaddr $self;
+	my ($self, $ref, $delta_ticks) = @_;
 	foreach my $show_handler ( @{ $_show_handlers{ $ref} } ) {
 		next unless $show_handler;
 		$show_handler->( $delta_ticks, $self );
