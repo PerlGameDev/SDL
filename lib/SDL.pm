@@ -103,6 +103,8 @@ sub Inline
 	require Alien::SDL;
     require File::Spec;
 	my $libs = Alien::SDL->config('libs');
+	#This should be added in ldd flags section but it is only doing SDL_main for some reason.
+	$libs .= ' '.File::Spec->catfile(Alien::SDL->config('prefix'),'lib','libSDL.dll.a')	if( $^O =~ 'win32' );
 	my $cflags = Alien::SDL->config('cflags');
 	my $path;
 	my $sdl_typemap = File::Spec->catfile( 'SDL', 'typemap' );
