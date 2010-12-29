@@ -113,8 +113,8 @@ sub pause {
 
 sub _event {
 	my ($self, $ref) = @_;
+	SDL::Events::pump_events();
 	while ( SDL::Events::poll_event( $_event{ $ref} ) ) {
-		SDL::Events::pump_events();
 		foreach my $event_handler ( @{ $_event_handlers{ $ref} } ) {
 			next unless $event_handler;
 			$event_handler->( $_event{ $ref}, $self );
