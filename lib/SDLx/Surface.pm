@@ -16,7 +16,6 @@ use SDL::PixelFormat;
 
 use SDL::GFX::Primitives;
 
-use Tie::Simple;
 use SDLx::Validate;
 use SDLx::Surface::TiedMatrix;
 
@@ -25,24 +24,25 @@ use overload (
 	fallback => 1,
 );
 use SDL::Constants ':SDL::Video';
-our @ISA = qw(Exporter DynaLoader SDL::Surface);
+our @ISA = qw(Exporter DynaLoader);
 
 use SDL::Internal::Loader;
 internal_load_dlls(__PACKAGE__);
 
 bootstrap SDLx::Surface;
 
-# I won't use a module here for efficiency and simplification of the
-# hierarchy.
-# Inside out object
-my %_tied_array;
+
+# This class provides an Adapter/Decorator to the SDL::Surface
+# class, while also extending its functionality. We don't inherit
+# directly because SDL::Surface is implemented on the C level as
+# a SCALAR ref, not a HASH, so it would be tricky to subclass from.
 
 sub new {
 	my ( $class, %options ) = @_;
-	my $self;
+	my $self = bless { tied_array => undef }, ref($class) || $class;
 
 	if ( $options{surface} ) {
-		$self = bless $options{surface}, $class;
+		$self->{surface} = $options{surface};
 	} else {
 		my $width  = $options{width}  || $options{w};
 		my $height = $options{height} || $options{h};
@@ -56,11 +56,11 @@ sub new {
 			$options{bluemask}  ||= 0x0000FF00;
 			$options{alphamask} ||= 0x000000FF;
 
-			$self = bless SDL::Surface->new(
+			$self->{surface} = SDL::Surface->new(
 				$options{flags},    $width,            $height,
 				$options{depth},    $options{redmask}, $options{greenmask},
 				$options{bluemask}, $options{alphamask}
-			), $class;
+			);
 		} else {
 			Carp::confess 'Provide surface, or atleast width and height';
 		}
@@ -70,6 +70,26 @@ sub new {
 	}
 	return $self;
 }
+
+### Decorating SDL::Surface
+## TODO: should we implement SDL::Surface->new_from() ?
+
+sub w              { $_[0]->{surface}->w                       }
+sub h              { $_[0]->{surface}->h                       }
+sub format         { $_[0]->{surface}->format                  }
+sub pitch          { $_[0]->{surface}->pitch                   }
+#sub get_pixel      { $_[0]->{surface}->get_pixel($_[1])        }
+#sub set_pixel      { $_[0]->{surface}->set_pixel($_[1], $_[2]) }
+sub get_pixels_ptr { $_[0]->{surface}->get_pixels_ptr          }
+# TODO: I think flags() is undocumented
+sub flags          { $_[0]->{surface}->flags                   }
+
+### Extra methods and attributes
+###
+
+sub surface { $_[0]->{surface}    }
+sub width   { $_[0]->{surface}->w }
+sub height  { $_[0]->{surface}->h }
 
 sub display {
 	my $disp = SDL::Video::get_video_surface;
@@ -108,17 +128,9 @@ sub duplicate {
 
 ### Overloads
 
-sub _tied_array {
-	my ( $self, $array ) = @_;
-	if ($array) {
-		$_tied_array{$$self} = $array if $array;
-	}
-	return $_tied_array{$$self};
-}
-
 sub get_pixel {
 	my ( $self, $y, $x ) = @_;
-	return SDLx::Surface::get_pixel_xs( $self, $x, $y );
+	return SDLx::Surface::get_pixel_xs( $self->surface, $x, $y );
 }
 
 sub set_pixel {
@@ -126,28 +138,21 @@ sub set_pixel {
 
 	$new_value = SDLx::Validate::num_rgba($new_value);
 
-	SDLx::Surface::set_pixel_xs( $self, $x, $y, $new_value );
+	SDLx::Surface::set_pixel_xs( $self->surface, $x, $y, $new_value );
 }
 
 sub _array {
 	my $self = shift;
-
-	my $array = $self->_tied_array;
+	my $array = $self->{tied_array};
 
 	unless ($array) {
 		tie my @array, 'SDLx::Surface::TiedMatrix', $self;
 		$array = \@array;
-		$self->_tied_array($array);
+		$self->{tied_array} = $array;
 	}
 	return $array;
 }
 
-#ATTRIBUTE
-
-sub surface { $_[0] }
-
-sub width { $_[0]->w }
-sub height { $_[0]->h }
 
 #WRAPPING
 
@@ -215,7 +220,8 @@ sub flip {
 }
 
 sub update {
-	my ( $surface, $rects ) = @_;
+	my ( $self, $rects ) = @_;
+    my $surface = $self->{surface};
 
 	if ( !defined($rects) || ( ref($rects) eq 'ARRAY' && !ref( $rects->[0] ) ) ) {
 		my @rect;
@@ -225,18 +231,15 @@ sub update {
 		$rect[2] ||= $surface->w;
 		$rect[3] ||= $surface->h;
 		
-		foreach(0..1)
-		{
+		foreach(0..1) {
 			$rect[$_] = 0 if $rect[$_] < 0;
 		}
 		
-		foreach(0,2)
-		{
+		foreach(0,2) {
 			$rect[$_] = $surface->w if $rect[$_] > $surface->w;
 		}
 		
-		foreach(1,3)
-		{
+		foreach(1,3) {
 			$rect[$_] = $surface->h if $rect[$_] > $surface->h;
 		}	
 		SDL::Video::update_rect( $surface, @rect );
@@ -244,7 +247,7 @@ sub update {
 		SDL::Video::update_rects( $surface, map { SDLx::Validate::rect($_) } @{$rects} );
 	}
 
-	return $surface;
+	return $self;
 }
 
 sub draw_line {
@@ -372,10 +375,5 @@ sub draw_gfx_text {
 	return $self;
 }
 
-sub DESTROY {
-	my $self = shift;
-	delete $_tied_array{$$self};
-	SDL::Surface::DESTROY($self);
-}
 
 1;
