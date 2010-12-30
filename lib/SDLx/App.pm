@@ -2,7 +2,6 @@
 #
 # App.pm
 #
-
 package SDLx::App;
 
 use strict;
@@ -21,21 +20,20 @@ use Data::Dumper;
 use base qw/SDLx::Surface SDLx::Controller/;
 
 sub new {
-	my $proto   = shift;
-	my $class   = ref($proto) || $proto;
-	my %options = @_;
+    my ($class, %options) = @_;
 
-	# SDL_INIT_VIDEO() is 0, so check defined instead of truth.
-	unless ( exists( $options{noinit} ) ) # we shouldn't do init always
-	{
-		my $init =
-			defined $options{init}
-			? $options{init}
-			: SDL::SDL_INIT_EVERYTHING;
+    # we shouldn't do init always
+	unless ( exists( $options{noinit} ) ) {
+
+        # SDL_INIT_VIDEO() is 0, so we check for defined
+        # instead of just true/false
+		my $init = defined $options{init}
+                 ? $options{init} : SDL::SDL_INIT_EVERYTHING;
 
 		SDL::init($init);
 	}
 
+    # oh, my eyes! my eyes!!
 	my $t   = $options{title}            || $options{t}   || $0;
 	my $it  = $options{icon_title}       || $options{it}  || $t;
 	my $ic  = $options{icon}             || $options{i}   || "";
@@ -58,6 +56,7 @@ sub new {
 	my $st = $options{stencil_size} || $options{st} || 0;
 	my $async = $options{asyncblit} || 0;
 
+    # some options push new flags
 	$f |= SDL::Video::SDL_OPENGL if ( $options{gl} || $options{opengl} );
 	$f |= SDL::Video::SDL_FULLSCREEN
 		if ( $options{fullscreen} || $options{full} );
