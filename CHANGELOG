@@ -1,5 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.526 Dec 31 2010 
+	- Inline with 'SDL' support 
+	- Decreasing some SDL_Validate scalar leaks 
+
 * 2.525_5
 	- Fixed bug with SDL::Mixer::Music::hook_music, arg was freed too early [FROGGS]
 	- Added Module::Build::SDL, a helper for creating SDL based modules [kthakore]
