@@ -30,7 +30,7 @@ sub new {
 	bless $self, $class;
 	$self->audio(1);
 	$self->video(1);
-	return $self, $info;
+	return $self;
 }
 
 sub DESTROY {
@@ -54,15 +54,15 @@ sub volume {
 }
 
 sub display {
-	Carp::confess "SDL::SMPEG::SMPEG::Display requires a SDL::SMPEG::Surface\n"
-		unless $_[1]->isa('SDL::SMPEG::Surface');
-	SDL::SMPEG::SMPEGSetDisplay( ${ $_[0] }, ${ $_[1] }, 0 );
+	Carp::confess "SDL::SMPEG::Display requires a SDL::Surface\n"
+		unless $_[1]->isa('SDL::Surface');
+	SDL::SMPEG::SMPEGSetDisplay( ${ $_[0] },  $_[1] , 0 );
 }
 
 sub scale {
 	return SDL::SMPEG::SMPEGScaleXY( ${ $_[0] }, $_[1], $_[2] ) if ( @_ == 3 );
 	return SDL::SMPEG::SMPEGScaleXY( ${ $_[0] }, $_[1]->width(), $_[1]->height() )
-		if $_[1]->isa('SDL::SMPEG::Surface');
+		if $_[1]->isa('SDL::Surface');
 	SDL::SMPEG::SMPEGScale( ${ $_[0] }, $_[1] );
 }
 
@@ -95,8 +95,8 @@ sub loop {
 }
 
 sub region {
-	Carp::confess "SDL::SMPEG::SMPEG::region requires a SDL::SMPEG::Rect\n"
-		unless $_[1]->isa('SDL::SMPEG::Rect');
+	Carp::confess "SDL::SMPEG::region requires a SDL::Rect\n"
+		unless $_[1]->isa('SDL::Rect');
 	SDL::SMPEG::SMPEGDisplayRegion( ${ $_[0] }, ${ $_[1] } );
 }
 

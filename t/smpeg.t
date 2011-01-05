@@ -6,6 +6,7 @@ BEGIN {
 }
 
 use strict;
+use SDL;
 use SDL::Config;
 
 use Test::More;
@@ -17,7 +18,7 @@ if ( SDL::Config->has('smpeg') ) {
 }
 
 use_ok('SDL::SMPEG');
-use_ok('SDL::Surface');
+use SDL::Video;
 
 can_ok(
 	'SDL::SMPEG', qw/
@@ -79,12 +80,12 @@ SCOPE: {
 	# TODO: I'm not entirely sure this is meant to be zero
 	is( $mpeg->fps,       0, '->fps ok'       );
 
-	# Create a surface to attach the movie to
-	my $surface = SDL::Surface->new(
+	# Create a display to attach the movie to
+	my $surface = SDL::Video::set_video_mode(
 		$mpeg->height,
 		$mpeg->width,
-		24,         # Colour bits
-		0, 0, 0, 0, # Masks
+		32,         # Colour bits
+		SDL::Video::SDL_SWSURFACE, # flags
 	);
 	isa_ok( $surface, 'SDL::Surface' );
 

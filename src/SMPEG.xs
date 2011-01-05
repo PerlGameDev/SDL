@@ -13,6 +13,10 @@
 #endif
 
 
+void smpeg_display_callback (SDL_Surface* s , int a, int b, unsigned int c, unsigned int d)
+{
+
+}
 
 MODULE = SDL::SMPEG				PACKAGE = SDL::SMPEG
 PROTOTYPES : DISABLE
@@ -174,12 +178,14 @@ SMPEGSetVolume ( mpeg , volume )
 		SMPEG_setvolume(mpeg,volume);
 
 void
-SMPEGSetDisplay ( mpeg, dest, surfLock )
+SMPEGSetDisplay ( mpeg, dest, callback )
 	SMPEG* mpeg
 	SDL_Surface* dest
-	SDL_mutex*  surfLock
+	SV* callback
 	CODE:
-		SMPEG_setdisplay(mpeg,dest,surfLock,NULL);
+		SDL_mutex* surfLock = SDL_CreateMutex();
+		SMPEG_setdisplay(mpeg,dest,surfLock,(void*)&smpeg_display_callback);
+		safefree(surfLock);
 
 void
 SMPEGScaleXY ( mpeg, w, h)
