@@ -7,6 +7,13 @@ use Carp;
 use SDL;
 use SDL::Surface;
 use SDL::MPEG;
+our @ISA = qw(Exporter DynaLoader);
+
+use SDL::Internal::Loader;
+internal_load_dlls(__PACKAGE__);
+
+bootstrap SDL::SMPEG;
+
 
 sub new {
 	my $proto   = shift;
@@ -18,8 +25,8 @@ sub new {
 	my $a = $options{'-audio'} ? 1 : 0;
 	my $info = SDL::MPEG->new();
 
-	my $self = \SDL::NewSMPEG( $n, $$info, $a );
-	Carp::confess SDL::GetError() unless $$self;
+	my $self = \SDL::SMPEG::NewSMPEG( $n, $$info, $a );
+	Carp::confess SDL::get_error() unless $$self;
 	bless $self, $class;
 	$self->audio(1);
 	$self->video(1);
@@ -27,74 +34,74 @@ sub new {
 }
 
 sub DESTROY {
-	SDL::FreeSMPEG( ${ $_[0] } );
+	SDL::SMPEG::FreeSMPEG( ${ $_[0] } );
 }
 
 sub error {
-	SDL::SMPEGError( ${ $_[0] } );
+	SDL::SMPEG::SMPEGError( ${ $_[0] } );
 }
 
 sub audio {
-	SDL::SMPEGEnableAudio( ${ $_[0] }, $_[1] );
+	SDL::SMPEG::SMPEGEnableAudio( ${ $_[0] }, $_[1] );
 }
 
 sub video {
-	SDL::SMPEGEnableSMPEG( ${ $_[0] }, $_[1] );
+	SDL::SMPEG::SMPEGEnableVideo( ${ $_[0] }, $_[1] );
 }
 
 sub volume {
-	SDL::SMPEGSetVolume( ${ $_[0] }, $_[1] );
+	SDL::SMPEG::SMPEGSetVolume( ${ $_[0] }, $_[1] );
 }
 
 sub display {
-	Carp::confess "SDL::SMPEG::Display requires a SDL::Surface\n"
-		unless $_[1]->isa('SDL::Surface');
-	SDL::SMPEGSetDisplay( ${ $_[0] }, ${ $_[1] }, 0 );
+	Carp::confess "SDL::SMPEG::SMPEG::Display requires a SDL::SMPEG::Surface\n"
+		unless $_[1]->isa('SDL::SMPEG::Surface');
+	SDL::SMPEG::SMPEGSetDisplay( ${ $_[0] }, ${ $_[1] }, 0 );
 }
 
 sub scale {
-	return SDL::SMPEGScaleXY( ${ $_[0] }, $_[1], $_[2] ) if ( @_ == 3 );
-	return SDL::SMPEGScaleXY( ${ $_[0] }, $_[1]->width(), $_[1]->height() )
-		if $_[1]->isa('SDL::Surface');
-	SDL::SMPEGScale( ${ $_[0] }, $_[1] );
+	return SDL::SMPEG::SMPEGScaleXY( ${ $_[0] }, $_[1], $_[2] ) if ( @_ == 3 );
+	return SDL::SMPEG::SMPEGScaleXY( ${ $_[0] }, $_[1]->width(), $_[1]->height() )
+		if $_[1]->isa('SDL::SMPEG::Surface');
+	SDL::SMPEG::SMPEGScale( ${ $_[0] }, $_[1] );
 }
 
 sub play {
-	SDL::SMPEGPlay( ${ $_[0] } );
+	SDL::SMPEG::SMPEGPlay( ${ $_[0] } );
 }
 
 sub pause {
-	SDL::SMPEGPause( ${ $_[0] } );
+	SDL::SMPEG::SMPEGPause( ${ $_[0] } );
 }
 
 sub stop {
-	SDL::SMPEGStop( ${ $_[0] } );
+	SDL::SMPEG::SMPEGStop( ${ $_[0] } );
 }
 
 sub rewind {
-	SDL::SMPEGRewind( ${ $_[0] } );
+	SDL::SMPEG::SMPEGRewind( ${ $_[0] } );
 }
 
 sub seek {
-	SDL::SMPEGSeek( ${ $_[0] }, $_[1] );
+	SDL::SMPEG::SMPEGSeek( ${ $_[0] }, $_[1] );
 }
 
 sub skip {
-	SDL::SMPEGSkip( ${ $_[0] }, $_[1] );
+	SDL::SMPEG::SMPEGSkip( ${ $_[0] }, $_[1] );
 }
 
 sub loop {
-	SDL::SMPEGLoop( ${ $_[0] }, $_[1] );
+	SDL::SMPEG::SMPEGLoop( ${ $_[0] }, $_[1] );
 }
 
 sub region {
-	Carp::confess "SDL::SMPEG::region requires a SDL::Rect\n"
-		unless $_[1]->isa('SDL::Rect');
-	SDL::SMPEGDisplayRegion( ${ $_[0] }, ${ $_[1] } );
+	Carp::confess "SDL::SMPEG::SMPEG::region requires a SDL::SMPEG::Rect\n"
+		unless $_[1]->isa('SDL::SMPEG::Rect');
+	SDL::SMPEG::SMPEGDisplayRegion( ${ $_[0] }, ${ $_[1] } );
 }
 
 sub frame {
-	SDL::SMPEGRenderFrame( ${ $_[0] }, $_[1] );
+	SDL::SMPEG::SMPEGRenderFrame( ${ $_[0] }, $_[1] );
 }
 
 sub info {
@@ -102,7 +109,7 @@ sub info {
 }
 
 sub status {
-	SDL::SMPEGStatus( ${ $_[0] } );
+	SDL::SMPEG::SMPEGStatus( ${ $_[0] } );
 }
 
 1;

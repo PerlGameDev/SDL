@@ -34,6 +34,12 @@ use strict;
 use warnings;
 use Carp;
 use SDL;
+our @ISA = qw(Exporter DynaLoader);
+
+use SDL::Internal::Loader;
+internal_load_dlls(__PACKAGE__);
+
+bootstrap SDL::MPEG;
 
 sub new {
 	my $proto   = shift;
@@ -42,59 +48,56 @@ sub new {
 
 	my $self;
 	if ( $options{-from} ) {
-		Carp::confess "SDL::MPEG::new -from requires a SDL::Video object\n"
-			unless $options{-from}->isa('SDL::Video');
-
-		$self = \SDL::SMPEGGetInfo( ${ $options{-from} } );
+		$self = \SDL::MPEG::SMPEGGetInfo( ${ $options{-from} } );
 	} else {
-		$self = \SDL::NewSMPEGInfo();
+		$self = \SDL::MPEG::NewSMPEGInfo();
 	}
 	bless $self, $class;
 	return $self;
 }
 
 sub DESTROY {
-	SDL::FreeSMPEGInfo( ${ $_[0] } );
+	SDL::MPEG::FreeSMPEGInfo( ${ $_[0] } );
 }
 
 sub has_audio {
-	SDL::SMPEGInfoHasAudio( ${ $_[0] } );
+	SDL::MPEG::SMPEGInfoHasAudio( ${ $_[0] } );
 }
 
 sub has_video {
-	SDL::SMPEGInfoHasVideo( ${ $_[0] } );
+	SDL::MPEG::SMPEGInfoHasVideo( ${ $_[0] } );
 }
 
 sub width {
-	SDL::SMPEGInfoWidth( ${ $_[0] } );
+	SDL::MPEG::SMPEGInfoWidth( ${ $_[0] } );
 }
 
 sub height {
-	SDL::SMPEGInfoHeight( ${ $_[0] } );
+	SDL::MPEG::SMPEGInfoHeight( ${ $_[0] } );
 }
 
 sub size {
-	SDL::SMPEGInfoTotalSize( ${ $_[0] } );
+	SDL::MPEG::SMPEGInfoTotalSize( ${ $_[0] } );
 }
 
 sub offset {
-	SDL::SMPEGInfoCurrentOffset( ${ $_[0] } );
+	SDL::MPEG::SMPEGInfoCurrentOffset( ${ $_[0] } );
 }
 
 sub frame {
-	SDL::SMPEGInfoCurrentFrame( ${ $_[0] } );
+	SDL::MPEG::SMPEGInfoCurrentFrame( ${ $_[0] } );
 }
 
 sub fps {
-	SDL::SMPEGInfoCurrentFPS( ${ $_[0] } );
+	SDL::MPEG::SMPEGInfoCurrentFPS( ${ $_[0] } );
 }
 
 sub time {
-	SDL::SMPEGInfoCurrentTime( ${ $_[0] } );
+	SDL::MPEG::SMPEGInfoCurrentTime( ${ $_[0] } );
 }
 
 sub length {
-	SDL::SMPEGInfoTotalTime( ${ $_[0] } );
+	SDL::MPEG::SMPEGInfoTotalTime( ${ $_[0] } );
 }
 
 1;

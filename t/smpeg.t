@@ -11,7 +11,7 @@ use SDL::Config;
 use Test::More;
 
 if ( SDL::Config->has('smpeg') ) {
-	plan( tests => 2 );
+	plan( tests => 4 );
 } else {
 	plan( skip_all => ( SDL::Config->has('smpeg') ? '' : ' smpeg support not compiled' ) );
 }
@@ -40,5 +40,9 @@ can_ok(
 		status
 		/
 );
+
+my ($smpeg, $mpeg) = SDL::SMPEG->new(-name => 'test/data/test-mpeg.mpg' );
+isa_ok( $smpeg, 'SDL::SMPEG' );
+isa_ok( $mpeg, 'SDL::MPEG' );
 
 sleep(2);
