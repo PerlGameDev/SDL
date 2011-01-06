@@ -48,7 +48,7 @@ sub new {
 
 	my $self;
 	if ( $options{-from} ) {
-		$self = \SDL::SMPEG::SMPEGGetInfo( ${ $options{-from} } );
+		$self = \SDL::SMPEG::SMPEGGetInfo( $options{-from} );
 	} else {
 		$self = \NewSMPEGInfo();
 	}
@@ -57,47 +57,47 @@ sub new {
 }
 
 sub DESTROY {
-	FreeSMPEGInfo( ${ $_[0] } );
+#	FreeSMPEGInfo(  $_[0] );
 }
 
 sub has_audio {
-	SMPEGInfoHasAudio( ${ $_[0] } );
+	SMPEGInfoHasAudio(  $_[0] );
 }
 
 sub has_video {
-	SMPEGInfoHasVideo( ${ $_[0] } );
+	SMPEGInfoHasVideo(  $_[0] );
 }
 
 sub width {
-	SMPEGInfoWidth( ${ $_[0] } );
+	SMPEGInfoWidth(  $_[0] );
 }
 
 sub height {
-	SMPEGInfoHeight( ${ $_[0] } );
+	SMPEGInfoHeight(  $_[0] );
 }
 
 sub size {
-	SMPEGInfoTotalSize( ${ $_[0] } );
+	SMPEGInfoTotalSize(  $_[0] );
 }
 
 sub offset {
-	SMPEGInfoCurrentOffset( ${ $_[0] } );
+	SMPEGInfoCurrentOffset(  $_[0] );
 }
 
 sub frame {
-	SMPEGInfoCurrentFrame( ${ $_[0] } );
+	SMPEGInfoCurrentFrame(  $_[0] );
 }
 
 sub fps {
-	SMPEGInfoCurrentFPS( ${ $_[0] } );
+	SMPEGInfoCurrentFPS(  $_[0] );
 }
 
 sub time {
-	SMPEGInfoCurrentTime( ${ $_[0] } );
+	SMPEGInfoCurrentTime(  $_[0] );
 }
 
 sub length {
-	SMPEGInfoTotalTime( ${ $_[0] } );
+	SMPEGInfoTotalTime(  $_[0] );
 }
 
 1;

@@ -76,8 +76,8 @@ IPaddress*		O_OBJECT
 SDLNet_GenericSocket	T_PTR
 TTF_Font *		O_OBJECT
 SDL_Overlay *		O_OBJECT	
-SMPEG_Info *		T_PTR
-SMPEG *			T_PTR
+SMPEG_Info *		O_OBJECT
+SMPEG *			O_OBJECT
 SMPEGstatus		T_IV
 SDL_mutex *		T_PTR
 GLbitfield		T_IV

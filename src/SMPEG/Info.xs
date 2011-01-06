@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -22,6 +23,8 @@ PROTOTYPES : DISABLE
 
 SMPEG_Info *
 NewSMPEGInfo()
+	PREINIT:
+		char* CLASS = "SDL::SMPEG::Info";
 	CODE:	
 		RETVAL = (SMPEG_Info *) safemalloc (sizeof(SMPEG_Info));
 	OUTPUT:
@@ -29,9 +32,9 @@ NewSMPEGInfo()
 
 void
 FreeSMPEGInfo ( info )
-	SMPEG_Info *info
+	SV *info
 	CODE:	
-		safefree(info);
+		objDESTROY(info, safefree);
 
 int
 SMPEGInfoHasAudio ( info )

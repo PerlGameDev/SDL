@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -37,20 +38,22 @@ NewSMPEG ( filename, info, use_audio )
 	char* filename
 	SMPEG_Info* info
 	int use_audio
+	PREINIT:
+		char* CLASS = "SDL::SMPEG";
 	CODE:	
-/*#ifdef HAVE_SDL_MIXER */
-/*		RETVAL = SMPEG_new(filename,info,0); */
-/*#else */
+#ifdef HAVE_SDL_MIXER
+		RETVAL = SMPEG_new(filename,info,0); 
+#else 
 		RETVAL = SMPEG_new(filename,info,use_audio);
-/*#endif */
+#endif 
 	OUTPUT:
 		RETVAL
 
 void
 FreeSMPEG ( mpeg )
-	SMPEG* mpeg
+	SV* mpeg
 	CODE:
-		SMPEG_delete(mpeg);
+		objDESTROY(mpeg, (void (*)(void *))SMPEG_delete);
 
 void
 SMPEGEnableAudio ( mpeg , flag )
@@ -189,6 +192,8 @@ SMPEGRenderFrame ( mpeg, frame )
 SMPEG_Info *
 SMPEGGetInfo ( mpeg )
 	SMPEG* mpeg
+	PREINIT:
+		char* CLASS = "SDL::SMPEG::Info";
 	CODE:
 		RETVAL = (SMPEG_Info *) safemalloc (sizeof(SMPEG_Info));
 		SMPEG_getinfo(mpeg,RETVAL);
