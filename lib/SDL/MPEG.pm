@@ -35,7 +35,7 @@ use warnings;
 use Carp;
 use SDL;
 our @ISA = qw(Exporter DynaLoader);
-
+use SDL::SMPEG;
 use SDL::Internal::Loader;
 internal_load_dlls(__PACKAGE__);
 
@@ -48,7 +48,7 @@ sub new {
 
 	my $self;
 	if ( $options{-from} ) {
-		$self = \SDL::MPEG::SMPEGGetInfo( ${ $options{-from} } );
+		$self = \SDL::SMPEG::SMPEGGetInfo( ${ $options{-from} } );
 	} else {
 		$self = \SDL::MPEG::NewSMPEGInfo();
 	}
