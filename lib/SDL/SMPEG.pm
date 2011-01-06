@@ -105,7 +105,7 @@ sub frame {
 }
 
 sub info {
-	new SDL::MPEG-from => $_[0];
+	SDL::MPEG->new( -from => $_[0] );
 }
 
 sub status {
