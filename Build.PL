@@ -31,7 +31,7 @@ my %platforms = (
 	solaris     => 'Unix',
 );
 my $package = 'My::Builder::' . ( $platforms{$^O} || 'Unix' );
-print "Gonna use '$package' class ...\n";
+print "Using '$package' class ...\n";
 eval "require $package" or Carp::confess "Require '$package' failed: $@\n";
 
 ### Subsystems to build
@@ -615,12 +615,12 @@ warn "###WARNING### Alien::SDL seems to be broken"
 	unless Alien::SDL->config('prefix');
 
 ### See which subsystems can be built -- do we have headers for them?
-print "Gonna autodetect available libraries ...\n";
+print "Detecting available libraries ...\n";
 my $build_systems = $build->find_subsystems( \%subsystems, \%libraries );
 my $lib_translate = $build->translate_table( \%subsystems, \%libraries );
 
 ### Save info about available subsystems for future SDL::ConfigData
-print "Gonna write config_data ...\n";
+print "Writing config_data ...\n";
 $build->config_data( 'SDL_cfg',           $build_systems );
 $build->config_data( 'SDL_lib_translate', $lib_translate );
 $build->config_data( 'subsystems',        \%subsystems );
@@ -631,7 +631,7 @@ $build->config_data( 'libraries',         \%libraries );
 $build->special_build_settings();
 
 ### Get some info into M::B notes
-print "Gonna save some info to 'notes' ...\n";
+print "Saving some info to 'notes' ...\n";
 $build->notes( 'subsystems',    \%subsystems );
 $build->notes( 'libraries',     \%libraries );
 $build->notes( 'build_systems', $build_systems );
