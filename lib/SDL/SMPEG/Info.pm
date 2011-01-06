@@ -28,7 +28,7 @@
 #	dgoehrig@cpan.org
 #
 
-package SDL::MPEG;
+package SDL::SMPEG::Info;
 
 use strict;
 use warnings;
@@ -39,7 +39,7 @@ use SDL::SMPEG;
 use SDL::Internal::Loader;
 internal_load_dlls(__PACKAGE__);
 
-bootstrap SDL::MPEG;
+bootstrap SDL::SMPEG::Info;
 
 sub new {
 	my $proto   = shift;
@@ -50,54 +50,54 @@ sub new {
 	if ( $options{-from} ) {
 		$self = \SDL::SMPEG::SMPEGGetInfo( ${ $options{-from} } );
 	} else {
-		$self = \SDL::MPEG::NewSMPEGInfo();
+		$self = \NewSMPEGInfo();
 	}
 	bless $self, $class;
 	return $self;
 }
 
 sub DESTROY {
-	SDL::MPEG::FreeSMPEGInfo( ${ $_[0] } );
+	FreeSMPEGInfo( ${ $_[0] } );
 }
 
 sub has_audio {
-	SDL::MPEG::SMPEGInfoHasAudio( ${ $_[0] } );
+	SMPEGInfoHasAudio( ${ $_[0] } );
 }
 
 sub has_video {
-	SDL::MPEG::SMPEGInfoHasVideo( ${ $_[0] } );
+	SMPEGInfoHasVideo( ${ $_[0] } );
 }
 
 sub width {
-	SDL::MPEG::SMPEGInfoWidth( ${ $_[0] } );
+	SMPEGInfoWidth( ${ $_[0] } );
 }
 
 sub height {
-	SDL::MPEG::SMPEGInfoHeight( ${ $_[0] } );
+	SMPEGInfoHeight( ${ $_[0] } );
 }
 
 sub size {
-	SDL::MPEG::SMPEGInfoTotalSize( ${ $_[0] } );
+	SMPEGInfoTotalSize( ${ $_[0] } );
 }
 
 sub offset {
-	SDL::MPEG::SMPEGInfoCurrentOffset( ${ $_[0] } );
+	SMPEGInfoCurrentOffset( ${ $_[0] } );
 }
 
 sub frame {
-	SDL::MPEG::SMPEGInfoCurrentFrame( ${ $_[0] } );
+	SMPEGInfoCurrentFrame( ${ $_[0] } );
 }
 
 sub fps {
-	SDL::MPEG::SMPEGInfoCurrentFPS( ${ $_[0] } );
+	SMPEGInfoCurrentFPS( ${ $_[0] } );
 }
 
 sub time {
-	SDL::MPEG::SMPEGInfoCurrentTime( ${ $_[0] } );
+	SMPEGInfoCurrentTime( ${ $_[0] } );
 }
 
 sub length {
-	SDL::MPEG::SMPEGInfoTotalTime( ${ $_[0] } );
+	SMPEGInfoTotalTime( ${ $_[0] } );
 }
 
 1;

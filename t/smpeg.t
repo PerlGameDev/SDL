@@ -64,7 +64,7 @@ SCOPE: {
 
 	# Get the video metadata
 	my $mpeg = $smpeg->info;
-	isa_ok( $mpeg, 'SDL::MPEG' );
+	isa_ok( $mpeg, 'SDL::SMPEG::Info' );
 
 	# Check it matches what we expect
 	is( $mpeg->has_audio, 1,         '->has_audio ok' );

@@ -392,7 +392,7 @@ my %subsystems = (
 		libraries => [qw( SDL SDL_image )],
 	},
 
-		SMPEG => {
+	SMPEG => {
 			file	=> {
 				from => 'src/SMPEG.xs',
 				to   =>	'lib/SDL/SMPEG.xs',
@@ -401,8 +401,8 @@ my %subsystems = (
 		},
 	MPEG => {
 			file	=> {
-				from => 'src/MPEG.xs',
-				to   =>	'lib/SDL/MPEG.xs',
+				from => 'src/SMPEG/Info.xs',
+				to   =>	'lib/SDL/SMPEG/Info.xs',
 			},
 			libraries => [qw( SDL smpeg)],
 		},
