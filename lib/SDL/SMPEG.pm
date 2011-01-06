@@ -1,4 +1,3 @@
-#!perl
 package SDL::SMPEG;
 
 use strict;
@@ -8,6 +7,7 @@ use SDL;
 use SDL::Surface;
 use SDL::SMPEG::Info;
 use Scalar::Util 'refaddr';
+use Data::Dumper;
 our @ISA = qw(Exporter DynaLoader);
 
 use SDL::Internal::Loader;
@@ -18,8 +18,7 @@ bootstrap SDL::SMPEG;
 my %_info;
 
 sub new {
-	my $proto   = shift;
-	my $class   = ref($proto) || $proto;
+	my $class   = shift;
 	my %options = @_;
 
 	my $n = $options{-name}
@@ -28,7 +27,7 @@ sub new {
 	my $info = SDL::SMPEG::Info->new();
 
 	my $self = NewSMPEG( $n, $info, $a );
-	%_info{ refaddr $self } = $info;
+	$_info{ refaddr $self } = $info;
 	Carp::confess SDL::get_error() unless $self;
 	$self->audio(1);
 	$self->video(1);
@@ -108,7 +107,7 @@ sub frame {
 
 sub info {
 #	SDL::SMPEG::Info->new( -from => $_[0] );
-	%info{ refaddr $_[0] };
+	$_info{ refaddr $_[0] };
 }
 
 sub status {

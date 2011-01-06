@@ -57,7 +57,7 @@ SCOPE: {
 	# above, intentionally so we can evade the failing test and
 	# continue testing. Once the above test case passes, merge
 	# this with the test case above.
-	my ($smpeg) = SDL::SMPEG::new(
+	my ($smpeg) = SDL::SMPEG->new(
 		-name => 'test/data/test-mpeg.mpg',
 	);
 	isa_ok( $smpeg, 'SDL::SMPEG' );
