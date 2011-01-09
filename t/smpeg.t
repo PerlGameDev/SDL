@@ -11,6 +11,10 @@ use SDL::Config;
 
 use Test::More;
 
+my $videodriver = $ENV{SDL_VIDEODRIVER};
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+
+
 if ( SDL::Config->has('smpeg') ) {
 	plan( tests => 19 );
 } else {
@@ -90,13 +94,19 @@ SCOPE: {
 	isa_ok( $surface, 'SDL::Surface' );
 
 	# Attach the movie to a surface
-	ok( $smpeg->display($surface), '->display(surface) ok' );
+	is( $smpeg->display($surface), undef, '->display(surface) ok' );
 
 	# Now that we are bound we should be able to do things
 	# to the movie and have them actually work.
 	# Confirm we can change where we are in the video.
-	ok( $smpeg->frame(5), '->frame(5) ok' );
+	is( $smpeg->frame(5), undef, '->frame(5) ok' );
 	is( $mpeg->frame, 5, '->frame updated in info object' );
 }
 
-sleep(2);
+
+if ($videodriver) {
+	$ENV{SDL_VIDEODRIVER} = $videodriver;
+} else {
+	delete $ENV{SDL_VIDEODRIVER};
+}
+
