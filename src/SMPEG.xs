@@ -85,9 +85,7 @@ SMPEGSetDisplay ( mpeg, dest, callback )
 	SDL_Surface* dest
 	SV* callback
 	CODE:
-		SDL_mutex* surfLock = SDL_CreateMutex();
-		SMPEG_setdisplay(mpeg,dest,surfLock,(void*)&smpeg_display_callback);
-		safefree(surfLock);
+		SMPEG_setdisplay(mpeg,dest,NULL,(void*)&smpeg_display_callback);
 
 void
 SMPEGScaleXY ( mpeg, w, h)
