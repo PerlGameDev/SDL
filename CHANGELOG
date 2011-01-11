@@ -1,5 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.526_1 Jan 11 2011
+	- Experimental SMPEG support, new tests:
+	- Fixed Mac regression due to ppport
+
 * 2.526 Dec 31 2010 
 	- Inline with 'SDL' support 
 	- Decreasing some SDL_Validate scalar leaks 
