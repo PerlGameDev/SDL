@@ -12,6 +12,9 @@ $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /Use of uninitialized value in
 use Carp ();
 use Scalar::Util ();
 
+use SDL::Internal::Loader;
+internal_load_dlls(__PACKAGE__);
+
 sub surfacex {
 	my ($arg) = @_;
 	if ( Scalar::Util::blessed($arg)) {

@@ -37,7 +37,7 @@ SV *cpy2bag( void *object, int p_size, int s_size, char *package )
     pointers[1]     = (void*)PERL_GET_CONTEXT;
 
     SV* a = newSVsv(sv_setref_pv(ref, package, (void *)pointers));
-	return a;
+    return a;
 }
 
 void objDESTROY(SV *bag, void (* callback)(void *object))
@@ -48,7 +48,7 @@ void objDESTROY(SV *bag, void (* callback)(void *object))
         void* object = pointers[0];
         if (PERL_GET_CONTEXT == pointers[1])
         {
-			pointers[0] = NULL;
+            pointers[0] = NULL;
             if(object)
                 callback(object);
             safefree(pointers);

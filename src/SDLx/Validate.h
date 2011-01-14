@@ -41,11 +41,12 @@ SV *rect( SV *rect, int* new_rect_made)
     {
         (*new_rect_made) = 0;
         retval = rect;
+        SvREFCNT_inc(rect);
     }
     else
         croak("Rect must be number or arrayref or SDL::Rect or undef");
 
-    SvREFCNT_inc(rect);
+    //SvREFCNT_inc(rect);
     return retval;
 }
 
