@@ -178,26 +178,22 @@ surfacex_draw_rect ( surface, rt, color )
 	SV* rt
 	SV* color
 	CODE:
-	
-	Uint32 m_color = __map_rgba( color, surface->format );
-	SDL_Rect r_rect;
-	r_rect.x = 0; r_rect.y = 0; r_rect.w = surface->w; r_rect.h = surface->h;
+		Uint32 m_color = __map_rgba( color, surface->format );
+		SDL_Rect r_rect;
 
-	if( SvOK(rt) )
-	{
-		int newly_created_rect = 0;
-		SV* foo = rect( rt, &newly_created_rect );
-		SDL_Rect* v_rect = (SDL_Rect*)bag2obj(foo);
-		r_rect.x = v_rect->x;
-		r_rect.y = v_rect->y;
-		r_rect.w = v_rect->w;
-		r_rect.h = v_rect->h;
-		SDL_FillRect(surface, &r_rect, m_color);
-		SvREFCNT_dec(foo);
-		//if( newly_created_rect == 1 ) {  safefree( v_rect); } 
-	}
-	else
-    	SDL_FillRect(surface, &r_rect, m_color);
+		if( SvOK(rt) )
+		{
+			int newly_created_rect = 0;
+			SV* foo                = rect( rt, &newly_created_rect );
+			r_rect                 = *(SDL_Rect*)bag2obj(foo);
+			SDL_FillRect(surface, &r_rect, m_color);
+			SvREFCNT_dec(foo);
+		}
+		else
+		{
+			r_rect.x = 0; r_rect.y = 0; r_rect.w = surface->w; r_rect.h = surface->h;
+			SDL_FillRect(surface, &r_rect, m_color);
+		}
 
 void
 surfacex_blit( src, dest, ... )

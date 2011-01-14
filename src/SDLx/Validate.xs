@@ -104,7 +104,7 @@ AV *
 val_list_rgba( color )
     SV *color
     CODE:
-	RETVAL = __list_rgba( color );
+        RETVAL = __list_rgba( color );
     OUTPUT:
         RETVAL
 
