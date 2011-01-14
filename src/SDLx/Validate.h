@@ -10,7 +10,7 @@ SV *rect( SV *rect, int* new_rect_made)
     if( !SvOK(rect) )
     {
         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
-		(*new_rect_made) = 1;
+        (*new_rect_made) = 1;
         r->x        = 0;
         r->y        = 0;
         r->w        = 0;
@@ -20,14 +20,15 @@ SV *rect( SV *rect, int* new_rect_made)
     else if( sv_derived_from(rect, "ARRAY") )
     {
         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
-	   		(*new_rect_made) = 1;
+        (*new_rect_made) = 1;
         int ra[4];
-        int i       = 0;
-        AV* recta   = (AV*)SvRV(rect);
+        int i            = 0;
+        AV* recta        = (AV*)SvRV(rect);
+        int len          = av_len(recta);
         for(i = 0; i < 4; i++)
         { 
-            SV* iv = av_shift(recta);
-            if( !SvOK( iv ) || iv == &PL_sv_undef )
+            SV* iv = i > len ? NULL : AvARRAY(recta)[i];
+            if( iv == NULL || !SvOK( iv ) || iv == &PL_sv_undef )
                 ra[i] = 0;
             else
                 ra[i] = SvIV( iv );
@@ -38,13 +39,13 @@ SV *rect( SV *rect, int* new_rect_made)
     }
     else if( sv_isobject(rect) && sv_derived_from(rect, "SDL::Rect") )
     {
-		(*new_rect_made) = 0;
-       	retval = rect;
+        (*new_rect_made) = 0;
+        retval = rect;
     }
     else
         croak("Rect must be number or arrayref or SDL::Rect or undef");
 
-	SvREFCNT_inc(rect);
+    SvREFCNT_inc(rect);
     return retval;
 }
 
