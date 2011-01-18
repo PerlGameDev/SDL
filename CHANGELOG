@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.527 Jan 18 2011
+	- Critical memory leak fixed in SDLx::App 
+
 * 2.526_2 Jan 18 2011
 	- SMPEG compile test 
 
