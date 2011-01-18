@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.526_2 Jan 18 2011
+	- SMPEG compile test 
+
 * 2.526_1 Jan 11 2011
 	- Experimental SMPEG support, new tests:
 	- Fixed Mac regression due to ppport
