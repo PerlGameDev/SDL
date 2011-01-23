@@ -165,6 +165,11 @@ C<SDL::delay> doesn't return anything.
  # Delay for half a second
  SDL::delay(500);
 
+=head1 SDL Manual: Getting Started
+
+A new book has been started to provide a complete tutorial for SDL. See L<http://bit.ly/hvxc9V|SDL Manual: Writing Games with Perl>.
+
+
 =head1 AUTHORS
 
 =head2 Project Founder
