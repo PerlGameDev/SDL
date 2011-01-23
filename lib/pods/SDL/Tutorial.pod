@@ -81,7 +81,7 @@ That, however, is another tutorial.
 
 =over 4
 
-=item L<SDL::Animation>
+=item L<SDL::Tutorial::Animation>
 
 basic rectangle drawing and animation
 

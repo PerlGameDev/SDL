@@ -38,6 +38,7 @@
 
 #include <SDL.h>
 
+
 #ifdef HAVE_GL
 #include <gl.h>
 #endif
@@ -74,8 +75,23 @@ extern PerlInterpreter *parent_perl;
 #endif
 
 #if defined WINDOWS || defined WIN32 
+#include <SDL_syswm.h>
 #include<windows.h> 
    extern int SDL_RegisterApp (char*, Uint32, void*);
+
+HWND get_handle_win32( )
+{
+	SDL_SysWMinfo SysInfo; //Will hold our Window information
+	SDL_VERSION(&SysInfo.version); //Set SDL version
+	 
+	if(SDL_GetWMInfo(&SysInfo) <= 0) {
+		printf("%s : %d\n", SDL_GetError(), SysInfo.window);
+		return NULL;
+	}
+	 
+	return SysInfo.window; //There it is, Win32 handle
+
+}
 #endif
 
 #ifndef NOSIGCATCH
@@ -141,6 +157,7 @@ XS(boot_SDL_perl)
 #endif
 
 }
+
 
 MODULE = SDL_perl	PACKAGE = SDL
 PROTOTYPES : DISABLE
@@ -265,6 +282,17 @@ get_ticks ()
 	OUTPUT:
 		RETVAL
 
+
+IV
+get_handle ()
+	CODE:
+#if defined WINDOWS || defined WIN32
+		RETVAL = (IV)get_handle_win32();
+#else
+		RETVAL = 0;
+#endif
+	OUTPUT:
+		RETVAL
 
 
 MODULE = SDL		PACKAGE = SDL
