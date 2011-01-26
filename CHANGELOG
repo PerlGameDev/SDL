@@ -1,5 +1,12 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.529 Jan 25 2011
+	- Adding SDL::get_handle() function to get Win32 API window management support
+	- Fixed pod errors and add new docs 
+
+* 2.528 Jan 18 2011
+	- Invalid Alien::SDL Dependency Fix
+
 * 2.527 Jan 18 2011
 	- Critical memory leak fixed in SDLx::App 
 
