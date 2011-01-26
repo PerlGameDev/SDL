@@ -6,6 +6,7 @@
 
 use strict;
 use warnings;
+use 5.008009;
 use Carp;
 
 use lib 'inc';
@@ -586,7 +587,8 @@ my $build = $package->new(
 	},
 	requires => {
 		'Tie::Simple' => '0',
-		'CPAN'        => '1.92'
+		'CPAN'        => '1.92',
+		'perl'		  => '5.008009'
 	},
 
 	build_recommends => {
