@@ -117,7 +117,7 @@ O_OBJECT
         Uint32 *threadid = (Uint32 *)malloc(sizeof(Uint32));
         *threadid       = SDL_ThreadID();
         pointers[2]     = (void*)threadid;
-        warn("typemap/OUTPUT: %d", *threadid);
+        warn("typemap/OUTPUT: %d -> %p", *threadid, pointers[0]);
         sv_setref_pv( $arg, CLASS, (void*)pointers ); 
     } else {
         XSRETURN_UNDEF;
