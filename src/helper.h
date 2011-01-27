@@ -53,8 +53,10 @@ SV *cpy2bag( void *object, int p_size, int s_size, char *package )
 
 void objDESTROY(SV *bag, void (* callback)(void *object))
 {
+
     if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
     {
+		warn("Called objD on %p", bag);
         void** pointers = (void**)(SvIV((SV*)SvRV( bag )));
         void* object = pointers[0];
         Uint32 *threadid = (Uint32*)(pointers[2]);
@@ -69,7 +71,7 @@ void objDESTROY(SV *bag, void (* callback)(void *object))
                 warn("helper.h/objDESTROY: DESTOYED!");
             }
             safefree(pointers);
-        }
+        
     }
 }
 
