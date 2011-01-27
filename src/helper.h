@@ -59,7 +59,7 @@ void objDESTROY(SV *bag, void (* callback)(void *object))
         void* object = pointers[0];
         Uint32 *threadid = (Uint32*)(pointers[2]);
         
-        warn("helper.h/objDESTROY: %d <> %d -> ", *threadid, SDL_ThreadID(), object);
+        warn("helper.h/objDESTROY: %d <> %d -> %p", *threadid, SDL_ThreadID(), object);
         
         if (PERL_GET_CONTEXT == pointers[1])
         {
