@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "defines.h"
 
 #ifndef aTHX_
 #define aTHX_

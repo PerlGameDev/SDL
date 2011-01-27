@@ -2,6 +2,9 @@
 #ifndef SDL_PERL_HELPER_H
 #define SDL_PERL_HELPER_H
 
+#include <SDL.h>
+#include "SDL_thread.h"
+
 PerlInterpreter * perl = NULL;
 
 void *bag2obj( SV *bag )
@@ -19,9 +22,13 @@ void *bag2obj( SV *bag )
 SV *obj2bag( int size_ptr,  void *obj, char *CLASS )
 {
     SV *   objref   = newSV( size_ptr );
-    void** pointers = malloc(2 * sizeof(void*));
+    void** pointers = malloc(3 * sizeof(void*));
     pointers[0]     = (void*)obj;
     pointers[1]     = (void*)PERL_GET_CONTEXT;
+    Uint32 *threadid = (Uint32 *)malloc(sizeof(Uint32));
+    *threadid       = SDL_ThreadID();
+    pointers[2]     = (void*)threadid;
+    warn("helper.h/obj2bag: %d", *threadid);
     sv_setref_pv( objref, CLASS, (void *)pointers);
     return objref;
 }
@@ -32,9 +39,13 @@ SV *cpy2bag( void *object, int p_size, int s_size, char *package )
     void *copy = safemalloc( s_size );
     memcpy( copy, object, s_size );
 
-    void** pointers = malloc(2 * sizeof(void*));
+    void** pointers = malloc(3 * sizeof(void*));
     pointers[0]     = (void*)copy;
     pointers[1]     = (void*)PERL_GET_CONTEXT;
+    Uint32 *threadid = (Uint32 *)malloc(sizeof(Uint32));
+    *threadid       = SDL_ThreadID();
+    pointers[2]     = (void*)threadid;
+    warn("helper.h/obj2bag: %d", *threadid);
 
     SV* a = newSVsv(sv_setref_pv(ref, package, (void *)pointers));
     return a;
@@ -46,11 +57,17 @@ void objDESTROY(SV *bag, void (* callback)(void *object))
     {
         void** pointers = (void**)(SvIV((SV*)SvRV( bag )));
         void* object = pointers[0];
+        Uint32 *threadid = (Uint32*)(pointers[2]);
+        
+        warn("helper.h/objDESTROY: %d <> %d", *threadid, SDL_ThreadID());
+        
         if (PERL_GET_CONTEXT == pointers[1])
         {
             pointers[0] = NULL;
-            if(object)
+            if(object) {
                 callback(object);
+                warn("helper.h/objDESTROY: DESTOYED!");
+            }
             safefree(pointers);
         }
     }
@@ -62,9 +79,13 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
     void *copy = safemalloc( s_size );
     memcpy( copy, object, s_size );
 
-    void** pointers = malloc(2 * sizeof(void*));
+    void** pointers = malloc(3 * sizeof(void*));
     pointers[0]     = (void*)copy;
     pointers[1]     = (void*)perl;
+    Uint32 *threadid = (Uint32 *)malloc(sizeof(Uint32));
+    *threadid       = SDL_ThreadID();
+    pointers[2]     = (void*)threadid;
+    warn("helper.h/_sv_ref: %d", *threadid);
 
     return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
 }

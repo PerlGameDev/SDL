@@ -1,5 +1,7 @@
 #define NEED_eval_pv
 #include "ppport.h"
+#include <SDL.h>
+#include "SDL_thread.h"
 /* */
 /* defines.h */
 /* */
