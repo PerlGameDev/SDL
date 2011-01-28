@@ -2,14 +2,13 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
 #endif
 
 #include <SDL.h>
-
-PerlInterpreter * perl = NULL;
 
 void _uinta_free(Uint16* av, int len_from_av_len)
 {
@@ -97,8 +96,6 @@ video_list_modes ( format, flags )
 	SDL_PixelFormat *format
 
 	CODE:
-		if(!perl)
-			perl = PERL_GET_CONTEXT;
 		SDL_Rect **mode;
 		RETVAL = newAV();
 		sv_2mortal((SV*)RETVAL);
@@ -110,17 +107,7 @@ video_list_modes ( format, flags )
 		} else {
 			int i;
 			for (i=0; mode[i]; ++i)
-			{
-				SV   *rectref  = newSV( sizeof(SDL_Rect *) );
-				void *copyRect = safemalloc( sizeof(SDL_Rect) );
-				memcpy( copyRect, mode[i], sizeof(SDL_Rect) );
-
-				void** pointers = malloc(2 * sizeof(void*));
-				pointers[0]     = (void*)copyRect;
-				pointers[1]     = (void*)perl;
-
-				av_push(RETVAL, newSVsv(sv_setref_pv(rectref, "SDL::Rect", (void *)pointers)));
-			}
+				av_push(RETVAL, cpy2bag( (void *)mode[i], sizeof(SDL_Rect *), sizeof(SDL_Rect), "SDL::Rect" ));
 		}
 	OUTPUT:
 		RETVAL
