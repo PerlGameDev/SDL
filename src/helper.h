@@ -45,7 +45,7 @@ SV *cpy2bag( void *object, int p_size, int s_size, char *package )
     Uint32 *threadid = (Uint32 *)malloc(sizeof(Uint32));
     *threadid       = SDL_ThreadID();
     pointers[2]     = (void*)threadid;
-    warn("helper.h/obj2bag: %d", *threadid);
+    warn("helper.h/cpy2bag: %d", *threadid);
 
     SV* a = newSVsv(sv_setref_pv(ref, package, (void *)pointers));
     return a;

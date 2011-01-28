@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -10,28 +11,18 @@
 #include <SDL.h>
 #include <SDL_events.h>
 
-PerlInterpreter * perl_for_cb=NULL;
 /* Static Memory for event filter call back */
 static SV * eventfiltersv;
 
 int eventfilter_cb( const void * event)
 {
-	
-
 	dSP;
 	int count;
 	int filter_signal;
-	SV * eventref = newSV( sizeof(SDL_Event *) );
-	void * copyEvent = safemalloc( sizeof(SDL_Event) );
-	memcpy( copyEvent, event, sizeof(SDL_Event) );
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
-			 void** pointers = malloc(2 * sizeof(void*));
-		  pointers[0] = (void*)copyEvent;
-		  pointers[1] = (void*)perl_for_cb;
-
-	XPUSHs( sv_setref_pv( eventref, "SDL::Event", (void *)pointers) );
+	XPUSHs( cpy2bag( (void *)event, sizeof(SDL_Event *), sizeof(SDL_Event), "SDL::Event" ) );
 	PUTBACK;
 
 /*	printf ( "Eventref is %p. Event is %p. CopyEvent is %p \n", eventref, event, copyEvent); */
@@ -111,11 +102,8 @@ void
 events_set_event_filter(callback)
 	SV* callback
 	CODE:
-	eventfiltersv = callback;
-	perl_for_cb = PERL_GET_CONTEXT;
-	
-	SDL_SetEventFilter((SDL_EventFilter) eventfilter_cb);
-
+		eventfiltersv = callback;
+		SDL_SetEventFilter((SDL_EventFilter) eventfilter_cb);
 
 AV *
 events_get_key_state()
