@@ -71,7 +71,7 @@ void objDESTROY(SV *bag, void (* callback)(void *object))
                 warn("helper.h/objDESTROY: DESTOYED!");
             }
             safefree(pointers);
-        
+        }
     }
 }
 
