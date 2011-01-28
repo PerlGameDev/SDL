@@ -32,10 +32,10 @@ AV* acceleration_cb( SDLx_Interface * obj, float t )
 	SAVETMPS;
 	PUSHMARK(SP);
 	
-	void** pointers  = malloc(3 * sizeof(void*));
+	void** pointers  = safemalloc(3 * sizeof(void*));
 	pointers[0]      = (void*)copyState;
 	pointers[1]      = (void*)0;
-	Uint32 *threadid = (Uint32 *)malloc(sizeof(Uint32));
+	Uint32 *threadid = (Uint32 *)safemalloc(sizeof(Uint32));
 	*threadid        = SDL_ThreadID();
 	pointers[2]      = (void*)threadid;
 	SV * state_obj   = sv_setref_pv( stateref, "SDLx::Controller::State", (void *)pointers);

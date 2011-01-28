@@ -23,10 +23,10 @@ void *bag2obj( SV *bag )
 SV *obj2bag( int size_ptr,  void *obj, char *CLASS )
 {
     SV *   objref    = newSV( size_ptr );
-    void** pointers  = malloc(3 * sizeof(void*));
+    void** pointers  = safemalloc(3 * sizeof(void*));
     pointers[0]      = (void*)obj;
     pointers[1]      = (void*)PERL_GET_CONTEXT;
-    Uint32 *threadid = (Uint32 *)malloc(sizeof(Uint32));
+    Uint32 *threadid = (Uint32 *)safemalloc(sizeof(Uint32));
     *threadid        = SDL_ThreadID();
     pointers[2]      = (void*)threadid;
     sv_setref_pv( objref, CLASS, (void *)pointers);
@@ -39,10 +39,10 @@ SV *cpy2bag( void *object, int p_size, int s_size, char *package )
     void *copy = safemalloc( s_size );
     memcpy( copy, object, s_size );
 
-    void** pointers  = malloc(3 * sizeof(void*));
+    void** pointers  = safemalloc(3 * sizeof(void*));
     pointers[0]      = (void*)copy;
     pointers[1]      = (void*)PERL_GET_CONTEXT;
-    Uint32 *threadid = (Uint32 *)malloc(sizeof(Uint32));
+    Uint32 *threadid = (Uint32 *)safemalloc(sizeof(Uint32));
     *threadid        = SDL_ThreadID();
     pointers[2]      = (void*)threadid;
     SV* a            = newSVsv(sv_setref_pv(ref, package, (void *)pointers));
@@ -64,6 +64,7 @@ void objDESTROY(SV *bag, void (* callback)(void *object))
             pointers[0] = NULL;
             if(object)
                 callback(object);
+            safefree(threadid);
             safefree(pointers);
         }
     }
@@ -75,10 +76,10 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
     void *copy = safemalloc( s_size );
     memcpy( copy, object, s_size );
 
-    void** pointers  = malloc(3 * sizeof(void*));
+    void** pointers  = safemalloc(3 * sizeof(void*));
     pointers[0]      = (void*)copy;
     pointers[1]      = (void*)perl;
-    Uint32 *threadid = (Uint32 *)malloc(sizeof(Uint32));
+    Uint32 *threadid = (Uint32 *)safemalloc(sizeof(Uint32));
     *threadid        = SDL_ThreadID();
     pointers[2]      = (void*)threadid;
 
