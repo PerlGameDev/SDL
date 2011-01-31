@@ -25,8 +25,6 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 my $screen_width  = 800;
 my $screen_height = 600;
 
-SDL::init(SDL_INIT_VIDEO);
-
 # setting video mode
 my $screen = SDL::Video::set_video_mode(
 	$screen_width, $screen_height, 32,
