@@ -10,10 +10,11 @@ is( SDL::Joystick::num_joysticks() >= 0, 1, "[num_joysticks] ran" );
 
 SKIP:
 {
-	SDL::init_sub_system(SDL_INIT_JOYSTICK);
-
 	skip "Need a joystick for below tests", 1
 		unless ( SDL::Joystick::num_joysticks() > 0 );
+
+	SDL::init_sub_system(SDL_INIT_JOYSTICK);
+
 
 	my $joy = SDL::Joystick->new(0);
 	pass "[new] can open joystick";
