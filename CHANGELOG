@@ -1,8 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.529_1 Jan 28 2011
-	- Fixed SDL threaded free problems with a threadid guard (FROGGS)
+* 2.530 Feb 02 2011
+	- Fixed SDL threaded free problems with a threadid guard [kthakore/FROGGS]
 	- Clean up malloc calls
+	- Updated Alien::SDL's version to 1.424 [FROGGS]
 
 * 2.529 Jan 25 2011
 	- Adding SDL::get_handle() function to get Win32 API window management support
