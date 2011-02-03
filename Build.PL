@@ -6,7 +6,6 @@
 
 use strict;
 use warnings;
-use 5.008008;
 use Carp;
 
 use lib 'inc';
