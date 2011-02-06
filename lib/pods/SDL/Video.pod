@@ -1037,7 +1037,7 @@ If the L<SDL::PixelFormat>'s  bpp (color depth) is less than 32-bpp then the unu
 
 =head2	map_RGBA
 
- $pixel = SDL::Video::map_RGB( $pixel_format, $r, $g, $b, $a );
+ $pixel = SDL::Video::map_RGBA( $pixel_format, $r, $g, $b, $a );
 
 Maps the RGBA color value to the specified L<SDL::PixelFormat> and returns the pixel value as a 32-bit int.
 If the format has a palette (8-bit) the index of the closest matching color in the palette will be returned.
