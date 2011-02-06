@@ -211,5 +211,10 @@ sub _exit_on_quit {
 
 }
 
+my $stash = {};
+sub stash {
+    return $stash;
+}
+
 1;
 
