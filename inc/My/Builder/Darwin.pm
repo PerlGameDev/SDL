@@ -56,7 +56,7 @@ sub build_bundle {
 	#system "echo \"APPL????\" > \"$bundle_contents/PkgInfo\"";
 	#system "cp MacOSX/Info.plist \"$bundle_contents/\"";
 	#system "cp \"MacOSX/SDLPerl.icns\" \"$bundle_contents/Resources\"";
-	$self->{properties}->{script_files} = 'SDLPerl.app/Contents/MacOS/SDLPerl';
+	$self->SUPER::script_files('SDLPerl.app/Contents/MacOS/SDLPerl');
 
 }
 
