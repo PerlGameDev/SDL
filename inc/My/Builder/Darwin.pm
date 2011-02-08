@@ -46,7 +46,9 @@ sub build_bundle {
 	system($cmd);
 
 		my $rez = "/Developer/Tools/Rez -d __DARWIN__ -useDF -o $bundle_content/Resources/SDLPerl.rsrc $(ARCH_FLAGS) SDLPerl.r
-		/Developer/Tools/ResMerger -dstIs DF $bundle_content/Resources/SDLPerl.rsrc -o $@"
+		/Developer/Tools/ResMerger -dstIs DF $bundle_content/Resources/SDLPerl.rsrc -o $@";
+	print STDERR $rez . "\n";
+	system($rez);
 	#mkdir "$bundle_contents/Resources", 0755;
 	#system "echo \"APPL????\" > \"$bundle_contents/PkgInfo\"";
 	#system "cp MacOSX/Info.plist \"$bundle_contents/\"";
