@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Alien::SDL;
 use File::Find qw(find);
+use Data::Dumper;
 use Cwd;
 use Config;
 use base 'My::Builder';
@@ -21,6 +22,8 @@ sub special_build_settings {
 }
 
 sub build_bundle {
+	my $self = shift;
+
 	my $bundle_contents = "SDLPerl.app/Contents";
 	system "mkdir -p \"$bundle_contents\"";
 	mkdir "$bundle_contents/MacOS", 0755;
@@ -46,12 +49,19 @@ sub build_bundle {
 	print STDERR $cmd . "\n";
 	system($cmd);
 
-	#	my $rez = "/Developer/Tools/Rez -d __DARWIN__ -useDF -o $bundle_content/Resources/SDLPerl.rsrc $(ARCH_FLAGS) SDLPerl.r
-	#	/Developer/Tools/ResMerger -dstIs DF $bundle_content/Resources/SDLPerl.rsrc -o $@"
-	mkdir "$bundle_contents/Resources", 0755;
-	system "echo \"APPL????\" > \"$bundle_contents/PkgInfo\"";
-	system "cp MacOSX/Info.plist \"$bundle_contents/\"";
-	system "cp \"MacOSX/SDLPerl.icns\" \"$bundle_contents/Resources\"";
+#	if( -e '/Developer/Tools/Rez' )
+#	{
+#		my $rez = "/Developer/Tools/Rez -d __DARWIN__ -useDF -o $bundle_contents/Resources/SDLPerl.rsrc \$\(ARCH_FLAGS) SDLPerl.r
+#		/Developer/Tools/ResMerger -dstIs DF $bundle_contents/Resources/SDLPerl.rsrc -o $@";
+#	print STDERR $rez . "\n";
+#	system($rez);
+#	}
+	#mkdir "$bundle_contents/Resources", 0755;
+	#system "echo \"APPL????\" > \"$bundle_contents/PkgInfo\"";
+	#system "cp MacOSX/Info.plist \"$bundle_contents/\"";
+	#system "cp \"MacOSX/SDLPerl.icns\" \"$bundle_contents/Resources\"";
+	$self->{properties}->{script_files} = 'SDLPerl.app/Contents/MacOS/SDLPerl';
+
 }
 
 sub ACTION_test {
