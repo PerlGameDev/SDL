@@ -561,7 +561,8 @@ my %xs =
 	keys %subsystems;
 
 ### Standard Module::Build stuff
-$My::Builder::config = $My::Builder::config; # Prevent a warning
+$My::Builder::config       = $My::Builder::config;       # Prevent a warning
+$My::Builder::script_files = $My::Builder::script_files; # Prevent a warning
 my $build = $package->new(
 	module_name        => 'SDL',
 	dist_name          => 'SDL',
@@ -597,6 +598,7 @@ my $build = $package->new(
 	config   => $My::Builder::config,
 	c_source => 'src',
 	xs_files => \%xs,
+	script_files => $My::Builder::script_files,
 	meta_add => {},
 	typemap_files => { 'typemap' => 'lib/SDL/typemap' },
 
