@@ -11,10 +11,6 @@ use Config;
 use File::Copy;
 use base 'My::Builder';
 
-$My::Builder::script_files = [
-	"SDLPerl.app/Contents/MacOS/SDLPerl"
-];
-
 sub special_build_settings {
     my $self = shift;
     $self->{c_source}     = [ 'src', 'main.c' ];
