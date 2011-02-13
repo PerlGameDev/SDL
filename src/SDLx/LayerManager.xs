@@ -120,14 +120,13 @@ lmx_blit( manager, dest )
                     rect->w        = layer->clip->w;
                     rect->h        = layer->clip->h;
                     layer->touched = 0;
+                    SDL_BlitSurface(layer->surface, layer->clip, dest, rect);
                     av_push(RETVAL, _sv_ref( rect, sizeof(SDL_Rect *), sizeof(SDL_Rect), "SDL::Rect" ));
-                    SDL_BlitSurface(layer->surface, layer->clip, dest, layer->pos);
                     did_something  = 1;
                 }
             }
             else
                 attached_layers = 1;
-            
             index++;
         }
         
@@ -150,25 +149,25 @@ lmx_blit( manager, dest )
             while(index < length)
             {
                 SDLx_Layer *layer = (SDLx_Layer *)bag2obj(*av_fetch(manager->layers, index, 0));
-                
-                if(layer->attached == 1)
+
+                if(layer->attached == 1 || layer->attached == 2)
                 {
-                    SDL_Rect *rect = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
-                    
-                    rect->x        =  layer->pos->x < x + layer->attached_rel->x ? layer->pos->x : x + layer->attached_rel->x;
-                    rect->y        =  layer->pos->y < y + layer->attached_rel->y ? layer->pos->y : y + layer->attached_rel->y;
-                    rect->w        = (layer->pos->x > x + layer->attached_rel->x ? layer->pos->x : x + layer->attached_rel->x) + layer->clip->w;
-                    rect->h        = (layer->pos->y > y + layer->attached_rel->y ? layer->pos->y : y + layer->attached_rel->y) + layer->clip->h;
+                    if(layer->attached == 1)
+                    {
+                        layer->pos->x  = x + layer->attached_rel->x;
+                        layer->pos->y  = y + layer->attached_rel->y;
+                    }
+
+                    SDL_Rect *rect    = (SDL_Rect *)safemalloc( sizeof(SDL_Rect) );
+                    rect->x           = layer->pos->x;
+                    rect->y           = layer->pos->y;
+                    rect->w           = layer->clip->w;
+                    rect->h           = layer->clip->h;
+
+                    SDL_BlitSurface(layer->surface, layer->clip, dest, rect);
                     av_push(RETVAL, _sv_ref( rect, sizeof(SDL_Rect *), sizeof(SDL_Rect), "SDL::Rect" ));
-                    layer->pos->x  = x + layer->attached_rel->x;
-                    layer->pos->y  = y + layer->attached_rel->y;
-                    SDL_BlitSurface(layer->surface, layer->clip, dest, layer->pos);
                 }
-                else if(layer->attached == 2)
-                {
-                    SDL_BlitSurface(layer->surface, layer->clip, dest, layer->pos);
-                }
-                
+
                 index++;
             }
         }
