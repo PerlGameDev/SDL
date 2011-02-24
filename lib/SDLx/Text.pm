@@ -46,9 +46,24 @@ sub new {
 sub text {
 	my ($self, $text) = @_;
 
-	my $surface = SDL::TTF::render_text_blended($self->{_font}, $text, $self->{_color})
+	my $surface;
+	if( $self->{mode} =~ 'utf8' )
+	{
+		$surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
 		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
 
+	}
+	elsif ( $self->{mode} =~ 'unicode' )
+	{
+	$surface = SDL::TTF::render_unicode_blended($self->{_font}, $text, $self->{_color})
+		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
+
+	}
+	else
+	{
+	$surface = SDL::TTF::render_text_blended($self->{_font}, $text, $self->{_color})
+		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
+	}
 	$self->{surface} = $surface;
 	$self->{w} = $surface->w;
 	$self->{h} = $surface->h;
