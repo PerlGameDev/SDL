@@ -561,7 +561,7 @@ my %xs =
 	keys %subsystems;
 
 ### Standard Module::Build stuff
-$My::Builder::config = $My::Builder::config; # Prevent a warning
+$My::Builder::config = $My::Builder::config;       # Prevent a warning
 my $build = $package->new(
 	module_name        => 'SDL',
 	dist_name          => 'SDL',
