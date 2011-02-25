@@ -43,11 +43,25 @@ sub new {
 	return $self;
 }
 
+sub w {
+	return $_[0]->{surface}->w();
+}
+
+sub h {
+	return $_[0]->{surface}->h();
+}
+
 sub text {
 	my ($self, $text) = @_;
 
 	my $surface;
-	if( $self->{mode} =~ 'utf8' )
+
+	unless ($self->{mode}){
+		$surface = SDL::TTF::render_text_blended($self->{_font}, $text, $self->{_color})
+		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
+
+	}	
+	elsif( $self->{mode} =~ 'utf8' )
 	{
 		$surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
 		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
@@ -59,14 +73,11 @@ sub text {
 		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
 
 	}
-	else
-	{
-	$surface = SDL::TTF::render_text_blended($self->{_font}, $text, $self->{_color})
-		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
-	}
 	$self->{surface} = $surface;
 	$self->{w} = $surface->w;
 	$self->{h} = $surface->h;
+
+	return $surface;
 }
 
 sub write_to {
