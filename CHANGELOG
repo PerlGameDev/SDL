@@ -1,5 +1,17 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.531 (to be released)
+    - SDLx::Text (and, thus, SDL Perl) now ships with a default FOSS font (garu/perigrin)
+    - improved text() manipulation under SDLx::Text (garu)
+    - added complete documentation for SDLx::Text (garu)
+    - added mode option for SDLx::Text (kthakore)
+    - tests and w/h methods for SDLx::Text (kthakore)
+    - protecting dstrect from modification during SDL_BlitSurface (FROGGS)
+    - installing SDLpp as a console app (kthakore)
+    - improving installation under MacOSX/Darwin (kthakore/FROGGS)
+    - improved internals of SDLx::App (kthakore)
+    - added stash() method for SDLx::App (FROGGS)
+
 * 2.530 Feb 02 2011
 	- Fixed SDL threaded free problems with a threadid guard [kthakore/FROGGS]
 	- Clean up malloc calls
