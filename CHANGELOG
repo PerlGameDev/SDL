@@ -11,6 +11,7 @@ Revision history for Perl extension SDL_perl.
     - improving installation under MacOSX/Darwin (kthakore/FROGGS)
     - improved internals of SDLx::App (kthakore)
     - added stash() method for SDLx::App (FROGGS)
+	- polished SDLx::Text to finished (garu)
 
 * 2.530 Feb 02 2011
 	- Fixed SDL threaded free problems with a threadid guard [kthakore/FROGGS]
