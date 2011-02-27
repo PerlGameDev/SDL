@@ -29,7 +29,7 @@ isa_ok( $score, 'SDLx::Text');
 
 $score->text('Hello!');
 
-is( $score->w, 62, 'Hello! is 62 px wide!' );
+is( $score->w, 60, 'Hello! is 62 px wide!' );
 is( $score->h, 28, 'Hello! is 28 px high!' );
 
 
