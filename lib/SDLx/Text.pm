@@ -82,7 +82,11 @@ sub text {
 	$self->{w} = $surface->w;
 	$self->{h} = $surface->h;
 
-	return $surface;
+	return $self;
+}
+
+sub surface {
+	return $_[0]->{surface};
 }
 
 sub write_to {

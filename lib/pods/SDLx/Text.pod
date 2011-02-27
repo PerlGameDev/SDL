@@ -78,7 +78,11 @@ whatever surface you are placing it into. Available alignments are 'C<left>',
 
 =head2 text( "text to write" )
 
-Sets the text to be displayed by the SDLx::Text object.
+Sets the text to be displayed by the SDLx::Text object. Return the SDLx::Text object itself, so you can easily chain this method around.
+
+=head2 surface
+
+Returns the underlying surface representing the text itself. You probably don't need this, unless you're doing something really funky.
 
 =head2 write_to( $target_surface )
 
