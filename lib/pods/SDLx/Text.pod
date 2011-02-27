@@ -1,0 +1,122 @@
+
+=pod
+
+=head1 NAME
+
+SDLx::Text - SDL extension for manipulating text
+
+=head1 CATEGORY
+
+Extension
+
+=head1 SYNOPSIS
+
+    use SDL;
+    use SDLx::App; 
+    use SDLx::Text;
+    
+    my $app = SDLx::App->new;
+
+
+=head1 DESCRIPTION
+
+
+=head1 METHODS
+
+=head2 new
+
+=head2 new (%options)
+
+Instantiates a new SDLx::Text object. All arguments are optional:
+
+=over 4
+
+=item * font
+
+    font => 'path/to/my/font.ttf'
+
+Sets the font to use. Fonts can be in TTF or FON formats. Generates an
+exception if the font cannot be loaded. If this argument is not provided,
+it will load the default C<Tuffy> free font (see "L</"COPYRIGHT & LICENSE">".
+
+=item * color 
+
+    color => [255, 255, 0]
+
+Sets the font color, as an array reference in C<[R, G, B]> or C<[R, G, B, A]>
+format. Defaults to C<[255,0,0]> (red). See L<SDL::Color> for more information on colors.
+
+=item * size
+
+    size => 60
+
+Sets the font size. Defaults to "24".
+
+=item * x
+
+=item * y
+
+    x => 30,
+    y => 10,
+
+Sets the top (y) and left (x) positioning of the text to be rendered,
+relative to whatever surface you are placing it into. Defaults to
+(0,0), which is the top-left corner of the destination surface (usually the
+app itself).
+
+=item * h_align
+
+    h_align => 'center'
+
+Sets the horizontal alignment of the text to be rendered relative to
+whatever surface you are placing it into. Available alignments are 'C<left>',
+'C<right>' and 'C<center>'. Default is 'C<left>'.
+
+=back
+
+=head2 text( "text to write" )
+
+Sets the text to be displayed by the SDLx::Text object.
+
+=head2 write_to( $target_surface )
+
+=head2 write_to( $target_surface, "text to write" )
+
+Renders the text onto C<$target_surface> (usually the app itself). The
+text string may be passed as a parameter, otherwise it will use whatever
+is already set (via the C<new()> or C<text()> methods.
+
+=head2 write_xy( $target_surface, $x, $y )
+
+=head2 write_xy( $target_surface, $x, $y, $text )
+
+Same as C<write_to()>, but will render the text using the given top (y) and
+left (x) coordinates.
+
+=head1 BUGS
+
+Please report any bugs or feature requests to the bug tracker. We will be notified, and then you'll automatically be notified of progress on your bug as we make changes.
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc SDLx::Text
+
+
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
+
+=head1 COPYRIGHT & LICENSE
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+This module ships with a default font, "I<Tuffy>", released to public domain by Thatcher Ulrich (http://tulrich.com).
+
+=head1 SEE ALSO
+
+L<SDL>, L<SDLx::App>, L<SDL::TTF>
