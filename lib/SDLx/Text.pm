@@ -20,8 +20,6 @@ sub new {
 
 	my $color = $options{'color'} || [255, 0, 0];
 
-	$color = SDLx::Validate::color($color);
-
 	my $size = $options{'size'} || 24;
 
 	my $self = bless {}, ref($class) || $class;
@@ -32,21 +30,66 @@ sub new {
 	$self->{h_align} = $options{'h_align'} || 'left';
 # TODO: validate
 # TODO: v_align
-# TODO: other accessors
-	unless ( SDL::TTF::was_init() )
-	{
-		Carp::cluck ("Cannot init TTF: " . SDL::get_error() ) unless SDL::TTF::init() == 0;
+	unless ( SDL::TTF::was_init() ) {
+		Carp::cluck ("Cannot init TTF: " . SDL::get_error() )
+		    unless SDL::TTF::init() == 0;
 	}
-	$self->{_font} = SDL::TTF::open_font($file, $size);
-	Carp::cluck 'Error opening font: ' . SDL::get_error
-		unless $self->{_font};
 
-	$self->{_color} = $color;
+	$self->size($size);
+	$self->font($file);
+	$self->color($color);
 
 	$self->text( $options{'text'} ) if defined $options{'text'};
 
 	return $self;
 }
+
+sub font {
+	my ($self, $font) = @_;
+
+	if ($font) {
+		my $size = $self->size;
+
+		$self->{_font} = SDL::TTF::open_font($font, $size)
+			or Carp::cluck 'Error opening font: ' . SDL::get_error;
+	}
+
+	return $self->{_font};
+}
+
+sub color {
+	my ($self, $color) = @_;
+
+	if ($color) {
+		$self->{_color} = SDLx::Validate::color($color);
+	}
+
+	return $self->{_color};
+}
+
+sub size {
+	my ($self, $size) = @_;
+
+	if ($size) {
+		$self->{_size} = $size;
+
+		# reload the font using new size
+		$self->font( $self->font );
+	}
+
+	return $self->{_size};
+}
+
+sub h_align {
+	my ($self, $align) = @_;
+
+	if ($align) {
+		$self->{h_align} = $align;
+	}
+
+	return $self->{h_align};
+}
+
 
 sub w {
 	return $_[0]->{surface}->w();
@@ -54,6 +97,24 @@ sub w {
 
 sub h {
 	return $_[0]->{surface}->h();
+}
+
+sub x {
+	my ($self, $x) = @_;
+
+	if ($x) {
+		$self->{x} = $x;
+	}
+	return $x;
+}
+
+sub y {
+	my ($self, $y) = @_;
+
+	if ($y) {
+		$self->{y} = $y;
+	}
+	return $y;
 }
 
 sub text {

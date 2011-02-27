@@ -17,72 +17,88 @@ Extension
     
     my $app = SDLx::App->new;
 
+    my $message = SDLx::Text->new;
+
+    $message->write_to( $app, "Hello, World!" );
+    $app->update;
+
 
 =head1 DESCRIPTION
 
+The standard SDL API for handling fonts and rendering text is full of quirks
+and and low-level functions scattered all over the place. This is a sugar
+layer meant to let you easily handle text in your SDL apps.
 
-=head1 METHODS
+=head1 CONSTRUCTION
 
 =head2 new
 
-=head2 new (%options)
+=head2 new ( %attributes )
 
-Instantiates a new SDLx::Text object. All arguments are optional:
+Instantiates a new SDLx::Text object. All attributes are optional:
 
-=over 4
+    my $text = SDLx::Text->new(
+            font    => '/path/to/my/font.ttf',
+            color   => [255, 255, 255], # "white"
+            size    => 24,
+            x       => 0,
+            y       => 0,
+            h_align => 'left',
+            text    => 'All your base are belong to us.'
+    );
 
-=item * font
+Please check the accessors below for more information on each attribute.
+All values shown above are the B<default values>, except for "text",
+which defaults to C<undef>; and "font", which if not provided will load
+the C<Gentium Basic> free font (see "L</"COPYRIGHT & LICENSE">" for more
+information).
 
-    font => 'path/to/my/font.ttf'
+=head1 ACCESSORS
 
-Sets the font to use. Fonts can be in TTF or FON formats. Generates an
-exception if the font cannot be loaded. If this argument is not provided,
-it will load the default C<Gentium Basic> free font (see "L</"COPYRIGHT & LICENSE">" for more information).
+All accessors below can be used to get and set their respective attributes.
+For example:
 
-=item * color 
+   my $font_name = $self->font;     # gets the font filename
+   $self->font( 'somefont.ttf' );   # sets a new font
 
-    color => [255, 255, 0]
+All accessors return their current value, after being set.
 
-Sets the font color, as an array reference in C<[R, G, B]> or C<[R, G, B, A]>
-format. Defaults to C<[255,0,0]> (red). See L<SDL::Color> for more information on colors.
+=head2 x
 
-=item * size
+Gets/sets the left (x) positioning of the text to be rendered, relative
+to whatever surface you are placing it into.
 
-    size => 60
+=head2 y
 
-Sets the font size. Defaults to "24".
+Gets/sets the top (y) positioning of the text to be rendered, relative
+to whatever surface you are placing it into.
 
-=item * x
+=head2 h_align
 
-=item * y
-
-    x => 30,
-    y => 10,
-
-Sets the top (y) and left (x) positioning of the text to be rendered,
-relative to whatever surface you are placing it into. Defaults to
-(0,0), which is the top-left corner of the destination surface (usually the
-app itself).
-
-=item * h_align
-
-    h_align => 'center'
-
-Sets the horizontal alignment of the text to be rendered relative to
+Gets/sets the horizontal alignment of the text to be rendered relative to
 whatever surface you are placing it into. Available alignments are 'C<left>',
 'C<right>' and 'C<center>'. Default is 'C<left>'.
 
-=item * text
+=head2 text
 
-=back
+Gets/sets the text to be displayed by the SDLx::Text object. Return the SDLx::Text object itself, so you can easily chain this method around.
 
-=head2 text( "text to write" )
+    my $obj = SDLx::Text->new->text( "Hello, Dave." );
 
-Sets the text to be displayed by the SDLx::Text object. Return the SDLx::Text object itself, so you can easily chain this method around.
+=head2 color
 
-=head2 surface
+Gets/sets the text color. The color is an array reference in C<[R, G, B]> or C<[R, G, B, A]> format. See L<SDL::Color> for more information on colors.
 
-Returns the underlying surface representing the text itself. You probably don't need this, unless you're doing something really funky.
+=head2 size
+
+Gets/sets the font size.
+
+=head2 font
+
+Gets/sets the font to use. Fonts can be in TTF, OTF or FON formats. Generates
+an exception if the font cannot be loaded.
+
+=head1 METHODS
 
 =head2 write_to( $target_surface )
 
@@ -98,6 +114,30 @@ is already set (via the C<new()> or C<text()> methods.
 
 Same as C<write_to()>, but will render the text using the given top (y) and
 left (x) coordinates.
+
+
+=head1 READ-ONLY ATTRIBUTES
+
+As you set or update your text, font or size, SDLx::Text updates the surface
+that represents it. You don't usually need to worry about this at all, and
+we strongly recommend you use the L<"/METHODS"> above to render your text.
+
+If however you need to know how tall or wide the rendered text will be
+(in pixels), or if you want to retrieve the surface so you can manipulate and
+render it yourself, you can use the following getters:
+
+=head2 surface
+
+Returns the underlying surface representing the text itself. You probably don't need this, unless you're doing something really funky.
+
+=head2 w
+
+Shortcut to see the width of the underlying surface representing the text.
+
+=head2 h
+
+Shortcut to see the height of the underlying surface representing the text.
+
 
 =head1 BUGS
 
