@@ -530,7 +530,7 @@ Example:
  SDL::init(SDL_INIT_VIDEO);
  SDL::TTF::init();
  my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
- my $font    = SDL::TTF::open_font('test/data/aircut3.ttf', '24');
+ my $font    = SDL::TTF::open_font('somefont.ttf', '24');
  die 'Coudnt make font '. SDL::get_error if !$font;
  my $surface = SDL::TTF::render_text_solid($font, 'Hallo!', SDL::Color->new(0xFF,0xFF,0xFF));
  SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(10, 10, 640, 480));

@@ -25,6 +25,12 @@ use SDL::RWOps;
 use SDL::Version;
 use Encode;
 
+use FindBin;
+use File::Spec;
+my $font_filename = File::Spec->catfile(
+        $FindBin::Bin, '..', 'share', 'GenBasB.ttf'
+);
+
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
@@ -74,19 +80,19 @@ is( SDL::TTF::byte_swapped_unicode(0), undef, "[ttf_byte_swapped_unicode] on" );
 is( SDL::TTF::byte_swapped_unicode(1), undef,
 	"[ttf_byte_swapped_unicode] off"
 );
-my $font = SDL::TTF::open_font( 'test/data/aircut3.ttf', 24 );
+my $font = SDL::TTF::open_font( $font_filename, 24 );
 isa_ok( $font, 'SDL::TTF::Font', "[open_font]" );
 isa_ok(
-	SDL::TTF::open_font_index( 'test/data/aircut3.ttf', 8, 0 ),
+	SDL::TTF::open_font_index( $font_filename, 8, 0 ),
 	'SDL::TTF::Font', "[open_font_index]"
 );
-my $file = SDL::RWOps->new_file( 'test/data/aircut3.ttf', 'r' );
+my $file = SDL::RWOps->new_file( $font_filename, 'r' );
 isa_ok( $file, 'SDL::RWOps', "[new_file]" );
 isa_ok(
 	SDL::TTF::open_font_RW( $file, 0, 12 ),
 	'SDL::TTF::Font', "[open_font_RW]"
 );
-$file = SDL::RWOps->new_file( 'test/data/aircut3.ttf', 'r' );
+$file = SDL::RWOps->new_file( $font_filename, 'r' );
 isa_ok(
 	SDL::TTF::open_font_index_RW( $file, 0, 16, 0 ),
 	'SDL::TTF::Font', "[open_font_index_RW]"

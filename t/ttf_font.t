@@ -17,6 +17,12 @@ use SDL::TTF;
 use SDL::TTF::Font;
 use SDL::Version;
 
+use FindBin;
+use File::Spec;
+my $font_filename = File::Spec->catfile(
+        $FindBin::Bin, '..', 'share', 'GenBasB.ttf'
+);
+
 my $lv = SDL::TTF::linked_version();
 my $cv = SDL::TTF::compile_time_version();
 
@@ -33,12 +39,12 @@ printf(
 is( SDL::TTF::init(), 0, "[init] succeeded" );
 
 isa_ok(
-	SDL::TTF::Font->new( 'test/data/aircut3.ttf', 24 ),
+	SDL::TTF::Font->new( $font_filename, 24 ),
 	'SDL::TTF::Font',
 	"[new] with font and size"
 );
 isa_ok(
-	SDL::TTF::Font->new( 'test/data/aircut3.ttf', 24, 0 ),
+	SDL::TTF::Font->new( $font_filename, 24, 0 ),
 	'SDL::TTF::Font',
 	"[new] with font, size and index"
 );
