@@ -97,26 +97,36 @@ isa_ok(
 	SDL::TTF::open_font_index_RW( $file, 0, 16, 0 ),
 	'SDL::TTF::Font', "[open_font_index_RW]"
 );
-is( SDL::TTF::get_font_style($font),
-	TTF_STYLE_NORMAL, "[get_font_style] returns TTF_STYLE_NORMAL"
+
+# get_font_style returns the style as a bitmask
+
+my $style = SDL::TTF::get_font_style($font);
+
+is( $style, TTF_STYLE_NORMAL,  "[get_font_style] returns TTF_STYLE_NORMAL"
 );
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_BOLD ),
 	undef, "[set_font_style] to TTF_STYLE_BOLD"
 );
-is( SDL::TTF::get_font_style($font),
-	TTF_STYLE_BOLD, "[get_font_style] returns TTF_STYLE_BOLD"
+
+$style = SDL::TTF::get_font_style($font);
+
+ok( $style & TTF_STYLE_BOLD , "[get_font_style] returns TTF_STYLE_BOLD"
 );
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_ITALIC ),
 	undef, "[set_font_style] to TTF_STYLE_ITALIC"
 );
-is( SDL::TTF::get_font_style($font),
-	TTF_STYLE_ITALIC, "[get_font_style] returns TTF_STYLE_ITALIC"
+
+$style =  SDL::TTF::get_font_style($font);
+ok( $style & TTF_STYLE_ITALIC, "[get_font_style] returns TTF_STYLE_ITALIC"
 );
+
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_UNDERLINE ),
 	undef, "[set_font_style] to TTF_STYLE_UNDERLINE"
 );
-is( SDL::TTF::get_font_style($font),
-	TTF_STYLE_UNDERLINE, "[get_font_style] returns TTF_STYLE_UNDERLINE"
+
+$style =  SDL::TTF::get_font_style($font);
+
+ok( TTF_STYLE_UNDERLINE, "[get_font_style] returns TTF_STYLE_UNDERLINE"
 );
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_NORMAL ),
 	undef, "[set_font_style] to TTF_STYLE_NORMAL"
