@@ -72,6 +72,8 @@ Sets the horizontal alignment of the text to be rendered relative to
 whatever surface you are placing it into. Available alignments are 'C<left>',
 'C<right>' and 'C<center>'. Default is 'C<left>'.
 
+=item * text
+
 =back
 
 =head2 text( "text to write" )

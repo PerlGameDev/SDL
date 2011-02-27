@@ -43,6 +43,8 @@ sub new {
 
 	$self->{_color} = $color;
 
+	$self->text( $options{'text'} ) if defined $options{'text'};
+
 	return $self;
 }
 
