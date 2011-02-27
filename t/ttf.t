@@ -80,7 +80,7 @@ is( SDL::TTF::byte_swapped_unicode(0), undef, "[ttf_byte_swapped_unicode] on" );
 is( SDL::TTF::byte_swapped_unicode(1), undef,
 	"[ttf_byte_swapped_unicode] off"
 );
-my $font = SDL::TTF::open_font( $font_filename, 24 );
+my $font = SDL::TTF::open_font( $font_filename, 22 );
 isa_ok( $font, 'SDL::TTF::Font', "[open_font]" );
 isa_ok(
 	SDL::TTF::open_font_index( $font_filename, 8, 0 ),
@@ -256,8 +256,9 @@ SKIP:
 	my $black      = SDL::Video::map_RGB( $display->format, 0x00, 0x00, 0x00 );
 	SDL::Video::fill_rect( $display, SDL::Rect->new( 0, 0, 640, 480 ), $black );
 
+	my $font = SDL::TTF::open_font( $font_filename, 24 );
 	my $render_text_solid = SDL::TTF::render_text_solid( $font, 'render_text_solid', $text_fg );
-	isa_ok( $render_text_solid, 'SDL::Surface', "[render_text_solid]" );
+	isa_ok( $render_text_solid, 'SDL::Surface', "[render_text_solid] ".SDL::get_error() );
 	SDL::Video::blit_surface(
 		$render_text_solid, SDL::Rect->new( 0, 0, 640, 480 ),
 		$display, SDL::Rect->new( 5, $y += 27, 640, 480 )
