@@ -14,20 +14,23 @@ BEGIN {
 	}
 }
 
-use SDLx::Text;
+use_ok( 'SDLx::Text' );
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
-
-my $score = SDLx::Text->new( font => 'test/data/aircut3.ttf' );
+use FindBin;
+use File::Spec;
+my $score = SDLx::Text->new(
+       font => File::Spec->catfile($FindBin::Bin, '..', 'share', 'GenBasB.ttf')
+);
 
 isa_ok( $score, 'SDLx::Text');
 
 $score->text('Hello!');
 
-is( $score->w, 56, 'Hello! is 56 px wide!' );
-is( $score->h, 27, 'Hello! is 27 px high!' );
+is( $score->w, 62, 'Hello! is 62 px wide!' );
+is( $score->h, 28, 'Hello! is 28 px high!' );
 
 
 END {

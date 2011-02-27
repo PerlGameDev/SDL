@@ -37,7 +37,7 @@ Instantiates a new SDLx::Text object. All arguments are optional:
 
 Sets the font to use. Fonts can be in TTF or FON formats. Generates an
 exception if the font cannot be loaded. If this argument is not provided,
-it will load the default C<Tuffy> free font (see "L</"COPYRIGHT & LICENSE">".
+it will load the default C<Gentium Basic (Bold)> free font (see "L</"COPYRIGHT & LICENSE">" for more information).
 
 =item * color 
 
@@ -115,7 +115,7 @@ See L<SDL/AUTHORS>.
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
-This module ships with a default font, "I<Tuffy>", released to public domain by Thatcher Ulrich (http://tulrich.com).
+This module ships with a default font, "I<Gentium Basic (Bold)>", Copyright 2003-2008 SIL International (http://sil.org), released under the SIL Open Font License 1.1 (OFL). The font is available for use in free and commercial products, with some minor restrictions. Please read the C<OFL.txt> and C<OFL-FAQ.txt> for further information.
 
 =head1 SEE ALSO
 

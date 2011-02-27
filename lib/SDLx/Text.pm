@@ -12,8 +12,11 @@ sub new {
 	unless ( SDL::Config->has('SDL_ttf') ) {
 		Carp::cluck("SDL_ttf support has not been compiled");
 	}  
-	my $file = $options{'font'}
-	or Carp::croak 'must provide font filename';
+	my $file = $options{'font'};
+    if (!$file) {
+        require File::ShareDir;
+        $file = File::ShareDir::dist_file('SDL', 'GenBasB.ttf');
+    }
 
 	my $color = $options{'color'} || [255, 0, 0];
 
