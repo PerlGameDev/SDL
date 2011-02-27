@@ -28,7 +28,7 @@ use Encode;
 use FindBin;
 use File::Spec;
 my $font_filename = File::Spec->catfile(
-        $FindBin::Bin, '..', 'share', 'GenBasB.ttf'
+        $FindBin::Bin, '..', 'share', 'GenBasR.ttf'
 );
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};

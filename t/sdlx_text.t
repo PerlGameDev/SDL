@@ -22,7 +22,7 @@ $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 use FindBin;
 use File::Spec;
 my $score = SDLx::Text->new(
-       font => File::Spec->catfile($FindBin::Bin, '..', 'share', 'GenBasB.ttf')
+       font => File::Spec->catfile($FindBin::Bin, '..', 'share', 'GenBasR.ttf')
 );
 
 isa_ok( $score, 'SDLx::Text');

@@ -15,7 +15,7 @@ sub new {
 	my $file = $options{'font'};
     if (!$file) {
         require File::ShareDir;
-        $file = File::ShareDir::dist_file('SDL', 'GenBasB.ttf');
+        $file = File::ShareDir::dist_file('SDL', 'GenBasR.ttf');
     }
 
 	my $color = $options{'color'} || [255, 0, 0];
