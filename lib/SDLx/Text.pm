@@ -140,18 +140,17 @@ sub write_to {
 	my ($self, $target, $text) = @_;
 
 	$self->text($text) if $text;
+	if ( my $surface = $self->{surface} ) {
+		if ($self->{h_align} eq 'center' ) {
+			$self->{x} = ($target->w / 2) - ($surface->w / 2);
+		}
+		# TODO: other alignments
 
-	my $surface = $self->{surface};
-
-	if ($self->{h_align} eq 'center' ) {
-		$self->{x} = ($target->w / 2) - ($surface->w / 2);
-	}
-# TODO: other alignments
-
-	SDL::Video::blit_surface(
+		SDL::Video::blit_surface(
 			$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
 			$target, SDL::Rect->new($self->{x}, $self->{y}, $target->w, $target->h)
-			);
+		);
+	}
 	return;
 }
 
@@ -159,12 +158,13 @@ sub write_xy {
 	my ($self, $target, $x, $y, $text) = @_;
 
 	$self->text($text) if $text;
-	my $surface = $self->{surface};
+	if ( my $surface = $self->{surface} ) {
 
-	SDL::Video::blit_surface(
-			$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
-			$target, SDL::Rect->new($x, $y, $target->w, $target->h)
-			);
+		SDL::Video::blit_surface(
+				$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
+				$target, SDL::Rect->new($x, $y, $target->w, $target->h)
+		);
+	}
 	return;
 }
 
