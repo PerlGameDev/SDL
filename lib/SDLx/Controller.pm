@@ -21,6 +21,7 @@ my %_event;
 my %_event_handlers;
 my %_move_handlers;
 my %_show_handlers;
+my %_sleep_cycle;
 
 sub new {
 	my ($self, %args) = @_;
@@ -42,6 +43,7 @@ sub new {
 	$_event_handlers{ $ref }     = $args{event_handlers};
 	$_move_handlers{ $ref }      = $args{move_handlers};
 	$_show_handlers{ $ref }      = $args{show_handlers};
+	$_sleep_cycle{ $ref }		 = $args{delay};
 
 	return $self;
 }
@@ -58,6 +60,7 @@ sub DESTROY {
 	delete $_event_handlers{ $ref};
 	delete $_move_handlers{ $ref};
 	delete $_show_handlers{ $ref};
+	delete $_sleep_cycle { $ref };
 }
 
 sub run {
@@ -93,6 +96,7 @@ sub run {
 		
 		$dt    = $_dt{ $ref};    #these can change
 		$min_t = $_min_t{ $ref}; #during the cycle
+		SDL::delay( $_sleep_cycle{ $ref } ) if $_sleep_cycle{ $ref };
 	}
 
 }

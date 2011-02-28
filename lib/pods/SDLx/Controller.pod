@@ -71,6 +71,8 @@ Having the C<min_t> at 1 / 60 ensures that the controller can update the screen 
 A "V-Sync" such as this is necessary to prevent video "tear", which occurs when the app is updating faster than the monitor can display.
 Setting it to 0, as seen above, will let the app run as fast as it possibly can.
 
+C<delay> specifies a loop delay in millisecs to place on the controller loop. B<NOTE:> Picking a good delay based on the needs can help reduce CPU load and pressure.
+
 C<event> is a SDL::Event object that events going to the event callbacks are polled in to. It defaults to C<< SDL::Event->new() >>.
 
 All parameters are optional.
