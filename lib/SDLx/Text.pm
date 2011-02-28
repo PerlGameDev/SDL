@@ -105,7 +105,7 @@ sub x {
 	if ($x) {
 		$self->{x} = $x;
 	}
-	return $x;
+	return $self->{x};
 }
 
 sub y {
@@ -114,7 +114,7 @@ sub y {
 	if ($y) {
 		$self->{y} = $y;
 	}
-	return $y;
+	return $self->{y};
 }
 
 sub text {
