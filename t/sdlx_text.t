@@ -27,10 +27,18 @@ my $score = SDLx::Text->new(
 
 isa_ok( $score, 'SDLx::Text');
 
+is($score->x, 0, 'default x position');
+is($score->y, 0, 'default y position');
+is($score->h_align, 'left', 'default horizontal alignment');
+isa_ok( $score->font, 'SDL::TTF::Font' );
+isa_ok($score->color, 'SDL::Color', 'default color');
+is($score->size, 24, 'default size');
+
 $score->text('Hello!');
 
 is( $score->w, 60, 'Hello! is 62 px wide!' );
 is( $score->h, 28, 'Hello! is 28 px high!' );
+isa_ok($score->surface, 'SDL::Surface');
 
 
 END {
