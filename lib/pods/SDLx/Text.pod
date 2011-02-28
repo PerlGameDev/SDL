@@ -79,12 +79,6 @@ Gets/sets the horizontal alignment of the text to be rendered relative to
 whatever surface you are placing it into. Available alignments are 'C<left>',
 'C<right>' and 'C<center>'. Default is 'C<left>'.
 
-=head2 text
-
-Gets/sets the text to be displayed by the SDLx::Text object. Return the SDLx::Text object itself, so you can easily chain this method around.
-
-    my $obj = SDLx::Text->new->text( "Hello, Dave." );
-
 =head2 color
 
 Gets/sets the text color. The color is an array reference in C<[R, G, B]> or C<[R, G, B, A]> format. See L<SDL::Color> for more information on colors.
@@ -95,10 +89,21 @@ Gets/sets the font size.
 
 =head2 font
 
-Gets/sets the font to use. Fonts can be in TTF, OTF or FON formats. Generates
-an exception if the font cannot be loaded.
+Pass it a string containing the path to your desired font to use it. Fonts
+can be in TTF, OTF or FON formats. Generates an exception if the font
+cannot be loaded.
+
+Returns the L<SDL::TTF::Font> object representing the font.
+
 
 =head1 METHODS
+
+=head2 text( $some_text )
+
+Sets the text to be displayed by the SDLx::Text object. Return the SDLx::Text object itself, so you can easily chain this method around.
+
+    my $obj = SDLx::Text->new->text( "Hello, Dave." );
+
 
 =head2 write_to( $target_surface )
 
@@ -138,6 +143,35 @@ Shortcut to see the width of the underlying surface representing the text.
 
 Shortcut to see the height of the underlying surface representing the text.
 
+=head1 ERRORS AND DIAGNOSTICS
+
+=over 4
+
+=item * "SDL_ttf support has not been compiled"
+
+In order to render text in SDL you must have enabled SDL_ttf while building L<Alien::SDL>.
+
+=item * "Cannot init TTF: <some error>"
+
+In order to load fonts and render text, we need to initialize L<SDL::TTF>
+- that is, in case it hasn't been initialized already. The error above will
+appear in the rare event of any problem during initialization.
+
+=item * "Error opening font: <some error>"
+
+The font file you set either via C<< font( 'font.ttf' ) >> or during
+construction could not be loaded. The file may not exist in the given path,
+have wrong permissions, be corrupted, or of an unsupported format. Please
+refer the C<< <some error> >> message in the message itself for further
+information.
+
+=item * "TTF rendering error: <some error>"
+
+When you call C<text()>, it renders the provided string onto an internal
+L<SDL::Surface> object. If there was any problem rendering the text, this
+message will appear.
+
+=back
 
 =head1 BUGS
 
