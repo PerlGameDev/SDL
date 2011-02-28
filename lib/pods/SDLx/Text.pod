@@ -104,6 +104,8 @@ Sets the text to be displayed by the SDLx::Text object. Return the SDLx::Text ob
 
     my $obj = SDLx::Text->new->text( "Hello, Dave." );
 
+Text will always be rendered as utf8, so you can pass any string containing
+regular ASCII or valid utf8 characters.
 
 =head2 write_to( $target_surface )
 
