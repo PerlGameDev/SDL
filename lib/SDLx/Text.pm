@@ -18,7 +18,7 @@ sub new {
         $file = File::ShareDir::dist_file('SDL', 'GenBasR.ttf');
     }
 
-	my $color = $options{'color'} || [255, 0, 0];
+	my $color = $options{'color'} || [255, 255, 255];
 
 	my $size = $options{'size'} || 24;
 
