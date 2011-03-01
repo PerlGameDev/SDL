@@ -10,6 +10,7 @@ use SDL::Video;
 use SDL::PixelFormat;
 
 BEGIN {
+	use FindBin;
 	use Test::More;
 	use lib 't/lib';
 	use SDL::TestTool;
@@ -25,7 +26,6 @@ use SDL::RWOps;
 use SDL::Version;
 use Encode;
 
-use FindBin;
 use File::Spec;
 my $font_filename = File::Spec->catfile(
         $FindBin::Bin, '..', 'share', 'GenBasR.ttf'

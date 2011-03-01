@@ -5,6 +5,7 @@ use SDL::Color;
 use SDL::Surface;
 use SDLx::App;
 BEGIN {
+	use FindBin;
 	use Test::More;
 	use lib 't/lib';
 	use SDL::TestTool;
@@ -19,7 +20,6 @@ use_ok( 'SDLx::Text' );
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
-use FindBin;
 use File::Spec;
 my $score = SDLx::Text->new(
        font => File::Spec->catfile($FindBin::Bin, '..', 'share', 'GenBasR.ttf')
