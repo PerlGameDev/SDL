@@ -4,6 +4,8 @@ use SDL;
 use SDL::Config;
 
 BEGIN {
+	use FindBin;
+	use File::Spec;
 	use Test::More;
 	use lib 't/lib';
 	use SDL::TestTool;
@@ -16,9 +18,6 @@ BEGIN {
 use SDL::TTF;
 use SDL::TTF::Font;
 use SDL::Version;
-
-use FindBin;
-use File::Spec;
 my $font_filename = File::Spec->catfile(
         $FindBin::Bin, '..', 'share', 'GenBasR.ttf'
 );
