@@ -126,7 +126,7 @@ sub text {
 		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
 
 	$self->{surface} = $surface;
-	my $arr =  SDL::TTF::ttf_size_utf8( $self->{_font}, $text );
+	my $arr =  SDL::TTF::size_utf8( $self->{_font}, $text );
 	$self->{w} = $arr->[0];
 	$self->{h} = $arr->[1];
 
