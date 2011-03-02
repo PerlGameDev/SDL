@@ -34,9 +34,9 @@ isa_ok( $score->font, 'SDL::TTF::Font' );
 isa_ok($score->color, 'SDL::Color', 'default color');
 is($score->size, 24, 'default size');
 
-$score->text('Hello!');
+$score->text('Hello');
 
-is( $score->w, 60, 'Hello! is 62 px wide!' );
+is( $score->w, 53, 'Hello! is 53 px wide!' );
 is( $score->h, 28, 'Hello! is 28 px high!' );
 isa_ok($score->surface, 'SDL::Surface');
 
