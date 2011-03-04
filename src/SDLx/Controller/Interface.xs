@@ -113,7 +113,7 @@ void integrate( SDLx_Interface* object, float t, float dt)
 	const float dydt = 1.0f/6.0f * (a->dy + 2.0f*(b->dy + c->dy) + d->dy);
 	const float dv_ydt = 1.0f/6.0f * (a->dv_y + 2.0f*(b->dv_y + c->dv_y) + d->dv_y);
 	const float drotationdt = 1.0f/6.0f * (a->drotation + 2.0f*(b->drotation + c->drotation) + d->drotation);
-	const float dv_angdt = 1.0f/6.0f * (a->dang_v + 2.0f*(b->dang_v + c->dv_y) + d->dang_v);
+	const float dv_angdt = 1.0f/6.0f * (a->dang_v + 2.0f*(b->dang_v + c->dang_v) + d->dang_v);
 
 	state->x = state->x + dxdt*dt;
 	state->v_x = state->v_x + dv_xdt*dt;
