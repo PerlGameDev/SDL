@@ -260,6 +260,35 @@ sub draw_line {
 	return $self;
 }
 
+sub draw_poly {
+	my ( $self, $x_coords, $y_coords, $color, $antialias ) = @_;
+
+	Carp::confess "Error x_coords needs an array ref [x1,x2,x3,...]"
+		unless ref($x_coords) eq 'ARRAY';
+	Carp::confess "Error y_coords needs an array ref [y1,y2,y3,...]"
+		unless ref($y_coords) eq 'ARRAY';
+	Carp::confess "Error x_coords and y_coords should have the same size"
+		unless scalar @$x_coords == scalar @$y_coords;
+
+	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
+		Carp::cluck("SDL_gfx_primitives support has not been compiled");
+		return;
+	}
+
+	$color = SDLx::Validate::num_rgba($color);
+
+	my $result;
+	if ($antialias) {
+		$result = SDL::GFX::Primitives::aapolygon_color( $self, $x_coords, $y_coords, scalar @$x_coords, $color );
+	} else {
+		$result = SDL::GFX::Primitives::polygon_color( $self, $x_coords, $y_coords, scalar @$x_coords, $color );
+	}
+
+	Carp::confess "Error drawing line: " . SDL::get_error() if ( $result == -1 );
+
+	return $self;
+}
+
 sub draw_circle {
 	my ( $self, $center, $radius, $color, $antialias ) = @_;
 
@@ -317,18 +346,10 @@ sub draw_ellipse {
 	return $self;
 }
 
-sub draw_polygon {
-	my ( $self, $vector, $color ) = @_;
-
-	return $self;
-
-}
-
 sub draw_bezier {
 	my ( $self, $vector, $smooth, $color ) = @_;
 
 }
-
 
 sub draw_gfx_text {
 	my ( $self, $vector, $color, $text, $font ) = @_;

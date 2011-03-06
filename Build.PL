@@ -165,7 +165,7 @@ my %subsystems = (
 			from => 'src/SDLx/Surface.xs',
 			to   => 'lib/SDLx/Surface.xs',
 		},
-		libraries => [qw( SDL )],
+		libraries => [qw( SDL SDL_gfx_primitives )],
 	},
 	TimerX => {
 		file => {

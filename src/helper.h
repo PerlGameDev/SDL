@@ -86,4 +86,33 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
     return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
 }
 
+void _svinta_free(Sint16* av, int len_from_av_len)
+{
+    if( av == NULL)
+        return;
+    safefree( av ); /* we only need to free the malloc'd array. It is one block. */
+        av = NULL;
+}
+
+Sint16* av_to_sint16 (AV* av)
+{
+    int len = av_len(av);
+    if( len != -1)
+    {
+        int i;
+        Sint16* table = (Sint16 *)safemalloc(sizeof(Sint16)*(len+1));
+        for ( i = 0; i < len+1 ; i++ )
+        { 
+            SV ** temp = av_fetch(av,i,0);
+            if( temp != NULL )
+                table[i] = (Sint16) SvIV ( *temp  );
+            else
+                table[i] = 0;
+        }
+        return table;
+
+    }
+    return NULL;
+}
+
 #endif
