@@ -121,8 +121,7 @@ sub new {
 	$self = $self->SDLx::Controller::new(%options);
 	bless $self, $class;
 
-	$self->add_event_handler( \&_exit_on_quit ) if $eoq;
-
+	
 	return $self;
 }
 
