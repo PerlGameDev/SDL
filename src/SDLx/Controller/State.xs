@@ -3,6 +3,7 @@
 #include "XSUB.h"
 #include "ppport.h"
 #include "defines.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -88,10 +89,11 @@ state_ang_v(state, ...)
 		RETVAL
 
 void
-state_DESTROY( obj )
-	SDLx_State *obj
-	CODE: 
-	  if (obj->owned == 0)
-	   safefree(obj);	
+state_DESTROY( bag )
+	SV *bag
+	CODE:
+		SDLx_State *obj = (SDLx_State *)bag2obj(bag);
+		if (obj->owned == 0)
+			objDESTROY(bag, safefree);
 
 

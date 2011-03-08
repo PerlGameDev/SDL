@@ -1,6 +1,7 @@
 Revision history for Perl extension SDL_perl.
 
 *
+    - SDLx::Controller::Interface  fixed memory leak [jtpalmer]
     - SDLx::Controller::Interface  fixed angular velocity [jtpalmer]
 
 * 2.531 Feb 27 2011
