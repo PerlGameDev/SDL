@@ -53,7 +53,6 @@ sub new {
 	my $bas = $options{blue_accum_size}  || $options{bas} || 0;
 	my $aas = $options{alpha_accum_size} || $options{aas} || 0;
 	my $db  = $options{double_buffer}    || $options{db}  || 0;
-	my $eoq = $options{exit_on_quit}     || $options{eoq} || 0;
 
 	my $bs = $options{buffer_size}  || $options{bs} || 0;
 	my $st = $options{stencil_size} || $options{st} || 0;
@@ -205,12 +204,7 @@ sub attribute {
 	$$returns[1];
 }
 
-sub _exit_on_quit {
-   my ($event, $app) = @_;
 
-    $app->stop() if $event->type == SDL_QUIT;
-
-}
 
 my %_stash;
 sub stash :lvalue{	

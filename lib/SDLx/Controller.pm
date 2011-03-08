@@ -22,6 +22,7 @@ my %_event_handlers;
 my %_move_handlers;
 my %_show_handlers;
 my %_sleep_cycle;
+my %_eoq;
 
 sub new {
 	my ($self, %args) = @_;
@@ -44,6 +45,7 @@ sub new {
 	$_move_handlers{ $ref }      = $args{move_handlers};
 	$_show_handlers{ $ref }      = $args{show_handlers};
 	$_sleep_cycle{ $ref }		 = $args{delay};
+	$_eoq{$ref} 				 = $args{exit_on_quit} || $args{eoq} || 0;
 
 	return $self;
 }
@@ -61,6 +63,7 @@ sub DESTROY {
 	delete $_move_handlers{ $ref};
 	delete $_show_handlers{ $ref};
 	delete $_sleep_cycle { $ref };
+	delete $_eoq{$ref}; 
 }
 
 sub run {
@@ -119,6 +122,7 @@ sub _event {
 	my ($self, $ref) = @_;
 	SDL::Events::pump_events();
 	while ( SDL::Events::poll_event( $_event{ $ref} ) ) {
+		_exit_on_quit( $_event{ $ref}  ) if $_eoq{$ref};
 		foreach my $event_handler ( @{ $_event_handlers{ $ref} } ) {
 			next unless $event_handler;
 			$event_handler->( $_event{ $ref}, $self );
@@ -247,6 +251,12 @@ sub current_time {
 	$_current_time{ $ref};
 }
 
+sub _exit_on_quit {
+   my ($self, $event) = @_;
+
+    $self->stop() if $event->type == SDL_QUIT;
+
+}
 1; #not 42 man!
 
 __END__
