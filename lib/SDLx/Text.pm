@@ -3,6 +3,7 @@ use SDL;
 use SDL::Video;
 use SDL::Config;
 use SDL::TTF;
+use SDL::TTF::Font;
 use SDLx::Validate;
 
 use Carp ();
