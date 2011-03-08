@@ -19,7 +19,7 @@ sub new {
 		#require Carp;
 		Carp::confess SDL::get_error();
 	}
-	bless $self, $class;
+	bless $self, ref($class) || $class;
 	return $self;
 }
 
