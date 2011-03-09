@@ -106,6 +106,18 @@ sub run {
 
 }
 
+*eoq = \&exit_on_quit;  # alias
+sub exit_on_quit {
+    my ($self, $value) = @_;
+
+    my $ref = refaddr $self;
+    if (defined $value) {
+        $_eoq{$ref} = $value;
+    }
+
+    return $_eoq{$ref};
+}
+
 sub pause {
 	my ($self, $callback) = @_;
 	my $ref = refaddr $self;
