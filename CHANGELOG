@@ -5,6 +5,8 @@ Revision history for Perl extension SDL_perl.
     - SDLx::Controller::Interface  fixed angular velocity [jtpalmer]
 	- SDLx::Text using SDL::TTF::Font correctly [FROGGS]
 	- SDLx::Surface draws polygons [FROGGS]
+	- SDLx::Controller now handles eoq option as a non handler [KTHAKORE]
+	- SDLx::Controller keeps track of paused state [BLAIZER]
 
 * 2.531 Feb 27 2011
     - protecting dstrect from modification during SDL_BlitSurface (FROGGS)

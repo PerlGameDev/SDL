@@ -23,6 +23,7 @@ my %_move_handlers;
 my %_show_handlers;
 my %_sleep_cycle;
 my %_eoq;
+my %_paused;
 
 sub new {
 	my ($self, %args) = @_;
@@ -64,6 +65,7 @@ sub DESTROY {
 	delete $_show_handlers{ $ref};
 	delete $_sleep_cycle { $ref };
 	delete $_eoq{$ref}; 
+	delete $_paused{$ref};
 }
 
 sub run {
@@ -109,6 +111,7 @@ sub pause {
 	my $ref = refaddr $self;
 	$callback ||= sub {1};
 	my $event = SDL::Event->new();
+	$_paused{ $ref } = 1;
 	while(1) {
 		SDL::Events::wait_event($event) or Carp::confess("pause failed waiting for an event");
 		if($callback->($event, $self)) {
@@ -116,6 +119,8 @@ sub pause {
 			last;
 		}
 	}
+
+	delete $_paused{$ref};
 }
 
 sub _event {
@@ -251,12 +256,17 @@ sub current_time {
 	$_current_time{ $ref};
 }
 
+sub paused {
+	$_paused{ refaddr $_[0]};
+}
+
 sub _exit_on_quit {
    my ($self, $event) = @_;
 
     $self->stop() if $event->type == SDL_QUIT;
 
 }
+
 1; #not 42 man!
 
 __END__
