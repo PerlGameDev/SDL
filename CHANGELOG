@@ -1,8 +1,10 @@
 Revision history for Perl extension SDL_perl.
 
-*
+* 2.531_1 (Fixes for 2.531) March 8 2011
     - SDLx::Controller::Interface  fixed memory leak [jtpalmer]
     - SDLx::Controller::Interface  fixed angular velocity [jtpalmer]
+	- SDLx::Text using SDL::TTF::Font correctly [FROGGS]
+	- SDLx::Surface draws polygons [FROGGS]
 
 * 2.531 Feb 27 2011
     - protecting dstrect from modification during SDL_BlitSurface (FROGGS)
