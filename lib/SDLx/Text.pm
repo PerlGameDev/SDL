@@ -19,7 +19,7 @@ sub new {
         $file = File::ShareDir::dist_file('SDL', 'GenBasR.ttf');
     }
 
-	my $color = $options{'color'} || [255, 255, 255];
+	my $color = defined $options{'color'} ? $options{'color'} : [255, 255, 255];
 
 	my $size = $options{'size'} || 24;
 
@@ -61,7 +61,7 @@ sub font {
 sub color {
 	my ($self, $color) = @_;
 
-	if ($color) {
+	if (defined $color) {
 		$self->{_color} = SDLx::Validate::color($color);
 	}
 
@@ -103,7 +103,7 @@ sub h {
 sub x {
 	my ($self, $x) = @_;
 
-	if ($x) {
+	if (defined $x) {
 		$self->{x} = $x;
 	}
 	return $self->{x};
@@ -112,7 +112,7 @@ sub x {
 sub y {
 	my ($self, $y) = @_;
 
-	if ($y) {
+	if (defined $y) {
 		$self->{y} = $y;
 	}
 	return $self->{y};
@@ -141,16 +141,18 @@ sub surface {
 sub write_to {
 	my ($self, $target, $text) = @_;
 
-	$self->text($text) if $text;
+	$self->text($text) if defined $text;
 	if ( my $surface = $self->{surface} ) {
 		if ($self->{h_align} eq 'center' ) {
 			$self->{x} = ($target->w / 2) - ($surface->w / 2);
 		}
-		# TODO: other alignments
+		elsif ($self->{h_align} eq 'right' ) {
+			$self->{x} = $target->w - $surface->w;
+		}
 
 		SDL::Video::blit_surface(
 			$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
-			$target, SDL::Rect->new($self->{x}, $self->{y}, $target->w, $target->h)
+			$target, SDL::Rect->new($self->{x}, $self->{y}, 0, 0)
 		);
 	}
 	return;
@@ -159,12 +161,17 @@ sub write_to {
 sub write_xy {
 	my ($self, $target, $x, $y, $text) = @_;
 
-	$self->text($text) if $text;
+	$self->text($text) if defined $text;
 	if ( my $surface = $self->{surface} ) {
-
+		if ($self->{h_align} eq 'center' ) {
+			$x -= $surface->w / 2;
+		}
+		elsif ($self->{h_align} eq 'right' ) {
+			$x -= $surface->w;
+		}
 		SDL::Video::blit_surface(
-				$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
-				$target, SDL::Rect->new($x, $y, $target->w, $target->h)
+			$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
+			$target, SDL::Rect->new($x, $y, 0, 0)
 		);
 	}
 	return;
