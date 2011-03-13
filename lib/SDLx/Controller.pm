@@ -42,9 +42,9 @@ sub new {
 #	$_current_time{ $ref }       = $args{current_time} || 0; #no point
 	$_stop{ $ref }               = $args{stop};
 	$_event{ $ref }              = $args{event} || SDL::Event->new();
-	$_event_handlers{ $ref }     = $args{event_handlers};
-	$_move_handlers{ $ref }      = $args{move_handlers};
-	$_show_handlers{ $ref }      = $args{show_handlers};
+	$_event_handlers{ $ref }     = $args{event_handlers} || [];
+	$_move_handlers{ $ref }      = $args{move_handlers}  || [];
+	$_show_handlers{ $ref }      = $args{show_handlers}  || [];
 	$_sleep_cycle{ $ref }		 = $args{delay};
 	$_eoq{$ref} 				 = $args{exit_on_quit} || $args{eoq} || 0;
 
@@ -106,6 +106,18 @@ sub run {
 
 }
 
+*eoq = \&exit_on_quit;  # alias
+sub exit_on_quit {
+    my ($self, $value) = @_;
+
+    my $ref = refaddr $self;
+    if (defined $value) {
+        $_eoq{$ref} = $value;
+    }
+
+    return $_eoq{$ref};
+}
+
 sub pause {
 	my ($self, $callback) = @_;
 	my $ref = refaddr $self;
@@ -161,7 +173,6 @@ sub _add_handler {
 
 sub add_move_handler {
 	my $ref = refaddr $_[0];
-	$_[0]->remove_all_move_handlers if !$_move_handlers{ $ref };
 	return _add_handler( $_move_handlers{ $ref}, $_[1] );
 }
 
@@ -169,13 +180,11 @@ sub add_event_handler {
 	my $ref = refaddr $_[0];
 	Carp::confess 'SDLx::App or a Display (SDL::Video::get_video_mode) must be made'
 		unless SDL::Video::get_video_surface();
-	$_[0]->remove_all_event_handlers if !$_event_handlers{ $ref };
 	return _add_handler( $_event_handlers{ $ref}, $_[1] );
 }
 
 sub add_show_handler {
 	my $ref = refaddr $_[0];
-	$_[0]->remove_all_show_handlers if !$_show_handlers{ $ref };
 	return _add_handler( $_show_handlers{ $ref}, $_[1] );
 }
 
@@ -264,7 +273,6 @@ sub _exit_on_quit {
    my ($self, $event) = @_;
 
     $self->stop() if $event->type == SDL_QUIT;
-
 }
 
 1; #not 42 man!

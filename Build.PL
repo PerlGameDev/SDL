@@ -583,8 +583,10 @@ my $build = $package->new(
 		'File::Find'        => '0',
 		'File::ShareDir'    => '1.0',
 		'Tie::Simple'       => '0',
+		'Scalar::Util'      => '0',
 	},
 	requires => {
+		'Scalar::Util'   => '0',
 		'Tie::Simple'    => '0',
 		'File::ShareDir' => '1.0',
 		'CPAN'           => '1.92',
