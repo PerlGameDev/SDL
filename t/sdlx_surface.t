@@ -167,6 +167,24 @@ foreach my $c (@colors) {
 }
 $surfs[0]->draw_rect( [ 0, 0, 10, 20 ], 0xFF00FFFF );
 pass 'draw_rect works';
+
+foreach my $c (@colors) {
+	my $color = ( $c->[0] << 24 ) + ( $c->[1] << 16 ) + ( $c->[2] << 8 ) + $c->[3];
+
+	my $before = SDL::Video::get_RGBA( $surfs[0]->surface()->format(), $surfs[0]->[0][0] );
+
+	$surfs[0]->draw_rect_blended( [ 0, 0, 10, 20 ], $c );
+
+	my $after = SDL::Video::get_RGBA( $surfs[0]->surface()->format(), $surfs[0]->[0][0] );
+
+	my $num = sprintf( '0x%08x', $color );
+    $c->[3] /= 255;
+	is( int($c->[3] * $c->[0] + (1 - $c->[3]) * $before->[0]), $after->[0], "draw_rect_blended uses correct red for $num" );
+	is( int($c->[3] * $c->[1] + (1 - $c->[3]) * $before->[1]), $after->[1], "draw_rect_blended uses correct green for $num " );
+	is( int($c->[3] * $c->[2] + (1 - $c->[3]) * $before->[2]), $after->[2], "draw_rect_blended uses correct blue for $num" );
+	is( 0xFF,                                                  $after->[3], "draw_rect_blended uses correct alpha for $num" );
+}
+
 SKIP:
 {
 	skip( 'SDL_gfx_primitives needed', 2 ) unless SDL::Config->has('SDL_gfx_primitives');

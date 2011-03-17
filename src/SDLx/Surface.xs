@@ -176,48 +176,61 @@ surfacex_set_pixel_xs ( surface, x, y, value )
 		if(SDL_MUSTLOCK(surface))
 		SDL_UnlockSurface(surface);
 
-
 void
 surfacex_draw_rect ( surface, rt, color )
 	SDL_Surface *surface
 	SV* rt
 	SV* color
 	CODE:
-		AV* ar         = __list_rgba( color );
-		int a          = SvUV(*av_fetch(ar, 3, 0));
+		SDL_Rect r_rect;
+		SV* foo;
 
-			SDL_Rect r_rect;
-			SV* foo;
+		if( SvOK(rt) )
+		{
+			int newly_created_rect = 0;
+			foo                    = rect( rt, &newly_created_rect );
+			r_rect                 = *(SDL_Rect*)bag2obj(foo);
+		}
+		else
+		{
+			r_rect.x = 0; r_rect.y = 0; r_rect.w = surface->w; r_rect.h = surface->h;
+		}
 
-			if( SvOK(rt) )
-			{
-				int newly_created_rect = 0;
-				foo                    = rect( rt, &newly_created_rect );
-				r_rect                 = *(SDL_Rect*)bag2obj(foo);
-			}
-			else
-			{
-				r_rect.x = 0; r_rect.y = 0; r_rect.w = surface->w; r_rect.h = surface->h;
-			}
+		Uint32 m_color = __map_rgba( color, surface->format );
+		SDL_FillRect(surface, &r_rect, m_color);
 
-				//Only do alpha blitting if we are doing on video surface and there is an alpha value; 
-			if( a != 0xFF && SDL_GetVideoSurface() == surface)
-			{
-				SDL_Surface *alpha_surface = SDL_CreateRGBSurface(
-					surface->flags, r_rect.w, r_rect.h,
-					32, 0xFF000000, 0xFF0000, 0xFF00, 0xFF
-				);
+		if( SvOK(rt) )
+			SvREFCNT_dec(foo);
 
-				Uint32 m_color = __map_rgba( color, alpha_surface->format );
-				SDL_FillRect(alpha_surface, NULL, m_color);
-				SDL_BlitSurface(alpha_surface, NULL, surface, &r_rect );
-				SDL_FreeSurface( alpha_surface);
-			}
-			else
-			{
-				Uint32 m_color = __map_rgba( color, surface->format );
-				SDL_FillRect(surface, &r_rect, m_color);
-			}
+void
+surfacex_draw_rect_blended ( surface, rt, color )
+	SDL_Surface *surface
+	SV* rt
+	SV* color
+	CODE:
+		SDL_Rect r_rect;
+		SV* foo;
+
+		if( SvOK(rt) )
+		{
+			int newly_created_rect = 0;
+			foo                    = rect( rt, &newly_created_rect );
+			r_rect                 = *(SDL_Rect*)bag2obj(foo);
+		}
+		else
+		{
+			r_rect.x = 0; r_rect.y = 0; r_rect.w = surface->w; r_rect.h = surface->h;
+		}
+
+		SDL_Surface *alpha_surface = SDL_CreateRGBSurface(
+			surface->flags, r_rect.w, r_rect.h,
+			32, 0xFF000000, 0xFF0000, 0xFF00, 0xFF
+		);
+
+		Uint32 m_color = __map_rgba( color, alpha_surface->format );
+		SDL_FillRect(alpha_surface, NULL, m_color);
+		SDL_BlitSurface(alpha_surface, NULL, surface, &r_rect );
+		SDL_FreeSurface( alpha_surface);
 
 		if( SvOK(rt) )
 			SvREFCNT_dec(foo);
