@@ -185,12 +185,6 @@ surfacex_draw_rect ( surface, rt, color )
 	CODE:
 		AV* ar         = __list_rgba( color );
 		int a          = SvUV(*av_fetch(ar, 3, 0));
-		sv_2mortal( (SV *)ar );
-
-
-		if( a != 0 ) // Don't even bother if there is no alpha 
-		{
-	
 
 			SDL_Rect r_rect;
 			SV* foo;
@@ -227,8 +221,6 @@ surfacex_draw_rect ( surface, rt, color )
 
 		if( SvOK(rt) )
 			SvREFCNT_dec(foo);
-		}
-
 
 #ifdef HAVE_SDL_GFX_PRIMITIVES
 
