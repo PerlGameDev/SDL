@@ -142,6 +142,33 @@ Otherwise, time will accumulate while the application is paused, and many moveme
 
 Note 2: a pause will be potentially dangerous to the C<run> cycle (even if you implement your own) unless called by an C<event> callback.
 
+=head2 paused
+
+Returns 1 if the app is paused, undef otherwise.
+This is only useful when used within code that will be run by C<pause>:
+
+ sub pause {
+     # press P to toggle pause
+     
+     my ($e, $app) = @_;
+     if($e->type == SDL_QUIT) {
+         $app->stop;
+         # quit handling is here so that the app
+         # can be stopped while paused
+     }
+     elsif($e->type == SDL_KEYDOWN) {
+         if($e->key_sym == SDLK_P) {
+             # We're paused, so end pause
+             return 1 if $app->paused;
+             
+             # We're not paused, so pause
+             $app->pause(\&pause);
+         }
+     }
+     return 0;
+ }
+
+
 =head2 add_event_handler
 
 Register a callback to handle events. You can add as many subs as you need.
