@@ -26,8 +26,7 @@ foreach ( 0 .. 40 ) {
 
 my $display_matrix = SDLx::Surface->new( surface => $app );
 
-#foreach(0..300)
-while (1) {
+while ( !$quit ) {
 
 	SDL::Events::pump_events();
 	while ( SDL::Events::poll_event($event) ) {
