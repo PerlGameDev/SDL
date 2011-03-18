@@ -92,7 +92,8 @@ Use it to delay the main loop to keep it at a specified framerate.
 The constructor takes a hash with 5 possible arguments as shown.
 No arguments are required, if no C<fps> is specified, the default FPS is 30.
 
-C<framecount>, C<rateticks>, C<lastticks> and C<rate> correspond to the 4 arguments given to C<SDL::GFX::FPSManager->new>.
+C<framecount>, C<rateticks>, C<lastticks> and C<rate> correspond to the 4 arguments given to
+C<< SDL::GFX::FPSManager->new >>.
 
 =head2 init
 
