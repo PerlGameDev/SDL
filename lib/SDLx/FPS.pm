@@ -8,24 +8,31 @@ our @ISA = qw(SDL::GFX::FPSManager);
 
 sub new {
 	my ( $class, @args ) = @_;
+
+	my %options;
 	if ( ref $args[0] ) {
-		my %options = %{ $args[0] };
+		%options = %{ $args[0] };
 		if ( @args > 1 ) {
 			Carp::cluck("Extra arguments are not taken when hash is specified");
 		}
-		for (
-			grep {
-				my $key = $_;
-				!grep $_ eq $key, qw/fps framecount rateticks lastticks rate/;
-			} keys %options
-			)
-		{
-			Carp::cluck("Unrecognized constructor hash key: $_");
-		}
-		@args = ( @options{qw/fps framecount rateticks lastticks rate/} );
-	} elsif ( @args > 4 ) {
+	} else {
+		%options = @args;
+	}
+
+	if ( keys %options > 4 ) {
 		Carp::cluck("Too many arguments given");
 	}
+
+	for (
+		grep {
+			my $key = $_;
+			!grep $_ eq $key, qw/fps framecount rateticks lastticks rate/;
+		} keys %options
+		)
+	{
+		Carp::cluck("Unrecognized constructor hash key: $_");
+	}
+	@args = ( @options{qw/fps framecount rateticks lastticks rate/} );
 	my $fps = $class->SDL::GFX::FPSManager::new(
 		map defined() ? $_ : 0,
 		@args[ 1 .. 4 ]

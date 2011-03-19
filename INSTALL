@@ -18,14 +18,13 @@ following libraries (as pre-compiled DLLs for Microsoft Windows platforms):
 
   * libSDL
   * png
+  * tiff
   * jpeg
   * smpeg
   * OpenGL (GL)
   * GLUT   (GLU)
   * SDL_image
   * SDL_mixer
-  * SDL_net
-  * SDL_tiff
   * SDL_gfx
   * SDL_ttf
 

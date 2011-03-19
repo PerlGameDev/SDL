@@ -75,7 +75,7 @@ sub update {
 
 	foreach ( 0 ... rand( $surface->w ) ) {
 
-		$matrix->[$_][ rand( $surface->h ) ] = 0xFFFFFFFF / ( $_ + 1 );
+		$matrix->[$_][ rand( $surface->h ) ] = int(0xFFFFFFFF / ( $_ + 1 ));
 
 	}
 	SDL::Video::unlock_surface($surface);

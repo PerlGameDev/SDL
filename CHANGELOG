@@ -1,5 +1,10 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.531_02 March 19 2011
+	- Fixes for several examples [jtpalmer]
+	- Fixes for INSTALL/README file [Pip]
+	- Fixes for draw_rect [FROGGS]
+
 * 2.531_01 March 9 2011
 	New features:
 	- SDLx::Surface    draw_polygon(), linking GFX to Surfaces when available [FROGGS]
