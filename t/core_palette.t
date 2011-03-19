@@ -63,3 +63,5 @@ if ($videodriver) {
 } else {
 	delete $ENV{SDL_VIDEODRIVER};
 }
+
+sleep(2);
