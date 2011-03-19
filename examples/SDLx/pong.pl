@@ -123,7 +123,7 @@ sub on_move {
 }
 
 sub on_event {
-	my $event = shift;
+	my ( $event, $app ) = @_;
 
 	if ( $event->type == SDL_KEYDOWN ) {
 		my $key = $event->key_sym;
