@@ -11,6 +11,9 @@ BEGIN {
 	}
 	use SDL;
 	use SDL::Config;
+	use threads;
+	use threads::shared;
+
 	use Test::More;
 	use lib 't/lib';
 	use SDL::TestTool;
@@ -24,8 +27,7 @@ BEGIN {
 		plan( skip_all => 'SDL_mixer support not compiled' );
 	}
 }
-use threads;
-use threads::shared;
+
 use SDL::Mixer;
 use SDL::Mixer::Music;
 use SDL::Mixer::Samples;
