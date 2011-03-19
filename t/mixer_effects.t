@@ -1,4 +1,8 @@
 #!/usr/bin/perl -w
+use strict;
+use warnings;
+use SDL;
+use SDL::Config;
 
 my $audiodriver;
 
@@ -8,8 +12,10 @@ BEGIN {
 		print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
 		exit(0);
 	}
-	use SDL;
-	use SDL::Config;
+	use threads;
+	use threads::shared;
+
+
 	use Test::More;
 	use lib 't/lib';
 	use SDL::TestTool;
@@ -23,10 +29,6 @@ BEGIN {
 		plan( skip_all => 'SDL_mixer support not compiled' );
 	}
 }
-use strict;
-use threads;
-use threads::shared;
-
 use SDL::Mixer;
 use SDL::Mixer::Channels;
 use SDL::Mixer::Effects;
@@ -40,8 +42,8 @@ unless($can_open == 0)
 }
 
 is( $can_open ,
-	0, '[open_audio] ran'
-);
+		0, '[open_audio] ran'
+  );
 
 my $delay           = 500;
 my $audio_test_file = 'test/data/silence.wav';
@@ -65,9 +67,9 @@ sub echo_effect_func {
 
 	$effect_func_called++;
 	printf(
-		"[effect_func] callback: channel=%2s, position=%8s, samples=%6s\n",
-		$channel, $position, scalar(@stream)
-	);
+			"[effect_func] callback: channel=%2s, position=%8s, samples=%6s\n",
+			$channel, $position, scalar(@stream)
+		  );
 
 	my @stream2 = @stream;
 	my $offset  = $samples / 2;
@@ -75,12 +77,12 @@ sub echo_effect_func {
 		if ( $i < $offset ) {
 			if ( scalar(@last_stream) == $samples ) {
 				$stream2[$i] = $stream[$i] * 0.6 + $last_stream[ $samples + $i - $offset ] * 0.4; # left
-				$stream2[ $i + 1 ] =
+					$stream2[ $i + 1 ] =
 					$stream[ $i + 1 ] * 0.6 + $last_stream[ $samples + $i - $offset + 1 ] * 0.4;  # right
 			}
 		} else {
 			$stream2[$i] = $stream[$i] * 0.6 + $stream[ $i - $offset ] * 0.4;                     # left
-			$stream2[ $i + 1 ] = $stream[ $i + 1 ] * 0.6 + $stream[ $i - $offset + 1 ] * 0.4;     # right
+				$stream2[ $i + 1 ] = $stream[ $i + 1 ] * 0.6 + $stream[ $i - $offset + 1 ] * 0.4;     # right
 		}
 	}
 
@@ -97,9 +99,9 @@ sub echo_effect_func2 {
 
 	$effect_func_called++;
 	printf(
-		"[effect_func2] callback: channel=%2s, position=%8s, samples=%6s\n",
-		$channel, $position, scalar(@stream)
-	);
+			"[effect_func2] callback: channel=%2s, position=%8s, samples=%6s\n",
+			$channel, $position, scalar(@stream)
+		  );
 	push( @stream, $position + $samples );
 	return @stream;
 
@@ -121,109 +123,109 @@ is( $playing_channel >= 0, 1, "[play_channel] playing $audio_test_file" );
 
 SDL::delay($delay);
 my $effect_id = SDL::Mixer::Effects::register(
-	$playing_channel,     "main::echo_effect_func2",
-	"main::effect_done2", 0
-);
+		$playing_channel,     "main::echo_effect_func2",
+		"main::effect_done2", 0
+		);
 isnt( $effect_id, -1, '[register] registerering echo effect callback' );
 SDL::delay($delay);
 my $check = SDL::Mixer::Effects::unregister( $playing_channel, $effect_id );
 isnt(
-	$check, 0,
-	'[unregister] unregistering effect_func will call effect_done'
-);
+		$check, 0,
+		'[unregister] unregistering effect_func will call effect_done'
+	);
 SDL::delay(200);
 is( $effect_func_called > 0,
-	1, "[effect_func] called $effect_func_called times"
-);
+		1, "[effect_func] called $effect_func_called times"
+  );
 is( $effect_done_called > 0,
-	1, "[effect_done] called $effect_done_called times"
-);
+		1, "[effect_done] called $effect_done_called times"
+  );
 
 SDL::delay($delay);
 $effect_func_called = 0;
 $effect_done_called = 0;
 
 $effect_id = SDL::Mixer::Effects::register(
-	$playing_channel,     "main::echo_effect_func2",
-	"main::effect_done2", 0
-);
+		$playing_channel,     "main::echo_effect_func2",
+		"main::effect_done2", 0
+		);
 isnt( $effect_id, -1, '[register] registerering echo effect callback' );
 SDL::delay($delay);
 $check = SDL::Mixer::Effects::unregister( $playing_channel, $effect_id );
 isnt(
-	$check, 0,
-	'[unregister] unregistering effect_func will call effect_done'
-);
+		$check, 0,
+		'[unregister] unregistering effect_func will call effect_done'
+	);
 SDL::delay(200);
 is( $effect_func_called > 0,
-	1, "[effect_func] called $effect_func_called times"
-);
+		1, "[effect_func] called $effect_func_called times"
+  );
 is( $effect_done_called > 0,
-	1, "[effect_done] called $effect_done_called times"
-);
+		1, "[effect_done] called $effect_done_called times"
+  );
 
 $effect_func_called = 0;
 $effect_done_called = 0;
 my $effect_id_all = SDL::Mixer::Effects::register( MIX_CHANNEL_POST, "main::echo_effect_func",
-	"main::effect_done", 0
-);
+		"main::effect_done", 0
+		);
 isnt( $effect_id_all, -1, '[register] registerering echo effect callback' );
 SDL::delay($delay);
 isnt(
-	SDL::Mixer::Effects::unregister_all(MIX_CHANNEL_POST),
-	0, '[unregister_all] unregistering all will call effect_done'
-);
+		SDL::Mixer::Effects::unregister_all(MIX_CHANNEL_POST),
+		0, '[unregister_all] unregistering all will call effect_done'
+	);
 SDL::delay(200);
 is( $effect_func_called > 0,
-	1, "[effect_func] called $effect_func_called times"
-);
+		1, "[effect_func] called $effect_func_called times"
+  );
 is( $effect_done_called > 0,
-	1, "[effect_done] called $effect_done_called times"
-);
+		1, "[effect_done] called $effect_done_called times"
+  );
 
 $effect_func_called = 0;
 is( SDL::Mixer::Effects::set_post_mix( "main::echo_effect_func", 0 ),
-	undef, '[set_post_mix] registering echo effect callback'
-);
+		undef, '[set_post_mix] registering echo effect callback'
+  );
 SDL::delay($delay);
 is( SDL::Mixer::Effects::set_post_mix(),
-	undef, '[set_post_mix] unregistering echo effect callback'
-);
+		undef, '[set_post_mix] unregistering echo effect callback'
+  );
 SDL::delay(200);
 is( $effect_func_called > 0,
-	1, "[effect_func] called $effect_func_called times"
-);
+		1, "[effect_func] called $effect_func_called times"
+  );
 SDL::delay($delay);
 
 isnt(
-	SDL::Mixer::Effects::set_panning( $playing_channel, 128, 255 ),
-	0, '[set_panning]  50% left, 100% right'
-);
+		SDL::Mixer::Effects::set_panning( $playing_channel, 128, 255 ),
+		0, '[set_panning]  50% left, 100% right'
+	);
 SDL::delay($delay);
 isnt(
-	SDL::Mixer::Effects::set_position( $playing_channel, 225, 80 ),
-	0, '[set_position] left-behind, 33% away'
-);
+		SDL::Mixer::Effects::set_position( $playing_channel, 225, 80 ),
+		0, '[set_position] left-behind, 33% away'
+	);
 SDL::delay($delay);
 isnt(
-	SDL::Mixer::Effects::set_distance( $playing_channel, 160 ),
-	0, '[set_distance] 66% away'
-);
+		SDL::Mixer::Effects::set_distance( $playing_channel, 160 ),
+		0, '[set_distance] 66% away'
+	);
 SDL::delay($delay);
 isnt(
-	SDL::Mixer::Effects::set_position( $playing_channel, 0, 0 ),
-	0, '[set_position] front, 0% away'
-);
+		SDL::Mixer::Effects::set_position( $playing_channel, 0, 0 ),
+		0, '[set_position] front, 0% away'
+	);
 SDL::delay($delay);
 isnt(
-	SDL::Mixer::Effects::set_reverse_stereo( $playing_channel, 1 ),
-	0, '[set_reverse_stereo] on'
-);
+		SDL::Mixer::Effects::set_reverse_stereo( $playing_channel, 1 ),
+		0, '[set_reverse_stereo] on'
+	);
 SDL::delay($delay);
 isnt(
-	SDL::Mixer::Effects::set_reverse_stereo( $playing_channel, 0 ),
-	0, '[set_reverse_stereo] off'
-);
+		SDL::Mixer::Effects::set_reverse_stereo( $playing_channel, 0 ),
+		0, '[set_reverse_stereo] off'
+	);
 SDL::delay($delay);
 
 SDL::Mixer::close_audio();
