@@ -42,7 +42,7 @@ for ( 1 .. $count ) {
 }
 is( $fps->framecount, $count, 'fps->framecount' );
 
-$_fps = 30;
+$_fps = 20;
 $fps->set($_fps);
 is( $fps->get, $_fps, 'fps->get after fps->set' );
 
@@ -52,6 +52,9 @@ my $ticks_post_delay = SDL::get_ticks();
 
 cmp_ok( $fps->lastticks, '>=', $ticks_pre_delay,  'fps->lastticks after fps->delay' );
 cmp_ok( $fps->lastticks, '<=', $ticks_post_delay, 'fps->lastticks after fps->delay' );
+
+$fps = SDLx::FPS->new();
+is( $fps->get, 30, 'fps->get default value' );
 
 #reset the old video driver
 if ($videodriver) {
