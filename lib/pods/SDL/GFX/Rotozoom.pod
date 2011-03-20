@@ -65,47 +65,23 @@ Example:
 
 =head2 surface_xy
 
- SDL_Surface *
- gfx_roto_surface_xy(src, angle, zoomx, zoomy, smooth)
- 	SDL_Surface * src
- 	double angle
- 	double zoomx
- 	double zoomy
- 	int smooth
- 	PREINIT:
- 		char *CLASS = "SDL::Surface";
- 	CODE:
- 		RETVAL = rotozoomSurfaceXY(src, angle, zoomx, zoomy, smooth);
- 	OUTPUT:
- 		RETVAL
+ my $new_surface = SDL::GFX::Rotozoom::surface_xy( $surface, $angle, $zoom_x, $zoom_y, $smooth );
+
+Same as L<SDL::GFX::Rotozoom::surface|/surface> but you can specify the zoomlevel for x and y separately.
 
 =head2 surface_size
 
- void 
- gfx_roto_surface_size(width, height, angle, zoom, dstwidth, dstheight)
- 	int width
- 	int height
- 	double angle
- 	double zoom
- 	int *dstwidth
- 	int *dstheight
- 	CODE:
- 		rotozoomSurfaceSize(width, height, angle, zoom, dstwidth, dstheight);
+ my ($new_width, $new_height) = @{ SDL::GFX::Rotozoom::surface_size( $width, $height, $angle, $zoom ) };
+
+C<surface_size> will give you the width and height of an rotating/zoom operation for the given C<$width> and C<$height>.
+Helpful for knowing the surface size before actually do the rotating/zoom operation.
 
 =head2 surface_size_xy
 
- void 
- gfx_roto_surface_size_xy(width, height, angle, zoomx, zoomy, dstwidth, dstheight)
- 	int width
- 	int height
- 	double angle
- 	double zoomx
- 	double zoomy
- 	int *dstwidth
- 	int *dstheight
- 	CODE:
- 		rotozoomSurfaceSizeXY(width, height, angle, zoomx, zoomy, dstwidth, dstheight);
-	
+ my ($new_width, $new_height) = @{ SDL::GFX::Rotozoom::surface_size_xy( $width, $height, $angle, $zoom_x, $zoom_y ) };
+
+Same as L<SDL::GFX::Rotozoom::surface_size|/surface_size> but you can specify the zoomlevel for x and y separately.
+
 =head2 zoom_surface
 
  SDL_Surface *
