@@ -28,18 +28,40 @@ Export tag: ':smoothing'
 
 =head2 surface
 
- SDL_Surface *
- gfx_roto_surface(src, angle, zoom, smooth)
- 	SDL_Surface * src
- 	double angle
- 	double zoom
- 	int smooth
- 	PREINIT:
- 		char *CLASS = "SDL::Surface";
- 	CODE:
- 		RETVAL = rotozoomSurface(src, angle, zoom, smooth);
- 	OUTPUT:
- 		RETVAL
+ my $new_surface = SDL::GFX::Rotozoom::surface( $surface, $angle, $zoom, $smooth );
+
+With C<SDL::GFX::Rotozoom::surface> you have the opportunity to rotate and zoom a given surface.
+The surface will be rotated counter clockwise (in degrees).
+Pass C<SMOOTHING_ON> or C<SMOOTHING_OFF> in order to turn it on or off.
+
+B<Note>: The new surface (with $C<zoom == 1>) will usually be bigger than the source C<$surface>.
+
+B<Note>: Note: new surface should be less than 16384 in width and height.
+
+Example:
+
+ use SDL;
+ use SDL::Video;
+ use SDL::Rect;
+ use SDL::Surface;
+ use SDL::GFX::Rotozoom;
+ 
+ my $screen_width  = 640;
+ my $screen_height = 480;
+ 
+ SDL::init(SDL_INIT_VIDEO);
+ 
+ my $screen  = SDL::Video::set_video_mode(800, 600, 32, SDL_SWSURFACE);
+ my $picture = SDL::Video::load_BMP('test.bmp');
+ 
+ my $rotated = SDL::GFX::Rotozoom::surface( $picture, 45, 0.8, SMOOTHING_ON );
+ 
+ SDL::Video::blit_surface( $rotated, SDL::Rect->new(0, 0, $rotated->w, $rotated->h), 
+                           $screen,  SDL::Rect->new(0, 0, 0, 0) );
+ 
+ SDL::Video::update_rect( $screen, 0, 0, 0, 0 );
+ 
+ sleep(2);
 
 =head2 surface_xy
 
