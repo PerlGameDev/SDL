@@ -38,10 +38,11 @@ sign denotes the prompt itself, so what you should type follows it):
 
 You will be presented with the CPAN prompt at this point.
 
-  CPAN> upgrade /.*/
+  CPAN> upgrade YAML CPAN
 
 Yeah, CPAN> denotes we are now prompted inside CPAN and recommending upgrading
-everything out-of-date. Then with your site up-to-date:
+at least the YAML and CPAN packages if they are out-of-date. Then with those
+upgraded:
 
   CPAN> install SDL
 
@@ -55,9 +56,9 @@ clone from GitHub by running:
 
   $ git clone https://GitHub.Com/PerlGameDev/SDL.git
 
-To update your clone, go into the directory that the git repo is in
+To update your clone, go into the directory that the git repository is in
 (i.e., into the git repo itself, not merely the directory that you did the
-`git clone` in) and type the following:
+`git clone ...` in) and type the following:
 
   $ git pull
 
@@ -77,8 +78,8 @@ Only MacOS used to also require you to:
 
 Katrina Payne (the original author of this file) had a cute anecdote here
 about SDL Perl being a blushing girl who fails testing and enjoys watching
-InuYasha. Quirky! ;) I couldn't quite bear to replace it all so here's her
-paragraph of glory from Thu Oct 22, 2009:
+InuYasha. Quirky! ;) It has too much character that I couldn't quite bear
+to replace it so here's her original paragraph from Thu Oct 22, 2009:
 
   "Then if there is an issue getting herself all pretty this command will have 
 her just stop there... your best bet is to give her comfort food. Of the 
