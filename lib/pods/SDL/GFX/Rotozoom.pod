@@ -9,11 +9,11 @@ TODO, GFX
 
 =head1 CONSTANTS
 
-The constants are not exported by default. You can export them into your namespace by doing:
+The constants are exported by default. You can avoid this by doing:
 
- use SDL::GFX::Rotozoom ':all';
+ use SDL::GFX::Rotozoom ();
 
-or access them directly:
+and access them directly:
 
  SDL::GFX::Rotozoom::SMOOTHING_OFF;
 
