@@ -5,7 +5,7 @@ SDL::GFX::Rotozoom - rotation and zooming functions for surfaces
 
 =head1 CATEGORY
 
-TODO, GFX
+GFX
 
 =head1 CONSTANTS
 
@@ -84,58 +84,27 @@ Same as L<SDL::GFX::Rotozoom::surface_size|/surface_size> but you can specify th
 
 =head2 zoom_surface
 
- SDL_Surface *
- gfx_roto_zoom_surface(src, zoomx, zoomy, smooth)
- 	SDL_Surface * src
- 	double zoomx
- 	double zoomy
- 	int smooth
- 	PREINIT:
- 		char *CLASS = "SDL::Surface";
- 	CODE:
- 		RETVAL = zoomSurface(src, zoomx, zoomy, smooth);
- 	OUTPUT:
- 		RETVAL
+ my $new_surface = SDL::GFX::Rotozoom::zoom_surface( $surface, $zoom_x, $zoom_y, $smooth );
+
+Same as L<SDL::GFX::Rotozoom::surface_xy|/surface_xy> except you can zoom only.
 
 =head2 zoom_surface_size
 
- void
- gfx_roto_zoom_surface_size(width, height, zoomx, zoomy, dstwidth, dstheight)
- 	int width
- 	int height
- 	double zoomx
- 	double zoomy
- 	int *dstwidth
- 	int *dstheight
- 	CODE:
- 		zoomSurfaceSize(width, height, zoomx, zoomy, dstwidth, dstheight);
+ my ($new_width, $new_height) = SDL::GFX::Rotozoom::zoom_surface_size( $width, $height, $zoom_x, $zoom_y );
+
+Same as L<SDL::GFX::Rotozoom::surface_size_xy|/surface_size_xy> except you can specify zoom only.
 
 =head2 shrink_surface
 
- SDL_Surface *
- gfx_roto_shrink_surface(src, factorx, factory)
- 	SDL_Surface * src
- 	int factorx
- 	int factory
- 	PREINIT:
- 		char *CLASS = "SDL::Surface";
- 	CODE:
- 		RETVAL = shrinkSurface(src, factorx, factory);
- 	OUTPUT:
- 		RETVAL
+ my $new_surface = SDL::GFX::Rotozoom::shrink_surface( $surface, $factor_x, $factor_y );
+
+Specialized function for shrinking a surface.
 
 =head2 rotate_surface_90_degrees
 
- SDL_Surface *
- gfx_roto_rotate_surface_90_degrees(pSurf, numClockwiseTurns)
- 	SDL_Surface* pSurf
- 	int numClockwiseTurns
- 	PREINIT:
- 		char *CLASS = "SDL::Surface";
- 	CODE:
- 		RETVAL = rotateSurface90Degrees(pSurf, numClockwiseTurns);
- 	OUTPUT:
- 		RETVAL
+ my $new_surface = SDL::GFX::Rotozoom::rotate_surface_90_degrees( $surface, $num_clockwise_turns );
+
+Rotating a surface C<$num_clockwise_turns>-times.
 
 =head1 AUTHORS
 
