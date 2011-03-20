@@ -427,7 +427,7 @@ the key value).
 The key must be of the same pixel format as the surface, L<SDL::Video::map_RGB|/map_RGB> is often useful for obtaining an acceptable value.
 If flag is C<SDL_SRCCOLORKEY> then key is the transparent pixel value in the source image of a blit.
 
-If C<flag> is OR'd with C<SDL_RLEACCEL> then the surface will be drawn using RLE acceleration when drawn with SDL::Blit_surface.
+If C<flag> is OR'd with C<SDL_RLEACCEL> then the surface will be drawn using RLE acceleration when drawn with SDL::Video::blit_surface.
 The surface will actually be encoded for RLE acceleration the first time L<SDL::Video::blit_surface|/blit_surface> or 
 C<SDL::Video::display_format|/display_format> is called on the surface.
 If C<flag> is C<0>, this function clears any current color key. 
