@@ -50,21 +50,23 @@ print "Your paste can be found at ", $link[0]->url, "\n";
 
 =head1 NAME
 
-tools/dev/nopaste.pl - paste the contents of a file via a pastebot server
+tools/nopaste.pl - paste the contents of a file via a pastebot server
 
 =head1 SYNOPSIS
 
   nopaste.pl -t "TITLE" [ -c CHANNEL ] [ -n NAME ] [ FILENAME ]
 
     TITLE     the title of the paste
-    CHANNEL   the irc channel (defaults to #parrot)
+    CHANNEL   the irc channel (defaults to #sdl)
     NAME      the username (defaults to username or 'someone')
     FILENAME  the name of the file to paste (defaults to STDIN)
 
 =head1 DESCRIPTION
 
 This program can be used to paste the contents of a file on a pastebot server
--- specifically, B<nopaste.snit.ch> -- for immediate linkage on an IRC channel --
+my $server = 'scsys.co.uk';
+my $url    = "http://$server:8001/paste";
+-- specifically, B<scsys.co.uk> -- for immediate linkage on an IRC channel --
 by default, B<#sdl>.
 
 =head1 AUTHOR
