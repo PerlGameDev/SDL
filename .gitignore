@@ -32,3 +32,9 @@ MANIFEST
 *.bak
 *_def.old
 *.ERR
+*Thumbs.db
+Build.bat
+*.base
+*.def
+*.exp
+*.lds

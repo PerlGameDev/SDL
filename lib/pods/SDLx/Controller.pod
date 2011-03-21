@@ -117,7 +117,7 @@ This can be used to easily implement a pause when the app loses focus:
  sub window {
      my ($e, $app) = @_;
      if($e->type == SDL_QUIT) {
-		 $app->stop;
+         $app->stop;
          # quit handling is here so that the app
          # can be stopped while paused
      }
@@ -129,7 +129,7 @@ This can be used to easily implement a pause when the app loses focus:
              else {
                  $app->pause(\&window);
                  # recursive, but only once since the window
-                 # can't lose focus again without gaining is first
+                 # can't lose focus again without gaining it first
              }
          }
      }
@@ -167,7 +167,6 @@ This is only useful when used within code that will be run by C<pause>:
      }
      return 0;
  }
-
 
 =head2 add_event_handler
 
