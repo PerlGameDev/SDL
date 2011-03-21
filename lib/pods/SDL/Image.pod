@@ -3,17 +3,17 @@
 
 =head1 NAME
 
-SDL::Image - Bindings for the SDL_Image library
+SDL::Image - Bindings for the SDL_image library
 
 =head1 DESCRIPTION
 
-SDL::Image allows you to load many different format of images into memory as an SDL::Surface.
+SDL::Image allows you to load many different image formats into memory as an SDL::Surface.
 
 =head1 CATEGORY
 
 Image
 
-=head1 SUPPORTED FORMATS 
+=head1 SUPPORTED FORMATS
 
 The following types are supported:
 
@@ -21,11 +21,11 @@ The following types are supported:
 
 =item TGA
 
-TrueVision Targa (MUST have .tga) 
+TrueVision Targa (MUST have .tga)
 
 =item BMP
 
-Windows Bitmap(.bmp) 
+Windows Bitmap(.bmp)
 
 =item PNM
 
@@ -37,37 +37,37 @@ Portable Anymap (.pnm)
 =item XPM
 
 X11 Pixmap (.xpm) can be #included directly in code
-This is NOT the same as XBM(X11 Bitmap) format, which is for monocolor images. 
+This is NOT the same as XBM(X11 Bitmap) format, which is for monocolor images.
 
 =item XCF
 
 GIMP native (.xcf) (XCF = eXperimental Computing Facility?)
-This format is always changing, and since there's no library supplied by the GIMP project to load XCF, the loader may frequently fail to load much 
-of any image from an XCF file. It's better to load this in GIMP and convert to a better supported image format. 
+This format is always changing, and since there's no library supplied by the GIMP project to load XCF, the loader may frequently fail to load much
+of any image from an XCF file. It's better to load this in GIMP and convert to a better supported image format.
 
 =item PCX
 
-ZSoft IBM PC Paintbrush (.pcx) 
+ZSoft IBM PC Paintbrush (.pcx)
 
 =item GIF
 
-CompuServe Graphics Interchange Format (.gif) 
+CompuServe Graphics Interchange Format (.gif)
 
 =item JPG
 
-Joint Photographic Experts Group JFIF format (.jpg or .jpeg) 
+Joint Photographic Experts Group JFIF format (.jpg or .jpeg)
 
 =item TIF
 
-Tagged Image File Format (.tif or .tiff) 
+Tagged Image File Format (.tif or .tiff)
 
 =item LBM
 
-Interleaved Bitmap (.lbm or .iff) FORM : ILBM or PBM(packed bitmap), HAM6, HAM8, and 24bit types are not supported. 
+Interleaved Bitmap (.lbm or .iff) FORM : ILBM or PBM(packed bitmap), HAM6, HAM8, and 24bit types are not supported.
 
 =item PNG
 
-Portable Network Graphics (.png) 
+Portable Network Graphics (.png)
 
 =item XV
 
@@ -77,34 +77,33 @@ Portable Network Graphics (.png)
 
 =back
 
-
 =head1 LOADING METHODS
 
 =head2 load
 
- my $surface = SDL::Image::load( $file );
+  my $surface = SDL::Image::load( $file );
 
-$file Image file name to load a surface from. 
- 
-Load file for use as an image in a new L<SDL::Surface>. This actually calls L<SDL::Image::load_typed_rw|SDL::Image/"load_typed_rw">, with the 
-file extension used as the type string. This can load all supported image files, including TGA as long as the filename ends with ".tga". It is 
-best to call this outside of event loops, and rather keep the loaded images around until you are really done with them, as disk speed and image 
-conversion to a surface is not that speedy.  
+$file Image file name to load a surface from.
 
-B<Note>: If the image format loader requires initialization, it will attempt to do that the first time it is needed if you have not already called 
+Load file for use as an image in a new L<SDL::Surface>. This actually calls L<SDL::Image::load_typed_rw|SDL::Image/"load_typed_rw">, with the
+file extension used as the type string. This can load all supported image files (including TGA as long as the filename ends with ".tga"). It is
+best to call this outside of event loops, and rather keep the loaded images around until you are really done with them, as disk speed and image
+conversion to a surface is not that speedy.
+
+B<Note>: If the image format loader requires initialization, it will attempt to do that the first time it is needed if you have not already called
 L<SDL::Image::init|SDL::Image/"init"> to load support for your image format.
 
-B<Note>: If the image format supports a transparent pixel, L<SDL::Image> will set the colorkey for the surface. You can enable RLE acceleration on 
+B<Note>: If the image format supports a transparent pixel, L<SDL::Image> will set the colorkey for the surface. You can enable RLE acceleration on
 the surface afterwards by calling:
 
 L<SDL::Video::set_color_key|SDL::Video/"set_color_key">
- 
+
   my $image = SDL::Image::load( $some_png_file );
   SDL::Video::set_color_key($image, SDL_RLEACCEL, $image->format->colorkey);
 
 =head3 Return
 
-An image as a L<SDL::Surface>. NULL is returned on errors, such as no support built for the image, or a file reading error. Use 
+An image as an L<SDL::Surface>. undef is returned on errors, such as no support built for the image, or a file reading error. Use
 L<SDL::get_error|SDL/"get_error"> to get cause of error.
 
 =head2 load_typed_rw
@@ -115,11 +114,11 @@ L<SDL::get_error|SDL/"get_error"> to get cause of error.
 
 =item src
 
-The source L<SDL::RWops> as a pointer. The image is loaded from this. 
+The source L<SDL::RWOps> as a pointer. The image is loaded from this.
 
 =item freesrc
 
-A non-zero value mean is will automatically close/free the src for you. Since SDL Perl cannot handle the memory inside this function you would most 
+A non-zero value means it will automatically close/free the src for you. Since SDL Perl cannot handle the memory inside this function you would most
 likely want 1 here.
 
 =item type
@@ -160,19 +159,19 @@ Here is a list of the currently recognized strings (case is not important):
 
 =back
 
-=back 
+=back
 
-Load src for use as a surface. This can load all supported image formats. This method does not guarantee that the format specified by type is the 
-format of the loaded image, except in the case when TGA format is specified (or any other non-magicable format in the future). Using SDL_RWops is 
+Load src for use as a surface. This can load all supported image formats. This method does not guarantee that the format specified by type is the
+format of the loaded image, except in the case when TGA format is specified (or any other non-magicable format in the future). Using SDL_RWOps is
 not covered here, but they enable you to load from almost any source.
 
-B<Note>: If the image format loader requires initialization, it will attempt to do that the first time it is needed if you have not already called 
+B<Note>: If the image format loader requires initialization, it will attempt to do that the first time it is needed if you have not already called
 L<SDL::Image::init|SDL::Image/"init"> to load support for your image format.
 
-B<Note>: If the image format supports a transparent pixel, L<SDL::Image> will set the colorkey for the surface. You can enable RLE acceleration on 
+B<Note>: If the image format supports a transparent pixel, L<SDL::Image> will set the colorkey for the surface. You can enable RLE acceleration on
 the surface afterwards by calling: L<SDL::Video::set_color_key|SDL::Video/"set_color_key">
 
-=head3 Transparency 
+=head3 Transparency
 
   use SDL;
   use SDL::RWOps;
@@ -183,10 +182,10 @@ the surface afterwards by calling: L<SDL::Video::set_color_key|SDL::Video/"set_c
 
   SDL::Video::set_color_key($image, SDL_RLEACCEL, $image->format->colorkey);
 
-=head3 Return 
+=head3 Return
 
-The image as a new L<SDL::Surface>. NULL is returned on errors. 
- 
+The image as a new L<SDL::Surface>. undef is returned on errors.
+
 =head2 is_[TYPE]
 
 Test for valid, supported image files:
@@ -221,20 +220,20 @@ Test for valid, supported image files:
 
 =back
 
-These functions take a L<SDL::RWOps> as a parameter.
+These functions take an L<SDL::RWOps> as a parameter.
 
 =head3 Return
 
-1 if the image is a valid [TYPE]  and the [TYPE] format support is compiled into SDL_image. 0 is returned otherwise. 
+1 if the image is a valid [TYPE] and the [TYPE] format support is compiled into SDL_image. 0 is returned otherwise.
 
 =head3 Example
 
- use SDL::RWOps;
- use SDL::Image;
+  use SDL::RWOps;
+  use SDL::Image;
 
- my $file = SDL::RWOps->new_file("file", "rb");
- 
- print "Image is BMP" if ( SDL::is_BMP );
+  my $file = SDL::RWOps->new_file("file", "rb");
+
+  print "Image is BMP" if ( SDL::is_BMP );
 
 =head2 load_[TYPE]_rw
 
@@ -270,123 +269,123 @@ Specific loader for known formats:
 
 =back
 
-These functions take a L<SDL::RWop> as a parameter
+These functions take an L<SDL::RWOps> as a parameter.
 
 =head3 Return
 
-The image as a new L<SDL::Surface>. NULL is returned on errors, like if the [TYPE] is not supported, or a read error.
+The image as a new L<SDL::Surface>. undef is returned on errors, like if the [TYPE] is not supported, or a read error.
 
 =head3 Example
 
- use SDL;
- use SDL::RWOps;
- use SDL::Image;
+  use SDL;
+  use SDL::RWOps;
+  use SDL::Image;
 
- my $file = SDL::RWOps->new_file("file.png", "rb");  
+  my $file = SDL::RWOps->new_file("file.png", "rb");
 
- my $image = SDL::Image::load_PNG_rw($file);
- 
- die SDL::get_error if (!$image);  
- 
+  my $image = SDL::Image::load_PNG_rw($file);
+
+  die SDL::get_error if (!$image);
+
 =head2 read_XPM_from_array
 
- my $picture = SDL::Image::read_XPM_from_array(\@XPM, $width);
+  my $picture = SDL::Image::read_XPM_from_array(\@XPM, $width);
 
 This functions takes the reference of an array in the valid @XPM format. Also the $width of the XPM image.
 
 =head3 Return
 
-The image as a new L<SDL::Surface>. NULL is returned on errors, like if XPM is not supported, or a read error. 
+The image as a new L<SDL::Surface>. undef is returned on errors, like if XPM is not supported, or a read error.
 
 =head3 Example
 
-	my @XPM= (
-	'30 30 9 1',
-	' 	c #FFFFFF',
-	'.	c #EFEFEF',
-	'+	c #CFCFCF',
-	'@	c #9F9F9F',
-	'#	c #808080',
-	'$	c #505050',
-	'%	c #202020',
-	'&	c #000000',
-	'*	c #303030',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'           .+@##@+.           ',
-	'          .@$%&&%$@.          ',
-	'         .@*&&&&&&*@.         ',
-	'         +$&&&&&&&&$+         ',
-	'         @%&&&&&&&&%@         ',
-	'         #&&&&&&&&&&#         ',
-	'         #&&&&&&&&&&#         ',
-	'         @%&&&&&&&&%@         ',
-	'         +$&&&&&&&&$+         ',
-	'         .@*&&&&&&*@.         ',
-	'          .@$%&&%$@.          ',
-	'           .+@##@+.           ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',
-	'                              ',);
-	
-	my $picture = SDL::Image::read_XPM_from_array(\@XPM, 30);
+  my @XPM= (
+  '30 30 9 1',
+  ' 	c #FFFFFF',
+  '.	c #EFEFEF',
+  '+	c #CFCFCF',
+  '@	c #9F9F9F',
+  '#	c #808080',
+  '$	c #505050',
+  '%	c #202020',
+  '&	c #000000',
+  '*	c #303030',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '           .+@##@+.           ',
+  '          .@$%&&%$@.          ',
+  '         .@*&&&&&&*@.         ',
+  '         +$&&&&&&&&$+         ',
+  '         @%&&&&&&&&%@         ',
+  '         #&&&&&&&&&&#         ',
+  '         #&&&&&&&&&&#         ',
+  '         @%&&&&&&&&%@         ',
+  '         +$&&&&&&&&$+         ',
+  '         .@*&&&&&&*@.         ',
+  '          .@$%&&%$@.          ',
+  '           .+@##@+.           ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',
+  '                              ',);
+
+  my $picture = SDL::Image::read_XPM_from_array(\@XPM, 30);
 
 =head1 MISC METHODS
 
 =head2 linked_version
 
-Provides the version of linked sdl_image library.
+Provides the version of linked SDL_image library.
 
 =head3 Return
 
-Returns a L<SDL::Version> object
+Returns an L<SDL::Version> object.
 
 =head3 Example
 
-	my $version = SDL::Image::linked_version();
-	print $version->major.' '.$version->minor.' '.$version->patch;
+  my $version = SDL::Image::linked_version();
+  print $version->major.' '.$version->minor.' '.$version->patch;
 
 =head2 init
 
-B<For version SDL_image 1.2.10 and up>
+B<For version SDL_image 1.2.10 and up.>
 
 =head3 Flags
 
-bitwise OR'd set of image formats to support by loading a library now. The values you may OR together to pass in are: 
+Bitwise OR'd set of image formats to support by loading a library now. The values you may OR together to pass in are:
 
 =over
 
-=item IMG_INIT_JPG 
+=item IMG_INIT_JPG
 
-=item IMG_INIT_PNG 
+=item IMG_INIT_PNG
 
 =item IMG_INIT_TIF
 
 =back
 
-Initialize by loading support as indicated by the flags, or at least return success if support is already loaded. You may call this multiple times, 
-which will actually require you to call IMG_Quit just once to clean up. You may call this function with a 0 to retrieve whether support was built-in 
+Initialize by loading support as indicated by the flags, or at least return success if support is already loaded. You may call this multiple times,
+which will actually require you to call IMG_Quit just once to clean up. You may call this function with a 0 to retrieve whether support was built-in
 or not loaded yet.
 
-B<Note>: to load JPG, PNG, and/or TIF images you can call IMG_Init with the right IMG_INIT_* flags OR'd together before you program gets busy, to 
-prevent a later hiccup while it loads the library, and to check that you do have the support that you need before you try and use it.
+B<Note>: To load JPG, PNG, and/or TIF images you can call IMG_Init with the right IMG_INIT_* flags OR'd together before your program gets busy, to
+prevent a later hiccup while it loads the library, and to check that you do have the support that you need before you try to use it.
 
 B<Note>: No initialization is needed nor performed when using the SDL::Image::is_JPG, SDL::Image::is_PNG, and SDL::Image::is_TIF functions.
 
-B<Note>: this function does not always set the error string, so do not depend on SDL::Image::get_error being meaningful all the time.  
+B<Note>: This function does not always set the error string, so do not depend on SDL::Image::get_error being meaningful all the time.
 
 =head3 Return
 
@@ -400,27 +399,27 @@ A bitmask of all the currently inited image loaders.
 
 =head2 quit
 
-B<For version SDL_image 1.2.10 and up>
+B<For version SDL_image 1.2.10 and up.>
 
-This function cleans up all dynamically loaded library handles, freeing memory. If support is required again it will be initialized again, either 
-by L<SDL::Image::init|SDL::Image/"init"> or loading an image with dynamic support required. You may call this function when 
-L<SDL::Image::load|SDL::Image/"load"> functions are no longer needed for the JPG, PNG, and TIF image formats. You only need to call this function 
-once, no matter how many times L<SDL::Image::init|SDL::Image/"init"> was called. 
+This function cleans up all dynamically loaded library handles, freeing memory. If support is required again it will be initialized again, either
+by L<SDL::Image::init|SDL::Image/"init"> or loading an image with dynamic support required. You may call this function when
+L<SDL::Image::load|SDL::Image/"load"> functions are no longer needed for the JPG, PNG, and TIF image formats. You only need to call this function
+once, no matter how many times L<SDL::Image::init|SDL::Image/"init"> was called.
 
 =head3 Example
 
- use SDL::Image;
- SDL::Image::init(IMG_INIT_JPG); #loads JPG support
- SDL::Image::load("file.png"); #loads PNG support
- SDL::Image::quit(); #unloads everything
+  use SDL::Image;
+  SDL::Image::init(IMG_INIT_JPG); #loads JPG support
+  SDL::Image::load("file.png");   #loads PNG support
+  SDL::Image::quit();           #unloads everything
 
 =head2 set_error
 
-Same as L<SDL::set_error|SDL/"set_error">
+Same as L<SDL::set_error|SDL/"set_error">.
 
 =head2 get_error
 
-Same as L<SDL::get_error|SDL/"get_error">
+Same as L<SDL::get_error|SDL/"get_error">.
 
 =head1 SEE ALSO
 
