@@ -15,7 +15,7 @@ Core
 
 =head1 DESCRIPTION
 
-SDL_perl is a package of Perl modules that provide both functional and object oriented interfaces to the Simple DirectMedia Layer for Perl 5.
+SDL Perl is a package of Perl modules that provide both functional and object oriented interfaces to the Simple DirectMedia Layer for Perl 5.
 This package takes some liberties with the SDL API, and attempts to adhere to the spirit of both the SDL and Perl.
 This document describes the low-level functional SDL Perl API.
 For the object oriented programming interface please see the documentation provided on a per-class basis.
@@ -78,7 +78,7 @@ C<SDL::quit_subsystem> doesn't return any values.
 
  SDL::quit;
 
-C<SDL::quit> Shuts down all SDL subsystems, unloads the dynamically linked library and frees the allocated resources.
+C<SDL::quit> Shuts down all SDL subsystems, unloads the dynamically linked library, and frees the allocated resources.
 
 B<Note:> This will be called automatically when Perl exits. You don't need to call this, except if you want to initialize SDL again after this.
 
@@ -151,7 +151,7 @@ This value wraps around if the program runs for more than 49.7 days
 
  my $win32_handle = SDL::get_handle;
 
-A video surface must be inited to get a handle. 
+A video surface must be inited to get a handle.
 
 =head2 delay
 
@@ -185,7 +185,7 @@ Tobias Leich (FROGGS)
 
 The following people have dedicated blood sweat and tears to making SDL Perl possible.
 
-See the L<impact graph|http://github.com/kthakore/SDL_perl/graphs/impact> on our github repository.
+See the L<impact graph|HTTPS://GitHub.Com/PerlGameDev/SDL/graphs/impact> on our GitHub repository.
 
 Andy Bakun <sdlperl@thwartedefforts.org>
 
@@ -233,6 +233,8 @@ Michael Lamertz <mike@perl-ronin.de>
 
 morgoth.666
 
+Pip Stuart (Pip) <Pip@CPAN.Org>
+
 Peter BARABAS <z0d@artifact.hu>
 
 Russell Valentine <russ_allegro@yahoo.com>
@@ -257,11 +259,11 @@ If you would like to contribute to SDL Perl, please post a message on the mailin
 
 sdl-devel@perl.org
 
-And request access to the github repository. Or drop us a line on #sdl over at irc.perl.org
+And request access to the GitHub repository. Or drop us a line on #sdl over at irc.perl.org
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2002-2010 SDL Authors as listed above, all rights reserved.
+Copyright 2002-2011 SDL Authors as listed above, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
