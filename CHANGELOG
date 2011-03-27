@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.532 March 27 2011
+	- Tested and released experimental branch
+
 * 2.531_02 March 20 2011
 	- using parent Perls context in SDL::Mixer::Music's callbacks instead of TLS [FROGGS]
 	- Adding sleep(2) to core_palette.t [FROGGS]
