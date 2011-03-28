@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.531_03 March 21 2011
+	- setting parent_perl to NULL for non-threaded perls [FROGGS]
+
 * 2.531_02 March 20 2011
 	- using parent Perls context in SDL::Mixer::Music's callbacks instead of TLS [FROGGS]
 	- Adding sleep(2) to core_palette.t [FROGGS]

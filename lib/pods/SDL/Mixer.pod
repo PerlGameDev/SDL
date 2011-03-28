@@ -79,6 +79,42 @@ Export tag: ':status'
 SDL::Mixer allows you to enable sound, alter music volume settings, and lets you play, pause and resume, as well as fading the sound and music 
 in and out.
 
+=head2 Supported Formats
+
+The SDL Mixer library is a multi-channel audio mixer. It supports I<8 channels> of B<16 bit> stereo audio, and a I<single channel for music>.
+
+You can use the channels to load samples (i.e. sound effects) in the following formats:
+
+=over 4
+
+=item * Microsoft WAVE files (WAV)
+
+=item * Creative Labs VOC files (VOC)
+
+=item * MIDI files (if compiled with Timidity)
+
+=back
+
+If you use MIDI, you should note that the process of mixing MIDI files to wave output is very CPU-intensive, so if playing regular WAVE
+files sound great, but playing MIDI files sound choppy, try using 8-bit audio, mono audio, or lower frequencies.
+
+The music channel can play the following formats:
+
+=over 4
+
+=item * AIFF
+
+=item * MOD (.mod .xm .s3m .669 .it .med and more - if compiled with libmikmod)
+
+=item * OggVorbis (.ogg - if compiled with ogg/vorbis libraries)
+
+=item * MP3 (if compiled with SMPEG or MAD libraries)
+
+=item * FLAC (if compiled with FLAC library)
+
+=back
+
+
 =head1 METHODS
   
 =head2 init
