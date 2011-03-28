@@ -111,7 +111,7 @@ easily chain this method around.
     my $obj = SDLx::Text->new->text( "Hello, Dave." );
 
 Note that this will happen even if it's an empty string, or undef.
-B<You passed an argument, you got an object>.
+B<You pass an argument, you get an object>.
 
 Text will always be rendered as utf8, so you can pass any string containing
 regular ASCII or valid utf8 characters.
