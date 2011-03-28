@@ -125,13 +125,18 @@ sub text {
 
     $self->{text} = $text;
 
-	my $surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
-		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
+    if ( defined $text ) {
+        my $surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
+        or Carp::croak 'TTF rendering error: ' . SDL::get_error;
 
-	$self->{surface} = $surface;
-	my $arr =  SDL::TTF::size_utf8( $self->{_font}, $text );
-	$self->{w} = $arr->[0];
-	$self->{h} = $arr->[1];
+        $self->{surface} = $surface;
+        my $arr =  SDL::TTF::size_utf8( $self->{_font}, $text );
+        $self->{w} = $arr->[0];
+        $self->{h} = $arr->[1];
+    }
+    else {
+        $self->{surface} = undef;
+    }
 
 	return $self;
 }

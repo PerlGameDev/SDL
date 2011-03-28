@@ -41,6 +41,9 @@ is( $score->w, 53, 'Hello! is 53 px wide!' );
 is( $score->h, 28, 'Hello! is 28 px high!' );
 isa_ok($score->surface, 'SDL::Surface');
 
+my $value = undef;
+my $other_self = $score->text($value);
+isa_ok($score, 'SDLx::Text');
 
 END {
 
