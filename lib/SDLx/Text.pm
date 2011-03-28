@@ -148,7 +148,7 @@ sub surface {
 sub write_to {
 	my ($self, $target, $text) = @_;
 
-	$self->text($text) if $text;
+	$self->text($text) if scalar @_ > 2;
 	if ( my $surface = $self->{surface} ) {
 		if ($self->{h_align} eq 'center' ) {
 			$self->{x} = ($target->w / 2) - ($surface->w / 2);
@@ -166,7 +166,7 @@ sub write_to {
 sub write_xy {
 	my ($self, $target, $x, $y, $text) = @_;
 
-	$self->text($text) if $text;
+	$self->text($text) if scalar @_ > 4;
 	if ( my $surface = $self->{surface} ) {
 
 		SDL::Video::blit_surface(
