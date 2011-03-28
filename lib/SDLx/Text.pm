@@ -125,9 +125,7 @@ sub text {
 
     $self->{text} = $text;
 
-	my $surface;
-
-	$surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
+	my $surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
 		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
 
 	$self->{surface} = $surface;
