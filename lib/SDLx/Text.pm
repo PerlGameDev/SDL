@@ -40,7 +40,7 @@ sub new {
 	$self->font($file);
 	$self->color($color);
 
-	$self->text( $options{'text'} ) if defined $options{'text'};
+	$self->text( $options{'text'} ) if exists $options{'text'};
 
 	return $self;
 }
@@ -120,6 +120,10 @@ sub y {
 
 sub text {
 	my ($self, $text) = @_;
+
+    return $self->{text} if scalar @_ == 1;
+
+    $self->{text} = $text;
 
 	my $surface;
 
