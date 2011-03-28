@@ -75,8 +75,7 @@ for my $x ( 0 .. 640 ) {
 # remove this line
 sleep 2;
 
-# XXX - if you know why I need to create a new rect here, please tell me!
-$rect = create_rect();
+$rect->w($rect_width); # need to expand shrunken rect width back to original
 my $old_rect = create_rect();
 
 # your code also here, perhaps
