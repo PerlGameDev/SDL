@@ -103,6 +103,12 @@ and provided you don't need the optimal speed necessary (since blitting every
 object takes more work than just blitting the portions you need), this works
 quite well.
 
+B<Note:>  When you loop C<$rect>'s x position to the C<$app>'s width, the
+rect's C<w> (width) automatically gets shrunk to fit the window.  Once the
+x position reaches 640, the w is 0.  In order to reuse the C<$rect> from above
+for below, you'll need to first restore the initial width with the C<$rect>'s
+C<w()> member.
+
 =head2 Undrawing the Updated Rectangle
 
 If you need more speed or want to make a different complexity tradeoff, you can
