@@ -17,7 +17,7 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 	plan( skip_all => 'SDL_image support not compiled' );
 }
 
-can_ok( 'SDLx::FPS', qw( new init set get delay framecount rateticks lastticks rate ) );
+can_ok( 'SDLx::FPS', qw( new set get delay framecount rateticks lastticks rate ) );
 
 my $_fps = 60;
 

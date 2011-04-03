@@ -13,13 +13,9 @@ sub new {
 		Carp::cluck("Unrecognized constructor hash key: $_");
 	}
 	my $fps = $class->SDL::GFX::FPSManager::new( 0, 0, 0, 0 );
-	$fps->init;
+	SDL::GFX::Framerate::init( $fps );
 	$fps->set( $args{fps} ) if defined $args{fps};
 	$fps;
-}
-
-sub init {
-	SDL::GFX::Framerate::init( $_[0] );
 }
 
 sub set {
@@ -65,12 +61,6 @@ Use it to delay the main loop to keep it at a specified framerate.
  my $fps = SDLx::FPS->new( fps => 30 );
 
 No arguments are required, if no C<fps> is specified, the default FPS is 30.
-
-=head2 init
-
-Same as C<SDL::GFX::Framerate::init>.
-Initialize the framerate manager, set default framerate of 30Hz and reset delay interpolation.
-You don't need to call this; C<new> does it for you.
 
 =head2 set
 
