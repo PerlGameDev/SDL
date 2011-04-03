@@ -14,7 +14,7 @@ char *fcb = NULL;
 
 void mix_func(void *udata, Uint8 *stream, int len)
 {
-	ENTER_TLS_CONTEXT;
+	PERL_SET_CONTEXT(parent_perl);
 	dSP;                                       /* initialize stack pointer          */
 	ENTER;                                     /* everything created after here     */
 	SAVETMPS;                                  /* ...is a temporary variable.       */
@@ -43,12 +43,11 @@ void mix_func(void *udata, Uint8 *stream, int len)
 
 	FREETMPS;                                  /* free that return value            */
 	LEAVE;                                     /* ...and the XPUSHed "mortal" args. */
-	LEAVE_TLS_CONTEXT;
 }
 
 void mix_finished(void)
 {
-	ENTER_TLS_CONTEXT;
+	PERL_SET_CONTEXT(parent_perl);
 	dSP;                                       /* initialize stack pointer          */
 	PUSHMARK(SP);                              /* remember the stack pointer        */
 
@@ -56,7 +55,6 @@ void mix_finished(void)
 	{
 		call_pv(fcb, G_DISCARD|G_VOID);        /* call the function                 */
 	}
-    LEAVE_TLS_CONTEXT;
 }
 
 #endif
@@ -140,7 +138,7 @@ mixmus_hook_music( func = NULL, arg = 0 )
 	CODE:
 		if(func != NULL)
 		{
-			GET_TLS_CONTEXT;
+			parent_perl  = PERL_GET_CONTEXT;
 			cb           = func;
 			void *arg2   = safemalloc(sizeof(int));
 			*(int*) arg2 = arg;
@@ -160,7 +158,7 @@ mixmus_hook_music_finished( func = NULL )
 	CODE:
 		if(func != NULL)
 		{
-			GET_TLS_CONTEXT;
+			parent_perl  = PERL_GET_CONTEXT;
 			fcb = func;
 			Mix_HookMusicFinished(&mix_finished);
 		}
