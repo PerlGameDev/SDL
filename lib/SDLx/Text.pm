@@ -40,7 +40,7 @@ sub new {
 	$self->font($file);
 	$self->color($color);
 
-	$self->text( $options{'text'} ) if defined $options{'text'};
+	$self->text( $options{'text'} ) if exists $options{'text'};
 
 	return $self;
 }
@@ -121,15 +121,22 @@ sub y {
 sub text {
 	my ($self, $text) = @_;
 
-	my $surface;
+    return $self->{text} if scalar @_ == 1;
 
-	$surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
-		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
+    $self->{text} = $text;
 
-	$self->{surface} = $surface;
-	my $arr =  SDL::TTF::size_utf8( $self->{_font}, $text );
-	$self->{w} = $arr->[0];
-	$self->{h} = $arr->[1];
+    if ( defined $text ) {
+        my $surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
+        or Carp::croak 'TTF rendering error: ' . SDL::get_error;
+
+        $self->{surface} = $surface;
+        my $arr =  SDL::TTF::size_utf8( $self->{_font}, $text );
+        $self->{w} = $arr->[0];
+        $self->{h} = $arr->[1];
+    }
+    else {
+        $self->{surface} = undef;
+    }
 
 	return $self;
 }
@@ -140,8 +147,7 @@ sub surface {
 
 sub write_to {
 	my ($self, $target, $text) = @_;
-
-	$self->text($text) if defined $text;
+	$self->text($text) if scalar @_ > 2;
 	if ( my $surface = $self->{surface} ) {
 		if ($self->{h_align} eq 'center' ) {
 			$self->{x} = ($target->w / 2) - ($surface->w / 2);
@@ -161,7 +167,7 @@ sub write_to {
 sub write_xy {
 	my ($self, $target, $x, $y, $text) = @_;
 
-	$self->text($text) if defined $text;
+	$self->text($text) if scalar @_ > 4;
 	if ( my $surface = $self->{surface} ) {
 		if ($self->{h_align} eq 'center' ) {
 			$x -= $surface->w / 2;
