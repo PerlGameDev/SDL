@@ -12,7 +12,13 @@ use SDL::Mixer::Samples;
 use SDL::Mixer::MixChunk;
 
 
+sub new {
+	my ($class, %params) = @_;
 
+	my $self = bless { %params }, $class;
+
+    return $self;
+}
 
 1;
 
