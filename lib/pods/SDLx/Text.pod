@@ -100,9 +100,18 @@ Returns the L<SDL::TTF::Font> object representing the font.
 
 =head2 text( $some_text )
 
-Sets the text to be displayed by the SDLx::Text object. Return the SDLx::Text object itself, so you can easily chain this method around.
+Sets the text to be displayed by the SDLx::Text object. If you call it
+without any arguments, you'll get the current text string:
+
+   my $string = $obj->text();
+
+Otherwise, C<text()> will return the SDLx::Text object itself, so you can
+easily chain this method around.
 
     my $obj = SDLx::Text->new->text( "Hello, Dave." );
+
+Note that this will happen even if it's an empty string, or undef.
+B<You pass an argument, you get an object>.
 
 Text will always be rendered as utf8, so you can pass any string containing
 regular ASCII or valid utf8 characters.

@@ -11,8 +11,8 @@ BEGIN {
 	}
 	use SDL;
 	use SDL::Config;
-	use threads;
-	use threads::shared;
+	require threads;
+	require threads::shared;
 
 	use Test::More;
 	use lib 't/lib';
