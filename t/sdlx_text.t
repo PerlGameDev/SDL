@@ -5,14 +5,14 @@ use SDL::Color;
 use SDL::Surface;
 use SDLx::App;
 BEGIN {
-	use FindBin;
-	use Test::More;
-	use lib 't/lib';
-	use SDL::TestTool;
+    use FindBin;
+    use Test::More;
+    use lib 't/lib';
+    use SDL::TestTool;
 
-	if ( !SDL::Config->has('SDL_ttf') ) {
-		plan( skip_all => 'SDL_ttf support not compiled' );
-	}
+    if ( !SDL::Config->has('SDL_ttf') ) {
+        plan( skip_all => 'SDL_ttf support not compiled' );
+    }
 }
 
 use_ok( 'SDLx::Text' );
@@ -47,11 +47,11 @@ isa_ok($score, 'SDLx::Text');
 
 END {
 
-	if ($videodriver) {
-		$ENV{SDL_VIDEODRIVER} = $videodriver;
-	} else {
-		delete $ENV{SDL_VIDEODRIVER};
-	}
+    if ($videodriver) {
+        $ENV{SDL_VIDEODRIVER} = $videodriver;
+    } else {
+        delete $ENV{SDL_VIDEODRIVER};
+    }
 
-	done_testing;
+    done_testing;
 }

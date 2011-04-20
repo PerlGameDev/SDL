@@ -4,122 +4,138 @@ use SDL::Video;
 use SDL::Config;
 use SDL::TTF;
 use SDL::TTF::Font;
+use SDL::Rect;
 use SDLx::Validate;
 
 use Carp ();
 
 sub new {
-	my ($class, %options) = @_;
-	unless ( SDL::Config->has('SDL_ttf') ) {
-		Carp::cluck("SDL_ttf support has not been compiled");
-	}  
-	my $file = $options{'font'};
+    my ($class, %options) = @_;
+    unless ( SDL::Config->has('SDL_ttf') ) {
+        Carp::cluck("SDL_ttf support has not been compiled");
+    }
+    my $file = $options{'font'};
     if (!$file) {
         require File::ShareDir;
         $file = File::ShareDir::dist_file('SDL', 'GenBasR.ttf');
     }
 
-	my $color = $options{'color'} || [255, 255, 255];
+    Carp::confess 'rect cannot be instantiated together with x or y'
+        if exists $options{rect} and ( exists $options{x} or exists $options{y} );
 
-	my $size = $options{'size'} || 24;
+    my $color = $options{'color'} || [255, 255, 255];
 
-	my $self = bless {}, ref($class) || $class;
+    my $size = $options{'size'} || 24;
 
-	$self->{x} = $options{'x'} || 0;
-	$self->{y} = $options{'y'} || 0;
+    my $self = bless {}, ref($class) || $class;
 
-	$self->{h_align} = $options{'h_align'} || 'left';
+    $self->x( $options{x} || 0 );
+    $self->y( $options{y} || 0 );
+    $self->rect( $options{rect} ) if exists $options{rect};
+    $self->clip( $options{clip} ) if exists $options{clip};
+
+    $self->h_align($options{'h_align'} || 'left');
+    $self->v_align($options{'v_align'} || 'top');
 # TODO: validate
-# TODO: v_align
-	unless ( SDL::TTF::was_init() ) {
-		Carp::cluck ("Cannot init TTF: " . SDL::get_error() )
-		    unless SDL::TTF::init() == 0;
-	}
+    unless ( SDL::TTF::was_init() ) {
+        Carp::cluck ("Cannot init TTF: " . SDL::get_error() )
+            unless SDL::TTF::init() == 0;
+    }
 
-	$self->size($size);
-	$self->font($file);
-	$self->color($color);
+    $self->size($size);
+    $self->font($file);
+    $self->color($color);
 
-	$self->text( $options{'text'} ) if exists $options{'text'};
+    $self->text( $options{'text'} ) if exists $options{'text'};
 
-	return $self;
+    return $self;
 }
 
 sub font {
-	my ($self, $font) = @_;
+    my ($self, $font) = @_;
 
-	if ($font) {
-		my $size = $self->size;
+    if ($font) {
+        my $size = $self->size;
 
-		$self->{_font} = SDL::TTF::open_font($font, $size)
-			or Carp::cluck 'Error opening font: ' . SDL::get_error;
-	}
+        $self->{_font} = SDL::TTF::open_font($font, $size)
+            or Carp::cluck 'Error opening font: ' . SDL::get_error;
+    }
 
-	return $self->{_font};
+    return $self->{_font};
 }
 
 sub color {
-	my ($self, $color) = @_;
+    my ($self, $color) = @_;
 
-	if ($color) {
-		$self->{_color} = SDLx::Validate::color($color);
-	}
+    if ($color) {
+        $self->{_color} = SDLx::Validate::color($color);
+    }
 
-	return $self->{_color};
+    return $self->{_color};
 }
 
 sub size {
-	my ($self, $size) = @_;
+    my ($self, $size) = @_;
 
-	if ($size) {
-		$self->{_size} = $size;
+    if ($size) {
+        $self->{_size} = $size;
 
-		# reload the font using new size
-		$self->font( $self->font );
-	}
+        # reload the font using new size
+        $self->font( $self->font );
+    }
 
-	return $self->{_size};
+    return $self->{_size};
 }
 
 sub h_align {
-	my ($self, $align) = @_;
+    my ($self, $align) = @_;
 
-	if ($align) {
-		$self->{h_align} = $align;
-	}
+    if ($align) {
+        $self->{h_align} = $align;
+    }
 
-	return $self->{h_align};
+    return $self->{h_align};
+}
+
+sub v_align {
+    my ($self, $align) = @_;
+
+    if ($align) {
+        $self->{v_align} = $align;
+    }
+
+    return $self->{v_align};
 }
 
 
 sub w {
-	return $_[0]->{surface}->w();
+    return $_[0]->{surface}->w();
 }
 
 sub h {
-	return $_[0]->{surface}->h();
+    return $_[0]->{surface}->h();
 }
 
 sub x {
-	my ($self, $x) = @_;
+    my ($self, $x) = @_;
 
-	if ($x) {
-		$self->{x} = $x;
-	}
-	return $self->{x};
+    if (defined $x) {
+        $self->{x} = $x;
+    }
+    return $self->{x};
 }
 
 sub y {
-	my ($self, $y) = @_;
+    my ($self, $y) = @_;
 
-	if ($y) {
-		$self->{y} = $y;
-	}
-	return $self->{y};
+    if (defined  $y) {
+        $self->{y} = $y;
+    }
+    return $self->{y};
 }
 
 sub text {
-	my ($self, $text) = @_;
+    my ($self, $text) = @_;
 
     return $self->{text} if scalar @_ == 1;
 
@@ -130,7 +146,7 @@ sub text {
         or Carp::croak 'TTF rendering error: ' . SDL::get_error;
 
         $self->{surface} = $surface;
-        my $arr =  SDL::TTF::size_utf8( $self->{_font}, $text );
+        my $arr = SDL::TTF::size_utf8( $self->{_font}, $text );
         $self->{w} = $arr->[0];
         $self->{h} = $arr->[1];
     }
@@ -138,43 +154,110 @@ sub text {
         $self->{surface} = undef;
     }
 
-	return $self;
+    return $self;
 }
 
 sub surface {
-	return $_[0]->{surface};
+    return $_[0]->{surface};
 }
 
 sub write_to {
-	my ($self, $target, $text) = @_;
+    my ($self, $target, $text) = @_;
 
-	$self->text($text) if scalar @_ > 2;
-	if ( my $surface = $self->{surface} ) {
-		if ($self->{h_align} eq 'center' ) {
-			$self->{x} = ($target->w / 2) - ($surface->w / 2);
-		}
-		# TODO: other alignments
+    $self->text($text) if defined $text;
+    if ( my $surface = $self->{surface} ) {
 
-		SDL::Video::blit_surface(
-			$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
-			$target, SDL::Rect->new($self->{x}, $self->{y}, $target->w, $target->h)
-		);
-	}
-	return;
+        # Set target rect
+        my $rect = $self->rect;
+        $rect = SDL::Rect->new(0, 0, $target->w, $target->h) unless $rect;
+
+        # Move text by horizontal align
+        if ($self->{h_align} eq 'left' ) {
+            $self->{x} = $rect->x;
+        }
+        elsif ($self->{h_align} eq 'center' ) {
+            $self->{x} = $rect->x + ($rect->w / 2) - ($surface->w / 2);
+        }
+        elsif($self->{h_align} eq 'right' ) {
+            $self->{x} = $rect->x + $rect->w - $surface->w;
+        }
+
+        # Move text by vertical align
+        if ($self->{v_align} eq 'top' ) {
+            $self->{y} = $rect->y;
+        }
+        elsif ($self->{v_align} eq 'middle' ) {
+            $self->{y} = $rect->y + ($rect->h / 2) - ($surface->h / 2);
+        }
+        elsif($self->{v_align} eq 'bottom' ) {
+            $self->{y} = $rect->y + $rect->h - $surface->h;
+        }
+
+        SDL::Video::blit_surface(
+            $surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
+            $target, SDL::Rect->new($self->{x}, $self->{y}, $surface->w, $surface->h)
+        );
+    }
+    return;
 }
 
 sub write_xy {
-	my ($self, $target, $x, $y, $text) = @_;
+    my ($self, $target, $x, $y, $text) = @_;
 
-	$self->text($text) if scalar @_ > 4;
-	if ( my $surface = $self->{surface} ) {
+    $x = $self->x unless defined $x;
+    $y = $self->y unless defined $y;
 
-		SDL::Video::blit_surface(
-				$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
-				$target, SDL::Rect->new($x, $y, $target->w, $target->h)
-		);
-	}
-	return;
+    $self->text($text) if defined $text;
+    if ( my $surface = $self->{surface} ) {
+
+         # Set target rect
+        my $rect = $self->rect;
+        $rect = SDL::Rect->new(0, 0, $target->w, $target->h) unless $rect;
+
+        if ($self->{h_align} eq 'left' ) {
+            $self->{x} = $rect->x + $x;
+        }
+        elsif ($self->{h_align} eq 'center' ) {
+            $self->{x} = $rect->x + $x - ($surface->w / 2);
+        }
+        elsif($self->{h_align} eq 'right' ) {
+            $self->{x} = $rect->x + $x - $surface->w;
+        }
+
+        if ($self->{v_align} eq 'top' ) {
+            $self->{y} = $rect->y + $y;
+        }
+        elsif ($self->{v_align} eq 'middle' ) {
+            $self->{y} = $rect->y + $y - ($surface->h / 2);
+        }
+        elsif($self->{v_align} eq 'bottom' ) {
+            $self->{y} = $rect->y + $y - $surface->h;
+        }
+
+        SDL::Video::blit_surface(
+                $surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
+                $target, SDL::Rect->new($self->{x}, $self->{y}, $surface->w, $surface->h)
+        );
+    }
+    return;
+}
+
+sub rect {
+    my ( $self, $rect ) = @_;
+
+    # short-circuit
+    return $self->{rect} unless $rect;
+
+    return $self->{rect} = SDLx::Validate::rect($rect);
+}
+
+sub clip {
+    my ( $self, $clip ) = @_;
+
+    # short-circuit
+    return $self->{clip} unless $clip;
+
+    return $self->{clip} = SDLx::Validate::rect($clip);
 }
 
 1;

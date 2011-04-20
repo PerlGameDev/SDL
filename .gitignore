@@ -32,3 +32,5 @@ MANIFEST
 *.bak
 *_def.old
 *.ERR
+.includepath
+.project
