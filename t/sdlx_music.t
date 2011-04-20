@@ -45,7 +45,7 @@ isa_ok( $music, "SDLx::Music" );
 can_ok( 'SDLx::Music', 'data' );
 
 ## Simple
-ok( $music->data( silence => 'test/data/silence.ogg' ) );
+ok( $music->data( silence => 'test/data/silence.wav' ) );
 
 ## Long
 ok(
@@ -56,13 +56,18 @@ ok(
             fade_in => 0.5,
             volume  => 72
         },
-    ));
+    )
+);
 
-      if ($audiodriver) {
-        $ENV{SDL_AUDIODRIVER} = $audiodriver;
-    }
-    else {
-        delete $ENV{SDL_AUDIODRIVER};
-    }
+## Check if stuff actually got loaded
 
-    done_testing();
+isa_ok( $music->{data}->{silence}->{_content}, "SDL::Mixer::MixMusic" );
+
+if ($audiodriver) {
+    $ENV{SDL_AUDIODRIVER} = $audiodriver;
+}
+else {
+    delete $ENV{SDL_AUDIODRIVER};
+}
+
+done_testing();
