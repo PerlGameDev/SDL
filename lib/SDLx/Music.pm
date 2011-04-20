@@ -13,11 +13,19 @@ use SDL::Mixer::MixChunk;
 
 
 sub new {
+
 	my ($class, %params) = @_;
 
 	my $self = bless { %params }, $class;
 
     return $self;
+}
+
+sub data {
+
+	my ($self, %data) = @_;
+
+	return 1;
 }
 
 1;
