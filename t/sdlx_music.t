@@ -32,6 +32,14 @@ BEGIN {
 
    use_ok('SDLx::Music', "Can load SDLx::Music");
 
+# Object Creation
+
+  can_ok('SDLx::Music', 'new');
+
+  my $music = SDLx::Music->new();
+
+  isa_ok( $music, "SDLx::Music" );
+
 if ($audiodriver) {
 	$ENV{SDL_AUDIODRIVER} = $audiodriver;
 } else {
