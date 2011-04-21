@@ -66,6 +66,7 @@ ok(
 ## Check if stuff actually got loaded
 
 isa_ok( $music->{data}->{silence}->{_content}, "SDL::Mixer::MixMusic" );
+isa_ok( $music->{data}->{sample}->{_content}, "SDL::Mixer::MixMusic" );
 
 if ($audiodriver) {
     $ENV{SDL_AUDIODRIVER} = $audiodriver;
