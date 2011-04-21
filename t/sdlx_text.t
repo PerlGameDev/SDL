@@ -61,7 +61,7 @@ isa_ok($score->rect, 'SDL::Rect');
 my ($xy_x, $xy_y) = (50, 50);
 
 # Create target surface
-my $target = SDL::Surface->new(width => 200, height => 200);
+my $target = SDLx::Surface->new(width => 200, height => 200);
 
 # Test matrix write_xx for different aligns
 my @test = (
