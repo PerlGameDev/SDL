@@ -38,7 +38,11 @@ can_ok( 'SDLx::Music', 'new' );
 
 my $music = SDLx::Music->new();
 
+my $music2 = SDLx::Music->new();
+
 isa_ok( $music, "SDLx::Music" );
+
+isa_ok( $music2, "SDLx::Music" );
 
 # Music Data defination
 

@@ -21,7 +21,7 @@ sub new {
 
 	# Initialize Audio 
 
-	die SDL::get_error() if ( SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096) ) != 0 ;
+	Carp::croak SDL::get_error() if ( SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096) ) != 0 ;
 
 
     return $self;
