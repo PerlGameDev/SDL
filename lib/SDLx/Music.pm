@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Carp ();
 use SDL;
+use SDL::Audio;
 use SDL::Mixer;
 use SDL::Mixer::Music;
 use SDL::Mixer::Channels;
@@ -17,6 +18,11 @@ sub new {
 	my %params = @_;
 
 	my $self = bless { %params }, $class;
+
+	# Initialize Audio 
+
+	die SDL::get_error() if ( SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096) ) != 0 ;
+
 
     return $self;
 }
