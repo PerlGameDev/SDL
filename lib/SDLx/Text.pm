@@ -167,6 +167,10 @@ sub write_to {
     $self->text($text) if defined $text;
     if ( my $surface = $self->{surface} ) {
 
+        # Set source rect
+        my $clip = $self->clip;
+        $clip = SDL::Rect->new(0, 0, $surface->w, $surface->h) unless $clip;
+
         # Set target rect
         my $rect = $self->rect;
         $rect = SDL::Rect->new(0, 0, $target->w, $target->h) unless $rect;
@@ -194,7 +198,7 @@ sub write_to {
         }
 
         SDL::Video::blit_surface(
-            $surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
+            $surface, SDL::Rect->new($clip->x,$clip->y,$clip->w, $clip->h),
             $target, SDL::Rect->new($self->{x}, $self->{y}, $surface->w, $surface->h)
         );
     }
@@ -210,7 +214,11 @@ sub write_xy {
     $self->text($text) if defined $text;
     if ( my $surface = $self->{surface} ) {
 
-         # Set target rect
+        # Set source rect
+        my $clip = $self->clip;
+        $clip = SDL::Rect->new(0, 0, $surface->w, $surface->h) unless $clip;
+
+        # Set target rect
         my $rect = $self->rect;
         $rect = SDL::Rect->new(0, 0, $target->w, $target->h) unless $rect;
 
@@ -235,7 +243,7 @@ sub write_xy {
         }
 
         SDL::Video::blit_surface(
-                $surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
+                $surface, SDL::Rect->new($clip->x,$clip->y,$clip->w, $clip->h),
                 $target, SDL::Rect->new($self->{x}, $self->{y}, $surface->w, $surface->h)
         );
     }

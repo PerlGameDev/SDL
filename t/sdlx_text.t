@@ -113,7 +113,10 @@ for my $test (@test)
         sprintf 'vertical position write_xy for %s:%s', $score->h_align, $score->v_align;
 }
 
-#note explain $score;
+# Clip test
+$score->clip( SDL::Rect->new(10, 10, 50, 50) );
+isa_ok($score->clip, 'SDL::Rect');
+
 
 END {
 

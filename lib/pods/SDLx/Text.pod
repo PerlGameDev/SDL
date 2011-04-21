@@ -79,6 +79,11 @@ to whatever surface you are placing it into.
 Gets/sets the SDL::Rect for destination. Use it if you want write relative some
 rectangle on target surface.
 
+=head2 clip
+
+Gets/sets the SDL::Rect for choose only a small subset of the object's internal
+surface to be used on calls to C<write_to> or C<write_xy>.
+
 =head2 h_align
 
 Gets/sets the horizontal alignment of the text to be rendered relative to
