@@ -79,6 +79,22 @@ ok( $music->clear );
 
 is( $music->{data}, undef, "Is clear" );
 
+# Check default call
+
+can_ok ( 'SDLx::Music', 'default' );
+
+isa_ok( $music->default, "SDLx::Music::Default" );
+
+$music->default->ext('.wav');
+
+isa_ok( SDLx::Music->default, "SDLx::Music::Default" );
+
+SDLx::Music->default->ext('.ogg');
+
+is( $music->default->ext, '.wav' );
+is( SDLx::Music->default->ext, '.ogg');
+
+
 if ($audiodriver) {
     $ENV{SDL_AUDIODRIVER} = $audiodriver;
 }

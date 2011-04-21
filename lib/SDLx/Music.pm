@@ -12,6 +12,10 @@ use SDL::Mixer::Channels;
 use SDL::Mixer::Samples;
 use SDL::Mixer::MixChunk;
 
+use SDLx::Music::Default;
+
+our $def = bless ({}, "SDLx::Music::Default");
+
 sub new {
     my $class  = shift;
     my %params = @_;
@@ -19,14 +23,22 @@ sub new {
     my $self = bless {%params}, $class;
 
     # Initialize Audio
-    $self->{freq}      = $self->{freq} || 44100;
-    $self->{format}    = $self->{format} || SDL::Audio::AUDIO_S16SYS;
-    $self->{channels}  = $self->{channels} || 2;
+    $self->{freq}      = $self->{freq}      || 44100;
+    $self->{format}    = $self->{format}    || SDL::Audio::AUDIO_S16SYS;
+    $self->{channels}  = $self->{channels}  || 2;
     $self->{chunksize} = $self->{chunksize} || 4096;
 
     Carp::croak SDL::get_error()
-      if ( SDL::Mixer::open_audio( $self->{freq}, $self->{format}, $self->{channels}, $self->{chunksize} ) )
-      != 0;
+      if (
+        SDL::Mixer::open_audio(
+            $self->{freq},     $self->{format},
+            $self->{channels}, $self->{chunksize}
+        )
+      ) != 0;
+
+	#Set up the default
+
+	$self->{default} = bless {}, "SDLx::Music::Default";
 
     return $self;
 }
@@ -57,12 +69,16 @@ sub data {
     return 1;
 }
 
-
-sub clear 
-{
-	delete $_[0]->{data};
+sub clear {
+    delete $_[0]->{data};
 
 }
 
+sub default :lvalue {
+    my $self = shift;
+    if   ( defined $self && ref($self) ) { return $self->{default} }
+    else                                 { return $SDLx::Music::def; }
+
+}
 1;
 
