@@ -124,8 +124,11 @@ B<Please note:> do not mix use of this class with L<SDL::Mixer::Music> if you wa
 
 =head2 new
 
-	SDLx::Music->new( $name );
-	SDLx::Music->new( %args );
+	SDLx::Music->new;
+	#Option arguments showing the default parameters
+	SDLx::Music->new( freq => 44100, format => SDL::Audio::AUDIO_S16SYS, channels => 2, chunksize => 4096);
+
+	
 
 Creates the new music object. Inits audio with a call to L<SDLx::Mixer::init|SDLx::Mixer/init>, if it isn't already (if you want more precise control over what is initialized, make sure you call L<SDLx::Mixer::init|SDLx::Mixer/init> before you call thiihs method). Creates an empty default data object for object-wide defaults. If arguments are supplied, calls L</data> with them to set up any initial data objects. Returns the new music object.
 
