@@ -57,5 +57,12 @@ sub data {
     return 1;
 }
 
+
+sub clear 
+{
+	delete $_[0]->{data};
+
+}
+
 1;
 

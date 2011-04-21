@@ -63,10 +63,21 @@ ok(
     )
 );
 
+
 ## Check if stuff actually got loaded
 
 isa_ok( $music->{data}->{silence}->{_content}, "SDL::Mixer::MixMusic" );
 isa_ok( $music->{data}->{sample}->{_content}, "SDL::Mixer::MixMusic" );
+
+# Clear the data 
+
+can_ok ( 'SDLx::Music', 'clear' );
+
+ok( $music->clear );
+
+## Check if we are actually clear
+
+is( $music->{data}, undef, "Is clear" );
 
 if ($audiodriver) {
     $ENV{SDL_AUDIODRIVER} = $audiodriver;
