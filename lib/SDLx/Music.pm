@@ -45,8 +45,11 @@ sub new {
 
 sub data {
     my $self = shift;
-    my %data = @_;
+	return if $#_ < 0;
+	
+	return $self->{data}->{$_[0]} if $#_ == 0;
 
+    my %data = @_;
     # loop through keys
     foreach ( keys %data ) {
         my $datum = $data{$_};
@@ -80,5 +83,7 @@ sub default :lvalue {
     else                                 { return $SDLx::Music::def; }
 
 }
+
+
 1;
 

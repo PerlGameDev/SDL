@@ -94,6 +94,10 @@ SDLx::Music->default->ext('.ogg');
 is( $music->default->ext, '.wav' );
 is( SDLx::Music->default->ext, '.ogg');
 
+my $silence = $music->data('silence');
+
+is_deeply( $silence, $music->{data}->{silence}, "Silence is retreived correctly");
+is_deeply( $music->data('sample'), $music->{data}->{sample}, "Sample is retreived correctly");
 
 if ($audiodriver) {
     $ENV{SDL_AUDIODRIVER} = $audiodriver;
