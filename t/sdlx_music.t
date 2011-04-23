@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use SDL;
 use SDL::Config;
+use Data::Dumper;
 
 my $audiodriver;
 
@@ -69,6 +70,21 @@ ok(
 isa_ok( $music->{data}->{silence}->{_content}, "SDL::Mixer::MixMusic" );
 isa_ok( $music->{data}->{sample}->{_content}, "SDL::Mixer::MixMusic" );
 
+my $silence = $music->data('silence');
+
+isa_ok( $silence, "SDLx::Music::Data");
+isa_ok( $music->data('sample'), "SDLx::Music::Data");
+
+is_deeply( $silence, $music->{data}->{silence}, "Silence is retreived correctly");
+is_deeply( $music->data('sample'), $music->{data}->{sample}, "Sample is retreived correctly");
+
+# Chained changes
+
+$silence->volume(55)->loops(2)->file(2); 
+
+is( $silence->{volume}, 55);
+
+
 # Clear the data 
 
 can_ok ( 'SDLx::Music', 'clear' );
@@ -93,11 +109,6 @@ SDLx::Music->default->ext('.ogg');
 
 is( $music->default->ext, '.wav' );
 is( SDLx::Music->default->ext, '.ogg');
-
-my $silence = $music->data('silence');
-
-is_deeply( $silence, $music->{data}->{silence}, "Silence is retreived correctly");
-is_deeply( $music->data('sample'), $music->{data}->{sample}, "Sample is retreived correctly");
 
 if ($audiodriver) {
     $ENV{SDL_AUDIODRIVER} = $audiodriver;
