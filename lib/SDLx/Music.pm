@@ -58,16 +58,13 @@ sub data {
 			my $d = {};
 			if ( ref $datum eq 'HASH' ) {
 				$d = $datum;
-				$d->{_content} =
-					SDL::Mixer::Music::load_MUS( $datum->{file} );
 			}
 			else {
-				$d->{_content} =
-					SDL::Mixer::Music::load_MUS($datum);
+				$d->{file} = $datum;
 			}
 
 			$self->{data}->{$_}  = bless($d, "SDLx::Music::Data");
-
+			$self->{data}->{$_}->{to_load} = 1;
 		}
 
 	}
@@ -87,6 +84,47 @@ sub default :lvalue {
 
 }
 
+sub play {
+	my $self = shift;
+	my $play_data = shift;
+	my %override = @_;
+
+	my $volume = $play_data->{volume} || $override{volume} || 50;
+	my $fade_in =  $play_data->{fade_in} || $override{fade_in} || 0.5;
+	my $loops = $play_data->{loops} ||$override{loops} ||  0;
+
+		if ($play_data->{to_load})
+		{
+			$play_data->{_content} = SDL::Mixer::Music::load_MUS( $play_data->{file} );
+			$play_data->{to_load} = 0;
+		}
+
+	#Check for fading and handle that
+
+        unless(SDL::Mixer::Music::play_music($play_data->{_content}, $loops))
+        {
+            Carp::carp("Cannot play: ".SDL::get_error()."\n");
+        }
+
+
+}
+
+sub load {
+	my $self = shift;
+
+	foreach( keys ( %{$self->{data}} ) )
+	{
+		my $data = $self->{data}->{$_};
+
+		if ($data->{to_load})
+		{
+			$data->{_content} = SDL::Mixer::Music::load_MUS( $data->{file} );
+			$data->{to_load} = 0;
+		}
+
+	}
+
+}
 
 1;
 

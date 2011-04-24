@@ -8,7 +8,11 @@ sub volume
 
 sub file
 {
-	$_[0]->{file} = $_[1] if $_[1];
+	if( $_[1] )
+	{
+		$_[0]->{file} = $_[1];
+		$_[0]->{to_load} = 1; 
+	}
 	return $_[0]; 
 }
 
