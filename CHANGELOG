@@ -1,5 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.533 
+	- Added preliminary SDLx::Music
+	- Minor fixes for SDLx::Text [garu]
+
 * 2.532 March 27 2011
 	- Tested and released experimental branch
 

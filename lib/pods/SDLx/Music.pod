@@ -143,9 +143,7 @@ With no arguments: returns a reference to the data hash. This hash has data name
 
 With a name: creates the data name if it doesn't already exist. Does this with a call to L<SDLx::Music::Data->new|SDLx::Music::Data/new> with C<name => $name> and puts that new object in the data hash under the key of C<$name>. Returns the data object for that name.
 
-With a data object: adds the data object to the data hash, with the key of its L<name|SDLx::Music::Data/name>. Raises an exception if it has no name. Returns the data object.
-
-With a hash of arguments: for each pair, hands the value to L<SDLx::Music::Data->new|SDLx::Music::Data/new> which should be either a hashref or filename. The key is used as the default value for L<name|SDLx::Music::Data/name>. Each object is then put in the data hash under the key of its L<name|SDLx::Music::Data/name>. Returns C<$music>.
+With a hash of arguments: for each pair, and returns a  L<SDLx::Music::Data>. Returns C<$music>.
 
 =head2 data_for
 
