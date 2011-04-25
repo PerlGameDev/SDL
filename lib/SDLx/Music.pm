@@ -132,5 +132,10 @@ sub load {
 
 }
 
+sub playing 
+{
+	return SDL::Mixer::Music::playing_music();
+}
+
 1;
 

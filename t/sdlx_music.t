@@ -76,11 +76,18 @@ is_deeply( $music->data('sample'), $music->{data}->{sample}, "Sample is retreive
 
 # Chained changes
 
+can_ok( 'SDLx::Music', 'playing');
+
 $silence->volume(55)->loops(2)->file('test/data/silence.wav'); 
 
 $music->play($silence);
 
-SDL::delay(100);
+while( $music->playing )
+{
+
+	pass('Played at least once');
+
+}
 
 isa_ok( $music->{data}->{silence}->{_content}, "SDL::Mixer::MixMusic", "Didn't load data for play" );
 
