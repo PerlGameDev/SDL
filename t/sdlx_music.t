@@ -82,12 +82,13 @@ $silence->volume(55)->loops(2)->file('test/data/silence.wav');
 
 $music->play($silence);
 
+my $played; 
 while( $music->playing )
 {
-
-	pass('Played at least once');
-
+	$played = 1 unless $played;
 }
+
+is( $played, 1, "Music played and atleast one" ); 	
 
 isa_ok( $music->{data}->{silence}->{_content}, "SDL::Mixer::MixMusic", "Didn't load data for play" );
 
@@ -99,7 +100,13 @@ isa_ok( $music->{data}->{sample}->{_content}, "SDL::Mixer::MixMusic" );
 
 $music->play( $music->data('sample') );
 
-SDL::delay(2000);
+$played = 0;
+while( $music->playing )
+{
+	$played = 1 unless $played;
+}
+
+is( $played, 1, "Music played and atleast one" ); 	
 
 is( $silence->{volume}, 55);
 
