@@ -63,8 +63,9 @@ sub data {
 				$d->{file} = $datum;
 			}
 
-			$self->{data}->{$_}  = bless($d, "SDLx::Music::Data");
-			$self->{data}->{$_}->{to_load} = 1;
+			my $play_data = bless($d, "SDLx::Music::Data");
+			$play_data->{to_load} = 1;
+			$self->{data}->{$_} = $play_data;
 		}
 
 	}
@@ -89,24 +90,29 @@ sub play {
 	my $play_data = shift;
 	my %override = @_;
 
+	return unless defined $play_data;
+
 	my $volume = $play_data->{volume} || $override{volume} || 50;
 	my $fade_in =  $play_data->{fade_in} || $override{fade_in} || 0.5;
-	my $loops = $play_data->{loops} ||$override{loops} ||  0;
+	my $loops = $play_data->{loops} ||$override{loops} ||  1;
 
 		if ($play_data->{to_load})
 		{
+
 			$play_data->{_content} = SDL::Mixer::Music::load_MUS( $play_data->{file} );
 			$play_data->{to_load} = 0;
 		}
 
 	#Check for fading and handle that
+	SDL::Mixer::Music::volume_music($volume);
 
-        unless(SDL::Mixer::Music::play_music($play_data->{_content}, $loops))
+	my $played = SDL::Mixer::Music::play_music($play_data->{_content}, $loops);
+    if( defined $played && $played == -1)
         {
-            Carp::carp("Cannot play: ".SDL::get_error()."\n");
+            Carp::croak "Cannot play: ".SDL::get_error()."\n";
         }
 
-
+	return SDL::Mixer::Music::playing_music();
 }
 
 sub load {

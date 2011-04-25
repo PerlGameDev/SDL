@@ -39,11 +39,11 @@ can_ok( 'SDLx::Music', 'new' );
 
 my $music = SDLx::Music->new();
 
-my $music2 = SDLx::Music->new();
+#my $music2 = SDLx::Music->new();
 
 isa_ok( $music, "SDLx::Music" );
 
-isa_ok( $music2, "SDLx::Music" );
+#isa_ok( $music2, "SDLx::Music" );
 
 # Music Data defination
 
@@ -80,7 +80,9 @@ $silence->volume(55)->loops(2)->file('test/data/silence.wav');
 
 $music->play($silence);
 
-isa_ok( $music->{data}->{silence}->{_content}, "SDL::Mixer::MixMusic" );
+SDL::delay(100);
+
+isa_ok( $music->{data}->{silence}->{_content}, "SDL::Mixer::MixMusic", "Didn't load data for play" );
 
 can_ok(  'SDLx::Music', 'load' );
 
@@ -88,7 +90,9 @@ $music->load;
 
 isa_ok( $music->{data}->{sample}->{_content}, "SDL::Mixer::MixMusic" );
 
+$music->play( $music->data('sample') );
 
+SDL::delay(2000);
 
 is( $silence->{volume}, 55);
 
