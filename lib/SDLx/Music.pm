@@ -1,145 +1,224 @@
 package SDLx::Music;
 use strict;
 use warnings;
-use Carp ();
-use SDL;
-use SDL::Audio;
-use SDL::Mixer;
-use SDL::Mixer::Music;
-use SDL::Mixer::Channels;
-use SDL::Mixer::Samples;
-use SDL::Mixer::MixChunk;
 
-use Data::Dumper;
-use SDLx::Music::Default;
+use SDL::Mixer ();
+use SDL::Mixer::Music ();
+use SDLx::Mixer;
 use SDLx::Music::Data;
+use Carp ();
 
-our $def = bless( {}, "SDLx::Music::Default" );
+our $_Default = SDLx::Music::Data->new unless $_Default;
+our $_Last_Played;
 
 sub new {
-    my $class  = shift;
-    my %params = @_;
-
-    my $self = bless {%params}, $class;
-
-    # Initialize Audio
-    $self->{freq}      = $self->{freq}      || 44100;
-    $self->{format}    = $self->{format}    || SDL::Audio::AUDIO_S16SYS;
-    $self->{channels}  = $self->{channels}  || 2;
-    $self->{chunksize} = $self->{chunksize} || 4096;
-
-    Carp::croak SDL::get_error()
-      if (
-        SDL::Mixer::open_audio(
-            $self->{freq},     $self->{format},
-            $self->{channels}, $self->{chunksize}
-        )
-      ) != 0;
-
-    #Set up the default
-
-    $self->{default} = bless {}, "SDLx::Music::Default";
-
-    return $self;
+	my $class = shift;
+	my $self = bless {}, ref $class || $class;
+	SDLx::Mixer::init() unless SDLx::Mixer::status();
+	$self->{default} = SDLx::Music::Data->new;
+	$self->data(@_) if @_;
+	return $self;
 }
 
 sub data {
-    my $self = shift;
-    return if $#_ < 0;
-    return $self->{data}->{ $_[0] } if $#_ == 0;
-
-    my %data = @_;
-
-    # loop through keys
-    foreach ( keys %data ) {
-        my $datum = $data{$_};
-
-        #If SCALAR is Simple
-        if ( defined $datum ) {
-            my $d = {};
-            if ( ref $datum eq 'HASH' ) {
-                $d = $datum;
-            }
-            else {
-                $d->{file} = $datum;
-            }
-
-            my $play_data = bless( $d, "SDLx::Music::Data" );
-            $play_data->{to_load} = 1;
-            $self->{data}->{$_} = $play_data;
-        }
-
-    }
-
-    return 1;
+	my $self = shift;
+	if(@_ == 1) {
+		my ($arg) = @_;
+		return $self->{data}{$arg->name} ||= $arg if eval { $arg->isa('SDLx::Music::Data') };
+		return $self->{data}{$arg}       ||= SDLx::Music::Data->new($arg);
+	}
+	if(@_) {
+		my %arg = @_;
+		while(my ($name, $value) = each %arg) {
+			my $data = SDLx::Music::Data->new($name, $value);
+			$self->{data}{$name}
+		}
+		return $self;
+	}
+	return $self->{data} ||= {};
+}
+sub data_for {
+	my $self = shift;
+	$self->data($_) for @_;
+	return $self;
+}
+sub has_data {
+	my $self = shift;
+	if(@_ == 1)  {
+		my ($arg) = @_;
+		return exists ${{ reverse %{$self->data} }}{$arg} && $arg if eval { $arg->isa('SDLx::Music::Data') };
+		return $self->data->{$arg};
+	}
+	unless(@_) {
+		return scalar keys %{$self->data};
+	}
+	return;
 }
 
-sub clear {
-    delete $_[0]->{data};
-
-}
-
-sub default : lvalue {
-    my $self = shift;
-    if   ( defined $self && ref($self) ) { return $self->{default} }
-    else                                 { return $SDLx::Music::def; }
-
-}
-
-sub play {
-    my $self      = shift;
-    my $play_data = shift;
-    my %override  = @_;
-
-    return unless defined $play_data;
-
-    my $volume  = $play_data->{volume}  || $override{volume}  || 50;
-    my $fade_in = $play_data->{fade_in} || $override{fade_in} || 0;
-    my $loops   = $play_data->{loops}   || $override{loops}   || 1;
-
-    if ( $play_data->{to_load} ) {
-
-        $play_data->{_content} =
-          SDL::Mixer::Music::load_MUS( $play_data->{file} );
-        $play_data->{to_load} = 0;
-    }
-
-    SDL::Mixer::Music::volume_music($volume);
-
-    unless ( SDL::Mixer::Music::playing_music() || $fade_in  ) {
-        my $played =
-          SDL::Mixer::Music::play_music( $play_data->{_content}, $loops );
-        if ( defined $played && $played == -1 ) {
-            Carp::carp "Cannot play: " . SDL::get_error() . "\n";
-        }
-    }
-    else {
-		my $played =  SDL::Mixer::Music::fade_in_music( $play_data->{_content}, $loops, $fade_in );
-		 if ( defined $played && $played == -1 ) {
-            Carp::carp "Cannot play: " . SDL::get_error() . "\n";
-        }	
-    }
-    return SDL::Mixer::Music::playing_music();
+sub default {
+	my $self = shift;
+	my $default = ref $self ? $self->{default} : $_Default;
+	return $default->params(@_) if @_;
+	return $default;
 }
 
 sub load {
-    my $self = shift;
-
-    foreach ( keys( %{ $self->{data} } ) ) {
-        my $data = $self->{data}->{$_};
-
-        if ( $data->{to_load} ) {
-            $data->{_content} = SDL::Mixer::Music::load_MUS( $data->{file} );
-            $data->{to_load}  = 0;
-        }
-
-    }
-
+	my $self = shift;
+	if(ref $self) {
+		if(@_) {
+			_load_data(
+				eval { $_->isa('SDLx::Music::Data') } ? $_ : $self->data($_)
+			) for @_;
+		}
+		else {
+			_load_data($_) for values %{$self->data};
+		}
+	}
+	else {
+		_load_data($_) for @_;
+	}
+	return $self;
+}
+sub _load_data {
+	my ($data) = @_;
+	unless($data->loaded) {
+		my $file = $data->file;
+		my $loaded = $SDLx::Music::Data::loaded{$file} || SDL::Mixer::Music::load_MUS($file);
+		return $data->loaded($loaded) if $loaded;
+		Carp::cluck("Couldn't SDL::Mixer::Music::load_MUS($file) for data name $name: ", SDL::get_error());
+	}
 }
 
+sub unload {
+	my $self = shift;
+	if(!ref $self) {
+		if(@_) {
+			(
+				eval { $_->isa('SDLx::Music::Data') } ? $_ : $self->data($_)
+			)->loaded(undef) for @_;
+		}
+		else {
+			$_->loaded(undef) for values %{$self->data};
+		}
+	}
+	else {
+		$_->loaded(undef) for @_;
+	}
+	return $self;
+}
+
+sub clear {
+	my $self = shift;
+	if(@_) {
+		delete $self->data->{$_} for @_;
+	}
+	else {
+		delete $self->{data};
+	}
+	return $self;
+}
+
+sub play {
+	my $self = shift;
+	if(@_) {
+		my ($arg, %params);
+		my $data = !ref $self || eval { $arg->isa('SDLx::Music::Data') } ? $arg : $self->data($arg);
+		SDLx::Music->load($data);
+		my $fade_in = (defined $params{fade_in} ? $params{fade_in} : $data->fade_in) / 1000;
+		my $loops   = (defined $params{loops}   ? $params{loops}   : $data->loops) || -1;
+		if(
+			defined $fade_in
+				? SDL::Mixer::Music::fade_in_music($data->loaded, $loops, $fade_in)
+				: SDL::Mixer::Music::play_music($data->loaded, $loops)
+		) {
+			Carp::cluck("Couldn't play $name: ", SDL::get_error());
+		}
+		else {
+			$_Last_Played = $data;
+			SDLx::Music->vol($data, $params{vol}, $params{vol_portion});
+			SDLx::Music->pos($data, $params{pos});
+			#TODO: finished callback
+		}
+	}
+	else {
+		SDL::Mixer::Music::resume_music();
+	}
+	return $self;
+}
+sub pause {
+	my ($self) = @_;
+	SDL::Mixer::Music::pause_music();
+	return $self;
+}
+sub stop {
+	my ($self) = @_;
+	SDL::Mixer::Music::halt_music();
+	return $self;
+}
+
+sub last_played {
+	return $_Last_Played;
+}
 sub playing {
-    return SDL::Mixer::Music::playing_music();
+	return SDL::Mixer::Music::playing() ? SDLx::Music->last_played : ();
 }
+sub paused {
+	return SDL::Mixer::Music::paused()  ? SDLx::Music->last_played : ();
+}
+
+sub fade_out {
+	my ($self, $arg, $fade_out) = @_;
+		SDL::Mixer::Music::fade_out($fade_out * 1000)
+	if defined $fade_out
+	or defined($fade_out = eval { $arg->isa('SDLx::Music::Data') } ? $arg->fade_out : $arg);
+	return $self;
+}
+sub fading {
+	my $fading = SDL::Mixer::Music::fading_music();
+	return
+		$fading == SDL::Mixer::MIX_NO_FADING  ?  0 :
+		$fading == SDL::Mixer::MIX_FADING_IN  ? -1 :
+#		$fading == SDL::Mixer::MIX_FADING_OUT ?  1 :
+		                                         1
+	;
+}
+
+sub vol {
+	my $self = shift;
+	if(@_) {
+		my ($arg, $vol, $vol_portion) = @_;
+		if(defined $vol) {
+			if(defined $vol_portion) {
+				SDL::Mixer::Music::volume_music($vol * $vol_portion);
+			}
+			else {
+				$vol *= $arg->vol_portion if eval { $arg->isa('SDLx::Music::Data') } and defined $arg->
+			}
+		}
+		else {
+			$arg = eval { $arg->isa('SDlx::Music::Data') } ? $arg->fade_out : $arg;
+			SDL::Mixer::Music::fade_out($arg * 1000) if defined $arg;
+		}
+		return $self;
+	}
+	return SDL::Mixer::Music::volume_music(-1);
+}
+
+sub pos {
+	my ($self, $arg, $pos) = @_;
+		SDL::Mixer::Music::set_music_position($pos)
+	if defined $pos
+	or defined($pos = eval { $arg->isa('SDLx::Music::Data') } ? $arg->pos : $arg);
+	return $self;
+}
+sub rewind {
+	my ($self) = @_;
+	SDL::Mixer::Music::rewind_music();
+	return $self;
+}
+
+# TODO: (maybe)
+	# SDL::Mixer::Music::hook_music( $callback, $position );
+	# my $position = SDL::Mixer::Music::get_music_hook_data();
 
 1;
-

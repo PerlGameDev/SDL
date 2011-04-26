@@ -1,0 +1,174 @@
+
+=head1 NAME
+
+SDLx::Music::Data - The data for a single piece of music
+
+=head1 CATEGORY
+
+Extension
+
+=head1 SYNOPSIS
+
+TODO
+
+=head1 DESCRIPTION
+
+To minimize confusion, this class only provides methods to the parameters of data objects (and a constructor). With the exception of L<name|/name>, the parameters' values can all be set with their corresponding method.
+
+=head1 METHODS
+
+=head2 new
+
+ my $data = SDLx::Music::Data->new( $name, $filename );
+ my $data = SDLx::Music::Data->new( $name, $data );
+ my $data = SDLx::Music::Data->new( $name, \%params );
+ my $data = SDLx::Music::Data->new( $data );
+
+Creates and returns the new data object. Then with a name, which sets the data object's L<name|/name> param, and optionally:
+
+A filename: creates it with C<$filename> as the initial value for the L<file|/file> param.
+
+A param hashref: creates it using the keys as params and their values to set the params.
+
+A data object: creates a clone of the data object giving it the new name of C<$name>.
+
+Or with a data object instead of a name: does nothing and just returns the data object as-is.
+
+All of this may seem a bit weird, but when you look at this with L<SDLx::Mixer's data|SDLx::Mixer/data> in mind you can see that the different forms of this method coincide with the different forms of that one.
+
+=head1 Parameter Methods
+
+The "without arguments" sections of these parameters will say something like "returns this, or that, or base". This means that if "this" is undefined, "that" will looked in. If "that" is undefined then the next thing will be looked in. This is where the object-wide and class-wide defaults come in to play, see L<Default Objects|/Default Objects> for details. If the last term is reached, the base value, it will be returned. The base value is specific to the parameter, and will be some sane default value like the empty string or undef.
+
+The "with arguments" sections, are all the same in the way that they set the param to the argument. If undef is specified, the param is deleted (which has pretty much the same effect as setting it to undef, it's just faster and saves memory).
+
+=head2 name
+
+ my $name = $data->name;
+
+Returns the data object's name. This param can only be set when a new data object is constructed, and it will always be some defined value (even if it's just the empty string). If you want to change the name of an object, you can only make a copy of it with a different name with the C<$name, $data> form of L<new|/new>. This param is used when a data object's file is L<load|SDLx::Music/load>ed as the base value for L<file|/file>.
+
+=head2 file
+
+ my $file = $data->file;
+ $data->file( $file );
+
+Without arguments: returns the data object's file param or its L<name|/name>. This param is used along with L<dir|/dir> and L<ext|/ext> when a data object's file is L<load|SDLx::Music/load>ed.
+
+With arguments: sets the param and returns the data object.
+
+=head2 dir
+
+ my $directory = $data->dir;
+ $data->dir( $directory );
+
+Without arguments: returns the data object's directory param, or the object-wide one, or the class-wide one, or the empty string. This param is added to the front of the L<file|/file> param when a data object's file is L<load|SDLx::Music/load>ed.
+
+With arguments: sets the param and returns the data object.
+
+=head2 ext
+
+ my $extension = $data->ext;
+ $data->ext( $extension );
+
+Without arguments: returns the data object's file extension param, or the object-wide one, or the class-wide one, or the empty string. This param is added to the end of the L<file|/file> param when a data object's file is L<load|SDLx::Music/load>ed.
+
+With arguments: sets the param and returns the data object.
+
+=head2 loaded
+
+ my $mix_music = $data->loaded;
+ $data->loaded( $mix_music );
+
+Without arguments: returns the data object's currently loaded music file (a L<SDL::Mixer::MixMusic> object) or undef. This music file isn't necessarily the same one as returned by L<dir|/dir>, L<file|/file> and L<ext|/ext> joined together, it is just the last to have been L<load|SDLx::Music/load>ed or explicitly set with this method. Remember that L<SDLx::Music's load|SDLx::Music/load> won't put music files into this parameter if it's already defined, so undefine it first. This param is also used by L<SDLx::Music's play|SDLx::Music/play> as the music to be played.
+
+With arguments: sets the param and returns the data  object. Values should be a L<SDL::Mixer::MixMusic> object.
+
+=head2 loops
+
+ my $loops = $data->loops;
+ $data->loops( $loops );
+
+Without arguments: returns the data object's number of loops param, or the object-wide one, or the class-wide one, or 0. This param is used by L<SDLx::Music's play|SDLx::Music/play> as the the amount of times to play the music. A value of 0 will play it in an infinite loop.
+
+With arguments: sets the param and returns the data object. Values should be 0 or greater.
+
+=head2 fade_in
+
+ my $seconds = $data->fade_in;
+ $data->fade_in( $seconds );
+
+Without arguments: returns the data object's seconds of fade-in param, or the object-wide one, or the class-wide one, or undef. If this param is defined, L<SDLx::Music's play|SDLx::Music/play> will fade the music in for its next specified seconds.
+
+With arguments: sets the param and returns the data object. Values should be greater than 0.
+
+=head2 fade_out
+
+ my $seconds = $data->fade_out;
+ $data->fade_out( $seconds );
+
+Without arguments: returns the data object's seconds of fade-out param, or the object-wide one, or the class-wide one, or undef. If this param is defined, it will be used by the C<$data> form of L<SDLx::Music's fade_out|SDLx::Music/fade_out> to fade the music out for its next specified seconds.
+
+With arguments: sets the param and returns the data object. Values should be greater than 0.
+
+=head2 vol
+
+ my $volume = $data->vol;
+ $data->vol( $volume );
+
+Without arguments: returns the data object's volume param, or the object-wide one, or the class-wide one, or 128 (L<SDL::Mixer::MIX_MAX_VOLUME|SDL::Mixer/CONSTANTS>). This param is used by L<SDLx::Music's play|SDLx::Music/play> and the C<$data> form of L<SDLx::Music's vol|SDLx::Music/vol> multiplied by L<vol_portion|/vol_portion> to set the new music volume.
+
+With arguments: sets the param and returns the data object. Values should be from 0 to 128 (L<SDL::Mixer::MIX_MAX_VOLUME|SDL::Mixer/CONSTANTS>).
+
+=head2 vol_portion
+
+ my $volume_portion = $data->vol_portion;
+ $data->vol_portion( $volume_portion );
+
+Without arguments: returns the data object's volume portion param, or the object-wide one, or the class-wide one, or 1. This param multiplies L<vol|/vol> when used in L<SDLx::Music's play|SDLx::Music/play> or the C<$data> form of L<SDLx::Music's vol|SDLx::Music/vol> to set the new music volume.
+
+With arguments: set the param and returns the data object. Values should be from 0 to 1.
+
+=head2 pos
+
+ my $seconds = $data->pos;
+ $data->pos( $seconds );
+
+Without arguments: returns the data object's position param, or the object-wide one, or the class-wide one, or undef. If this param is defined, L<SDLx::Music's play|SDLx::Music/play> and the C<$data> form of L<SDLx::Music's pos|SDLx::Music/pos> will use it to set the position of the music to the seconds specified. This does different things for different file types, so see L<SDL::Mixer::Music::set_music_position|SDL::Mixer::Music/set_music_position> for details.
+
+With arguments: sets the param and returns the data object. Values should be 0 or greater.
+
+=head2 finished
+
+ my $callback = $data->finished;
+ $data->finished( $callback );
+
+TODO
+
+Without arguments: returns the data object's finished callback, or the object-wide one, or the class-wide one, or undef. If this param is defined, it will do magic with L<SDL::Mixer::Music::hook_music_finished|SDL::Mixer::Music/hook_music_finished>.
+
+With arguments: sets the param and returns the data object. Values should be a code reference or a string containing the name of a subroutine qualified with its package, so that C<&{ $callback }> is the desired call.
+
+=head1 Default Objects
+
+As you can see from the above, the parameters other than L<name|/name>, L<file|/file>, and L<loaded|/loaded> all fall back to the two default objects if they are undefined. Object-wide default data objects are created when L<SDLx::Mixer's new|SDLx::Mixer/new> is called to create a new music object. When a data object is added to a music object, it gets linked with this default data object. If the same data object is then added to other music objects, it will keep its original link. This isn't considered a bug, you need to just keep this in mind when adding a data object to multiple music objects. On the other hand, there is only one class-wide default data object and it comes into existence when L<SDLx::Music> is used.
+
+Remember that the calls to access these default data objects belong to L<SDLx::Music> and its objects, B<not> to this class.
+
+ $music->default;
+ SDLx::Music->default;
+
+These default objects both belong to the separate class called C<SDLx::Music::DefaultData>. The only differences it has to this class are that it has no L<name|/name>, L<file|/file>, or L<loaded|/loaded> parameters, and that the params don't fall back to other values when accessed.
+
+=head1 SEE ALSO
+
+L<SDLx::Music>
+
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
+=head1 COPYRIGHT & LICENSE
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
