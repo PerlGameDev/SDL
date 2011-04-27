@@ -3,7 +3,7 @@ Revision history for Perl extension SDL_perl.
 * 2.533 
 	- Added preliminary SDLx::Music
 	- Minor fixes for SDLx::Text [garu]
-	- Build requires: perl 5.8.0 should be good enough for SDL [FROGGS]
+	- Build requires: perl 5.8.1 is good enough for SDL [FROGGS]
 	- SDLx::Music test: 'require threads' instead of 'use threads' and removed Data::Dumper [FROGGS]
 	- SDLx::Text test: width isnt 53 on windows, made test more tolerant [FROGGS]
 
