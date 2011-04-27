@@ -44,6 +44,7 @@ Instantiates a new SDLx::Text object. All attributes are optional:
             x       => 0,
             y       => 0,
             h_align => 'left',
+            v_align => 'top',
             text    => 'All your base are belong to us.'
     );
 
@@ -73,11 +74,27 @@ to whatever surface you are placing it into.
 Gets/sets the top (y) positioning of the text to be rendered, relative
 to whatever surface you are placing it into.
 
+=head2 rect
+
+Gets/sets the SDL::Rect for destination. Use it if you want write relative some
+rectangle on target surface.
+
+=head2 clip
+
+Gets/sets the SDL::Rect for choose only a small subset of the object's internal
+surface to be used on calls to C<write_to> or C<write_xy>.
+
 =head2 h_align
 
 Gets/sets the horizontal alignment of the text to be rendered relative to
 whatever surface you are placing it into. Available alignments are 'C<left>',
 'C<right>' and 'C<center>'. Default is 'C<left>'.
+
+=head2 v_align
+
+Gets/sets the vertical alignment of the text to be rendered relative to
+whatever surface you are placing it into. Available alignments are 'C<top>',
+'C<bottom>' and 'C<middle>'. Default is 'C<top>'.
 
 =head2 color
 
@@ -125,12 +142,20 @@ Renders the text onto C<$target_surface> (usually the app itself). The
 text string may be passed as a parameter, otherwise it will use whatever
 is already set (via the C<new()> or C<text()> methods.
 
+This method use C<h_align()>, C<v_align()> and C<rect()> for set text position
+relative target surface. After write_to called C<x()> and C<y()> represent
+current text position.
+
 =head2 write_xy( $target_surface, $x, $y )
 
 =head2 write_xy( $target_surface, $x, $y, $text )
 
-Same as C<write_to()>, but will render the text using the given top (y) and
-left (x) coordinates.
+Same as C<write_to()>, but will render the text using the given $x and
+$y coordinates.
+
+This method use C<h_align()> and C<v_align()> to set text position relative $x
+and $y. And use C<rect()> for set text position relative target surface. After
+write_xy called C<x()> and C<y()> represent current text position.
 
 
 =head1 READ-ONLY ATTRIBUTES

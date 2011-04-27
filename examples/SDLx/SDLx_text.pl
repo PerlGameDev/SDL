@@ -58,6 +58,19 @@ for my $v (qw(top middle bottom))
     $y += 60;
 }
 
+# Clip text
+$text = SDLx::Text->new(
+    font    => 'share/GenBasR.ttf',
+    size    => 36,
+    color   => 0xFFFF00,
+    mode    => 'utf8',
+    clip    => SDL::Rect->new(5, 5, 172, 23),
+    h_align => 'center',
+    v_align => 'top',
+);
+$text->write_xy($app, 400, 120, 'CLIPPED TEXT');
+
+
 # Use rect for position text
 $text = SDLx::Text->new(
     font    => 'share/GenBasR.ttf',
@@ -109,6 +122,9 @@ $text->color(0xFF0000);
 $text->write_xy($app, 400, 70,
     'Red text is example of different aligns on write_to for SDLx::App target'.
     ' surface without any limitations.');
+$text->color(0xFFFF00);
+$text->write_xy($app, 400, 100,
+    'Clipped text example.');
 
 # Run application
 $app->flip;
