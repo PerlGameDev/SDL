@@ -12,9 +12,9 @@ Extension
 =head1 SYNOPSIS
 
     use SDL;
-    use SDLx::App; 
+    use SDLx::App;
     use SDLx::Text;
-    
+
     my $app = SDLx::App->new;
 
     my $message = SDLx::Text->new;
@@ -26,7 +26,7 @@ Extension
 =head1 DESCRIPTION
 
 The standard SDL API for handling fonts and rendering text is full of quirks
-and and low-level functions scattered all over the place. This is a sugar
+and low-level functions scattered all over the place. This is a sugar
 layer meant to let you easily handle text in your SDL apps.
 
 =head1 CONSTRUCTION
@@ -58,8 +58,8 @@ information).
 All accessors below can be used to get and set their respective attributes.
 For example:
 
-   my $font_name = $self->font;     # gets the font filename
-   $self->font( 'somefont.ttf' );   # sets a new font
+   my $string = $text->text;        # gets the current text
+   $text->text( 'new text' );       # sets a new text
 
 All accessors return their current value, after being set.
 
@@ -81,7 +81,8 @@ whatever surface you are placing it into. Available alignments are 'C<left>',
 
 =head2 color
 
-Gets/sets the text color. The color is an array reference in C<[R, G, B]> or C<[R, G, B, A]> format. See L<SDL::Color> for more information on colors.
+Gets/sets the text color. The color is an array reference in C<[R, G, B]> or
+C<[R, G, B, A]> format. See L<SDL::Color> for more information on colors.
 
 =head2 size
 
@@ -144,7 +145,8 @@ render it yourself, you can use the following getters:
 
 =head2 surface
 
-Returns the underlying surface representing the text itself. You probably don't need this, unless you're doing something really funky.
+Returns the underlying surface representing the text itself. You probably don't
+need this, unless you're doing something really funky.
 
 =head2 w
 
@@ -160,7 +162,8 @@ Shortcut to see the height of the underlying surface representing the text.
 
 =item * "SDL_ttf support has not been compiled"
 
-In order to render text in SDL you must have enabled SDL_ttf while building L<Alien::SDL>.
+In order to render text in SDL you must have enabled SDL_ttf while
+building L<Alien::SDL>.
 
 =item * "Cannot init TTF: <some error>"
 
@@ -186,7 +189,9 @@ message will appear.
 
 =head1 BUGS
 
-Please report any bugs or feature requests to the bug tracker. We will be notified, and then you'll automatically be notified of progress on your bug as we make changes.
+Please report any bugs or feature requests to the bug tracker. We will be
+notified, and then you'll automatically be notified of progress on your bug as
+we make changes.
 
 
 =head1 SUPPORT
@@ -206,7 +211,12 @@ See L<SDL/AUTHORS>.
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
-This module ships with a default font, "I<Gentium Basic>", Copyright 2003-2008 SIL International (http://sil.org), released under the SIL Open Font License 1.1 (OFL). The font is available for use in free and commercial products, with some minor restrictions. Please read the C<OFL.txt> and C<OFL-FAQ.txt> for further information.
+This module ships with a default font, "I<Gentium Basic>",
+Copyright 2003-2008 SIL International (http://sil.org),
+released under the SIL Open Font License 1.1 (OFL).
+The font is available for use in free and commercial products, with some minor
+restrictions.
+Please read the C<OFL.txt> and C<OFL-FAQ.txt> for further information.
 
 =head1 SEE ALSO
 
