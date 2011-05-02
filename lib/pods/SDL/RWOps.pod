@@ -19,7 +19,7 @@ TODO, Core, Structure
   use SDL::RWOps;
   use SDL::Surface;
   
-  # the file contains a 32-byte header with lengths of data blocks, folled by the data blocks itself
+  # the file contains a 32-byte header with lengths of data blocks, followed by the data blocks itself
   my $file   = '/path/to/file/containing_image_data.dat';
   my $header = ''; # up to eight 32-bit integers specifying the length of the data blocks (images)
   my @images = ''; # we push the surfaces to that array later
