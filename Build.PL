@@ -590,7 +590,7 @@ my $build = $package->new(
 		'Tie::Simple'    => '0',
 		'File::ShareDir' => '1.0',
 		'CPAN'           => '1.92',
-		'perl'           => '5.008009',
+		'perl'           => '5.008000',
 	},
 	share_dir => 'share',
 

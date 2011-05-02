@@ -37,7 +37,7 @@ is($score->size, 24, 'default size');
 $score->text('Hello');
 
 is( $score->text, 'Hello', 'text() as a getter' );
-is( $score->w, 53, 'Hello! is 53 px wide!' );
+ok( $score->w >= 50 && $score->w <= 53, 'Hello! is 50..53 px wide!' );
 is( $score->h, 28, 'Hello! is 28 px high!' );
 isa_ok($score->surface, 'SDL::Surface');
 

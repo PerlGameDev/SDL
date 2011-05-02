@@ -318,7 +318,7 @@ event_motion_y ( event, ... )
 	OUTPUT:
 		RETVAL
 
-Uint16
+Sint16
 event_motion_xrel ( event, ... )
 	SDL_Event *event
 	CODE: 
@@ -326,7 +326,7 @@ event_motion_xrel ( event, ... )
 
 		if( items > 1 )
 		{
-			a->xrel = SvUV( ST(1) );
+			a->xrel = SvIV( ST(1) );
 		}
 
 		RETVAL = a->xrel;
@@ -334,7 +334,7 @@ event_motion_xrel ( event, ... )
 		RETVAL
 
 
-Uint16
+Sint16
 event_motion_yrel ( event, ... )
 	SDL_Event *event
 	CODE: 
@@ -342,7 +342,7 @@ event_motion_yrel ( event, ... )
 
 		if( items > 1 )
 		{
-			a->yrel = SvUV( ST(1) );
+			a->yrel = SvIV( ST(1) );
 		}
 
 		RETVAL = a->yrel;
@@ -582,7 +582,7 @@ event_jball_xrel ( event, ... )
 
 		if( items > 1 )
 		{
-			a->xrel = SvUV( ST(1) );
+			a->xrel = SvIV( ST(1) );
 		}
 
 		RETVAL = a->xrel;
@@ -597,7 +597,7 @@ event_jball_yrel ( event, ... )
 
 		if( items > 1 )
 		{
-			a->yrel = SvUV( ST(1) );
+			a->yrel = SvIV( ST(1) );
 		}
 
 		RETVAL = a->yrel;

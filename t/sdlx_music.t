@@ -3,7 +3,6 @@ use strict;
 use warnings;
 use SDL;
 use SDL::Config;
-use Data::Dumper;
 
 my $audiodriver;
 
@@ -13,8 +12,8 @@ BEGIN {
         print("1..0 # Skip: Perl not compiled with 'useithreads'\n");
         exit(0);
     }
-    use threads;
-    use threads::shared;
+    require threads;
+    require threads::shared;
 
     use Test::More;
     use lib 't/lib';
