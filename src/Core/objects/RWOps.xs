@@ -58,7 +58,7 @@ rwops_new_mem ( CLASS, mem, size )
 		RETVAL
 
 SDL_RWops *
-rwops_new_const_mem (CLASS, mem, ... ) // size optional, zbsp kleiner als len
+rwops_new_const_mem (CLASS, mem, ... )
 	char* CLASS
 	SV* mem
 	CODE:
