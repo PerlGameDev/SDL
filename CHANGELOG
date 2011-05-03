@@ -6,6 +6,7 @@ Revision history for Perl extension SDL_perl.
 	- Build requires: perl 5.8.1 is good enough for SDL [FROGGS]
 	- SDLx::Music test: 'require threads' instead of 'use threads' and removed Data::Dumper [FROGGS]
 	- SDLx::Text test: width isnt 53 on windows, made test more tolerant [FROGGS]
+	- SDLx::FPS test: testing with 60fps is too much for some systems (cpantester vm's), reduced to 25 [FROGGS]
 
 * 2.532 March 27 2011
 	- Tested and released experimental branch
