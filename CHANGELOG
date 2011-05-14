@@ -7,6 +7,7 @@ Revision history for Perl extension SDL_perl.
 	- SDLx::Music test: 'require threads' instead of 'use threads' and removed Data::Dumper [FROGGS]
 	- SDLx::Text test: width isnt 53 on windows, made test more tolerant [FROGGS]
 	- SDLx::FPS test: testing with 60fps is too much for some systems (cpantester vm's), reduced to 25 [FROGGS]
+	- src/helper.h: removed newSVsv() since these SV's are not freed till global destruction [FROGGS]
 
 * 2.532 March 27 2011
 	- Tested and released experimental branch

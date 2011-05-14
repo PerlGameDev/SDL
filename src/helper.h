@@ -45,7 +45,7 @@ SV *cpy2bag( void *object, int p_size, int s_size, char *package )
     Uint32 *threadid = (Uint32 *)safemalloc(sizeof(Uint32));
     *threadid        = SDL_ThreadID();
     pointers[2]      = (void*)threadid;
-    SV* a            = newSVsv(sv_setref_pv(ref, package, (void *)pointers));
+    SV* a            = sv_setref_pv(ref, package, (void *)pointers);
     return a;
 }
 
@@ -83,7 +83,7 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
     *threadid        = SDL_ThreadID();
     pointers[2]      = (void*)threadid;
 
-    return newSVsv(sv_setref_pv(ref, package, (void *)pointers));
+    return sv_setref_pv(ref, package, (void *)pointers);
 }
 
 void _svinta_free(Sint16* av, int len_from_av_len)
