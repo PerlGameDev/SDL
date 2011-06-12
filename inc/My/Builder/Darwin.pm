@@ -54,9 +54,9 @@ sub build_bundle {
 
 sub ACTION_test {
     my $self = shift;
-    $self->build_bundle() if !( -d getcwd() . '/blib/script/SDLPerl' );
-    my $cmd =
-      getcwd().'/blib/script/SDLPerl ' . getcwd() . '/Build test';
+    $self->build_bundle() if !( -e 'blib/script/SDLPerl' );
+    my $cmd = ($ENV{SDL_RELEASE_TESTING} ? 'blib/script/SDLPerl ' : $^X)
+            . getcwd() . '/Build test';
     if ( $ENV{SDL_PERL_TEST} ) {
         $self->Module::Build::ACTION_test;
         $ENV{SDL_PERL_TEST} = 0;    #unset it again
