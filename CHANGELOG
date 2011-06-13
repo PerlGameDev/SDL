@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.534_01
+	- Using 'perl' instead of 'SDLPerl' to run silent tests on darwin [FROGGS]
+
 * 2.533 
 	- Added preliminary SDLx::Music
 	- Minor fixes for SDLx::Text [garu]
