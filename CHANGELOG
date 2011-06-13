@@ -10,6 +10,9 @@ Revision history for Perl extension SDL_perl.
     - SDLx::Text improved documentation [garu]
     - SDLx::TTF fixed loading error [FROGGS]
 
+* 2.534_01 June 13 2011
+	- Using 'perl' instead of 'SDLPerl' to run silent tests on darwin [FROGGS]
+
 * 2.533 May 31 2011
 	- Added preliminary SDLx::Music
 	- Minor fixes for SDLx::Text [garu]
