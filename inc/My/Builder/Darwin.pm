@@ -48,23 +48,30 @@ sub build_bundle {
     my $cmd =
       "gcc $arch -o \"blib/script/SDLPerl\" MacOSX/main.c $cflags $libs";
     $cmd =~ s/\s+/ /g;
-    print STDERR $cmd . "\n";
-    system($cmd);
+    unless(-e 'blib/script/SDLPerl') {
+        print STDERR $cmd . "\n";
+        system($cmd);
+    }
 }
 
 sub ACTION_test {
     my $self = shift;
+    $self->depends_on('build');
     $self->build_bundle() if !( -e 'blib/script/SDLPerl' );
-    my $cmd = ($ENV{SDL_RELEASE_TESTING} ? 'blib/script/SDLPerl' : $^X)
-            .  ' ' . getcwd() . '/Build test';
-    if ( $ENV{SDL_PERL_TEST} ) {
-        $self->Module::Build::ACTION_test;
-        $ENV{SDL_PERL_TEST} = 0;    #unset it again
+    if( $ENV{SDL_RELEASE_TESTING} ) {
+        if ( $ENV{SDL_PERL_TEST} ) {
+            $self->Module::Build::ACTION_test;
+            $ENV{SDL_PERL_TEST} = 0;    #unset it again
+        }
+        else {
+            my $cmd = 'blib/script/SDLPerl Build test';
+            $ENV{SDL_PERL_TEST} = 1;
+            system( split ' ', $cmd );
+            die 'Errors in Testing. Can\'t continue' if $?;
+        }
     }
     else {
-        $ENV{SDL_PERL_TEST} = 1;
-        system( split ' ', $cmd );
-        die 'Errors in Testing. Can\'t continue' if $?;
+        $self->Module::Build::ACTION_test;
     }
 }
 
