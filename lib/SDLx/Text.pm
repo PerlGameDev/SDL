@@ -52,7 +52,7 @@ sub font {
 		my $size = $self->size;
 
 		$self->{_font} = SDL::TTF::open_font($font, $size)
-			or Carp::cluck 'Error opening font: ' . SDL::get_error;
+			or Carp::cluck "Error opening font '$font': " . SDL::get_error;
 	}
 
 	return $self->{_font};
