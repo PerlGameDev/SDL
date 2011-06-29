@@ -177,7 +177,7 @@ Returns $self
 
 =head2 draw_circle_filled
 
- $sdlx_surface->draw_filled_circle( [$x1, $y1], $radius, \@color ); 
+ $sdlx_surface->draw_circle_filled( [$x1, $y1], $radius, \@color );
 
 Draws an B<filled> circle at C<($x1,$y1)> of size $radius and $color.
 Antialias is turned on automatically. 
