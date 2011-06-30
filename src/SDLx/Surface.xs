@@ -203,28 +203,26 @@ surfacex_draw_rect ( surface, rt, color )
 #ifdef HAVE_SDL_GFX_PRIMITIVES
 
 int
-surfacex_draw_polygon(surface, vectors, color, antialias)
+surfacex_draw_polygon(surface, vectors, color, antialias=0)
     SDL_Surface * surface
     AV* vectors
     Uint32 color
-    SV *antialias
+    int antialias
     CODE:
         AV* vx = newAV();
         AV* vy = newAV();
-        int n;
-        for(n = 0; n <= av_len(vectors); n++)
+        AV* vertex;
+        while (vertex = (AV*)SvRV(av_shift(vectors)))
         {
-            if(n & 1)
-                av_store(vy, (int)((n-1)/2), *av_fetch(vectors, n, 0));
-            else
-                av_store(vx, (int)(n/2),     *av_fetch(vectors, n, 0));
+            av_push(vx, av_shift(vertex));
+            av_push(vy, av_shift(vertex));
         }
         
-        n = av_len(vx) + 1;
+        int n = av_len(vx) + 1;
         
         Sint16 * _vx   = av_to_sint16(vx);
         Sint16 * _vy   = av_to_sint16(vy);
-        RETVAL         = SvOK(antialias)
+        RETVAL         = antialias
                        ? aapolygonColor(surface, _vx, _vy, n, color)
                        : polygonColor(surface, _vx, _vy, n, color);
         _svinta_free( _vx, av_len(vx) );
