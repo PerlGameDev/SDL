@@ -343,7 +343,30 @@ sub draw_arc {
 }
 
 sub draw_ellipse {
-	my ( $self, $center, $radius, $color, $antialias ) = @_;
+	my ( $self, $center, $rx, $ry, $color, $antialias ) = @_;
+
+	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	$color = SDLx::Validate::num_rgba($color);
+
+	if ($antialias)
+	{
+		SDL::GFX::Primitives::aaellipse_color( $self, @$center, $rx, $ry, $color );
+	}
+	else
+	{
+		SDL::GFX::Primitives::ellipse_color( $self, @$center, $rx, $ry, $color );
+	}
+
+	return $self;
+}
+
+sub draw_ellipse_filled {
+	my ( $self, $center, $rx, $ry, $color ) = @_;
+
+	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	$color = SDLx::Validate::num_rgba($color);
+
+	SDL::GFX::Primitives::filled_ellipse_color( $self, @$center, $rx, $ry, $color );
 
 	return $self;
 }
