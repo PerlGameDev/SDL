@@ -217,6 +217,26 @@ Draws an B<filled> polygon with vertices C<($xN,$yN)> and $color.
 Antialias is turned on automatically.
 Returns $self
 
+=head2 draw_ellipse
+
+ $sdlx_surface->draw_ellipse( [ $x, $y ], $rx, $ry, $color );
+
+Draws an unfilled ellipse centered at C<($x,$y)> with horizontal radius $rx,
+vetical radius $ry and $color.
+Antialias is turned on if $antialias is true.
+
+Returns $self
+
+=head2 draw_ellipse_filled
+
+ $sdlx_surface->draw_ellipse_filled( [ $x, $y ], $rx, $ry, $color );
+
+Draws an B<filled> ellipse centered at C<($x,$y)> with horizontal radius $rx,
+vetical radius $ry and $color.
+Antialias is turned on automatically.
+
+Returns $self
+
 =head2 draw_gfx_text
 
 Draw text using gfx (not pretty but fast) at give vector, color.
