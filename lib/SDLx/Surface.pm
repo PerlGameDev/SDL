@@ -337,7 +337,12 @@ sub draw_polygon_filled {
 }
 
 sub draw_arc {
-	my ( $self, $vector, $radius, $start, $end, $color ) = @_;
+	my ( $self, $center, $radius, $start, $end, $color ) = @_;
+
+	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	$color = SDLx::Validate::num_rgba($color);
+
+	SDL::GFX::Primitives::arc_color( $self, @$center, $radius, $start, $end, $color );
 
 	return $self;
 }
@@ -374,6 +379,13 @@ sub draw_ellipse_filled {
 sub draw_bezier {
 	my ( $self, $vector, $smooth, $color ) = @_;
 
+	$color = SDLx::Validate::num_rgba($color);
+
+	my @vx = map { $_->[0] } @$vector;
+	my @vy = map { $_->[1] } @$vector;
+	SDL::GFX::Primitives::bezier_color( $self, \@vx, \@vy, scalar @$vector, $smooth, $color );
+
+	return $self;
 }
 
 sub draw_gfx_text {
