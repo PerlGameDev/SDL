@@ -217,6 +217,15 @@ Draws an B<filled> polygon with vertices C<($xN,$yN)> and $color.
 Antialias is turned on automatically.
 Returns $self
 
+=head2 draw_arc
+
+ $sdlx_surface->draw_arc( [ $x, $y ], $radius, $start, $end, $color );
+
+Draws an arc around C<($x,$y)> with $radius, $start radius, $end radius
+and $color.
+
+Returns $self
+
 =head2 draw_ellipse
 
  $sdlx_surface->draw_ellipse( [ $x, $y ], $rx, $ry, $color );
@@ -233,6 +242,16 @@ Returns $self
 
 Draws an B<filled> ellipse centered at C<($x,$y)> with horizontal radius $rx,
 vetical radius $ry and $color.
+Antialias is turned on automatically.
+
+Returns $self
+
+=head2 draw_bezier
+
+ $sdlx_surface->draw_bezier( [ [$x1, $y1], [$x2, $y2], [$x3, y3], ... ], $s, $color );
+
+Draws a bezier curve of points C<($xN,$yN)> using $s steps for
+interpolation and $color.
 Antialias is turned on automatically.
 
 Returns $self
