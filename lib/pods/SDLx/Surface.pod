@@ -194,7 +194,7 @@ Returns $self
 
 =head2 draw_trigon_filled
 
- $sdlx_surface->draw_trigon_filled( [ [$x1, $y1], [$x2, $y2], [$x3, y3] ], \@color, $antialias );
+ $sdlx_surface->draw_trigon_filled( [ [$x1, $y1], [$x2, $y2], [$x3, y3] ], \@color );
 
 Draws an B<filled> trigon (triangle) with vertices C<($x1,$y1)>, C<($x2,$y2)>,
 C<($x3,$y3)> and $color.
@@ -211,7 +211,7 @@ Returns $self
 
 =head2 draw_polygon_filled
 
- $sdlx_surface->draw_polygon_filled( [ [$x1, $y1], [$x2, $y2], [$x3, y3], ... ], \@color, $antialias );
+ $sdlx_surface->draw_polygon_filled( [ [$x1, $y1], [$x2, $y2], [$x3, y3], ... ], \@color );
 
 Draws an B<filled> polygon with vertices C<($xN,$yN)> and $color.
 Antialias is turned on automatically.
