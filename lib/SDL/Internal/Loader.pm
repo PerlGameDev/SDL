@@ -30,6 +30,7 @@ use Alien::SDL;
 
 sub internal_load_dlls($) {
 	my $package = shift;
+	return unless SDL::ConfigData->config('build_dynamic');
 	### check if some ld_shlib_map is defined
 	my $shlib_map = Alien::SDL->config('ld_shlib_map');
 	return unless $shlib_map; # empty shlib_map, nothing to do

@@ -10,6 +10,7 @@ use Carp;
 
 use lib 'inc';
 use Alien::SDL;
+use Config;
 
 print STDERR <<BROKENMSG;
 *************************** !!!WARNING!!! ********************************
@@ -47,6 +48,7 @@ my %subsystems = (
 			to   => 'lib/SDL_perl.xs',
 		},
 		libraries => [qw( SDL )],
+		static_libraries => [qw( SDL dl )],
 	},
 	Time => {
 		file => {
@@ -559,6 +561,14 @@ my %libraries = (
 my %xs =
 	map { $subsystems{$_}{file}{from} => $subsystems{$_}{file}{to} }
 	keys %subsystems;
+my %a =
+	map {
+		my $a = $subsystems{$_}{file}{to}; $a =~ s/\.xs/.a/;
+		my $b = $a; 
+		$b =~ s/^([^\\\/]+)[\\\/](.+)[\\\/]([^\\\/]+)\.a$/$1\/auto\/$2\/$3\/$3.a/;
+		$b =~ s/^([^\\\/]+)[\\\/]([^\\\/]+)\.a$/$1\/auto\/$2\/$2.a/;
+		$a => $b }
+	keys %subsystems;
 
 ### Standard Module::Build stuff
 $My::Builder::config = $My::Builder::config;       # Prevent a warning
@@ -602,6 +612,8 @@ my $build = $package->new(
 	xs_files => \%xs,
 	meta_add => {},
 	typemap_files => { 'typemap' => 'lib/SDL/typemap' },
+	static_lib_files => \%a,
+	#install_path => { a => 'lib/arch' },
 
 	#create_readme => 1, ### make sense only if there is some POD doc in the file specified by dist_version_from
 	meta_merge => {
@@ -629,6 +641,7 @@ $build->config_data( 'SDL_cfg',           $build_systems );
 $build->config_data( 'SDL_lib_translate', $lib_translate );
 $build->config_data( 'subsystems',        \%subsystems );
 $build->config_data( 'libraries',         \%libraries );
+$build->config_data( 'build_dynamic',     defined $Config{usedl} && $Config{usedl} );
 
 ### Something that was originally special to MacOS/Darwin
 # somebody MacOS/Darwin friendly should review whether it is still necessary
@@ -643,4 +656,5 @@ $build->notes( 'sdl_cflags',    Alien::SDL->config('cflags') );
 $build->notes( 'sdl_libs',      Alien::SDL->config('libs') );
 $build->set_file_flags(); # creates notes('file_flags')
 $build->add_build_element('typemap');
+$build->add_build_element('static_lib') unless $build->notes( 'build_dynamic' );
 $build->create_build_script();
