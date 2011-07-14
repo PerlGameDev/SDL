@@ -1,0 +1,6 @@
+-Wl,-Bstatic -Wl,--start-group
+-laa -lartsc -lasound -lasyncns -laudio -ldirect -ldirectfb -lesd -lfusion -lgpm -lncurses -lpulse -lpulse-simple -lresolv -lrt -lSDL
+-lSDLmain -lslang -lvga -lx86 -lxcb -lxcb-xlib -lXau -lXdmcp -lXi -lX11 -lSDL_gfx -lpng -lSDL_image -lSDL_mixer -lfreetype -lSDL_ttf
+-Wl,--end-group
+-Wl,-Bdynamic -ldl -lpthread -lc
+-Wl,--allow-multiple-definition

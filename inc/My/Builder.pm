@@ -64,8 +64,8 @@ sub process_xs {
 	else {
 		$file      =~ /(.+)\.xs$/;
 		my $c_file = "$1.c";
-		my $a_file = "$1.a";
-		unless( -e $a_file ) {
+		my $o_file = "$1.o";
+		unless( -e $o_file ) {
 			ExtUtils::ParseXS::process_file(
 				filename     => $file,
 				output       => $c_file,
@@ -79,30 +79,15 @@ sub process_xs {
 				optimize     => 1
 			);
 			$self->add_to_cleanup($c_file);
-			my $o_file = $self->cbuilder->compile(
+			$o_file = $self->cbuilder->compile(
 				source               => $c_file,
 				extra_compiler_flags => join(' ', @{$file_args->{extra_compiler_flags}})
 				                      . ' -I' . File::Spec->catfile($self->orig_dir, 'src')
 				                      . ' ' . Alien::SDL->config('cflags')
 			);
 			$self->add_to_cleanup($o_file);
-			my @object_files = ($o_file);
-			$file =~ /([^\\\/_]+)(\_.+)?\.xs$/;
-			if($self->notes( 'subsystems' )->{$1}->{'static_libraries'}) {
-				mkdir($self->orig_dir . '/static_libs') unless -d $self->orig_dir . '/static_libs';
-				foreach(@{$self->notes( 'subsystems' )->{$1}->{'static_libraries'}}) {
-					my $static_lib_dir = $self->orig_dir . '/static_libs/' . $_;
-					unless(-d $static_lib_dir) {
-						mkdir($static_lib_dir);
-					}
-					chdir($static_lib_dir);
-					$self->do_system('ar', 'x', "/usr/lib/lib$_.a");
-					push(@object_files, <$static_lib_dir/*.o>);
-				}
-			}
-			chdir($self->orig_dir);
-			$self->do_system('ar', 'csr', $a_file, @object_files);
-			$self->add_to_cleanup($a_file);
+			$self->do_system('ar', 'csq', $self->orig_dir . '/lib/SDL_perl.a', $o_file);
+			$self->add_to_cleanup($self->orig_dir . '/libSDL_perl.a');
 		}
 	}
 }
