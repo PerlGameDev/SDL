@@ -48,7 +48,10 @@ my %subsystems = (
 			to   => 'lib/SDL_perl.xs',
 		},
 		libraries => [qw( SDL )],
-		static_libraries => [qw( SDL dl )],
+		static_libraries => [qw( aa artsc asound asyncns audio c dl direct directfb esd fusion gpm ncurses
+		                         pthread pulse pulse-simple resolv rt SDL SDLmain slang vga x86 xcb xcb-xlib
+		                         Xau Xdmcp Xi X11
+		)],
 	},
 	Time => {
 		file => {
