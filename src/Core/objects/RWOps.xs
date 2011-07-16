@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "helper.h"
 #include "ppport.h"
 
 #ifndef aTHX_
@@ -8,6 +9,11 @@
 #endif
 
 #include <SDL.h>
+
+void _free_rwops(void *object)
+{
+	SDL_FreeRW((SDL_RWops *)object);
+}
 
 MODULE = SDL::RWOps 	PACKAGE = SDL::RWOps    PREFIX = rwops_
 
@@ -31,7 +37,7 @@ SDL_RWops*
 rwops_new_file ( CLASS, file, mode )
 	char* CLASS
 	char* file
-	char * mode
+	char* mode
 	CODE:
 		RETVAL = SDL_RWFromFile(file,mode);
 	OUTPUT:
@@ -116,9 +122,9 @@ rwops_close ( rw )
 		RETVAL
 
 void
-rwops_free ( rw )
-	SDL_RWops* rw
+rwops_free ( bag )
+	SV* bag
 	CODE:
-		SDL_FreeRW(rw);
+		objDESTROY(bag, _free_rwops);
 
 

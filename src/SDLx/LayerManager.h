@@ -24,7 +24,7 @@ typedef struct SDLx_Layer
     HV                *data;
 } SDLx_Layer;
 
-int intersection( SDLx_Layer *layer1, SDLx_Layer *layer2 )
+static inline int intersection( SDLx_Layer *layer1, SDLx_Layer *layer2 )
 {
     if(
         /* upper left point inside layer */
@@ -58,7 +58,7 @@ int intersection( SDLx_Layer *layer1, SDLx_Layer *layer2 )
     return 0;
 }
 
-AV *layers_behind( SDLx_Layer *layer)
+static inline AV *layers_behind( SDLx_Layer *layer)
 {
     AV *matches = newAV();
     int i;
@@ -93,7 +93,7 @@ AV *layers_behind( SDLx_Layer *layer)
     return matches;
 }
 
-AV *layers_ahead( SDLx_Layer *layer )
+static inline AV *layers_ahead( SDLx_Layer *layer )
 {
     AV *matches = newAV();
     int i;

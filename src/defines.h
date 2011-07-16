@@ -33,9 +33,9 @@
 #define SDL_PERL_DEFINES_H
 
 #ifdef USE_THREADS
-PerlInterpreter *parent_perl = NULL;
-extern PerlInterpreter *parent_perl;
-PerlInterpreter *current_perl = NULL;
+STATIC PerlInterpreter *parent_perl = NULL;
+//static extern PerlInterpreter *parent_perl;
+static PerlInterpreter *current_perl = NULL;
 #define GET_TLS_CONTEXT eval_pv("require DynaLoader;", TRUE); \
         if(!current_perl) { \
             parent_perl = PERL_GET_CONTEXT; \
@@ -48,8 +48,8 @@ PerlInterpreter *current_perl = NULL;
             }
 #define LEAVE_TLS_CONTEXT }
 #else
-PerlInterpreter *parent_perl = NULL;
-extern PerlInterpreter *parent_perl;
+STATIC PerlInterpreter *parent_perl = NULL;
+//static extern PerlInterpreter *parent_perl;
 #define GET_TLS_CONTEXT         /* TLS context not enabled */
 #define ENTER_TLS_CONTEXT       /* TLS context not enabled */
 #define LEAVE_TLS_CONTEXT       /* TLS context not enabled */

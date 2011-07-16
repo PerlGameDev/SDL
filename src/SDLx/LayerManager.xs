@@ -11,7 +11,7 @@
 #include <SDL.h>
 #include "SDLx/LayerManager.h"
 
-int _get_pixel( SDL_Surface *surface, int x, int y )
+STATIC int _get_pixel( SDL_Surface *surface, int x, int y )
 {
     int value  = 0;
     int offset = x + surface->w * y;

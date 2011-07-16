@@ -47,7 +47,7 @@ typedef struct SDLx_Interface
 
 } SDLx_Interface;
 
-void copy_state( SDLx_State * a, SDLx_State * b )
+static inline void copy_state( SDLx_State * a, SDLx_State * b )
 {
     
 	a->x        = b->x;
@@ -59,7 +59,7 @@ void copy_state( SDLx_State * a, SDLx_State * b )
 }
 
 
-void interpolate( SDLx_Interface* obj, SDLx_State* out, float alpha )
+static inline void interpolate( SDLx_Interface* obj, SDLx_State* out, float alpha )
 {
 	 out->x = obj->current->x * alpha + obj->previous->x * (1 - alpha);
 	 out->y = obj->current->y * alpha + obj->previous->y * (1 - alpha);

@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include "helper.h"
 
-SV *rect( SV *rect, int* new_rect_made)
+static inline SV *rect( SV *rect, int* new_rect_made)
 {
     SV *retval = NULL;
     /*we hand this over to perl to handle */
@@ -50,7 +50,7 @@ SV *rect( SV *rect, int* new_rect_made)
     return retval;
 }
 
-SV *surface( SV *surface )
+static inline SV *surface( SV *surface )
 {
     if( sv_isobject(surface) && sv_derived_from(surface, "SDL::Surface"))
     {
@@ -61,7 +61,7 @@ SV *surface( SV *surface )
     return NULL;
 }
 
-char *_color_format( SV *color )
+static inline char *_color_format( SV *color )
 {
     char *retval = NULL;
     if( !SvOK(color) || SvIOK(color) )
@@ -76,7 +76,7 @@ char *_color_format( SV *color )
     return retval;
 }
 
-SV *_color_number( SV *color, SV *alpha )
+static inline SV *_color_number( SV *color, SV *alpha )
 {
     int          c      = SvIV(color);
     int          a      = SvIV(alpha);
@@ -105,7 +105,7 @@ SV *_color_number( SV *color, SV *alpha )
     return newSVuv(retval);
 }
 
-AV *_color_arrayref( AV *color, SV *alpha )
+static inline AV *_color_arrayref( AV *color, SV *alpha )
 {
     AV *retval = (AV*)sv_2mortal((SV*)newAV());
     int length = SvTRUE(alpha) ? 4 : 3;
@@ -136,7 +136,7 @@ AV *_color_arrayref( AV *color, SV *alpha )
 }
 
 
-AV* __list_rgb( SV* color )
+static inline AV* __list_rgb( SV* color )
 {
     char *format = _color_format(color);
     AV* RETVAL   = newAV();
@@ -172,7 +172,7 @@ AV* __list_rgb( SV* color )
 }
 
 
-AV* __list_rgba( SV* color )
+static inline AV* __list_rgba( SV* color )
 {
     char *format = _color_format(color);
     AV* RETVAL   = newAV();
@@ -211,7 +211,7 @@ AV* __list_rgba( SV* color )
 }
 
 
-unsigned int __map_rgb( SV* color, SDL_PixelFormat* format )
+static inline unsigned int __map_rgb( SV* color, SDL_PixelFormat* format )
 {
 	Uint8 r,g,b;
 	AV* a = __list_rgb( color );
@@ -223,7 +223,7 @@ unsigned int __map_rgb( SV* color, SDL_PixelFormat* format )
 
 }
 
-unsigned int __map_rgba( SV* color, SDL_PixelFormat* format )
+static inline unsigned int __map_rgba( SV* color, SDL_PixelFormat* format )
 {
 	int r,g,b,a;
 	AV* ar = __list_rgba( color );

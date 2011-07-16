@@ -5,9 +5,9 @@
 #include <SDL.h>
 #include "SDL_thread.h"
 
-PerlInterpreter * perl = NULL;
+static PerlInterpreter * perl = NULL;
 
-void *bag2obj( SV *bag )
+STATIC void *bag2obj( SV *bag )
 {
     void *obj = NULL;
 
@@ -20,7 +20,7 @@ void *bag2obj( SV *bag )
     return obj;
 }
 
-SV *obj2bag( int size_ptr,  void *obj, char *CLASS )
+STATIC SV *obj2bag( int size_ptr,  void *obj, char *CLASS )
 {
     SV *   objref    = newSV( size_ptr );
     void** pointers  = safemalloc(3 * sizeof(void*));
@@ -33,7 +33,7 @@ SV *obj2bag( int size_ptr,  void *obj, char *CLASS )
     return objref;
 }
 
-SV *cpy2bag( void *object, int p_size, int s_size, char *package )
+STATIC SV *cpy2bag( void *object, int p_size, int s_size, char *package )
 {
     SV   *ref  = newSV( p_size );
     void *copy = safemalloc( s_size );
@@ -49,7 +49,7 @@ SV *cpy2bag( void *object, int p_size, int s_size, char *package )
     return a;
 }
 
-void objDESTROY(SV *bag, void (* callback)(void *object))
+static inline void objDESTROY(SV *bag, void (* callback)(void *object))
 {
 
     if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
@@ -70,7 +70,7 @@ void objDESTROY(SV *bag, void (* callback)(void *object))
     }
 }
 
-SV *_sv_ref( void *object, int p_size, int s_size, char *package )
+static inline SV *_sv_ref( void *object, int p_size, int s_size, char *package )
 {
     SV   *ref  = newSV( p_size );
     void *copy = safemalloc( s_size );
@@ -86,7 +86,7 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
     return sv_setref_pv(ref, package, (void *)pointers);
 }
 
-void _svinta_free(Sint16* av, int len_from_av_len)
+static inline void _svinta_free(Sint16* av, int len_from_av_len)
 {
     if( av == NULL)
         return;
@@ -94,7 +94,7 @@ void _svinta_free(Sint16* av, int len_from_av_len)
         av = NULL;
 }
 
-Sint16* av_to_sint16 (AV* av)
+static inline Sint16* av_to_sint16 (AV* av)
 {
     int len = av_len(av);
     if( len != -1)

@@ -67,7 +67,7 @@ int _calc_offset ( SDL_Surface* surface, int x, int y )
 }
 
 
-unsigned int _get_pixel(SDL_Surface * surface, int offset)
+STATIC unsigned int _get_pixel(SDL_Surface * surface, int offset)
 {
 
 	unsigned int value;
