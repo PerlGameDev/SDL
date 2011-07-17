@@ -63,8 +63,9 @@ sub process_xs {
 	}
 	else {
 		$file      =~ /(.+)\.xs$/;
+		my $_a     = $Config{_a} || '.a';
 		my $c_file = "$1.c";
-		my $a_file = "$1.a";
+		my $a_file = $1 . $_a;
 		unless( -e $a_file ) {
 			ExtUtils::ParseXS::process_file(
 				filename     => $file,
