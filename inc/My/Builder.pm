@@ -86,23 +86,8 @@ sub process_xs {
 				                      . ' ' . Alien::SDL->config('cflags')
 			);
 			$self->add_to_cleanup($o_file);
-      my @object_files = ($o_file);
-      $file =~ /([^\\\/_]+)(\_.+)?\.xs$/;
-      if($self->notes( 'subsystems' )->{$1}->{'static_libraries'}) {
-        mkdir($self->orig_dir . '/static_libs') unless -d $self->orig_dir . '/static_libs';
-        foreach(@{$self->notes( 'subsystems' )->{$1}->{'static_libraries'}}) {
-          my $static_lib_dir = $self->orig_dir . '/static_libs/' . $_;
-          unless(-d $static_lib_dir) {
-            mkdir($static_lib_dir);
-          }
-          chdir($static_lib_dir);
-          $self->do_system('ar', 'x', "/usr/lib/lib$_.a");
-          push(@object_files, <$static_lib_dir/*.o>);
-        }
-      }
-      chdir($self->orig_dir);
-      $self->do_system('ar', 'csr', $a_file, @object_files);
-      $self->add_to_cleanup($a_file);
+			$self->do_system('ar', 'csr', $a_file, $o_file);
+			$self->add_to_cleanup($a_file);
 		}
 	}
 }
