@@ -1,7 +1,6 @@
--lXi
 -lSDL_mixer -lsmpeg -lmikmod -lvorbisfile -lvorbis -logg
--lSDL -lesd -laa -lX11 -lxcb -lxcb-xlib -lXdmcp -lSDLmain -ldirectfb -ldirect -lfusion
--lartsc -lasound -laudio -lXau -lgpm -lncurses -lpulse-simple -lpulse -lasyncns -lresolv
+-lSDL -lesd -laa -lX11 -lSDLmain -ldirectfb -ldirect -lfusion
+-lartsc -lasound -laudio -lgpm -lncurses -lpulse-simple -lpulse -lasyncns -lresolv
 -lslang -lvga -lx86
 -lSDL_gfx
 -lSDL_image -ltiff -ljpeg -lpng
