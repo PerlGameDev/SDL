@@ -273,15 +273,24 @@ MODULE = SDLx::SFont	PACKAGE = SDLx::SFont	PREFIX = st_
 
 
 SDL_Surface *
-st_new ( CLASS, filename )
+st_new ( CLASS, sv )
 	char *CLASS
-	char *filename
+	SV *sv
 	CODE:
 #ifdef HAVE_SDL_IMAGE
-		RETVAL = IMG_Load(filename);
+	STRLEN len;
+	unsigned char *scalar = SvPV(sv, len);
+	if(SvOK(sv) && sv_isobject(sv) && sv_derived_from(sv, "SDL::RWOps"))
+	{
+		SDL_RWops *rwops      = SDL_RWFromConstMem((const void*)scalar, len);
+		if(rwops)
+			RETVAL = IMG_LoadTyped_RW(rwops, 1, NULL);
+	}
+	else
+		RETVAL = IMG_Load(scalar);
 #else
 		SDL_SetError("SDL_image not available for SFont. Using SDL_loadBMP instead of IMG_Load.");
-		RETVAL = SDL_LoadBMP(filename);
+		RETVAL = SDL_LoadBMP(scalar);
 #endif
 		SFont_InitFont(RETVAL);
 	OUTPUT:
