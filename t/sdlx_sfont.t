@@ -4,6 +4,7 @@ use Test::More;
 use SDL;
 use SDL::Config;
 use SDL::Video;
+use SDL::RWOps;
 use SDL::Surface;
 use SDLx::SFont;
 use lib 't/lib';
@@ -29,6 +30,11 @@ my $d = SDL::Surface->new( SDL_SWSURFACE, 100, 100, 32 );
 my $font = SDLx::SFont->new( 'test/data/font.' . ( SDL::Config->has('png') ? 'png' : 'bmp' ) );
 
 isa_ok( $font, 'SDL::Surface', '[new] makes surface' );
+
+my $rwops = SDL::RWOps->new_file( 'test/data/font.' . ( SDL::Config->has('png') ? 'png' : 'bmp' ), 'rw' );
+my $font2 = SDLx::SFont->new( $rwops );
+
+isa_ok( $font2, 'SDL::Surface', '[new] makes surface from SDL::RWOps' );
 
 #print using $font
 

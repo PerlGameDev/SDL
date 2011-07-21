@@ -11,30 +11,32 @@ Extension
 
   use SDLx::SFont;
   use SDLx::App;
-
-   #Make a surface
-   #Select a font
-   my $d = SDLx::App->new( title => 'app', width => 200, height => 200, depth => 32 );
-
-   my $font = SDLx::SFont->new('t/font.png');
   
-   #print using $font
-   
-   SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
+  # in case you want to load fonts from an scalar
+  use SDL::RWOps;
 
-   my $font2 = SDLx::SFont->new('t/font2.png');
+  # Make a surface
+  # Select a font
+  my $d = SDLx::App->new( title => 'app', width => 200, height => 200, depth => 32 );
 
-   #print using font2
+  my $font = SDLx::SFont->new('t/font.png');
+  
+  # print using $font
+  SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
 
-   SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
+  # print using font2
+  SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
 
-   $font->use();
+  # print using a font from an SDL::RWOps object
+  my $font3 = SDLx::SFont->new( SDL::RWOps->new_file( 't/font2.png', 'r' ) );
+  SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
 
-   #print using $font
-   
-   SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
+  $font->use();
 
-   #that is it folks ..
+  # print using $font
+  SDLx::SFont::print_text( $d, 10, 10, 'Huh' );
+
+  # that is it folks ..
 
 =head1 DESCRIPTION
 

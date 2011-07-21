@@ -31,6 +31,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#include "helper.h"
 #include "ppport.h"
 
 #ifndef aTHX_
@@ -278,19 +279,19 @@ st_new ( CLASS, sv )
 	SV *sv
 	CODE:
 #ifdef HAVE_SDL_IMAGE
-	STRLEN len;
-	unsigned char *scalar = SvPV(sv, len);
 	if(SvOK(sv) && sv_isobject(sv) && sv_derived_from(sv, "SDL::RWOps"))
-	{
-		SDL_RWops *rwops      = SDL_RWFromConstMem((const void*)scalar, len);
-		if(rwops)
-			RETVAL = IMG_LoadTyped_RW(rwops, 1, NULL);
-	}
+		RETVAL = IMG_LoadTyped_RW((SDL_RWops *)bag2obj(sv), 1, NULL);
 	else
-		RETVAL = IMG_Load(scalar);
+	{
+		STRLEN len;
+		unsigned char *text = SvPV(sv, len);
+		RETVAL = IMG_Load(text);
+	}
 #else
 		SDL_SetError("SDL_image not available for SFont. Using SDL_loadBMP instead of IMG_Load.");
-		RETVAL = SDL_LoadBMP(scalar);
+		STRLEN len;
+		unsigned char *text = SvPV(sv, len);
+		RETVAL = SDL_LoadBMP(text);
 #endif
 		SFont_InitFont(RETVAL);
 	OUTPUT:
