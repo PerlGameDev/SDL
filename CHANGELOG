@@ -13,6 +13,8 @@ Revision history for Perl extension SDL_perl.
 * 2.534_02 Aug 27
 	New features:
 	- SDLx::Surface: added methods draw_trigon, draw_ellipse, draw_arc and draw_bezier [jtpalmer]
+	Bug fixes:
+	- SDLx::Rect: fixed methods copy, move and inflate [jtpalmer]
 
 * 2.534_01 June 13 2011
 	- Using 'perl' instead of 'SDLPerl' to run silent tests on darwin [FROGGS]

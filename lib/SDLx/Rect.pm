@@ -13,14 +13,14 @@ sub new {
 	my $w     = shift || 0;
 	my $h     = shift || 0;
 
+	$class = ref($class) || $class;
 	my $self = $class->SUPER::new( $x, $y, $w, $h );
 	unless ($$self) {
 
 		#require Carp;
 		Carp::confess SDL::get_error();
 	}
-	bless $self, ref($class) || $class;
-	return $self;
+	return bless $self, $class;
 }
 
 #############################
@@ -254,10 +254,10 @@ sub midbottom {
 sub copy {
 	my $self = shift;
 	return $self->new(
-		-top    => $self->top,
-		-left   => $self->left,
-		-width  => $self->width,
-		-height => $self->height,
+		$self->x,
+		$self->y,
+		$self->w,
+		$self->h,
 	);
 }
 
@@ -269,10 +269,10 @@ sub move {
 		Carp::confess "must receive x and y positions as argument";
 	}
 	return $self->new(
-		-top    => $self->top + $y,
-		-left   => $self->left + $x,
-		-width  => $self->width,
-		-height => $self->height,
+		$self->left + $x,
+		$self->top + $y,
+		$self->width,
+		$self->height,
 	);
 }
 
@@ -298,10 +298,10 @@ sub inflate {
 	}
 
 	return $self->new(
-		-left => $self->left - ( $x / 2 ),
-		-top  => $self->top -  ( $y / 2 ),
-		-width  => $self->width + $x,
-		-height => $self->height + $y,
+		$self->left - ( $x / 2 ),
+		$self->top - ( $y / 2 ),
+		$self->width + $x,
+		$self->height + $y,
 	);
 }
 
