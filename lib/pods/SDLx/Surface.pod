@@ -121,6 +121,8 @@ Blits C<SDLx::Surface> onto $dest surface.
 $src_rect or $dest_rect are optional. If $src_rect is ommited, it will be the size of the entire surface. If $dest_rect is ommited, 
 it will be blitted at C<(0, 0)>. $src_rect or $dest_rect can be array refs or C<SDL::Rect>. $dest can be C<SDLx::Surface> or C<SDL::Surface>.
 
+Note that the final blit rectangle is stored in $dest_rect after clipping is performed.
+
 Returns $self
 
 =head2 blit_by
@@ -129,6 +131,8 @@ Returns $self
 
 Does the same as C<blit> but the C<SDLx::Surface> is the one being blitted to.
 This is useful when the surface you have isn't an C<SDLx::Surface>, but the surface it is being blitted to is.
+
+Note that the final blit rectangle is stored in $dest_rect after clipping is performed.
 
 =head2 flip
 
