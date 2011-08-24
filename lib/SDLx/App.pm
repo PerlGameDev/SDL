@@ -3,13 +3,22 @@ package SDLx::App;
 use strict;
 use warnings;
 
+# SDL modules actually used here
 use SDL ();
 use SDL::Video ();
 use SDL::Mouse ();
 use base qw/SDLx::Surface SDLx::Controller/;
 
+# SDL modules used for other reasons
+# Please verify their usefulness here
+use SDL::Rect ();
+use SDL::Event ();
+use SDL::Events ();
+use SDL::Surface ();
+use SDL::PixelFormat ();
+
 use Carp ();
-use Scalar::Util qw/refaddr/; # wont need this with SDLx::InsideOut
+use Scalar::Util qw/refaddr/;
 
 sub new {
 	my $class = shift;
@@ -20,16 +29,6 @@ sub new {
 	my $w   = defined $o{width}            ? $o{width}            : defined $o{w}   ? $o{w}   : 640;
 	my $h   = defined $o{height}           ? $o{height}           : defined $o{h}   ? $o{h}   : 480;
 	my $d   = defined $o{depth}            ? $o{depth}            : defined $o{d}   ? $o{d}   : 32;
-	my $r   = defined $o{red_size}         ? $o{red_size}         : defined $o{r}   ? $o{r}   : 5;
-	my $g   = defined $o{green_size}       ? $o{green_size}       : defined $o{g}   ? $o{g}   : 5;
-	my $b   = defined $o{blue_size}        ? $o{blue_size}        : defined $o{b}   ? $o{b}   : 5;
-	my $a   = defined $o{alpha_size}       ? $o{alpha_size}       : defined $o{a}   ? $o{a}   : undef;
-	my $ra  = defined $o{red_accum_size}   ? $o{red_accum_size}   : defined $o{ra}  ? $o{ra}  : undef;
-	my $ga  = defined $o{green_accum_size} ? $o{green_accum_size} : defined $o{ga}  ? $o{ga}  : undef;
-	my $ba  = defined $o{blue_accum_size}  ? $o{blue_accum_size}  : defined $o{ba}  ? $o{ba}  : undef;
-	my $aa  = defined $o{alpha_accum_size} ? $o{alpha_accum_size} : defined $o{aa}  ? $o{aa}  : undef;
-	my $bs  = defined $o{buffer_size}      ? $o{buffer_size}      : defined $o{bs}  ? $o{bs}  : undef;
-	my $ss  = defined $o{stencil_size}     ? $o{stencil_size}     : defined $o{ss}  ? $o{ss}  : undef;
 	my $pos = defined $o{position}         ? $o{position}         : defined $o{pos} ? $o{pos} : undef;
 	my $s   = defined $o{stash}            ? $o{stash}            : defined $o{s}   ? $o{s}   : undef;
 
@@ -76,16 +75,16 @@ sub new {
 	elsif( ref $f eq 'ARRAY' ) {
 		my %flag = map { $_ => 1 } @$f;
 		undef $f;
-			$f |= SDL::Video::SDL_ANYFORMAT  if $flag{any_format} || $flag{af};
-			$f |= SDL::Video::SDL_DOUBLEBUF  if $flag{double_buf} || $flag{db};
-			$f |= SDL::Video::SDL_SWSURFACE  if $flag{sw_surface} || $flag{sw};
-			$f |= SDL::Video::SDL_HWSURFACE  if $flag{hw_surface} || $flag{hw};
-			$f |= SDL::Video::SDL_ASYNCBLIT  if $flag{async_blit} || $flag{ab};
-			$f |= SDL::Video::SDL_HWPALETTE  if $flag{hw_palette} || $flag{hwp};
-			$f |= SDL::Video::SDL_FULLSCREEN if $flag{fullscreen} || $flag{fs};
-			$f |= SDL::Video::SDL_OPENGL     if $flag{opengl}     || $flag{gl};
-			$f |= SDL::Video::SDL_RESIZABLE  if $flag{resizable}  || $flag{rs};
-			$f |= SDL::Video::SDL_NOFRAME    if $flag{no_frame}   || $flag{nf};
+		$f |= SDL::Video::SDL_ANYFORMAT  if $flag{any_format} || $flag{af};
+		$f |= SDL::Video::SDL_DOUBLEBUF  if $flag{double_buf} || $flag{db};
+		$f |= SDL::Video::SDL_SWSURFACE  if $flag{sw_surface} || $flag{sw};
+		$f |= SDL::Video::SDL_HWSURFACE  if $flag{hw_surface} || $flag{hw};
+		$f |= SDL::Video::SDL_ASYNCBLIT  if $flag{async_blit} || $flag{ab};
+		$f |= SDL::Video::SDL_HWPALETTE  if $flag{hw_palette} || $flag{hwp};
+		$f |= SDL::Video::SDL_FULLSCREEN if $flag{fullscreen} || $flag{fs};
+		$f |= SDL::Video::SDL_OPENGL     if $flag{opengl}     || $flag{gl};
+		$f |= SDL::Video::SDL_RESIZABLE  if $flag{resizable}  || $flag{rs};
+		$f |= SDL::Video::SDL_NOFRAME    if $flag{no_frame}   || $flag{nf};
 	}
 	$f |= SDL::Video::SDL_ANYFORMAT  if $af;
 	$f |= SDL::Video::SDL_DOUBLEBUF  if $db;
@@ -108,6 +107,17 @@ sub new {
 	bless $self, $class;
 
 	if ( $gl ) {
+		my $r   = defined $o{red_size}         ? $o{red_size}         : defined $o{r}  ? $o{r}  : 5;
+		my $g   = defined $o{green_size}       ? $o{green_size}       : defined $o{g}  ? $o{g}  : 5;
+		my $b   = defined $o{blue_size}        ? $o{blue_size}        : defined $o{b}  ? $o{b}  : 5;
+		my $a   = defined $o{alpha_size}       ? $o{alpha_size}       : defined $o{a}  ? $o{a}  : undef;
+		my $ra  = defined $o{red_accum_size}   ? $o{red_accum_size}   : defined $o{ra} ? $o{ra} : undef;
+		my $ga  = defined $o{green_accum_size} ? $o{green_accum_size} : defined $o{ga} ? $o{ga} : undef;
+		my $ba  = defined $o{blue_accum_size}  ? $o{blue_accum_size}  : defined $o{ba} ? $o{ba} : undef;
+		my $aa  = defined $o{alpha_accum_size} ? $o{alpha_accum_size} : defined $o{aa} ? $o{aa} : undef;
+		my $bs  = defined $o{buffer_size}      ? $o{buffer_size}      : defined $o{bs} ? $o{bs} : undef;
+		my $ss  = defined $o{stencil_size}     ? $o{stencil_size}     : defined $o{ss} ? $o{ss} : undef;
+
 		$SDLx::App::USING_OPENGL = 1;
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_RED_SIZE(),   $r );
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_GREEN_SIZE(), $g );
@@ -145,10 +155,9 @@ sub new {
 }
 
 sub resize {
-	my ($self) = @_;
+	my ($self, $w, $h) = @_;
 	my $flags = $self->flags;
 	if ( $flags & SDL::Video::SDL_RESIZABLE ) {
-		my ( $self, $w, $h ) = @_;
 		my $d = $self->format->BitsPerPixel;
 		return $self = SDL::Video::set_video_mode( $w, $h, $d, $flags )
 			or Carp::confess( "SDL cannot set video:" . SDL::get_error );
@@ -159,16 +168,17 @@ sub resize {
 sub title {
 	shift;
 	if ( @_ ) {
-		my ( $title, $icon ) = @_;
-		$title = defined $icon ? $icon : $0 unless defined $title;
-		$icon = $title unless defined $icon;
-		return SDL::Video::wm_set_caption( $title, $icon );
+		my ( $title, $icon_title ) = @_;
+		$title = defined $icon_title ? $icon_title : $0 unless defined $title;
+		$icon_title = $title unless defined $icon_title;
+		return SDL::Video::wm_set_caption( $title, $icon_title );
 	}
 	SDL::Video::wm_get_caption();
 }
 
 sub icon {
-	my ( undef, $icon ) = @_;
+	shift;
+	my ( $icon ) = @_;
 	if ( defined $icon ) {
 		unless ( eval { $icon->isa( 'SDL::Surface' ) } ) {
 			$icon = SDL::Video::load_BMP( $icon );
@@ -181,8 +191,10 @@ sub icon {
 	}
 }
 
+# this should probably be moved to SDLx::Controller
 sub delay {
-	my ( undef, $ms ) = @_;
+	shift;
+	my ( $ms ) = @_;
 	SDL::delay( $ms );
 }
 
@@ -202,7 +214,8 @@ sub error {
 }
 
 sub warp {
-	my ( undef, $x, $y ) = @_;
+	shift;
+	my ( $x, $y ) = @_;
 	SDL::Mouse::warp_mouse( $x, $y );
 }
 
@@ -246,7 +259,8 @@ sub sync {
 
 sub attribute {
 	return unless $SDLx::App::USING_OPENGL;
-	my ( undef, $mode, $value ) = @_;
+	shift;
+	my ( $mode, $value ) = @_;
 	if ( defined $value ) {
 		return SDL::Video::GL_set_attribute( $mode, $value );
 	}
@@ -256,7 +270,6 @@ sub attribute {
 	$returns->[1];
 }
 
-# wont need this with SDLx::InsideOut
 my %_stash;
 sub stash :lvalue {
 	my ( $self ) = @_;
