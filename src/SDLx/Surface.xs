@@ -12,6 +12,10 @@
 #include <SDL.h>
 #include "SDLx/Validate.h"
 
+#ifdef HAVE_SDL_GFX_PRIMITIVES
+#include <SDL_gfxPrimitives.h>
+#endif
+
 SV * get_pixel32 (SDL_Surface *surface, int x, int y)
 {
 	
@@ -173,8 +177,6 @@ surfacex_set_pixel_xs ( surface, x, y, value )
 		SDL_UnlockSurface(surface);
 
 
-<<<<<<< HEAD
-=======
 void
 surfacex_draw_rect ( surface, rt, color )
 	SDL_Surface *surface
@@ -197,7 +199,89 @@ surfacex_draw_rect ( surface, rt, color )
 			r_rect.x = 0; r_rect.y = 0; r_rect.w = surface->w; r_rect.h = surface->h;
 			SDL_FillRect(surface, &r_rect, m_color);
 		}
->>>>>>> 34f1f9b35b272e4cba12a0420933f5870f734128
 
+#ifdef HAVE_SDL_GFX_PRIMITIVES
+
+int
+surfacex_draw_polygon(surface, vectors, color, antialias)
+    SDL_Surface * surface
+    AV* vectors
+    Uint32 color
+    SV *antialias
+    CODE:
+        AV* vx = newAV();
+        AV* vy = newAV();
+        int n;
+        for(n = 0; n <= av_len(vectors); n++)
+        {
+            if(n & 1)
+                av_store(vy, (int)((n-1)/2), *av_fetch(vectors, n, 0));
+            else
+                av_store(vx, (int)(n/2),     *av_fetch(vectors, n, 0));
+        }
+        
+        n = av_len(vx) + 1;
+        
+        Sint16 * _vx   = av_to_sint16(vx);
+        Sint16 * _vy   = av_to_sint16(vy);
+        RETVAL         = SvOK(antialias)
+                       ? aapolygonColor(surface, _vx, _vy, n, color)
+                       : polygonColor(surface, _vx, _vy, n, color);
+        _svinta_free( _vx, av_len(vx) );
+        _svinta_free( _vy, av_len(vy) );
+    OUTPUT:
+        RETVAL
+
+#endif
+
+void
+surfacex_blit( src, dest, ... )
+    SV *src
+    SV *dest
+    CODE:
+        src  = surface(src);
+        dest = surface(dest);
+        SDL_Surface *_src  = (SDL_Surface *)bag2obj(src);
+        SDL_Surface *_dest = (SDL_Surface *)bag2obj(dest);
+
+        SDL_Rect _src_rect;
+        SDL_Rect _dest_rect;
+        int newly_created_rect = 0;
+       	SV* s_rect_sv, *d_rect_sv; 
+		int mall_sr = 0; int mall_dr = 0;
+        if( items > 2 && SvOK(ST(2)) )
+        { 
+			s_rect_sv =  rect(ST(2), &newly_created_rect);
+			_src_rect = *(SDL_Rect *)bag2obj( s_rect_sv );
+			mall_sr = 1;
+		}
+        else
+        {
+            _src_rect.x = 0;
+            _src_rect.y = 0;
+            _src_rect.w = _src->w;
+            _src_rect.h = _src->h;
+        }
+        
+        if( items > 3 && SvOK(ST(3)) )
+		{
+			d_rect_sv = rect(ST(3), &newly_created_rect);
+            _dest_rect = *(SDL_Rect *)bag2obj( d_rect_sv );
+			mall_dr = 1;
+		}
+        else
+        {
+            _dest_rect.x = 0;
+            _dest_rect.y = 0;
+            _dest_rect.w = _dest->w;
+            _dest_rect.h = _dest->h;
+        }
+        
+        SDL_BlitSurface( _src, &_src_rect, _dest, &_dest_rect );
+		if ( mall_sr == 1 )
+			SvREFCNT_dec( s_rect_sv);
+		if ( mall_dr == 1 )
+			SvREFCNT_dec( d_rect_sv );
 
    
+
