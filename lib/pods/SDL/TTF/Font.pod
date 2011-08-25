@@ -17,8 +17,9 @@ TTF, Structure
  
  my $font = SDL::TTF::Font->new($font_file, $point_size, $face_index);
 
-Load file for use as a font, at the given size. This can load TTF and FON files.
-You can specify the face index of a font file containing multiple faces.
+Load file for use as a font, at the given size. This can load TTF, OTF and
+FON files. You can specify the face index of a font file containing multiple
+faces.
 
 Returns: a L<SDL::TTF::Font> object. C<undef> is returned on errors.
 

@@ -1,0 +1,204 @@
+
+=pod
+
+=head1 NAME
+
+SDLx::Text - SDL extension for manipulating text
+
+=head1 CATEGORY
+
+Extension
+
+=head1 SYNOPSIS
+
+    use SDL;
+    use SDLx::App; 
+    use SDLx::Text;
+    
+    my $app = SDLx::App->new;
+
+    my $message = SDLx::Text->new;
+
+    $message->write_to( $app, "Hello, World!" );
+    $app->update;
+
+
+=head1 DESCRIPTION
+
+The standard SDL API for handling fonts and rendering text is full of quirks
+and and low-level functions scattered all over the place. This is a sugar
+layer meant to let you easily handle text in your SDL apps.
+
+=head1 CONSTRUCTION
+
+=head2 new
+
+=head2 new ( %attributes )
+
+Instantiates a new SDLx::Text object. All attributes are optional:
+
+    my $text = SDLx::Text->new(
+            font    => '/path/to/my/font.ttf',
+            color   => [255, 255, 255], # "white"
+            size    => 24,
+            x       => 0,
+            y       => 0,
+            h_align => 'left',
+            text    => 'All your base are belong to us.'
+    );
+
+Please check the accessors below for more information on each attribute.
+All values shown above are the B<default values>, except for "text",
+which defaults to C<undef>; and "font", which if not provided will load
+the C<Gentium Basic> free font (see "L</"COPYRIGHT & LICENSE">" for more
+information).
+
+=head1 ACCESSORS
+
+All accessors below can be used to get and set their respective attributes.
+For example:
+
+   my $font_name = $self->font;     # gets the font filename
+   $self->font( 'somefont.ttf' );   # sets a new font
+
+All accessors return their current value, after being set.
+
+=head2 x
+
+Gets/sets the left (x) positioning of the text to be rendered, relative
+to whatever surface you are placing it into.
+
+=head2 y
+
+Gets/sets the top (y) positioning of the text to be rendered, relative
+to whatever surface you are placing it into.
+
+=head2 h_align
+
+Gets/sets the horizontal alignment of the text to be rendered relative to
+whatever surface you are placing it into. Available alignments are 'C<left>',
+'C<right>' and 'C<center>'. Default is 'C<left>'.
+
+=head2 color
+
+Gets/sets the text color. The color is an array reference in C<[R, G, B]> or C<[R, G, B, A]> format. See L<SDL::Color> for more information on colors.
+
+=head2 size
+
+Gets/sets the font size.
+
+=head2 font
+
+Pass it a string containing the path to your desired font to use it. Fonts
+can be in TTF, OTF or FON formats. Generates an exception if the font
+cannot be loaded.
+
+Returns the L<SDL::TTF::Font> object representing the font.
+
+
+=head1 METHODS
+
+=head2 text( $some_text )
+
+Sets the text to be displayed by the SDLx::Text object. Return the SDLx::Text object itself, so you can easily chain this method around.
+
+    my $obj = SDLx::Text->new->text( "Hello, Dave." );
+
+Text will always be rendered as utf8, so you can pass any string containing
+regular ASCII or valid utf8 characters.
+
+=head2 write_to( $target_surface )
+
+=head2 write_to( $target_surface, "text to write" )
+
+Renders the text onto C<$target_surface> (usually the app itself). The
+text string may be passed as a parameter, otherwise it will use whatever
+is already set (via the C<new()> or C<text()> methods.
+
+=head2 write_xy( $target_surface, $x, $y )
+
+=head2 write_xy( $target_surface, $x, $y, $text )
+
+Same as C<write_to()>, but will render the text using the given top (y) and
+left (x) coordinates.
+
+
+=head1 READ-ONLY ATTRIBUTES
+
+As you set or update your text, font or size, SDLx::Text updates the surface
+that represents it. You don't usually need to worry about this at all, and
+we strongly recommend you use the L<"/METHODS"> above to render your text.
+
+If however you need to know how tall or wide the rendered text will be
+(in pixels), or if you want to retrieve the surface so you can manipulate and
+render it yourself, you can use the following getters:
+
+=head2 surface
+
+Returns the underlying surface representing the text itself. You probably don't need this, unless you're doing something really funky.
+
+=head2 w
+
+Shortcut to see the width of the underlying surface representing the text.
+
+=head2 h
+
+Shortcut to see the height of the underlying surface representing the text.
+
+=head1 ERRORS AND DIAGNOSTICS
+
+=over 4
+
+=item * "SDL_ttf support has not been compiled"
+
+In order to render text in SDL you must have enabled SDL_ttf while building L<Alien::SDL>.
+
+=item * "Cannot init TTF: <some error>"
+
+In order to load fonts and render text, we need to initialize L<SDL::TTF>
+- that is, in case it hasn't been initialized already. The error above will
+appear in the rare event of any problem during initialization.
+
+=item * "Error opening font: <some error>"
+
+The font file you set either via C<< font( 'font.ttf' ) >> or during
+construction could not be loaded. The file may not exist in the given path,
+have wrong permissions, be corrupted, or of an unsupported format. Please
+refer the C<< <some error> >> message in the message itself for further
+information.
+
+=item * "TTF rendering error: <some error>"
+
+When you call C<text()>, it renders the provided string onto an internal
+L<SDL::Surface> object. If there was any problem rendering the text, this
+message will appear.
+
+=back
+
+=head1 BUGS
+
+Please report any bugs or feature requests to the bug tracker. We will be notified, and then you'll automatically be notified of progress on your bug as we make changes.
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc SDLx::Text
+
+
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
+
+=head1 COPYRIGHT & LICENSE
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+This module ships with a default font, "I<Gentium Basic>", Copyright 2003-2008 SIL International (http://sil.org), released under the SIL Open Font License 1.1 (OFL). The font is available for use in free and commercial products, with some minor restrictions. Please read the C<OFL.txt> and C<OFL-FAQ.txt> for further information.
+
+=head1 SEE ALSO
+
+L<SDL>, L<SDLx::App>, L<SDL::TTF>

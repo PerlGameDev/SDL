@@ -15,6 +15,11 @@ Tutorials
 	# to run this tutorial 
 	$ perl -MSDL::Tutorial -e 1
 
+=head1 SDL Manual
+
+C<SDL::Tutorial> are incomplete and old. A new book has been started to provide 
+a complete tutorial for SDL. See L<http://bit.ly/hvxc9V>.
+
 =head1 SDL BASICS
 
 SDL, the Simple DirectMedia Layer, is a cross-platform multimedia library.
@@ -81,7 +86,7 @@ That, however, is another tutorial.
 
 =over 4
 
-=item L<SDL::Animation>
+=item L<SDL::Tutorial::Animation>
 
 basic rectangle drawing and animation
 

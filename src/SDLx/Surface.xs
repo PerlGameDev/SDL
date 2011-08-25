@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#define NEED_newSV_type_GLOBAL
 #include "ppport.h"
 #include "helper.h"
 
@@ -172,6 +173,31 @@ surfacex_set_pixel_xs ( surface, x, y, value )
 		SDL_UnlockSurface(surface);
 
 
+<<<<<<< HEAD
+=======
+void
+surfacex_draw_rect ( surface, rt, color )
+	SDL_Surface *surface
+	SV* rt
+	SV* color
+	CODE:
+		Uint32 m_color = __map_rgba( color, surface->format );
+		SDL_Rect r_rect;
+
+		if( SvOK(rt) )
+		{
+			int newly_created_rect = 0;
+			SV* foo                = rect( rt, &newly_created_rect );
+			r_rect                 = *(SDL_Rect*)bag2obj(foo);
+			SDL_FillRect(surface, &r_rect, m_color);
+			SvREFCNT_dec(foo);
+		}
+		else
+		{
+			r_rect.x = 0; r_rect.y = 0; r_rect.w = surface->w; r_rect.h = surface->h;
+			SDL_FillRect(surface, &r_rect, m_color);
+		}
+>>>>>>> 34f1f9b35b272e4cba12a0420933f5870f734128
 
 
    

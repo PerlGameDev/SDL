@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -51,7 +52,6 @@ audio_load_wav ( filename, spec )
 		SDL_AudioSpec *temp = safemalloc(sizeof(SDL_AudioSpec));
 		Uint8 *buf;
 		Uint32 len;
-		SV * asref = newSV( sizeof(SDL_AudioSpec *) );
 
 		memcpy( temp, spec, sizeof(SDL_AudioSpec) );
 		temp = SDL_LoadWAV(filename,temp,&buf,&len);
@@ -60,16 +60,11 @@ audio_load_wav ( filename, spec )
 			croak("Error in SDL_LoadWAV: %s", SDL_GetError()); 
 		}
 		else
-		{	
-		 void** pointers = malloc(2 * sizeof(void*));
-		  pointers[0] = (void*)temp;
-		  pointers[1] = (void*)PERL_GET_CONTEXT;
-
-		
+		{
 			RETVAL = (AV*)sv_2mortal((SV*)newAV());
-			av_push(RETVAL, sv_setref_pv( asref, "SDL::AudioSpec", (void *)pointers));
-			av_push(RETVAL,newSViv(PTR2IV(buf)));
-			av_push(RETVAL,newSViv(len));
+			av_push(RETVAL, obj2bag( sizeof(SDL_AudioSpec *), (void *)temp, "SDL::AudioSpec" ));
+			av_push(RETVAL, newSViv(PTR2IV(buf)));
+			av_push(RETVAL, newSViv(len));
 		}
 	OUTPUT:
 		RETVAL

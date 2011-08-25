@@ -1,5 +1,37 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.531 Feb 27 2011
+    - protecting dstrect from modification during SDL_BlitSurface (FROGGS)
+    - installing SDLpp as a console app (kthakore)
+    - improving installation under MacOSX/Darwin (kthakore/FROGGS)
+    - SDLx::Text  (and, thus, SDL Perl) now ships with a default FOSS font (garu/perigrin)
+    - SDLx::Text  improved text() manipulation (garu)
+    - SDLx::Text  added complete documentation (garu)
+    - SDLx::Text  all text is now rendered as utf8 (kthakore/garu)
+    - SDLx::Text  added accessors for all SDLx::Text attributes (garu)
+    - SDLx::Text  text() returns $self, surface() returns $surface (garu)
+    - SDLx::Text  tests and w/h methods for SDLx::Text (kthakore/garu)
+    - SDLx::App   improved internals (kthakore)
+    - SDLx::App   added stash() method (FROGGS)
+
+* 2.530 Feb 02 2011
+	- Fixed SDL threaded free problems with a threadid guard [kthakore/FROGGS]
+	- Clean up malloc calls
+	- Updated Alien::SDL's version to 1.424 [FROGGS]
+
+* 2.529 Jan 25 2011
+	- Adding SDL::get_handle() function to get Win32 API window management support
+	- Fixed pod errors and add new docs 
+
+* 2.528 Jan 18 2011
+	- Invalid Alien::SDL Dependency Fix
+
+* 2.527 Jan 18 2011
+	- Critical memory leak fixed in SDLx::App 
+
+* 2.526_2 Jan 18 2011
+	- SMPEG compile test 
+
 * 2.526_1 Jan 11 2011
 	- Experimental SMPEG support, new tests:
 	- Fixed Mac regression due to ppport

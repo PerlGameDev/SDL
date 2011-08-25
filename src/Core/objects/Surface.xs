@@ -1,6 +1,7 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+#define NEED_newSV_type_GLOBAL
 #include "ppport.h"
 #include "helper.h"
 

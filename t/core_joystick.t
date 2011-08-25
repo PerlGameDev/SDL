@@ -6,15 +6,15 @@ use SDL::Joystick;
 my @done = qw/num_joysticks/;
 can_ok( "SDL::Joystick", @done );
 
+SDL::init(SDL_INIT_JOYSTICK);
+
 is( SDL::Joystick::num_joysticks() >= 0, 1, "[num_joysticks] ran" );
 
 SKIP:
 {
-	SDL::init_sub_system(SDL_INIT_JOYSTICK);
-
 	skip "Need a joystick for below tests", 1
 		unless ( SDL::Joystick::num_joysticks() > 0 );
-
+	
 	my $joy = SDL::Joystick->new(0);
 	pass "[new] can open joystick";
 

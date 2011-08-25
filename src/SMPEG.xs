@@ -11,13 +11,13 @@
 
 #ifdef HAVE_SMPEG
 #include <smpeg/smpeg.h>
-#endif
-
 
 void smpeg_display_callback (SDL_Surface* s , int a, int b, unsigned int c, unsigned int d)
 {
 
 }
+
+#endif 
 
 MODULE = SDL::SMPEG				PACKAGE = SDL::SMPEG
 PROTOTYPES : DISABLE

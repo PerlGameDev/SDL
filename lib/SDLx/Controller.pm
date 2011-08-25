@@ -21,6 +21,8 @@ my %_event;
 my %_event_handlers;
 my %_move_handlers;
 my %_show_handlers;
+my %_sleep_cycle;
+my %_paused;
 
 sub new {
 	my ($self, %args) = @_;
@@ -31,9 +33,9 @@ sub new {
 		my $a;
 		$self = bless \$a, $self;
 	}
-	
+
 	my $ref = refaddr $self;
-	
+
 	$_dt{ $ref }                 = defined $args{dt}    ? $args{dt}    : 0.1;
 	$_min_t{ $ref }              = defined $args{min_t} ? $args{min_t} : 1 / 60;
 #	$_current_time{ $ref }       = $args{current_time} || 0; #no point
@@ -42,6 +44,8 @@ sub new {
 	$_event_handlers{ $ref }     = $args{event_handlers};
 	$_move_handlers{ $ref }      = $args{move_handlers};
 	$_show_handlers{ $ref }      = $args{show_handlers};
+	$_sleep_cycle{ $ref }        = $args{delay};
+#	$_paused{ $ref }             = $args{paused}; #read only
 
 	return $self;
 }
@@ -58,17 +62,19 @@ sub DESTROY {
 	delete $_event_handlers{ $ref};
 	delete $_move_handlers{ $ref};
 	delete $_show_handlers{ $ref};
+	delete $_sleep_cycle { $ref };
+	delete $_paused { $ref };
 }
 
 sub run {
 	my ($self)       = @_;
-	my $ref          = refaddr $self; 
+	my $ref          = refaddr $self;
 	my $dt           = $_dt{ $ref };
 	my $min_t        = $_min_t{ $ref };
 	my $t            = 0.0;
 
-	#Allows us to do stop and run 
-	$_stop{ $ref } = 0;	
+	#Allows us to do stop and run
+	$_stop{ $ref } = 0;
 
 	$_current_time{ $ref } = Time::HiRes::time;
 	while ( !$_stop{ $ref } ) {
@@ -88,11 +94,12 @@ sub run {
 		my $step = $delta_copy / $dt;
 		$self->_move( $ref, $step, $t ); #a partial move
 		$t += $dt * $step;
-		
+
 		$self->_show( $ref, $delta_time );
-		
+
 		$dt    = $_dt{ $ref};    #these can change
 		$min_t = $_min_t{ $ref}; #during the cycle
+		SDL::delay( $_sleep_cycle{ $ref } ) if $_sleep_cycle{ $ref };
 	}
 
 }
@@ -102,6 +109,7 @@ sub pause {
 	my $ref = refaddr $self;
 	$callback ||= sub {1};
 	my $event = SDL::Event->new();
+	$_paused{ $ref} = 1;
 	while(1) {
 		SDL::Events::wait_event($event) or Carp::confess("pause failed waiting for an event");
 		if($callback->($event, $self)) {
@@ -109,6 +117,7 @@ sub pause {
 			last;
 		}
 	}
+	delete $_paused{ $ref};
 }
 
 sub _event {
@@ -169,10 +178,10 @@ sub add_show_handler {
 sub _remove_handler {
 	my ( $arr_ref, $id ) = @_;
 	if ( ref $id ) {
-		($id) = grep { 
+		($id) = grep {
 					$id eq $arr_ref->[$_]
 				} 0..$#{$arr_ref};
-				
+
 		if ( !defined $id ) {
 			Carp::cluck("$id is not currently a handler of this type");
 			return;
@@ -221,26 +230,30 @@ sub show_handlers  { $_show_handlers{ refaddr $_[0] } }
 
 sub dt {
 	my ($self, $arg) = @_;
-	my $ref = refaddr $self;	
+	my $ref = refaddr $self;
 	$_dt{ $ref} = $arg if defined $arg;
-	
+
 	$_dt{ $ref};
 }
 
 sub min_t {
 	my ($self, $arg) = @_;
-	my $ref = refaddr $self;	
+	my $ref = refaddr $self;
 	$_min_t{ $ref} = $arg if defined $arg;
-	
+
 	$_min_t{ $ref};
 }
 
 sub current_time {
 	my ($self, $arg) = @_;
-	my $ref = refaddr $self;	
+	my $ref = refaddr $self;
 	$_current_time{ $ref} = $arg if defined $arg;
-	
+
 	$_current_time{ $ref};
+}
+
+sub paused {
+	$_paused{ refaddr $_[0]};
 }
 
 1; #not 42 man!

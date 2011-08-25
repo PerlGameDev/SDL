@@ -3,7 +3,7 @@
 
 =head1 NAME
 
-SDL perl packager - Package SDL games
+SDLpp - Package your SDL games
 
 =head1 SETUP
 

@@ -147,6 +147,12 @@ C<SDL::linked_version> works in the same way as C<SDL::version>, but returns an 
 Returns the number of milliseconds since SDL library initialization.
 This value wraps around if the program runs for more than 49.7 days
 
+=head2 get_handle
+
+ my $win32_handle = SDL::get_handle;
+
+A video surface must be inited to get a handle. 
+
 =head2 delay
 
  SDL::delay( $ms );
@@ -158,6 +164,10 @@ C<SDL::delay> doesn't return anything.
 
  # Delay for half a second
  SDL::delay(500);
+
+=head1 SDL Manual: Getting Started
+
+A new book has been started to provide a complete tutorial for SDL. See L<http://bit.ly/hvxc9V>.
 
 =head1 AUTHORS
 

@@ -25,6 +25,12 @@ use SDL::RWOps;
 use SDL::Version;
 use Encode;
 
+use FindBin;
+use File::Spec;
+my $font_filename = File::Spec->catfile(
+        $FindBin::Bin, '..', 'share', 'GenBasR.ttf'
+);
+
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
 
@@ -74,43 +80,53 @@ is( SDL::TTF::byte_swapped_unicode(0), undef, "[ttf_byte_swapped_unicode] on" );
 is( SDL::TTF::byte_swapped_unicode(1), undef,
 	"[ttf_byte_swapped_unicode] off"
 );
-my $font = SDL::TTF::open_font( 'test/data/aircut3.ttf', 24 );
+my $font = SDL::TTF::open_font( $font_filename, 22 );
 isa_ok( $font, 'SDL::TTF::Font', "[open_font]" );
 isa_ok(
-	SDL::TTF::open_font_index( 'test/data/aircut3.ttf', 8, 0 ),
+	SDL::TTF::open_font_index( $font_filename, 8, 0 ),
 	'SDL::TTF::Font', "[open_font_index]"
 );
-my $file = SDL::RWOps->new_file( 'test/data/aircut3.ttf', 'r' );
+my $file = SDL::RWOps->new_file( $font_filename, 'r' );
 isa_ok( $file, 'SDL::RWOps', "[new_file]" );
 isa_ok(
 	SDL::TTF::open_font_RW( $file, 0, 12 ),
 	'SDL::TTF::Font', "[open_font_RW]"
 );
-$file = SDL::RWOps->new_file( 'test/data/aircut3.ttf', 'r' );
+$file = SDL::RWOps->new_file( $font_filename, 'r' );
 isa_ok(
 	SDL::TTF::open_font_index_RW( $file, 0, 16, 0 ),
 	'SDL::TTF::Font', "[open_font_index_RW]"
 );
-is( SDL::TTF::get_font_style($font),
-	TTF_STYLE_NORMAL, "[get_font_style] returns TTF_STYLE_NORMAL"
+
+# get_font_style returns the style as a bitmask
+
+my $style = SDL::TTF::get_font_style($font);
+
+is( $style, TTF_STYLE_NORMAL,  "[get_font_style] returns TTF_STYLE_NORMAL"
 );
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_BOLD ),
 	undef, "[set_font_style] to TTF_STYLE_BOLD"
 );
-is( SDL::TTF::get_font_style($font),
-	TTF_STYLE_BOLD, "[get_font_style] returns TTF_STYLE_BOLD"
+
+$style = SDL::TTF::get_font_style($font);
+
+ok( $style & TTF_STYLE_BOLD , "[get_font_style] returns TTF_STYLE_BOLD"
 );
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_ITALIC ),
 	undef, "[set_font_style] to TTF_STYLE_ITALIC"
 );
-is( SDL::TTF::get_font_style($font),
-	TTF_STYLE_ITALIC, "[get_font_style] returns TTF_STYLE_ITALIC"
+
+$style =  SDL::TTF::get_font_style($font);
+ok( $style & TTF_STYLE_ITALIC, "[get_font_style] returns TTF_STYLE_ITALIC"
 );
+
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_UNDERLINE ),
 	undef, "[set_font_style] to TTF_STYLE_UNDERLINE"
 );
-is( SDL::TTF::get_font_style($font),
-	TTF_STYLE_UNDERLINE, "[get_font_style] returns TTF_STYLE_UNDERLINE"
+
+$style =  SDL::TTF::get_font_style($font);
+
+ok( TTF_STYLE_UNDERLINE, "[get_font_style] returns TTF_STYLE_UNDERLINE"
 );
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_NORMAL ),
 	undef, "[set_font_style] to TTF_STYLE_NORMAL"
@@ -240,8 +256,9 @@ SKIP:
 	my $black      = SDL::Video::map_RGB( $display->format, 0x00, 0x00, 0x00 );
 	SDL::Video::fill_rect( $display, SDL::Rect->new( 0, 0, 640, 480 ), $black );
 
+	my $font = SDL::TTF::open_font( $font_filename, 24 );
 	my $render_text_solid = SDL::TTF::render_text_solid( $font, 'render_text_solid', $text_fg );
-	isa_ok( $render_text_solid, 'SDL::Surface', "[render_text_solid]" );
+	isa_ok( $render_text_solid, 'SDL::Surface', "[render_text_solid] ".SDL::get_error() );
 	SDL::Video::blit_surface(
 		$render_text_solid, SDL::Rect->new( 0, 0, 640, 480 ),
 		$display, SDL::Rect->new( 5, $y += 27, 640, 480 )

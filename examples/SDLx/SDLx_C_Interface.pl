@@ -7,7 +7,7 @@ use SDL::Event;
 use SDL::Events;
 
 use SDLx::Controller::Interface;
-my $app = SDLx::App->new( w => 200, h => 200, title => "timestep" );
+my $app = SDLx::App->new( w => 200, h => 200, title => "timestep", delay => 10 );
 
 #The initial x and y for this object.
 my $spring = SDLx::Controller::Interface->new( x => 100, y => 100 );
@@ -24,7 +24,6 @@ my $accel = sub {
 	my $k  = 10;
 	my $b  = 1;
 	my $ax = ( ( -1 * $k ) * ( $state->x ) - $b * $state->v_x );
-
 	return ( $ax, 0, 0 );
 };
 $spring->set_acceleration($accel);

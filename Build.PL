@@ -392,20 +392,20 @@ my %subsystems = (
 		libraries => [qw( SDL SDL_image )],
 	},
 
-	SMPEG => {
-			file	=> {
-				from => 'src/SMPEG.xs',
-				to   =>	'lib/SDL/SMPEG.xs',
-			},
-			libraries => [qw( SDL smpeg)],
-		},
-	MPEG => {
-			file	=> {
-				from => 'src/SMPEG/Info.xs',
-				to   =>	'lib/SDL/SMPEG/Info.xs',
-			},
-			libraries => [qw( SDL smpeg)],
-		},
+#	SMPEG => {
+#			file	=> {
+#				from => 'src/SMPEG.xs',
+#				to   =>	'lib/SDL/SMPEG.xs',
+#			},
+#			libraries => [qw( SDL smpeg)],
+#		},
+#	MPEG => {
+#			file	=> {
+#				from => 'src/SMPEG/Info.xs',
+#				to   =>	'lib/SDL/SMPEG/Info.xs',
+#			},
+#			libraries => [qw( SDL smpeg)],
+#		},
 	Pango => {
 		file => {
 			from => 'src/Pango/Pango.xs',
@@ -561,7 +561,7 @@ my %xs =
 	keys %subsystems;
 
 ### Standard Module::Build stuff
-$My::Builder::config = $My::Builder::config; # Prevent a warning
+$My::Builder::config = $My::Builder::config;       # Prevent a warning
 my $build = $package->new(
 	module_name        => 'SDL',
 	dist_name          => 'SDL',
@@ -569,9 +569,9 @@ my $build = $package->new(
 	dist_version_from  => 'lib/SDL.pm',
 	configure_requires => {
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL'         => '1.421_3',
+		'Alien::SDL'         => '1.424',
 		'File::Find'         => '0',
-		'File::ShareDir'     => '0',
+		'File::ShareDir'     => '1.0',
 		'Tie::Simple'        => '0',
 		'Capture::Tiny'      => '0',
 	},
@@ -579,19 +579,21 @@ my $build = $package->new(
 		'Test::Simple'      => '0.88',
    		'Capture::Tiny'     => '0',
 		'Test::Most'        => '0.21',
-		'Alien::SDL'        => '1.421_3',
+		'Alien::SDL'        => '1.424',
 		'File::Find'        => '0',
-		'File::ShareDir'    => '0',
-		'Tie::Simple'       => '0'
+		'File::ShareDir'    => '1.0',
+		'Tie::Simple'       => '0',
 	},
 	requires => {
-		'Tie::Simple' => '0',
-		'CPAN'        => '1.92'
+		'Tie::Simple'    => '0',
+		'File::ShareDir' => '1.0',
+		'CPAN'           => '1.92',
+		'perl'           => '5.008009',
 	},
+	share_dir => 'share',
 
 	build_recommends => {
-		'Pod::ToDemo' => '0.20'
-
+		'Pod::ToDemo' => '0.20',
 	},
 	config   => $My::Builder::config,
 	c_source => 'src',

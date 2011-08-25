@@ -125,7 +125,7 @@ L<SDL::TTF::init|SDL::TTF/"init"> to use the functionality again
 
  my $font = SDL::TTF::open_font($font_file, $point_size);
 
-Load file for use as a font, at the given size. This is actually C<SDL::TTF::open_font_index(..., ..., $index = 0)>. This can load TTF and FON files.
+Load file for use as a font, at the given size. This is actually C<SDL::TTF::open_font_index(..., ..., $index = 0)>. This can load TTF, OTF and FON files.
 
 Returns: a L<SDL::TTF::Font> object. C<undef> is returned on errors.
 
@@ -530,7 +530,7 @@ Example:
  SDL::init(SDL_INIT_VIDEO);
  SDL::TTF::init();
  my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
- my $font    = SDL::TTF::open_font('test/data/aircut3.ttf', '24');
+ my $font    = SDL::TTF::open_font('somefont.ttf', '24');
  die 'Coudnt make font '. SDL::get_error if !$font;
  my $surface = SDL::TTF::render_text_solid($font, 'Hallo!', SDL::Color->new(0xFF,0xFF,0xFF));
  SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(10, 10, 640, 480));

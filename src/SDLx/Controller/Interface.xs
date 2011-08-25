@@ -2,6 +2,7 @@
 #include "perl.h"
 #include "XSUB.h"
 #include "ppport.h"
+#include "defines.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -31,10 +32,13 @@ AV* acceleration_cb( SDLx_Interface * obj, float t )
 	SAVETMPS;
 	PUSHMARK(SP);
 	
-		 void** pointers = malloc(2 * sizeof(void*));
-		  pointers[0] = (void*)copyState;
-		  pointers[1] = (void*)0;
-	SV * state_obj = sv_setref_pv( stateref, "SDLx::Controller::State", (void *)pointers);
+	void** pointers  = safemalloc(3 * sizeof(void*));
+	pointers[0]      = (void*)copyState;
+	pointers[1]      = (void*)0;
+	Uint32 *threadid = (Uint32 *)safemalloc(sizeof(Uint32));
+	*threadid        = SDL_ThreadID();
+	pointers[2]      = (void*)threadid;
+	SV * state_obj   = sv_setref_pv( stateref, "SDLx::Controller::State", (void *)pointers);
 
 	XPUSHs( sv_2mortal(newSVnv(t)));
 	XPUSHs( state_obj  );

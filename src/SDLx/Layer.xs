@@ -113,6 +113,10 @@ layerx_surface( layer, ... )
             layer->surface        = SDL_ConvertSurface(surface, surface->format, surface->flags);
             layer->touched        = 1;
             layer->manager->saved = 0;
+            layer->pos->w         = layer->surface->w;
+            layer->pos->h         = layer->surface->h;
+            layer->clip->w        = layer->surface->w;
+            layer->clip->h        = layer->surface->h;
         }
     
         RETVAL = _sv_ref( layer->surface, sizeof(SDL_Surface *), sizeof(SDL_Surface), "SDL::Surface" );
