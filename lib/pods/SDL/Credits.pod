@@ -13,7 +13,7 @@ Core
 
 =head2 Core Developers
 
-See the L<impact graph|http://github.com/kthakore/SDL_perl/graphs/impact> on our github repository.
+See the L<impact graph|https://github.com/PerlGameDev/SDL/graphs/impact> on our github repository.
 
 Also see our CONTRIBUTORS file.
 
