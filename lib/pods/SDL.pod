@@ -185,7 +185,7 @@ Tobias Leich (FROGGS)
 
 The following people have dedicated blood sweat and tears to making SDL Perl possible.
 
-See the L<impact graph|http://github.com/kthakore/SDL_perl/graphs/impact> on our github repository.
+See the L<impact graph|https://github.com/PerlGameDev/SDL/graphs/impact> on our github repository.
 
 Andy Bakun <sdlperl@thwartedefforts.org>
 
