@@ -15,7 +15,7 @@ Core
 
 See the L<impact graph|https://github.com/PerlGameDev/SDL/graphs/impact> on our github repository.
 
-Also see our CONTRIBUTORS file.
+Also see L<SDL/AUTHORS>.
 
 =head2 Maintenance
 
