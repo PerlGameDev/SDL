@@ -448,7 +448,7 @@ blit_surface ( src, src_rect_sv, dest, dest_rect_sv )
 			}
 			if( SvOK( dest_rect_sv) )
 			{
-				dest_rect = (SDL_Rect*)bag2obj(src_rect_sv);
+				dest_rect = (SDL_Rect*)bag2obj(dest_rect_sv);
 			}
 		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
 	OUTPUT:
