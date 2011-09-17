@@ -259,5 +259,3 @@ sub paused {
 1; #not 42 man!
 
 __END__
-
-

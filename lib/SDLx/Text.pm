@@ -3,6 +3,7 @@ use SDL;
 use SDL::Video;
 use SDL::Config;
 use SDL::TTF;
+use SDL::TTF::Font;
 use SDLx::Validate;
 
 use Carp ();
@@ -18,7 +19,7 @@ sub new {
         $file = File::ShareDir::dist_file('SDL', 'GenBasR.ttf');
     }
 
-	my $color = $options{'color'} || [255, 255, 255];
+	my $color = defined $options{'color'} ? $options{'color'} : [255, 255, 255];
 
 	my $size = $options{'size'} || 24;
 
@@ -39,7 +40,7 @@ sub new {
 	$self->font($file);
 	$self->color($color);
 
-	$self->text( $options{'text'} ) if defined $options{'text'};
+	$self->text( $options{'text'} ) if exists $options{'text'};
 
 	return $self;
 }
@@ -51,7 +52,7 @@ sub font {
 		my $size = $self->size;
 
 		$self->{_font} = SDL::TTF::open_font($font, $size)
-			or Carp::cluck 'Error opening font: ' . SDL::get_error;
+			or Carp::cluck "Error opening font '$font': " . SDL::get_error;
 	}
 
 	return $self->{_font};
@@ -60,7 +61,7 @@ sub font {
 sub color {
 	my ($self, $color) = @_;
 
-	if ($color) {
+	if (defined $color) {
 		$self->{_color} = SDLx::Validate::color($color);
 	}
 
@@ -102,7 +103,7 @@ sub h {
 sub x {
 	my ($self, $x) = @_;
 
-	if ($x) {
+	if (defined $x) {
 		$self->{x} = $x;
 	}
 	return $self->{x};
@@ -111,7 +112,7 @@ sub x {
 sub y {
 	my ($self, $y) = @_;
 
-	if ($y) {
+	if (defined $y) {
 		$self->{y} = $y;
 	}
 	return $self->{y};
@@ -120,14 +121,22 @@ sub y {
 sub text {
 	my ($self, $text) = @_;
 
-	my $surface;
+    return $self->{text} if scalar @_ == 1;
 
-	$surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
-		or Carp::croak 'TTF rendering error: ' . SDL::get_error;
+    $self->{text} = $text;
 
-	$self->{surface} = $surface;
-	$self->{w} = $surface->w;
-	$self->{h} = $surface->h;
+    if ( defined $text ) {
+        my $surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
+        or Carp::croak 'TTF rendering error: ' . SDL::get_error;
+
+        $self->{surface} = $surface;
+        my $arr =  SDL::TTF::size_utf8( $self->{_font}, $text );
+        $self->{w} = $arr->[0];
+        $self->{h} = $arr->[1];
+    }
+    else {
+        $self->{surface} = undef;
+    }
 
 	return $self;
 }
@@ -138,17 +147,18 @@ sub surface {
 
 sub write_to {
 	my ($self, $target, $text) = @_;
-
-	$self->text($text) if $text;
+	$self->text($text) if scalar @_ > 2;
 	if ( my $surface = $self->{surface} ) {
 		if ($self->{h_align} eq 'center' ) {
 			$self->{x} = ($target->w / 2) - ($surface->w / 2);
 		}
-		# TODO: other alignments
+		elsif ($self->{h_align} eq 'right' ) {
+			$self->{x} = $target->w - $surface->w;
+		}
 
 		SDL::Video::blit_surface(
 			$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
-			$target, SDL::Rect->new($self->{x}, $self->{y}, $target->w, $target->h)
+			$target, SDL::Rect->new($self->{x}, $self->{y}, 0, 0)
 		);
 	}
 	return;
@@ -157,12 +167,17 @@ sub write_to {
 sub write_xy {
 	my ($self, $target, $x, $y, $text) = @_;
 
-	$self->text($text) if $text;
+	$self->text($text) if scalar @_ > 4;
 	if ( my $surface = $self->{surface} ) {
-
+		if ($self->{h_align} eq 'center' ) {
+			$x -= $surface->w / 2;
+		}
+		elsif ($self->{h_align} eq 'right' ) {
+			$x -= $surface->w;
+		}
 		SDL::Video::blit_surface(
-				$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
-				$target, SDL::Rect->new($x, $y, $target->w, $target->h)
+			$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
+			$target, SDL::Rect->new($x, $y, 0, 0)
 		);
 	}
 	return;

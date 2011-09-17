@@ -123,7 +123,7 @@ sub on_move {
 }
 
 sub on_event {
-	my $event = shift;
+	my ( $event, $app ) = @_;
 
 	if ( $event->type == SDL_KEYDOWN ) {
 		my $key = $event->key_sym;
@@ -144,7 +144,7 @@ sub on_event {
 		$paddle->{y_vel} += $paddle->{vel} if $key == SDLK_UP;
 		$paddle->{y_vel} -= $paddle->{vel} if $key == SDLK_DOWN;
 	} elsif ( $event->type == SDL_QUIT ) {
-		$app->stop();
+		exit;
 	}
 }
 

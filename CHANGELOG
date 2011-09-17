@@ -1,18 +1,62 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.533 
+	- Added preliminary SDLx::Music
+	- Minor fixes for SDLx::Text [garu]
+	- Build requires: perl 5.8.1 is good enough for SDL [FROGGS]
+	- SDLx::Music test: 'require threads' instead of 'use threads' and removed Data::Dumper [FROGGS]
+	- SDLx::Text test: width isnt 53 on windows, made test more tolerant [FROGGS]
+	- SDLx::FPS test: testing with 60fps is too much for some systems (cpantester vm's), reduced to 25 [FROGGS]
+	- src/helper.h: removed newSVsv() since these SV's are not freed till global destruction [FROGGS]
+
+* 2.532 March 27 2011
+	- Tested and released experimental branch
+
+* 2.531_02 March 20 2011
+	- using parent Perls context in SDL::Mixer::Music's callbacks instead of TLS [FROGGS]
+	- Adding sleep(2) to core_palette.t [FROGGS]
+	- Loading threads before Test::More in several SDL::Mixer tests [kthakore]
+	- Allow non-hashref constructor args for SDLx::FPS [jtpalmer]
+	- Fixed examples: replacing $app->stop with exit in pong [kthakore]
+	- Fixed cookbook: using known image file as fallback in pogl_sdl_texture [kthakore]
+	- Fixed examples: pong, starry, tie_matrix, sdlx_sprite_animated [jtpalmer]
+	- Rewrote INSTALL and README file [Pip]
+	- SDLx::Surface: added tests for draw_rect with transparency/translucency [garu]
+	- SDLx::Surface: fixed option handling, center and right alignment in write_to/xy [FROGGS]
+
+* 2.531_01 March 9 2011
+	New features:
+	- SDLx::Surface    draw_polygon(), linking GFX to Surfaces when available [FROGGS]
+	- SDLx::Controller exit_on_quit() and eoq() accessors [garu]
+
+	Changes that may break old code:
+	- SDLx::Controller now handles eoq option as a non handler [kthakore]
+
+	Experimental features:
+	- SDLx::Controller  "delay" option to ease CPU pressure [kthakore]
+
+	Bugfixes:
+	- SDLx::Controller proper handler initialization [garu]
+	- SDLx::Controller several more tests added [garu]
+	- SDLx::Controller::Interface  fixed memory leak [jtpalmer]
+	- SDLx::Controller::Interface  fixed angular velocity [jtpalmer]
+	- SDLx::Text using SDL::TTF::Font correctly [FROGGS]
+	- SDLx::Controller keeps track of paused state [Blaizer]
+	- SDLx::Rect proper object construction [garu]
+
 * 2.531 Feb 27 2011
-    - protecting dstrect from modification during SDL_BlitSurface (FROGGS)
-    - installing SDLpp as a console app (kthakore)
-    - improving installation under MacOSX/Darwin (kthakore/FROGGS)
-    - SDLx::Text  (and, thus, SDL Perl) now ships with a default FOSS font (garu/perigrin)
-    - SDLx::Text  improved text() manipulation (garu)
-    - SDLx::Text  added complete documentation (garu)
-    - SDLx::Text  all text is now rendered as utf8 (kthakore/garu)
-    - SDLx::Text  added accessors for all SDLx::Text attributes (garu)
-    - SDLx::Text  text() returns $self, surface() returns $surface (garu)
-    - SDLx::Text  tests and w/h methods for SDLx::Text (kthakore/garu)
-    - SDLx::App   improved internals (kthakore)
-    - SDLx::App   added stash() method (FROGGS)
+	- protecting dstrect from modification during SDL_BlitSurface [FROGGS]
+	- installing SDLpp as a console app [kthakore]
+	- improving installation under MacOSX/Darwin [kthakore/FROGGS]
+	- SDLx::Text  (and, thus, SDL Perl) now ships with a default FOSS font [garu/perigrin]
+	- SDLx::Text  improved text() manipulation [garu]
+	- SDLx::Text  added complete documentation [garu]
+	- SDLx::Text  all text is now rendered as utf8 [kthakore/garu]
+	- SDLx::Text  added accessors for all SDLx::Text attributes [garu]
+	- SDLx::Text  text() returns $self, surface() returns $surface [garu]
+	- SDLx::Text  tests and w/h methods for SDLx::Text [kthakore/garu]
+	- SDLx::App   improved internals [kthakore]
+	- SDLx::App   added stash() method [FROGGS]
 
 * 2.530 Feb 02 2011
 	- Fixed SDL threaded free problems with a threadid guard [kthakore/FROGGS]

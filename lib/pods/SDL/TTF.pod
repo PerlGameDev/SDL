@@ -240,7 +240,7 @@ B<Note>: at least SDL_ttf 2.0.10 needed
 
 =head4 set_font_outline
 
- SDL::TTF::get_font_outline($font, $outline);
+ SDL::TTF::set_font_outline($font, $outline);
 
 Set the outline pixel width of the loaded font. Use C<0>(zero) to turn off outlining.
 

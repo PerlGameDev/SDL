@@ -21,7 +21,7 @@ The Following are XS bindings to the SDL_gfx Library
 
 Described here:
 
-See: L<http:/*www.ferzkopp.net/joomla/content/view/19/14/> */
+See: L<http://www.ferzkopp.net/joomla/content/view/19/14/>
 
 =cut
 

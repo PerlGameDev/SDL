@@ -12,6 +12,10 @@
 #include <SDL.h>
 #include "SDLx/Validate.h"
 
+#ifdef HAVE_SDL_GFX_PRIMITIVES
+#include <SDL_gfxPrimitives.h>
+#endif
+
 SV * get_pixel32 (SDL_Surface *surface, int x, int y)
 {
 	
@@ -195,6 +199,40 @@ surfacex_draw_rect ( surface, rt, color )
 			r_rect.x = 0; r_rect.y = 0; r_rect.w = surface->w; r_rect.h = surface->h;
 			SDL_FillRect(surface, &r_rect, m_color);
 		}
+
+#ifdef HAVE_SDL_GFX_PRIMITIVES
+
+int
+surfacex_draw_polygon(surface, vectors, color, antialias)
+    SDL_Surface * surface
+    AV* vectors
+    Uint32 color
+    SV *antialias
+    CODE:
+        AV* vx = newAV();
+        AV* vy = newAV();
+        int n;
+        for(n = 0; n <= av_len(vectors); n++)
+        {
+            if(n & 1)
+                av_store(vy, (int)((n-1)/2), *av_fetch(vectors, n, 0));
+            else
+                av_store(vx, (int)(n/2),     *av_fetch(vectors, n, 0));
+        }
+        
+        n = av_len(vx) + 1;
+        
+        Sint16 * _vx   = av_to_sint16(vx);
+        Sint16 * _vy   = av_to_sint16(vy);
+        RETVAL         = SvOK(antialias)
+                       ? aapolygonColor(surface, _vx, _vy, n, color)
+                       : polygonColor(surface, _vx, _vy, n, color);
+        _svinta_free( _vx, av_len(vx) );
+        _svinta_free( _vy, av_len(vy) );
+    OUTPUT:
+        RETVAL
+
+#endif
 
 void
 surfacex_blit( src, dest, ... )

@@ -35,8 +35,6 @@ Core, Video
  SDL::Video::update_rect($screen_surface, 0, 0, $screen_width, $screen_height);
 
  sleep(5); # just to have time to see it
- 
- SDL::quit();
 
 =head1 CONSTANTS
 
@@ -150,8 +148,6 @@ Example:
  my $video_info = SDL::Video::get_video_info();
  
  printf( "we can have %dbits per pixel\n", $video_info->vfmt->BitsPerPixel );
- 
- SDL::quit();
 
 =head2	video_driver_name
 
@@ -170,8 +166,6 @@ Example:
  SDL::init(SDL_INIT_VIDEO);
 
  print SDL::Video::video_driver_name() . "\n";
- 
- SDL::quit();
 
 =head2	list_modes
 
@@ -223,8 +217,6 @@ Example:
  {
      printf("%s video modes available\n", $modes[0]);
  }
- 
- SDL::quit();
 
 =head2	video_mode_ok
 
@@ -247,8 +239,6 @@ Example:
  {
      printf( "this video mode is not supported\n" );
  }
- 
- SDL::quit();
 
 =head2	set_video_mode
 
@@ -418,8 +408,6 @@ B<Note>: When loading a 24-bit Windows BMP file, pixel data points are loaded as
  SDL::Video::update_rect( $screen, 0, 0, $screen_width, $screen_height );
  
  sleep(2);
- 
- SDL::quit;
 
 =head2	save_BMP
 
@@ -439,7 +427,7 @@ the key value).
 The key must be of the same pixel format as the surface, L<SDL::Video::map_RGB|/map_RGB> is often useful for obtaining an acceptable value.
 If flag is C<SDL_SRCCOLORKEY> then key is the transparent pixel value in the source image of a blit.
 
-If C<flag> is OR'd with C<SDL_RLEACCEL> then the surface will be drawn using RLE acceleration when drawn with SDL::Blit_surface.
+If C<flag> is OR'd with C<SDL_RLEACCEL> then the surface will be drawn using RLE acceleration when drawn with SDL::Video::blit_surface.
 The surface will actually be encoded for RLE acceleration the first time L<SDL::Video::blit_surface|/blit_surface> or 
 C<SDL::Video::display_format|/display_format> is called on the surface.
 If C<flag> is C<0>, this function clears any current color key. 
@@ -631,8 +619,6 @@ a matching unlock.
  }
  
  main();
- 
- SDL::quit;
 
 =head2	unlock_surface
 
@@ -689,8 +675,6 @@ C<SDL::Video::get_clip_rect> doesn't returns anything;
  SDL::Video::get_clip_rect($screen, $rect);
  
  printf( "rect is %d, %d, %d, %d\n", $rect->x, $rect->y, $rect->w, $rect->h);
- 
- SDL::quit;
 
 =head2	blit_surface
 
@@ -766,8 +750,6 @@ Example:
 
  sleep(2);
 
- SDL::quit();
-
 =head2	flip
 
  $flip = SDL::Video::flip( $screen_surface );
@@ -811,8 +793,6 @@ Example:
  {
      printf( STDERR "failed to swap buffers: %s\n", SDL::get_error() );
  }
- 
- SDL::quit();
 
 =head1 Palette, Color and Pixel Functions
 
@@ -918,8 +898,6 @@ Example:
  SDL::Video::set_gamma( 1, 1, 1 );
  
  usleep(500000);
- 
- SDL::quit();
 
 =head2	get_gamma_ramp
 
@@ -947,8 +925,6 @@ C<SDL::Video::get_gamma_ramp> returns -1 on error.
      printf( "for gamma = 0.5: red=0x%04X, green=0x%04X, blue=0x%04X\n", $red[127], $green[127], $blue[127] );
      printf( "for gamma = 0.0: red=0x%04X, green=0x%04X, blue=0x%04X\n", $red[0],   $green[0],   $blue[0]   );
  }
- 
- SDL::quit();
 
 =head2	set_gamma_ramp
 
@@ -992,8 +968,6 @@ Example:
      printf( "for gamma = 0.5: red=0x%04X, green=0x%04X, blue=0x%04X\n", $red[127], $green[127], $blue[127] );
      printf( "for gamma = 0.0: red=0x%04X, green=0x%04X, blue=0x%04X\n", $red[0],   $green[0],   $blue[0]   );
  }
- 
- SDL::quit();
 
 =head2	map_RGB
 
@@ -1032,8 +1006,6 @@ If the L<SDL::PixelFormat>'s  bpp (color depth) is less than 32-bpp then the unu
  printf( "for 16bpp it is: 0x%02X 0x%02X 0x%02X\n", $r, $g, $b );
  
  # so color #9CDC67 becomes #9CDF63
- 
- SDL::quit();
 
 =head2	map_RGBA
 
@@ -1272,8 +1244,6 @@ Example:
  SDL::Video::wm_set_caption( 'maximized title', 'minimized title' );
  
  sleep(2);
- 
- SDL::quit;
 
 =head2	wm_get_caption
 
@@ -1296,8 +1266,6 @@ Example:
  my ($title, $icon) = @{ SDL::Video::wm_get_caption() };
  
  printf( "title is '%s' and icon is '%s'\n", $title, $icon );
- 
- SDL::quit;
 
 =head2	wm_set_icon
 
@@ -1378,8 +1346,6 @@ Example:
  SDL::Video::wm_iconify_window();
  
  sleep(2); 
- 
- SDL::quit;
 
 =head2	wm_toggle_fullscreen
 

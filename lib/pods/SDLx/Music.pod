@@ -1,0 +1,323 @@
+
+=head1 NAME
+
+SDLx::Music - A powerful, convenient interface to C<SDL::Mixer::Music>
+
+=head1 CATEGORY
+
+Extension
+
+=head1 SYNOPSIS
+
+	use SDL;
+	use SDLx::Music;
+
+	my $music = SDLx::Music->new;
+
+	#define music data with just a name and file path
+	$music->data(
+		fast => 'music/fast.ogg',
+		slow => 'music/slow.ogg',
+		magical => 'music/magic/cake.ogg',
+	);
+
+	#define more the long way with a parameter hash
+	$music->data(
+		squelch => {
+			file    => 'music/squelch.ogg',
+			loops   => 3,
+			fade_in => 0.5,
+			volume  => 72,
+		}
+		splurge => {
+			file     => 'music/splurge.ogg',
+			finished => sub { print 'Splurged!' },
+		},
+	);
+
+	#instead, do it the short way with the help of defaults
+
+	#clobber everything
+	$music->clear;
+
+	#specify the class-wide default for file extension
+	SDLx::Music->default->ext('.ogg');
+
+	#specify the object-wide default for file directory
+	$music->default->dir('music/');
+
+	#redefine squelch and splurge
+	$music->data(
+		squelch => {
+			#file defaults to the data name, so the path becomes
+			#'music/squelch.ogg', which is what we wanted
+			loops   => 3,
+			fade_in => 0.5,
+			volume  => 72,
+		}
+		splurge => {
+			finished => sub { print 'Splurged!' },
+		},
+	);
+
+	#and we can redefine the others like this
+	$music->data_for(
+		'fast',
+		'slow',
+	)->data(
+		magical => 'magic/cake',
+	);
+
+	#get to that named data
+	my $splurge = $music->data('splurge');
+
+	#and add to/modify it without clobbering existing data
+	$splurge
+		->volume(55)
+		->file('data/' . $splurge->file)
+	;
+
+	#play it once, fading in for 2 seconds
+	$music->play($splurge, loops => 1, fade_in => 2);
+	#(it will be loaded automatically and played with its specified params)
+
+	sleep 5;
+
+	#pause it
+	$music->pause if $music->playing;
+
+	#load everything else
+	$music->load;
+
+	#resume playing it at a lower volume
+	$music->volume(44);
+	$music->play;
+
+	#get the names for all music
+	my @names = keys %{ $music->data };
+
+	for my $name (@names) {
+		#play it in an infinite loop
+		$music->play($name, loops => 0);
+		warn "Cake!" if $music->playing eq "magical";
+		sleep 10;
+	}
+
+	#fade out the last song
+	$music->fade_out(5);
+
+	sleep 4;
+
+	die "CAKE!" if $music->fading->name eq "magical";
+	
+	sleep 1;
+
+=head1 DESCRIPTION
+
+This class provides a powerful and convenient interface to L<SDL::Mixer::Music>. The main goal was to make music code neater and clearer. Among the things that help this, this class provides class-wide and object-wide defaults and it automatically shares duplicate use of the same files.
+
+The following document is intended for reference. For a more beginner-friendly description of this class, see chapter X of the SDL Perl Manual (when it is written).
+
+B<Please note:> do not mix use of this class with L<SDL::Mixer::Music> if you want everything to work right.
+
+=head1 METHODS
+
+=head2 new
+
+	SDLx::Music->new;
+	#Option arguments showing the default parameters
+	SDLx::Music->new( freq => 44100, format => SDL::Audio::AUDIO_S16SYS, channels => 2, chunksize => 4096);
+
+	
+
+Creates the new music object. Inits audio with a call to L<SDLx::Mixer::init|SDLx::Mixer/init>, if it isn't already (if you want more precise control over what is initialized, make sure you call L<SDLx::Mixer::init|SDLx::Mixer/init> before you call thiihs method). Creates an empty default data object for object-wide defaults. If arguments are supplied, calls L</data> with them to set up any initial data objects. Returns the new music object.
+
+=head2 data
+
+	$music->data;
+	$music->data( $name );
+	$music->data( $data );
+	$music->data( %args );
+
+With no arguments: returns a reference to the data hash. This hash has data names as keys and the associated data objects as values.
+
+With a name: creates the data name if it doesn't already exist. Does this with a call to L<SDLx::Music::Data->new|SDLx::Music::Data/new> with C<name => $name> and puts that new object in the data hash under the key of C<$name>. Returns the data object for that name.
+
+With a hash of arguments: for each pair, and returns a  L<SDLx::Music::Data>. Returns C<$music>.
+
+=head2 data_for
+
+	$music->data_for( @names_or_data_objects );
+
+Calls L</data> repeatedly, passing it one element of the list at a time, to initialise mulitiple empty names and/or add data objects. Returns C<$music>.
+
+=head2 has_data
+
+	$music->has_data;
+	$music->has_data( $name );
+	$music->has_data( $data );
+
+Without arguments: returns how many data objects the class has.
+
+With a name: returns the data object for C<$name>. If there is no data object for C<$name> it is not created and undef is returned instead.
+
+With a data object: does a (slowish) reverse of the data hash to see if the data object belongs to C<$music>. Returns it or undef.
+
+=head2 default
+
+	$music->default;
+	SDLx::Music->default;
+
+Returns the default data object belonging to C<$music> (created in L</new>), or to the class. See L<SDLx::Music::Data> for information on how defaults work.
+
+=head2 load
+
+	$music->load;
+	$music->load( @names_or_data_objects );
+	SDLx::Music->load( @data_objects );
+
+Without arguments: for every data object belonging to C<$music>, if the data object doesn't already have a L<loaded|SDLx::Music::Data/loaded> file, loads the file named by L<dir|SDLx::Music::Data/dir>, L<file|SDLx::Music::Data/file> and L<ext|SDLx::Music::Data/ext> if it hasn't been loaded already. Sets the data object's L<loaded|SDLx::Music::Data/loaded> parameter to this. Two or more objects that use the same file will use the same loaded file. Reference counting is respected, so if two data objects use the same loaded file it will be removed from memory only after both are destroyed. Returns <$music>.
+
+With arguments: does the same, but only for the names or data objects in the list. If there isn't a data object for any name, it will be created.
+
+=head2 unload
+
+	$music->unload;
+	$music->unload( @names_or_data_objects );
+	SDLx::Music->unload( @data_objects );
+
+Without arguments: clears the L<loaded|SDLx::Music::Data/loaded> parameter for all of the data objects in C<$music>. The loaded file is removed from memory if it loses its last reference to it. Returns <$music>.
+
+With arguments: does the same, but only for the names or data objects in the list. Doesn't create a data object for a name that doesn't exist.
+
+=head2 clear
+
+	$music->clear;
+	$music->clear( @names );
+
+Without arguments: empties C<$music>'s data hash of all of its objects. The objects will be destroyed only if the last reference to them is removed, and no parameters will be cleared if this is not the case. Returns C<$music>.
+
+With arguments: does the same, but only deletes the values of the data hash for the names in the list.
+
+=head2 real_clear
+
+	$music->real_clear;
+	$music->real_clear( @names_or_data_objects );
+	SDLx::Music->real_clear( @data_objects );
+
+The full, brute force version of L</clear>.
+
+Without arguments: empties out the parameters of every data object in C<$music> (including L</unload>ing them) and then removes them from the data hash. This may not remove the objects from memory if there are still remaining references to them, but it is the closest thing to it. Returns C<$music>.
+
+With arguments: does the same, but only clears out the names or data objects in the list.
+
+=head2 play
+
+	$music_or_class->play;
+	$music->play( $name, $params );
+	$music_or_class->play( $data, %params );
+
+Without arguments: resumes any paused music. Returns the object or class.
+
+With arguments: plays the sound found in C<$music>'s C<$name>, or in C<$data> (depending on which is specified). L</load>s it if it needs to be loaded (which in turn creates the name if it needs to be created). The C<%params> are all optional and, if defined, are used instead of the values returned by the data object's parameter methods. The accepted parameters here are:
+
+=over
+
+=item L<loops|SDLx::Music::Data/loops>
+
+Plays the music file C<loops> times. If C<loops> is 0, loops it infinitely.
+
+=item L<fade_in|SDLx::Music::Data/fade_in>
+
+Fades the music in for its first C<fade_in> milliseconds, if C<fade_in> is defined.
+
+=item L<vol|SDLx::Music::Data/vol>
+
+Sets the music volume to C<vol>.
+
+=item L<vol_portion|SDLx::Music::Data/vol_portion>
+
+Multiplies the C<vol> by C<vol_portion> (values from 0 to 1 are encouraged) before setting the volume.
+
+=item L<pos|SDLx::Music::Data/pos>
+
+Sets the music position to C<pos> if C<pos> is defined.
+
+=back
+
+Returns the object or class.
+
+=head2 pause
+
+	$music_or_class->pause;
+
+Pauses any playing music. Returns the object or class.
+
+=head2 stop
+
+	$music_or_class->stop;
+
+Stops any playing music. Returns the object or class.
+
+=head2 last_played
+
+	my $last_played = $music_or_class->last_played;
+
+Returns the data object that was L</play>ed last.
+
+=head2 playing
+
+	my $playing = $music->playing;
+
+If there is something playing, returns the data object that was L</play>ed last. Otherwise, returns undef.
+
+=head2 paused
+
+If there is something paused, returns the data object that was L</play>ed last. Otherwise, returns undef.
+
+=head2 fading
+
+If there is something fading, returns the data object that was L</play>ed last. Otherwise, returns undef.
+
+=head2 volume
+
+	my $volume = $music_or_class->volume;
+	$music_or_class->volume( $volume );
+
+Without arguments: returns the current music volume
+
+With arguments: Sets the music volume to C<$volume>. Returns the object or class.
+
+=head2 fade_out
+
+	$music_or_class->fade_out( $fade_out );
+
+Fades the music out for its next C<fade_in> milliseconds. Returns the object or class.
+
+=head2 rewind
+
+	$music_or_class->rewind;
+
+Rewinds the music to its start. Returns the object or class.
+	
+=head2 pos
+
+	$music_or_class->pos( $pos );
+
+Sets the music position to C<$pos> milliseconds. It does different things for different file types, so see L<SDL::Mixer::Music::set_music_position|SDL::Mixer::Music/set_music_position> for details. Note that this method divides C<$pos> by 1000 to pass it to that function, which uses seconds. Returns the object or class.
+
+=head1 SEE ALSO
+
+L<SDLx::Music::Data>
+L<SDLx::Mixer>
+L<SDL::Mixer::Music>
+L<SDL::Mixer>
+
+=head1 AUTHORS
+
+See L<SDL/AUTHORS>.
+
+=head1 COPYRIGHT & LICENSE
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.

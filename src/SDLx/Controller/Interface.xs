@@ -3,6 +3,7 @@
 #include "XSUB.h"
 #include "ppport.h"
 #include "defines.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -13,49 +14,37 @@
 
 AV* acceleration_cb( SDLx_Interface * obj, float t )
 {
-	
 	SV* tmpsv;
 	if( !(SvROK(obj->acceleration) && (tmpsv = obj->acceleration) ) )
 	{
 		croak( "Interface doesn't not contain an acceleration callback" );
 	}
 
-
 	dSP;
 	AV* array = newAV();
+	int i;
 	int count;
-	SV * stateref = newSV( sizeof(SDLx_State *) ); 	
-	void * copyState = safemalloc( sizeof(SDLx_State) );
-	memcpy( copyState, obj->current, sizeof(SDLx_State) );
-	((SDLx_State *)copyState)->owned = 0; /*conditional free */
+	SDLx_State* copyState = (SDLx_State *)safemalloc( sizeof(SDLx_State) );
+	copy_state( copyState, obj->current );
+	copyState->owned = 0;
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
-	
-	void** pointers  = safemalloc(3 * sizeof(void*));
-	pointers[0]      = (void*)copyState;
-	pointers[1]      = (void*)0;
-	Uint32 *threadid = (Uint32 *)safemalloc(sizeof(Uint32));
-	*threadid        = SDL_ThreadID();
-	pointers[2]      = (void*)threadid;
-	SV * state_obj   = sv_setref_pv( stateref, "SDLx::Controller::State", (void *)pointers);
-
-	XPUSHs( sv_2mortal(newSVnv(t)));
-	XPUSHs( state_obj  );
-
+	XPUSHs( sv_2mortal(newSVnv(t)) );
+	XPUSHs( sv_2mortal( obj2bag( sizeof(SDLx_State *), (void *)copyState, "SDLx::Controller::State" ) ) );
 	PUTBACK;
 
-	count = call_sv(obj->acceleration, G_ARRAY);
+	count = call_sv( obj->acceleration, G_ARRAY );
 
 	SPAGAIN;
 /*	warn( "state %p, state->x %f", copyState, ((SDLx_State *)copyState)->x ); */
-	int i;
-	for( i =0; i < count ; i++)
-	 av_push( array, newSVnv(POPn));
+	for( i = 0; i < count; i++ )
+		av_push( array, newSVnv(POPn) );
 
 /*	warn ("before obj->current->x %f", obj->current->x); */
-	copy_state(obj->current, (SDLx_State *)copyState);
+	copy_state( obj->current, copyState );
 /*	warn ("after obj->current->x %f", obj->current->x); */
+	PUTBACK;
 	FREETMPS;
 	LEAVE;
 
@@ -68,10 +57,21 @@ void evaluate(SDLx_Interface* obj, SDLx_Derivative* out, SDLx_State* initial, fl
 	out->dy = initial->v_y;
 	out->drotation = initial->ang_v;
 	AV* accel = acceleration_cb(obj, t);
-	out->dv_x = sv_nv(av_pop(accel));
-	out->dv_y = sv_nv(av_pop(accel));
-	out->dang_v = sv_nv(av_pop(accel));
 
+	SV* temp;
+	temp = av_pop(accel);
+	out->dv_x = sv_nv(temp);
+	SvREFCNT_dec(temp);
+
+	temp = av_pop(accel);
+	out->dv_y = sv_nv(temp);
+	SvREFCNT_dec(temp);
+
+	temp = av_pop(accel);
+	out->dang_v = sv_nv(temp);
+	SvREFCNT_dec(temp);
+
+	SvREFCNT_dec((SV*)accel);
 }
 
 void evaluate_dt(SDLx_Interface* obj, SDLx_Derivative* out, SDLx_State* initial, float t, float dt, SDLx_Derivative* d)
@@ -90,9 +90,21 @@ void evaluate_dt(SDLx_Interface* obj, SDLx_Derivative* out, SDLx_State* initial,
 	out->drotation = state.ang_v;
 
 	AV* accel = acceleration_cb(obj, t+dt);
-	out->dv_x = sv_nv(av_pop(accel));
-	out->dv_y = sv_nv(av_pop(accel));
-	out->dang_v = sv_nv(av_pop(accel));
+
+	SV* temp;
+	temp = av_pop(accel);
+	out->dv_x = sv_nv(temp);
+	SvREFCNT_dec(temp);
+
+	temp = av_pop(accel);
+	out->dv_y = sv_nv(temp);
+	SvREFCNT_dec(temp);
+
+	temp = av_pop(accel);
+	out->dang_v = sv_nv(temp);
+	SvREFCNT_dec(temp);
+
+	SvREFCNT_dec((SV*)accel);
 }
 
 void integrate( SDLx_Interface* object, float t, float dt) 
@@ -113,7 +125,7 @@ void integrate( SDLx_Interface* object, float t, float dt)
 	const float dydt = 1.0f/6.0f * (a->dy + 2.0f*(b->dy + c->dy) + d->dy);
 	const float dv_ydt = 1.0f/6.0f * (a->dv_y + 2.0f*(b->dv_y + c->dv_y) + d->dv_y);
 	const float drotationdt = 1.0f/6.0f * (a->drotation + 2.0f*(b->drotation + c->drotation) + d->drotation);
-	const float dv_angdt = 1.0f/6.0f * (a->dang_v + 2.0f*(b->dang_v + c->dv_y) + d->dang_v);
+	const float dv_angdt = 1.0f/6.0f * (a->dang_v + 2.0f*(b->dang_v + c->dang_v) + d->dang_v);
 
 	state->x = state->x + dxdt*dt;
 	state->v_x = state->v_x + dv_xdt*dt;

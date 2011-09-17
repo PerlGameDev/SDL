@@ -17,12 +17,12 @@ SDL::Video::fill_rect(
 );
 
 my $sprite = SDLx::Sprite::Animated->new(
-	image           => 'test/data/hero.png',
+	image           => 'test/data/hero.bmp',
 	rect            => SDL::Rect->new( 48, 0, 48, 48 ),
 	ticks_per_frame => 6,
 );
 $sprite->set_sequences( left => [ [ 1, 0 ], [ 1, 1 ], [ 1, 2 ] ], );
-$sprite->alpha_key( SDL::Color->new( 0xfc, 0x00, 0xff ) );
+$sprite->alpha_key( SDL::Color->new( 0xff, 0x00, 0xff ) );
 $sprite->sequence('left');
 $sprite->start();
 my $x     = 0;

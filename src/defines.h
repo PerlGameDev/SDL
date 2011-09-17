@@ -48,6 +48,8 @@ PerlInterpreter *current_perl = NULL;
             }
 #define LEAVE_TLS_CONTEXT }
 #else
+PerlInterpreter *parent_perl = NULL;
+extern PerlInterpreter *parent_perl;
 #define GET_TLS_CONTEXT         /* TLS context not enabled */
 #define ENTER_TLS_CONTEXT       /* TLS context not enabled */
 #define LEAVE_TLS_CONTEXT       /* TLS context not enabled */

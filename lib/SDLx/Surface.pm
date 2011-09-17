@@ -317,18 +317,10 @@ sub draw_ellipse {
 	return $self;
 }
 
-sub draw_polygon {
-	my ( $self, $vector, $color ) = @_;
-
-	return $self;
-
-}
-
 sub draw_bezier {
 	my ( $self, $vector, $smooth, $color ) = @_;
 
 }
-
 
 sub draw_gfx_text {
 	my ( $self, $vector, $color, $text, $font ) = @_;

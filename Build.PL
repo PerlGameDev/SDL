@@ -165,7 +165,7 @@ my %subsystems = (
 			from => 'src/SDLx/Surface.xs',
 			to   => 'lib/SDLx/Surface.xs',
 		},
-		libraries => [qw( SDL )],
+		libraries => [qw( SDL SDL_gfx_primitives )],
 	},
 	TimerX => {
 		file => {
@@ -569,7 +569,7 @@ my $build = $package->new(
 	dist_version_from  => 'lib/SDL.pm',
 	configure_requires => {
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL'         => '1.424',
+		'Alien::SDL'         => '1.426',
 		'File::Find'         => '0',
 		'File::ShareDir'     => '1.0',
 		'Tie::Simple'        => '0',
@@ -579,16 +579,18 @@ my $build = $package->new(
 		'Test::Simple'      => '0.88',
    		'Capture::Tiny'     => '0',
 		'Test::Most'        => '0.21',
-		'Alien::SDL'        => '1.424',
+		'Alien::SDL'        => '1.426',
 		'File::Find'        => '0',
 		'File::ShareDir'    => '1.0',
 		'Tie::Simple'       => '0',
+		'Scalar::Util'      => '0',
 	},
 	requires => {
+		'Scalar::Util'   => '0',
 		'Tie::Simple'    => '0',
 		'File::ShareDir' => '1.0',
 		'CPAN'           => '1.92',
-		'perl'           => '5.008009',
+		'perl'           => '5.008000',
 	},
 	share_dir => 'share',
 

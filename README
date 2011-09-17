@@ -1,53 +1,14 @@
 NAME
-    SDL_perl - Simple DirectMedia Layer for Perl
- 
+    SDL Perl - Simple DirectMedia Layer for Perl
+
 SYNOPSIS
     use SDL;
- 
+
 DESCRIPTION
-    SDL_perl is a package of Perl modules that provide both functional and
+    SDL Perl is a package of Perl modules that provide both functional and
     object oriented interfaces to the Simple DirectMedia Layer for Perl 5.
     This package takes some liberties with the SDL API, and attempts to adhere
     to the spirit of both the SDL and Perl.
- 
-The SDL Perl 2009 Development Team
-    Documentation
-        Nick: magnet
- 
-    Perl Development
-        Nick: Garu
-        Name: Breno G. de Oliveira
-            
-        Nick: Dngor
-        Name: Rocco Caputo
- 
-        Nick: nferraz
-        Name: Nelson Ferraz
 
-        Nick: monsenhor
-        Name: Ricardo Filipo
- 
-    Maintainance
-        Nick: kthakore
-        Name: Kartik Thakore
-
-        Nick: FROGGS
-        Name: Tobias Leich
-    
-MacOSX Experimental Usage
-    Please get libsdl packages from Fink
- 
-            perl Build.PL
-            perl Build test
-            perl Build Bundle
-            perl Build install
- 
-    Running SDL Perl Scripts in MacOSX
-        First set the PERL5LIB environment variable to the dependencies of your
-        script
- 
-            %export PERL5LIB=$PERL5LIB:./lib
- 
-        Use the SDLPerl executable made in the bundle and call your scripts
- 
-            %SDLPerl.app/Contents/MacOS/SDLPerl yourScript.pl
+The SDL Perl Development Team
+    Please see: HTTPS://GitHub.Com/PerlGameDev/SDL/contributors

@@ -279,4 +279,3 @@ sub stash :lvalue {
 }
 
 1;
-
