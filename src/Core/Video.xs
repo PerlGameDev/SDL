@@ -434,12 +434,22 @@ fill_rect ( dest, dest_rect, pixel )
 		RETVAL
 
 int
-blit_surface ( src, src_rect, dest, dest_rect )
+blit_surface ( src, src_rect_sv, dest, dest_rect_sv )
 	SDL_Surface *src
 	SDL_Surface *dest
-	SDL_Rect *src_rect
-	SDL_Rect *dest_rect
+	SV *src_rect_sv
+	SV *dest_rect_sv
 	CODE:
+		SDL_Rect* src_rect = NULL;
+		SDL_Rect* dest_rect = NULL;
+			if( SvOK(src_rect_sv ) )
+			{
+				src_rect = (SDL_Rect*)bag2obj(src_rect_sv);
+			}
+			if( SvOK( dest_rect_sv) )
+			{
+				dest_rect = (SDL_Rect*)bag2obj(src_rect_sv);
+			}
 		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
 	OUTPUT:
 		RETVAL
