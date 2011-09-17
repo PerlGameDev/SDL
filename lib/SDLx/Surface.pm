@@ -123,9 +123,7 @@ sub get_pixel {
 
 sub set_pixel {
 	my ( $self, $y, $x, $new_value ) = @_;
-
 	$new_value = SDLx::Validate::num_rgba($new_value);
-
 	SDLx::Surface::set_pixel_xs( $self, $x, $y, $new_value );
 }
 
@@ -190,6 +188,8 @@ sub load {
 		}
 	}
 
+	
+	
 	my $formated_surface = $surface;
 	if( SDL::Video::get_video_surface )
 	{
@@ -200,6 +200,33 @@ sub load {
 }
 
 #EXTENSTIONS
+
+sub blit {
+	my ( $src, $dest, $src_rect, $dest_rect ) = @_;
+
+	$src = SDLx::Validate::surface($src);
+	$dest = SDLx::Validate::surface($dest);
+
+	if(defined $src_rect) {
+		$src_rect = SDLx::Validate::rect($src_rect);
+	}
+	else {
+		$src_rect = SDL::Rect->new( 0, 0, $src->w, $src->h );
+	}
+	if(defined $dest_rect) {
+		$dest_rect = SDLx::Validate::rect($dest_rect);
+	}
+	else {
+		$dest_rect = SDL::Rect->new( 0, 0, $dest->w, $dest->h );
+	}
+
+	SDL::Video::blit_surface(
+		$src, $src_rect,
+		$dest, $dest_rect
+	);
+
+	return $src;
+}
 
 sub blit_by {
 	my ( $dest, $src, $src_rect, $dest_rect ) = @_;
@@ -218,19 +245,33 @@ sub update {
 	my ( $surface, $rects ) = @_;
 
 	if ( !defined($rects) || ( ref($rects) eq 'ARRAY' && !ref( $rects->[0] ) ) ) {
-			my @rect;
-		 @rect = @{$rects} if $rects;
+		my @rect;
+		@rect = @{$rects} if $rects;
 		$rect[0] ||= 0;
 		$rect[1] ||= 0;
 		$rect[2] ||= $surface->w;
 		$rect[3] ||= $surface->h;
- 	
+		
 		SDL::Video::update_rect( $surface, @rect );
 	} else {
 		SDL::Video::update_rects( $surface, map { SDLx::Validate::rect($_) } @{$rects} );
 	}
 
 	return $surface;
+}
+
+sub draw_rect {
+	my ( $self, $rect, $color ) = @_;
+	$color = SDLx::Validate::map_rgba( $color, $self->format );
+	if ( defined $rect ) {
+		$rect = SDLx::Validate::rect($rect);
+	} else {
+		$rect = SDL::Rect->new( 0, 0, $self->w, $self->h );
+	}
+
+	SDL::Video::fill_rect( $self, $rect, $color )
+		and Carp::confess "Error drawing rect: " . SDL::get_error();
+	return $self;
 }
 
 sub draw_line {
@@ -273,7 +314,7 @@ sub draw_circle {
 
 	unless( $antialias )
 	{
-		SDL::GFX::Primitives::circle_color( $self, @{$center}, $radius, $color );
+	SDL::GFX::Primitives::circle_color( $self, @{$center}, $radius, $color );
 	}
 	else
 	{
@@ -283,7 +324,7 @@ sub draw_circle {
 }
 
 sub draw_circle_filled {
-	my ( $self, $center, $radius, $color) = @_;
+	my ( $self, $center, $radius, $color ) = @_;
 
 	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
 		Carp::cluck("SDL_gfx_primitives support has not been compiled");
