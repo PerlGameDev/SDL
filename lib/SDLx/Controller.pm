@@ -22,6 +22,7 @@ my %_event_handlers;
 my %_move_handlers;
 my %_show_handlers;
 my %_sleep_cycle;
+my %_eoq;
 my %_paused;
 
 sub new {
@@ -41,10 +42,11 @@ sub new {
 #	$_current_time{ $ref }       = $args{current_time} || 0; #no point
 	$_stop{ $ref }               = $args{stop};
 	$_event{ $ref }              = $args{event} || SDL::Event->new();
-	$_event_handlers{ $ref }     = $args{event_handlers};
-	$_move_handlers{ $ref }      = $args{move_handlers};
-	$_show_handlers{ $ref }      = $args{show_handlers};
-	$_sleep_cycle{ $ref }        = $args{delay};
+	$_event_handlers{ $ref }     = $args{event_handlers} || [];
+	$_move_handlers{ $ref }      = $args{move_handlers}  || [];
+	$_show_handlers{ $ref }      = $args{show_handlers}  || [];
+	$_sleep_cycle{ $ref }		 = $args{delay};
+	$_eoq{$ref} 				 = $args{exit_on_quit} || $args{eoq} || 0;
 #	$_paused{ $ref }             = $args{paused}; #read only
 
 	return $self;
@@ -63,7 +65,8 @@ sub DESTROY {
 	delete $_move_handlers{ $ref};
 	delete $_show_handlers{ $ref};
 	delete $_sleep_cycle { $ref };
-	delete $_paused { $ref };
+	delete $_eoq{$ref}; 
+	delete $_paused{$ref};
 }
 
 sub run {
@@ -104,15 +107,27 @@ sub run {
 
 }
 
+sub exit_on_quit {
+    my ($self, $value) = @_;
+
+    my $ref = refaddr $self;
+    if (defined $value) {
+        $_eoq{$ref} = $value;
+    }
+
+    return $_eoq{$ref};
+}
+*eoq = \&exit_on_quit;  # alias
+
 sub pause {
-	my ($self, $callback) = @_;
+	my ($self, $callback, $event) = @_;
 	my $ref = refaddr $self;
-	$callback ||= sub {1};
-	my $event = SDL::Event->new();
+	$event ||= SDL::Event->new();
 	$_paused{ $ref} = 1;
 	while(1) {
 		SDL::Events::wait_event($event) or Carp::confess("pause failed waiting for an event");
-		if($callback->($event, $self)) {
+		$self->_exit_on_quit($_event{ $ref}) if $_eoq{ $ref};
+		if(!$callback or $callback->($event, $self)) {
 			$_current_time{ $ref} = Time::HiRes::time; #so run doesn't catch up with the time paused
 			last;
 		}
@@ -124,6 +139,7 @@ sub _event {
 	my ($self, $ref) = @_;
 	SDL::Events::pump_events();
 	while ( SDL::Events::poll_event( $_event{ $ref} ) ) {
+		$self->_exit_on_quit( $_event{ $ref}  ) if $_eoq{$ref};
 		foreach my $event_handler ( @{ $_event_handlers{ $ref} } ) {
 			next unless $event_handler;
 			$event_handler->( $_event{ $ref}, $self );
@@ -157,7 +173,6 @@ sub _add_handler {
 
 sub add_move_handler {
 	my $ref = refaddr $_[0];
-	$_[0]->remove_all_move_handlers if !$_move_handlers{ $ref };
 	return _add_handler( $_move_handlers{ $ref}, $_[1] );
 }
 
@@ -165,13 +180,11 @@ sub add_event_handler {
 	my $ref = refaddr $_[0];
 	Carp::confess 'SDLx::App or a Display (SDL::Video::get_video_mode) must be made'
 		unless SDL::Video::get_video_surface();
-	$_[0]->remove_all_event_handlers if !$_event_handlers{ $ref };
 	return _add_handler( $_event_handlers{ $ref}, $_[1] );
 }
 
 sub add_show_handler {
 	my $ref = refaddr $_[0];
-	$_[0]->remove_all_show_handlers if !$_show_handlers{ $ref };
 	return _add_handler( $_show_handlers{ $ref}, $_[1] );
 }
 
@@ -256,6 +269,14 @@ sub paused {
 	$_paused{ refaddr $_[0]};
 }
 
-1; #not 42 man!
+sub _exit_on_quit {
+   my ($self, $event) = @_;
+
+    $self->stop() if $event->type == SDL_QUIT;
+}
+
+1;
 
 __END__
+
+
