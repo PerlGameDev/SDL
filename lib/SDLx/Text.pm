@@ -83,7 +83,7 @@ sub size {
 		$self->{_size} = $size;
 
 		# reload the font using new size
-		$self->font( $self->font );
+		$self->font( $self->font_filename );
 	}
 
 	return $self->{_size};
