@@ -58,10 +58,10 @@ information).
 All accessors below can be used to get and set their respective attributes.
 For example:
 
-   my $font_name = $self->font;     # gets the font filename
-   $self->font( 'somefont.ttf' );   # sets a new font
+   my $font_size = $obj->size;   # gets the font size
+   $obj->size( 42 );             # sets a new font size
 
-All accessors return their current value, after being set.
+Unless otherwise noticed, all accessors return their current value, after being set.
 
 =head2 x
 
