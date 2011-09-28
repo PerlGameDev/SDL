@@ -25,6 +25,14 @@ sub new {
 
 	my $size = $options{'size'} || 24;
 
+	my $shadow        = $options{'shadow'}        || 0;
+	my $shadow_offset = $options{'shadow_offset'} || 1;
+
+	my $shadow_color  = defined $options{'shadow_color'}
+	                  ? $options{'shadow_color'}
+	                  : [0, 0, 0]
+	                  ;
+
 	my $self = bless {}, ref($class) || $class;
 
 	$self->{x} = $options{'x'} || 0;
@@ -41,6 +49,9 @@ sub new {
 	$self->size($size);
 	$self->font($file);
 	$self->color($color);
+	$self->shadow($shadow);
+	$self->shadow_color($shadow_color);
+	$self->shadow_offset($shadow_offset);
 
 	$self->text( $options{'text'} ) if exists $options{'text'};
 
@@ -104,6 +115,39 @@ sub h_align {
 	return $self->{h_align};
 }
 
+sub shadow {
+	my ($self, $shadow) = @_;
+
+	if ($shadow) {
+	    $self->{shadow} = $shadow;
+	    $self->{_update_surfaces} = 1;
+	}
+
+	return $self->{shadow};
+}
+
+sub shadow_color {
+	my ($self, $shadow_color) = @_;
+
+	if (defined $shadow_color) {
+		$self->{shadow_color} = SDLx::Validate::color($shadow_color);
+	    $self->{_update_surfaces} = 1;
+	}
+
+	return $self->{shadow_color};
+}
+
+
+sub shadow_offset {
+	my ($self, $shadow_offset) = @_;
+
+	if ($shadow_offset) {
+	    $self->{shadow_offset} = $shadow_offset;
+	    $self->{_update_surfaces} = 1;
+	}
+
+	return $self->{shadow_offset};
+}
 
 sub w {
 	return $_[0]->{surface}->w();
@@ -142,6 +186,16 @@ sub text {
         my $surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
         or Carp::croak 'TTF rendering error: ' . SDL::get_error;
 
+	    if ($self->{shadow}) {
+	        my $shadow_surface = SDL::TTF::render_utf8_blended(
+	              $self->{_font},
+	              $text,
+	              $self->{shadow_color}
+	        ) or Carp::croak 'TTF shadow rendering error: ' . SDL::get_error;
+
+	        $self->{_shadow_surface} = $shadow_surface;
+	    }
+
         $self->{surface} = $surface;
         my $arr =  SDL::TTF::size_utf8( $self->{_font}, $text );
         $self->{w} = $arr->[0];
@@ -177,6 +231,15 @@ sub write_to {
 			$self->{x} = $target->w - $surface->w;
 		}
 
+	   if ($self->{shadow}) {
+	       my $shadow = $self->{_shadow_surface};
+	       my $offset = $self->{shadow_offset};
+	       SDL::Video::blit_surface(
+	           $shadow, SDL::Rect->new(0,0,$shadow->w, $shadow->h),
+	           $target, SDL::Rect->new($self->{x} + $offset, $self->{y} + $offset, 0, 0)
+	       );
+	   }
+
 		SDL::Video::blit_surface(
 			$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
 			$target, SDL::Rect->new($self->{x}, $self->{y}, 0, 0)
@@ -203,6 +266,16 @@ sub write_xy {
 		elsif ($self->{h_align} eq 'right' ) {
 			$x -= $surface->w;
 		}
+
+	    if ($self->{shadow}) {
+	        my $shadow = $self->{_shadow_surface};
+	        my $offset = $self->{shadow_offset};
+	        SDL::Video::blit_surface(
+	            $shadow, SDL::Rect->new(0,0,$shadow->w, $shadow->h),
+	            $target, SDL::Rect->new($x + $offset, $y + $offset, 0, 0)
+	        );
+	    }
+
 		SDL::Video::blit_surface(
 			$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
 			$target, SDL::Rect->new($x, $y, 0, 0)

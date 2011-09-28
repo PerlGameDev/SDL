@@ -95,6 +95,20 @@ cannot be loaded.
 
 Returns the L<SDL::TTF::Font> object representing the font.
 
+=head2 shadow
+
+Set this to true to create a nice 3D shadow effect on the rendered text.
+This is achieved by creating another version of the text below the
+original one, at a given offset.
+
+=head2 shadow_color
+
+Set the RGB color array for the shadow. Defaults to black ( C<[0,0,0]> ).
+
+=head2 shadow_offset
+
+Sets the offset in which to display the shadow. Defaults to 1, meaning
+1 pixel below and 1 pixel to the right of the original text.
 
 =head1 METHODS
 
