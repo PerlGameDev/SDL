@@ -1,5 +1,15 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.534
+    - SDLx::Text improved error message [garu]
+    - SDLx::Text new getter: font_filename() [garu]
+    - SDLx::Text fixed size() accessor [garu]
+    - SDLx::Text dynamic updating of text [garu]
+    - SDLx::Text new options: shadow, shadow_offset and shadow_color [garu]
+    - SDLx::Text examples (zoom, shadow) [garu]
+    - SDLx::Text improved documentation [garu]
+    - SDLx::TTF fixed loading error [FROGGS]
+
 * 2.533 May 31 2011
 	- Added preliminary SDLx::Music
 	- Minor fixes for SDLx::Text [garu]
