@@ -197,9 +197,6 @@ sub text {
 	    }
 
         $self->{surface} = $surface;
-        my $arr =  SDL::TTF::size_utf8( $self->{_font}, $text );
-        $self->{w} = $arr->[0];
-        $self->{h} = $arr->[1];
     }
     else {
         $self->{surface} = undef;
