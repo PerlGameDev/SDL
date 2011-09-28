@@ -1,6 +1,6 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.533 
+* 2.533 May 31 2011
 	- Added preliminary SDLx::Music
 	- Minor fixes for SDLx::Text [garu]
 	- Build requires: perl 5.8.1 is good enough for SDL [FROGGS]
