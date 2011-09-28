@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-
+use lib '../lib';
 use SDL;
 use SDLx::App;
 use SDLx::Text;
