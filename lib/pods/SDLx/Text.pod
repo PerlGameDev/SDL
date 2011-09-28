@@ -154,6 +154,10 @@ Shortcut to see the width of the underlying surface representing the text.
 
 Shortcut to see the height of the underlying surface representing the text.
 
+=head2 font_filename
+
+Returns the file name for the loaded font. Use C<font()> to get the font object itself, or to set a new font.
+
 =head1 ERRORS AND DIAGNOSTICS
 
 =over 4

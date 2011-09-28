@@ -46,16 +46,22 @@ sub new {
 }
 
 sub font {
-	my ($self, $font) = @_;
+	my ($self, $font_filename) = @_;
 
-	if ($font) {
+	if ($font_filename) {
 		my $size = $self->size;
 
-		$self->{_font} = SDL::TTF::open_font($font, $size)
-			or Carp::cluck "Error opening font '$font': " . SDL::get_error;
+		$self->{_font} = SDL::TTF::open_font($font_filename, $size)
+			or Carp::cluck "Error opening font '$font_filename': " . SDL::get_error;
+
+        $self->{_font_filename} = $font_filename;
 	}
 
 	return $self->{_font};
+}
+
+sub font_filename {
+    return $_[0]->{_font_filename};
 }
 
 sub color {
