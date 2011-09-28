@@ -1,4 +1,6 @@
 package SDLx::Text;
+use strict;
+use warnings;
 use SDL;
 use SDL::Video;
 use SDL::Config;
