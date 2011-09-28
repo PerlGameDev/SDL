@@ -56,7 +56,8 @@ sub font {
 		$self->{_font} = SDL::TTF::open_font($font_filename, $size)
 			or Carp::cluck "Error opening font '$font_filename': " . SDL::get_error;
 
-        $self->{_font_filename} = $font_filename;
+	    $self->{_font_filename} = $font_filename;
+	    $self->{_update_surfaces} = 1;
 	}
 
 	return $self->{_font};
@@ -71,6 +72,7 @@ sub color {
 
 	if (defined $color) {
 		$self->{_color} = SDLx::Validate::color($color);
+	    $self->{_update_surfaces} = 1;
 	}
 
 	return $self->{_color};
@@ -82,7 +84,9 @@ sub size {
 	if ($size) {
 		$self->{_size} = $size;
 
-		# reload the font using new size
+		# reload the font using new size.
+		# No need to set "_update_surfaces"
+		# since font() already does it.
 		$self->font( $self->font_filename );
 	}
 
@@ -94,6 +98,7 @@ sub h_align {
 
 	if ($align) {
 		$self->{h_align} = $align;
+		$self->{_update_surfaces} = 1;
 	}
 
 	return $self->{h_align};
@@ -155,7 +160,15 @@ sub surface {
 
 sub write_to {
 	my ($self, $target, $text) = @_;
-	$self->text($text) if scalar @_ > 2;
+
+	if (@_ > 2) {
+	    $self->text($text);
+	}
+	elsif ($self->{_update_surfaces}) {
+	    $self->{_update_surfaces} = 0;
+	    $self->text( $self->text );
+	}
+
 	if ( my $surface = $self->{surface} ) {
 		if ($self->{h_align} eq 'center' ) {
 			$self->{x} = ($target->w / 2) - ($surface->w / 2);
@@ -175,7 +188,14 @@ sub write_to {
 sub write_xy {
 	my ($self, $target, $x, $y, $text) = @_;
 
-	$self->text($text) if scalar @_ > 4;
+	if (@_ > 4) {
+	    $self->text($text);
+	}
+	elsif ($self->{_update_surfaces}) {
+	    $self->{_update_surfaces} = 0;
+	    $self->text( $self->text );
+	}
+
 	if ( my $surface = $self->{surface} ) {
 		if ($self->{h_align} eq 'center' ) {
 			$x -= $surface->w / 2;
