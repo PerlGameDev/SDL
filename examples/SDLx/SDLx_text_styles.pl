@@ -35,6 +35,15 @@ $text->bold(1);
 $text->italic(1);
 $text->write_xy( $app, 300, 250, 'All in one!' );
 
+my $another = SDLx::Text->new(
+        bold          => 1,
+        italic        => 1,
+        underline     => 1,
+        strikethrough => 1,
+        shadow        => 1,
+);
+
+$another->write_xy( $app, 50, 300, 'Can even be set with others (like shadow), during startup!' );
 
 $app->update;
 
