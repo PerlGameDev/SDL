@@ -44,6 +44,8 @@ Instantiates a new SDLx::Text object. All attributes are optional:
             x       => 0,
             y       => 0,
             h_align => 'left',
+            shadow  => 1,
+            bold    => 1,
             text    => 'All your base are belong to us.'
     );
 

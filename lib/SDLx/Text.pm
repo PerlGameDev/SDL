@@ -53,6 +53,11 @@ sub new {
 	$self->shadow_color($shadow_color);
 	$self->shadow_offset($shadow_offset);
 
+    $self->bold($options{'bold'}) if exists $options{'bold'};
+    $self->italic($options{'italic'}) if exists $options{'italic'};
+    $self->underline($options{'underline'}) if exists $options{'underline'};
+    $self->strikethrough($options{'strikethrough'}) if exists $options{'strikethrough'};
+
 	$self->text( $options{'text'} ) if exists $options{'text'};
 
 	return $self;
