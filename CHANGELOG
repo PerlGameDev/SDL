@@ -6,7 +6,8 @@ Revision history for Perl extension SDL_perl.
     - SDLx::Text fixed size() accessor [garu]
     - SDLx::Text dynamic updating of text [garu]
     - SDLx::Text new options: shadow, shadow_offset and shadow_color [garu]
-    - SDLx::Text examples (zoom, shadow) [garu]
+    - SDLx::Text new options: normal, bold, italic, underline, strikethrough [garu]
+    - SDLx::Text examples (zoom, shadow, style) [garu]
     - SDLx::Text improved documentation [garu]
     - SDLx::TTF fixed loading error [FROGGS]
 
