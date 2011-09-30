@@ -28,7 +28,8 @@ sub new {
 	# undef is not a valid input
 	my $w   = defined $o{width}            ? $o{width}            : defined $o{w}   ? $o{w}   : 640;
 	my $h   = defined $o{height}           ? $o{height}           : defined $o{h}   ? $o{h}   : 480;
-	my $d   = defined $o{depth}            ? $o{depth}            : defined $o{d}   ? $o{d}   : 32;
+	my $d   = defined $o{depth}            ? $o{depth}            : defined $o{d}   ? $o{d}   : undef;
+	my $f   = defined $o{flags}            ? $o{flags}            : defined $o{f}   ? $o{f}   : 0;
 	my $pos = defined $o{position}         ? $o{position}         : defined $o{pos} ? $o{pos} : undef;
 	my $s   = defined $o{stash}            ? $o{stash}            : defined $o{s}   ? $o{s}   : undef;
 
@@ -37,23 +38,29 @@ sub new {
 	my $it   = exists $o{icon_title}       ? $o{icon_title}       : exists  $o{it}  ? $o{it}  : undef;
 	my $icon =                                                                        $o{icon};
 	my $init =                                                                        $o{init};
-	my $f    = exists $o{flags}            ? $o{flags}            : exists  $o{f}   ? $o{f}   : undef;
 
 	# boolean
-	my $ni  = $o{no_init}    || $o{ni};
-	my $af  = $o{any_format} || $o{af};
-	my $db  = $o{double_buf} || $o{db};
-	my $sw  = $o{sw_surface} || $o{sw};
-	my $hw  = $o{hw_surface} || $o{hw};
-	my $ab  = $o{async_blit} || $o{ab};
-	my $hwp = $o{hw_palette} || $o{hwp};
-	my $fs  = $o{fullscreen} || $o{fs};
-	my $gl  = $o{opengl}     || $o{gl};
-	my $rs  = $o{resizable}  || $o{rs};
-	my $nf  = $o{no_frame}   || $o{nf};
-	my $nc  = $o{no_cursor}  || $o{nc};
-	my $cen = $o{centered}   || $o{cen};
-	my $gi  = $o{grab_input} || $o{gi};
+	my $ni    = $o{no_init}       || $o{ni};
+	my $af    = $o{any_format}    || $o{af};
+	my $db    = $o{double_buf}    || $o{db};
+	my $sw    = $o{sw_surface}    || $o{sw};
+	my $hw    = $o{hw_surface}    || $o{hw};
+	my $ab    = $o{async_blit}    || $o{ab};
+	my $hwp   = $o{hw_palette}    || $o{hwp};
+	my $fs    = $o{fullscreen}    || $o{fs};
+	my $gl    = $o{opengl}        || $o{gl};
+	my $rs    = $o{resizable}     || $o{rs};
+	my $nf    = $o{no_frame}      || $o{nf};
+	my $ncur  = $o{no_cursor}     || $o{ncur};
+	my $cen   = $o{centered}      || $o{cen};
+	my $gi    = $o{grab_input}    || $o{gi};
+	my $nc    = $o{no_controller} || $o{nc};
+	
+	unless( defined $d ) {
+		# specify SDL_ANYFORMAT if depth isn't defined
+		$d = 32;
+		$af = 1;
+	}
 
 	unless ( $ni ) {
 		if ( ref $init eq 'ARRAY' ) {
@@ -69,23 +76,7 @@ sub new {
 		}
 		SDL::init( defined $init ? $init : SDL::SDL_INIT_EVERYTHING );
 	}
-	unless( defined $f ) {
-		$f = SDL::Video::SDL_ANYFORMAT;
-	}
-	elsif( ref $f eq 'ARRAY' ) {
-		my %flag = map { $_ => 1 } @$f;
-		undef $f;
-		$f |= SDL::Video::SDL_ANYFORMAT  if $flag{any_format} || $flag{af};
-		$f |= SDL::Video::SDL_DOUBLEBUF  if $flag{double_buf} || $flag{db};
-		$f |= SDL::Video::SDL_SWSURFACE  if $flag{sw_surface} || $flag{sw};
-		$f |= SDL::Video::SDL_HWSURFACE  if $flag{hw_surface} || $flag{hw};
-		$f |= SDL::Video::SDL_ASYNCBLIT  if $flag{async_blit} || $flag{ab};
-		$f |= SDL::Video::SDL_HWPALETTE  if $flag{hw_palette} || $flag{hwp};
-		$f |= SDL::Video::SDL_FULLSCREEN if $flag{fullscreen} || $flag{fs};
-		$f |= SDL::Video::SDL_OPENGL     if $flag{opengl}     || $flag{gl};
-		$f |= SDL::Video::SDL_RESIZABLE  if $flag{resizable}  || $flag{rs};
-		$f |= SDL::Video::SDL_NOFRAME    if $flag{no_frame}   || $flag{nf};
-	}
+	
 	$f |= SDL::Video::SDL_ANYFORMAT  if $af;
 	$f |= SDL::Video::SDL_DOUBLEBUF  if $db;
 	$f |= SDL::Video::SDL_SWSURFACE  if $sw;
@@ -96,17 +87,18 @@ sub new {
 	$f |= SDL::Video::SDL_OPENGL     if $gl;
 	$f |= SDL::Video::SDL_RESIZABLE  if $rs;
 	$f |= SDL::Video::SDL_NOFRAME    if $nf;
-	$f ||= 0;
 
 	$ENV{SDL_VIDEO_CENTERED}   = $cen if $cen;
 	$ENV{SDL_VIDEO_WINDOW_POS} = $pos if $pos;
 
-	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f ) or Carp::confess( SDL::get_error() );
+	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f ) or Carp::confess( "set_video_mode failed: ", SDL::get_error() );
 	my $self = SDLx::Surface->new( surface => $surface );
-	$self->SDLx::Controller::new( %o );
+	$self->SDLx::Controller::new( %o ) unless $nc;
 	bless $self, $class;
 
 	if ( $gl ) {
+		$SDLx::App::USING_OPENGL = 1;
+		
 		my $r   = defined $o{red_size}         ? $o{red_size}         : defined $o{r}  ? $o{r}  : 5;
 		my $g   = defined $o{green_size}       ? $o{green_size}       : defined $o{g}  ? $o{g}  : 5;
 		my $b   = defined $o{blue_size}        ? $o{blue_size}        : defined $o{b}  ? $o{b}  : 5;
@@ -118,21 +110,20 @@ sub new {
 		my $bs  = defined $o{buffer_size}      ? $o{buffer_size}      : defined $o{bs} ? $o{bs} : undef;
 		my $ss  = defined $o{stencil_size}     ? $o{stencil_size}     : defined $o{ss} ? $o{ss} : undef;
 
-		$SDLx::App::USING_OPENGL = 1;
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_RED_SIZE(),   $r );
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_GREEN_SIZE(), $g );
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_BLUE_SIZE(),  $b );
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ALPHA_SIZE(), $a ) if defined $a;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_RED_SIZE,   $r );
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_GREEN_SIZE, $g );
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_BLUE_SIZE,  $b );
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ALPHA_SIZE, $a ) if defined $a;
 
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_RED_ACCUM_SIZE(),   $ra ) if defined $ra;
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_GREEN_ACCUM_SIZE(), $ga ) if defined $ga;
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_BLUE_ACCUM_SIZE(),  $ba ) if defined $ba;
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ALPHA_ACCUM_SIZE(), $aa ) if defined $aa;
 
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_DEPTH_SIZE(),   $d  );
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_DOUBLEBUFFER(), $db ) if defined $db;
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_BUFFER_SIZE(),  $bs ) if defined $bs;
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_STENCIL_SIZE(), $ss ) if defined $ss;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_DEPTH_SIZE,   $d  );
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_DOUBLEBUFFER, $db ) if defined $db;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_BUFFER_SIZE,  $bs ) if defined $bs;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_STENCIL_SIZE, $ss ) if defined $ss;
 
 		# These could be added here?
 		# SDL_GL_STEREO
@@ -147,9 +138,9 @@ sub new {
 
 	$self->title( $t, $it );
 	$self->icon( $icon );
-	$self->show_cursor( 0 ) if $nc;
+	$self->show_cursor( 0 ) if $ncur;
 	$self->grab_input( $gi ) if $gi;
-	$self->stash() = $s;
+	$self->stash = $s;
 
 	$self;
 }
@@ -173,7 +164,7 @@ sub title {
 		$icon_title = $title unless defined $icon_title;
 		return SDL::Video::wm_set_caption( $title, $icon_title );
 	}
-	SDL::Video::wm_get_caption();
+	SDL::Video::wm_get_caption;
 }
 
 sub icon {
@@ -199,18 +190,18 @@ sub delay {
 }
 
 sub ticks {
-	SDL::get_ticks();
+	SDL::get_ticks;
 }
 
 sub error {
 	shift;
 	if( @_ == 1 and !defined $_[0] ) {
-		return SDL::clear_error();
+		return SDL::clear_error;
 	}
 	if( @_ ) {
 		return SDL_set_error_real( @_ );
 	}
-	SDL::get_error();
+	SDL::get_error;
 }
 
 sub warp {
@@ -236,7 +227,7 @@ sub fullscreen {
 }
 
 sub iconify {
-	SDL::Video::wm_iconify_window();
+	SDL::Video::wm_iconify_window;
 }
 
 sub grab_input {
@@ -251,10 +242,10 @@ sub grab_input {
 
 sub sync {
 	if ( $SDLx::App::USING_OPENGL ) {
-		return SDL::Video::GL_swap_buffers();
+		return SDL::Video::GL_swap_buffers;
 	}
 	my ( $self ) = @_;
-	$self->flip();
+	$self->flip;
 }
 
 sub attribute {
