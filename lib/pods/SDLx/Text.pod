@@ -44,6 +44,8 @@ Instantiates a new SDLx::Text object. All attributes are optional:
             x       => 0,
             y       => 0,
             h_align => 'left',
+            shadow  => 1,
+            bold    => 1,
             text    => 'All your base are belong to us.'
     );
 
@@ -109,6 +111,49 @@ Set the RGB color array for the shadow. Defaults to black ( C<[0,0,0]> ).
 
 Sets the offset in which to display the shadow. Defaults to 1, meaning
 1 pixel below and 1 pixel to the right of the original text.
+
+=head2 Setting the Font Style
+
+The following accessors can be used to set a rendering file for the B<loaded> font.
+They will only work for the current font, so if you change fonts, make sure to
+apply your modifiers again. A single font can have more than one modifier applied to it, eg:
+
+  my $text = SDLx::Text->new;
+
+  $text->bold(1);
+  $text->italic(1);
+
+Set them to a true value to enable, false to disable.
+
+=head3 normal
+
+Sets the font style to normal.
+
+=head3 bold
+
+Sets the font style to bold.
+
+=head3 italic
+
+Sets the font style to italic.
+
+=head3 underline
+
+Sets the font style to underline.
+
+B<Note>: Due to libsdl design and depending on the chosen font, sometimes
+the underline may be outside of the generated text surface, and thus not
+visible when blitted to the screen. In these cases, you should probably turn
+off the option and draw your own underlines in the target surface.
+
+=head3 strikethrough
+
+Sets the font style to strikethrough.
+
+B<Note>: Due to libsdl design and depending on the chosen font, sometimes
+the strikethrough may be outside of the generated text surface, and thus not
+visible when blitted to the screen. In these cases, you should probably turn
+off the option and draw your own strikethroughs in the target surface.
 
 =head1 METHODS
 

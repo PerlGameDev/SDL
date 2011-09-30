@@ -157,7 +157,7 @@ This is only useful when used within code that will be run by C<pause>:
          # can be stopped while paused
      }
      elsif($e->type == SDL_KEYDOWN) {
-         if($e->key_sym == SDLK_P) {
+         if($e->key_sym == SDLK_p) {
              # We're paused, so end pause
              return 1 if $app->paused;
              

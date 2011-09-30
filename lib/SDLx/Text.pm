@@ -53,6 +53,11 @@ sub new {
 	$self->shadow_color($shadow_color);
 	$self->shadow_offset($shadow_offset);
 
+    $self->bold($options{'bold'}) if exists $options{'bold'};
+    $self->italic($options{'italic'}) if exists $options{'italic'};
+    $self->underline($options{'underline'}) if exists $options{'underline'};
+    $self->strikethrough($options{'strikethrough'}) if exists $options{'strikethrough'};
+
 	$self->text( $options{'text'} ) if exists $options{'text'};
 
 	return $self;
@@ -103,6 +108,41 @@ sub size {
 
 	return $self->{_size};
 }
+
+sub _style {
+    my ($self, $flag, $enable) = @_;
+
+    my $styles = SDL::TTF::get_font_style( $self->font );
+
+    # do we have an enable flag?
+    if (@_ > 2) {
+
+        # we do! setup flags if we're enabling or disabling
+        if ($enable) {
+            $styles |= $flag;
+        }
+        else {
+            $styles ^= $flag if $flag & $styles;
+        }
+
+        SDL::TTF::set_font_style( $self->font, $styles );
+
+        # another run, returning true if value was properly set.
+        return SDL::TTF::get_font_style( $self->font ) & $flag;
+    }
+    # no enable flag present, just return
+    # whether the style is enabled/disabled
+    else {
+        return $styles & $flag;
+    }
+}
+
+sub normal        { my $self = shift; $self->_style( TTF_STYLE_NORMAL,        @_ ) }
+sub bold          { my $self = shift; $self->_style( TTF_STYLE_BOLD,          @_ ) }
+sub italic        { my $self = shift; $self->_style( TTF_STYLE_ITALIC,        @_ ) }
+sub underline     { my $self = shift; $self->_style( TTF_STYLE_UNDERLINE,     @_ ) }
+sub strikethrough { my $self = shift; $self->_style( TTF_STYLE_STRIKETHROUGH, @_ ) }
+
 
 sub h_align {
 	my ($self, $align) = @_;
