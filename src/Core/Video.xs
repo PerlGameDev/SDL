@@ -179,25 +179,23 @@ video_set_colors ( surface, start, ... )
 	SDL_Surface *surface
 	int start
 	CODE:
-		SDL_Color *colors,*temp;
-		int i, length;
-		if ( items < 3 ) { RETVAL = 0;}
+		if ( items < 3 )
+			RETVAL = 0;
 		else
 		{
-		length = items - 2;
-		colors = (SDL_Color *)safemalloc(sizeof(SDL_Color)*(length+1));
-		for ( i = 0; i < length ; i++ ) {
-                        void** pointers = (void**)(SvIV(ST(i+2))); 
-			temp = (SDL_Color *)pointers[0];
-			colors[i].r = temp->r;
-			colors[i].g = temp->g;
-			colors[i].b = temp->b;
+			int i;
+			int length        = items - 2;
+			SDL_Color *colors = (SDL_Color *)safemalloc(sizeof(SDL_Color) * (length + 1));
+			for ( i = 0; i < length ; i++ ) {
+				SDL_Color *temp = (SDL_Color *)bag2obj( ST(i + 2) );
+				colors[i].r     = temp->r;
+				colors[i].g     = temp->g;
+				colors[i].b     = temp->b;
+			}
+			RETVAL = SDL_SetColors(surface, colors, start, length);
+			safefree(colors);
 		}
-		RETVAL = SDL_SetColors(surface, colors, start, length );
-	  	safefree(colors);
-		}	
-
-	OUTPUT:	
+	OUTPUT:
 		RETVAL
 
 int

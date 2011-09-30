@@ -58,10 +58,10 @@ information).
 All accessors below can be used to get and set their respective attributes.
 For example:
 
-   my $font_name = $self->font;     # gets the font filename
-   $self->font( 'somefont.ttf' );   # sets a new font
+   my $font_size = $obj->size;   # gets the font size
+   $obj->size( 42 );             # sets a new font size
 
-All accessors return their current value, after being set.
+Unless otherwise noticed, all accessors return their current value, after being set.
 
 =head2 x
 
@@ -95,6 +95,20 @@ cannot be loaded.
 
 Returns the L<SDL::TTF::Font> object representing the font.
 
+=head2 shadow
+
+Set this to true to create a nice 3D shadow effect on the rendered text.
+This is achieved by creating another version of the text below the
+original one, at a given offset.
+
+=head2 shadow_color
+
+Set the RGB color array for the shadow. Defaults to black ( C<[0,0,0]> ).
+
+=head2 shadow_offset
+
+Sets the offset in which to display the shadow. Defaults to 1, meaning
+1 pixel below and 1 pixel to the right of the original text.
 
 =head1 METHODS
 
@@ -153,6 +167,10 @@ Shortcut to see the width of the underlying surface representing the text.
 =head2 h
 
 Shortcut to see the height of the underlying surface representing the text.
+
+=head2 font_filename
+
+Returns the file name for the loaded font. Use C<font()> to get the font object itself, or to set a new font.
 
 =head1 ERRORS AND DIAGNOSTICS
 
