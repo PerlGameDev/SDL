@@ -217,7 +217,7 @@ video_set_palette ( surface, flags, start, ... )
 				colors[i].g     = temp->g;
 				colors[i].b     = temp->b;
 			}
-			RETVAL = SDL_SetColors(surface, flags, colors, start, length);
+			RETVAL = SDL_SetPalette(surface, flags, colors, start, length);
 			safefree(colors);
 		}
 	OUTPUT:
