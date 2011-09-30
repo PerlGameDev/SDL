@@ -120,14 +120,15 @@ sub exit_on_quit {
 *eoq = \&exit_on_quit;  # alias
 
 sub pause {
-	my ($self, $callback, $event) = @_;
+	my ($self, $callback) = @_;
 	my $ref = refaddr $self;
-	$event ||= SDL::Event->new();
 	$_paused{ $ref} = 1;
 	while(1) {
-		SDL::Events::wait_event($event) or Carp::confess("pause failed waiting for an event");
-		$self->_exit_on_quit($_event{ $ref}) if $_eoq{ $ref};
-		if(!$callback or $callback->($event, $self)) {
+		SDL::Events::wait_event($_event{ $ref}) or Carp::confess("pause failed waiting for an event");
+		if(
+			$_eoq{ $ref} && do { $self->_exit_on_quit($_event{ $ref}); $_stop{ $ref} }
+			or !$callback or $callback->($_event{ $ref}, $self)
+		) {
 			$_current_time{ $ref} = Time::HiRes::time; #so run doesn't catch up with the time paused
 			last;
 		}
