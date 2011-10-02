@@ -347,9 +347,16 @@ int
 video_set_color_key ( surface, flag, key )
 	SDL_Surface *surface
 	Uint32 flag
-	SDL_Color *key
+	SV *key
 	CODE:
-		Uint32 pixel = SDL_MapRGB(surface->format,key->r,key->g,key->b);
+		Uint32 pixel;
+		if(SvOK(key) && SvIOK(key))
+			pixel = (Uint32)SvUV(key);
+		else
+		{
+			SDL_Color *color = (SDL_Color *)bag2obj(key);
+			pixel            = SDL_MapRGB(surface->format, color->r, color->g, color->b);
+		}
 		RETVAL = SDL_SetColorKey(surface,flag,pixel);
 	OUTPUT:
 		RETVAL
