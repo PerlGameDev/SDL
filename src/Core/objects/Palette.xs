@@ -31,19 +31,14 @@ palette_ncolors ( palette )
 	OUTPUT:
 		RETVAL
 
-AV * 
+AV *
 palette_colors ( palette )
 	SDL_Palette *palette
-	INIT:
-		int i;	
 	CODE:
-		RETVAL = (AV *)sv_2mortal((SV*)newAV());
-
+		RETVAL = (AV*)sv_2mortal((SV*)newAV());
+		int i;
 		for(i = 0; i < palette->ncolors; i++)
-		{
-			av_push( RETVAL, cpy2bag( (SDL_Color *)(palette->colors + i), sizeof(SDL_Color *), sizeof(SDL_Color), "SDL::Color" ) 
-					);
-		}
+			av_push( RETVAL, cpy2bag( (SDL_Color *)(palette->colors + i), sizeof(SDL_Color *), sizeof(SDL_Color), "SDL::Color" ) );
 	OUTPUT:
 		RETVAL
 
