@@ -38,9 +38,7 @@ palette_colors ( palette )
 		RETVAL = (AV*)sv_2mortal((SV*)newAV());
 		int i;
 		for(i = 0; i < palette->ncolors; i++)
-		{
-			av_push(RETVAL,newSViv( PTR2IV( palette->colors + i ) ) );
-		}
+			av_push( RETVAL, cpy2bag( (SDL_Color *)(palette->colors + i), sizeof(SDL_Color *), sizeof(SDL_Color), "SDL::Color" ) );
 	OUTPUT:
 		RETVAL
 

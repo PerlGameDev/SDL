@@ -11,27 +11,34 @@ Core, Video, Structure
 
 =head1 DESCRIPTION
 
-Each pixel in an 8-bit surface is an index into the colors field of the C<SDL::Palette> structure store in C<SDL::PixelFormat>. A C<SDL::Palette>
-should never need to be created manually. It is automatically created when SDL allocates a C<SDL::PixelFormat> for a surface. The colors 
-values of a C<SDL::Surface>'s palette can be set with the C<SDL::Video::set_colors>.
+Each pixel in an 8-bit surface is an index into the colors field of the C<SDL::Palette> object stored in its C<SDL::PixelFormat>.
+A C<SDL::Palette> is created automatically when SDL allocates a C<SDL::PixelFormat> for a surface.
+This class has methods for returning the colors in a palette object.
+The colors can be set with L<SDL::Video::set_colors|SDL::Video/set_colors> and L<SDL::Video::set_palette|SDL::Video/set_palette>.
 
 =head1 METHODS
 
-=head2 ncolors ( )
+=head2 ncolors
 
-Fetches the number of colors in palette
+  $ncolors = $palette->ncolors();
 
-=head2 colors ( index )
+Returns the number of colors in palette.
 
-Fetches an array of colors in palette
+=head2 colors
 
-=head2 color_index ( index )
+  @colors = @{ $palette->colors() };
 
-Fetches the SDL_Color at the provide index in palette
+Returns an array, C<ncolors> in length, of the L<SDL::Color>s in the palette.
+
+=head2 color_index
+
+  $color = $palette->color_index( $index );
+
+Returns the L<SDL::Color> at the provided index of the palette.
 
 =head1 SEE ALSO
 
-L<SDL::Color> L<SDL::Surface>
+L<SDL::Video> L<SDL::PixelFormat> L<SDL::Color> L<SDL::Surface>
 
 =head1 AUTHORS
 
