@@ -5,7 +5,7 @@ use Carp;
 
 use SDL;
 use SDL::TTF;
-use SDL::Font;
+use SDL::TTF::Font;
 
 
 sub new

@@ -1,5 +1,16 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.534
+    - SDLx::Text improved error message [garu]
+    - SDLx::Text new getter: font_filename() [garu]
+    - SDLx::Text fixed size() accessor [garu]
+    - SDLx::Text dynamic updating of text [garu]
+    - SDLx::Text new options: shadow, shadow_offset and shadow_color [garu]
+    - SDLx::Text new options: normal, bold, italic, underline, strikethrough [garu]
+    - SDLx::Text examples (zoom, shadow, style) [garu]
+    - SDLx::Text improved documentation [garu]
+    - SDLx::TTF fixed loading error [FROGGS]
+
 * 2.534_03
 	Documentation fixes:
 	- SDL::Event: fixed SDL_EVENTMASK documentation [jtpalmer]
@@ -7,15 +18,14 @@ Revision history for Perl extension SDL_perl.
 * 2.534_02 August 27 2011
 	New features:
 	- SDLx::Surface: added methods draw_trigon, draw_ellipse, draw_arc and draw_bezier [jtpalmer]
-
 	Bug fixes:
 	- SDLx::Rect: fixed methods copy, move and inflate [jtpalmer]
 	- SDLx::Surface: minor documentation update [jtpalmer]
 
-* 2.534_01
+* 2.534_01 June 13 2011
 	- Using 'perl' instead of 'SDLPerl' to run silent tests on darwin [FROGGS]
 
-* 2.533 
+* 2.533 May 31 2011
 	- Added preliminary SDLx::Music
 	- Minor fixes for SDLx::Text [garu]
 	- Build requires: perl 5.8.1 is good enough for SDL [FROGGS]
