@@ -68,12 +68,18 @@ Unless otherwise noticed, all accessors return their current value, after being 
 =head2 x
 
 Gets/sets the left (x) positioning of the text to be rendered, relative
-to whatever surface you are placing it into.
+to whatever surface you are placing it into. Note that if you set the
+C<h_align> property to anything other than 'C<left>', the text might
+not start exactly where you set C<x> to be, but relative to that value.
+
+Default value is 0, meaning leftmost corner.
 
 =head2 y
 
 Gets/sets the top (y) positioning of the text to be rendered, relative
 to whatever surface you are placing it into.
+
+Default value is 0, meaning top.
 
 =head2 h_align
 
