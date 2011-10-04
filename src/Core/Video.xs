@@ -14,7 +14,7 @@ void _uinta_free(Uint16* av, int len_from_av_len)
 {
 	if( av != NULL)
 	  return;
-	
+
 	safefree(av);
 }
 
@@ -26,7 +26,7 @@ Uint16* av_to_uint16 (AV* av)
 		int i;
 		Uint16* table = (Uint16 *)safemalloc(sizeof(Uint16)*(len+1));
 		for ( i = 0; i < len+1 ; i++ )
-		{ 
+		{
 			SV ** temp = av_fetch(av,i,0);
 			if( temp != NULL )
 			{
@@ -78,15 +78,15 @@ video_get_video_info()
 
 SV *
 video_video_driver_name( )
-	
+
 	CODE:
 		char buffer[1024];
-		if ( SDL_VideoDriverName(buffer, 1024) != NULL ) 
-		{ 
+		if ( SDL_VideoDriverName(buffer, 1024) != NULL )
+		{
 			RETVAL =  newSVpv(buffer, 0);
-		} 
-		else 
-			 XSRETURN_UNDEF;  	
+		}
+		else
+			 XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
 
@@ -159,7 +159,7 @@ video_update_rects ( surface, ... )
 		num_rects = items - 1;
 		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
 		for(i=0;i<num_rects;i++) {
-                        void** pointers = (void**)(SvIV((SV*)SvRV( ST(i+1) ))); 
+                        void** pointers = (void**)(SvIV((SV*)SvRV( ST(i+1) )));
 			rects[i] = *(SDL_Rect *)(pointers[0]);
 		}
 		SDL_UpdateRects(surface,num_rects,rects);
@@ -179,25 +179,23 @@ video_set_colors ( surface, start, ... )
 	SDL_Surface *surface
 	int start
 	CODE:
-		SDL_Color *colors,*temp;
-		int i, length;
-		if ( items < 3 ) { RETVAL = 0;}
+		if ( items < 3 )
+			RETVAL = 0;
 		else
 		{
-		length = items - 2;
-		colors = (SDL_Color *)safemalloc(sizeof(SDL_Color)*(length+1));
-		for ( i = 0; i < length ; i++ ) {
-                        void** pointers = (void**)(SvIV(ST(i+2))); 
-			temp = (SDL_Color *)pointers[0];
-			colors[i].r = temp->r;
-			colors[i].g = temp->g;
-			colors[i].b = temp->b;
+			int i;
+			int length        = items - 2;
+			SDL_Color *colors = (SDL_Color *)safemalloc(sizeof(SDL_Color) * (length + 1));
+			for ( i = 0; i < length ; i++ ) {
+				SDL_Color *temp = (SDL_Color *)bag2obj( ST(i + 2) );
+				colors[i].r     = temp->r;
+				colors[i].g     = temp->g;
+				colors[i].b     = temp->b;
+			}
+			RETVAL = SDL_SetColors(surface, colors, start, length);
+			safefree(colors);
 		}
-		RETVAL = SDL_SetColors(surface, colors, start, length );
-	  	safefree(colors);
-		}	
-
-	OUTPUT:	
+	OUTPUT:
 		RETVAL
 
 int
@@ -205,31 +203,24 @@ video_set_palette ( surface, flags, start, ... )
 	SDL_Surface *surface
 	int flags
 	int start
-
 	CODE:
-		SDL_Color *colors;
-                SDL_Color *temp;
-		int i,length;
-
-		if ( items < 4 ) { 
-                  RETVAL = 0;
-
-                } else {
-		  length = items - 3;		
-                  colors = (SDL_Color *)safemalloc(sizeof(SDL_Color)*(length+1));
-                  for ( i = 0; i < length; i++ ){ 
-
-                     void** pointers = (void**)(SvIV(ST(i+3))); 
-                     temp = (SDL_Color *)pointers[0];
-                     colors[i].r = temp->r;
-                     colors[i].g = temp->g;
-                     colors[i].b = temp->b;
-		  }
-
-		  RETVAL = SDL_SetPalette(surface, flags, colors, start, length);
-	  	  safefree(colors);
+		if ( items < 4 )
+			RETVAL = 0;
+		else
+		{
+			int i;
+			int length        = items - 3;
+			SDL_Color *colors = (SDL_Color *)safemalloc(sizeof(SDL_Color) * (length + 1));
+			for ( i = 0; i < length ; i++ ) {
+				SDL_Color *temp = (SDL_Color *)bag2obj( ST(i + 3) );
+				colors[i].r     = temp->r;
+				colors[i].g     = temp->g;
+				colors[i].b     = temp->b;
+			}
+			RETVAL = SDL_SetPalette(surface, flags, colors, start, length);
+			safefree(colors);
 		}
-	OUTPUT:	
+	OUTPUT:
 		RETVAL
 
 int
@@ -239,7 +230,7 @@ video_set_gamma(r, g, b)
 	float b;
 	CODE:
 		RETVAL = SDL_SetGamma(r,g,b);
-	OUTPUT:	
+	OUTPUT:
 		RETVAL
 
 int
@@ -260,7 +251,7 @@ video_get_gamma_ramp( redtable, greentable, bluetable )
 		}
 	OUTPUT:
 		RETVAL
-	
+
 int
 video_set_gamma_ramp( rt, gt, bt )
 	AV* rt;
@@ -272,11 +263,11 @@ video_set_gamma_ramp( rt, gt, bt )
 		greentable = av_to_uint16(gt);
 		bluetable = av_to_uint16(bt);
 		RETVAL =  SDL_SetGammaRamp(redtable, greentable, bluetable);
-		_uinta_free(redtable, av_len(rt) ); 
-		_uinta_free(greentable, av_len(gt) ); 
+		_uinta_free(redtable, av_len(rt) );
+		_uinta_free(greentable, av_len(gt) );
 		_uinta_free(bluetable, av_len(bt) );
 	OUTPUT:
-		RETVAL 
+		RETVAL
 
 
 
@@ -296,7 +287,7 @@ video_map_RGBA ( pixel_format, r, g, b, a )
 	SDL_PixelFormat *pixel_format
 	Uint8 r
 	Uint8 g
-	Uint8 b	
+	Uint8 b
 	Uint8 a
 	CODE:
 		RETVAL = SDL_MapRGBA(pixel_format, r,g,b,a );
@@ -356,9 +347,16 @@ int
 video_set_color_key ( surface, flag, key )
 	SDL_Surface *surface
 	Uint32 flag
-	SDL_Color *key
+	SV *key
 	CODE:
-		Uint32 pixel = SDL_MapRGB(surface->format,key->r,key->g,key->b);
+		Uint32 pixel;
+		if(SvOK(key) && SvIOK(key))
+			pixel = (Uint32)SvUV(key);
+		else
+		{
+			SDL_Color *color = (SDL_Color *)bag2obj(key);
+			pixel            = SDL_MapRGB(surface->format, color->r, color->g, color->b);
+		}
 		RETVAL = SDL_SetColorKey(surface,flag,pixel);
 	OUTPUT:
 		RETVAL
@@ -434,12 +432,22 @@ fill_rect ( dest, dest_rect, pixel )
 		RETVAL
 
 int
-blit_surface ( src, src_rect, dest, dest_rect )
+blit_surface ( src, src_rect_sv, dest, dest_rect_sv )
 	SDL_Surface *src
 	SDL_Surface *dest
-	SDL_Rect *src_rect
-	SDL_Rect *dest_rect
+	SV *src_rect_sv
+	SV *dest_rect_sv
 	CODE:
+		SDL_Rect* src_rect = NULL;
+		SDL_Rect* dest_rect = NULL;
+			if( SvOK(src_rect_sv ) )
+			{
+				src_rect = (SDL_Rect*)bag2obj(src_rect_sv);
+			}
+			if( SvOK( dest_rect_sv) )
+			{
+				dest_rect = (SDL_Rect*)bag2obj(dest_rect_sv);
+			}
 		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
 	OUTPUT:
 		RETVAL
@@ -580,4 +588,4 @@ video_MUSTLOCK ( surface )
 	CODE:
 		RETVAL = SDL_MUSTLOCK(surface);
 	OUTPUT:
-		RETVAL		
+		RETVAL

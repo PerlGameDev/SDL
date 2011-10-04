@@ -1,6 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
 * 2.534
+	- SDL::Palette fixed colors() to return an array [Blaizer]
+	- SDL::Video fixed set_colors, set_palette [FROGGS, Blaizer]
     - SDLx::Text improved error message [garu]
     - SDLx::Text new getter: font_filename() [garu]
     - SDLx::Text fixed size() accessor [garu]
