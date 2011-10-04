@@ -7,6 +7,7 @@ use SDL::Config;
 use SDL::TTF;
 use SDL::TTF::Font;
 use SDLx::Validate;
+use List::Util qw(max sum);
 
 use Carp ();
 
@@ -190,11 +191,17 @@ sub shadow_offset {
 }
 
 sub w {
-	return $_[0]->{surface}->w();
+    my $surface = $_[0]->{surface};
+    return $surface->w unless $surface and ref $surface eq 'ARRAY';
+
+    return max map { $_ ? $_->w() : 0 } @$surface;
 }
 
 sub h {
-	return $_[0]->{surface}->h();
+    my $surface = $_[0]->{surface};
+    return $surface->h unless $surface and ref $surface eq 'ARRAY';
+
+    return sum map { $_ ? $_->h() : 0 } @$surface;
 }
 
 sub x {
@@ -220,29 +227,46 @@ sub text {
 
     return $self->{text} if scalar @_ == 1;
 
-    $self->{text} = $text;
-
     if ( defined $text ) {
-        my $surface = SDL::TTF::render_utf8_blended($self->{_font}, $text, $self->{_color})
-        or Carp::croak 'TTF rendering error: ' . SDL::get_error;
+        my $font = $self->{_font};
+        my $surface = _get_surfaces_for($font, $text, $self->{_color} )
+            or Carp::croak 'TTF rendering error: ' . SDL::get_error;
 
 	    if ($self->{shadow}) {
-	        my $shadow_surface = SDL::TTF::render_utf8_blended(
-	              $self->{_font},
-	              $text,
-	              $self->{shadow_color}
-	        ) or Carp::croak 'TTF shadow rendering error: ' . SDL::get_error;
+	        my $shadow_surface = _get_surfaces_for($font, $text, $self->{shadow_color})
+	            or Carp::croak 'TTF shadow rendering error: ' . SDL::get_error;
+
+            $shadow_surface = [ $shadow_surface ] unless ref $shadow_surface eq 'ARRAY';
 
 	        $self->{_shadow_surface} = $shadow_surface;
 	    }
 
         $self->{surface} = $surface;
+        $self->{text} = $text;
     }
     else {
         $self->{surface} = undef;
     }
 
+
 	return $self;
+}
+
+# Returns the TTF surface for the given text.
+# If the text contains linebreaks, we split into
+# several surfaces (since SDL can't render '\n').
+sub _get_surfaces_for {
+    my ($font, $text, $color) = @_;
+
+    return SDL::TTF::render_utf8_blended($font, $text, $color)
+        if index($text, "\n") == -1;
+
+    my @surfaces = ();
+    my @paragraphs = split /\n/ => $text;
+    foreach my $paragraph (@paragraphs) {
+        push @surfaces, SDL::TTF::render_utf8_blended($font, $paragraph, $color);
+    }
+    return \@surfaces;
 }
 
 sub surface {
@@ -252,37 +276,11 @@ sub surface {
 sub write_to {
 	my ($self, $target, $text) = @_;
 
-	if (@_ > 2) {
-	    $self->text($text);
-	}
-	elsif ($self->{_update_surfaces}) {
-	    $self->{_update_surfaces} = 0;
-	    $self->text( $self->text );
-	}
-
-	if ( my $surface = $self->{surface} ) {
-		if ($self->{h_align} eq 'center' ) {
-			$self->{x} = ($target->w / 2) - ($surface->w / 2);
-		}
-		elsif ($self->{h_align} eq 'right' ) {
-			$self->{x} = $target->w - $surface->w;
-		}
-
-	   if ($self->{shadow}) {
-	       my $shadow = $self->{_shadow_surface};
-	       my $offset = $self->{shadow_offset};
-	       SDL::Video::blit_surface(
-	           $shadow, SDL::Rect->new(0,0,$shadow->w, $shadow->h),
-	           $target, SDL::Rect->new($self->{x} + $offset, $self->{y} + $offset, 0, 0)
-	       );
-	   }
-
-		SDL::Video::blit_surface(
-			$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
-			$target, SDL::Rect->new($self->{x}, $self->{y}, 0, 0)
-		);
-	}
-	return;
+    if (@_ > 2) {
+        $self->text($text);
+        $self->{_update_surfaces} = 0;
+    }
+    $self->write_xy($target, $self->{x}, $self->{y});
 }
 
 sub write_xy {
@@ -290,33 +288,52 @@ sub write_xy {
 
 	if (@_ > 4) {
 	    $self->text($text);
+        $self->{_update_surfaces} = 0;
 	}
 	elsif ($self->{_update_surfaces}) {
-	    $self->{_update_surfaces} = 0;
 	    $self->text( $self->text );
+	    $self->{_update_surfaces} = 0;
 	}
 
-	if ( my $surface = $self->{surface} ) {
-		if ($self->{h_align} eq 'center' ) {
-			$x -= $surface->w / 2;
-		}
-		elsif ($self->{h_align} eq 'right' ) {
-			$x -= $surface->w;
-		}
+	if ( my $surfaces = $self->{surface} ) {
 
-	    if ($self->{shadow}) {
-	        my $shadow = $self->{_shadow_surface};
-	        my $offset = $self->{shadow_offset};
-	        SDL::Video::blit_surface(
-	            $shadow, SDL::Rect->new(0,0,$shadow->w, $shadow->h),
-	            $target, SDL::Rect->new($x + $offset, $y + $offset, 0, 0)
-	        );
-	    }
+        $surfaces = [ $surfaces ] unless ref $surfaces eq 'ARRAY';
+        my $linebreaks = 0;
 
-		SDL::Video::blit_surface(
-			$surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
-			$target, SDL::Rect->new($x, $y, 0, 0)
-		);
+        foreach my $i ( 0 .. $#{$surfaces}) {
+            if (my $surface = $surfaces->[$i]) {
+                $y += ($linebreaks * $surface->h);
+                $linebreaks = 0;
+
+                if ($self->{h_align} eq 'center' ) {
+                    # $x = ($target->w / 2) - ($surface->w / 2);
+                    $x -= $surface->w / 2;
+                }
+                elsif ($self->{h_align} eq 'right' ) {
+                    # $x = $target->w - $surface->w;
+                    $x -= $surface->w;
+                }
+
+                # blit the shadow
+                if ($self->{shadow}) {
+                    my $shadow = $self->{_shadow_surface}->[$i];
+                    my $offset = $self->{shadow_offset};
+
+                    SDL::Video::blit_surface(
+                       $shadow, SDL::Rect->new(0,0,$shadow->w, $shadow->h),
+                       $target, SDL::Rect->new($x + $offset, $y + $offset, 0, 0)
+                    );
+                }
+
+                # blit the text
+                SDL::Video::blit_surface(
+                    $surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
+                    $target, SDL::Rect->new($x, $y, 0, 0)
+                );
+            }
+            $linebreaks++;
+        }
+
 	}
 	return;
 }
