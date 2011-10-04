@@ -59,6 +59,9 @@ sub new {
     $self->underline($options{'underline'}) if exists $options{'underline'};
     $self->strikethrough($options{'strikethrough'}) if exists $options{'strikethrough'};
 
+    # word wrapping
+    $self->{word_wrap} = $options{'word_wrap'} || 0;
+
 	$self->text( $options{'text'} ) if exists $options{'text'};
 
 	return $self;
@@ -228,6 +231,7 @@ sub text {
     return $self->{text} if scalar @_ == 1;
 
     if ( defined $text ) {
+        $text = $self->_word_wrap($text) if $self->{word_wrap};
         my $font = $self->{_font};
         my $surface = _get_surfaces_for($font, $text, $self->{_color} )
             or Carp::croak 'TTF rendering error: ' . SDL::get_error;
@@ -267,6 +271,42 @@ sub _get_surfaces_for {
         push @surfaces, SDL::TTF::render_utf8_blended($font, $paragraph, $color);
     }
     return \@surfaces;
+}
+
+sub _word_wrap {
+    my ($self, $text) = @_;
+
+    my $maxlen = $self->{word_wrap};
+    my $font   = $self->{_font};
+
+    # code heavily based on Text::Flow::Wrap
+    my @paragraphs = split /\n/ => $text;
+    my @output;
+
+    foreach my $paragraph (@paragraphs) {
+        my @paragraph_output = ('');
+        my @words  = split /\s+/ => $paragraph;
+
+        foreach my $word (@words) {
+            my $padded    = $word . q[ ];
+            my $candidate = $paragraph_output[-1] . $padded;
+            my ($w) = @{ SDL::TTF::size_utf8($font, $candidate) };
+            if ($w < $maxlen) {
+                $paragraph_output[-1] = $candidate;
+            }
+            else {
+                push @paragraph_output, $padded;
+            }
+        }
+        chop $paragraph_output[-1] if substr( $paragraph_output[-1], -1, 1 ) eq q[ ];
+
+        push @output, \@paragraph_output;
+
+    }
+
+    return join "\n" => map {
+        join "\n" => @$_
+    } @output;
 }
 
 sub surface {
