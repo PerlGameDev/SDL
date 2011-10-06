@@ -12,8 +12,35 @@ TODO, Core, Structure
 
 =head1 SYNOPSIS
 
-use SDL::RW;
+  # The following example will load several png's from a single file to an array of SDL::Surface's.
+  # Usefull for e.g. levelfiles.
+  use SDL;
+  use SDL::Image;
+  use SDL::RWOps;
+  use SDL::Surface;
+  
+  # the file contains a 32-byte header with lengths of data blocks, followed by the data blocks itself
+  my $file   = '/path/to/file/containing_image_data.dat';
+  my $header = ''; # up to eight 32-bit integers specifying the length of the data blocks (images)
+  my @images = ''; # we push the surfaces to that array later
+  
+  open(FH, "<$file") or die "Can't open file $file";
+  binmode(FH);
+  read(FH, $header, 32); # read 32 bytes of data
 
+  my @blocks = unpack( 'V*', $header ); # unpack the block sizes
+
+  foreach my $block_size (@blocks) {
+      if($block_size) {
+          my $image = '';
+          read(FH, $image, $block_size);
+          my $rw = SDL::RWOps->new_const_mem( $image );
+          push(@images, SDL::Image::load_PNG_rw( $rw );
+      }
+  }
+  close(FH);
+  
+  # ... now do something with the surfaces
 
 SDL::RWOps is an "undocumented" feature of SDL, allowing you to use pointers to memory instead of files (though it can handle files too) for things such as images or samples. The primary advantage of this feature is that many libraries load files from the filesystem themselves, leaving you a bit stuck if you want to implement your own special file access, such as an archive format. Fortunately many libraries, such as SDL_image, provide additional methods designed to read from an SDL_RWops, so that you can provide the data in whatever way you like.
 
@@ -67,10 +94,13 @@ It returns a SDL::Rwops on succés or undef on error.
 Note: If the memory is not writable, use SDL::rw_from_const_mem instead. 
 
 
-=head2 rw_from_const_mem(mem,size)
+=head2 from_const_mem
 
-rw_from_const_mem sets up a SDL::RWops struct based on a memory area of a certain size. It assumes the memory area is not writable. 
-It returns a SDL::RWops on succés on undef on error.
+  my $rw = SDL::RWOps->from_const_mem( $image_data );
+  my $rw = SDL::RWOps->from_const_mem( $image_data, $size );
+
+C<from_const_mem> sets up a SDL::RWOps object based on a memory area of a certain size. The C<$size> parameter is optional.
+It assumes the memory area is not writable. It returns a SDL::RWOps on success or undef on error.
 
 =head2 alloc_rw()
 
@@ -78,7 +108,6 @@ alloc_rw allocates an empty, unpopulated SDL::RWops structure. You must fill out
 It returns a SDL::RWops structure on succés or undef on error. 
 
 Note: You must free any memory allocated with SDL::alloc_rw with SDL::free_rw.
-
 
 =head2 free_rw(context)
 
