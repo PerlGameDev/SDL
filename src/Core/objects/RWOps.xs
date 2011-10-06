@@ -57,13 +57,16 @@ rwops_new_mem ( CLASS, mem, size )
 	OUTPUT:
 		RETVAL
 
-SDL_RWops*
-rwops_new_const_mem (CLASS, mem, size )
+SDL_RWops *
+rwops_new_const_mem (CLASS, mem, ... )
 	char* CLASS
-	const char* mem
-	int size
+	SV* mem
 	CODE:
-		RETVAL = SDL_RWFromConstMem((const void*)mem,size);
+		STRLEN len;
+		unsigned char *text = SvPV(mem, len);
+		if(items > 2 && SvIOK(ST(2)))
+			len = SvIV(ST(2));
+		RETVAL = SDL_RWFromConstMem((const void*)text, len);
 	OUTPUT:
 		RETVAL
 
