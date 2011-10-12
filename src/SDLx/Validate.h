@@ -54,7 +54,8 @@ SV *surface( SV *surface )
 {
     if( sv_isobject(surface) && sv_derived_from(surface, "SDL::Surface"))
     {
-        SvREFCNT_inc(surface);
+        /* memory leak detected by Test::LeakTrace */
+        /* SvREFCNT_inc(surface); */
         return surface;
     }
     croak("Surface must be SDL::Surface or SDLx::Surface");
