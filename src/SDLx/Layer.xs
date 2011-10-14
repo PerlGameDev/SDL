@@ -240,6 +240,8 @@ layerx_foreground( bag )
         SvREFCNT_inc( bag );
         RETVAL                      = newSVsv(bag);
         SvREFCNT_inc(RETVAL);
+    OUTPUT:
+        RETVAL
 
 void
 layerx_DESTROY( layer )
