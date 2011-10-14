@@ -38,7 +38,7 @@ val__color_arrayref( color, ... )
     CODE:
         RETVAL = items > 1
                ? _color_arrayref( color, ST(1) )
-               : _color_arrayref( color, newSVuv(0) );
+               : _color_arrayref( color, sv_2mortal(newSVuv(0)) );
     OUTPUT:
         RETVAL
 
@@ -48,10 +48,10 @@ val_num_rgb( color )
     CODE:
         char *format = _color_format( color );
         if( 0 == strcmp("number", format) )
-            RETVAL = _color_number(color, newSVuv(0));
+            RETVAL = _color_number( color, sv_2mortal(newSVuv(0)) );
         else if( 0 == strcmp("arrayref", format) )
         {
-            AV *c  = _color_arrayref( (AV *)SvRV(color), newSVuv(0) );
+            AV *c  = _color_arrayref( (AV *)SvRV(color), sv_2mortal(newSVuv(0)) );
 	    unsigned int v = (( SvUV(AvARRAY(c)[0]) << 16 ) + ( SvUV(AvARRAY(c)[1]) << 8 ) + SvUV(AvARRAY(c)[2]));
             RETVAL = newSVuv(v);
         }
@@ -73,11 +73,11 @@ val_num_rgba( color )
         char *format = _color_format( color );
         if( 0 == strcmp("number", format) )
         {
-            RETVAL = _color_number(color, newSVuv(1));
+            RETVAL = _color_number( color, sv_2mortal(newSVuv(1)) );
         }
         else if( 0 == strcmp("arrayref", format) )
         {
-            AV *c          = _color_arrayref( (AV *)SvRV(color), newSVuv(1) );
+            AV *c          = _color_arrayref( (AV *)SvRV(color), sv_2mortal(newSVuv(1)) );
             unsigned int v = (SvUV(AvARRAY(c)[0]) << 24) + (SvUV(AvARRAY(c)[1]) << 16) + (SvUV(AvARRAY(c)[2]) << 8) + SvUV(AvARRAY(c)[3] );
             RETVAL         = newSVuv(v);
         }
