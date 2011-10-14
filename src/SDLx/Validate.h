@@ -69,9 +69,9 @@ char *_color_format( SV *color )
     else if( sv_derived_from(color, "ARRAY") )
         retval = "arrayref";
     else if( sv_isobject(color) && sv_derived_from(color, "SDL::Color") )
-        retval = "SDLx::Color";
+        retval = "SDL::Color";
     else
-        croak("Color must be number or arrayref or SDLx::Color");
+        croak("Color must be number or arrayref or SDL::Color");
 
     return retval;
 }
@@ -152,7 +152,7 @@ AV* __list_rgb( SV* color )
     {
         RETVAL = _color_arrayref((AV *)SvRV(color), sv_2mortal(newSVuv(0)));
     }
-    else if ( 0 == strcmp("SDLx::Color", format) )
+    else if ( 0 == strcmp("SDL::Color", format) )
     {
         RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
         SDL_Color *_color = (SDL_Color *)bag2obj(color);
@@ -189,7 +189,7 @@ AV* __list_rgba( SV* color )
     {
         RETVAL = _color_arrayref((AV *)SvRV(color), sv_2mortal(newSVuv(1)));
     }
-    else if ( 0 == strcmp("SDLx::Color", format) )
+    else if ( 0 == strcmp("SDL::Color", format) )
     {
         RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
         SDL_Color *_color = (SDL_Color*)bag2obj(color);
