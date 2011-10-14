@@ -13,6 +13,8 @@
 
 void _free_surface(void *object)
 {
+	// Frees the resources used by a previously created SDL_Surface.
+	// If the surface was created using SDL_CreateRGBSurfaceFrom then the pixel data is not freed.
 	SDL_FreeSurface((SDL_Surface *)object);
 }
 
