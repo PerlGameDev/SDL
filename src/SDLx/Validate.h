@@ -53,12 +53,9 @@ SV *rect( SV *rect, int* new_rect_made)
 SV *surface( SV *surface )
 {
     if( sv_isobject(surface) && sv_derived_from(surface, "SDL::Surface"))
-    {
-        SvREFCNT_inc(surface);
         return surface;
-    }
+
     croak("Surface must be SDL::Surface or SDLx::Surface");
-    return NULL;
 }
 
 char *_color_format( SV *color )

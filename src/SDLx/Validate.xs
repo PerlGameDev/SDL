@@ -117,15 +117,18 @@ val_rect( r )
     OUTPUT:
         RETVAL
 
-SV *
+void *
 val_surface( s )
-    SV* s
-    CODE:
-        RETVAL = surface(s);
-        if(NULL == RETVAL)
+    SV *s
+    PPCODE:
+        SV *ret;
+        ret = surface(s);
+        if(NULL == ret)
             XSRETURN_UNDEF;
-    OUTPUT:
-        RETVAL
+        else {
+            ST(0) = ret;
+            XSRETURN(1);
+        }
 
 SV *
 val_map_rgb( color, format)
