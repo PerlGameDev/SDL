@@ -121,6 +121,8 @@ Blits C<SDLx::Surface> onto $dest surface.
 $src_rect or $dest_rect are optional. If $src_rect is ommited, it will be the size of the entire surface. If $dest_rect is ommited, 
 it will be blitted at C<(0, 0)>. $src_rect or $dest_rect can be array refs or C<SDL::Rect>. $dest can be C<SDLx::Surface> or C<SDL::Surface>.
 
+Note that the final blit rectangle is stored in $dest_rect after clipping is performed.
+
 Returns $self
 
 =head2 blit_by
@@ -129,6 +131,8 @@ Returns $self
 
 Does the same as C<blit> but the C<SDLx::Surface> is the one being blitted to.
 This is useful when the surface you have isn't an C<SDLx::Surface>, but the surface it is being blitted to is.
+
+Note that the final blit rectangle is stored in $dest_rect after clipping is performed.
 
 =head2 flip
 
@@ -177,13 +181,84 @@ Returns $self
 
 =head2 draw_circle_filled
 
- $sdlx_surface->draw_filled_circle( [$x1, $y1], $radius, \@color ); 
+ $sdlx_surface->draw_circle_filled( [$x1, $y1], $radius, \@color );
 
 Draws an B<filled> circle at C<($x1,$y1)> of size $radius and $color.
 Antialias is turned on automatically. 
 Returns $self
 
+=head2 draw_trigon
 
+ $sdlx_surface->draw_trigon( [ [$x1, $y1], [$x2, $y2], [$x3, y3] ], \@color, $antialias );
+
+Draws an unfilled trigon (triangle) with vertices C<($x1,$y1)>, C<($x2,$y2)>,
+C<($x3,$y3)> and $color.
+Antialias is turned on if $antialias is true.
+Returns $self
+
+=head2 draw_trigon_filled
+
+ $sdlx_surface->draw_trigon_filled( [ [$x1, $y1], [$x2, $y2], [$x3, y3] ], \@color );
+
+Draws an B<filled> trigon (triangle) with vertices C<($x1,$y1)>, C<($x2,$y2)>,
+C<($x3,$y3)> and $color.
+Antialias is turned on automatically.
+Returns $self
+
+=head2 draw_polygon
+
+ $sdlx_surface->draw_polygon( [ [$x1, $y1], [$x2, $y2], [$x3, y3], ... ], \@color, $antialias );
+
+Draws an unfilled polygon with vertices C<($xN,$yN)> and $color.
+Antialias is turned on if $antialias is true.
+Returns $self
+
+=head2 draw_polygon_filled
+
+ $sdlx_surface->draw_polygon_filled( [ [$x1, $y1], [$x2, $y2], [$x3, y3], ... ], \@color );
+
+Draws an B<filled> polygon with vertices C<($xN,$yN)> and $color.
+Antialias is turned on automatically.
+Returns $self
+
+=head2 draw_arc
+
+ $sdlx_surface->draw_arc( [ $x, $y ], $radius, $start, $end, $color );
+
+Draws an arc around C<($x,$y)> with $radius, $start radius, $end radius
+and $color.
+
+Returns $self
+
+=head2 draw_ellipse
+
+ $sdlx_surface->draw_ellipse( [ $x, $y ], $rx, $ry, $color );
+
+Draws an unfilled ellipse centered at C<($x,$y)> with horizontal radius $rx,
+vetical radius $ry and $color.
+Antialias is turned on if $antialias is true.
+
+Returns $self
+
+=head2 draw_ellipse_filled
+
+ $sdlx_surface->draw_ellipse_filled( [ $x, $y ], $rx, $ry, $color );
+
+Draws an B<filled> ellipse centered at C<($x,$y)> with horizontal radius $rx,
+vetical radius $ry and $color.
+Antialias is turned on automatically.
+
+Returns $self
+
+=head2 draw_bezier
+
+ $sdlx_surface->draw_bezier( [ [$x1, $y1], [$x2, $y2], [$x3, y3], ... ], $s, $color );
+
+Draws a bezier curve of points C<($xN,$yN)> using $s steps for
+interpolation and $color.
+Antialias is turned on automatically.
+
+Returns $self
 
 =head2 draw_gfx_text
 

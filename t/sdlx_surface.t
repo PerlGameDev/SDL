@@ -170,6 +170,9 @@ pass 'draw_rect works';
 SKIP:
 {
 	skip( 'SDL_gfx_primitives needed', 2 ) unless SDL::Config->has('SDL_gfx_primitives');
+
+	is( $surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], 0xff00ffff ), $surfs[1], 'draw_line returns self' );
+
 	$surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], 0xff00ff );
 	$surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], 0xff00ffff );
 	$surfs[1]->draw_line( [ 0, 10 ], [ 20, 10 ], 0xff00ffff, 1 );
@@ -189,6 +192,7 @@ SKIP:
 	pass 'draw_gfx_text works';
 	my @colors_t = ( [ 255, 0, 0, 255 ], 0xFF0000FF, 0xFF00FF, [ 255, 0, 255 ] );
 
+	is( $surfs[0]->draw_circle( [ 100, 10 ], 20, [ 0, 0, 0, 0] ), $surfs[0], 'draw_circle returns self' );
 	foreach my $cir_color (@colors_t) {
 		my $cir_color = [ 255, 0, 0, 255 ];
 		$surfs[0]->draw_circle( [ 100, 10 ], 20, $cir_color ); #no fill
@@ -199,6 +203,31 @@ SKIP:
 		pass 'draw_circle_filled works';
 	}
 
+	is( $surfs[0]->draw_trigon( [ [100, 10], [110, 10], [110, 20] ], [ 255, 0, 0, 255 ] ), $surfs[0], 'draw_trigon returns self' );
+	is( $surfs[0]->draw_trigon_filled( [ [100, 10], [110, 10], [110, 20] ], [ 255, 0, 0, 255 ] ), $surfs[0], 'draw_trigon_filled returns self' );
+	foreach my $color (@colors_t) {
+		my $color = [ 255, 0, 0, 255 ];
+		my $verts = [ [100, 10], [110, 10], [110, 20] ];
+		$surfs[0]->draw_trigon( $verts, $color ); #no fill
+		$surfs[0]->draw_trigon( $verts, $color, 1 );
+		$surfs[0]->draw_trigon_filled( $verts, $color ); #fill
+		isnt( $surfs[0]->[100][10], 0 );
+		pass 'draw_trigon works';
+		pass 'draw_trigon_filled works';
+	}
+
+	is( $surfs[0]->draw_polygon( [ [100, 10], [110, 10], [110, 20] ], [ 255, 0, 0, 255 ] ), $surfs[0], 'draw_polygon returns self' );
+	is( $surfs[0]->draw_polygon_filled( [ [100, 10], [110, 10], [110, 20] ], [ 255, 0, 0, 255 ] ), $surfs[0], 'draw_polygon_filled returns self' );
+	foreach my $color (@colors_t) {
+		my $color = [ 255, 0, 0, 255 ];
+		my $verts = [ [100, 10], [110, 10], [110, 20], [100, 20] ];
+		$surfs[0]->draw_polygon( $verts, $color ); #no fill
+		$surfs[0]->draw_polygon( $verts, $color, 1 );
+		$surfs[0]->draw_polygon_filled( $verts, $color ); #fill
+		isnt( $surfs[0]->[100][10], 0 );
+		pass 'draw_polygon works';
+		pass 'draw_polygon_filled works';
+	}
 }
 
 

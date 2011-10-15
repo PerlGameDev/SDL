@@ -26,6 +26,7 @@ stage
 MANIFEST
 !MANIFEST.skip
 *META.yml
+*META.json
 *.tar.gz
 *.swp
 *~
