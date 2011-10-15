@@ -241,6 +241,7 @@ surfacex_blit( src, dest, ... )
     CODE:
         assert_surface(src);
         assert_surface(dest);
+		/* just return the pointer stored in the bag */
         SDL_Surface *_src  = (SDL_Surface *)bag2obj(src);
         SDL_Surface *_dest = (SDL_Surface *)bag2obj(dest);
 
