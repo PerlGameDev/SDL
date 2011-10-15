@@ -9,6 +9,7 @@ SV *rect( SV *rect, int* new_rect_made)
 
     if( !SvOK(rect) )
     {
+	  /* create a new zero sized rectangle */
         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
         (*new_rect_made) = 1;
         r->x        = 0;
@@ -19,6 +20,7 @@ SV *rect( SV *rect, int* new_rect_made)
     }
     else if( sv_derived_from(rect, "ARRAY") )
     {
+	  /* create a new rectangle from the array */
         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
         (*new_rect_made) = 1;
         int ra[4];
@@ -39,6 +41,7 @@ SV *rect( SV *rect, int* new_rect_made)
     }
     else if( sv_isobject(rect) && sv_derived_from(rect, "SDL::Rect") )
     {
+	  /* we already had a good rect. Just pass it along */
         (*new_rect_made) = 0;
         retval = rect;
         SvREFCNT_inc(rect);
