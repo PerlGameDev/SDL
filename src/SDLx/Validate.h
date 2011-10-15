@@ -2,7 +2,8 @@
 #include <SDL.h>
 #include "helper.h"
 
-SV *create_rect( SV *rect, int* new_rect_made)
+/* SV input should be a mortal SV */
+SV *create_mortal_rect( SV *rect, int* new_rect_made)
 {
     SV *retval = NULL;
     /*we hand this over to perl to handle */
@@ -17,6 +18,7 @@ SV *create_rect( SV *rect, int* new_rect_made)
         r->w        = 0;
         r->h        = 0;
         retval      = obj2bag( sizeof( SDL_Rect *), (void *)(r), "SDL::Rect" );
+		sv_2mortal(retval) ;
     }
     else if( sv_derived_from(rect, "ARRAY") )
     {
@@ -38,10 +40,11 @@ SV *create_rect( SV *rect, int* new_rect_made)
 
         r->x   = ra[0]; r->y = ra[1]; r->w = ra[2]; r->h= ra[3];
         retval = obj2bag( sizeof( SDL_Rect *), (void *)(r), "SDL::Rect" );
+		sv_2mortal(retval) ;
     }
     else if( sv_isobject(rect) && sv_derived_from(rect, "SDL::Rect") )
     {
-	  /* we already had a good rect. Just pass it along */
+	  /* we already had a good mortal rect . Just pass it along */
         (*new_rect_made) = 0;
         retval = rect;
         SvREFCNT_inc(rect);
@@ -50,7 +53,7 @@ SV *create_rect( SV *rect, int* new_rect_made)
         croak("Rect must be number or arrayref or SDL::Rect or undef");
 
     //SvREFCNT_inc(rect);
-    return retval;
+    return retval; 
 }
 
 void assert_surface( SV *surface )

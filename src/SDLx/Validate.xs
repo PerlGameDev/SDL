@@ -108,14 +108,13 @@ val_list_rgba( color )
     OUTPUT:
         RETVAL
 
-SV *
+void
 val_rect( r )
     SV* r
-    CODE:
+    PPCODE:
         int new_ = 0;
-        RETVAL   = create_rect( r, &new_ );
-    OUTPUT:
-        RETVAL
+        ST(0) = create_mortal_rect( r, &new_ );
+        XSRETURN(1);
 
 void *
 val_surface( s )
