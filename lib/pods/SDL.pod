@@ -56,23 +56,23 @@ The C<$flags> tell C<SDL::init> which subsystems to initialize.
 
 C<SDL::init> returns C<0> on success, or C<-1> on error.
 
-=head2 init_subsystem
+=head2 init_sub_system
 
- SDL::init_subsystem( $flags );
+ SDL::init_sub_system( $flags );
 
-After SDL has been initialized with C<SDL::init> you may initialize any uninitialized subsystems with C<SDL::init_subsystem>.
-The C<$flags> tell C<SDL::init_subsystem> which subsystems to initialize, and are taken in the same way as C<SDL::init>.
+After SDL has been initialized with C<SDL::init> you may initialize any uninitialized subsystems with C<SDL::init_sub_system>.
+The C<$flags> tell C<SDL::init_sub_system> which subsystems to initialize, and are taken in the same way as C<SDL::init>.
 
-C<SDL::init_subsystem> returns C<0> on success, or C<-1> on error.
+C<SDL::init_sub_system> returns C<0> on success, or C<-1> on error.
 
-=head2 quit_subsystem
+=head2 quit_sub_system
 
- SDL::quit_subsystem( $flags );
+ SDL::quit_sub_system( $flags );
 
-C<SDL::quit_subsystem> allows you to shut down a subsystem that has been previously initialized by C<SDL::init> or C<SDL::init_subsystem>.
-The C<$flags> tell C<SDL::quit_subsystem> which subsystems to shut down, and are taken in the same way as C<SDL::init>.
+C<SDL::quit_sub_system> allows you to shut down a subsystem that has been previously initialized by C<SDL::init> or C<SDL::init_sub_system>.
+The C<$flags> tell C<SDL::quit_sub_system> which subsystems to shut down, and are taken in the same way as C<SDL::init>.
 
-C<SDL::quit_subsystem> doesn't return any values.
+C<SDL::quit_sub_system> doesn't return any values.
 
 =head2 quit
 
@@ -185,7 +185,7 @@ Tobias Leich (FROGGS)
 
 The following people have dedicated blood sweat and tears to making SDL Perl possible.
 
-See the L<impact graph|http://github.com/kthakore/SDL_perl/graphs/impact> on our github repository.
+See the L<impact graph|https://github.com/PerlGameDev/SDL/graphs/impact> on our github repository.
 
 Andy Bakun <sdlperl@thwartedefforts.org>
 

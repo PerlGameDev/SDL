@@ -298,21 +298,80 @@ sub draw_circle_filled {
 	return $self;
 }
 
-
 sub draw_trigon {
-	my ( $self, $center, $vextexes, $color ) = @_;
+	my ( $self, $vertices, $color, $antialias ) = @_;
+
+	$color = SDLx::Validate::num_rgba($color);
+
+	if ($antialias) {
+		SDL::GFX::Primitives::aatrigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0], $vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
+	}
+	else
+	{
+		SDL::GFX::Primitives::trigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0], $vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
+	}
+
+	return $self;
+}
+
+sub draw_trigon_filled {
+	my ( $self, $vertices, $color ) = @_;
+
+	$color = SDLx::Validate::num_rgba($color);
+
+	SDL::GFX::Primitives::filled_trigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0], $vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
+
+	return $self;
+}
+
+sub draw_polygon_filled {
+	my ( $self, $vertices, $color ) = @_;
+
+	$color = SDLx::Validate::num_rgba($color);
+
+	my @vx = map { $_->[0] } @$vertices;
+	my @vy = map { $_->[1] } @$vertices;
+	SDL::GFX::Primitives::filled_polygon_color( $self, \@vx, \@vy, scalar @$vertices, $color );
 
 	return $self;
 }
 
 sub draw_arc {
-	my ( $self, $vector, $radius, $start, $end, $color ) = @_;
+	my ( $self, $center, $radius, $start, $end, $color ) = @_;
+
+	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	$color = SDLx::Validate::num_rgba($color);
+
+	SDL::GFX::Primitives::arc_color( $self, @$center, $radius, $start, $end, $color );
 
 	return $self;
 }
 
 sub draw_ellipse {
-	my ( $self, $center, $radius, $color, $antialias ) = @_;
+	my ( $self, $center, $rx, $ry, $color, $antialias ) = @_;
+
+	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	$color = SDLx::Validate::num_rgba($color);
+
+	if ($antialias)
+	{
+		SDL::GFX::Primitives::aaellipse_color( $self, @$center, $rx, $ry, $color );
+	}
+	else
+	{
+		SDL::GFX::Primitives::ellipse_color( $self, @$center, $rx, $ry, $color );
+	}
+
+	return $self;
+}
+
+sub draw_ellipse_filled {
+	my ( $self, $center, $rx, $ry, $color ) = @_;
+
+	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	$color = SDLx::Validate::num_rgba($color);
+
+	SDL::GFX::Primitives::filled_ellipse_color( $self, @$center, $rx, $ry, $color );
 
 	return $self;
 }
@@ -320,6 +379,13 @@ sub draw_ellipse {
 sub draw_bezier {
 	my ( $self, $vector, $smooth, $color ) = @_;
 
+	$color = SDLx::Validate::num_rgba($color);
+
+	my @vx = map { $_->[0] } @$vector;
+	my @vy = map { $_->[1] } @$vector;
+	SDL::GFX::Primitives::bezier_color( $self, \@vx, \@vy, scalar @$vector, $smooth, $color );
+
+	return $self;
 }
 
 sub draw_gfx_text {
