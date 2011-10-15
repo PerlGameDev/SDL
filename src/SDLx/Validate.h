@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include "helper.h"
 
-SV *rect( SV *rect, int* new_rect_made)
+SV *create_rect( SV *rect, int* new_rect_made)
 {
     SV *retval = NULL;
     /*we hand this over to perl to handle */

@@ -113,7 +113,7 @@ val_rect( r )
     SV* r
     CODE:
         int new_ = 0;
-        RETVAL   = rect( r, &new_ );
+        RETVAL   = create_rect( r, &new_ );
     OUTPUT:
         RETVAL
 
