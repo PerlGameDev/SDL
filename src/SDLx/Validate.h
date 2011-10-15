@@ -112,6 +112,7 @@ SV *_color_number( SV *color, SV *alpha )
     return newSVuv(retval);
 }
 
+/* returns a new mortal AV* */
 AV *_color_arrayref( AV *color, SV *alpha )
 {
     AV *retval = (AV*)sv_2mortal((SV*)newAV());
@@ -143,13 +144,14 @@ AV *_color_arrayref( AV *color, SV *alpha )
 }
 
 
+/* returns a mortal AV* */
 AV* __list_rgb( SV* color )
 {
     char *format = _color_format(color);
-    AV* RETVAL   = newAV();
+    AV* RETVAL ;
     if ( 0 == strcmp("number", format) )
     {
-        RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
+        RETVAL = (AV*)sv_2mortal( (SV *) newAV() );
         unsigned int _color = SvUV(sv_2mortal(_color_number(color, newSVuv(0))));
         av_push(RETVAL, newSVuv(_color >> 16 & 0xFF));
         av_push(RETVAL, newSVuv(_color >>  8 & 0xFF));
@@ -157,11 +159,12 @@ AV* __list_rgb( SV* color )
     }
     else if ( 0 == strcmp("arrayref", format) )
     {
+	  /* _color_arrayref returns a mortal AV* */
         RETVAL = _color_arrayref((AV *)SvRV(color), sv_2mortal(newSVuv(0)));
     }
     else if ( 0 == strcmp("SDL::Color", format) )
     {
-        RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
+	    RETVAL = (AV*)sv_2mortal((SV *) newAV() );
         SDL_Color *_color = (SDL_Color *)bag2obj(color);
         av_push(RETVAL, newSVuv(_color->r));
         av_push(RETVAL, newSVuv(_color->g));
@@ -169,7 +172,7 @@ AV* __list_rgb( SV* color )
     }
     else
     {
-        RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
+	    RETVAL = (AV*)sv_2mortal((SV *) newAV() );
         av_push(RETVAL, newSVuv(0));
         av_push(RETVAL, newSVuv(0));
         av_push(RETVAL, newSVuv(0));
@@ -182,10 +185,10 @@ AV* __list_rgb( SV* color )
 AV* __list_rgba( SV* color )
 {
     char *format = _color_format(color);
-    AV* RETVAL   = newAV();
+    AV* RETVAL ;
     if ( 0 == strcmp("number", format) )
     {
-        RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
+        RETVAL = (AV*)sv_2mortal((SV *) newAV() );
         unsigned int _color = SvUV(sv_2mortal(_color_number(color, sv_2mortal(newSVuv(1)))));
         av_push(RETVAL, newSVuv(_color >> 24 & 0xFF));
         av_push(RETVAL, newSVuv(_color >> 16 & 0xFF));
@@ -198,7 +201,7 @@ AV* __list_rgba( SV* color )
     }
     else if ( 0 == strcmp("SDL::Color", format) )
     {
-        RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
+        RETVAL = (AV*)sv_2mortal((SV *) newAV() );
         SDL_Color *_color = (SDL_Color*)bag2obj(color);
         av_push(RETVAL, newSVuv(_color->r));
         av_push(RETVAL, newSVuv(_color->g));
@@ -207,7 +210,7 @@ AV* __list_rgba( SV* color )
     }
     else
     {
-        RETVAL = (AV*)sv_2mortal((SV *)RETVAL);
+        RETVAL = (AV*)sv_2mortal((SV *) newAV() );
         av_push(RETVAL, newSVuv(0));
         av_push(RETVAL, newSVuv(0));
         av_push(RETVAL, newSVuv(0));
