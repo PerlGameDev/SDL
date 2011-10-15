@@ -120,15 +120,11 @@ void *
 val_surface( s )
     SV *s
     PPCODE:
-        SV *ret;
-        ret = surface(s);
-        if(NULL == ret)
-            XSRETURN_UNDEF;
-        else {
-		    /* s (hence ret) is already mortal */
-            ST(0) = ret;
-            XSRETURN(1);
-        }
+        assert_surface(s); /* ok or dead */
+	    /* ret is already mortal */
+        ST(0) = s;
+        XSRETURN(1);
+
 
 SV *
 val_map_rgb( color, format)
