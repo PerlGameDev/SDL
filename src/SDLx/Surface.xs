@@ -239,8 +239,8 @@ surfacex_blit( src, dest, ... )
     SV *src
     SV *dest
     CODE:
-        src  = surface(src);
-        dest = surface(dest);
+        assert_surface(src);
+        assert_surface(dest);
         SDL_Surface *_src  = (SDL_Surface *)bag2obj(src);
         SDL_Surface *_dest = (SDL_Surface *)bag2obj(dest);
 
@@ -249,6 +249,7 @@ surfacex_blit( src, dest, ... )
         int newly_created_rect = 0;
        	SV* s_rect_sv, *d_rect_sv; 
 		int mall_sr = 0; int mall_dr = 0;
+
         if( items > 2 && SvOK(ST(2)) )
         { 
 			s_rect_sv =  rect(ST(2), &newly_created_rect);

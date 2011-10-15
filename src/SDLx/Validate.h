@@ -53,16 +53,16 @@ SV *rect( SV *rect, int* new_rect_made)
     return retval;
 }
 
-SV *surface( SV *surface )
+void assert_surface( SV *surface )
 {
     if( sv_isobject(surface) && sv_derived_from(surface, "SDL::Surface"))
     {
         /* memory leak detected by Test::LeakTrace */
         /* SvREFCNT_inc(surface); */
-        return surface;
+        return ;
     }
     croak("Surface must be SDL::Surface or SDLx::Surface");
-    return NULL;
+    /* does not return */
 }
 
 char *_color_format( SV *color )
