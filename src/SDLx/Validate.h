@@ -9,7 +9,6 @@ SV *rect( SV *rect, int* new_rect_made)
 
     if( !SvOK(rect) )
     {
-	  /* create a new zero sized rectangle */
         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
         (*new_rect_made) = 1;
         r->x        = 0;
@@ -20,7 +19,6 @@ SV *rect( SV *rect, int* new_rect_made)
     }
     else if( sv_derived_from(rect, "ARRAY") )
     {
-	  /* create a new rectangle from the array */
         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
         (*new_rect_made) = 1;
         int ra[4];
@@ -41,7 +39,6 @@ SV *rect( SV *rect, int* new_rect_made)
     }
     else if( sv_isobject(rect) && sv_derived_from(rect, "SDL::Rect") )
     {
-	  /* we already had a good rect. Just pass it along */
         (*new_rect_made) = 0;
         retval = rect;
         SvREFCNT_inc(rect);
@@ -53,16 +50,16 @@ SV *rect( SV *rect, int* new_rect_made)
     return retval;
 }
 
-void assert_surface( SV *surface )
+SV *surface( SV *surface )
 {
     if( sv_isobject(surface) && sv_derived_from(surface, "SDL::Surface"))
     {
         /* memory leak detected by Test::LeakTrace */
         /* SvREFCNT_inc(surface); */
-        return ;
+        return surface;
     }
     croak("Surface must be SDL::Surface or SDLx::Surface");
-    /* does not return */
+    return NULL;
 }
 
 char *_color_format( SV *color )
