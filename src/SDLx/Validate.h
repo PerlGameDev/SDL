@@ -47,7 +47,8 @@ SV *create_mortal_rect( SV *rect, int* new_rect_made)
 	  /* we already had a good mortal rect . Just pass it along */
         (*new_rect_made) = 0;
         retval = rect;
-        SvREFCNT_inc(rect);
+        // no need to inc REFCNT since we dont make the SV mortal twice
+        //SvREFCNT_inc(rect);
     }
     else
         croak("Rect must be number or arrayref or SDL::Rect or undef");
