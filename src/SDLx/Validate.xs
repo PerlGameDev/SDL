@@ -51,14 +51,14 @@ val_num_rgb( color )
             RETVAL = _color_number( color, sv_2mortal(newSVuv(0)) );
         else if( 0 == strcmp("arrayref", format) )
         {
-            AV *c  = _color_arrayref( (AV *)SvRV(color), sv_2mortal(newSVuv(0)) );
-	    unsigned int v = (( SvUV(AvARRAY(c)[0]) << 16 ) + ( SvUV(AvARRAY(c)[1]) << 8 ) + SvUV(AvARRAY(c)[2]));
-            RETVAL = newSVuv(v);
+            AV *c          = _color_arrayref( (AV *)SvRV(color), sv_2mortal(newSVuv(0)) );
+            unsigned int v = (( SvUV(AvARRAY(c)[0]) << 16 ) + ( SvUV(AvARRAY(c)[1]) << 8 ) + SvUV(AvARRAY(c)[2]));
+            RETVAL         = newSVuv(v);
         }
         else if( 0 == strcmp("SDL::Color", format) )
         {
             SDL_Color *_color = (SDL_Color*) bag2obj( color );
-	    unsigned int v = ( (_color->r) << 16 ) + ( (_color->g) << 8 ) + _color->b;
+            unsigned int v    = ( (_color->r) << 16 ) + ( (_color->g) << 8 ) + _color->b;
             RETVAL            = newSVuv( v );
         }
         else
@@ -72,9 +72,7 @@ val_num_rgba( color )
     CODE:
         char *format = _color_format( color );
         if( 0 == strcmp("number", format) )
-        {
             RETVAL = _color_number( color, sv_2mortal(newSVuv(1)) );
-        }
         else if( 0 == strcmp("arrayref", format) )
         {
             AV *c          = _color_arrayref( (AV *)SvRV(color), sv_2mortal(newSVuv(1)) );
@@ -96,7 +94,7 @@ AV *
 val_list_rgb( color )
     SV *color
     CODE:
-	RETVAL = __list_rgb( color );
+        RETVAL = __list_rgb( color );
     OUTPUT:
         RETVAL
 
@@ -120,25 +118,24 @@ val_surface( s )
     SV *s
     PPCODE:
         assert_surface(s); /* ok or dead */
-	    /* ret is already mortal */
+        /* ret is already mortal */
         ST(0) = s;
         XSRETURN(1);
-
 
 SV *
 val_map_rgb( color, format)
     SV* color
     SDL_PixelFormat * format
     CODE:
-	RETVAL = newSVuv( __map_rgb( color, format ) );
+        RETVAL = newSVuv( __map_rgb( color, format ) );
     OUTPUT:
-	RETVAL
+        RETVAL
 
 SV *
 val_map_rgba( color, format)
     SV* color
     SDL_PixelFormat * format
     CODE:
-	RETVAL = newSVuv( __map_rgba( color, format ) );
+        RETVAL = newSVuv( __map_rgba( color, format ) );
     OUTPUT:
-	RETVAL
+        RETVAL

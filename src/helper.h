@@ -51,7 +51,6 @@ SV *cpy2bag( void *object, int p_size, int s_size, char *package )
 
 void objDESTROY(SV *bag, void (* callback)(void *object))
 {
-
     if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
     {
         void** pointers  = (void**)(SvIV((SV*)SvRV( bag )));
@@ -88,10 +87,10 @@ SV *_sv_ref( void *object, int p_size, int s_size, char *package )
 
 void _svinta_free(Sint16* av, int len_from_av_len)
 {
-    if( av == NULL)
+    if( av == NULL )
         return;
     safefree( av ); /* we only need to free the malloc'd array. It is one block. */
-        av = NULL;
+    av = NULL;
 }
 
 Sint16* av_to_sint16 (AV* av)
@@ -113,6 +112,14 @@ Sint16* av_to_sint16 (AV* av)
 
     }
     return NULL;
+}
+
+void _int_range( int *val, int min, int max )
+{
+    if( *val < min  )
+       *val = min;
+    else if ( *val > max )
+       *val = max;
 }
 
 #endif
