@@ -112,8 +112,7 @@ void
 val_rect( r )
     SV* r
     PPCODE:
-        int new_ = 0;
-        ST(0) = create_mortal_rect( r, &new_ );
+        ST(0) = create_mortal_rect( r );
         XSRETURN(1);
 
 void *

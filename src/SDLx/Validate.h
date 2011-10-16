@@ -3,7 +3,7 @@
 #include "helper.h"
 
 /* SV input should be a mortal SV */
-SV *create_mortal_rect( SV *rect, int* new_rect_made)
+SV *create_mortal_rect( SV *rect )
 {
     SV *retval = NULL;
     /*we hand this over to perl to handle */
@@ -12,7 +12,6 @@ SV *create_mortal_rect( SV *rect, int* new_rect_made)
     {
 	  /* create a new zero sized rectangle */
         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
-        (*new_rect_made) = 1;
         r->x        = 0;
         r->y        = 0;
         r->w        = 0;
@@ -24,7 +23,6 @@ SV *create_mortal_rect( SV *rect, int* new_rect_made)
     {
 	  /* create a new rectangle from the array */
         SDL_Rect* r = safemalloc( sizeof(SDL_Rect) );
-        (*new_rect_made) = 1;
         int ra[4];
         int i            = 0;
         AV* recta        = (AV*)SvRV(rect);
@@ -45,7 +43,6 @@ SV *create_mortal_rect( SV *rect, int* new_rect_made)
     else if( sv_isobject(rect) && sv_derived_from(rect, "SDL::Rect") )
     {
 	  /* we already had a good mortal rect . Just pass it along */
-        (*new_rect_made) = 0;
         retval = rect;
         // no need to inc REFCNT since we dont make the SV mortal twice
         //SvREFCNT_inc(rect);

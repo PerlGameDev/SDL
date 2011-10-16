@@ -187,17 +187,12 @@ surfacex_draw_rect ( surface, rt, color )
 		SDL_Rect r_rect;
 
 		if( SvOK(rt) )
-		{
-			int newly_created_rect = 0;
-			SV* foo                = create_mortal_rect( rt, &newly_created_rect );
-			r_rect                 = *(SDL_Rect*)bag2obj(foo);
-			SDL_FillRect(surface, &r_rect, m_color);
-		}
+			r_rect = *(SDL_Rect*)bag2obj( create_mortal_rect( rt ) );
 		else
 		{
 			r_rect.x = 0; r_rect.y = 0; r_rect.w = surface->w; r_rect.h = surface->h;
-			SDL_FillRect(surface, &r_rect, m_color);
 		}
+		SDL_FillRect(surface, &r_rect, m_color);
 
 #ifdef HAVE_SDL_GFX_PRIMITIVES
 
@@ -247,13 +242,9 @@ surfacex_blit( src, dest, ... )
         SDL_Rect _src_rect;
         SDL_Rect _dest_rect;
         int newly_created_rect = 0;
-       	SV* s_rect_sv, *d_rect_sv; 
 
         if( items > 2 && SvOK(ST(2)) )
-        { 
-			s_rect_sv =  create_mortal_rect(ST(2), &newly_created_rect);
-			_src_rect = *(SDL_Rect *)bag2obj( s_rect_sv );
-		}
+            _src_rect = *(SDL_Rect *)bag2obj( create_mortal_rect( ST(2) ) );
         else
         {
             _src_rect.x = 0;
@@ -263,10 +254,7 @@ surfacex_blit( src, dest, ... )
         }
         
         if( items > 3 && SvOK(ST(3)) )
-		{
-			d_rect_sv = create_mortal_rect(ST(3), &newly_created_rect);
-            _dest_rect = *(SDL_Rect *)bag2obj( d_rect_sv );
-		}
+            _dest_rect = *(SDL_Rect *)bag2obj( create_mortal_rect( ST(3) ) );
         else
         {
             _dest_rect.x = 0;
