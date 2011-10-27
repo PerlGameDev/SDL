@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.534 October 27 2011
+	- Combined release of 2.534_* 
+
 * 2.534_03 October 06 2011
 	- SDL::Palette fixed colors() to return an array [Blaizer]
 	- SDL::Video fixed set_colors, set_palette [FROGGS, Blaizer]
