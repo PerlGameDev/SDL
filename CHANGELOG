@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.534_01 Nov 5 2011
+	- Merged in memory leak fixes [dod]
+
 * 2.534 October 27 2011
 	- Combined release of 2.534_* 
 
