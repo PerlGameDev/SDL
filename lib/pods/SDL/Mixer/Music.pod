@@ -35,7 +35,7 @@ Example for loading music from a variable:
  my $rwops = SDL::RWOps->new_const_mem( $scalar_holding_music );
  my $music = SDL::Mixer::Music::load_MUS( $rwops );
 
-<b>Noet:</b> You need at least libSDL_mixer 1.2.7 for this feature.
+B<Note:> You need at least libSDL_mixer 1.2.7 for this feature.
 
 =head2 hook_music
 
