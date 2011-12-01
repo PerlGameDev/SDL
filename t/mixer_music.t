@@ -31,6 +31,7 @@ BEGIN {
 use SDL::Mixer;
 use SDL::Mixer::Music;
 use SDL::Mixer::Samples;
+use SDL::RWOps;
 use SDL::Version;
 
 my $v = SDL::Mixer::linked_version();
@@ -107,6 +108,19 @@ isa_ok( $sample_music, 'SDL::Mixer::MixMusic', '[load_MUS]' );
 is( SDL::Mixer::Music::play_music( $sample_music, 0 ),
 	0, "[play_music] plays $audio_test_file"
 );
+
+SKIP:
+{
+	skip( 'Version 1.2.7 needed', 2 )
+		unless ( $v->major >= 1 && $v->minor >= 2 && $v->patch >= 7 );
+
+	my $rw = SDL::RWOps->new_file( $audio_test_file, "rb" );
+	my $sample_music_rw = SDL::Mixer::Music::load_MUS_RW( $rw );
+	isa_ok( $sample_music_rw, 'SDL::Mixer::MixMusic', '[load_MUS_RW]' );
+	is( SDL::Mixer::Music::play_music( $sample_music_rw, 0 ),
+		0, "[play_music_rw] plays $audio_test_file"
+	);
+}
 
 SKIP:
 {
