@@ -1,21 +1,27 @@
 Revision history for Perl extension SDL_perl.
 
-* 2.534
+* 2.535_01 Nov 5 2011
+	- Merged in memory leak fixes [dod]
+
+* 2.534 October 27 2011
+	- Combined release of 2.534_* 
+
+* 2.534_03 October 06 2011
 	- SDL::Palette fixed colors() to return an array [Blaizer]
 	- SDL::Video fixed set_colors, set_palette [FROGGS, Blaizer]
-    - SDLx::Text improved error message [garu]
-    - SDLx::Text new getter: font_filename() [garu]
-    - SDLx::Text fixed size() accessor [garu]
-    - SDLx::Text dynamic updating of text [garu]
-    - SDLx::Text new options: shadow, shadow_offset and shadow_color [garu]
-    - SDLx::Text new options: normal, bold, italic, underline, strikethrough [garu]
-    - SDLx::Text examples (zoom, shadow, style) [garu]
-    - SDLx::Text improved documentation [garu]
-    - SDLx::TTF fixed loading error [FROGGS]
-
-* 2.534_03
-	Documentation fixes:
-	- SDL::Event: fixed SDL_EVENTMASK documentation [jtpalmer]
+	- SDLx::Text improved error message [garu]
+	- SDLx::Text new getter: font_filename() [garu]
+	- SDLx::Text fixed size() accessor [garu]
+	- SDLx::Text dynamic updating of text [garu]
+	- SDLx::Text new options: shadow, shadow_offset and shadow_color [garu]
+	- SDLx::Text new options: normal, bold, italic, underline, strikethrough [garu]
+	- SDLx::Text examples (zoom, shadow, style) [garu]
+	- SDLx::Text improved documentation [garu]
+	- SDLx::Text word wrapping support [garu]
+	- SDLx::TTF fixed loading error [FROGGS]
+	- SDL::Event fixed SDL_EVENTMASK documentation [jtpalmer]
+	- SDL::RWOps got SDL::RWOps->from_const_mem working, updated docs [FROGGS]
+	- SDL::Video updated xs and docs for blit_surface using undefined rects [FROGGS]
 
 * 2.534_02 August 27 2011
 	New features:
