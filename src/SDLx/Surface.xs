@@ -174,8 +174,9 @@ surfacex_draw_polygon ( surface, vectors, color, ... )
         AV* vx                 = newAV();
         AV* vy                 = newAV();
         AV* vertex;
-        while(vertex = (AV*)SvRV(av_shift(vectors)))
+        while(av_len(vectors) >= 0)
         {
+            vertex = (AV*)SvRV(av_shift(vectors));
             av_push(vx, av_shift(vertex));
             av_push(vy, av_shift(vertex));
         }
