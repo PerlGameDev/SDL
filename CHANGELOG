@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.535_02 Dec 2 2011
+	- src/SDLx/Surface.xs: fixed perl-5.8.9 crash while shifting from empty AV [FROGGS]
+
 * 2.535_01 Nov 5 2011
 	- Merged in memory leak fixes [dod]
 
