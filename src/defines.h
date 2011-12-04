@@ -55,4 +55,8 @@ extern PerlInterpreter *parent_perl;
 #define LEAVE_TLS_CONTEXT       /* TLS context not enabled */
 #endif
 
+/* VERSION_ATLEAST(have_triplet, need_triplet) */
+#define VERSION_ATLEAST(a, b, c, d, e, f) (a > d || (a == d && b > e) \
+                                           || (a == d && b == e && c >= f))
+
 #endif

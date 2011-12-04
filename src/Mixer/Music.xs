@@ -123,6 +123,35 @@ mixmus_load_MUS( filename )
 	OUTPUT:
 		RETVAL
 
+#if VERSION_ATLEAST(SDL_MIXER_MAJOR_VERSION, SDL_MIXER_MINOR_VERSION, SDL_MIXER_PATCHLEVEL, 1, 2, 7)
+
+Mix_Music *
+mixmus_load_MUS_RW( rw )
+	SDL_RWops *rw
+	PREINIT:
+		char * CLASS = "SDL::Mixer::MixMusic";
+	CODE:
+		Mix_Music * mixmusic;
+		mixmusic = Mix_LoadMUS_RW(rw);
+		if (mixmusic == NULL)
+			fprintf(stderr, "Could not load SDL::RWOp object\n");
+		RETVAL = mixmusic;
+	OUTPUT:
+		RETVAL
+
+#else
+
+Mix_Music *
+mixmus_load_MUS_RW( rw )
+	SDL_RWops *rw
+	CODE:
+		warn("SDL_mixer >= 1.2.7 needed for SDL::Mixer::Music::load_MUS_RW( rw )");
+		XSRETURN_UNDEF;
+	OUTPUT:
+		RETVAL
+
+#endif
+
 void
 mixmus_free_music( music )
 	Mix_Music *music
