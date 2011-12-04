@@ -1,5 +1,9 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.535_03 Dec 4 2011
+	- SDL::Mixer::Music: added load_MUS_RW [FROGGS]
+	- defines.h: added VERSION_ATLEAST macro [FROGGS]
+
 * 2.535_02 Dec 2 2011
 	- src/SDLx/Surface.xs: fixed perl-5.8.9 crash while shifting from empty AV [FROGGS]
 
