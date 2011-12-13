@@ -74,7 +74,7 @@ sub new {
 		$init |= SDL::SDL_INIT_TIMER       if $init{timer}        || $init{t};
 	}
 	#if anything is already inited, only init specified extra subsystems
-	if ( SDL::was_init( SDL::INIT_EVERYTHING ) & (SDL_INIT_AUDIO | SDL_INIT_CDROM | SDL_INIT_EVENTTHREAD | SDL_INIT_JOYSTICK | SDL_INIT_TIMER | SDL_INIT_VIDEO) ) {
+	if ( SDL::was_init( SDL::SDL_INIT_EVERYTHING ) & (SDL::SDL_INIT_AUDIO | SDL::SDL_INIT_CDROM | SDL::SDL_INIT_EVENTTHREAD | SDL::SDL_INIT_JOYSTICK | SDL::SDL_INIT_TIMER | SDL::SDL_INIT_VIDEO) ) {
 		SDL::init_subsystems($init) if defined $init;
 	}
 	else {
