@@ -17,6 +17,26 @@ Mixer
 
 C<load_MUS> loads a music file into a C<SDL::Mixer::MixMusic> structure. This can be passed to L<play_music|SDL::Mixer::Music/"play_music">.
 
+=head2 load_MUS_RW
+
+ my $music = SDL::Mixer::Music::load_MUS_RW( $rwops );
+
+C<load_MUS_RW> does the same like C<load_MUS> except that it accepts an L<SDL::RWOps>-object rather than a filename.
+
+Example for loading music from a variable:
+
+ use SDL;
+ use SDL::Mixer;
+ use SDL::Mixer::Music;
+ use SDL::RWOps;
+ 
+ [...]
+ 
+ my $rwops = SDL::RWOps->new_const_mem( $scalar_holding_music );
+ my $music = SDL::Mixer::Music::load_MUS( $rwops );
+
+B<Note:> You need at least libSDL_mixer 1.2.7 for this feature.
+
 =head2 hook_music
 
  SDL::Mixer::Music::hook_music( $callback, $position );

@@ -202,33 +202,33 @@ surfacex_draw_rect ( surface, rt, color )
 
 #ifdef HAVE_SDL_GFX_PRIMITIVES
 
-SV *
-surfacex_draw_polygon ( surface, vectors, color, ... )
-    SV* surface
+int
+surfacex_draw_polygon(surface, vectors, color, antialias)
+    SDL_Surface * surface
     AV* vectors
     Uint32 color
+    SV *antialias
     CODE:
-        SDL_Surface * _surface = (SDL_Surface *)bag2obj(surface);
         AV* vx = newAV();
         AV* vy = newAV();
-        AV* vertex;
-        while (vertex = (AV*)SvRV(av_shift(vectors)))
+        int n;
+        for(n = 0; n <= av_len(vectors); n++)
         {
-            av_push(vx, av_shift(vertex));
-            av_push(vy, av_shift(vertex));
+            if(n & 1)
+                av_store(vy, (int)((n-1)/2), *av_fetch(vectors, n, 0));
+            else
+                av_store(vx, (int)(n/2),     *av_fetch(vectors, n, 0));
         }
         
-        int n = av_len(vx) + 1;
+        n = av_len(vx) + 1;
         
         Sint16 * _vx   = av_to_sint16(vx);
         Sint16 * _vy   = av_to_sint16(vy);
-        if ( items > 3 && SvTRUE( ST(3) ) )
-            aapolygonColor( _surface, _vx, _vy, n, color );
-        else
-            polygonColor( _surface, _vx, _vy, n, color );
+        RETVAL         = SvOK(antialias)
+                       ? aapolygonColor(surface, _vx, _vy, n, color)
+                       : polygonColor(surface, _vx, _vy, n, color);
         _svinta_free( _vx, av_len(vx) );
         _svinta_free( _vy, av_len(vy) );
-        RETVAL = SvREFCNT_inc(surface);
     OUTPUT:
         RETVAL
 
@@ -284,4 +284,3 @@ surfacex_blit( src, dest, ... )
 			SvREFCNT_dec( d_rect_sv );
 
    
-

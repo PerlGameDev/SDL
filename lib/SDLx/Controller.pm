@@ -52,6 +52,16 @@ sub new {
 	return $self;
 }
 
+
+sub delay {
+	my $self = shift;
+	my $delay = shift; 
+	my $ref = refaddr $self;
+	
+	$_sleep_cycle{ $ref }  = $delay if $delay;
+	return $self; 
+}
+
 sub DESTROY {
 	my $self = shift;
 	my $ref = refaddr $self;

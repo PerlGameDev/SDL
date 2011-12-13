@@ -683,10 +683,10 @@ C<SDL::Video::get_clip_rect> doesn't returns anything;
  SDL::Video::blit_surface( $src_surface, $src_rect, $dest_surface, $dest_rect );
 
 This performs a fast blit from the given source L<SDL::Surface> to the given destination L<SDL::Surface>.
-The width and height in C<src_surface> determine the size of the copied rectangle. Only the position is used in the C<dst_rect> 
-(the width and height are ignored). Blits with negative C<dst_rect> coordinates will be clipped properly.
-If C<src_rect> is NULL, the entire surface is copied. If C<dst_rect> is NULL, then the destination position (upper left corner) is (0, 0).
-The final blit rectangle is saved in C<dst_rect> after all clipping is performed (C<src_rect> is not modified).
+The width and height in C<$src_rect> determine the size of the copied rectangle. Only the position is used in the C<$dest_rect> 
+(the width and height are ignored). Blits with negative C<dest_rect> coordinates will be clipped properly.
+If C<$src_rect> is C<undef>, the entire surface is copied. If C<$dest_rect> is C<undef>, then the destination position (upper left corner) is (0, 0).
+The final blit rectangle is saved in C<$dest_rect> after all clipping is performed (C<$src_rect> is not modified).
 The blit function should not be called on a locked surface. I.e. when you use your own drawing functions you may need to lock a surface, 
 but this is not the case with C<SDL::Video::blit_surface>. Like most surface manipulation functions in SDL, it should not be used together 
 with OpenGL.
