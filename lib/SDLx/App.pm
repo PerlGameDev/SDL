@@ -40,7 +40,6 @@ sub new {
 	my $init =                                                                        $o{init};
 
 	# boolean
-	my $ni    = $o{no_init}       || $o{ni};
 	my $af    = $o{any_format}    || $o{af};
 	my $db    = $o{double_buf}    || $o{db};
 	my $sw    = $o{sw_surface}    || $o{sw};
@@ -56,24 +55,29 @@ sub new {
 	my $gi    = $o{grab_input}    || $o{gi};
 	my $nc    = $o{no_controller} || $o{nc};
 	
-	unless( defined $d ) {
+	unless ( defined $d ) {
 		# specify SDL_ANYFORMAT if depth isn't defined
 		$d = 32;
 		$af = 1;
 	}
 
-	unless ( $ni ) {
-		if ( ref $init eq 'ARRAY' ) {
-			my %init = map { $_ => 1 } @$init;
-			undef $init;
-			$init |= SDL::SDL_INIT_AUDIO       if $init{audio}        || $init{a};
-			$init |= SDL::SDL_INIT_VIDEO       if $init{video}        || $init{v};
-			$init |= SDL::SDL_INIT_CDROM       if $init{cd_rom}       || $init{cd};
-			$init |= SDL::SDL_INIT_EVERYTHING  if $init{everything}   || $init{e};
-			$init |= SDL::SDL_INIT_NOPARACHUTE if $init{no_parachute} || $init{np};
-			$init |= SDL::SDL_INIT_JOYSTICK    if $init{joystick}     || $init{j};
-			$init |= SDL::SDL_INIT_TIMER       if $init{timer}        || $init{t};
-		}
+	#used to say unless no_init here. I don't think we need it anymore
+	if ( ref $init eq 'ARRAY' ) {
+		my %init = map { $_ => 1 } @$init;
+		undef $init;
+		$init |= SDL::SDL_INIT_AUDIO       if $init{audio}        || $init{a};
+		$init |= SDL::SDL_INIT_VIDEO       if $init{video}        || $init{v};
+		$init |= SDL::SDL_INIT_CDROM       if $init{cd_rom}       || $init{cd};
+		$init |= SDL::SDL_INIT_EVERYTHING  if $init{everything}   || $init{e};
+		$init |= SDL::SDL_INIT_NOPARACHUTE if $init{no_parachute} || $init{np};
+		$init |= SDL::SDL_INIT_JOYSTICK    if $init{joystick}     || $init{j};
+		$init |= SDL::SDL_INIT_TIMER       if $init{timer}        || $init{t};
+	}
+	#if anything is already inited, only init specified extra subsystems
+	if ( SDL::was_init( SDL::INIT_EVERYTHING ) & (SDL_INIT_AUDIO | SDL_INIT_CDROM | SDL_INIT_EVENTTHREAD | SDL_INIT_JOYSTICK | SDL_INIT_TIMER | SDL_INIT_VIDEO) ) {
+		SDL::init_subsystems($init) if defined $init;
+	}
+	else {
 		SDL::init( defined $init ? $init : SDL::SDL_INIT_EVERYTHING );
 	}
 	
@@ -88,6 +92,7 @@ sub new {
 	$f |= SDL::Video::SDL_RESIZABLE  if $rs;
 	$f |= SDL::Video::SDL_NOFRAME    if $nf;
 
+	#we'll let SDL decide which takes priority and set both if both are specified
 	$ENV{SDL_VIDEO_CENTERED}   = $cen if $cen;
 	$ENV{SDL_VIDEO_WINDOW_POS} = $pos if $pos;
 
@@ -195,10 +200,10 @@ sub ticks {
 
 sub error {
 	shift;
-	if( @_ == 1 and !defined $_[0] ) {
+	if ( @_ == 1 and !defined $_[0] ) {
 		return SDL::clear_error;
 	}
-	if( @_ ) {
+	if ( @_ ) {
 		return SDL_set_error_real( @_ );
 	}
 	SDL::get_error;
@@ -213,7 +218,7 @@ sub warp {
 sub show_cursor {
 	shift;
 	require SDL::Constants;
-	if( @_ ) {
+	if ( @_ ) {
 		my ( $show ) = @_;
 		return SDL::Mouse::show_cursor( SDL::Constants::SDL_ENABLE ) if $show;
 		return SDL::Mouse::show_cursor( SDL::Constants::SDL_DISABLE );
@@ -232,7 +237,7 @@ sub iconify {
 
 sub grab_input {
 	shift;
-	if(@_) {
+	if (@_) {
 		my ( $grab ) = @_;
 		return SDL::Video::wm_grab_input( SDL::Video::SDL_GRAB_ON ) if $grab;
 		return SDL::Video::wm_grab_input( SDL::Video::SDL_GRAB_OFF );
