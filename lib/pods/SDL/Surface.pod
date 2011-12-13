@@ -104,7 +104,7 @@ B<Disclaimer:> The following methods can be very slow, making them suitable for 
 
  my $pixel = $surface->get_pixel( $offset )
 
-Returns the pixel value for the given C<$offset>.
+Returns the numeric pixel value for the given C<$offset>.
 The pixel value depends on current pixel format.
 
 B<Note:> For surfaces with a palette (1 byte per pixel) the palette index is returned instead of color values.

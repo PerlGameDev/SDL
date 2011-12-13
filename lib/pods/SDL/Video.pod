@@ -421,6 +421,8 @@ it returns 0 on success or -1 on error.
  $set_color_key = SDL::Video::set_color_key( $surface, $flag, $key );
 
 Sets the color key (transparent pixel) in a blittable surface and enables or disables RLE blit acceleration.
+C<$key> can be an integer or an L<SDL::Color|SDL::Color> object. If you pass an L<SDL::Color|SDL::Color> object 
+L<SDL::Video::map_RGB|/map_RGB> will be called on it before setting the color key.
 
 RLE acceleration can substantially speed up blitting of images with large horizontal runs of transparent pixels (i.e., pixels that match 
 the key value).
