@@ -21,9 +21,11 @@ my %_event;
 my %_event_handlers;
 my %_move_handlers;
 my %_show_handlers;
-my %_sleep_cycle;
+my %_delay;
 my %_eoq;
 my %_paused;
+my %_time;
+my %_eoq_handler;
 
 sub new {
 	my ($self, %args) = @_;
@@ -39,27 +41,19 @@ sub new {
 
 	$_dt{ $ref }                 = defined $args{dt}    ? $args{dt}    : 0.1;
 	$_min_t{ $ref }              = defined $args{min_t} ? $args{min_t} : 1 / 60;
-#	$_current_time{ $ref }       = $args{current_time} || 0; #no point
-	$_stop{ $ref }               = $args{stop};
+#	$_current_time{ $ref }       = $args{current_time} || 0;                               #no point
+#	$_stop{ $ref }               = $args{stop};                                            #shouldn't be allowed
 	$_event{ $ref }              = $args{event} || SDL::Event->new();
 	$_event_handlers{ $ref }     = $args{event_handlers} || [];
 	$_move_handlers{ $ref }      = $args{move_handlers}  || [];
 	$_show_handlers{ $ref }      = $args{show_handlers}  || [];
-	$_sleep_cycle{ $ref }		 = $args{delay};
-	$_eoq{$ref} 				 = $args{exit_on_quit} || $args{eoq} || 0;
-#	$_paused{ $ref }             = $args{paused}; #read only
+	$_delay{ $ref }              = (defined $args{delay} && $args{delay} >= 1 ? $args{delay} / 1000 : $args{delay}) || 0; #phasing out ticks, but still accepting them. Remove whenever we break compat
+	$_eoq{$ref}                  = $args{exit_on_quit} || $args{eoq};
+#	$_paused{ $ref }             = $args{paused};                                          #no point
+	$_time{ $ref }               = $args{time} || 0;
+	$_eoq_handler{ $ref }        = $args{exit_on_quit_handler} || $args{eoq_handler} || \&_default_exit_on_quit_handler;
 
 	return $self;
-}
-
-
-sub delay {
-	my $self = shift;
-	my $delay = shift; 
-	my $ref = refaddr $self;
-	
-	$_sleep_cycle{ $ref }  = $delay if $delay;
-	return $self; 
 }
 
 sub DESTROY {
@@ -74,9 +68,11 @@ sub DESTROY {
 	delete $_event_handlers{ $ref};
 	delete $_move_handlers{ $ref};
 	delete $_show_handlers{ $ref};
-	delete $_sleep_cycle { $ref };
-	delete $_eoq{$ref}; 
-	delete $_paused{$ref};
+	delete $_delay { $ref};
+	delete $_eoq{ $ref}; 
+	delete $_paused{ $ref};
+	delete $_time{ $ref};
+	delete $_eoq_handler{ $ref};
 }
 
 sub run {
@@ -84,7 +80,6 @@ sub run {
 	my $ref          = refaddr $self;
 	my $dt           = $_dt{ $ref };
 	my $min_t        = $_min_t{ $ref };
-	my $t            = 0.0;
 
 	#Allows us to do stop and run
 	$_stop{ $ref } = 0;
@@ -100,34 +95,24 @@ sub run {
 		my $delta_copy = $delta_time;
 
 		while ( $delta_copy > $dt ) {
-			$self->_move( $ref, 1, $t ); #a full move
+			$self->_move( $ref, 1, $_time{ $ref} ); #a full move
 			$delta_copy -= $dt;
-			$t += $dt;
+			$_time{ $ref} += $dt;
 		}
 		my $step = $delta_copy / $dt;
-		$self->_move( $ref, $step, $t ); #a partial move
-		$t += $dt * $step;
+		$self->_move( $ref, $step, $_time{ $ref} ); #a partial move
+		$_time{ $ref} += $dt * $step;
 
 		$self->_show( $ref, $delta_time );
 
 		$dt    = $_dt{ $ref};    #these can change
 		$min_t = $_min_t{ $ref}; #during the cycle
-		SDL::delay( $_sleep_cycle{ $ref } ) if $_sleep_cycle{ $ref };
+		
+		Time::HiRes::sleep( $_delay{ $ref } ) if $_delay{ $ref };
 	}
 
 }
-
-sub exit_on_quit {
-    my ($self, $value) = @_;
-
-    my $ref = refaddr $self;
-    if (defined $value) {
-        $_eoq{$ref} = $value;
-    }
-
-    return $_eoq{$ref};
-}
-*eoq = \&exit_on_quit;  # alias
+sub stop { $_stop{ refaddr $_[0] } = 1 }
 
 sub pause {
 	my ($self, $callback) = @_;
@@ -136,7 +121,7 @@ sub pause {
 	while(1) {
 		SDL::Events::wait_event($_event{ $ref}) or Carp::confess("pause failed waiting for an event");
 		if(
-			$_eoq{ $ref} && do { $self->_exit_on_quit($_event{ $ref}); $_stop{ $ref} }
+			$_eoq{ $ref} && do { $_eoq_handler{ $ref}->( $_event{ $ref}, $self ); $_stop{ $ref} }
 			or !$callback or $callback->($_event{ $ref}, $self)
 		) {
 			$_current_time{ $ref} = Time::HiRes::time; #so run doesn't catch up with the time paused
@@ -145,12 +130,16 @@ sub pause {
 	}
 	delete $_paused{ $ref};
 }
+sub paused {
+	#why would you ever want to set this? Internally set only
+	$_paused{ refaddr $_[0]};
+}
 
 sub _event {
 	my ($self, $ref) = @_;
 	SDL::Events::pump_events();
 	while ( SDL::Events::poll_event( $_event{ $ref} ) ) {
-		$self->_exit_on_quit( $_event{ $ref}  ) if $_eoq{$ref};
+		$_eoq_handler{ $ref}->( $_event{ $ref}, $self ) if $_eoq{ $ref};
 		foreach my $event_handler ( @{ $_event_handlers{ $ref} } ) {
 			next unless $event_handler;
 			$event_handler->( $_event{ $ref}, $self );
@@ -173,8 +162,6 @@ sub _show {
 		$show_handler->( $delta_ticks, $self );
 	}
 }
-
-sub stop { $_stop{ refaddr $_[0] } = 1 }
 
 sub _add_handler {
 	my ( $arr_ref, $handler ) = @_;
@@ -276,14 +263,56 @@ sub current_time {
 	$_current_time{ $ref};
 }
 
-sub paused {
-	$_paused{ refaddr $_[0]};
+sub delay {
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
+	$_delay{ $ref} = $arg if defined $arg;
+
+	$_delay{ $ref};
 }
 
-sub _exit_on_quit {
+sub exit_on_quit {
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
+	$_eoq{ $ref} = $arg if defined $arg;
+
+	$_eoq{ $ref};
+}
+*eoq = \&exit_on_quit;  # alias
+
+sub exit_on_quit_handler {
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
+	$_eoq_handler{ $ref} = $arg if defined $arg;
+
+	$_eoq_handler{ $ref};
+}
+*eoq_handler = \&exit_on_quit_handler; #alias
+
+sub _default_exit_on_quit_handler {
    my ($self, $event) = @_;
 
     $self->stop() if $event->type == SDL_QUIT;
+}
+
+sub event {
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
+	$_event{ $ref} = $arg if defined $arg;
+
+	$_event{ $ref};
+}
+
+#replacements for SDLx::App->get_ticks() and delay()
+sub time {
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
+	$_time{ $ref} = $arg if defined $arg;
+
+	$_time{ $ref};
+}
+sub sleep {
+	return Time::HiRes::sleep( $_[1] );
 }
 
 1;

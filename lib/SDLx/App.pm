@@ -20,6 +20,8 @@ use SDL::PixelFormat ();
 use Carp ();
 use Scalar::Util qw/refaddr/;
 
+my %_stash;
+
 sub new {
 	my $class = shift;
 	$class = ref $class || $class;
@@ -31,7 +33,7 @@ sub new {
 	my $d   = defined $o{depth}            ? $o{depth}            : defined $o{d}   ? $o{d}   : undef;
 	my $f   = defined $o{flags}            ? $o{flags}            : defined $o{f}   ? $o{f}   : 0;
 	my $pos = defined $o{position}         ? $o{position}         : defined $o{pos} ? $o{pos} : undef;
-	my $s   = defined $o{stash}            ? $o{stash}            : defined $o{s}   ? $o{s}   : undef;
+	my $s   = defined $o{stash}            ? $o{stash}            : defined $o{s}   ? $o{s}   : {};
 
 	# undef is a valid input
 	my $t    = exists $o{title}            ? $o{title}            : exists  $o{t}   ? $o{t}   : undef;
@@ -75,7 +77,7 @@ sub new {
 	}
 	#if anything is already inited, only init specified extra subsystems
 	if ( SDL::was_init( SDL::SDL_INIT_EVERYTHING ) & (SDL::SDL_INIT_AUDIO | SDL::SDL_INIT_CDROM | SDL::SDL_INIT_EVENTTHREAD | SDL::SDL_INIT_JOYSTICK | SDL::SDL_INIT_TIMER | SDL::SDL_INIT_VIDEO) ) {
-		SDL::init_subsystems($init) if defined $init;
+		SDL::init_sub_system( $init ) if defined $init;
 	}
 	else {
 		SDL::init( defined $init ? $init : SDL::SDL_INIT_EVERYTHING );
@@ -150,6 +152,16 @@ sub new {
 	$self;
 }
 
+sub DESTROY {
+	my ($self) = @_;
+	my $ref = refaddr($self);
+	delete $_stash{ $ref };
+}
+
+sub stash :lvalue {
+	return $_stash{ refaddr( $_[0] ) };
+}
+
 sub resize {
 	my ($self, $w, $h) = @_;
 	my $flags = $self->flags;
@@ -162,9 +174,8 @@ sub resize {
 }
 
 sub title {
-	shift;
-	if ( @_ ) {
-		my ( $title, $icon_title ) = @_;
+	my ( undef, $title, $icon_title ) = @_;
+	if ( @_ > 1 ) {
 		$title = defined $icon_title ? $icon_title : $0 unless defined $title;
 		$icon_title = $title unless defined $icon_title;
 		return SDL::Video::wm_set_caption( $title, $icon_title );
@@ -173,25 +184,13 @@ sub title {
 }
 
 sub icon {
-	shift;
-	my ( $icon ) = @_;
-	if ( defined $icon ) {
-		unless ( eval { $icon->isa( 'SDL::Surface' ) } ) {
-			$icon = SDL::Video::load_BMP( $icon );
-			unless ( $icon ) {
-				require SDL::Image;
-				$icon = SDL::Image::load( $icon );
-			}
-		}
-		SDL::Video::wm_set_icon( $icon );
-	}
+	SDL::Video::wm_set_icon( $_[1] );
 }
 
-# this should probably be moved to SDLx::Controller
+# this has been moved to SDLx::Controller in the form of time and sleep
+# this can be removed at any time we wanna break compat
 sub delay {
-	shift;
-	my ( $ms ) = @_;
-	SDL::delay( $ms );
+	SDL::delay( $_[1] );
 }
 
 sub ticks {
@@ -210,20 +209,17 @@ sub error {
 }
 
 sub warp {
-	shift;
-	my ( $x, $y ) = @_;
+	my ( undef, $x, $y ) = @_;
 	SDL::Mouse::warp_mouse( $x, $y );
 }
 
 sub show_cursor {
-	shift;
-	require SDL::Constants;
-	if ( @_ ) {
-		my ( $show ) = @_;
-		return SDL::Mouse::show_cursor( SDL::Constants::SDL_ENABLE ) if $show;
-		return SDL::Mouse::show_cursor( SDL::Constants::SDL_DISABLE );
+	my (undef, $show) = @_;
+	if ( @_ > 1 ) {
+		return SDL::Mouse::show_cursor( SDL::Events::SDL_ENABLE ) if $show;
+		return SDL::Mouse::show_cursor( SDL::Events::SDL_DISABLE );
 	}
-	SDL::Mouse::show_cursor( SDL::Constants::SDL_QUERY );
+	SDL::Mouse::show_cursor( SDL::Events::SDL_QUERY );
 }
 
 sub fullscreen {
@@ -236,9 +232,8 @@ sub iconify {
 }
 
 sub grab_input {
-	shift;
-	if (@_) {
-		my ( $grab ) = @_;
+	my (undef, $grab ) = @_;
+	if (@_ > 1) {
 		return SDL::Video::wm_grab_input( SDL::Video::SDL_GRAB_ON ) if $grab;
 		return SDL::Video::wm_grab_input( SDL::Video::SDL_GRAB_OFF );
 	}
@@ -246,17 +241,17 @@ sub grab_input {
 }
 
 sub sync {
+	my ( $self ) = @_;
 	if ( $SDLx::App::USING_OPENGL ) {
 		return SDL::Video::GL_swap_buffers;
 	}
-	my ( $self ) = @_;
 	$self->flip;
 }
 
 sub attribute {
+	my ( undef, $mode, $value ) = @_;
+	
 	return unless $SDLx::App::USING_OPENGL;
-	shift;
-	my ( $mode, $value ) = @_;
 	if ( defined $value ) {
 		return SDL::Video::GL_set_attribute( $mode, $value );
 	}
@@ -264,14 +259,6 @@ sub attribute {
 	Carp::confess( "SDLx::App::attribute failed to get GL attribute" )
 		if ( $returns->[0] < 0 );
 	$returns->[1];
-}
-
-my %_stash;
-sub stash :lvalue {
-	my ( $self ) = @_;
-    my $ref = refaddr( $self );
-	$_stash{ $ref } = {} unless $_stash{ $ref };
-	return $_stash{ $ref };
 }
 
 1;
