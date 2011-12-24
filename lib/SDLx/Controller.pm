@@ -90,7 +90,10 @@ sub run {
 
 		my $new_time   = Time::HiRes::time;
 		my $delta_time = $new_time - $_current_time{ $ref };
-		next if $delta_time < $min_t;
+		if($delta_time < $min_t) {
+			Time::HiRes::sleep(0.001); #sleep at least a millisecond
+			next;
+		}
 		$_current_time{ $ref} = $new_time;
 		my $delta_copy = $delta_time;
 
