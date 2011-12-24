@@ -362,17 +362,22 @@ All the examples here are of recursive pause callbacks, but, of course, yours do
 
 =head2 exit_on_quit
 
+(shortcut: eoq)
+
 =head2 min_t
 
 =head2 delay
 
 =head2 exit_on_quit_handler
 
+(shortcut: eoq_handler)
+
 =head2 event
 
-=head2 time
-
 =head2 current_time
+
+ my $param = $app->...;
+ $app->...($param);
 
 If an argument is passed, modifies the corresponding value to the argument.
 C<dt> and C<min_t> will keep their old value until the beginning of the next C<run> cycle.
@@ -380,6 +385,23 @@ See L</new> for details on what all of these params affect.
 L</pause> mentions C<current_time> in a note, other than there it shouldn't be touched.
 
 Returns the corresponding value.
+
+=head2 time
+
+ my $time = $app->time;
+ $app->time($time);
+
+Returns the total time, in hi-res seconds, the app loop has been running.
+Use this instead of L<SDL::get_ticks|SDL/get_ticks>.
+Although you shouldn't need to, you can supply a different time to reset it to counting from that value.
+This will (probably) have no effect on the L</run> loop. Change L</current_time> if you want to have an effect.
+
+=head2 sleep
+
+ $app->sleep($time);
+
+Causes the app to sleep for the specified time, in hi-res seconds, or forever if no argument is specified.
+Use this instead of L<SDL::delay|SDL/delay>.
 
 =head1 AUTHORS
 
