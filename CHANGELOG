@@ -1,5 +1,10 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.535_04 Dec 26 2011
+	- SDL::Mixer::Channels: get_chunk returns a copy of the retrieved chunk
+	  that we can free safely [FROGGS]
+	- SDL::Mixer::MixChunk: added condition to destructor [FROGGS]
+
 * 2.535_03 Dec 4 2011
 	- SDL::Mixer::Music: added load_MUS_RW [FROGGS]
 	- defines.h: added VERSION_ATLEAST macro [FROGGS]

@@ -16,7 +16,9 @@
 
 void _free_mixchunk(void *object)
 {
-	Mix_FreeChunk((Mix_Chunk *)object);
+	/* int allocated: if 1 struct has its own allocated buffer, if 0 abuf should not be freed */
+	if(((Mix_Chunk *)object)->allocated)
+		Mix_FreeChunk((Mix_Chunk *)object);
 }
 
 #endif
