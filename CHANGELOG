@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.535_05 Dec 28 2011
+	- SDL::Mixer::Channels: using malloc instead of safemalloc [FROGGS]
+
 * 2.535_04 Dec 26 2011
 	- SDL::Mixer::Channels: get_chunk returns a copy of the retrieved chunk
 	  that we can free safely [FROGGS]

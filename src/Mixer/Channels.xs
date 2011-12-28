@@ -215,8 +215,8 @@ mixchan_get_chunk(chan)
 		char* CLASS = "SDL::Mixer::MixChunk";
 	CODE:
 		Mix_Chunk *chunk = Mix_GetChunk(chan);
-		Mix_Chunk *copy  = safemalloc(sizeof(Mix_Chunk));
-		copy->abuf       = safemalloc( chunk->alen );
+		Mix_Chunk *copy  = malloc(sizeof(Mix_Chunk));
+		copy->abuf       = malloc( chunk->alen );
 		memcpy( copy->abuf, chunk->abuf, chunk->alen );
 		copy->alen       = chunk->alen;
 		copy->volume     = chunk->volume;
