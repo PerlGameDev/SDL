@@ -13,7 +13,7 @@ void *bag2obj( SV *bag )
 
     if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
     {
-        void **pointers = (void **)(SvIV((SV *)SvRV( bag ))); 
+        void **pointers = (void **)INT2PTR(void *, SvIV((SV *)SvRV( bag ))); 
         obj             = (void *)(pointers[0]);
     }
     
@@ -53,7 +53,7 @@ void objDESTROY(SV *bag, void (* callback)(void *object))
 {
     if( sv_isobject(bag) && (SvTYPE(SvRV(bag)) == SVt_PVMG) )
     {
-        void** pointers  = (void**)(SvIV((SV*)SvRV( bag )));
+        void** pointers  = (void**)INT2PTR(void *, SvIV((SV *)SvRV( bag )));
         void* object     = pointers[0];
         Uint32 *threadid = (Uint32*)(pointers[2]);
         

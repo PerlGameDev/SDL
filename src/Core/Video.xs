@@ -159,7 +159,7 @@ video_update_rects ( surface, ... )
 		num_rects = items - 1;
 		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
 		for(i=0;i<num_rects;i++) {
-                        void** pointers = (void**)(SvIV((SV*)SvRV( ST(i+1) )));
+                        void** pointers = (void**)INT2PTR(void *, SvIV((SV *)SvRV( ST(i + 1) )));
 			rects[i] = *(SDL_Rect *)(pointers[0]);
 		}
 		SDL_UpdateRects(surface,num_rects,rects);
