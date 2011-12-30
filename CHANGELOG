@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.535_06 Dec 30 2011
+	- using INT2PTR to convert stored pointers to right size and hide warnings [FROGGS]
+
 * 2.535_05 Dec 28 2011
 	- SDL::Mixer::Channels: using malloc instead of safemalloc [FROGGS]
 
