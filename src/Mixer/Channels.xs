@@ -34,7 +34,7 @@ void callback(int channel)
 	SAVETMPS;
 
 	PUSHMARK(SP);
-	XPUSHs(sv_2mortal(newSViv(PERL_GET_CONTEXT == parent_perl ? channel : channel + 10)));
+	XPUSHs(sv_2mortal(newSViv(channel)));
 	PUTBACK;
 
 	if(cb)
