@@ -28,21 +28,32 @@ static SV * cb = (SV*)NULL;
 
 void callback(int channel)
 {
-	PERL_SET_CONTEXT(parent_perl);
-
+	ENTER_TLS_CONTEXT;
 	dSP;
 	ENTER;
 	SAVETMPS;
 
 	PUSHMARK(SP);
-	XPUSHs(sv_2mortal(newSViv(channel)));
+	XPUSHs(sv_2mortal(newSViv(PERL_GET_CONTEXT == parent_perl ? channel : channel + 10)));
 	PUTBACK;
 
-	if(cb != (SV*)NULL)
-		call_sv(cb, G_VOID);
+	if(cb)
+	{
+		if(PERL_GET_CONTEXT == parent_perl)
+			call_sv(cb, G_VOID);
+		else
+		{
+			CLONE_PARAMS clone_params;
+			clone_params.stashes = newAV();
+			clone_params.flags   = CLONEf_KEEP_PTR_TABLE;
+			call_sv(sv_dup(cb, &clone_params), G_VOID);
+		}
+	}
 
 	FREETMPS;
 	LEAVE;
+
+	LEAVE_TLS_CONTEXT;
 }
 #endif
 
@@ -71,7 +82,7 @@ int
 mixchan_volume ( channel, volume )
 	int channel
 	int volume
-	CODE:	
+	CODE:
 		RETVAL = Mix_Volume(channel,volume);
 	OUTPUT:
 		RETVAL
@@ -170,7 +181,7 @@ mixchan_channel_finished( fn )
         else
 			SvSetSV(cb, fn);
 
-		parent_perl = PERL_GET_CONTEXT;
+		GET_TLS_CONTEXT;
 		Mix_ChannelFinished(&callback);
 
 #else
@@ -185,7 +196,7 @@ mixchan_channel_finished( fn )
 
 int
 mixchan_playing( channel )
-	int channel	
+	int channel
 	CODE:
 		RETVAL = Mix_Playing(channel);
 	OUTPUT:

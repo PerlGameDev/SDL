@@ -1,5 +1,8 @@
 Revision history for Perl extension SDL_perl.
 
+* 2.535_07 Jan 03 2011
+	- SDL::Mixer::Channels callback: experimental usage of sv_dup [FROGGS]
+
 * 2.535_06 Dec 30 2011
 	- using INT2PTR to convert stored pointers to right size and hide warnings [FROGGS]
 
@@ -22,7 +25,7 @@ Revision history for Perl extension SDL_perl.
 	- Merged in memory leak fixes [dod]
 
 * 2.534 October 27 2011
-	- Combined release of 2.534_* 
+	- Combined release of 2.534_*
 
 * 2.534_03 October 06 2011
 	- SDL::Palette fixed colors() to return an array [Blaizer]
@@ -116,24 +119,24 @@ Revision history for Perl extension SDL_perl.
 
 * 2.529 Jan 25 2011
 	- Adding SDL::get_handle() function to get Win32 API window management support
-	- Fixed pod errors and add new docs 
+	- Fixed pod errors and add new docs
 
 * 2.528 Jan 18 2011
 	- Invalid Alien::SDL Dependency Fix
 
 * 2.527 Jan 18 2011
-	- Critical memory leak fixed in SDLx::App 
+	- Critical memory leak fixed in SDLx::App
 
 * 2.526_2 Jan 18 2011
-	- SMPEG compile test 
+	- SMPEG compile test
 
 * 2.526_1 Jan 11 2011
 	- Experimental SMPEG support, new tests:
 	- Fixed Mac regression due to ppport
 
-* 2.526 Dec 31 2010 
-	- Inline with 'SDL' support 
-	- Decreasing some SDL_Validate scalar leaks 
+* 2.526 Dec 31 2010
+	- Inline with 'SDL' support
+	- Decreasing some SDL_Validate scalar leaks
 
 * 2.525_5
 	- Fixed bug with SDL::Mixer::Music::hook_music, arg was freed too early [FROGGS]
@@ -149,11 +152,11 @@ Revision history for Perl extension SDL_perl.
 	- Added refaddr optimizations [kthakore]
 
 * 2.524
-	- Fix for t/mixer_channels.t.bak 
+	- Fix for t/mixer_channels.t.bak
 	- Allow SDLx::App to be restarted after it has been stoped
 	- FROGGS cleaned up some memory stuff for AudioSpec
 
-* 2.523 
+* 2.523
 	- Cleaned up how O_OBJECTs are free'd [FROGGS]
 	- SDLx::Surface now DESTROYs the SDL::Surface saving memory [kthakore]
 	- Fixed Icon value for the SDLx::App constructor useage [kthakore]
@@ -181,7 +184,7 @@ Revision history for Perl extension SDL_perl.
 	- SDLx::Surface has alias for w,h [kthakore]
 	- SDLx::Surface can use array color format for pixels
 	- SDLx::Text added [garu]
-	- SDLx::App->new() has exit on quit option 
+	- SDLx::App->new() has exit on quit option
 
 * 2.518
 	- Major refactor of SDLx::Controller [Blaizer]
@@ -195,13 +198,13 @@ Revision history for Perl extension SDL_perl.
 	- Fix for test plan in t/sdlx_sound [FROGGS]
 
 * 2.515
-	- Added preliminary SDLx::Sound [rflipo] 
+	- Added preliminary SDLx::Sound [rflipo]
 	- Added preliminary SDLx::TTF [kthakore]
 
 * 2.514
 	- Made SDLx::Controller::Interface [kthakore]
 	- Fixed unsigned int bug for get_pixels from surface [kthakore]
-	- Several document fixes 
+	- Several document fixes
 	- Minor additions to SDLx::Sprite::Animated [jtpalmer]
 	- Using only bmp for that sprite test [jtpalmer]
 	- Added a fix for writing key_sym for a SDL::Event [kthakore]
@@ -253,22 +256,22 @@ Revision history for Perl extension SDL_perl.
 	- Added version guard for older version of pixelinfo struct
 	- Added example of new SDLx::Surface
 	- Fixes for exec.h stack dumper during testing
-	- Added version guard for SDLx::GFX [FROGGS]	
+	- Added version guard for SDLx::GFX [FROGGS]
 	- Modified SDLx::Sprite to inherit from SDLx::Surface
 
 * 2.501  July 10 2010
-	- Fixes tests for SDLx::TTF and SDL::Surface [FROGGS, kthakore] 
+	- Fixes tests for SDLx::TTF and SDL::Surface [FROGGS, kthakore]
 	- Makes ptr to pixels READONLY for some safety
 	- *nix users gets a stack dumper of segfault
 
 * 2.500  July 9 2010
 
-	- Fixed Memory Leaks due to perl desturct level 
-	- Fixed Memory leak in SDL::Mixer::Music 
+	- Fixed Memory Leaks due to perl desturct level
+	- Fixed Memory leak in SDL::Mixer::Music
 	- Fixed the test on SDLx::Sprite
 	- Modified SDLx::FPS [Blaizer]
 	- Cleaned up docs [Blaizer]
-	- Cleaned up docs for SDLx::Rect and added Category 
+	- Cleaned up docs for SDLx::Rect and added Category
 	- Added SDLx::SFont and docs and test
 
 * 2.5 RC
@@ -281,7 +284,7 @@ Revision history for Perl extension SDL_perl.
 	- MacOSx compile and useage works
 	- Using dummy audiodriver for tests so no sound is played [#163] [FROGGS]
 	- POGL example added
-	- Fixed fail due to to strict test for texture_polygon in SDL::GFX 
+	- Fixed fail due to to strict test for texture_polygon in SDL::GFX
 	- Created SDLx::FPS [Blaizer]
 
 * 2.408 Sun June 13 2010
@@ -296,7 +299,7 @@ Revision history for Perl extension SDL_perl.
 	- Updated docs [Blaizer]
 	- Removed deprecated modules [kthakore, FROGGS]
 
-* 2.405 Wed May 05 2010 
+* 2.405 Wed May 05 2010
 	- Conditional compile on glu.h header [kthakore] {ticket 131}
 	- Documentation cleanup [bricas, kthakore]
 	- Remove usesages of 'new SDL...' [bricas]
@@ -370,7 +373,7 @@ Revision history for Perl extension SDL_perl.
 	- SDL::Image implemented and tested [#72] [kthakore]
 	- FreeBSD SDL test clean up [#75] [kthakore]
 	- Handle GFX seperate headers in Build [FROGGS,kthakore]
-	- Started GFX, GFX BlitFunc, GFX Primatives, FPSManager  [FROGGS] 
+	- Started GFX, GFX BlitFunc, GFX Primatives, FPSManager  [FROGGS]
 	- Added more init tests [kthakore]
 	- Added condition compile for mixer and ttf [kthakore]
 	- Replaced test file for MixMusic (proper file format) [FROGGS]
@@ -396,13 +399,13 @@ Revision history for Perl extension SDL_perl.
 	- SDL::Event Filtering and user Events 2 way communication [kthakore, FROGGS]
 	- SDL  Functions and Clean Up [acme, kthakore, FROGGS]
 	- SDL::Mouse and SDL::Cursor [ kthakore, FROGGS ]
-	- SDL documentation [magnet, kthakore, FROGGS] 
+	- SDL documentation [magnet, kthakore, FROGGS]
 	- Auto-Generated Constants.pm [FROGGS]
 	- Added direct pixel writing examples [kthakore]
 	- Added walking and map moving example [kthakore, FROGGS]
 
 * v2.2.3.1 Sept 29 2009 Kartik Thakore <thakore.kartik@gmail.com>
-	- Critical Build.PL fix for META.yml 
+	- Critical Build.PL fix for META.yml
 	- Doc fix
 
 * v2.2.3 Sept 29 2009 Kartik Thakore <thakore.kartik@gmail.com>
@@ -428,9 +431,9 @@ Revision history for Perl extension SDL_perl.
 	- Added faster SDL::Color alternative https://rt.cpan.org/Public/Bug/Display.html?id=17975
 	- Added better error reporting for TTFont errors
 	- Added win32 support https://rt.cpan.org/Ticket/Display.html?id=49003
-	
+
 * Aug 22 2009 Kartik Thakore <thakore.kartik@gmail.com>
-	- Added no index 
+	- Added no index
 	- Added james's openbsd.pm
 
 * Aug 18 2009  Kartik Thakore   <thakore.kartik@gmail.com>
@@ -457,7 +460,7 @@ Revision history for Perl extension SDL_perl.
 * Aug 5 2009    Kartik Thakore   <thakore.kartik@gmail.com>
 	- fixed build after Module::Build breakage
 	- fixed openGL header problems
-	- merged darwin app droper builder 
+	- merged darwin app droper builder
 
 * Jul 8 2006	David J. Goehrig <dgoehrig@cpan.org>
 	- finished embedding data in example scripts
@@ -465,7 +468,7 @@ Revision history for Perl extension SDL_perl.
 
 * Mar 15 2006	David J. Goehrig <dgoehrig@cpan.org>
 	- fixed OpenGL examples to work under MacOS X using the SDL Perl.app bundle
-	
+
 * Oct 12 2005	David J. Goehrig <dgoehrig@cpan.org>
 	- Fixed bug where SDL::App frees underlying Surface via DESTROY
 	- Added SDL_svg support
@@ -496,7 +499,7 @@ Revision history for Perl extension SDL_perl.
 	- renamed SDL::OpenGL::glReadPixel(s)
 	- added error message for SDL::OpenGL::glLightModel
 	- cleaned up some formatting issues in OpenGL.xs
-	- fixed bug in SDL::Cdrom (referencing a scalar as a hashref) 
+	- fixed bug in SDL::Cdrom (referencing a scalar as a hashref)
 	- added some more documentation to SDL::Color
 	- added SDL::Event::push (Andy Bakun)
 	- fixed documentation and usage of SDL::Event::set
@@ -519,12 +522,12 @@ Revision history for Perl extension SDL_perl.
 	- fixed SDL::Surface::blit typo bug
 	- applied glGet patch by Luke (enumerating them all!)
 	- fixed typo bug in make/lib/SDL/Build/Darwin.pm
-		
+
 
 * Feb 23 2004	David J. Goehrig <dgoehrig@cpan.org>
 	- fixed OpenGL exporting & bootstrapping
 	- added ifdefs in OpenGL for NURBS and GLUTesslator
-	- updated the test scripts to use SDL::Config 
+	- updated the test scripts to use SDL::Config
 	- added OpenGL test
 	- modified SDL::Config->has to use grep instead
 	- fixed SDL::Cdrom::status
@@ -579,10 +582,10 @@ Revision history for Perl extension SDL_perl.
 	- added scripts/GL/gl.h header (OpenGL 1.4 header from Linux NVidia driver)
 	- modified gl_const.pl to generate SDL::OpenGL::Constants.pm using scripts/GL/gl.h
 	  OpenGL constants now uses Exporter and SelfLoader
-	- modified sdl_const.pl to generate SDL::Constants 
+	- modified sdl_const.pl to generate SDL::Constants
 	  SDL constants now uses Exporter and SelfLoader
 	- modified SDL.pm to export constants from SDL::Constants
-	- modified SDL/OpenGL.pm to export constants from SDL::OpenGL::Constants 
+	- modified SDL/OpenGL.pm to export constants from SDL::OpenGL::Constants
 	- changed all function names in OpenGL.xs (xxx replaced by glxxx or gluxxx)
 	  changed export in SDL/OpenGL.pm accordingly
 	- removed warning in SDL::Surface::new()
@@ -648,7 +651,7 @@ Revision history for Perl extension SDL_perl.
 	- Added test suite, Thanks Tels
 	- Added SDL::SurfaceCopy finally
 	- Added SDL::Surface::new -surface && -copy constructors
-	- Changed SDL::Tool::Graphic::* to return a new SDL::Surface object 
+	- Changed SDL::Tool::Graphic::* to return a new SDL::Surface object
 	- Added SDL::Event::resize_w && SDL::Event::resize_h
 
 * Jan 3 2003	David J. Goehrig <dave@sdlperl.org>
@@ -716,7 +719,7 @@ Revision history for Perl extension SDL_perl.
 	- Fixed some prototypes (OpenGL happier on Debian)
 
 * Sept 5 2002	David J. Goehrig <dave@sdlperl.org>
-	- Optimizaiton in SDL::App::loop, 
+	- Optimizaiton in SDL::App::loop,
 	now syncs app only if action called
 	- Added test/testmenu.pl (precursor to a menu class)
 
@@ -746,7 +749,7 @@ Revision history for Perl extension SDL_perl.
 	- SDL::TTFont added font metric query methods
 
 * Jun  4 2002	David J. Goehrig <dave@sdlperl.org>
-	- Fixed GL_ALL_CLIENT_BITS Mesa bug again... 
+	- Fixed GL_ALL_CLIENT_BITS Mesa bug again...
 	It appears to have disappeared after 1.17.2,
 	Thanks Seemant Kulleen & Chris Moeller for
 	pointing it out.
@@ -801,19 +804,19 @@ Revision history for Perl extension SDL_perl.
 	- updated MANIFEST, etc.
 
 * Apr 26 2002	David J. Goehrig <dave@sdlperl.org>
-	- Added more OpenGL support 
+	- Added more OpenGL support
 
 * Apr 23 2002	David J. Goehrig <dave@sdlperl.org>
 	- fixed SFont and SDL_Console support
 	- Added SDL::FontTool
-	- Added test/testfonttool.pl 
+	- Added test/testfonttool.pl
 
 * Apr 19 2002	David J. Goehrig <dave@sdlperl.org>
 	- Added proper SDL_mixer callback support
-	- Broke out linux makefile 
+	- Broke out linux makefile
 	- Begun OpenGL support
 	- fixed test/testgfxprim.pl screen update bug
-	- fixed test/testgfxroto.pl alpha blits 
+	- fixed test/testgfxroto.pl alpha blits
 	- Added test/logo.png
 
 * Apr 16 2002	Wayne Keenan <wayne@metaverse.fsnet.co.uk>
@@ -829,8 +832,8 @@ Revision history for Perl extension SDL_perl.
 	- Documented SDL::Surface, SDL::Color
 	- Added automagic Surface, Color, and Rect support throughout OO layer
 	- Fixed testsprite.pl, graywin.pl to use above classes
-	- Brokeout Win32 Makefile.PL 
-	- Fixed SMPEG a little bit 
+	- Brokeout Win32 Makefile.PL
+	- Fixed SMPEG a little bit
 
 * Apr 11 2002	Wayne Keenan <wayne@metaverse.fsnet.co.uk>
 	- Added SMPEG support
@@ -848,7 +851,7 @@ Revision history for Perl extension SDL_perl.
 	- Fixed SDL_perl.spec according to most of Guillaume's suggestions
 	- Expanded the build_rpms script to upload to sdlperl.org
 	- Added SDL::Timer.pm for timer objects
-	- Added test/testtimer.pl 
+	- Added test/testtimer.pl
 
 * Apr 4 2002	David J. Goehrig <dave@sdlperl.org>
 	- Added SDL_perl.spec for RPM/SRPM builds
@@ -887,15 +890,15 @@ Revision history for Perl extension SDL_perl.
 	- Added Resize Event support
 	- Added Joystick Events support
 	- Added audio status query support
-	- Removed TrackListing	
+	- Removed TrackListing
 
 * Mar  9 2002	David J. Goehrig <dave@sdlperl.org>
 
 	- Generated sdlpl compatability layer ( known to be buggy )
 	- Bug fixes in OO modules, frozen-bubble now runs under 1.14
-	- Added patches directory to contain fixes for other people's programs 
+	- Added patches directory to contain fixes for other people's programs
 	- Added some Set/GetClipRect support
-	- More Documentation 
+	- More Documentation
 	- Began SDL_ttf support
 	- Began SDL_net support
 
@@ -910,21 +913,21 @@ Revision history for Perl extension SDL_perl.
 
 * Feb 26 2002	David J. Goehrig <dave@sdlperl.org>
 
-	- Altered API / Simplified namespace 
+	- Altered API / Simplified namespace
 	- Removed SDL_Image, SDL_Mixer, and OpenGL dependencies
 	- Added extension autodetection to config process
 
 * Jan 28 2002	Guillaume Cottenceau <gc@mandrakesoft.com>
 
-	- Fixed a deallocation bug in Sound.pm 
+	- Fixed a deallocation bug in Sound.pm
 
 * Jan 22 2002	Guillaume Cottenceau <gc@mandrakesoft.com>
 
 	- Fixed a deallocation bug in Music.pm
 
-* Dec 18 2000	David J. Goehrig 
+* Dec 18 2000	David J. Goehrig
 
-	- Removed clipping fuctions 
+	- Removed clipping fuctions
 	- Updated Readme
 	- Moved more to sourceforge
 
@@ -932,8 +935,8 @@ Revision history for Perl extension SDL_perl.
 
 	- Open GL support
 	- OpenGL Glut like Application framework
-	- more video flags 
-	- creating Surface from pre-allocated memory 
+	- more video flags
+	- creating Surface from pre-allocated memory
 	- BMP screen dump
 	- added state dumpers as an debugging aid
 	- bug fixes
