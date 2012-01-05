@@ -125,11 +125,11 @@ O_OBJECT
 INPUT
 
 O_OBJECT_NPGC
-    $var = ($type) SvIV((SV*)SvRV($arg));
+    $var = INT2PTR($type, SvIV((SV *)SvRV( $arg )));
 
 O_OBJECT
     if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) ) {
-        void** pointers = (void**)(SvIV((SV*)SvRV( $arg )));
+        void** pointers = (void**)INT2PTR(void *, SvIV((SV *)SvRV( $arg )));
         $var = ($type)(pointers[0]);
     } else if ($arg == 0) {
         XSRETURN(0);

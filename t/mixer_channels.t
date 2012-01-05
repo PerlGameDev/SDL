@@ -33,6 +33,8 @@ BEGIN {
 use SDL::Mixer;
 use SDL::Mixer::Channels;
 use SDL::Mixer::Samples;
+use SDL::Mixer::MixChunk;
+
 my $can_open = SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 );
 
 unless($can_open == 0) 
@@ -50,7 +52,7 @@ is( SDL::Mixer::Channels::allocate_channels(4),
 
 my $finished :shared = 0;
 my $callback = sub {
-	my $channel = shift;
+	my ($channel) = shift;
 	printf( "[channel_finished] callback called for channel %d\n", $channel);
 	$finished++;
 };

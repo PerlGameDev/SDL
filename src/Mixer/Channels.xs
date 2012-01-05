@@ -4,6 +4,7 @@
 #define NEED_sv_2pv_flag
 #include "ppport.h"
 #include "defines.h"
+#include "helper.h"
 
 #ifndef aTHX_
 #define aTHX_
@@ -28,7 +29,6 @@ static SV * cb = (SV*)NULL;
 void callback(int channel)
 {
 	PERL_SET_CONTEXT(parent_perl);
-
 	dSP;
 	ENTER;
 	SAVETMPS;
@@ -37,7 +37,7 @@ void callback(int channel)
 	XPUSHs(sv_2mortal(newSViv(channel)));
 	PUTBACK;
 
-	if(cb != (SV*)NULL)
+	if(cb)
 		call_sv(cb, G_VOID);
 
 	FREETMPS;
@@ -51,7 +51,7 @@ MODULE = SDL::Mixer::Channels 	PACKAGE = SDL::Mixer::Channels    PREFIX = mixcha
 
 SDL_mixer bindings
 
-See: http:/*www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html */
+See: http://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
 
 =cut
 
@@ -70,7 +70,7 @@ int
 mixchan_volume ( channel, volume )
 	int channel
 	int volume
-	CODE:	
+	CODE:
 		RETVAL = Mix_Volume(channel,volume);
 	OUTPUT:
 		RETVAL
@@ -169,7 +169,7 @@ mixchan_channel_finished( fn )
         else
 			SvSetSV(cb, fn);
 
-		parent_perl = PERL_GET_CONTEXT;
+		GET_TLS_CONTEXT;
 		Mix_ChannelFinished(&callback);
 
 #else
@@ -184,7 +184,7 @@ mixchan_channel_finished( fn )
 
 int
 mixchan_playing( channel )
-	int channel	
+	int channel
 	CODE:
 		RETVAL = Mix_Playing(channel);
 	OUTPUT:
@@ -213,7 +213,14 @@ mixchan_get_chunk(chan)
 	PREINIT:
 		char* CLASS = "SDL::Mixer::MixChunk";
 	CODE:
-		RETVAL = Mix_GetChunk(chan);
+		Mix_Chunk *chunk = Mix_GetChunk(chan);
+		Mix_Chunk *copy  = malloc(sizeof(Mix_Chunk));
+		copy->abuf       = malloc( chunk->alen );
+		memcpy( copy->abuf, chunk->abuf, chunk->alen );
+		copy->alen       = chunk->alen;
+		copy->volume     = chunk->volume;
+		copy->allocated  = 1;
+		RETVAL           = copy;
 	OUTPUT:
 		RETVAL
 
