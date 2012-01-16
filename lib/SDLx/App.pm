@@ -7,14 +7,14 @@ use warnings;
 use SDL ();
 use SDL::Video ();
 use SDL::Mouse ();
+use SDL::Event ();
+use SDL::Surface ();
 use base qw/SDLx::Surface SDLx::Controller/;
 
 # SDL modules used for other reasons
 # Please verify their usefulness here
 use SDL::Rect ();
-use SDL::Event ();
 use SDL::Events ();
-use SDL::Surface ();
 use SDL::PixelFormat ();
 
 use Carp ();
@@ -22,67 +22,73 @@ use Scalar::Util qw/refaddr/;
 
 my %_stash;
 
+$SDLx::App::USING_OPENGL = 0;
+
 sub new {
 	my $class = shift;
 	$class = ref $class || $class;
 	my %o = @_;
 
 	# undef is not a valid input
-	my $w   = defined $o{width}            ? $o{width}            : defined $o{w}   ? $o{w}   : 640;
-	my $h   = defined $o{height}           ? $o{height}           : defined $o{h}   ? $o{h}   : 480;
-	my $d   = defined $o{depth}            ? $o{depth}            : defined $o{d}   ? $o{d}   : undef;
-	my $f   = defined $o{flags}            ? $o{flags}            : defined $o{f}   ? $o{f}   : 0;
-	my $pos = defined $o{position}         ? $o{position}         : defined $o{pos} ? $o{pos} : undef;
-	my $s   = defined $o{stash}            ? $o{stash}            : defined $o{s}   ? $o{s}   : {};
+	my $w   = defined $o{width}      ? $o{width}      : defined $o{w}   ? $o{w}   : 640;
+	my $h   = defined $o{height}     ? $o{height}     : defined $o{h}   ? $o{h}   : 480;
+	my $d   = defined $o{depth}      ? $o{depth}      : defined $o{d}   ? $o{d}   : undef;
+	my $f   = defined $o{flags}      ? $o{flags}      : defined $o{f}   ? $o{f}   : 0;
+	my $pos = defined $o{position}   ? $o{position}   : defined $o{pos} ? $o{pos} : undef;
+	my $s   = defined $o{stash}      ? $o{stash}                                  : {};
 
 	# undef is a valid input
-	my $t    = exists $o{title}            ? $o{title}            : exists  $o{t}   ? $o{t}   : undef;
-	my $it   = exists $o{icon_title}       ? $o{icon_title}       : exists  $o{it}  ? $o{it}  : undef;
-	my $icon =                                                                        $o{icon};
-	my $init =                                                                        $o{init};
+	my $t    =                         $o{title};
+	my $it   =                         $o{icon_title};
+	my $icon =                         $o{icon};
+	my $init = exists $o{initialize} ? $o{initialize}                             : $o{init};
 
 	# boolean
-	my $af    = $o{any_format}    || $o{af};
-	my $db    = $o{double_buf}    || $o{db};
-	my $sw    = $o{sw_surface}    || $o{sw};
-	my $hw    = $o{hw_surface}    || $o{hw};
-	my $ab    = $o{async_blit}    || $o{ab};
-	my $hwp   = $o{hw_palette}    || $o{hwp};
-	my $fs    = $o{fullscreen}    || $o{fs};
-	my $gl    = $o{opengl}        || $o{gl};
-	my $rs    = $o{resizable}     || $o{rs};
-	my $nf    = $o{no_frame}      || $o{nf};
-	my $ncur  = $o{no_cursor}     || $o{ncur};
-	my $cen   = $o{centered}      || $o{cen};
-	my $gi    = $o{grab_input}    || $o{gi};
-	my $nc    = $o{no_controller} || $o{nc};
-	
+	my $af    = $o{any_format};
+	my $db    = $o{double_buffer}     || $o{double_buf} || $o{dbl_buf};
+	my $sw    = $o{software_surface}  || $o{sw_surface} || $o{sw};
+	my $hw    = $o{hardware_surface}  || $o{hw_surface} || $o{hw};
+	my $ab    = $o{asynchronous_blit} || $o{async_blit};
+	my $hwp   = $o{hardware_palette}  || $o{hw_palette} || $o{hw_pal};
+	my $fs    = $o{full_screen}       || $o{fullscreen};
+	my $gl    = $o{open_gl}           || $o{opengl}     || $o{gl};
+	my $rs    = $o{resizable};
+	my $nf    = $o{no_frame};
+	my $ncur  = $o{no_cursor};
+	my $cen   = $o{centered}          || $o{center};
+	my $gi    = $o{grab_input};
+	my $nc    = $o{no_controller};
+
 	unless ( defined $d ) {
-		# specify SDL_ANYFORMAT if depth isn't defined
+		# specify SDL_ANYFORMAT flag if depth isn't defined
 		$d = 32;
 		$af = 1;
 	}
 
-	#used to say unless no_init here. I don't think we need it anymore
+	# used to say unless no_init here. I don't think we need it anymore
 	if ( ref $init eq 'ARRAY' ) {
+		# make a hash with keys of the values in the init array
 		my %init = map { $_ => 1 } @$init;
 		undef $init;
-		$init |= SDL::SDL_INIT_AUDIO       if $init{audio}        || $init{a};
-		$init |= SDL::SDL_INIT_VIDEO       if $init{video}        || $init{v};
-		$init |= SDL::SDL_INIT_CDROM       if $init{cd_rom}       || $init{cd};
-		$init |= SDL::SDL_INIT_EVERYTHING  if $init{everything}   || $init{e};
-		$init |= SDL::SDL_INIT_NOPARACHUTE if $init{no_parachute} || $init{np};
-		$init |= SDL::SDL_INIT_JOYSTICK    if $init{joystick}     || $init{j};
-		$init |= SDL::SDL_INIT_TIMER       if $init{timer}        || $init{t};
+
+		$init |= SDL::SDL_INIT_AUDIO       if $init{audio};
+		$init |= SDL::SDL_INIT_CDROM       if $init{cd_rom}       || $init{cdrom};
+		$init |= SDL::SDL_INIT_EVERYTHING  if $init{everything};
+		$init |= SDL::SDL_INIT_NOPARACHUTE if $init{no_parachute};
+		$init |= SDL::SDL_INIT_JOYSTICK    if $init{joystick};
+		$init |= SDL::SDL_INIT_TIMER       if $init{timer};
 	}
-	#if anything is already inited, only init specified extra subsystems
-	if ( SDL::was_init( SDL::SDL_INIT_EVERYTHING ) & (SDL::SDL_INIT_AUDIO | SDL::SDL_INIT_CDROM | SDL::SDL_INIT_EVENTTHREAD | SDL::SDL_INIT_JOYSTICK | SDL::SDL_INIT_TIMER | SDL::SDL_INIT_VIDEO) ) {
-		SDL::init_sub_system( $init ) if defined $init;
+
+	# if anything is already inited, only init specified extra subsystems
+	if ( SDL::was_init( SDL::SDL_INIT_AUDIO | SDL::SDL_INIT_CDROM | SDL::SDL_INIT_EVENTTHREAD | SDL::SDL_INIT_JOYSTICK | SDL::SDL_INIT_TIMER | SDL::SDL_INIT_VIDEO ) ) {
+		# I'm assuming we always wanna init video
+		SDL::init_sub_system( ($init || 0) | SDL::SDL_INIT_VIDEO );
 	}
 	else {
-		SDL::init( defined $init ? $init : SDL::SDL_INIT_EVERYTHING );
+		# I'm assuming we always wanna init video
+		SDL::init( defined $init ? $init | SDL::SDL_INIT_VIDEO : SDL::SDL_INIT_EVERYTHING );
 	}
-	
+
 	$f |= SDL::Video::SDL_ANYFORMAT  if $af;
 	$f |= SDL::Video::SDL_DOUBLEBUF  if $db;
 	$f |= SDL::Video::SDL_SWSURFACE  if $sw;
@@ -94,28 +100,35 @@ sub new {
 	$f |= SDL::Video::SDL_RESIZABLE  if $rs;
 	$f |= SDL::Video::SDL_NOFRAME    if $nf;
 
-	#we'll let SDL decide which takes priority and set both if both are specified
+	# we'll let SDL decide which takes priority and set both if both are specified
 	$ENV{SDL_VIDEO_CENTERED}   = $cen if $cen;
 	$ENV{SDL_VIDEO_WINDOW_POS} = $pos if $pos;
 
-	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f ) or Carp::confess( "set_video_mode failed: ", SDL::get_error() );
-	my $self = SDLx::Surface->new( surface => $surface );
+	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
+		or Carp::confess( "set_video_mode failed: ", SDL::get_error() );
+	my $self = bless SDLx::Surface->new( surface => $surface ), $class;
 	$self->SDLx::Controller::new( %o ) unless $nc;
-	bless $self, $class;
 
 	if ( $gl ) {
 		$SDLx::App::USING_OPENGL = 1;
-		
-		my $r   = defined $o{red_size}         ? $o{red_size}         : defined $o{r}  ? $o{r}  : 5;
-		my $g   = defined $o{green_size}       ? $o{green_size}       : defined $o{g}  ? $o{g}  : 5;
-		my $b   = defined $o{blue_size}        ? $o{blue_size}        : defined $o{b}  ? $o{b}  : 5;
-		my $a   = defined $o{alpha_size}       ? $o{alpha_size}       : defined $o{a}  ? $o{a}  : undef;
-		my $ra  = defined $o{red_accum_size}   ? $o{red_accum_size}   : defined $o{ra} ? $o{ra} : undef;
-		my $ga  = defined $o{green_accum_size} ? $o{green_accum_size} : defined $o{ga} ? $o{ga} : undef;
-		my $ba  = defined $o{blue_accum_size}  ? $o{blue_accum_size}  : defined $o{ba} ? $o{ba} : undef;
-		my $aa  = defined $o{alpha_accum_size} ? $o{alpha_accum_size} : defined $o{aa} ? $o{aa} : undef;
-		my $bs  = defined $o{buffer_size}      ? $o{buffer_size}      : defined $o{bs} ? $o{bs} : undef;
-		my $ss  = defined $o{stencil_size}     ? $o{stencil_size}     : defined $o{ss} ? $o{ss} : undef;
+
+		my $r   = defined $o{gl_red_size}             ? $o{gl_red_size}             : defined $o{gl_red}         ? $o{gl_red}         : 5;
+		my $g   = defined $o{gl_green_size}           ? $o{gl_green_size}           : defined $o{gl_green}       ? $o{gl_green}       : 5;
+		my $b   = defined $o{gl_blue_size}            ? $o{gl_blue_size}            : defined $o{gl_blue}        ? $o{gl_blue}        : 5;
+		my $a   = defined $o{gl_alpha_size}           ? $o{gl_alpha_size}           : defined $o{gl_alpha}       ? $o{gl_alpha}       : undef;
+		my $ra  = defined $o{gl_red_accum_size}       ? $o{gl_red_accum_size}       : defined $o{gl_red_accum}   ? $o{gl_red_accum}   : undef;
+		my $ga  = defined $o{gl_green_accum_size}     ? $o{gl_green_accum_size}     : defined $o{gl_green_accum} ? $o{gl_green_accum} : undef;
+		my $ba  = defined $o{gl_blue_accum_size}      ? $o{gl_blue_accum_size}      : defined $o{gl_blue_accum}  ? $o{gl_blue_accum}  : undef;
+		my $aa  = defined $o{gl_alpha_accum_size}     ? $o{gl_alpha_accum_size}     : defined $o{gl_alpha_accum} ? $o{gl_alpha_accum} : undef;
+		my $bs  = defined $o{gl_buffer_size}          ? $o{gl_buffer_size}          : defined $o{gl_buffer}      ? $o{gl_buffer}      : undef;
+		my $ss  = defined $o{gl_stencil_size}         ? $o{gl_stencil_size}         : defined $o{gl_stencil}     ? $o{gl_stencil}     : undef;
+		my $msb = defined $o{gl_multi_sample_buffers} ? $o{gl_multi_sample_buffers}                                                   : undef;
+		my $mss = defined $o{gl_multi_sample_samples} ? $o{gl_multi_sample_samples}                                                   : undef;
+
+		# boolean
+		my $s  = $o{gl_stereo};
+		my $sc = $o{gl_swap_control};
+		my $av = $o{gl_accelerated_visual};
 
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_RED_SIZE,   $r );
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_GREEN_SIZE, $g );
@@ -132,15 +145,11 @@ sub new {
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_BUFFER_SIZE,  $bs ) if defined $bs;
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_STENCIL_SIZE, $ss ) if defined $ss;
 
-		# These could be added here?
-		# SDL_GL_STEREO
-		# SDL_GL_MULTISAMPLEBUFFERS
-		# SDL_GL_MULTISAMPLESAMPLES
-		# SDL_GL_ACCELERATED_VISUAL
-		# SDL_GL_SWAP_CONTROL
-	}
-	else {
-		$SDLx::App::USING_OPENGL = 0;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_STEREO,             $s   ) if defined $s;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_MULTISAMPLEBUFFERS, $msb ) if defined $msb;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_MULTISAMPLESAMPLES, $mss ) if defined $mss;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_SWAP_CONTROL,       $sc  ) if defined $sc;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ACCELERATED_VISUAL, $av  ) if defined $av;
 	}
 
 	$self->title( $t, $it );
@@ -153,7 +162,7 @@ sub new {
 }
 
 sub DESTROY {
-	my ($self) = @_;
+	my ( $self ) = @_;
 	my $ref = refaddr($self);
 	delete $_stash{ $ref };
 }
@@ -163,14 +172,23 @@ sub stash :lvalue {
 }
 
 sub resize {
-	my ($self, $w, $h) = @_;
-	my $flags = $self->flags;
-	if ( $flags & SDL::Video::SDL_RESIZABLE ) {
-		my $d = $self->format->BitsPerPixel;
-		return $self = SDL::Video::set_video_mode( $w, $h, $d, $flags )
-			or Carp::confess( "SDL cannot set video:" . SDL::get_error );
-	}
-	Carp::confess( "Application surface not resizable" );
+	my ( $self, $w, $h, $d, $flags ) = @_;
+	
+	# you'd probably never need to change the depth or flags, but we offer it because why not
+	$d = $self->format->BitsPerPixel unless defined $d;
+	$flags = $self->flags unless defined $flags;
+
+	# do what we do in new() to make the app object
+	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $flags )
+		or Carp::confess( "resize with set_video_mode failed: ", SDL::get_error() );
+	$surface = bless SDLx::Surface->new( surface => $surface ), ref $self;
+	
+	# make $self point to the new C surface object
+	# luckily, we keep the app's SDLx::Controller like this
+	# because its inside-out-ness pays attention to the address of the SV and not the C object
+	$$self = $$surface;
+
+	$self;
 }
 
 sub title {
@@ -187,16 +205,6 @@ sub icon {
 	SDL::Video::wm_set_icon( $_[1] );
 }
 
-# this has been moved to SDLx::Controller in the form of time and sleep
-# this can be removed at any time we wanna break compat
-sub delay {
-	SDL::delay( $_[1] );
-}
-
-sub ticks {
-	SDL::get_ticks;
-}
-
 sub error {
 	shift;
 	if ( @_ == 1 and !defined $_[0] ) {
@@ -208,18 +216,18 @@ sub error {
 	SDL::get_error;
 }
 
-sub warp {
+sub warp_cursor {
 	my ( undef, $x, $y ) = @_;
 	SDL::Mouse::warp_mouse( $x, $y );
 }
 
 sub show_cursor {
-	my (undef, $show) = @_;
+	my ( undef, $show ) = @_;
 	if ( @_ > 1 ) {
-		return SDL::Mouse::show_cursor( SDL::Events::SDL_ENABLE ) if $show;
-		return SDL::Mouse::show_cursor( SDL::Events::SDL_DISABLE );
+		return SDL::Mouse::show_cursor( SDL::Event::SDL_ENABLE ) if $show;
+		return SDL::Mouse::show_cursor( SDL::Event::SDL_DISABLE );
 	}
-	SDL::Mouse::show_cursor( SDL::Events::SDL_QUERY );
+	SDL::Mouse::show_cursor( SDL::Event::SDL_QUERY );
 }
 
 sub fullscreen {
@@ -232,7 +240,7 @@ sub iconify {
 }
 
 sub grab_input {
-	my (undef, $grab ) = @_;
+	my ( undef, $grab ) = @_;
 	if (@_ > 1) {
 		return SDL::Video::wm_grab_input( SDL::Video::SDL_GRAB_ON ) if $grab;
 		return SDL::Video::wm_grab_input( SDL::Video::SDL_GRAB_OFF );
@@ -248,9 +256,9 @@ sub sync {
 	$self->flip;
 }
 
-sub attribute {
+sub gl_attribute {
 	my ( undef, $mode, $value ) = @_;
-	
+
 	return unless $SDLx::App::USING_OPENGL;
 	if ( defined $value ) {
 		return SDL::Video::GL_set_attribute( $mode, $value );

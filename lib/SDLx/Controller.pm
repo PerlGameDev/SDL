@@ -29,10 +29,9 @@ my %_eoq_handler;
 
 sub new {
 	my ($self, %args) = @_;
-	if(ref $self) {
-		bless $self, ref $self;
-	}
-	else {
+	
+	# if $self is blessed then it has to isa controller, so let's not even bless it to this class
+	unless(ref $self) {
 		my $a;
 		$self = bless \$a, $self;
 	}

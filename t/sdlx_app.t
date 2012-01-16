@@ -22,16 +22,15 @@ can_ok(
 		stash
 		resize
 		title
-		delay
-		ticks
+		icon
 		error
-		warp
+		warp_cursor
 		show_cursor
 		fullscreen
 		iconify
 		grab_input
 		sync
-		attribute
+		gl_attribute
 	/
 );
 

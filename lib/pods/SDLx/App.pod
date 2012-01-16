@@ -12,32 +12,34 @@ Extension
 =head1 SYNOPSIS
 
     use SDL;
-    use SDLx::App; 
+    use SDLx::App;
     use SDL::Event;
-    use SDL::Events; 
-    
-    my $app = SDLx::App->new( 
-        title  => 'Application Title',
-        width  => 640,
-        height => 480,
-        depth  => 32
-    ); 
+    use SDL::Events;
+
+ my $app = SDLx::App->new(
+     title  => 'My Great Game',
+     width  => 640,
+     height => 480,
+     depth  => 32
+ );
 
 This is the manual way of doing things
 
-    my $event = SDL::Event->new; # create a new event 
-    
-    SDL::Events::pump_events();
-       
-    while ( SDL::Events::poll_event($event) ) { 
-        my $type = $event->type(); # get event type 
-        print $type; 
-        exit if $type == SDL_QUIT; 
-    }
+ my $event = SDL::Event->new; # create a new event
+
+ SDL::Events::pump_events();
+
+ while ( SDL::Events::poll_event($event) ) {
+     my $type = $event->type(); # get event type
+     print $type;
+     exit if $type == SDL_QUIT;
+ }
 
 An alternative to the manual Event processing is through the L<SDLx::Controller> module. L<SDLx::App> is a Controller so see the CALLBACKS section below.
 
 =head1 DESCRIPTION
+
+The C<SDLx::App> provides methods for the root window of your SDL application, as well as many related convenience methods.
 
 L<SDLx::App> controls the root window of the of your SDL based application.
 It extends the L<SDL::Surface> class, and provides an interface to the window
@@ -96,15 +98,6 @@ passed, both the window title and icon title will be set to its value.
 If two parameters are passed the window title will be set to the first,
 and the icon title to the second.
 
-=head2 delay( $ms )
-
-C<SDLx::App::delay> takes 1 argument, and will sleep the application for
-that many ms.
-
-=head2 ticks
-
-C<SDLx::App::ticks> returns the number of ms since the application began.
-
 =head2 error
 
 C<SDLx::App::error> returns the last error message set by the SDL.
@@ -155,25 +148,36 @@ always returns the current value of the given attribute, or Carp::confesss on fa
 
 C<SDLx::App> is a C<SDLx::Controller>. Use the event, show and handlers to run the app.
 
-  use SDL;
-  use SDLx::App;
- 
-  use SDL::Event; #Where ever the event call back is processed
+ use SDL;
+ use SDLx::App;
 
-  my $app = SDLx::App->new( width => 200, height => 200);
+ use SDL::Event; #Where ever the event call back is processed
 
-  $app->add_event_handler( sub{ return 0 if $_[0]->type == SDL_QUIT; return 1});
+ my $app = SDLx::App->new( width => 200, height => 200);
 
-  $app->add_show_handler( sub{ $app->update() } );
+ $app->add_event_handler(
+     sub {
+          my ($event) = @_;
+		  # handle the event here
+     }
+ );
 
-  $app->add_move_handler( 
-  sub{ 
-  #calc your physics here 
-  } );
+ $app->add_show_handler(
+     sub {
+         # handle drawing objects here
+     }
+ );
 
-  $app->run();
+ $app->add_move_handler(
+     sub {
+         # handle moving objects here
+     }
+ );
 
-see L<SDLx::Controller> for more details.
+ # run the app with the added callbacks
+ $app->run();
+
+For a full explanation of the L<run|SDLx::Controller/run> loop and other Controller related methods, please see L<SDLx::Controller>.
 
 =head1 AUTHORS
 
@@ -181,6 +185,6 @@ See L<SDL/AUTHORS>.
 
 =head1 SEE ALSO
 
-L<perl> L<SDL::Surface> L<SDL::Event>  L<SDL::OpenGL>
+L<SDLx::Controller>, L<SDLx::Surface>, L<SDL::Video>, L<SDL::Event>, L<SDL::Mouse>, L<SDL::OpenGL>
 
 =cut
