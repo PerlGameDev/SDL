@@ -62,7 +62,7 @@ sub new {
 	my $hw    = $o{hardware_surface}  || $o{hw_surface}  || $o{hw};
 	my $ab    = $o{asynchronous_blit} || $o{async_blit};
 	my $af    = $o{any_format};
-	my $hwp   = $o{hardware_palette}  || $o{hw_palette}  || $o{hw_pal};
+	my $hwp   = $o{hardware_palette}  || $o{hw_palette};
 	my $db    = $o{double_buffer}     || $o{double_buf}  || $o{dbl_buf};
 	my $fs    = $o{full_screen}       || $o{fullscreen};
 	my $gl    = $o{open_gl}           || $o{opengl}      || $o{gl};
@@ -108,11 +108,6 @@ sub new {
 	$ENV{SDL_VIDEO_CENTERED}   = $cen if $cen;
 	$ENV{SDL_VIDEO_WINDOW_POS} = $pos if $pos;
 
-	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
-		or Carp::confess( "set_video_mode failed: ", SDL::get_error() );
-	my $self = bless SDLx::Surface->new( surface => $surface ), $class;
-	$self->SDLx::Controller::new( %o ) unless $nc;
-
 	if ( $gl ) {
 		$SDLx::App::USING_OPENGL = 1;
 
@@ -156,6 +151,11 @@ sub new {
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ACCELERATED_VISUAL, $av  ) if defined $av;
 	}
 
+	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
+		or Carp::confess( "set_video_mode failed: ", SDL::get_error() );
+	my $self = bless SDLx::Surface->new( surface => $surface ), $class;
+
+	$self->SDLx::Controller::new( %o ) unless $nc;
 	$self->title( $t, $it );
 	$self->icon( $icon );
 	$self->show_cursor( 0 ) if $ncur;

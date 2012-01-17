@@ -24,6 +24,7 @@ Extension
      title      => 'My Great Game',
      width      => 1024,
      height     => 600,
+     dt         => 0.05,
      centered   => 1,
      no_frame   => 1,
      async_blit => 1,
@@ -75,8 +76,8 @@ providing all the methods they both provide.
      height => 480,
      depth  => 32,
      
-     title      => "My Great Game",
-     icon_title => "MGG",
+     title      => "Application Title",
+     icon_title => "App Title",
      icon       => SDL::Video::load_BMP( "icon.bmp" ),
      
      # two ways to do init. init video is assumed regardless
@@ -84,7 +85,7 @@ providing all the methods they both provide.
      init => [ 'audio', 'joystick' ],
      
      # normal libsdl access to flags
-     flags  => SDL_SWSURFACE | SDL_ANYFORMAT,
+     flags => SDL_SWSURFACE | SDL_ANYFORMAT,
      # or parameter access to flags
      sw_surface => 1,
      hw_surface => 1,
@@ -97,57 +98,187 @@ providing all the methods they both provide.
      resizable  => 1,
      no_frame   => 1,
 
+     # window position
+     centered => 1,
+     position => [ 150, 100 ],
+
      no_cursor  => 1,
      grab_input => 1,
-
-     # window position
-     position => [ 150, 100 ],
-     centered => 1,
 
      # don't initialize an SDLx::Controller for the app
      no_controller => 1,
 
      # store your goodies in the app if you like
      stash => {},
+     
+     # and everything from SDLx::Controller
+     dt             => 0.1,
+     min_t          => 1 / 60,
+     delay          => 0,
+     eoq            => 1,
+     eoq_handler    => \&quit,
+     event          => SDL::Event->new(),
+     event_handlers => [],
+     move_handlers  => [],
+     show_handlers  => [],
+     time           => 0,
  );
 
-C<SDLx::App::new> initializes the SDL, creates a new screen,
-and initializes some of the window manager properties.
-C<SDLx::App::new> takes a series of named parameters:
+Initializes SDL with L<SDLx::App::init|/init>,
+creates the root window with L<SDL::Video::set_video_mode|SDL::Video/set_video_mode>,
+initializes an L<SDLx::Controller> belonging to the app,
+and performs many other app management tasks all as specified by named parameters.
+Returns an L<SDLx::Surface> of the new app.
 
-=over 4
+The complete set of parameters are shown in the code above and explained in detail below.
+When constructing the app's L<SDLx::Controller> all parameters specified are also given to
+L<< SDLx::Controller->new|SDLx::Controller/new >>, so should be specified here. See
+L<SDLx::Controller>.
 
-=item * title
-the window title. Defaults to the file name. Shorter alias: 't'
+=over
 
-=item * icon_title
-the icon title. Defaults to file name. Shortcut: 'it'
+=item width
 
-=item * icon
-the icon itself. Defaults to none. Shortcut: 'i'
+The window width, in pixels. Defaults to 640. Alias: C<w>.
 
-=item * width
-Window width, in pixels. Defaults to 640. Shortcut: 'w'
+=item height
 
-=item * height
-Window height, in pixels. Defaults to 480. Shortcut: 'h'
+The window height, in pixels. Defaults to 480. Alias: C<h>.
 
-=item * depth
-Screen depth. Defaults to 16. Shortcut: 'd'.
+=item depth
 
-=item * flags
-Any flags you want to pass to L<SDL::Video> upon initialization. Defaults to SDL_ANYFORMAT.
-Flags should be I<or'ed> together if you're passing more than one (flags => FOO|BAR). Shortcut: 'f'.
+The surface's color depth, in bits per pixel. Should be 8, 16, 24 or 32.
+If not defined, defaults to 32 and specifies the
+L<SDL_ANYFORMAT|SDL::Video/CONSTANTS> flag. Alias: C<d>.
 
-=item * resizeable
-Set this to a true value to make the window resizeable by the user. Default is off.
+=item title
 
-=item * exit_on_quit
-Set this to a true value to make the app exit if a SDL_QUIT event is triggered. Shortcut: 'eoq'.
+The window's title, as a string. Defaults to the L</icon_title> if defined, or the file name.
+
+=item icon_title
+
+The application's icon title, as a string. Defaults to the L</title> if defined, or the file name.
+
+=item icon
+
+The application's icon. Set with L</icon>.
+
+=item init
+
+The SDL subsystems to initialize, as a product of the L<SDL init constants|SDL/CONSTANTS> or an array ref.
+The video subsystem is initialized no matter what, and does not need to be specified.
+The specified value is passed to L<SDLx::App::init|/init>, so see that for more details.
+Defaults to L<SDL_INIT_EVERYTHING|SDL/CONSTANTS>. Alias: C<initialize>.
+
+=item flags
+
+L<SDL::Video flags|SDL::Video/CONSTANTS to specify when calling
+L<SDL::Video::set_video_mode|SDL::Video/set_video_mode>.
+Flags should be bitwise I<or'ed> together when passing more than one (C<flags => FOO|BAR>).
+All flags have a corresponding named parameter which can be used instead of specifying them here,
+and are explained below.
+Defaults to no flags, or to L<SDL_ANYFORMAT|SDL::Video/CONSTANTS> if the C<depth> parameter was undefined.
+Alias: C<f>.
+
+=item sw_surface
+
+The L<SDL_SWSURFACE|SDL::Video/CONSTANTS> flag, as a boolean. If true, creates the surface in
+system memory. This is best used when you plan to do per-pixel manipulations,
+or blit surfaces with alpha channels. Aliases: C<software_surface>, C<sw>.
+
+=item hw_surface
+
+The L<SDL_HWSURFACE|SDL::Video/CONSTANTS> flag, as a boolean. If true, creates the surface in
+video memory. This is best used when the surfaces you'll be blitting are also hardware surfaces.
+SDL copies the surfaces from video memory to system memory when you L<lock|SDL::Video/lock_surface> them,
+and back when you L<unlock|SDL::Video/unlock_surface> them, which can cause a major performance hit.
+If the video driver does not support hardware surfaces, a software surface will be returned instead.
+Many platforms can only provide hardware surfaces when using L<SDL_FULLSCREEN|SDL::Video/CONSTANTS>.
+Aliases: C<hardware_surface>, C<hw>.
+
+=item async_blit
+
+The L<SDL_ASYNCBLIT|SDL::Video/CONSTANTS> flag, as a boolean. If true, enables the use of asynchronous updates
+of the display surface. This will usually slow down blitting on single-CPU machines, but can speed up blitting
+on multi-CPU machines. Alias: C<asynchronous_blit>.
+
+=item any_format
+
+The L<SDL_ANYFORMAT|SDL::Video/CONSTANTS> flag, as a boolean. If a video surface of the requested
+bits-per-pixel (bpp) is not available SDL will normally emulate one with a shadow surface.
+Passing a true value prevents this and causes SDL to use the video surface, regardless of its pixel depth.
+This flag is specified automatically when the L</depth> parameter is undefined.
+
+=item hw_palette
+
+The L<SDL_HWPALETTE|SDL::Video/CONSTANTS> flag, as a boolean. If true, gives SDL exclusive palette access.
+Without this flag you may not always get the exact colors you request with
+L<SDL::Video::set_colors|SDL::Video/set_colors> or L<SDL::Video::set_palette|SDL::Video/set_palette>.
+Alias: C<hardware_palette>.
+
+=item double_buf
+
+The L<SDL_DOUBLEBUF|SDL::Video/CONSTANTS> flag, as a boolean. If true, enables hardware double buffering;
+faster, but only valid with a hardware surface. L<flip|SDLx::Surface/flip> should be used to flip the buffers
+and update the screen. All drawing will take place on the surface that is not being displayed.
+If double buffering could not be enabled then L<flip|SDLx::Surface/flip> will just perform an
+L<update_rect|SDLx::Surface/update_rect> on the entire screen. Aliases: C<double_buffer>, C<dbl_buf>.
+
+=item fullscreen
+
+The L<SDL_FULLSCREEN|SDL::Video/CONSTANTS> flag, as a boolean. If true, SDL will attempt to use a fullscreen mode, 
+changing the hardware resolution to the resolution of the display surface.
+If, for whatever reason, this change is not possible the next higher resolution will be used
+and the display surface centered on a black background. Alias: C<full_screen>.
+
+=item open_gl
+
+The L<SDL_OPENGL|SDL::Video/CONSTANTS> flag, as a boolean. If true, creates an OpenGL rendering context.
+This uses any C<gl> attributes specified and any others set with L</gl_attribute>. Alias: C<opengl>.
+
+=item resizable
+
+The L<SDL_RESIZABLE|SDL::Video/CONSTANTS> flag, as a boolean. If true, creates a resizable window.
+When the window is resized by the user a L<SDL_VIDEORESIZE|SDL::Events/CONSTANTS> event
+is generated and L</resize> should be called with the new size.
+
+=item no_frame
+The L<SDL_NOFRAME|SDL::Video/CONSTANTS> flag, as a boolean. If true, SDL attempts to create a window
+with no title bar or frame decoration. Fullscreen modes automatically have this flag set.
+
+=item centered
+
+A boolean value. If true, centers the window on the screen using C<$ENV{SDL_VIDEO_CENTERED}>.
+Alias: C<center>.
+
+=item position
+
+The position of the window on the screen, as an array ref. The array ref should be two elements long,
+specifying C<x> and C<y> values, in pixels, used to position the window on the screen.
+Implemented using C<$ENV{SDL_VIDEO_WINDOW_POS}>. Alias: C<pos>.
+
+=item no_cursor
+
+A boolean value. If true, hides the cursor on the video surface using L</show_cursor>.
+A surface can then instead be blitted to the display at the location of the cursor.
+
+=item grab_input
+
+A boolean value. If true, SDL attempts to confine the cursor to the window using L</grab_input>.
+Also, nearly all keyboard input will be passed directly to the application,
+and not interpreted by any window manager present.
+
+=item no_controller
+
+A boolean value. If true, does not initialize an L<SDLx::Controller> for the app.
+Care should then be taken to not use any of L<SDLx::Controller>s methods.
+
+=item stash
+
+A place to store any information you need the app to hold. This can then be returned and set with
+L</stash>. If not specified, defaults to an empty hash ref.
 
 =back
-
-=head1 METHODS
 
 =head2 title()
 
