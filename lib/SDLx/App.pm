@@ -116,10 +116,10 @@ sub new {
 		my $g   = defined $o{gl_green_size}           ? $o{gl_green_size}           : defined $o{gl_green}       ? $o{gl_green}       : 5;
 		my $b   = defined $o{gl_blue_size}            ? $o{gl_blue_size}            : defined $o{gl_blue}        ? $o{gl_blue}        : 5;
 		my $a   = defined $o{gl_alpha_size}           ? $o{gl_alpha_size}           : defined $o{gl_alpha}       ? $o{gl_alpha}       : undef;
-		my $ra  = defined $o{gl_red_accum_size}       ? $o{gl_red_accum_size}       : defined $o{gl_red_accum}   ? $o{gl_red_accum}   : undef;
-		my $ga  = defined $o{gl_green_accum_size}     ? $o{gl_green_accum_size}     : defined $o{gl_green_accum} ? $o{gl_green_accum} : undef;
-		my $ba  = defined $o{gl_blue_accum_size}      ? $o{gl_blue_accum_size}      : defined $o{gl_blue_accum}  ? $o{gl_blue_accum}  : undef;
-		my $aa  = defined $o{gl_alpha_accum_size}     ? $o{gl_alpha_accum_size}     : defined $o{gl_alpha_accum} ? $o{gl_alpha_accum} : undef;
+		my $ra  = defined $o{gl_accum_red_size}       ? $o{gl_accum_red_size}       : defined $o{gl_accum_red}   ? $o{gl_accum_red}   : undef;
+		my $ga  = defined $o{gl_accum_green_size}     ? $o{gl_accum_green_size}     : defined $o{gl_accum_green} ? $o{gl_accum_green} : undef;
+		my $ba  = defined $o{gl_accum_blue_size}      ? $o{gl_accum_blue_size}      : defined $o{gl_accum_blue}  ? $o{gl_accum_blue}  : undef;
+		my $aa  = defined $o{gl_accum_alpha_size}     ? $o{gl_accum_alpha_size}     : defined $o{gl_accum_alpha} ? $o{gl_accum_alpha} : undef;
 		my $bs  = defined $o{gl_buffer_size}          ? $o{gl_buffer_size}          : defined $o{gl_buffer}      ? $o{gl_buffer}      : undef;
 		my $ss  = defined $o{gl_stencil_size}         ? $o{gl_stencil_size}         : defined $o{gl_stencil}     ? $o{gl_stencil}     : undef;
 		my $msb = defined $o{gl_multi_sample_buffers} ? $o{gl_multi_sample_buffers}                                                   : undef;
@@ -130,19 +130,19 @@ sub new {
 		my $sc = $o{gl_swap_control};
 		my $av = $o{gl_accelerated_visual};
 
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_RED_SIZE,   $r );
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_GREEN_SIZE, $g );
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_BLUE_SIZE,  $b );
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_RED_SIZE,   $r ) if defined $r;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_GREEN_SIZE, $g ) if defined $g;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_BLUE_SIZE,  $b ) if defined $b;
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ALPHA_SIZE, $a ) if defined $a;
 
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_RED_ACCUM_SIZE(),   $ra ) if defined $ra;
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_GREEN_ACCUM_SIZE(), $ga ) if defined $ga;
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_BLUE_ACCUM_SIZE(),  $ba ) if defined $ba;
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ALPHA_ACCUM_SIZE(), $aa ) if defined $aa;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ACCUM_RED_SIZE,   $ra ) if defined $ra;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ACCUM_GREEN_SIZE, $ga ) if defined $ga;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ACCUM_BLUE_SIZE,  $ba ) if defined $ba;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ACCUM_ALPHA_SIZE, $aa ) if defined $aa;
 
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_DEPTH_SIZE,   $d  );
-		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_DOUBLEBUFFER, $db ) if defined $db;
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_BUFFER_SIZE,  $bs ) if defined $bs;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_DOUBLEBUFFER, $db ) if defined $db;
+		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_DEPTH_SIZE,   $d  );
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_STENCIL_SIZE, $ss ) if defined $ss;
 
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_STEREO,             $s   ) if defined $s;
@@ -173,7 +173,7 @@ sub stash :lvalue {
 
 sub resize {
 	my ( $self, $w, $h, $d, $flags ) = @_;
-	
+
 	# you'd probably never need to change the depth or flags, but we offer it because why not
 	$d = $self->format->BitsPerPixel unless defined $d;
 	$flags = $self->flags unless defined $flags;
@@ -182,7 +182,7 @@ sub resize {
 	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $flags )
 		or Carp::confess( "resize with set_video_mode failed: ", SDL::get_error() );
 	$surface = bless SDLx::Surface->new( surface => $surface ), ref $self;
-	
+
 	# make $self point to the new C surface object
 	# luckily, we keep the app's SDLx::Controller like this
 	# because its inside-out-ness pays attention to the address of the SV and not the C object
