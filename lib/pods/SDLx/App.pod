@@ -74,9 +74,18 @@ providing all the methods they both provide.
      width  => 640,
      height => 480,
      depth  => 32,
+     
+     title      => "My Great Game",
+     icon_title => "MGG",
+     icon       => SDL::Video::load_BMP( "icon.bmp" ),
+     
+     # two ways to do init. init video is assumed regardless
+     init => SDL_INIT_AUDIO | SDL_INIT_JOYSTICK,
+     init => [ 'audio', 'joystick' ],
+     
+     # normal libsdl access to flags
      flags  => SDL_SWSURFACE | SDL_ANYFORMAT,
-
-     # parameter access to flags
+     # or parameter access to flags
      sw_surface => 1,
      hw_surface => 1,
      async_blit => 1,
@@ -88,17 +97,12 @@ providing all the methods they both provide.
      resizable  => 1,
      no_frame   => 1,
 
-     # two ways to do init. init video is assumed regardless
-     init => SDL_INIT_AUDIO | SDL_INIT_JOYSTICK,
-     init => [ 'audio', 'joystick' ],
+     no_cursor  => 1,
+     grab_input => 1,
 
      # window position
      position => [ 150, 100 ],
      centered => 1,
-
-     # other things
-     no_cursor => 1,
-     grab_input => 1,
 
      # don't initialize an SDLx::Controller for the app
      no_controller => 1,
