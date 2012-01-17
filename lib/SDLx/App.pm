@@ -26,14 +26,14 @@ $SDLx::App::USING_OPENGL = 0;
 
 sub new {
 	my $class = shift;
-	
+
 	# if we already have an app, we just use set_video_mode to change it
 	if( ref $class ) {
 		my ( $w, $h, $d, $f ) = @_;
 		my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
 			or Carp::confess( "changing app with set_video_mode failed: ", SDL::get_error() );
 		$surface = bless SDLx::Surface->new( surface => $surface ), ref $class;
-		
+
 		# make the app scalar ref point to the new C surface object
 		# luckily, we keep the app's SDLx::Controller like this
 		# because its inside-out-ness pays attention to the address of the SV and not the C object
@@ -58,15 +58,15 @@ sub new {
 	my $init = exists $o{initialize} ? $o{initialize}                             : $o{init};
 
 	# boolean
-	my $af    = $o{any_format};
-	my $db    = $o{double_buffer}     || $o{double_buf} || $o{dbl_buf};
-	my $sw    = $o{software_surface}  || $o{sw_surface} || $o{sw};
-	my $hw    = $o{hardware_surface}  || $o{hw_surface} || $o{hw};
+	my $sw    = $o{software_surface}  || $o{sw_surface}  || $o{sw};
+	my $hw    = $o{hardware_surface}  || $o{hw_surface}  || $o{hw};
 	my $ab    = $o{asynchronous_blit} || $o{async_blit};
-	my $hwp   = $o{hardware_palette}  || $o{hw_palette} || $o{hw_pal};
+	my $af    = $o{any_format};
+	my $hwp   = $o{hardware_palette}  || $o{hw_palette}  || $o{hw_pal};
+	my $db    = $o{double_buffer}     || $o{double_buf}  || $o{dbl_buf};
 	my $fs    = $o{full_screen}       || $o{fullscreen};
-	my $gl    = $o{open_gl}           || $o{opengl}     || $o{gl};
-	my $rs    = $o{resizable};
+	my $gl    = $o{open_gl}           || $o{opengl}      || $o{gl};
+	my $rs    = $o{resizable}         || $o{resizeable}; # it's a hard word to spell :-)
 	my $nf    = $o{no_frame};
 	my $ncur  = $o{no_cursor};
 	my $cen   = $o{centered}          || $o{center};
@@ -93,12 +93,12 @@ sub new {
 		SDLx::App::init( $init );
 	}
 
-	$f |= SDL::Video::SDL_ANYFORMAT  if $af;
-	$f |= SDL::Video::SDL_DOUBLEBUF  if $db;
 	$f |= SDL::Video::SDL_SWSURFACE  if $sw;
 	$f |= SDL::Video::SDL_HWSURFACE  if $hw;
 	$f |= SDL::Video::SDL_ASYNCBLIT  if $ab;
+	$f |= SDL::Video::SDL_ANYFORMAT  if $af;
 	$f |= SDL::Video::SDL_HWPALETTE  if $hwp;
+	$f |= SDL::Video::SDL_DOUBLEBUF  if $db;
 	$f |= SDL::Video::SDL_FULLSCREEN if $fs;
 	$f |= SDL::Video::SDL_OPENGL     if $gl;
 	$f |= SDL::Video::SDL_RESIZABLE  if $rs;
@@ -177,7 +177,7 @@ sub stash :lvalue {
 
 sub init {
 	my ( $init ) = @_;
-	
+
 	return unless defined $init;
 	if ( ref $init ) {
 		# make a hash with keys of the values in the init array
@@ -193,7 +193,7 @@ sub init {
 		$init |= SDL::SDL_INIT_NOPARACHUTE if $init{no_parachute};
         $init |= SDL::SDL_INIT_EVENTTHREAD if $init{event_thread};
 	}
-	
+
 	# if anything is already inited, only init specified extra subsystems
 	if ( SDL::was_init( SDL::SDL_INIT_EVERYTHING ) ) {
 		SDL::init_sub_system( $init )
@@ -207,9 +207,9 @@ sub init {
 
 sub screen_size {
 	SDLx::App::init( SDL::SDL_INIT_VIDEO );
-	
+
 	my $video_info = SDL::Video::get_video_info();
-	
+
 	return( $video_info->current_w, $video_info->current_h );
 }
 
@@ -265,16 +265,16 @@ sub show_cursor {
 sub fullscreen {
 	my ( $self ) = @_;
 	return 1 if SDL::Video::wm_toggle_fullscreen( $self );
-	
+
 	# fallback to doing it with set_video_mode()
 	my $w = $self->w;
 	my $h = $self->h;
 	my $d = $self->format->BitsPerPixel;
 	my $f = $self->flags;
-	
+
 	#toggle fullscreen flag
 	$f ^= SDL::Video::SDL_FULLSCREEN;
-	
+
 	$self->new( $w, $h, $d, $f );
 }
 

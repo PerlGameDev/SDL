@@ -70,6 +70,43 @@ providing all the methods they both provide.
 
 =head2 new
 
+ my $app = SDLx::App->new(
+     width  => 640,
+     height => 480,
+     depth  => 32,
+     flags  => SDL_SWSURFACE | SDL_ANYFORMAT,
+
+     # parameter access to flags
+     sw_surface => 1,
+     hw_surface => 1,
+     async_blit => 1,
+     any_format => 1,
+     hw_palette => 1,
+     double_buf => 1,
+     fullscreen => 1,
+     open_gl    => 1,
+     resizable  => 1,
+     no_frame   => 1,
+
+     # two ways to do init. init video is assumed regardless
+     init => SDL_INIT_AUDIO | SDL_INIT_JOYSTICK,
+     init => [ 'audio', 'joystick' ],
+
+     # window position
+     position => [ 150, 100 ],
+     centered => 1,
+
+     # other things
+     no_cursor => 1,
+     grab_input => 1,
+
+     # don't initialize an SDLx::Controller for the app
+     no_controller => 1,
+
+     # store your goodies in the app if you like
+     stash => {},
+ );
+
 C<SDLx::App::new> initializes the SDL, creates a new screen,
 and initializes some of the window manager properties.
 C<SDLx::App::new> takes a series of named parameters:
