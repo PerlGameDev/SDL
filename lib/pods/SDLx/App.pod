@@ -63,10 +63,8 @@ please see L<SDLx::Controller>.
 
 The C<SDLx::App> provides methods for the root window of your SDL application,
 as well as many related convenience methods.
-
-L<SDLx::App> controls the root window of the of your SDL based application.
-It extends the L<SDL::Surface> class, and provides an interface to the window
-manager oriented functions.
+It is a subclass of both L<SDLx::Surface> and L<SDLx::Controller>,
+providing all the methods they both provide.
 
 =head1 METHODS
 
