@@ -20,6 +20,8 @@ can_ok(
 	'SDLx::App', qw/
 		new
 		stash
+		init
+		screen_size
 		resize
 		title
 		icon
