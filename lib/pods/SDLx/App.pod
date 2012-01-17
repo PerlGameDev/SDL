@@ -3,7 +3,7 @@
 
 =head1 NAME
 
-SDLx::App - a SDL perl extension
+SDLx::App - The root window of an SDL application
 
 =head1 CATEGORY
 
@@ -11,35 +11,58 @@ Extension
 
 =head1 SYNOPSIS
 
-    use SDL;
-    use SDLx::App;
-    use SDL::Event;
-    use SDL::Events;
+ use SDL;
+ use SDLx::App;
+ use SDL::Event;
+ use SDL::Events;
 
+ # this is all the code we need to have a working app!
+ my $app = SDLx::App->new;
+
+ # we can also specify many useful things in the constructor
  my $app = SDLx::App->new(
-     title  => 'My Great Game',
-     width  => 640,
-     height => 480,
-     depth  => 32
+     title      => 'My Great Game',
+     width      => 1024,
+     height     => 600,
+     centered   => 1,
+     no_frame   => 1,
+     async_blit => 1,
  );
 
-This is the manual way of doing things
+ # our app also comes with an SDLx::Controller
 
- my $event = SDL::Event->new; # create a new event
+ # add a handler handle events such as keypresses
+ $app->add_event_handler(
+     sub {
+          my ($event) = @_;
+          # handle the event here
+     }
+ );
 
- SDL::Events::pump_events();
+ # add a handler to move our objects in response to time
+ $app->add_move_handler(
+     sub {
+         # handle moving objects here
+     }
+ );
 
- while ( SDL::Events::poll_event($event) ) {
-     my $type = $event->type(); # get event type
-     print $type;
-     exit if $type == SDL_QUIT;
- }
+ # add a handler to show our objects on the screen
+ $app->add_show_handler(
+     sub {
+         # handle drawing objects here
+     }
+ );
 
-An alternative to the manual Event processing is through the L<SDLx::Controller> module. L<SDLx::App> is a Controller so see the CALLBACKS section below.
+ # finally, start the app run loop with the added handlers
+ $app->run();
+
+For a full explanation of the L<run|SDLx::Controller/run> loop and other Controller related methods,
+please see L<SDLx::Controller>.
 
 =head1 DESCRIPTION
 
-The C<SDLx::App> provides methods for the root window of your SDL application, as well as many related convenience methods.
+The C<SDLx::App> provides methods for the root window of your SDL application,
+as well as many related convenience methods.
 
 L<SDLx::App> controls the root window of the of your SDL based application.
 It extends the L<SDL::Surface> class, and provides an interface to the window
@@ -65,16 +88,17 @@ the icon title. Defaults to file name. Shortcut: 'it'
 the icon itself. Defaults to none. Shortcut: 'i'
 
 =item * width
-Window width, in pixels. Defaults to 800. Shortcut: 'w'
+Window width, in pixels. Defaults to 640. Shortcut: 'w'
 
 =item * height
-Window height, in pixels. Defaults to 600. Shortcut: 'h'
+Window height, in pixels. Defaults to 480. Shortcut: 'h'
 
 =item * depth
 Screen depth. Defaults to 16. Shortcut: 'd'.
 
 =item * flags
-Any flags you want to pass to L<SDL::Video> upon initialization. Defaults to SDL_ANYFORMAT. Flags should be I<or'ed> together if you're passing more than one (flags => FOO|BAR). Shortcut: 'f'.
+Any flags you want to pass to L<SDL::Video> upon initialization. Defaults to SDL_ANYFORMAT.
+Flags should be I<or'ed> together if you're passing more than one (flags => FOO|BAR). Shortcut: 'f'.
 
 =item * resizeable
 Set this to a true value to make the window resizeable by the user. Default is off.
@@ -143,41 +167,6 @@ or OpenGL buffer if applicable. This is prefered to calling flip on the applicat
 C<SDLx::App::attribute> allows one to get and set GL attributes. By passing a value
 in addition to the attribute selector, the value will be set. C<SDL:::App::attribute>
 always returns the current value of the given attribute, or Carp::confesss on failure.
-
-=head1 CALLBACKS
-
-C<SDLx::App> is a C<SDLx::Controller>. Use the event, show and handlers to run the app.
-
- use SDL;
- use SDLx::App;
-
- use SDL::Event; #Where ever the event call back is processed
-
- my $app = SDLx::App->new( width => 200, height => 200);
-
- $app->add_event_handler(
-     sub {
-          my ($event) = @_;
-		  # handle the event here
-     }
- );
-
- $app->add_show_handler(
-     sub {
-         # handle drawing objects here
-     }
- );
-
- $app->add_move_handler(
-     sub {
-         # handle moving objects here
-     }
- );
-
- # run the app with the added callbacks
- $app->run();
-
-For a full explanation of the L<run|SDLx::Controller/run> loop and other Controller related methods, please see L<SDLx::Controller>.
 
 =head1 AUTHORS
 
