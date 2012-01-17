@@ -26,7 +26,21 @@ $SDLx::App::USING_OPENGL = 0;
 
 sub new {
 	my $class = shift;
-	$class = ref $class || $class;
+	
+	# if we already have an app, we just use set_video_mode to change it
+	if( ref $class ) {
+		my ( $w, $h, $d, $f ) = @_;
+		my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
+			or Carp::confess( "changing app with set_video_mode failed: ", SDL::get_error() );
+		$surface = bless SDLx::Surface->new( surface => $surface ), ref $class;
+		
+		# make the app scalar ref point to the new C surface object
+		# luckily, we keep the app's SDLx::Controller like this
+		# because its inside-out-ness pays attention to the address of the SV and not the C object
+		$$class = $$surface;
+		return $class;
+	}
+
 	my %o = @_;
 
 	# undef is not a valid input
@@ -66,27 +80,17 @@ sub new {
 	}
 
 	# used to say unless no_init here. I don't think we need it anymore
-	if ( ref $init eq 'ARRAY' ) {
-		# make a hash with keys of the values in the init array
-		my %init = map { $_ => 1 } @$init;
-		undef $init;
-
-		$init |= SDL::SDL_INIT_AUDIO       if $init{audio};
-		$init |= SDL::SDL_INIT_CDROM       if $init{cd_rom}       || $init{cdrom};
-		$init |= SDL::SDL_INIT_EVERYTHING  if $init{everything};
-		$init |= SDL::SDL_INIT_NOPARACHUTE if $init{no_parachute};
-		$init |= SDL::SDL_INIT_JOYSTICK    if $init{joystick};
-		$init |= SDL::SDL_INIT_TIMER       if $init{timer};
-	}
-
-	# if anything is already inited, only init specified extra subsystems
-	if ( SDL::was_init( SDL::SDL_INIT_AUDIO | SDL::SDL_INIT_CDROM | SDL::SDL_INIT_EVENTTHREAD | SDL::SDL_INIT_JOYSTICK | SDL::SDL_INIT_TIMER | SDL::SDL_INIT_VIDEO ) ) {
-		# I'm assuming we always wanna init video
-		SDL::init_sub_system( ($init || 0) | SDL::SDL_INIT_VIDEO );
+	if( !defined $init ) {
+		SDLx::App::init( SDL::SDL_INIT_EVERYTHING );
 	}
 	else {
-		# I'm assuming we always wanna init video
-		SDL::init( defined $init ? $init | SDL::SDL_INIT_VIDEO : SDL::SDL_INIT_EVERYTHING );
+		if( ref $init ) {
+			push @$init, "video";
+		}
+		else {
+			$init |= SDL::SDL_INIT_VIDEO
+		}
+		SDLx::App::init( $init );
 	}
 
 	$f |= SDL::Video::SDL_ANYFORMAT  if $af;
@@ -171,24 +175,52 @@ sub stash :lvalue {
 	return $_stash{ refaddr( $_[0] ) };
 }
 
+sub init {
+	my ( $init ) = @_;
+	
+	return unless defined $init;
+	if ( ref $init ) {
+		# make a hash with keys of the values in the init array
+		my %init = map { $_ => 1 } @$init;
+		undef $init;
+
+		$init |= SDL::SDL_INIT_TIMER       if $init{timer};
+		$init |= SDL::SDL_INIT_AUDIO       if $init{audio};
+		$init |= SDL::SDL_INIT_VIDEO       if $init{video};
+		$init |= SDL::SDL_INIT_CDROM       if $init{cd_rom}       || $init{cdrom};
+		$init |= SDL::SDL_INIT_JOYSTICK    if $init{joystick};
+		$init |= SDL::SDL_INIT_EVERYTHING  if $init{everything}   || $init{all};
+		$init |= SDL::SDL_INIT_NOPARACHUTE if $init{no_parachute};
+        $init |= SDL::SDL_INIT_EVENTTHREAD if $init{event_thread};
+	}
+	
+	# if anything is already inited, only init specified extra subsystems
+	if ( SDL::was_init( SDL::SDL_INIT_EVERYTHING ) ) {
+		SDL::init_sub_system( $init )
+			and Carp::cluck( "SDL init_sub_system failed: ", SDL::get_error() );
+	}
+	else {
+		SDL::init( $init )
+			and Carp::confess( "SDL init failed: ", SDL::get_error() );
+	}
+}
+
+sub screen_size {
+	SDLx::App::init( SDL::SDL_INIT_VIDEO );
+	
+	my $video_info = SDL::Video::get_video_info();
+	
+	return( $video_info->current_w, $video_info->current_h );
+}
+
 sub resize {
-	my ( $self, $w, $h, $d, $flags ) = @_;
+	my ( $self, $w, $h, $d, $f ) = @_;
 
 	# you'd probably never need to change the depth or flags, but we offer it because why not
 	$d = $self->format->BitsPerPixel unless defined $d;
-	$flags = $self->flags unless defined $flags;
+	$f = $self->flags unless defined $f;
 
-	# do what we do in new() to make the app object
-	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $flags )
-		or Carp::confess( "resize with set_video_mode failed: ", SDL::get_error() );
-	$surface = bless SDLx::Surface->new( surface => $surface ), ref $self;
-
-	# make $self point to the new C surface object
-	# luckily, we keep the app's SDLx::Controller like this
-	# because its inside-out-ness pays attention to the address of the SV and not the C object
-	$$self = $$surface;
-
-	$self;
+	$self->new( $w, $h, $d, $f );
 }
 
 sub title {
@@ -232,7 +264,18 @@ sub show_cursor {
 
 sub fullscreen {
 	my ( $self ) = @_;
-	SDL::Video::wm_toggle_fullscreen( $self );
+	return 1 if SDL::Video::wm_toggle_fullscreen( $self );
+	
+	# fallback to doing it with set_video_mode()
+	my $w = $self->w;
+	my $h = $self->h;
+	my $d = $self->format->BitsPerPixel;
+	my $f = $self->flags;
+	
+	#toggle fullscreen flag
+	$f ^= SDL::Video::SDL_FULLSCREEN;
+	
+	$self->new( $w, $h, $d, $f );
 }
 
 sub iconify {
@@ -242,8 +285,8 @@ sub iconify {
 sub grab_input {
 	my ( undef, $grab ) = @_;
 	if (@_ > 1) {
-		return SDL::Video::wm_grab_input( SDL::Video::SDL_GRAB_ON ) if $grab;
-		return SDL::Video::wm_grab_input( SDL::Video::SDL_GRAB_OFF );
+		return SDL::Video::wm_grab_input( SDL::Video::SDL_GRAB_ON ) if $grab and $grab ne SDL::Video::SDL_GRAB_QUERY;
+		return SDL::Video::wm_grab_input( SDL::Video::SDL_GRAB_OFF ) unless $grab;
 	}
 	SDL::Video::wm_grab_input( SDL::Video::SDL_GRAB_QUERY );
 }
@@ -267,6 +310,15 @@ sub gl_attribute {
 	Carp::confess( "SDLx::App::attribute failed to get GL attribute" )
 		if ( $returns->[0] < 0 );
 	$returns->[1];
+}
+
+# this has been moved to SDLx::Controller in the form of time and sleep
+# this can be removed at any time we wanna break compat
+sub delay {
+	SDL::delay( $_[1] );
+}
+sub ticks {
+	SDL::get_ticks;
 }
 
 1;
