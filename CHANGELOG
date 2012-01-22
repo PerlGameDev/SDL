@@ -2,6 +2,10 @@ Revision history for Perl extension SDL_perl.
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+* 2.537_01 Jan 22 2012
+	- t/core_cd.t: gnu hurd 0.3 handles devices like cdrom strange [FROGGS]
+	- t/sdlx_fps.t: seems better to try to get 5 fps (slow vm's) [FROGGS]
+
 * 2.536 Jan 04 2011
 	- using INT2PTR to convert stored pointers to right size and hide warnings [FROGGS]
 	- SDL::Mixer::Channels: using malloc instead of safemalloc [FROGGS]
