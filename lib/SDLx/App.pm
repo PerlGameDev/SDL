@@ -27,20 +27,6 @@ $SDLx::App::USING_OPENGL = 0;
 sub new {
 	my $class = shift;
 
-	# if we already have an app, we just use set_video_mode to change it
-	if( ref $class ) {
-		my ( $w, $h, $d, $f ) = @_;
-		my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
-			or Carp::confess( "changing app with set_video_mode failed: ", SDL::get_error() );
-		$surface = bless SDLx::Surface->new( surface => $surface ), ref $class;
-
-		# make the app scalar ref point to the new C surface object
-		# luckily, we keep the app's SDLx::Controller like this
-		# because its inside-out-ness pays attention to the address of the SV and not the C object
-		$$class = $$surface;
-		return $class;
-	}
-
 	my %o = @_;
 
 	# undef is not a valid input
@@ -49,13 +35,13 @@ sub new {
 	my $d   = defined $o{depth}      ? $o{depth}      : defined $o{d}   ? $o{d}   : undef;
 	my $f   = defined $o{flags}      ? $o{flags}      : defined $o{f}   ? $o{f}   : 0;
 	my $pos = defined $o{position}   ? $o{position}   : defined $o{pos} ? $o{pos} : undef;
-	my $s   = defined $o{stash}      ? $o{stash}                                  : {};
 
 	# undef is a valid input
 	my $t    =                         $o{title};
 	my $it   =                         $o{icon_title};
 	my $icon =                         $o{icon};
 	my $init = exists $o{initialize} ? $o{initialize}                             : $o{init};
+	my $s    = exists $o{stash}      ? $o{stash}                                  : {};
 
 	# boolean
 	my $sw    = $o{software_surface}  || $o{sw_surface}  || $o{sw};
@@ -151,9 +137,7 @@ sub new {
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ACCELERATED_VISUAL, $av  ) if defined $av;
 	}
 
-	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
-		or Carp::confess( "set_video_mode failed: ", SDL::get_error() );
-	my $self = bless SDLx::Surface->new( surface => $surface ), $class;
+	my $self = $class->set_video_mode( $w, $h, $d, $f );
 
 	$self->SDLx::Controller::new( %o ) unless $nc;
 	$self->title( $t, $it );
@@ -163,6 +147,25 @@ sub new {
 	$self->stash = $s;
 
 	$self;
+}
+
+sub set_video_mode {
+	my ($self, $w, $h, $d, $f) = @_;
+	
+	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
+		or Carp::confess( "set_video_mode failed: ", SDL::get_error() );
+	$surface = SDLx::Surface->new( surface => $surface );
+		
+	# if we already have an app
+	if( ref $self ) {
+		# make the app scalar ref point to the new C surface object
+		# luckily, we keep the app's SDLx::Controller like this
+		# because its inside-out-ness pays attention to the address of the SV and not the C object
+		bless $surface, ref $self;
+		$$self = $$surface;
+		return $self;
+	}
+	return bless $surface, $self;
 }
 
 sub DESTROY {
@@ -220,7 +223,7 @@ sub resize {
 	$d = $self->format->BitsPerPixel unless defined $d;
 	$f = $self->flags unless defined $f;
 
-	$self->new( $w, $h, $d, $f );
+	$self->set_video_mode( $w, $h, $d, $f );
 }
 
 sub title {
@@ -267,15 +270,16 @@ sub fullscreen {
 	return 1 if SDL::Video::wm_toggle_fullscreen( $self );
 
 	# fallback to doing it with set_video_mode()
-	my $w = $self->w;
-	my $h = $self->h;
-	my $d = $self->format->BitsPerPixel;
 	my $f = $self->flags;
 
-	#toggle fullscreen flag
-	$f ^= SDL::Video::SDL_FULLSCREEN;
+	eval { $self->set_video_mode( 0, 0, 0, $f ^ SDL::Video::SDL_FULLSCREEN ) };
+	return 1 unless $@;
+	
+	# failed going fullscreen, let's revert back
+	$self->set_video_mode( 0, 0, $self->format->BitsPerPixel, $f );
 
-	$self->new( $w, $h, $d, $f );
+	# report failure to go fullscreen
+	return 0;
 }
 
 sub iconify {

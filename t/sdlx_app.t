@@ -19,6 +19,7 @@ use SDLx::App;
 can_ok(
 	'SDLx::App', qw/
 		new
+		set_video_mode
 		stash
 		init
 		screen_size
