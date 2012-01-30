@@ -280,6 +280,33 @@ L</stash>. If not specified, defaults to an empty hash ref.
 
 =back
 
+=head2 init
+
+ SDLx::App::init( SDL::SDL_INIT_TIMER | SDL::SDL_INIT_AUDIO | ... );
+ SDLx::App::init( [ 'timer', 'audio', 'video', 'cd_rom', 'cdrom', 'joystick',
+                    'everything', 'all', 'no_parachute', 'event_thread' ]  );
+
+This is not a method, but a sub. It is used internally by L</new> to init SDL with
+L<SDL::init|SDL/init>. If any subsystems are already initialized, it will use
+L<SDL::init_sub_system|SDL/init_sub_system> instead. You should use this whenever you need to
+init anything outside calls to </new>.
+
+If a number is specified, it will initialize SDL in the same way as L<SDL::init|SDL/init> describes.
+If an array ref is specified, each element should be a string corresponding to a flag to specify.
+The strings and their corresponding flags are shown in the table below. See L<SDL::init|SDL/init> for
+descriptions of what each flag does.
+
+ flag                    string          alias
+ ====================    ============    ======
+ SDL_INIT_TIMER          timer
+ SDL_INIT_AUDIO          audio
+ SDL_INIT_VIDEO          video
+ SDL_INIT_CDROM          cd_rom          cdrom
+ SDL_INIT_JOYSTICK       joystick        
+ SDL_INIT_EVERYTHING     everything      all
+ SDL_INIT_NOPARACHUTE    no_parachute
+ SDL_INIT_EVENTTHREAD    event_thread
+
 =head2 title()
 
 =head2 title( $new_title )

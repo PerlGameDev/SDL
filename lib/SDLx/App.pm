@@ -179,9 +179,8 @@ sub stash :lvalue {
 }
 
 sub init {
-	my ( $init ) = @_;
+	my $init = shift;
 
-	return unless defined $init;
 	if ( ref $init ) {
 		# make a hash with keys of the values in the init array
 		my %init = map { $_ => 1 } @$init;
@@ -194,7 +193,7 @@ sub init {
 		$init |= SDL::SDL_INIT_JOYSTICK    if $init{joystick};
 		$init |= SDL::SDL_INIT_EVERYTHING  if $init{everything}   || $init{all};
 		$init |= SDL::SDL_INIT_NOPARACHUTE if $init{no_parachute};
-        $init |= SDL::SDL_INIT_EVENTTHREAD if $init{event_thread};
+		$init |= SDL::SDL_INIT_EVENTTHREAD if $init{event_thread};
 	}
 
 	# if anything is already inited, only init specified extra subsystems
