@@ -335,10 +335,14 @@ Resize the app to the specified width and height. The surface's depth and flags 
 
 =head2 fullscreen
 
+ $app->fullscreen();
+
 Toggles the app in and out of fullscreen mode in a cross-platform-friendly way.
 Returns false if the app fails to go fullscreen for some reason. Otherwise, returns true.
 
 =head2 iconify
+
+ $app->iconify();
 
 Attempts to iconify the window with L<SDL::Video::wm_iconify_window|SDL::Video/wm_iconify_window>.
 

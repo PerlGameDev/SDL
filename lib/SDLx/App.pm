@@ -151,11 +151,11 @@ sub new {
 
 sub set_video_mode {
 	my ($self, $w, $h, $d, $f) = @_;
-	
+
 	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
 		or Carp::confess( "set_video_mode failed: ", SDL::get_error() );
 	$surface = SDLx::Surface->new( surface => $surface );
-		
+
 	# if we already have an app
 	if( ref $self ) {
 		# make the app scalar ref point to the new C surface object
@@ -273,7 +273,7 @@ sub fullscreen {
 
 	eval { $self->set_video_mode( 0, 0, $d, $f ^ SDL::Video::SDL_FULLSCREEN ) };
 	return 1 unless $@;
-	
+
 	# failed going fullscreen, let's revert back
 	$self->set_video_mode( 0, 0, $d, $f );
 
