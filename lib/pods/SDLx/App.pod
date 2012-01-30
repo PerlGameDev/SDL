@@ -75,15 +75,15 @@ providing all the methods they both provide.
      width  => 640,
      height => 480,
      depth  => 32,
-     
+
      title      => "Application Title",
      icon_title => "App Title",
      icon       => SDL::Video::load_BMP( "icon.bmp" ),
-     
+
      # two ways to do init. init video is assumed regardless
      init => SDL_INIT_AUDIO | SDL_INIT_JOYSTICK,
      init => [ 'audio', 'joystick' ],
-     
+
      # normal libsdl access to flags
      flags => SDL_SWSURFACE | SDL_ANYFORMAT,
      # or parameter access to flags
@@ -110,7 +110,7 @@ providing all the methods they both provide.
 
      # store your goodies in the app if you like
      stash => {},
-     
+
      # and everything from SDLx::Controller
      dt             => 0.1,
      min_t          => 1 / 60,
@@ -226,7 +226,7 @@ L<update_rect|SDLx::Surface/update_rect> on the entire screen. Aliases: C<double
 
 =item fullscreen
 
-The L<SDL_FULLSCREEN|SDL::Video/CONSTANTS> flag, as a boolean. If true, SDL will attempt to use a fullscreen mode, 
+The L<SDL_FULLSCREEN|SDL::Video/CONSTANTS> flag, as a boolean. If true, SDL will attempt to use a fullscreen mode,
 changing the hardware resolution to the resolution of the display surface.
 If, for whatever reason, this change is not possible the next higher resolution will be used
 and the display surface centered on a black background. Alias: C<full_screen>.
@@ -302,10 +302,20 @@ descriptions of what each flag does.
  SDL_INIT_AUDIO          audio
  SDL_INIT_VIDEO          video
  SDL_INIT_CDROM          cd_rom          cdrom
- SDL_INIT_JOYSTICK       joystick        
+ SDL_INIT_JOYSTICK       joystick
  SDL_INIT_EVERYTHING     everything      all
  SDL_INIT_NOPARACHUTE    no_parachute
  SDL_INIT_EVENTTHREAD    event_thread
+
+=head2 screen_size
+
+ my ($screen_w, $screen_h) = SDLx::App::screen_size();
+
+Returns the width and height of the user's screen resolution using
+L<SDL::Video::get_video_info|SDL::Video/get_video_info>.
+This can be called before or after calling L</new>.
+Initializing the video subsytem will be handled correctly no matter what thanks to
+L<SDLx::App::init|/init>.
 
 =head2 title()
 
