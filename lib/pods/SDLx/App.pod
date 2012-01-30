@@ -317,6 +317,31 @@ This can be called before or after calling L</new>.
 Initializing the video subsytem will be handled correctly no matter what thanks to
 L<SDLx::App::init|/init>.
 
+=head2 set_video_mode
+
+ my $app = SDLx::App->set_video_mode( $w, $h, $d, $f );
+ $app->set_video_mode( $w, $h, $d, $f );
+
+The first form is used internally by L</new> to create the new SDL display surface.
+The second form can be used to change the video mode of an existing app.
+See L<SDL::Video::set_video_mode|SDL::Video/set_video_mode> for a description on what the
+four arguments do.
+
+=head2 resize
+
+ $app->resize( $w, $h );
+
+Resize the app to the specified width and height. The surface's depth and flags will remain the same.
+
+=head2 fullscreen
+
+Toggles the app in and out of fullscreen mode in a cross-platform-friendly way.
+Returns false if the app fails to go fullscreen for some reason. Otherwise, returns true.
+
+=head2 iconify
+
+Attempts to iconify the window with L<SDL::Video::wm_iconify_window|SDL::Video/wm_iconify_window>.
+
 =head2 title()
 
 =head2 title( $new_title )

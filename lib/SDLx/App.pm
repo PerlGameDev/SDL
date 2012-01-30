@@ -216,11 +216,10 @@ sub screen_size {
 }
 
 sub resize {
-	my ( $self, $w, $h, $d, $f ) = @_;
+	my ( $self, $w, $h ) = @_;
 
-	# you'd probably never need to change the depth or flags, but we offer it because why not
-	$d = $self->format->BitsPerPixel unless defined $d;
-	$f = $self->flags unless defined $f;
+	my $d = $self->format->BitsPerPixel;
+	my $f = $self->flags;
 
 	$self->set_video_mode( $w, $h, $d, $f );
 }
@@ -269,13 +268,14 @@ sub fullscreen {
 	return 1 if SDL::Video::wm_toggle_fullscreen( $self );
 
 	# fallback to doing it with set_video_mode()
+	my $d = $self->format->BitsPerPixel;
 	my $f = $self->flags;
 
-	eval { $self->set_video_mode( 0, 0, 0, $f ^ SDL::Video::SDL_FULLSCREEN ) };
+	eval { $self->set_video_mode( 0, 0, $d, $f ^ SDL::Video::SDL_FULLSCREEN ) };
 	return 1 unless $@;
 	
 	# failed going fullscreen, let's revert back
-	$self->set_video_mode( 0, 0, $self->format->BitsPerPixel, $f );
+	$self->set_video_mode( 0, 0, $d, $f );
 
 	# report failure to go fullscreen
 	return 0;
