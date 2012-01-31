@@ -78,7 +78,7 @@ providing all the methods they both provide.
 
      title      => "Application Title",
      icon_title => "App Title",
-     icon       => SDL::Video::load_BMP( "icon.bmp" ),
+     icon       => TODO,
 
      # two ways to do init. init video is assumed regardless
      init => SDL_INIT_AUDIO | SDL_INIT_JOYSTICK,
@@ -282,14 +282,14 @@ L</stash>. If not specified, defaults to an empty hash ref.
 
 =head2 init
 
- SDLx::App::init( SDL::SDL_INIT_TIMER | SDL::SDL_INIT_AUDIO | ... );
- SDLx::App::init( [ 'timer', 'audio', 'video', 'cd_rom', 'cdrom', 'joystick',
+ SDLx::App->init( SDL::SDL_INIT_TIMER | SDL::SDL_INIT_AUDIO | ... );
+ SDLx::App->init( [ 'timer', 'audio', 'video', 'cd_rom', 'cdrom', 'joystick',
                     'everything', 'all', 'no_parachute', 'event_thread' ]  );
 
-This is not a method, but a sub. It is used internally by L</new> to init SDL with
+This is used internally by L</new> to init SDL with
 L<SDL::init|SDL/init>. If any subsystems are already initialized, it will use
 L<SDL::init_sub_system|SDL/init_sub_system> instead. You should use this whenever you need to
-init anything outside calls to </new>.
+init anything outside calls to </new>, as it will always do what you want.
 
 If a number is specified, it will initialize SDL in the same way as L<SDL::init|SDL/init> describes.
 If an array ref is specified, each element should be a string corresponding to a flag to specify.
@@ -309,7 +309,7 @@ descriptions of what each flag does.
 
 =head2 screen_size
 
- my ($screen_w, $screen_h) = SDLx::App::screen_size();
+ my ($screen_w, $screen_h) = SDLx::App->screen_size();
 
 Returns the width and height of the user's screen resolution using
 L<SDL::Video::get_video_info|SDL::Video/get_video_info>.
@@ -346,34 +346,34 @@ Returns false if the app fails to go fullscreen for some reason. Otherwise, retu
 
 Attempts to iconify the window with L<SDL::Video::wm_iconify_window|SDL::Video/wm_iconify_window>.
 
-=head2 title()
+=head2 title
 
-=head2 title( $new_title )
+ my ( $title, $icon_title ) = $app->title();
+ $app->title( $title, $icon_title );
 
-=head2 title( $window_title, $icon_title )
+If no arguments are specified, returns a list of the title and the icon title.
+If arguments are specified, the titles will be set instead. Specify undef to keep the title or
+icon title the same, or a string to modify them.
 
-C<SDLx::App::title> takes 0, 1, or 2 arguments. If no parameter is given,
-it returns the current application window title. If one parameter is
-passed, both the window title and icon title will be set to its value.
-If two parameters are passed the window title will be set to the first,
-and the icon title to the second.
+=head2 icon
+
+ SDLx::App->icon( $filename );
+ SDLx::App->icon( SDL::Video::load_BMP( $filename ) );
+ SDLx::App->icon( $icon, $color_key );
+ SDLx::App->icon( $icon, $mask );
+
+This is yet to be implemented. Currently only the second form works.
 
 =head2 error
 
-C<SDLx::App::error> returns the last error message set by the SDL.
+ my $error = $app->error();
+ $app->error( @error );
+ $app->error( undef );
 
-=head2 resize( $width, $height )
-
-C<SDLx::App::resize> takes a new width and height of the application. Only
-works if the application was originally created with the resizable option.
-
-=head2 fullscreen
-
-C<SDLx::App::fullscreen> toggles the application in and out of fullscreen mode.
-
-=head2 iconify
-
-C<SDLx::App::iconify> iconifies the application window.
+With no arguments, returns the current SDL error using L<SDL::get_error|SDL/get_error>.
+With one or more arguments, sets the SDL error to the C<sprintf> formatted string.
+With C<undef> as the one and only argument, clears the SDL error. This can be used
+when you are done with the error.
 
 =head2 grab_input( $CONSTANT )
 

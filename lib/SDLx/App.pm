@@ -67,7 +67,7 @@ sub new {
 
 	# used to say unless no_init here. I don't think we need it anymore
 	if( !defined $init ) {
-		SDLx::App::init( SDL::SDL_INIT_EVERYTHING );
+		SDLx::App->init( SDL::SDL_INIT_EVERYTHING );
 	}
 	else {
 		if( ref $init ) {
@@ -76,7 +76,7 @@ sub new {
 		else {
 			$init |= SDL::SDL_INIT_VIDEO
 		}
-		SDLx::App::init( $init );
+		SDLx::App->init( $init );
 	}
 
 	$f |= SDL::Video::SDL_SWSURFACE  if $sw;
@@ -138,10 +138,13 @@ sub new {
 	}
 
 	my $self = $class->set_video_mode( $w, $h, $d, $f );
-
 	$self->SDLx::Controller::new( %o ) unless $nc;
+
+	$t = defined $it ? $it : $0 unless defined $t;
+	$it = $t unless defined $it;
 	$self->title( $t, $it );
 	$self->icon( $icon );
+
 	$self->show_cursor( 0 ) if $ncur;
 	$self->grab_input( $gi ) if $gi;
 	$self->stash = $s;
@@ -150,7 +153,7 @@ sub new {
 }
 
 sub set_video_mode {
-	my ($self, $w, $h, $d, $f) = @_;
+	my ( $self, $w, $h, $d, $f ) = @_;
 
 	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
 		or Carp::confess( "set_video_mode failed: ", SDL::get_error() );
@@ -179,7 +182,7 @@ sub stash :lvalue {
 }
 
 sub init {
-	my $init = shift;
+	my ( undef, $init ) = @_;
 
 	if ( ref $init ) {
 		# make a hash with keys of the values in the init array
@@ -208,7 +211,7 @@ sub init {
 }
 
 sub screen_size {
-	SDLx::App::init( SDL::SDL_INIT_VIDEO );
+	SDLx::App->init( SDL::SDL_INIT_VIDEO );
 
 	my $video_info = SDL::Video::get_video_info();
 
@@ -227,15 +230,17 @@ sub resize {
 sub title {
 	my ( undef, $title, $icon_title ) = @_;
 	if ( @_ > 1 ) {
-		$title = defined $icon_title ? $icon_title : $0 unless defined $title;
-		$icon_title = $title unless defined $icon_title;
+		my ($t, $it) = SDL::Video::wm_get_caption;
+		$title      = $t  unless defined $title;
+		$icon_title = $it unless defined $icon_title;
 		return SDL::Video::wm_set_caption( $title, $icon_title );
 	}
 	SDL::Video::wm_get_caption;
 }
 
 sub icon {
-	SDL::Video::wm_set_icon( $_[1] );
+	my ( undef, $icon, $mask ) = @_;
+	SDL::Video::wm_set_icon( $icon );
 }
 
 sub error {
