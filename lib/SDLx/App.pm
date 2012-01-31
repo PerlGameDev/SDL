@@ -249,7 +249,7 @@ sub error {
 		return SDL::clear_error;
 	}
 	if ( @_ ) {
-		return SDL_set_error_real( @_ );
+		return SDL::set_error_real( @_ );
 	}
 	SDL::get_error;
 }
