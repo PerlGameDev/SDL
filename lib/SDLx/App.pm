@@ -9,6 +9,7 @@ use SDL::Video ();
 use SDL::Mouse ();
 use SDL::Event ();
 use SDL::Surface ();
+use SDL::VideoInfo();
 use base qw/SDLx::Surface SDLx::Controller/;
 
 # SDL modules used for other reasons
@@ -21,6 +22,9 @@ use Carp ();
 use Scalar::Util qw/refaddr/;
 
 my %_stash;
+my $_screen_w;
+my $_screen_h;
+my $_screen_d;
 
 $SDLx::App::USING_OPENGL = 0;
 
@@ -77,6 +81,14 @@ sub new {
 			$init |= SDL::SDL_INIT_VIDEO
 		}
 		SDLx::App->init( $init );
+	}
+
+	# keep the screen's original res so we can set the app to that when we're done
+	unless(defined $_screen_w && defined $_screen_h && defined $_screen_d) {
+		my $video_info = SDL::Video::get_video_info();
+		$_screen_w      = $video_info->current_w;
+		$_screen_h      = $video_info->current_h;
+		$_screen_d      = $video_info->vfmt->BitsPerPixel;
 	}
 
 	$f |= SDL::Video::SDL_SWSURFACE  if $sw;
@@ -173,6 +185,12 @@ sub set_video_mode {
 
 sub DESTROY {
 	my ( $self ) = @_;
+
+	# set original screen size when app ends
+	if($_screen_w && $_screen_h && $_screen_d) {
+		SDL::Video::set_video_mode( $_screen_w, $_screen_h, $_screen_d, $self->flags );
+	}
+
 	my $ref = refaddr($self);
 	delete $_stash{ $ref };
 }
@@ -215,7 +233,7 @@ sub screen_size {
 
 	my $video_info = SDL::Video::get_video_info();
 
-	return( $video_info->current_w, $video_info->current_h );
+	return( $video_info->current_w, $video_info->current_h, $video_info->vfmt->BitsPerPixel );
 }
 
 sub resize {

@@ -19,7 +19,7 @@ if ( !SDL::TestTool->init(SDL_INIT_VIDEO) ) {
 
 can_ok( 'SDLx::FPS', qw( new set get delay framecount rateticks lastticks rate ) );
 
-my $_fps = 25;
+my $_fps = 5;
 
 my $ticks_start = SDL::get_ticks();
 my $fps = SDLx::FPS->new( fps => $_fps );
