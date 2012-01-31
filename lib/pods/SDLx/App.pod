@@ -375,20 +375,33 @@ With one or more arguments, sets the SDL error to the C<sprintf> formatted strin
 With C<undef> as the one and only argument, clears the SDL error. This can be used
 when you are done with the error.
 
-=head2 grab_input( $CONSTANT )
+=head2 warp_cursor
 
-C<SDLx::App::grab_input> can be used to change the input focus behavior of
-the application. It takes one argument, which should be one of the following:
+ $app->warp_cursor( $x, $y );
 
-=over 4
+Moves the cursor to the specified coordinates on the application window. If an argument
+is not specified, it will default to 0.
 
-=item * SDL_GRAB_QUERY
+=head2 show_cursor
 
-=item * SDL_GRAB_ON
+ my $is_cursor_shown = $app->show_cursor();
+ $app->show_cursor( $show );
 
-=item * SDL_GRAB_OFF
+If no arguments are specified, returns a boolean that will be true if the cursor
+is currently being shown or false otherwise. If an argument is specified, the cursor will be
+shown if it is true or hidden otherwise.
 
-=back
+=head2 grab_input
+
+ my $is_grabbing_input = $app->grab_input();
+ $app->grab_input( $grab );
+
+Grab input attempts to confine the cursor to the window.
+Also, nearly all keyboard input will be passed directly to the application,
+and not interpreted by any window manager present.
+If no arguments are specified, returns a boolean that will be true if
+grab input is on or false if it is off. If an argument is specified, grab input will be turned on
+if it is true or off otherwise.
 
 =head2 sync
 

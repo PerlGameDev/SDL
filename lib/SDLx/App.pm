@@ -256,14 +256,14 @@ sub error {
 
 sub warp_cursor {
 	my ( undef, $x, $y ) = @_;
-	SDL::Mouse::warp_mouse( $x, $y );
+	SDL::Mouse::warp_mouse( $x || 0, $y || 0 );
 }
 
 sub show_cursor {
 	my ( undef, $show ) = @_;
 	if ( @_ > 1 ) {
-		return SDL::Mouse::show_cursor( SDL::Event::SDL_ENABLE ) if $show;
-		return SDL::Mouse::show_cursor( SDL::Event::SDL_DISABLE );
+		return SDL::Mouse::show_cursor( SDL::Event::SDL_ENABLE ) if $show and $show ne SDL::Event::SDL_QUERY;
+		return SDL::Mouse::show_cursor( SDL::Event::SDL_DISABLE ) unless $show;
 	}
 	SDL::Mouse::show_cursor( SDL::Event::SDL_QUERY );
 }
