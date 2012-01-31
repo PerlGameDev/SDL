@@ -304,19 +304,19 @@ sub sync {
 	if ( $SDLx::App::USING_OPENGL ) {
 		return SDL::Video::GL_swap_buffers;
 	}
-	$self->flip;
+	SDL::Video::flip( $self );
 }
 
 sub gl_attribute {
 	my ( undef, $mode, $value ) = @_;
 
 	return unless $SDLx::App::USING_OPENGL;
-	if ( defined $value ) {
+	if ( @_ > 2 ) {
 		return SDL::Video::GL_set_attribute( $mode, $value );
 	}
 	my $returns = SDL::Video::GL_get_attribute( $mode );
-	Carp::confess( "SDLx::App::attribute failed to get GL attribute" )
-		if ( $returns->[0] < 0 );
+	Carp::cluck( "SDL::Video::GL_get_attribute failed to get GL attribute" )
+		if $returns->[0] < 0;
 	$returns->[1];
 }
 
