@@ -309,9 +309,9 @@ descriptions of what each flag does.
 
 =head2 screen_size
 
- my ($screen_w, $screen_h) = SDLx::App->screen_size();
+ my ($screen_w, $screen_h, $screen_d) = SDLx::App->screen_size();
 
-Returns the width and height of the user's screen resolution using
+Returns the width, height and depth of the user's screen using
 L<SDL::Video::get_video_info|SDL::Video/get_video_info>.
 This can be called before or after calling L</new>.
 Initializing the video subsytem will be handled correctly no matter what thanks to
