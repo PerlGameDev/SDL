@@ -76,9 +76,10 @@ providing all the methods they both provide.
      height => 480,
      depth  => 32,
 
-     title      => "Application Title",
-     icon_title => "App Title",
-     icon       => TODO,
+     title          => "Application Title",
+     icon_title     => "App Title",
+     icon           => "icon.bmp",
+     icon_color_key => [255, 255, 0],
 
      # two ways to do init. init video is assumed regardless
      init => SDL_INIT_AUDIO | SDL_INIT_JOYSTICK,
@@ -102,7 +103,7 @@ providing all the methods they both provide.
      centered => 1,
      position => [ 150, 100 ],
 
-     no_cursor  => 1,
+     hide_cursor  => 1,
      grab_input => 1,
 
      # don't initialize an SDLx::Controller for the app
@@ -161,7 +162,11 @@ The application's icon title, as a string. Defaults to the L</title> if defined,
 
 =item icon
 
-The application's icon. Set with L</icon>.
+The application's icon. Set with the L</icon> method.
+
+=item icon_color_key
+
+You can optionally use this when specifying the C<icon> parameter to set its color key (transparent pixel).
 
 =item init
 
@@ -257,10 +262,11 @@ The position of the window on the screen, as an array ref. The array ref should 
 specifying C<x> and C<y> values, in pixels, used to position the window on the screen.
 Implemented using C<$ENV{SDL_VIDEO_WINDOW_POS}>. Alias: C<pos>.
 
-=item no_cursor
+=item hide_cursor
 
 A boolean value. If true, hides the cursor on the video surface using L</show_cursor>.
 A surface can then instead be blitted to the display at the location of the cursor.
+Alias: C<no_cursor>.
 
 =item grab_input
 
@@ -357,12 +363,15 @@ icon title the same, or a string to modify them.
 
 =head2 icon
 
- SDLx::App->icon( $filename );
- SDLx::App->icon( SDL::Video::load_BMP( $filename ) );
- SDLx::App->icon( $icon, $color_key );
- SDLx::App->icon( $icon, $mask );
+ SDLx::App->icon( $filename, $color );
+ SDLx::App->icon( $surface, $color );
 
-This is yet to be implemented. Currently only the second form works.
+Sets the window's icon.
+This must be called before creating the display surface, so SDL::Image can not be used.
+If a filename is specified, it is loaded withL<SDL::Video::load_BMP|SDL::Video/load_BMP>.
+Otherwise, the first argument should be a surface. Win32 icons must be 32x32.
+The C<$color> argument is optional and, if specified, is used to set the icon's color key (transparent pixel).
+It should be an RGB color as either a number or array ref.
 
 =head2 error
 

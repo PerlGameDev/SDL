@@ -9,7 +9,8 @@ use SDL::Video ();
 use SDL::Mouse ();
 use SDL::Event ();
 use SDL::Surface ();
-use SDL::VideoInfo();
+use SDL::VideoInfo ();
+use SDLx::Validate ();
 use base qw/SDLx::Surface SDLx::Controller/;
 
 # SDL modules used for other reasons
@@ -39,13 +40,14 @@ sub new {
 	my $d   = defined $o{depth}      ? $o{depth}      : defined $o{d}   ? $o{d}   : undef;
 	my $f   = defined $o{flags}      ? $o{flags}      : defined $o{f}   ? $o{f}   : 0;
 	my $pos = defined $o{position}   ? $o{position}   : defined $o{pos} ? $o{pos} : undef;
+	my $ico =                          $o{icon};
 
 	# undef is a valid input
 	my $t    =                         $o{title};
 	my $it   =                         $o{icon_title};
-	my $icon =                         $o{icon};
 	my $init = exists $o{initialize} ? $o{initialize}                             : $o{init};
 	my $s    = exists $o{stash}      ? $o{stash}                                  : {};
+	my $icc  =                         $o{icon_color_key};
 
 	# boolean
 	my $sw    = $o{software_surface}  || $o{sw_surface}  || $o{sw};
@@ -58,7 +60,7 @@ sub new {
 	my $gl    = $o{open_gl}           || $o{opengl}      || $o{gl};
 	my $rs    = $o{resizable}         || $o{resizeable}; # it's a hard word to spell :-)
 	my $nf    = $o{no_frame};
-	my $ncur  = $o{no_cursor};
+	my $ncur  = $o{hide_cursor}       || $o{no_cursor};
 	my $cen   = $o{centered}          || $o{center};
 	my $gi    = $o{grab_input};
 	my $nc    = $o{no_controller};
@@ -148,6 +150,9 @@ sub new {
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_SWAP_CONTROL,       $sc  ) if defined $sc;
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ACCELERATED_VISUAL, $av  ) if defined $av;
 	}
+	
+	# icon must be set before set_video_mode
+	SDLx::App->icon( $ico, $icc ) if defined $ico;
 
 	my $self = $class->set_video_mode( $w, $h, $d, $f );
 	$self->SDLx::Controller::new( %o ) unless $nc;
@@ -155,7 +160,6 @@ sub new {
 	$t = defined $it ? $it : $0 unless defined $t;
 	$it = $t unless defined $it;
 	$self->title( $t, $it );
-	$self->icon( $icon );
 
 	$self->show_cursor( 0 ) if $ncur;
 	$self->grab_input( $gi ) if $gi;
@@ -257,7 +261,16 @@ sub title {
 }
 
 sub icon {
-	my ( undef, $icon, $mask ) = @_;
+	my ( undef, $icon, $color ) = @_;
+	SDLx::App->init( SDL::SDL_INIT_VIDEO );
+	unless( UNIVERSAL::isa( $icon, "SDL::Surface" ) ) {
+		$icon = SDL::Video::load_BMP( $icon );
+		$icon or Carp::confess( "Could not load_BMP icon '$icon': ", SDL::get_error() );
+	}
+	if( defined $color ) {
+		$color = SDLx::Validate::map_rgb( $color, $icon->format );
+		SDL::Video::set_color_key( $icon, SDL::Video::SDL_SRCCOLORKEY, $color );
+	}
 	SDL::Video::wm_set_icon( $icon );
 }
 
