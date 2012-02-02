@@ -58,11 +58,10 @@ ease.
      dt             => 0.05,
      min_t          => 0,
      delay          => 1 / 200,
-     eoq            => 1,
-     eoq_handler    => \&eoq_handler,
      event_handlers => [ @event_callbacks ],
      move_handlers  => [ @move_callbacks ],
      show_handlers  => [ @show_callbacks ],
+     stop_handler   => \&stop_handler,
      event          => $event,
      time           => 99,
  );
@@ -92,16 +91,6 @@ Setting it to 0, as seen above, will not delay the loop at all.
 The time, in seconds, to delay after every full app loop. Defaults to 0.
 B<NOTE:> Picking a good delay based on the needs can hugely reduce CPU load and pressure.
 
-=item exit_on_quit (shortcut: eoq)
-
-If true, the app loop will stop when an C<SDL_QUIT> event is triggered. Defaults to false.
-You can also specify your own exit on quit handler, but the default will do exactly what was just mentioned.
-
-=item exit_on_quit_handler (shortcut: eoq_handler)
-
-An alternative callback to handle quitting. Defaults to a callback that stops the event loop on an C<SDL_QUIT> event.
-Things that should be specified here are additional ways to end the app, like on pressing Esc or Alt-F4.
-
 =item event_handlers
 
 =item move_handlers
@@ -112,6 +101,24 @@ An array ref of the corresponding handler callbacks. All default to [].
 This is basically a shortcut way of adding handlers.
 They would otherwise be added with their corresponding C<add_..._handler> method.
 See below for a full explanation of the L</run> loop and handlers.
+
+=item stop_handler
+
+An extra, but separate, event callback to handle all L<stopping|/stop> of the app.
+It is the same in almost every way to an event handler (see L</run>): same recieved arguments, called in the same place.
+One difference is that it is called in L</pause> so that the app can be stopped while paused.
+Another difference is that it should always apply to the app; while you add and remove and clear event handlers,
+this wont be touched. This is good, because you'd (probably) always want your app to able to be stopped.
+Because of this, it's a good idea to use the stop handler regardless of whether you will be using L</pause>.
+
+Defaults to a callback that L<stops|/stop> the event loop on an C<SDL_QUIT> event.
+Specify a code ref to use a different callback to handle quitting, or a false value to not use a stop handler.
+If you want to provide your own stop handler you should give it the code of the default stop handler:
+
+ my ($event, $self) = @_;
+ $self->stop() if $event->type == SDL_QUIT;
+
+followed by any other code to handle events also triggering the app to stop, such as pressing Esc.
 
 =item event
 
@@ -357,20 +364,14 @@ This is only useful when used within code that will be run by L</pause>:
  $app->add_event_handler(\&toggle_pause);
 
 All the examples here are of recursive pause callbacks, but, of course, yours don't have to be.
- 
+
 =head2 dt
-
-=head2 exit_on_quit
-
-(shortcut: eoq)
 
 =head2 min_t
 
 =head2 delay
 
-=head2 exit_on_quit_handler
-
-(shortcut: eoq_handler)
+=head2 stop_handler
 
 =head2 event
 

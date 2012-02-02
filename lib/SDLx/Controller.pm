@@ -22,14 +22,13 @@ my %_event_handlers;
 my %_move_handlers;
 my %_show_handlers;
 my %_delay;
-my %_eoq;
 my %_paused;
 my %_time;
-my %_eoq_handler;
+my %_stop_handler;
 
 sub new {
 	my ($self, %args) = @_;
-	
+
 	# if $self is blessed then it has to isa controller, so let's not even bless it to this class
 	unless(ref $self) {
 		my $a;
@@ -47,10 +46,9 @@ sub new {
 	$_move_handlers{ $ref }      = $args{move_handlers}  || [];
 	$_show_handlers{ $ref }      = $args{show_handlers}  || [];
 	$_delay{ $ref }              = (defined $args{delay} && $args{delay} >= 1 ? $args{delay} / 1000 : $args{delay}) || 0; #phasing out ticks, but still accepting them. Remove whenever we break compat
-	$_eoq{$ref}                  = $args{exit_on_quit} || $args{eoq};
 #	$_paused{ $ref }             = $args{paused};                                          #no point
 	$_time{ $ref }               = $args{time} || 0;
-	$_eoq_handler{ $ref }        = $args{exit_on_quit_handler} || $args{eoq_handler} || \&_default_exit_on_quit_handler;
+	$_stop_handler{ $ref }       = $args{stop_handler} || \&_default_stop_handler;
 
 	return $self;
 }
@@ -68,10 +66,9 @@ sub DESTROY {
 	delete $_move_handlers{ $ref};
 	delete $_show_handlers{ $ref};
 	delete $_delay { $ref};
-	delete $_eoq{ $ref}; 
 	delete $_paused{ $ref};
 	delete $_time{ $ref};
-	delete $_eoq_handler{ $ref};
+	delete $_stop_handler{ $ref};
 }
 
 sub run {
@@ -109,7 +106,7 @@ sub run {
 
 		$dt    = $_dt{ $ref};    #these can change
 		$min_t = $_min_t{ $ref}; #during the cycle
-		
+
 		Time::HiRes::sleep( $_delay{ $ref } ) if $_delay{ $ref };
 	}
 
@@ -123,7 +120,7 @@ sub pause {
 	while(1) {
 		SDL::Events::wait_event($_event{ $ref}) or Carp::confess("pause failed waiting for an event");
 		if(
-			$_eoq{ $ref} && do { $_eoq_handler{ $ref}->( $_event{ $ref}, $self ); $_stop{ $ref} }
+			$_stop_handler{ $ref} && do { $_stop_handler{ $ref}->( $_event{ $ref}, $self ); $_stop{ $ref} }
 			or !$callback or $callback->($_event{ $ref}, $self)
 		) {
 			$_current_time{ $ref} = Time::HiRes::time; #so run doesn't catch up with the time paused
@@ -141,7 +138,7 @@ sub _event {
 	my ($self, $ref) = @_;
 	SDL::Events::pump_events();
 	while ( SDL::Events::poll_event( $_event{ $ref} ) ) {
-		$_eoq_handler{ $ref}->( $_event{ $ref}, $self ) if $_eoq{ $ref};
+		$_stop_handler{ $ref}->( $_event{ $ref}, $self ) if $_stop_handler{ $ref};
 		foreach my $event_handler ( @{ $_event_handlers{ $ref} } ) {
 			next unless $event_handler;
 			$event_handler->( $_event{ $ref}, $self );
@@ -273,28 +270,18 @@ sub delay {
 	$_delay{ $ref};
 }
 
-sub exit_on_quit {
+sub stop_handler {
 	my ($self, $arg) = @_;
 	my $ref = refaddr $self;
-	$_eoq{ $ref} = $arg if defined $arg;
+	$_stop_handler{ $ref} = $arg if @_ > 1;
 
-	$_eoq{ $ref};
+	$_stop_handler{ $ref};
 }
-*eoq = \&exit_on_quit;  # alias
 
-sub exit_on_quit_handler {
-	my ($self, $arg) = @_;
-	my $ref = refaddr $self;
-	$_eoq_handler{ $ref} = $arg if defined $arg;
+sub _default_stop_handler {
+	my ($event, $self) = @_;
 
-	$_eoq_handler{ $ref};
-}
-*eoq_handler = \&exit_on_quit_handler; #alias
-
-sub _default_exit_on_quit_handler {
-   my ($self, $event) = @_;
-
-    $self->stop() if $event->type == SDL_QUIT;
+	$self->stop() if $event->type == SDL_QUIT;
 }
 
 sub event {
