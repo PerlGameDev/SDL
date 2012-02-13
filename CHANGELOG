@@ -2,9 +2,15 @@ Revision history for Perl extension SDL_perl.
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
-* 2.537_01 Jan 22 2012
-	- t/core_cd.t: gnu hurd 0.3 handles devices like cdrom strange [FROGGS]
+* 2.537_02 Feb 13 2012
+	- t/core_cd.t: gnu hurd 0.3 handles devices like cdrom strange (skipping tests) [FROGGS]
 	- t/sdlx_fps.t: seems better to try to get 5 fps (slow vm's) [FROGGS]
+	- SDLx::Controller::Interface: weaken tests [FROGGS]
+	- SDL::Mixer::Channels: skipping callback test [FROGGS]
+	- SDL::Version: we can now compare SDL::Version objects like: $version >= 1.2.10 [FROGGS]
+	- SDLx::App::DESTROY: fixed function name for set_video_mode [FROGGS]
+	- SDLx::App: fix for issue 144, setting original screen res when app ends [FROGGS]
+	- t/sdlx_controller_interface.t: adding delay so that slow machines doesnt get a hickup [FROGGS]
 
 * 2.536 Jan 04 2011
 	- using INT2PTR to convert stored pointers to right size and hide warnings [FROGGS]
