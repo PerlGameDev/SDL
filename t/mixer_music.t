@@ -111,8 +111,7 @@ is( SDL::Mixer::Music::play_music( $sample_music, 0 ),
 
 SKIP:
 {
-	skip( 'Version 1.2.7 needed', 2 )
-		unless ( $v->major >= 1 && $v->minor >= 2 && $v->patch >= 7 );
+	skip( 'Version 1.2.7 needed', 2 ) if $v < 1.2.7;
 
 	my $rw = SDL::RWOps->new_file( $audio_test_file, "rb" );
 	my $sample_music_rw = SDL::Mixer::Music::load_MUS_RW( $rw );
@@ -124,8 +123,7 @@ SKIP:
 
 SKIP:
 {
-	skip( 'Version 1.2.9 needed', 2 )
-		unless ( $v->major >= 1 && $v->minor >= 2 && $v->patch >= 9 );
+	skip( 'Version 1.2.9 needed', 2 ) if $v < 1.2.9;
 
 	my $num_decoders = SDL::Mixer::Music::get_num_music_decoders();
 	is( $num_decoders >= 0,
