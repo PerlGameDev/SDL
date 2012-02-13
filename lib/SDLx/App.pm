@@ -33,9 +33,11 @@ sub new {
 
 	unless($screen_w && $screen_h && $screen_d) {
 		my $video_info = SDL::Video::get_video_info();
-		$screen_w      = $video_info->current_w;
-		$screen_h      = $video_info->current_h;
-		$screen_d      = $video_info->vfmt->BitsPerPixel;
+		if($video_info) {
+			$screen_w = $video_info->current_w;
+			$screen_h = $video_info->current_h;
+			$screen_d = $video_info->vfmt->BitsPerPixel;
+		}
 	}
 
 	# SDL_INIT_VIDEO() is 0, so check defined instead of truth.
@@ -225,7 +227,7 @@ sub stash :lvalue{
 
 sub DESTROY {
 	if($screen_w && $screen_h && $screen_d) {
-		SDL::Video::SetVideoMode( $screen_w, $screen_h, $screen_d, SDL_ANYFORMAT );
+		SDL::Video::set_video_mode( $screen_w, $screen_h, $screen_d, SDL_ANYFORMAT );
 	}
 }
 
