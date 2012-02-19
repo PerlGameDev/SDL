@@ -167,6 +167,13 @@ my %subsystems = (
 		},
 		libraries => [qw( SDL SDL_gfx_primitives )],
 	},
+	ScreenX => {
+		file => {
+			from => 'src/SDLx/Screen.xs',
+			to   => 'lib/SDLx/Screen.xs',
+		},
+		libraries => [qw( SDL X11 )],
+	},
 	TimerX => {
 		file => {
 			from => 'src/SDLx/Timer.xs',
@@ -552,6 +559,11 @@ my %libraries = (
 		define => 'HAVE_GLU',
 		header => 'GL/glu.h',
 		lib    => ( $^O =~ /^(MSWin32|cygwin)$/ ) ? 'glu32' : 'GLU', # xxx not nice
+	},
+	X11 => {
+		define => 'HAVE_X11',
+		header => 'X11/Xlib.h',
+		lib    => 'X11',
 	},
 );
 
