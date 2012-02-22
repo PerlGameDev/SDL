@@ -59,16 +59,18 @@ sub mix_func {
 	return @stream;
 }
 
-my $delay           = 100;
-my $audio_test_file = 'test/data/silence.wav';
-my $volume1         = 2;
-my $volume2         = 1;
+my $delay         = 100;
+my $wav_test_file = 'test/data/silence.wav';
+my $ogg_test_file = 'test/data/silence.ogg';
+my $volume1       = 2;
+my $volume2       = 1;
 
 if ( $ENV{'SDL_RELEASE_TESTING'} ) {
-	$delay           = 2000;
-	$audio_test_file = 'test/data/sample.wav';
-	$volume1         = 20;
-	$volume2         = 10;
+	$delay         = 2000;
+	$wav_test_file = 'test/data/sample.wav';
+	$ogg_test_file = 'test/data/sample.ogg';
+	$volume1       = 20;
+	$volume2       = 10;
 }
 
 SDL::Mixer::Music::volume_music($volume1);
@@ -103,23 +105,25 @@ SKIP:
 	is( $mix_func_called > 0, 1, "[hook_music] called $mix_func_called times" );
 }
 
-my $sample_music = SDL::Mixer::Music::load_MUS($audio_test_file);
-isa_ok( $sample_music, 'SDL::Mixer::MixMusic', '[load_MUS]' );
-is( SDL::Mixer::Music::play_music( $sample_music, 0 ),
-	0, "[play_music] plays $audio_test_file"
-);
-
 SKIP:
 {
-	skip( 'Version 1.2.7 needed', 2 ) if $v < 1.2.7;
+	skip( 'Version 1.2.7 needed', 3 ) if $v < 1.2.7;
 
-	my $rw = SDL::RWOps->new_file( $audio_test_file, "rb" );
+	my $rw = SDL::RWOps->new_file( $ogg_test_file, "rb" );
+	isa_ok( $rw, 'SDL::RWOps', '[SDL::RWOps->new_file]' );
 	my $sample_music_rw = SDL::Mixer::Music::load_MUS_RW( $rw );
 	isa_ok( $sample_music_rw, 'SDL::Mixer::MixMusic', '[load_MUS_RW]' );
 	is( SDL::Mixer::Music::play_music( $sample_music_rw, 0 ),
-		0, "[play_music_rw] plays $audio_test_file"
+		0, "[play_music_rw] plays $wav_test_file"
 	);
 }
+
+my $wav_music = SDL::Mixer::Music::load_MUS($wav_test_file);
+my $ogg_music = SDL::Mixer::Music::load_MUS($ogg_test_file);
+isa_ok( $wav_music, 'SDL::Mixer::MixMusic', '[load_MUS]' );
+is( SDL::Mixer::Music::play_music( $wav_music, 0 ),
+	0, "[play_music] plays $wav_test_file"
+);
 
 SKIP:
 {
@@ -137,8 +141,8 @@ SKIP:
 SDL::delay($delay);
 
 is( SDL::Mixer::Music::playing_music(), 1, "[playing_music] music is playing" );
-is( SDL::Mixer::Music::get_music_type($sample_music),
-	MUS_WAV, "[get_music_type] $audio_test_file is MUS_WAV"
+is( SDL::Mixer::Music::get_music_type($wav_music),
+	MUS_WAV, "[get_music_type] $wav_test_file is MUS_WAV"
 );
 is( SDL::Mixer::Music::get_music_type(),
 	MUS_WAV, "[get_music_type] currently playing MUS_WAV"
@@ -174,7 +178,7 @@ is( SDL::Mixer::Music::set_music_cmd("mpeg123 -q"),
 is( SDL::Mixer::Music::set_music_cmd(),
 	0, '[set_music_cmd] return to the internal player'
 );
-is( SDL::Mixer::Music::fade_in_music( $sample_music, 0, 2000 ),
+is( SDL::Mixer::Music::fade_in_music( $wav_music, 0, 2000 ),
 	0, "[fade_in_music] $delay ms"
 );
 
@@ -188,8 +192,8 @@ is( SDL::Mixer::Music::halt_music(), 0, '[halt_music]' );
 SKIP:
 {
 	skip( 'We need an MOD/OGG/MP3 for positioning', 2 )
-		unless $audio_test_file =~ /\.(ogg|mod|mp3)$/;
-	is( SDL::Mixer::Music::fade_in_music_pos( $sample_music, 0, 2000, 2.5 ),
+		unless $ogg_test_file =~ /\.(ogg|mod|mp3)$/;
+	is( SDL::Mixer::Music::fade_in_music_pos( $ogg_music, 0, 2000, 2.5 ),
 		0, "[fade_in_music_pos] $delay ms, beginning at 2.5 ms"
 	);
 	is( SDL::Mixer::Music::set_music_position(2.5),
