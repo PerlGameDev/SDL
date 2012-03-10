@@ -2,9 +2,16 @@ package SDLx::Rect;
 use strict;
 use warnings;
 use Carp;
+require DynaLoader;
+our @ISA = qw(DynaLoader SDL::Rect);
 use base 'SDL::Rect';
 
-our $VERSION = '0.01';
+use SDL::Internal::Loader;
+internal_load_dlls(__PACKAGE__);
+
+bootstrap SDLx::Rect;
+
+#our $VERSION = '0.01';
 
 sub new {
 	my $class = shift;

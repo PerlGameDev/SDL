@@ -1,7 +1,6 @@
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
-#define NEED_newSV_type_GLOBAL
 #include "ppport.h"
 #include "helper.h"
 
@@ -10,7 +9,6 @@
 #endif
 
 #include <SDL.h>
-#include "SDLx/Validate.h"
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 

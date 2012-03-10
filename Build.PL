@@ -146,6 +146,13 @@ my %subsystems = (
 		},
 		libraries => [qw( SDL )],
 	},
+	RectX => {
+		file => {
+			from => 'src/SDLx/Rect.xs',
+			to   => 'lib/SDLx/Rect.xs',
+		},
+		libraries => [qw( SDL )],
+	},
 	Color => {
 		file => {
 			from => 'src/Core/objects/Color.xs',
