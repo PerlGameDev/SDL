@@ -24,7 +24,8 @@ our %EXPORT_TAGS = (
 	app    => $SDL::Constants::EXPORT_TAGS{'SDL::Events/app'},
 	button => $SDL::Constants::EXPORT_TAGS{'SDL::Events/button'},
 	keysym => $SDL::Constants::EXPORT_TAGS{'SDL::Events/keysym'},
-	keymod => $SDL::Constants::EXPORT_TAGS{'SDL::Events/keymod'}
+	keymod => $SDL::Constants::EXPORT_TAGS{'SDL::Events/keymod'},
+	repeat => $SDL::Constants::EXPORT_TAGS{'SDL::Events/repeat'}
 );
 
 1;
