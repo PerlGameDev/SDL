@@ -15,7 +15,7 @@ Most likely you just want to know how to get events for you app.
   use SDL::Event;
   use SDL::Events ':all';
 
-  SDL::init(SDL_INIT_VIDEO); # Event can only be grabbed in the same thread as this 
+  SDL::init(SDL_INIT_VIDEO); # Event can only be grabbed in the same thread as this
 
   ...
 
@@ -27,7 +27,7 @@ Most likely you just want to know how to get events for you app.
       while(  SDL::Events::poll_event($event) )
       {
           #check by event type
-          on_active() if $event->type == SDL_ACTIVEEVENT; 
+          on_active() if $event->type == SDL_ACTIVEEVENT;
           ...
       }
   }
@@ -198,6 +198,11 @@ Export tag ':keymod'
  KMOD_MODE
  KMOD_RESERVED
 
+Export tag ':repeat'
+
+ SDL_DEFAULT_REPEAT_DELAY
+ SDL_DEFAULT_REPEAT_INTERVAL
+
 =head1 METHODS
 
 =head2 pump_events
@@ -206,15 +211,15 @@ Pumps the event loop, gathering events from the input devices.
 
 	pump_events();
 
-pump_events gathers all the pending input information from devices and places it on the event queue. Without calls to pump_events no events would 
-ever be placed on the queue. 
-Often the need for calls to pump_events is hidden from the user since L</poll_event> and L</wait_event> implicitly call pump_events. 
+pump_events gathers all the pending input information from devices and places it on the event queue. Without calls to pump_events no events would
+ever be placed on the queue.
+Often the need for calls to pump_events is hidden from the user since L</poll_event> and L</wait_event> implicitly call pump_events.
 However, if you are not polling or waiting for events (e.g. you are filtering them), then you must call pump_events to force an event queue update.
 
 
-=head2 peep_events (event, num_events, action, mask) 
+=head2 peep_events (event, num_events, action, mask)
 
-Checks the event queue for messages and optionally returns them.  
+Checks the event queue for messages and optionally returns them.
 
 	my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
 
@@ -239,14 +244,14 @@ Examples of mask:
 =item SDL_EVENTMASK (SDL_KEYUP)
 
 =item (SDL_EVENTMASK (SDL_MOUSEBUTTONDOWN) | SDL_EVENTMASK (SDL_MOUSEBUTTONUP))
-    
+
 =item SDL_ALLEVENTS
-   
+
 =item SDL_KEYUPMASK
-    
+
 =item SDL_ALLEVENTS ^ SDL_QUITMASK
 
-=back 
+=back
 
 =head3 RETURN
 
@@ -254,26 +259,26 @@ Number of Events actually stored or -1 if there was an error
 
 =head2 poll_event($event)
 
-Polls for currently pending events. 
+Polls for currently pending events.
 
 If $event is not NULL, the next event is removed from the queue and stored in the L<SDL::Event> structure pointed to by $event.
 
-As this function implicitly calls pump_events, you can only call this function in the thread that set the video mode with 
-L<SDL::Video::set_video_mode|SDL::Video/"set_video_mode">. 
+As this function implicitly calls pump_events, you can only call this function in the thread that set the video mode with
+L<SDL::Video::set_video_mode|SDL::Video/"set_video_mode">.
 
 =head3 RETURN
 
-Returns 1 if there are any pending events, or 0 if there are none available. 
+Returns 1 if there are any pending events, or 0 if there are none available.
 
 =head2 push_event($event)
 
-Pushes an event onto the event queue 
+Pushes an event onto the event queue
 
-The event queue can actually be used as a two way communication channel. Not only can events be read from the queue, but the user can also push 
-their own events onto it. event is a pointer to the event structure you wish to push onto the queue. 
+The event queue can actually be used as a two way communication channel. Not only can events be read from the queue, but the user can also push
+their own events onto it. event is a pointer to the event structure you wish to push onto the queue.
 The event is copied into the queue, and the caller may dispose of the memory pointed to after push_event returns.
 
-Note: Pushing device input events onto the queue doesn't modify the state of the device within SDL. 
+Note: Pushing device input events onto the queue doesn't modify the state of the device within SDL.
 
 This function is thread safe, and can be called from other threads safely.
 
@@ -287,8 +292,8 @@ Waits indefinitely for the next available $event, returning 0 if there was an er
 
 If $event is not NULL, the next event is removed from the queue and stored in $event.
 
-As this function implicitly calls SDL_PumpEvents, you can only call this function in the thread that 
-L<SDL::Video::set_video_mode|SDL::Video/"set_video_mode">.  
+As this function implicitly calls SDL_PumpEvents, you can only call this function in the thread that
+L<SDL::Video::set_video_mode|SDL::Video/"set_video_mode">.
 
 =head3 RETURN
 
@@ -296,7 +301,7 @@ L<SDL::Video::set_video_mode|SDL::Video/"set_video_mode">.
 
 =head2 set_event_filter
 
-Sets up a filter to process all events 
+Sets up a filter to process all events
 
 	my $filter = sub { if($_[0]->type == SDL_ACTIVEEVENT){ return 0} else{ return 1; }};
 
@@ -308,15 +313,15 @@ set_event_filter takes a coderef that it checks all events again. The callback g
 
 	sub { my $event_to_test = shift; ...}
 
-to filter the event return a 0, to pass the filter return a 1. 
+to filter the event return a 0, to pass the filter return a 1.
 
 One B<Caveat> is if you are filtering SDL_QUIT the event will be filtered if it is non-intterupt call ( Window closes normally ). If it is a 
 interrupt SDL_QUIT it will be process on the next event poll. 
 
-Events pushed onto to the queue with L<SDL::Events::push_events|SDL::Events/"push_events"> or L<SDL::Events::peep_events|SDL::Events/"peep_events"> 
+Events pushed onto to the queue with L<SDL::Events::push_events|SDL::Events/"push_events"> or L<SDL::Events::peep_events|SDL::Events/"peep_events">
 do not get filtered.
 
-This callback may run in a different thread. 
+This callback may run in a different thread.
 
 =head2 get_key_state
 
@@ -328,7 +333,7 @@ Get a snapshot of the current keyboard state
 
 Use L<SDL::Events::pump_events|SDL::Events/"pump_events"> to update the state array.
 
-This function gives you the current state after all events have been processed, so if a key or button has been pressed and released before you 
+This function gives you the current state after all events have been processed, so if a key or button has been pressed and released before you
 process events, then the pressed state will never show up in the get_key_state call.
 
 This function doesn't take into account whether shift has been pressed or not.
@@ -345,19 +350,19 @@ Return value is an OR'd combination of  KMOD_*
 
  my $mod_state = SDL::Events::get_mod_state();
 
- # Check which ones are pressed with 
+ # Check which ones are pressed with
 
  # no mod pressed?
- 
+
  print 'no_mod' if  ( $mod_state & KMOD_NONE );
 
- # CTRL or ALT 
+ # CTRL or ALT
 
  print 'ctrl alt' if ($mod_state & KMOD_CTRL || $mod_state & KMOD_ALT );
 
 =head3 MOD VALUES
 
-=over 
+=over
 
 =item KMOD_NONE
 
@@ -383,7 +388,7 @@ Return value is an OR'd combination of  KMOD_*
 
 =item KMOD_MODE
 
-=item KMOD_CTRL 
+=item KMOD_CTRL
 
 same as KMOD_LCTRL|KMOD_RCTRL
 
@@ -414,7 +419,7 @@ Simply pass your desired modifier states into $modstate. This value can be a OR'
 Any KMOD_* constant see L<SDL::Events::get_mod_state|SDL::Events/"get_mod_state"> for constants.
  SDL::Events::set_mod_state( $modstate );
 
-=head2 event_state 
+=head2 event_state
 
 Allows you to set the state of processing certain events
 
@@ -454,7 +459,7 @@ Gets the name of the a SDL virtual keysym
 
 Returns a string with the name of the key sym.
 
-=head2 enable_unicode 
+=head2 enable_unicode
 
 Enable/Disable UNICODE translation
 
@@ -472,7 +477,7 @@ Only key press events will be translated not release events.
 
 Returns the previous translation mode as (1,0).
 
-=head2 enable_key_repeat 
+=head2 enable_key_repeat
 
 Sets keyboard repeat rate
 
@@ -485,40 +490,40 @@ Setting $delay to 0 disables key repeating completely. Good default values are S
 
 Return 0 on success and -1 on fail.
 
-=head2 get_mouse_state 
+=head2 get_mouse_state
 
 Retrieves the current state of the mouse
 
   my ($mask,$x,$y) = @{ SDL::Events::get_mouse_state( ) };
 
-  print 'Button Left pressed' if ($mask & SDL_BUTTON_LMASK);    
+  print 'Button Left pressed' if ($mask & SDL_BUTTON_LMASK);
 
-  print 'Button Right pressed' if ($mask & SDL_BUTTON_RMASK);   
+  print 'Button Right pressed' if ($mask & SDL_BUTTON_RMASK);
 
-  print 'Button Middle pressed' if ($mask & SDL_BUTTON_MMASK);  
+  print 'Button Middle pressed' if ($mask & SDL_BUTTON_MMASK);
 
   print $x.','.$y;
 
-The current button state is returned as a button $bitmask, which can be tested using the the above constants 
+The current button state is returned as a button $bitmask, which can be tested using the the above constants
 
-=head2 get_relative_mouse_state 
+=head2 get_relative_mouse_state
 
 Retrieves the current relative state of the mouse
 
   my ($mask,$x,$y) = @{ SDL::Events::get_mouse_state( ) };
 
-  print 'Button Left pressed' if ($mask & SDL_BUTTON_LMASK);    
+  print 'Button Left pressed' if ($mask & SDL_BUTTON_LMASK);
 
-  print 'Button Right pressed' if ($mask & SDL_BUTTON_RMASK);   
+  print 'Button Right pressed' if ($mask & SDL_BUTTON_RMASK);
 
-  print 'Button Middle pressed' if ($mask & SDL_BUTTON_MMASK);  
+  print 'Button Middle pressed' if ($mask & SDL_BUTTON_MMASK);
 
   print $x.','.$y; # this is relative to the last position of the mouse
 
-The current button state is returned as a button $bitmask, which can be tested using the the above constants 
+The current button state is returned as a button $bitmask, which can be tested using the the above constants
 
 
-=head2 get_app_state 
+=head2 get_app_state
 
 Gets the state of the application
 
@@ -526,7 +531,7 @@ Gets the state of the application
 
 The $app_state is a bitwise combination of:
 
-=over 
+=over
 
 =item SDL_APPMOUSEFOCUS
 
@@ -547,22 +552,22 @@ Application is visible
 
 	warn 'Application Visible' if $app_state & SDL_APPACTIVE
 
-=back 
+=back
 
-=head2 joystick_event_state 
+=head2 joystick_event_state
 
 Enable/disable joystick event polling
 
 	my $status = SDL::Events::joystick_event_state( $state );
 
-This function is used to enable or disable joystick event processing. With joystick event processing disabled you will have to update joystick 
+This function is used to enable or disable joystick event processing. With joystick event processing disabled you will have to update joystick
 states with L<SDL::Joystick::update|SDL::Joystick/"update"> and read the joystick information manually. $state can be:
 
-=over 
+=over
 
 =item SDL_QUERY
 
-=item SDL_ENABLE 
+=item SDL_ENABLE
 
 =item SDL_IGNORE
 
