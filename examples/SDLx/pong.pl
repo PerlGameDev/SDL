@@ -29,7 +29,7 @@ my $paddle2 = {
 	y     => 0,
 	w     => 20,
 	h     => 80,
-	vel   => 250,
+	vel   => 130,
 	y_vel => 0,
 };
 
@@ -143,8 +143,6 @@ sub on_event {
 		my $key = $event->key_sym;
 		$paddle->{y_vel} += $paddle->{vel} if $key == SDLK_UP;
 		$paddle->{y_vel} -= $paddle->{vel} if $key == SDLK_DOWN;
-	} elsif ( $event->type == SDL_QUIT ) {
-		exit;
 	}
 }
 

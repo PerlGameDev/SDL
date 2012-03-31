@@ -7,7 +7,7 @@ use SDL;
 use SDLx::App;
 use SDLx::Text;
 
-my $app = SDLx::App->new( eoq => 1, width => 400, height => 100 );
+my $app = SDLx::App->new( width => 400, height => 100 );
 
 my $text = SDLx::Text->new;
 
