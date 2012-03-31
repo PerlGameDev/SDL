@@ -44,7 +44,6 @@ my $play = $snd->play('test/data/sample.wav');
 # pause or resume on keydown 
 $app->add_event_handler( sub{
 		my $e = $_[0];
-		$_[1]->stop() if $e->type == SDL_QUIT;
 		if( $e->type == SDL_KEYDOWN )
 		{ 
 		print "Ai\n"; 
