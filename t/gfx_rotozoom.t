@@ -65,8 +65,7 @@ is( $dest_h < 200, 1, 'surface_size, resulting height decreases at zoom 0.3' );
 
 SKIP:
 {
-	skip( 'Version 2.0.13 needed', 1 )
-		unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 13 );
+	skip( 'Version 2.0.13 needed', 1 ) if $v < 2.0.13;
 	isa_ok(
 		SDL::GFX::Rotozoom::surface_xy( $src, 1, 1, 1, 1 ),
 		'SDL::Surface', 'surface_xy'
@@ -108,8 +107,7 @@ is( $dest_h > 200, 1,
 
 SKIP:
 {
-	skip( 'Version 2.0.14 needed', 1 )
-		unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 14 );
+	skip( 'Version 2.0.14 needed', 1 ) if $v < 2.0.14;
 	isa_ok(
 		SDL::GFX::Rotozoom::shrink_surface( $src, 1, 1 ),
 		'SDL::Surface', 'shrink_surface'
@@ -119,8 +117,7 @@ SKIP:
 $src = SDL::Surface->new( SDL_SWSURFACE, 100, 200, 32, 0, 0, 0, 0 );
 SKIP:
 {
-	skip( 'Version 2.0.17 needed', 1 )
-		unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 17 );
+	skip( 'Version 2.0.17 needed', 1 ) if $v < 2.0.17;
 	isa_ok(
 		SDL::GFX::Rotozoom::rotate_surface_90_degrees( $src, 1 ),
 		'SDL::Surface', 'rotate_surface_90_degrees'

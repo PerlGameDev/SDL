@@ -37,7 +37,7 @@ use SDL::Mixer::MixChunk;
 
 my $can_open = SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 );
 
-unless($can_open == 0) 
+unless($can_open == 0)
 {
 	plan( skip_all => 'Cannot open audio :'.SDL::get_error() );
 }
@@ -56,8 +56,14 @@ my $callback = sub {
 	printf( "[channel_finished] callback called for channel %d\n", $channel);
 	$finished++;
 };
-SDL::Mixer::Channels::channel_finished($callback);
-pass '[channel_finished] registered callback';
+
+SKIP:
+{
+	skip( 'No callbacks unless SDL_RELEASE_TESTING', 1 )
+		unless $ENV{'SDL_RELEASE_TESTING'};
+	SDL::Mixer::Channels::channel_finished($callback);
+	pass '[channel_finished] registered callback';
+}
 
 my $delay           = 500;
 my $audio_test_file = 'test/data/silence.wav';
@@ -187,9 +193,14 @@ ok( $delay, 'delay definedness madness test #15' );
 SDL::Mixer::close_audio();
 pass '[close_audio] ran';
 
-is( $finished > 0,
+SKIP:
+{
+	skip( 'No callbacks unless SDL_RELEASE_TESTING', 1 )
+		unless $ENV{'SDL_RELEASE_TESTING'};
+	is( $finished > 0,
 		1, '[callback_finished] called the callback got ' . $finished
-  );
+	);
+}
 
 if ($audiodriver) {
 	$ENV{SDL_AUDIODRIVER} = $audiodriver;

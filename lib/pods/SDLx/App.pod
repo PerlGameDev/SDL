@@ -116,8 +116,7 @@ providing all the methods they both provide.
      dt             => 0.1,
      min_t          => 1 / 60,
      delay          => 0,
-     eoq            => 1,
-     eoq_handler    => \&quit,
+     stop_handler   => \&SDLx::Controller::default_stop_handler,
      event          => SDL::Event->new(),
      event_handlers => [],
      move_handlers  => [],
@@ -159,6 +158,7 @@ The window's title, as a string. Defaults to the L</icon_title> if defined, or t
 =item icon_title
 
 The application's icon title, as a string. Defaults to the L</title> if defined, or the file name.
+This will only have an effect under certain operating systems.
 
 =item icon
 
@@ -177,7 +177,7 @@ Defaults to L<SDL_INIT_EVERYTHING|SDL/CONSTANTS>. Alias: C<initialize>.
 
 =item flags
 
-L<SDL::Video flags|SDL::Video/CONSTANTS to specify when calling
+L<SDL::Video flags|SDL::Video/CONSTANTS> to specify when calling
 L<SDL::Video::set_video_mode|SDL::Video/set_video_mode>.
 Flags should be bitwise I<or'ed> together when passing more than one (C<flags => FOO|BAR>).
 All flags have a corresponding named parameter which can be used instead of specifying them here,
@@ -239,7 +239,7 @@ and the display surface centered on a black background. Alias: C<full_screen>.
 =item open_gl
 
 The L<SDL_OPENGL|SDL::Video/CONSTANTS> flag, as a boolean. If true, creates an OpenGL rendering context.
-This uses any C<gl> attributes specified and any others set with L</gl_attribute>. Alias: C<opengl>.
+This uses any C<gl> attributes specified and any others set with L</gl_attribute>. Aliases: C<opengl>, C<gl>.
 
 =item resizable
 
@@ -248,12 +248,14 @@ When the window is resized by the user a L<SDL_VIDEORESIZE|SDL::Events/CONSTANTS
 is generated and L</resize> should be called with the new size.
 
 =item no_frame
+
 The L<SDL_NOFRAME|SDL::Video/CONSTANTS> flag, as a boolean. If true, SDL attempts to create a window
 with no title bar or frame decoration. Fullscreen modes automatically have this flag set.
 
 =item centered
 
-A boolean value. If true, centers the window on the screen using C<$ENV{SDL_VIDEO_CENTERED}>.
+A boolean value. If true, creates the window centered on the screen.
+SDL does this with the C<SDL_VIDEO_CENTERED> environment variable which is set using C<$ENV{SDL_VIDEO_CENTERED}>.
 Alias: C<center>.
 
 =item position
@@ -295,7 +297,7 @@ L</stash>. If not specified, defaults to an empty hash ref.
 This is used internally by L</new> to init SDL with
 L<SDL::init|SDL/init>. If any subsystems are already initialized, it will use
 L<SDL::init_sub_system|SDL/init_sub_system> instead. You should use this whenever you need to
-init anything outside calls to </new>, as it will always do what you want.
+init anything outside calls to L</new>, as it will always do what you want.
 
 If a number is specified, it will initialize SDL in the same way as L<SDL::init|SDL/init> describes.
 If an array ref is specified, each element should be a string corresponding to a flag to specify.
@@ -337,7 +339,7 @@ four arguments do.
 
  $app->resize( $w, $h );
 
-Resize the app to the specified width and height. The surface's depth and flags will remain the same.
+Resizes the app to the specified width and height. The surface's depth and flags will remain the same.
 
 =head2 fullscreen
 
@@ -350,7 +352,8 @@ Returns false if the app fails to go fullscreen for some reason. Otherwise, retu
 
  $app->iconify();
 
-Attempts to iconify the window with L<SDL::Video::wm_iconify_window|SDL::Video/wm_iconify_window>.
+Attempts to minimize the window with L<SDL::Video::wm_iconify_window|SDL::Video/wm_iconify_window>.
+The exact behavior depends on the operating system.
 
 =head2 title
 
@@ -396,8 +399,8 @@ is not specified, it will default to 0.
  my $is_cursor_shown = $app->show_cursor();
  $app->show_cursor( $show );
 
-If no arguments are specified, returns a boolean that will be true if the cursor
-is currently being shown or false otherwise. If an argument is specified, the cursor will be
+With no arguments, returns a value that will be true if the cursor
+is currently being shown or false otherwise. With an argument, the cursor will be
 shown if it is true or hidden otherwise.
 
 =head2 grab_input

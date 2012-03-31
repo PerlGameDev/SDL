@@ -88,9 +88,11 @@ sub new {
 	# keep the screen's original res so we can set the app to that when we're done
 	unless(defined $_screen_w && defined $_screen_h && defined $_screen_d) {
 		my $video_info = SDL::Video::get_video_info();
-		$_screen_w      = $video_info->current_w;
-		$_screen_h      = $video_info->current_h;
-		$_screen_d      = $video_info->vfmt->BitsPerPixel;
+		if($video_info) {
+			$_screen_w = $video_info->current_w;
+			$_screen_h = $video_info->current_h;
+			$_screen_d = $video_info->vfmt->BitsPerPixel;
+		}
 	}
 
 	$f |= SDL::Video::SDL_SWSURFACE  if $sw;
@@ -150,7 +152,7 @@ sub new {
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_SWAP_CONTROL,       $sc  ) if defined $sc;
 		SDL::Video::GL_set_attribute( SDL::Video::SDL_GL_ACCELERATED_VISUAL, $av  ) if defined $av;
 	}
-	
+
 	# icon must be set before set_video_mode
 	SDLx::App->icon( $ico, $icc ) if defined $ico;
 
@@ -191,7 +193,7 @@ sub DESTROY {
 	my ( $self ) = @_;
 
 	# set original screen size when app ends
-	if($_screen_w && $_screen_h && $_screen_d) {
+	if(defined $_screen_w && defined $_screen_h && defined $_screen_d) {
 		SDL::Video::set_video_mode( $_screen_w, $_screen_h, $_screen_d, $self->flags );
 	}
 

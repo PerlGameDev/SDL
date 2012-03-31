@@ -137,13 +137,7 @@ is( SDL::TTF::get_font_style($font),
 
 SKIP:
 {
-	skip( "Version 2.0.10 (or better) needed", 10 )
-		unless $cv->major >= 2
-			&& $cv->minor >= 0
-			&& $cv->patch >= 10
-			&& $lv->major >= 2
-			&& $lv->minor >= 0
-			&& $lv->patch >= 10;
+	skip( "Version 2.0.10 (or better) needed", 10 ) if $cv < 2.0.10 || $lv < 2.0.10;
 	my $font_outline = SDL::TTF::get_font_outline($font);
 	ok( $font_outline >= 0, "[get_font_outline] is $font_outline" );
 	$font_outline++;
