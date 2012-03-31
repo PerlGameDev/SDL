@@ -71,17 +71,17 @@ is( $app->time, 20.3, 'time can be changed with method' );
 $app->stop;
 ok( $app->stopped, 'stopped true when used stop' );
 
-$app = SDLx::Controller->new;
-$app->pause(\&dummy_sub);
-ok( $app->paused, 'paused true when used pause' );
-is( $app->paused, \&dummy_sub, 'paused set to correct callback' );
-$app->pause(\&dummy_sub2);
-is( $app->paused, \&dummy_sub2, 'paused set to correct callback again' );
-$app->stop;
-ok( $app->stopped, 'stopped true when used stop after pause' );
-ok( !$app->paused, 'paused false when used stop after pause' );
-$app->pause(\&dummy_sub);
-ok( !$app->paused, 'paused remains false when used after stop' );
+# $app = SDLx::Controller->new;
+# $app->pause(\&dummy_sub);
+# ok( $app->paused, 'paused true when used pause' );
+# is( $app->paused, \&dummy_sub, 'paused set to correct callback' );
+# $app->pause(\&dummy_sub2);
+# is( $app->paused, \&dummy_sub2, 'paused set to correct callback again' );
+# $app->stop;
+# ok( $app->stopped, 'stopped true when used stop after pause' );
+# ok( !$app->paused, 'paused false when used stop after pause' );
+# $app->pause(\&dummy_sub);
+# ok( !$app->paused, 'paused remains false when used after stop' );
 
 my ($dummy_ref1, $dummy_ref2, $dummy_ref3) = ([], [sub {}, \&dummy_sub], [\&dummy_sub2, sub {}, sub {}]);
 
