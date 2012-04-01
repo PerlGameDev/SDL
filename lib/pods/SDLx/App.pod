@@ -234,7 +234,7 @@ L<update_rect|SDLx::Surface/update_rect> on the entire screen. Aliases: C<double
 The L<SDL_FULLSCREEN|SDL::Video/CONSTANTS> flag, as a boolean. If true, SDL will attempt to use a fullscreen mode,
 changing the hardware resolution to the resolution of the display surface.
 If, for whatever reason, this change is not possible the next higher resolution will be used
-and the display surface centered on a black background. Alias: C<full_screen>.
+and the display surface centered on a black background. Aliases: C<full_screen>, C<full>.
 
 =item open_gl
 

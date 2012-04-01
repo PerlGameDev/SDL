@@ -45,7 +45,7 @@ sub new {
 	$_delay{ $ref }              = (defined $args{delay} && $args{delay} >= 1 ? $args{delay} / 1000 : $args{delay}) || 0; #phasing out ticks, but still accepting them. Remove whenever we break compat
 #	$_paused{ $ref }             = undef;
 	$_time{ $ref }               = $args{time} || 0;
-	$_stop_handler{ $ref }       = $args{stop_handler} || \&default_stop_handler;
+	$_stop_handler{ $ref }       = exists $args{stop_handler} ? $args{stop_handler} : \&default_stop_handler;
 
 	return $self;
 }
