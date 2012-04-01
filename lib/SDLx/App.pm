@@ -56,7 +56,7 @@ sub new {
 	my $af    = $o{any_format};
 	my $hwp   = $o{hardware_palette}  || $o{hw_palette};
 	my $db    = $o{double_buffer}     || $o{double_buf}  || $o{dbl_buf};
-	my $fs    = $o{full_screen}       || $o{fullscreen};
+	my $fs    = $o{full_screen}       || $o{fullscreen}  || $o{full};
 	my $gl    = $o{open_gl}           || $o{opengl}      || $o{gl};
 	my $rs    = $o{resizable}         || $o{resizeable}; # it's a hard word to spell :-)
 	my $nf    = $o{no_frame};
@@ -351,15 +351,6 @@ sub gl_attribute {
 	Carp::cluck( "SDL::Video::GL_get_attribute failed to get GL attribute" )
 		if $returns->[0] < 0;
 	$returns->[1];
-}
-
-# this has been moved to SDLx::Controller in the form of time and sleep
-# this can be removed at any time we wanna break compat
-sub delay {
-	SDL::delay( $_[1] );
-}
-sub ticks {
-	SDL::get_ticks;
 }
 
 1;

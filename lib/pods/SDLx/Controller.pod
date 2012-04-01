@@ -101,7 +101,7 @@ Setting it to 0, as seen above, will not delay the loop at all.
 
 The time, in seconds or milliseconds, to delay after every full L</run> loop. Defaults to 0.
 If you specify a number greater than or equal to 1, it will be treated as milliseconds instead of seconds.
-B<NOTE:> Picking a good delay based on the needs of your game can greatly reduce CPU load and pressure.
+B<NOTE:> Picking a good delay based on the needs of your game can greatly reduce CPU load.
 
 =item event_handlers
 
@@ -419,6 +419,7 @@ As a neat shortcut, the callback is recursively defined and used as both an even
 
 Returns true if the run loop is currently paused. Also returns true when the run loop is about to pause.
 That is, true when the app will complete the current run cycle before pausing.
+This true value is actually the callback you passed with L</pause>.
 This has dual purposes. Firstly, it is useful from within the paused callback as shown below.
 
  sub toggle_pause { # press P to toggle pause
