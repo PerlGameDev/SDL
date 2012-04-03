@@ -209,4 +209,7 @@ is($show_inc, 30, 'called our show handlers exactly 30 times');
 ok( $app->stopped, 'stopped is true after the app is stopped' );
 ok( !$app->paused, 'paused is false. none of that' );
 
+# deprecated
+cmp_ok( $app->ticks, '>', 0, 'ticks is deprecated but still works' );
+
 done_testing;

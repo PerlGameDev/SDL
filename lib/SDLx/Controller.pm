@@ -313,7 +313,7 @@ sub event {
 	$_event{ $ref};
 }
 
-# replacements for SDLx::App->get_ticks() and delay()
+# replacements for SDLx::App::get_ticks() and SDLx::App::delay()
 sub time {
 	my ($self, $arg) = @_;
 	my $ref = refaddr $self;
@@ -323,6 +323,11 @@ sub time {
 }
 sub sleep {
 	return Time::HiRes::sleep( $_[1] );
+}
+
+# deprecated
+sub ticks {
+	return SDL::get_ticks();
 }
 
 1;
