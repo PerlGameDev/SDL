@@ -27,7 +27,8 @@ so they're not listed here.
 
 The OpenGL method C<attribute> is now called C<gl_attribute>.
 
-C<ticks> and C<delay> have been removed and replaced with SDLx::Controller's C<time> and C<sleep>.
+C<delay> has been removed and replaced with SDLx::Controller's C<sleep>. C<ticks> has been deprecated, but left in
+for backcompat.
 
 =item SDLx::Controller
 
