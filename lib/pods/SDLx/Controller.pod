@@ -391,6 +391,7 @@ If the callback returns a false value, the app will stay paused and the process 
 If a L</stop_handler> is defined, then each event will also be passed to that. This will allow the app to be stopped
 while being paused. If the stop handler calls L</stop> then the app will unpause and then stop.
 If your app doesn't have a stop handler then you'll have to handle stopping yourself in the pause callback.
+The app will also unpause if the callback calls L</stop>, regardless of whether the callback then returns true or false.
 
 Below is an example of C<pause> used to implement a pause and unpause when the app loses and gain focus.
 As a neat shortcut, the callback is recursively defined and used as both an event handler and the pause callback.
@@ -419,7 +420,6 @@ As a neat shortcut, the callback is recursively defined and used as both an even
 
 Returns true if the run loop is currently paused. Also returns true when the run loop is about to pause.
 That is, true when the app will complete the current run cycle before pausing.
-This true value is actually the callback you passed with L</pause>.
 This has dual purposes. Firstly, it is useful from within the paused callback as shown below.
 
  sub toggle_pause { # press P to toggle pause
@@ -439,6 +439,8 @@ This has dual purposes. Firstly, it is useful from within the paused callback as
 
 Secondly, it is useful for handlers to tell if the app is about to pause. If L</pause> is called from within an event handler,
 then the move and show handlers can check and respond to L</paused> in the remainder of the run cycle.
+In this time, both C<paused> and L</stopped> will return true. When the app is actually paused, only C<paused> will return true.
+This true value is actually the callback you passed with L</pause>, and can be checked to tell between different pauses.
 For example, a show handler could make the screen say PAUSED when L</paused> is true. This is preferred to having the
 event handler display this, because L</stop> could be called in the meantime.
 
@@ -463,8 +465,9 @@ event handler display this, because L</stop> could be called in the meantime.
  $app->stop_handler($stop_handler);
  $app->event       ($event);
 
-If an argument is passed, modifies the corresponding value to the argument.
-C<dt> and C<min_t> will keep their old value until the beginning of the next C<run> cycle.
+If an argument is passed, modifies the corresponding parameter to the argument.
+For each of these parameters the L</run> loop will give the handlers its old value until the start of the next cycle.
+The L</pause> callback, however, will always receive the new value.
 See L</new> for details on what these params do.
 
 Returns the corresponding value.

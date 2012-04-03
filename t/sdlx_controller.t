@@ -6,10 +6,17 @@ use SDL::Config;
 use SDL::Video;
 use SDL::Color;
 use SDL::Event;
+use SDL::Events;
 use SDLx::Controller;
 use Scalar::Util 'refaddr';
 use lib 't/lib';
 use SDL::TestTool;
+
+# we need video for events to work
+$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
+if ( !SDL::TestTool->init(SDL_INIT_VIDEO) or !SDL::Video::set_video_mode( 640, 480, 32, SDL_SWSURFACE ) ) {
+	plan( skip_all => 'Failed to init video' );
+}
 
 can_ok(
 	'SDLx::Controller',
@@ -69,19 +76,237 @@ is( $app->time, 20.3, 'time can be changed with method' );
 
 # stop and pause
 $app->stop;
-ok( $app->stopped, 'stopped true when used stop' );
+ok( $app->stopped, 'stopped still true when used stop' );
+{
+	my $pass_event;
+	my $pass_app;
+	my $pass_paused_within;
+	my $pass_not_stopped_within;
+	my $pass_not_paused_before;
+	my $pass_not_stopped_before;
+	my $pass_paused_in_cycle;
+	my $pass_stopped_in_cycle;
 
-# $app = SDLx::Controller->new;
-# $app->pause(\&dummy_sub);
-# ok( $app->paused, 'paused true when used pause' );
-# is( $app->paused, \&dummy_sub, 'paused set to correct callback' );
-# $app->pause(\&dummy_sub2);
-# is( $app->paused, \&dummy_sub2, 'paused set to correct callback again' );
-# $app->stop;
-# ok( $app->stopped, 'stopped true when used stop after pause' );
-# ok( !$app->paused, 'paused false when used stop after pause' );
-# $app->pause(\&dummy_sub);
-# ok( !$app->paused, 'paused remains false when used after stop' );
+	my $pause_test;
+	$pause_test = sub {
+		my ($event, $caller) = @_;
+		$pass_event++         if $event->type == SDL_KEYUP;
+		$pass_app++           if $caller == $app;
+		$pass_paused_within++ if $app->paused == $pause_test;
+		$pass_not_stopped_within++ unless $app->stopped;
+
+		$app->stop if $event->type == SDL_QUIT;
+		return;
+	};
+
+	$app = SDLx::Controller->new(
+		stop_handler => undef,
+		show_handlers => [
+			sub {
+				$pass_not_paused_before++  unless $app->paused;
+				$pass_not_stopped_before++ unless $app->stopped;
+			},
+			sub {
+				$pass_not_paused_before++  unless $app->paused;
+				$pass_not_stopped_before++ unless $app->stopped;
+
+				my $event = SDL::Event->new;
+				$event->type(SDL_KEYUP);
+				my $quit_event = SDL::Event->new;
+				$quit_event->type(SDL_QUIT);
+				SDL::Events::push_event($event);
+				SDL::Events::push_event($event);
+				SDL::Events::push_event($quit_event);
+
+				$app->pause(\&dummy_sub);
+				$app->pause($pause_test);
+				$pass_paused_in_cycle++  if $app->paused == $pause_test;
+				$pass_stopped_in_cycle++ if $app->stopped;
+			},
+			sub {
+				$pass_paused_in_cycle++  if $app->paused == $pause_test;
+				$pass_stopped_in_cycle++ if $app->stopped;
+			},
+		],
+	);
+	$app->run;
+
+	ok( $app->stopped, 'stopped true after being paused' );
+	ok( !$app->paused, 'paused not true after stopped' );
+	is( $pass_event,              2, 'pause gets the right event' );
+	is( $pass_app,                3, 'pause gets the app' );
+	is( $pass_paused_within,      3, 'paused returns callback within callback' );
+	is( $pass_not_stopped_within, 3, 'stopped return false within callback' );
+	is( $pass_not_paused_before,  2, 'paused returns false before being paused' );
+	is( $pass_not_stopped_before, 2, 'stopped returns false before being paused' );
+	is( $pass_paused_in_cycle,    2, 'pause returns callback in remaining cycle' );
+	is( $pass_stopped_in_cycle,   2, 'stopped returns true in remaining cycle' );
+}
+
+# callback returning 1 ending pause
+{
+	my $in_callback;
+
+	$app = SDLx::Controller->new(
+		show_handlers => [sub {
+			$app->stop if $in_callback;
+
+			my $event = SDL::Event->new;
+			my $other_event = SDL::Event->new;
+			$other_event->type(SDL_MOUSEBUTTONDOWN);
+			SDL::Events::push_event($event);
+			SDL::Events::push_event($event);
+			SDL::Events::push_event($other_event);
+
+			$app->pause(sub {
+				my ($event) = @_;
+				$in_callback++;
+				return 1 if $event->type == SDL_MOUSEBUTTONDOWN;
+				return;
+			});
+		}],
+	);
+	$app->run;
+
+	ok( $app->stopped, 'stopped true after being paused' );
+	ok( !$app->paused, 'paused not true after stopped' );
+	is( $in_callback, 3, 'callback called exactly three times' );
+}
+
+# stop handler ending pause
+{
+	my $in_callback;
+
+	$app = SDLx::Controller->new(
+		show_handlers => [sub {
+			my $event = SDL::Event->new;
+			my $quit_event = SDL::Event->new;
+			$quit_event->type(SDL_QUIT);
+			SDL::Events::push_event($event);
+			SDL::Events::push_event($event);
+			SDL::Events::push_event($quit_event);
+
+			$app->pause(sub {
+				$in_callback++;
+				return;
+			});
+		}],
+	);
+	$app->run;
+
+	ok( $app->stopped, 'stopped true after being paused' );
+	ok( !$app->paused, 'paused not true after stopped' );
+	is( $in_callback, 2, 'callback only called twice' );
+}
+
+# stop overriding pause
+{
+	my $didnt_override;
+
+	$app = SDLx::Controller->new(
+		show_handlers => [sub {
+			$app->stop;
+
+			my $event = SDL::Event->new;
+			SDL::Events::push_event($event);
+
+			$app->pause(sub {
+				$didnt_override = 1;
+				return 1;
+			});
+		}],
+	);
+	$app->run;
+
+	ok( $app->stopped, 'stopped true after run' );
+	ok( !$app->paused, 'paused never happened' );
+	ok( !$didnt_override, 'pause overrided by stop' );
+}
+{
+	my $didnt_override;
+
+	$app = SDLx::Controller->new(
+		show_handlers => [sub {
+			my $event = SDL::Event->new;
+			SDL::Events::push_event($event);
+
+			$app->pause(sub {
+				$didnt_override = 1;
+				return 1;
+			});
+
+			$app->stop;
+		}],
+	);
+	$app->run;
+
+	SDL::Events::poll_event( $app->event ); # remove unused event
+	ok( !$didnt_override, 'pause overrided by stop' );
+}
+
+# stop and event handlers
+{
+	my $fail_event_before_show;
+	my $pass_stop_handler_event;
+	my $pass_stop_handler_app;
+	my $pass_event_handler_event;
+	my $pass_event_handler_app;
+	my $pass_stopped;
+	my $fail_stopped;
+	my $in_show_handler;
+
+	$app = SDLx::Controller->new(
+		stop_handler => sub {
+			my ($event, $caller) = @_;
+			$fail_event_before_show++ unless $in_show_handler;
+			$pass_stop_handler_event++ if $event->type == SDL_KEYDOWN;
+			$pass_stop_handler_app++ if $caller == $app;
+			$fail_stopped++ if $app->stopped;
+		},
+		event_handlers => [
+			sub {
+				$fail_stopped++ if $app->stopped;
+			},
+			sub {
+				my ($event, $caller) = @_;
+				$fail_event_before_show++ unless $in_show_handler;
+				$pass_event_handler_event++ if $event->type == SDL_KEYDOWN;
+				$pass_event_handler_app++ if $caller == $app;
+				$app->stop if $event->type == SDL_MOUSEBUTTONUP;
+			},
+			sub {
+				$pass_stopped++ if $app->stopped;
+			},
+		],
+		show_handlers => [sub {
+			if($app->stopped) {
+				$pass_stopped++;
+				return;
+			}
+
+			$in_show_handler++;
+
+			my $event = SDL::Event->new;
+			$event->type(SDL_KEYDOWN);
+			my $other_event = SDL::Event->new;
+			$other_event->type(SDL_MOUSEBUTTONUP);
+			SDL::Events::push_event($event);
+			SDL::Events::push_event($event);
+			SDL::Events::push_event($other_event);
+		}],
+	);
+	$app->run;
+
+	ok( $app->stopped, 'stopped true after run' );
+	ok( !$fail_event_before_show,     'event handlers not called before show' );
+	is( $pass_stop_handler_event,  2, 'stop handler got correct event' );
+	is( $pass_stop_handler_app,    3, 'stop handler got app' );
+	is( $pass_event_handler_event, 2, 'event handler got correct event' );
+	is( $pass_event_handler_app,   3, 'event handler got app' );
+	is( $pass_stopped,             2, 'stopped true within cycle' );
+	ok( !$fail_stopped,               'stopped not true before stopped' );
+	is( $in_show_handler,          1, 'got into the show handler once' );
+}
 
 my ($dummy_ref1, $dummy_ref2, $dummy_ref3) = ([], [sub {}, \&dummy_sub], [\&dummy_sub2, sub {}, sub {}]);
 
@@ -118,14 +343,7 @@ $app = SDLx::Controller->new(
 sub dummy_sub  {1}
 sub dummy_sub2 {1}
 
-my @kinds = qw(move show);
-
-# SDL events need a video surface to work
-my $videodriver = $ENV{SDL_VIDEODRIVER};
-$ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
-push @kinds, 'event'
-    if SDL::TestTool->init(SDL_INIT_VIDEO)
-       and SDL::Video::set_video_mode( 640, 480, 32, SDL_SWSURFACE );
+my @kinds = qw(move show event);
 
 foreach my $kind (@kinds) {
     my $method = "add_${kind}_handler";

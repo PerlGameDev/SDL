@@ -42,7 +42,7 @@ sub new {
 	$_event_handlers{ $ref }     = $args{event_handlers} || [];
 	$_move_handlers{ $ref }      = $args{move_handlers}  || [];
 	$_show_handlers{ $ref }      = $args{show_handlers}  || [];
-	$_delay{ $ref }              = (defined $args{delay} && $args{delay} >= 1 ? $args{delay} / 1000 : $args{delay}) || 0; #phasing out ticks, but still accepting them. Remove whenever we break compat
+	$_delay{ $ref }          = defined $args{delay} && $args{delay} >= 1 ? $args{delay} / 1000 : $args{delay} || 0; # accepts seconds or ticks
 #	$_paused{ $ref }             = undef;
 	$_time{ $ref }               = $args{time} || 0;
 	$_stop_handler{ $ref }       = exists $args{stop_handler} ? $args{stop_handler} : \&default_stop_handler;
@@ -72,41 +72,50 @@ sub run {
 	my $ref          = refaddr $self;
 	my $dt           = $_dt{ $ref };
 	my $min_t        = $_min_t{ $ref };
+	my $delay  = $_delay{ $ref };
+
+	# these should never change
+	my $event_handlers = $_event_handlers{ $ref };
+	my $move_handlers  = $_move_handlers{ $ref };
+	my $show_handlers  = $_show_handlers{ $ref };
 
 	# alows us to do stop and run
 	delete $_stop{ $ref };
 	delete $_paused{ $ref };
 
 	my $current_time = Time::HiRes::time;
-	while ( !$_stop{ $ref } ) {
-		$self->_event($ref);
+	Time::HiRes::sleep( $_delay{ $ref } ) if $_delay{ $ref };
 
+	while ( !$_stop{ $ref } ) {
 		my $new_time   = Time::HiRes::time;
 		my $delta_time = $new_time - $current_time;
 		if($delta_time < $min_t) {
 			Time::HiRes::sleep(0.001); # sleep at least a millisecond
-			next;
+			redo;
 		}
 		$current_time = $new_time;
 		my $delta_copy = $delta_time;
 		my $time_ref = \$_time{ $ref};
 
+		$self->_event( $ref, $event_handlers );
+
 		while ( $delta_copy > $dt ) {
-			$self->_move( $ref, 1, $$time_ref ); # a full move
+			$self->_move( $move_handlers, 1, $$time_ref ); # a full move
 			$delta_copy -= $dt;
 			$$time_ref += $dt;
 		}
 		my $step = $delta_copy / $dt;
-		$self->_move( $ref, $step, $$time_ref ); # a partial move
+		$self->_move( $move_handlers, $step, $$time_ref ); # a partial move
 		$$time_ref += $dt * $step;
 
-		$self->_show( $ref, $delta_time );
+		$self->_show( $show_handlers, $delta_time );
 
 		# these can change during the cycle
 		$dt    = $_dt{ $ref};
 		$min_t = $_min_t{ $ref};
+		$delay          = $_delay{ $ref };
 
-		Time::HiRes::sleep( $_delay{ $ref } ) if $_delay{ $ref };
+		Time::HiRes::sleep( $delay ) if $delay;
 	}
 
 	# pause works by stopping the app and running it again
@@ -116,7 +125,7 @@ sub run {
 		$self->_pause($ref);
 
 		# exit out of this sub before going back in so we don't recurse deeper and deeper
-			goto &{ $self->can('run') }
+			goto $self->can('run')
 		unless $_stop{ $ref};
 	}
 }
@@ -141,11 +150,14 @@ sub _pause {
 	my $callback = $_paused{ $ref};
 
 	do {
+		SDL::Events::pump_events(); # don't know if we need this
 		SDL::Events::wait_event( $event ) or Carp::confess("pause failed waiting for an event");
+		$stop_handler->( $event, $self ) if $stop_handler;
 	}
 	until
-		$stop_handler && do { $stop_handler->( $event, $self ); $_stop{ $ref} }
+		$_stop{ $ref } # stop set by stop_handler
 		or !$callback or $callback->( $event, $self )
+		or $_stop{ $ref } # stop set by callback
 	;
 }
 sub pause {
@@ -164,28 +176,31 @@ sub paused {
 }
 
 sub _event {
-	my ($self, $ref) = @_;
+	my ($self, $ref, $event_handlers) = @_;
+	my $stop_handler = $_stop_handler{ $ref };
+	my $event = $_event{ $ref };
+
 	SDL::Events::pump_events();
-	while ( SDL::Events::poll_event( $_event{ $ref} ) ) {
-		$_stop_handler{ $ref}->( $_event{ $ref}, $self ) if $_stop_handler{ $ref};
-		foreach my $event_handler ( @{ $_event_handlers{ $ref} } ) {
+	while ( SDL::Events::poll_event( $event ) ) {
+		$stop_handler->( $event, $self ) if $stop_handler;
+		foreach my $event_handler ( @$event_handlers ) {
 			next unless $event_handler;
-			$event_handler->( $_event{ $ref}, $self );
+			$event_handler->( $event, $self );
 		}
 	}
 }
 
 sub _move {
-	my ($self, $ref, $move_portion, $t) = @_;
-	foreach my $move_handler ( @{ $_move_handlers{ $ref} } ) {
+	my ($self, $move_handlers, $move_portion, $t) = @_;
+	foreach my $move_handler ( @$move_handlers ) {
 		next unless $move_handler;
 		$move_handler->( $move_portion, $self, $t );
 	}
 }
 
 sub _show {
-	my ($self, $ref, $delta_ticks) = @_;
-	foreach my $show_handler ( @{ $_show_handlers{ $ref} } ) {
+	my ($self, $show_handlers, $delta_ticks) = @_;
+	foreach my $show_handler ( @$show_handlers ) {
 		next unless $show_handler;
 		$show_handler->( $delta_ticks, $self );
 	}
