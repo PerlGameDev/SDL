@@ -35,17 +35,17 @@ sub new {
 
 	my $ref = refaddr $self;
 
-	$_dt{ $ref }                 = defined $args{dt}    ? $args{dt}    : 0.1;
-	$_min_t{ $ref }              = defined $args{min_t} ? $args{min_t} : 1 / 60;
-	$_stop{ $ref }               = 1;
-	$_event{ $ref }              = $args{event} || SDL::Event->new();
-	$_event_handlers{ $ref }     = $args{event_handlers} || [];
-	$_move_handlers{ $ref }      = $args{move_handlers}  || [];
-	$_show_handlers{ $ref }      = $args{show_handlers}  || [];
-	$_delay{ $ref }              = (defined $args{delay} && $args{delay} >= 1 ? $args{delay} / 1000 : $args{delay}) || 0; #phasing out ticks, but still accepting them. Remove whenever we break compat
-#	$_paused{ $ref }             = undef;
-	$_time{ $ref }               = $args{time} || 0;
-	$_stop_handler{ $ref }       = exists $args{stop_handler} ? $args{stop_handler} : \&default_stop_handler;
+	$_dt{ $ref }             = defined $args{dt}    ? $args{dt}    : 0.1;
+	$_min_t{ $ref }          = defined $args{min_t} ? $args{min_t} : 1 / 60;
+	$_stop{ $ref }           = 1;
+	$_event{ $ref }          = $args{event} || SDL::Event->new();
+	$_event_handlers{ $ref } = $args{event_handlers} || [];
+	$_move_handlers{ $ref }  = $args{move_handlers}  || [];
+	$_show_handlers{ $ref }  = $args{show_handlers}  || [];
+	$_delay{ $ref }          = defined $args{delay} && $args{delay} >= 1 ? $args{delay} / 1000 : $args{delay} || 0; # accepts seconds or ticks
+#	$_paused{ $ref }         = undef;
+	$_time{ $ref }           = $args{time} || 0;
+	$_stop_handler{ $ref }   = exists $args{stop_handler} ? $args{stop_handler} : \&default_stop_handler;
 
 	return $self;
 }
@@ -54,70 +54,79 @@ sub DESTROY {
 	my $self = shift;
 	my $ref = refaddr $self;
 
-	delete $_dt{ $ref};
-	delete $_min_t{ $ref};
-	delete $_stop{ $ref};
-	delete $_event{ $ref};
-	delete $_event_handlers{ $ref};
-	delete $_move_handlers{ $ref};
-	delete $_show_handlers{ $ref};
-	delete $_delay { $ref};
-	delete $_paused{ $ref};
-	delete $_time{ $ref};
-	delete $_stop_handler{ $ref};
+	delete $_dt{ $ref };
+	delete $_min_t{ $ref };
+	delete $_stop{ $ref };
+	delete $_event{ $ref };
+	delete $_event_handlers{ $ref };
+	delete $_move_handlers{ $ref };
+	delete $_show_handlers{ $ref };
+	delete $_delay { $ref };
+	delete $_paused{ $ref };
+	delete $_time{ $ref };
+	delete $_stop_handler{ $ref };
 }
 
 sub run {
-	my ($self)       = @_;
-	my $ref          = refaddr $self;
-	my $dt           = $_dt{ $ref };
-	my $min_t        = $_min_t{ $ref };
+	my ($self) = @_;
+	my $ref = refaddr $self;
+	my $dt     = $_dt{ $ref };
+	my $min_t  = $_min_t{ $ref };
+	my $delay  = $_delay{ $ref };
+	
+	# these should never change
+	my $event_handlers = $_event_handlers{ $ref };
+	my $move_handlers  = $_move_handlers{ $ref };
+	my $show_handlers  = $_show_handlers{ $ref };
 
 	# alows us to do stop and run
 	delete $_stop{ $ref };
 	delete $_paused{ $ref };
 
 	my $current_time = Time::HiRes::time;
+	Time::HiRes::sleep( $_delay{ $ref } ) if $_delay{ $ref };
+	
 	while ( !$_stop{ $ref } ) {
-		$self->_event($ref);
-
 		my $new_time   = Time::HiRes::time;
 		my $delta_time = $new_time - $current_time;
-		if($delta_time < $min_t) {
-			Time::HiRes::sleep(0.001); # sleep at least a millisecond
-			next;
+		if( $delta_time < $min_t ) {
+			Time::HiRes::sleep( 0.001 ); # sleep at least a millisecond
+			redo;
 		}
 		$current_time = $new_time;
 		my $delta_copy = $delta_time;
-		my $time_ref = \$_time{ $ref};
+		my $time_ref = \$_time{ $ref };
+
+		$self->_event( $ref, $event_handlers );
 
 		while ( $delta_copy > $dt ) {
-			$self->_move( $ref, 1, $$time_ref ); # a full move
+			$self->_move( $move_handlers, 1, $$time_ref ); # a full move
 			$delta_copy -= $dt;
 			$$time_ref += $dt;
 		}
 		my $step = $delta_copy / $dt;
-		$self->_move( $ref, $step, $$time_ref ); # a partial move
+		$self->_move( $move_handlers, $step, $$time_ref ); # a partial move
 		$$time_ref += $dt * $step;
 
-		$self->_show( $ref, $delta_time );
+		$self->_show( $show_handlers, $delta_time );
 
 		# these can change during the cycle
-		$dt    = $_dt{ $ref};
-		$min_t = $_min_t{ $ref};
-
-		Time::HiRes::sleep( $_delay{ $ref } ) if $_delay{ $ref };
+		$dt             = $_dt{ $ref };
+		$min_t          = $_min_t{ $ref };
+		$delay          = $_delay{ $ref };
+		
+		Time::HiRes::sleep( $delay ) if $delay;
 	}
 
 	# pause works by stopping the app and running it again
 	if( $_paused{ $ref } ) {
-		delete $_stop{ $ref};
+		delete $_stop{ $ref };
 
 		$self->_pause($ref);
 
 		# exit out of this sub before going back in so we don't recurse deeper and deeper
-			goto &{ $self->can('run') }
-		unless $_stop{ $ref};
+			goto $self->can('run')
+		unless $_stop{ $ref };
 	}
 }
 
@@ -136,16 +145,19 @@ sub stopped {
 
 sub _pause {
 	my ($self, $ref) = @_;
-	my $event = $_event{ $ref};
-	my $stop_handler = $_stop_handler{ $ref};
-	my $callback = $_paused{ $ref};
+	my $event = $_event{ $ref };
+	my $stop_handler = $_stop_handler{ $ref };
+	my $callback = $_paused{ $ref };
 
 	do {
+		SDL::Events::pump_events(); # don't know if we need this
 		SDL::Events::wait_event( $event ) or Carp::confess("pause failed waiting for an event");
+		$stop_handler->( $event, $self ) if $stop_handler;
 	}
 	until
-		$stop_handler && do { $stop_handler->( $event, $self ); $_stop{ $ref} }
+		$_stop{ $ref } # stop set by stop_handler
 		or !$callback or $callback->( $event, $self )
+		or $_stop{ $ref } # stop set by callback
 	;
 }
 sub pause {
@@ -153,10 +165,10 @@ sub pause {
 	my $ref = refaddr $self;
 
 	# if we're going to stop we don't want to pause
-	return if !$_paused{ $ref} and $_stop{ $ref};
+	return if !$_paused{ $ref } and $_stop{ $ref };
 
-	$_paused{ $ref} = $callback;
-	$_stop{ $ref} = 1;
+	$_paused{ $ref } = $callback;
+	$_stop{ $ref } = 1;
 }
 sub paused {
 	# returns the callback (always true) if the app is paused or about to pause
@@ -164,28 +176,31 @@ sub paused {
 }
 
 sub _event {
-	my ($self, $ref) = @_;
+	my ($self, $ref, $event_handlers) = @_;
+	my $stop_handler = $_stop_handler{ $ref };
+	my $event = $_event{ $ref };
+	
 	SDL::Events::pump_events();
-	while ( SDL::Events::poll_event( $_event{ $ref} ) ) {
-		$_stop_handler{ $ref}->( $_event{ $ref}, $self ) if $_stop_handler{ $ref};
-		foreach my $event_handler ( @{ $_event_handlers{ $ref} } ) {
+	while ( SDL::Events::poll_event( $event ) ) {
+		$stop_handler->( $event, $self ) if $stop_handler;
+		foreach my $event_handler ( @$event_handlers ) {
 			next unless $event_handler;
-			$event_handler->( $_event{ $ref}, $self );
+			$event_handler->( $event, $self );
 		}
 	}
 }
 
 sub _move {
-	my ($self, $ref, $move_portion, $t) = @_;
-	foreach my $move_handler ( @{ $_move_handlers{ $ref} } ) {
+	my ($self, $move_handlers, $move_portion, $t) = @_;
+	foreach my $move_handler ( @$move_handlers ) {
 		next unless $move_handler;
 		$move_handler->( $move_portion, $self, $t );
 	}
 }
 
 sub _show {
-	my ($self, $ref, $delta_ticks) = @_;
-	foreach my $show_handler ( @{ $_show_handlers{ $ref} } ) {
+	my ($self, $show_handlers, $delta_ticks) = @_;
+	foreach my $show_handler ( @$show_handlers ) {
 		next unless $show_handler;
 		$show_handler->( $delta_ticks, $self );
 	}
@@ -199,27 +214,27 @@ sub _add_handler {
 
 sub add_move_handler {
 	my $ref = refaddr $_[0];
-	return _add_handler( $_move_handlers{ $ref}, $_[1] );
+	return _add_handler( $_move_handlers{ $ref }, $_[1] );
 }
 
 sub add_event_handler {
 	my $ref = refaddr $_[0];
 	Carp::confess 'SDLx::App or a Display (SDL::Video::get_video_mode) must be made'
 		unless SDL::Video::get_video_surface();
-	return _add_handler( $_event_handlers{ $ref}, $_[1] );
+	return _add_handler( $_event_handlers{ $ref }, $_[1] );
 }
 
 sub add_show_handler {
 	my $ref = refaddr $_[0];
-	return _add_handler( $_show_handlers{ $ref}, $_[1] );
+	return _add_handler( $_show_handlers{ $ref }, $_[1] );
 }
 
 sub _remove_handler {
 	my ( $arr_ref, $id ) = @_;
 	if ( ref $id ) {
 		($id) = grep {
-					$id eq $arr_ref->[$_]
-				} 0..$#{$arr_ref};
+			$id eq $arr_ref->[$_]
+		} 0..$#{$arr_ref};
 
 		if ( !defined $id ) {
 			Carp::cluck("$id is not currently a handler of this type");
@@ -270,33 +285,33 @@ sub show_handlers  { $_show_handlers{ refaddr $_[0] } }
 sub dt {
 	my ($self, $arg) = @_;
 	my $ref = refaddr $self;
-	$_dt{ $ref} = $arg if defined $arg;
+	$_dt{ $ref } = $arg if defined $arg;
 
-	$_dt{ $ref};
+	$_dt{ $ref };
 }
 
 sub min_t {
 	my ($self, $arg) = @_;
 	my $ref = refaddr $self;
-	$_min_t{ $ref} = $arg if defined $arg;
+	$_min_t{ $ref } = $arg if defined $arg;
 
-	$_min_t{ $ref};
+	$_min_t{ $ref };
 }
 
 sub delay {
 	my ($self, $arg) = @_;
 	my $ref = refaddr $self;
-	$_delay{ $ref} = $arg if defined $arg;
+	$_delay{ $ref } = $arg if defined $arg;
 
-	$_delay{ $ref};
+	$_delay{ $ref };
 }
 
 sub stop_handler {
 	my ($self, $arg) = @_;
 	my $ref = refaddr $self;
-	$_stop_handler{ $ref} = $arg if @_ > 1;
+	$_stop_handler{ $ref } = $arg if @_ > 1;
 
-	$_stop_handler{ $ref};
+	$_stop_handler{ $ref };
 }
 
 sub default_stop_handler {
@@ -308,18 +323,18 @@ sub default_stop_handler {
 sub event {
 	my ($self, $arg) = @_;
 	my $ref = refaddr $self;
-	$_event{ $ref} = $arg if defined $arg;
+	$_event{ $ref } = $arg if defined $arg;
 
-	$_event{ $ref};
+	$_event{ $ref };
 }
 
 # replacements for SDLx::App::get_ticks() and SDLx::App::delay()
 sub time {
 	my ($self, $arg) = @_;
 	my $ref = refaddr $self;
-	$_time{ $ref} = $arg if defined $arg;
+	$_time{ $ref } = $arg if defined $arg;
 
-	$_time{ $ref};
+	$_time{ $ref };
 }
 sub sleep {
 	return Time::HiRes::sleep( $_[1] );
