@@ -123,6 +123,14 @@ surfacex_get_pixel_xs ( surface, x, y )
 
 
 void
+surfacex_set_pixel_ptr ( surface, pointer )
+    SDL_Surface *surface
+    void *pointer
+    CODE:
+	surface->pixels = pointer
+
+
+void
 surfacex_set_pixel_xs ( surface, x, y, value )
     SDL_Surface *surface
     int x

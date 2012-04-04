@@ -103,6 +103,7 @@ SDL_RWops*		O_OBJECT
 SDL_svg_context*	T_PTR
 int			T_IV
 intArray		T_ARRAY
+void *			T_PTR
 
 OUTPUT
 
