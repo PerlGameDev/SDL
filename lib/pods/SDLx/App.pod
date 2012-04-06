@@ -322,7 +322,7 @@ descriptions of what each flag does.
 Returns the width, height and depth of the user's screen using
 L<SDL::Video::get_video_info|SDL::Video/get_video_info>.
 This can be called before or after calling L</new>.
-Initializing the video subsytem will be handled correctly no matter what thanks to
+Initializing the video subsystem will be handled correctly no matter what thanks to
 L<SDLx::App::init|/init>.
 
 =head2 set_video_mode
@@ -371,7 +371,7 @@ icon title the same, or a string to modify them.
 
 Sets the window's icon.
 This must be called before creating the display surface, so SDL::Image can not be used.
-If a filename is specified, it is loaded withL<SDL::Video::load_BMP|SDL::Video/load_BMP>.
+If a filename is specified, it is loaded with L<SDL::Video::load_BMP|SDL::Video/load_BMP>.
 Otherwise, the first argument should be a surface. Win32 icons must be 32x32.
 The C<$color> argument is optional and, if specified, is used to set the icon's color key (transparent pixel).
 It should be an RGB color as either a number or array ref.
@@ -416,6 +416,8 @@ grab input is on or false if it is off. If an argument is specified, grab input 
 if it is true or off otherwise.
 
 =head2 sync
+
+ $app->sync();
 
 Swaps the OpenGL buffers and does a full update of the screen with
 L<SDL::Video::GL_swap_buffers|SDL::Video/GL_swap_buffers> if OpenGL is being used.
