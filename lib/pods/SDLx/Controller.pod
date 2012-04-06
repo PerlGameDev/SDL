@@ -199,7 +199,7 @@ and back to false when it is lifted.
          $event->type == SDL_MOUSEBUTTONUP   ? 0 : undef
      ;
      return unless defined $state; # not a mouse click
-     
+
      if($event->button_button == SDL_BUTTON_LEFT) {
          $click = $state;
      }

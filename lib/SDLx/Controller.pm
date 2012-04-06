@@ -14,6 +14,7 @@ use Scalar::Util 'refaddr';
 # inside out, so this can work as the superclass of another class
 my %_dt;
 my %_min_t;
+my %_max_t;
 my %_stop;
 my %_event;
 my %_event_handlers;
@@ -37,6 +38,7 @@ sub new {
 
 	$_dt{ $ref }                 = defined $args{dt}    ? $args{dt}    : 0.1;
 	$_min_t{ $ref }              = defined $args{min_t} ? $args{min_t} : 1 / 60;
+	$_max_t{ $ref }          = defined $args{max_t} ? $args{max_t} : 0.5;
 	$_stop{ $ref }               = 1;
 	$_event{ $ref }              = $args{event} || SDL::Event->new();
 	$_event_handlers{ $ref }     = $args{event_handlers} || [];
@@ -56,6 +58,7 @@ sub DESTROY {
 
 	delete $_dt{ $ref};
 	delete $_min_t{ $ref};
+	delete $_max_t{ $ref };
 	delete $_stop{ $ref};
 	delete $_event{ $ref};
 	delete $_event_handlers{ $ref};
@@ -71,7 +74,6 @@ sub run {
 	my ($self)       = @_;
 	my $ref          = refaddr $self;
 	my $dt           = $_dt{ $ref };
-	my $min_t        = $_min_t{ $ref };
 	my $delay  = $_delay{ $ref };
 
 	# these should never change
@@ -84,16 +86,17 @@ sub run {
 	delete $_paused{ $ref };
 
 	my $current_time = Time::HiRes::time;
-	Time::HiRes::sleep( $_delay{ $ref } ) if $_delay{ $ref };
+	Time::HiRes::sleep( $delay ) if $delay;
 
 	while ( !$_stop{ $ref } ) {
 		my $new_time   = Time::HiRes::time;
 		my $delta_time = $new_time - $current_time;
-		if($delta_time < $min_t) {
+		if( $delta_time < $_min_t{ $ref } ) {
 			Time::HiRes::sleep(0.001); # sleep at least a millisecond
 			redo;
 		}
 		$current_time = $new_time;
+		$delta_time = $_max_t{ $ref } if $delta_time > $_max_t{ $ref };
 		my $delta_copy = $delta_time;
 		my $time_ref = \$_time{ $ref};
 
@@ -110,12 +113,11 @@ sub run {
 
 		$self->_show( $show_handlers, $delta_time );
 
+		Time::HiRes::sleep( $delay ) if $delay;
+
 		# these can change during the cycle
 		$dt    = $_dt{ $ref};
-		$min_t = $_min_t{ $ref};
 		$delay          = $_delay{ $ref };
-
-		Time::HiRes::sleep( $delay ) if $delay;
 	}
 
 	# pause works by stopping the app and running it again
@@ -123,6 +125,8 @@ sub run {
 		delete $_stop{ $ref};
 
 		$self->_pause($ref);
+
+		delete $_paused{ $ref };
 
 		# exit out of this sub before going back in so we don't recurse deeper and deeper
 			goto $self->can('run')
