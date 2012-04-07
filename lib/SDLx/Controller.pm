@@ -171,8 +171,8 @@ sub pause {
 	# if we're going to stop we don't want to pause
 	return if !$_paused{ $ref} and $_stop{ $ref};
 
+	$_stop{ $ref } = 1;
 	$_paused{ $ref} = $callback;
-	$_stop{ $ref} = 1;
 }
 sub paused {
 	# returns the callback (always true) if the app is paused or about to pause
