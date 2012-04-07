@@ -38,7 +38,7 @@ sub new {
 
 	$_dt{ $ref }             = defined $args{dt}    ? $args{dt}    : 0.1;
 	$_min_t{ $ref }          = defined $args{min_t} ? $args{min_t} : 1 / 60;
-	$_max_t{ $ref }          = defined $args{max_t} ? $args{max_t} : 0.5;
+	$_max_t{ $ref }          = defined $args{max_t} ? $args{max_t} : 0.1;
 	$_stop{ $ref }           = 1;
 	$_event{ $ref }          = $args{event} || SDL::Event->new();
 	$_event_handlers{ $ref } = $args{event_handlers} || [];
@@ -350,7 +350,3 @@ sub ticks {
 }
 
 1;
-
-__END__
-
-
