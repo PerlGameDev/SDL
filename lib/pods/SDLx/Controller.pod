@@ -58,6 +58,7 @@ such as pausing the game.
  SDLx::Controller->new(
      dt             => 0.05,
      min_t          => 0,
+     max_t          => 0.05,
      delay          => 1 / 200,
      event_handlers => [ @event_callbacks ],
      move_handlers  => [ @move_callbacks ],
@@ -74,7 +75,7 @@ All params are optional and have sane defaults.
 
 =item dt
 
-The length, in seconds, of a full movement step. Defaults to 0.1.
+The time, in seconds, of a full movement step. Defaults to 0.1.
 In most cases, the C<dt> could be set to any number and the game could run almost identically
 (except for floating-point precision differences). This is because B<the C<dt> is an enforcement of the maximum time
 between calling movement handlers>. The actual time between calling move handlers may be much less, as the movement handlers
@@ -96,6 +97,14 @@ The minimum time, in seconds, that has to accumulate before any move or show han
 A C<min_t> of 1 / 60 ensures that the controller can update the screen at a maximum of 60 times per second.
 A "V-Sync" such as this is necessary to prevent video "tear", which occurs when the app is updating faster than the monitor
 can display. Setting it to 0, as seen above, will not delay the loop at all.
+
+=item max_t
+
+The maximum time, in seconds, that the movement handlers are allowed to handle in a single cycle of the run loop.
+If more time has passed since the last cycle, this time will not be handled and the game will slow down.
+This is to protect against the slippery slope effect that happens when lag causes more movement handlers to be called
+which, in turn, causes more lag. Setting C<max_t> to the same value as C<dt> guarantees that movement handlers will each
+only be called once per frame. Defaults to 0.1, meaning the game will slow down if it is running at lower than 10 FPS.
 
 =item delay
 
