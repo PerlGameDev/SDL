@@ -144,7 +144,7 @@ sub stop {
 }
 sub stopped {
 	# returns true if the app is stopped or about to stop
-	$_stop{ refaddr $_[0]};
+	$_stop{ refaddr $_[0] };
 }
 
 sub _pause {
@@ -171,12 +171,12 @@ sub pause {
 	# if we're going to stop we don't want to pause
 	return if !$_paused{ $ref } and $_stop{ $ref };
 
-	$_paused{ $ref } = $callback;
 	$_stop{ $ref } = 1;
+	$_paused{ $ref } = $callback;
 }
 sub paused {
 	# returns the callback (always true) if the app is paused or about to pause
-	$_paused{ refaddr $_[0]};
+	$_paused{ refaddr $_[0] };
 }
 
 sub _event {

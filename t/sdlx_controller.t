@@ -173,32 +173,6 @@ ok( $app->stopped, 'stopped still true when used stop' );
 	is( $in_callback, 3, 'callback called exactly three times' );
 }
 
-# stop handler ending pause
-{
-	my $in_callback;
-
-	$app = SDLx::Controller->new(
-		show_handlers => [sub {
-			my $event = SDL::Event->new;
-			my $quit_event = SDL::Event->new;
-			$quit_event->type(SDL_QUIT);
-			SDL::Events::push_event($event);
-			SDL::Events::push_event($event);
-			SDL::Events::push_event($quit_event);
-
-			$app->pause(sub {
-				$in_callback++;
-				return;
-			});
-		}],
-	);
-	$app->run;
-
-	ok( $app->stopped, 'stopped true after being paused' );
-	ok( !$app->paused, 'paused not true after stopped' );
-	is( $in_callback, 2, 'callback only called twice' );
-}
-
 # stop overriding pause
 {
 	my $didnt_override;
@@ -338,6 +312,7 @@ is($app->stop_handler, \&dummy_sub2, 'stop_handler set in constructor' );
 $app = SDLx::Controller->new(
 	dt    => 0.1,
 	min_t => 0.5,
+	max_t => 1e9999,
 );
 
 sub dummy_sub  {1}
