@@ -172,18 +172,12 @@ sub new {
 
 sub set_video_mode {
 	my ( $self, $w, $h, $d, $f ) = @_;
-
 	my $surface = SDL::Video::set_video_mode( $w, $h, $d, $f )
 		or Carp::confess( "set_video_mode failed: ", SDL::get_error() );
 	$surface = SDLx::Surface->new( surface => $surface );
 
 	# if we already have an app
 	if( ref $self ) {
-		# make the app scalar ref point to the new C surface object
-		# luckily, we keep the app's SDLx::Controller like this
-		# because its inside-out-ness pays attention to the address of the SV and not the C object
-		bless $surface, ref $self;
-		$$self = $$surface;
 		return $self;
 	}
 	return bless $surface, $self;
