@@ -69,7 +69,7 @@ Export tag: ':video'
  SDL_SRCCOLORKEY     Use colorkey blitting
  SDL_RLEACCELOK      Private flag
  SDL_RLEACCEL        Accelerated colorkey blitting with RLE
- SDL_SRCALPHA        Use alpha blending blit
+ SDL_SRCALPHA        Use alpha blending blit (per-surface alpha)
  SDL_PREALLOC        Use preallocated memory
 
 Export tag ':overlay'
@@ -692,7 +692,26 @@ but this is not the case with C<SDL::Video::blit_surface>. Like most surface man
 with OpenGL.
 
 The results of blitting operations vary greatly depending on whether C<SDL_SRCALPHA> is set or not. See L<SDL::Video::set_alpha|/set_alpha> 
-for an explanation of how this affects your results. Colorkeying and alpha attributes also interact with surface blitting.
+for an explanation of how this affects your results. Colorkeying and alpha attributes also interact with surface blitting, as the following pseudo-code should hopefully explain.
+
+ if (source surface has SDL_SRCALPHA set) {
+    if (source surface has alpha channel (that is, surface->format->Amask != 0))
+        blit using per-pixel alpha, ignoring any colour key
+    else {
+        if (source surface has SDL_SRCCOLORKEY set)
+            blit using the colour key AND the per-surface alpha value
+        else
+            blit using the per-surface alpha value
+    }
+ } else {
+    if (source surface has SDL_SRCCOLORKEY set)
+        blit using the colour key
+    else
+        ordinary opaque rectangular blit
+ }
+
+See L<SDL::PixelFormat/"[RGBA]mask"> for details on C<< surface->format->Amask >>.
+
 C<SDL::Video::blit_surface> doesn't returns anything.
 
 For an example see L<SDL::Video::load_BMP|/load_BMP>.
