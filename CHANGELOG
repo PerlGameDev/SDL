@@ -2,6 +2,27 @@ Revision history for Perl extension SDL_perl.
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+* 2.537_03 Apr 12 2012
+	- SDLx::App made the docs a lot better [Blaizer]
+	- SDLx::App changed around shortcut names in the constructor [Blaizer]
+	- SDLx::App added and improved parameters of the constructor, see docs [Blaizer]
+	- SDLx::App updated methods resize, title, icon, error, show_cursor, grab_input [Blaizer]
+	- SDLx::App fullscreen method works better [Blaizer]
+	- SDLx::App new init method does our initializing right [Blaizer]
+	- SDLx::App new set_video_mode method does set_video_mode for SDLx::App [Blaizer]
+	- SDLx::App new screen_size method returns the user's screen size [Blaizer]
+	- SDLx::App warp method renamed to warp_cursor, attribute renamed to gl_attribute [Blaizer]
+	- SDLx::App fix to return the user's resolution to normal when a fullscreen app closes [FROGGS]
+	- SDLx::App removed delay method and deprecated get_ticks [Blaizer]
+	- SDLx::Controller removed eoq, its action is on by default and implemented by stop_handler [Blaizer]
+	- SDLx::Controller made the docs a lot better, even proofread them [Blaizer]
+	- SDLx::Controller pause works by stopping the app [Blaizer]
+	- SDLx::Controller added stopped and paused methods to tell what the app is doing [Blaizer]
+	- SDLx::Controller added max_t param, by default slows down apps going at less than 10 FPS [Blaizer]
+	- SDLx::Controller added time and sleep methods to replace get_ticks and delay [Blaizer]
+	- SDLx::Controller added some tests for pausing and events [Blaizer]
+	- SDLx::Controller removed current_time parameter [Blaizer]
+
 * 2.537_02 Feb 13 2012
 	- t/core_cd.t: gnu hurd 0.3 handles devices like cdrom strange (skipping tests) [FROGGS]
 	- t/sdlx_fps.t: seems better to try to get 5 fps (slow vm's) [FROGGS]

@@ -58,7 +58,7 @@ such as pausing the game.
  SDLx::Controller->new(
      dt             => 0.05,
      min_t          => 0,
-     max_t          => 0.05,
+     max_t          => 1e9999,
      delay          => 1 / 200,
      event_handlers => [ @event_callbacks ],
      move_handlers  => [ @move_callbacks ],
@@ -105,6 +105,7 @@ If more time has passed since the last cycle, this time will not be handled and 
 This is to protect against the slippery slope effect that happens when lag causes more movement handlers to be called
 which, in turn, causes more lag. Setting C<max_t> to the same value as C<dt> guarantees that movement handlers will each
 only be called once per frame. Defaults to 0.1, meaning the game will slow down if it is running at lower than 10 FPS.
+Setting it to 1e9999 (or infinity), as seen above, will disable this action.
 
 =item delay
 
