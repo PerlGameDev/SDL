@@ -302,6 +302,14 @@ sub min_t {
 	$_min_t{ $ref};
 }
 
+sub max_t {
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
+	$_max_t{ $ref } = $arg if defined $arg;
+
+	$_max_t{ $ref };
+}
+
 sub delay {
 	my ($self, $arg) = @_;
 	my $ref = refaddr $self;
