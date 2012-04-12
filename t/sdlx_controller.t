@@ -22,7 +22,7 @@ can_ok(
 	'SDLx::Controller',
 	qw(
 		new run stop stopped pause paused
-		dt min_t delay event stop_handler default_stop_handler
+		dt min_t max_t delay event stop_handler default_stop_handler
 		time sleep
 		add_move_handler add_event_handler add_show_handler
 		move_handlers event_handlers show_handlers
@@ -41,6 +41,7 @@ my $app = SDLx::Controller->new;
 isa_ok( $app, 'SDLx::Controller', 'default controller can be spawned' );
 is($app->dt, 0.1, 'default dt set to 0.1' );
 is($app->min_t, 1/60, 'default min_t set to 1/60' );
+is($app->max_t, 0.1, 'default max_t set to 0.1' );
 is($app->delay, 0, 'default delay set to 0' );
 is( scalar @{ $app->move_handlers }, 0, 'no motion handlers by default' );
 is( scalar @{ $app->show_handlers }, 0, 'no show handlers by default' );
@@ -66,6 +67,8 @@ $app->dt(1337);
 is( $app->dt, 1337, 'dt can be changed with method' );
 $app->min_t(123);
 is( $app->min_t, 123, 'min_t can be changed with method' );
+$app->max_t(190);
+is( $app->max_t, 190, 'max_t can be changed with method' );
 $app->delay(555);
 is( $app->delay, 555, 'delay can be changed with method' );
 my $event = SDL::Event->new;
@@ -288,6 +291,7 @@ my ($dummy_ref1, $dummy_ref2, $dummy_ref3) = ([], [sub {}, \&dummy_sub], [\&dumm
 $app = SDLx::Controller->new(
 	dt              => 0.1255,
 	min_t           => 0.467,
+	max_t           => 43,
 	event           => $event,
 	event_handlers  => $dummy_ref1,
 	move_handlers   => $dummy_ref2,
@@ -300,6 +304,7 @@ $app = SDLx::Controller->new(
 isa_ok( $app, 'SDLx::Controller' );
 is($app->dt, 0.1255, 'dt set in constructor');
 is($app->min_t, 0.467, 'min_t set in constructor' );
+is($app->max_t, 43, 'max_t set in constructor' );
 is($app->event, $event, 'event set in constructor' );
 is($app->event_handlers, $dummy_ref1, 'event_handlers set in constructor' );
 is($app->move_handlers, $dummy_ref2, 'move_handlers set in constructor' );
