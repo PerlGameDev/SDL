@@ -472,11 +472,13 @@ event handler display this, because L</stop> could be called in the meantime.
 
  my $dt           = $app->dt;
  my $min_t        = $app->min_t;
+ my $max_t        = $app->max_t;
  my $delay        = $app->delay;
  my $stop_handler = $app->stop_handler;
  my $event        = $app->event;
  $app->dt          ($dt);
  $app->min_t       ($min_t);
+ $app->max_t       ($max_t);
  $app->delay       ($delay);
  $app->stop_handler($stop_handler);
  $app->event       ($event);
