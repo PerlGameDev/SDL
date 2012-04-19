@@ -222,7 +222,7 @@ my %_stash;
 sub stash :lvalue{
 	my $ref = refaddr($_[0]);
 	$_stash{ $ref } = {} unless $_stash{ $ref };
-	return $_stash{ $ref }
+	$_stash{ $ref }
 }
 
 sub DESTROY {
