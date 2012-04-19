@@ -196,7 +196,7 @@ sub DESTROY {
 }
 
 sub stash :lvalue {
-	return $_stash{ refaddr( $_[0] ) };
+	$_stash{ refaddr( $_[0] ) };
 }
 
 sub init {
