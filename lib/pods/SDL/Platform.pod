@@ -1,0 +1,117 @@
+
+=pod
+
+=head1 NAME
+
+SDL-Platform - Platform Specific Informations about SDL Perl
+
+=head1 CATEGORY
+
+Documentation
+
+
+=head1 DESCRIPTION
+
+This document describes OS specific informations regading the installation and use of L<SDL>.
+
+=head2 General (all OS)
+
+You need to install L<Alien::SDL> to acquire all prerequisites of L<SDL>.
+
+On Windows, L<Alien::SDL> will get you zip-files containing prebuilt libs.
+
+On Unixes you can choose between compiling libs or use libs provided by the dist.
+The different options on Unixes are availale when requirements are met. Like having specific libs installed.
+
+There is some additional documentation in the L<Github-Wiki|https://github.com/PerlGameDev/SDL/wiki/Testing>. 
+You definitively want to look there, if you want to know how to install L<SDL> from the latest sources (e.g. in an unfinished, unreleased state).
+
+
+
+=head1 Windows
+
+=head2 Installation
+
+We recommend Strawberry Perl. You can get it L<here|http://strawberryperl.com/>.
+
+Once you installed Strawberry Perl, you can access the cpan shell via the start menu.
+
+Open up the cpan shell and type C<install Alien::SDL SDL>. Please follow the dialog and answer the questions to the best of your knowledge.
+
+
+
+=head1 Mac OS X
+
+=head2 Installation
+
+You will need a newer version of Perl that you can install with L<App::perlbrew>.
+
+Once you have a newer Perl installed please use C<cpan> to install L<Alien::SDL> (and of course L<SDL>).
+
+=head2 Using SDL on Mac OS X
+
+You can't use the C<perl> executable to run SDL scripts on Mac OS X, you need to use C<SDLPerl>.
+When you install L<SDL>, a program named C<SDLPerl> is installed. It should be in your path.
+
+Using Mac OS X, your SDL Perl script have to look like this:
+
+  #!SDLPerl
+  
+  use strict;
+  use warnings;
+  use SDL;
+  # your code here ...
+
+Using the wrong Perl executable, you might encounter a lot of error messages resulting in C<terminate called after throwing an instance of 'NSException'>.
+cf. the corresponding L<github issue|https://github.com/PerlGameDev/SDL/issues/208>.
+
+=head1 SEE ALSO
+
+=over
+
+=item * L<Alien::SDL>
+
+=item * L<SDL>
+
+=back
+
+=head1 AUTHORS
+
+See list of module authors in L<SDL>.
+
+If you would like to contribute to SDL Perl, please post a message on the mailing list:
+
+sdl-devel@perl.org
+
+And request access to the github repository. Or drop us a line on #sdl over at irc.perl.org
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2002-2010 SDL Authors as listed above, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=head1 DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
+OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
+ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH
+YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
+NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE
+LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL,
+OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE
+THE SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
+
