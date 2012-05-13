@@ -88,7 +88,7 @@ C<SDL::quit> doesn't return any values.
 
  my $flags = SDL::was_init( $flags );
 
-C<SDL::was_init> allows you to see which SDL subsytems have been initialized.
+C<SDL::was_init> allows you to see which SDL subsystems have been initialized.
 The C<$flags> tell C<SDL::was_init> which subsystems to check, and are taken in the same way as C<SDL::init>.
 
 C<SDL::was_init> returns a mask of the initialized subsystems it checks.

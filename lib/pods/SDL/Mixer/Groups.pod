@@ -92,7 +92,7 @@ C<group_newer> returns the channel number which started to play at last.
 
 Fades out the channels by the given group id. The fade-out-time is specified by C<$ms>.
 
-Retuns the number of affected channels.
+Returns the number of affected channels.
 
 =head2 halt_group
 
@@ -100,7 +100,7 @@ Retuns the number of affected channels.
 
 Halts the channels by the given group id.
 
-Retuns C<0>.
+Returns C<0>.
 
 =head1 AUTHORS
 

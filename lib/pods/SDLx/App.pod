@@ -419,20 +419,21 @@ if it is true or off otherwise.
 
  $app->sync();
 
+
+C<SDLx::App::sync> encapsulates the various methods of synchronizing the screen with the
+current video buffer. C<SDLx::App::sync> will do a fullscreen update, using the double buffer
+or OpenGL buffer if applicable. This is preferred to calling flip on the application window.
+
 Swaps the OpenGL buffers and does a full update of the screen with
 L<SDL::Video::GL_swap_buffers|SDL::Video/GL_swap_buffers> if OpenGL is being used.
-This is preferable to swapping the SDL buffers.
-Otherwise, just swaps the SDL buffers using L<SDL::Video::flip|SDL::Video/flip>.
+This is preferable to swapping the SDL buffers. Otherwise, just swaps the SDL buffers using L<SDL::Video::flip|SDL::Video/flip>.
 
 =head2 gl_attribute
 
  my $value = $app->( $attribute );
  $app->gl_attribute( $attribute, $value );
 
-With one argument, returns the value of the specified attribute using
-L<SDL::Video::GL_get_attribute|SDL::Video/GL_get_attribute>.
-With a value argument, sets the specified attribute
-to the specified value using L<SDL::Video::GL_set_attribute|SDL::Video/GL_set_attribute>.
+With one argument, returns the value of the specified attribute using L<SDL::Video::GL_get_attribute|SDL::Video/GL_get_attribute>. With a value argument, sets the specified attribute to the specified value using L<SDL::Video::GL_set_attribute|SDL::Video/GL_set_attribute>.
 The attribute argument should be one of the L<SDL::Video::SDL_GL_* constants|SDL::Video/CONSTANTS>.
 See L<SDL::Video::GL_set_attribute|SDL::Video/GL_set_attribute> for more details.
 
