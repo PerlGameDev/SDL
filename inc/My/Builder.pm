@@ -155,12 +155,10 @@ sub set_file_flags {
 sub process_pod_files {
 	my ($self, $ext) = @_;
 
-	my $method = "find_${ext}_files";
 	my $files = $self->_find_file_by_type($ext, 'lib');
-
 	while (my ($file, $dest) = each %$files) {
 		$dest =~ s!^lib/\Kpods/!!;
-		$self->copy_if_modified(from => $file, to => File::Spec->catfile($self->blib, $dest) );
+		$self->copy_if_modified(from => $file, to => File::Spec->catfile($self->blib, $dest));
 	}
 }
 
