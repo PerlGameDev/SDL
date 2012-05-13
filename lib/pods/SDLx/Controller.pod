@@ -41,7 +41,7 @@ the screen update is independent of the frame rate. Otherwise, your game will
 run at different speeds on different machines and this is never good (old
 MS-DOS games, anyone?).
 
-One way to circumveint this is by capping the frame rate so it's the same no
+One way to circumvent this is by capping the frame rate so it's the same no
 matter what, but this is not the right way to do it as it penalizes better
 hardware.
 
@@ -97,7 +97,7 @@ All hooked functions will be called during the main loop, in this order:
 =back
 
 Please refer to each handler below for information on received arguments.
-Note that the second argument every callback recieves is the C<SDLx::Controller> object.
+Note that the second argument every callback receives is the C<SDLx::Controller> object.
 
 =head2 stop
 
@@ -108,7 +108,7 @@ Returns from the C<run> loop.
 Attempts to pause the application with a call to C<SDL::Events::wait_event>. See L<SDL::Events>.
 
 Takes 1 argument which is a callback. The application waits for the next event with C<wait_event>.
-When one is recieved, it is passed to the callback as the first argument, along with the C<SDLx::Controller> object as the second argument.
+When one is received, it is passed to the callback as the first argument, along with the C<SDLx::Controller> object as the second argument.
 If the callback then returns a true value, C<pause> will return.
 If the callback returns a false value, C<pause> will repeat the process.
 
@@ -266,7 +266,7 @@ Returns the corresponding value.
 
 See L<SDL/AUTHORS>.
 
-=head2 ACKNOWLEGDEMENTS
+=head2 ACKNOWLEDGEMENTS
 
 The idea and base for this module comes from Lazy Foo's L<< Frame Independent
 Movement|http://www.lazyfoo.net/SDL_tutorials/lesson32/index.php >> tutorial,

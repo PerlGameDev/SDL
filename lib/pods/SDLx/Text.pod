@@ -147,7 +147,7 @@ Sets the font style to italic.
 
 Sets the font style to underline.
 
-B<Note>: Due to libsdl design and depending on the chosen font, sometimes
+B<Note>: Due to libSDL design and depending on the chosen font, sometimes
 the underline may be outside of the generated text surface, and thus not
 visible when blitted to the screen. In these cases, you should probably turn
 off the option and draw your own underlines in the target surface.
@@ -156,7 +156,7 @@ off the option and draw your own underlines in the target surface.
 
 Sets the font style to strikethrough.
 
-B<Note>: Due to libsdl design and depending on the chosen font, sometimes
+B<Note>: Due to libSDL design and depending on the chosen font, sometimes
 the strikethrough may be outside of the generated text surface, and thus not
 visible when blitted to the screen. In these cases, you should probably turn
 off the option and draw your own strikethroughs in the target surface.

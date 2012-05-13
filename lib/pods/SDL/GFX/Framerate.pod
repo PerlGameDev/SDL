@@ -41,8 +41,8 @@ Get the currently set framerate of the manager.
 
  SDL::GFX::Framerate::delay($fps);
 
-Generate a delay to accomodate currently set framerate. Call once in thegraphics/rendering loop. 
-If the computer cannot keep up with the rate (i.e.drawing too slow), the delay is zero and the delay interpolation is reset.
+Generate a delay to accommodate the currently set framerate. Call once in the graphics/rendering loop. 
+If the computer cannot keep up with the rate (i.e. drawing too slow), the delay is zero and the delay interpolation is reset.
 
 =head1 AUTHORS
 

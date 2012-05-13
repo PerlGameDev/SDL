@@ -163,7 +163,7 @@ B<Note>: Only available for SDL_mixer >= 1.2.10
 
  SDL::Mixer::quit();
 
-This function unloads the liraries previously loaded with L<init()|/init>.
+This function unloads the libraries previously loaded with L<init()|/init>.
 
 B<Note>: Only available for SDL_mixer >= 1.2.10
 

@@ -139,9 +139,9 @@ the application. It takes one argument, which should be one of the following:
 
 =head2 sync
 
-C<SDLx::App::sync> encapsulates the various methods of syncronizing the screen with the
+C<SDLx::App::sync> encapsulates the various methods of synchronizing the screen with the
 current video buffer. C<SDLx::App::sync> will do a fullscreen update, using the double buffer
-or OpenGL buffer if applicable. This is prefered to calling flip on the application window.
+or OpenGL buffer if applicable. This is preferred to calling flip on the application window.
 
 =head2 attribute( $attr )
 
@@ -149,7 +149,7 @@ or OpenGL buffer if applicable. This is prefered to calling flip on the applicat
 
 C<SDLx::App::attribute> allows one to get and set GL attributes. By passing a value
 in addition to the attribute selector, the value will be set. C<SDL:::App::attribute>
-always returns the current value of the given attribute, or Carp::confesss on failure.
+always returns the current value of the given attribute, or Carp::confess on failure.
 
 =head1 CALLBACKS
 
