@@ -118,7 +118,7 @@ Returns the new Surface.
  $sdlx_surface->blit( $dest, $src_rect, $dest_rect );
 
 Blits C<SDLx::Surface> onto $dest surface. 
-$src_rect or $dest_rect are optional. If $src_rect is ommited, it will be the size of the entire surface. If $dest_rect is ommited, 
+$src_rect or $dest_rect are optional. If $src_rect is omitted, it will be the size of the entire surface. If $dest_rect is omitted, 
 it will be blitted at C<(0, 0)>. $src_rect or $dest_rect can be array refs or C<SDL::Rect>. $dest can be C<SDLx::Surface> or C<SDL::Surface>.
 
 Note that the final blit rectangle is stored in $dest_rect after clipping is performed.
@@ -158,7 +158,7 @@ Returns $self
  $sdlx_surface->draw_rect( [$x,$y,$w,$h], 0xFFFF00FF );
  $sdlx_surface->draw_rect( SDL::Rect->new($x,$y,$w,$h), 0xFFFF00FF );
 
-Draws a rect on the surface with the given color. If the rect is ommited, the colored rect will be drawn to the entire surface.
+Draws a rect on the surface with the given color. If the rect is omitted, the colored rect will be drawn to the entire surface.
 
 Returns $self
 
@@ -235,7 +235,7 @@ Returns $self
  $sdlx_surface->draw_ellipse( [ $x, $y ], $rx, $ry, $color );
 
 Draws an unfilled ellipse centered at C<($x,$y)> with horizontal radius $rx,
-vetical radius $ry and $color.
+vertical radius $ry and $color.
 Antialias is turned on if $antialias is true.
 
 Returns $self
@@ -245,7 +245,7 @@ Returns $self
  $sdlx_surface->draw_ellipse_filled( [ $x, $y ], $rx, $ry, $color );
 
 Draws an B<filled> ellipse centered at C<($x,$y)> with horizontal radius $rx,
-vetical radius $ry and $color.
+vertical radius $ry and $color.
 Antialias is turned on automatically.
 
 Returns $self
