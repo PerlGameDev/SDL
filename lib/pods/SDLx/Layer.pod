@@ -52,7 +52,7 @@ The layer object just pass it through.
 
   my $index = $layer->index;
 
-The method C<index> represents the z-index ot this layer within its layermanager.
+The method C<index> represents the z-index of this layer within its layermanager.
 
 =head2 x
 
@@ -87,7 +87,7 @@ B<Example>:
 
   SDL::Video::blit_surface( $layer->surface, $layer->clip, $destination_surface, $layer->pos );
 
-This method let you retrive the current or set a new surface.
+This method let you retrieve the current or set a new surface.
 
 =head2 pos
 
@@ -150,13 +150,13 @@ B<Note>: The z-index is not changed for the given layer.
 
   $layer->detach_xy( $x, $y );
 
-C<detach_xy> detaches the prevously attached layer to the given coords. The upper left corner of this layer will be at C<$x> and C<$y>.
+C<detach_xy> detaches the previously attached layer to the given coords. The upper left corner of this layer will be at C<$x> and C<$y>.
 
 =head2 foreground
 
   $layer->foreground;
 
-This method moves the given layer to the foreground so that it is blittet on top of the other layers.
+This method moves the given layer to the foreground so that it is blitted on top of the other layers.
 
 =head1 BUGS
 

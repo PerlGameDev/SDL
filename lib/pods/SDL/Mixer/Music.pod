@@ -240,7 +240,7 @@ Returns C<1> if the music is paused, otherwise C<0>.
 
  my $playing_music = SDL::Mixer::Music::playing_music();
 
-Returns C<1> if the music is playing sound, otherwise C<0>. It does'nt check if the music is paused.
+Returns C<1> if the music is playing sound, otherwise C<0>. It doesn't check if the music is paused.
 
 =head1 AUTHORS
 

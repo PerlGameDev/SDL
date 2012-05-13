@@ -25,7 +25,7 @@ Pango
  
  my $context = SDL::Pango::Context->new;
  SDL::Pango::set_default_color($context, 0xA7C344FF, 0);
- SDL::Pango::set_markup($context, 'Hallo <b>W<span foreground="red">o</span><i>r</i><u>l</u>d</b>!', -1);
+ SDL::Pango::set_markup($context, 'Hello <b>W<span foreground="red">o</span><i>r</i><u>l</u>d</b>!', -1);
 
  SDL::init(SDL_INIT_VIDEO);
  
@@ -110,7 +110,7 @@ Returns: always C<0>.
 
  my $was_init = SDL::Pango::was_init();
 
-Query the initilization status of the Glib and Pango API. You may, of course, use this before L<SDL::Pango::init|SDL::Pango/"init"> to avoid initilizing twice 
+Query the initialization status of the Glib and Pango API. You may, of course, use this before L<SDL::Pango::init|SDL::Pango/"init"> to avoid initializing twice 
 in a row.
 
 Returns: Non-zero when already initialized. Zero when not initialized.
@@ -212,7 +212,7 @@ Draws the text or markup to an existing surface at position C<$x>/C<$y>.
 
  SDL::Pango::set_surface_create_args($context, $flags, $bits, $r_mask, $g_mask, $b_mask, $a_mask);
 
-Sets the argumet that are used when creating a surface via L<SDL::Pango::create_surface_draw|SDL::Pango/"create_surface_draw">.
+Sets the argument that are used when creating a surface via L<SDL::Pango::create_surface_draw|SDL::Pango/"create_surface_draw">.
 
 Example:
 
