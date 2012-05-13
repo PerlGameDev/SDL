@@ -65,7 +65,7 @@ Export tag: ':video'
                      NOTE: This option is kept for compatibility only, and is not recommended for new code.
  SDL_RESIZABLE       Resizable surface
  SDL_NOFRAME         No window caption or edge frame
- SDL_HWACCEL Use     Hardware acceleration blit
+ SDL_HWACCEL         Use hardware acceleration blit
  SDL_SRCCOLORKEY     Use colorkey blitting
  SDL_RLEACCELOK      Private flag
  SDL_RLEACCEL        Accelerated colorkey blitting with RLE
@@ -90,7 +90,7 @@ Export tag ':grab'
  SDL_GRAB_QUERY
  SDL_GRAB_OFF
  SDL_GRAB_ON
- SDL_GRAB_FULLSCREEN Used interally
+ SDL_GRAB_FULLSCREEN Used internally
 
 Export tag ':gl'
 
@@ -248,7 +248,7 @@ Sets up a video mode with the specified width, height, bits-per-pixel and flags.
 C<set_video_mode> returns a L<SDL::Surface> on success otherwise it returns undef on error, the error message is retrieved 
 using C<SDL::get_error>.
 
-=head3 List of avalaibles flags
+=head3 List of available flags
 
 =over 4
 
@@ -630,7 +630,7 @@ Surfaces that were previously locked using L<SDL::Video::lock_surface|/lock_sruf
 Surfaces should be unlocked as soon as possible.
 C<SDL::Video::unlock_surface> doesn't return anything.
 
-B<Note>: Since 1.1.8, the surface locks are recursive. See L<SDL::Video::lock_surface|/lock_sruface> for more information. 
+B<Note>: Since 1.1.8, the surface locks are recursive. See L<SDL::Video::lock_surface|/lock_surface> for more information. 
 
 =head2	MUSTLOCK
 
@@ -919,7 +919,7 @@ C<SDL::Video::get_gamma_ramp> returns -1 on error.
  
  if( -1 == $ret )
  {
-     print( "an error occoured" );
+     print( "an error occurred" );
  }
  else
  {
@@ -962,7 +962,7 @@ Example:
  
  if( -1 == $ret )
  {
-     print( "an error occoured" );
+     print( "an error occurred" );
  }
  else
  {

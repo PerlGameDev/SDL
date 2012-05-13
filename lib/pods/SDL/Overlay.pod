@@ -17,7 +17,7 @@ First import the following modules to get access to constants and functions need
    use SDL::Video;
    use SDL::Overlay;
 
-Init the video susbsystem.
+Init the video subsystem.
 
    SDL::Init(SDL_INIT_VIDEO);
 

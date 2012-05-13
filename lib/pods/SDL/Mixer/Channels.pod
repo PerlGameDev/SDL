@@ -17,7 +17,7 @@ Mixer
 
  my $ret = SDL::Mixer::Channels::allocate_channels( $number_of_channels );
 
-Dynamically change the number of channels managed by the mixer. If decreasing the number of channels, the upper channels arestopped.
+Dynamically change the number of channels managed by the mixer. If decreasing the number of channels, the upper channels are stopped.
 This function returns the new number of allocated channels.
 
 Example
@@ -142,7 +142,7 @@ Example 2:
 
  my $playing = SDL::Mixer::Channels::playing( $channel );
 
-Returns C<1> if the given channel is playing sound, otherwise C<0>. It does'nt check if the channel is paused.
+Returns C<1> if the given channel is playing sound, otherwise C<0>. It doesn't check if the channel is paused.
 
 B<Note>: If you pass C<-1> you will get the number of playing channels.
 

@@ -170,7 +170,7 @@ Current track on the CD;
 
  my $track =  $CD->track($number);
  
-Retrives track description of track $number in CD. See L<SDL::CDTrack>.
+Retrieves track description of track $number in CD. See L<SDL::CDTrack>.
 
 =head2 FRAMES_TO_MSF
 
