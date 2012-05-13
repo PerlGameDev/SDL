@@ -422,11 +422,19 @@ save_BMP ( surface, filename )
 		RETVAL
 
 int
-fill_rect ( dest, dest_rect, pixel )
+fill_rect ( dest, dest_rect_bag, pixel )
 	SDL_Surface *dest
-	SDL_Rect *dest_rect
+	SV *dest_rect_bag
 	Uint32 pixel
 	CODE:
+		SDL_Rect *dest_rect = NULL;
+
+		if (SvOK(dest_rect_bag))
+			dest_rect = (SDL_Rect *)bag2obj(dest_rect_bag);
+
+		if (dest_rect && (!dest_rect->w || !dest_rect->h))
+			dest_rect = NULL;
+
 		RETVAL = SDL_FillRect(dest,dest_rect,pixel);
 	OUTPUT:
 		RETVAL
