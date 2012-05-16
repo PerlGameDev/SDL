@@ -216,12 +216,12 @@ SKIP:
 		pass 'draw_trigon_filled works';
 	}
 
-	is( $surfs[0]->draw_polygon( [ [100, 10], [110, 10], [110, 20] ], [ 255, 0, 0, 255 ] ), $surfs[0], 'draw_polygon returns self' );
+	is( $surfs[0]->draw_polygon( [ [100, 10], [110, 10], [110, 20] ], [ 255, 0, 0, 255 ], 1 ), $surfs[0], 'draw_polygon returns self' );
 	is( $surfs[0]->draw_polygon_filled( [ [100, 10], [110, 10], [110, 20] ], [ 255, 0, 0, 255 ] ), $surfs[0], 'draw_polygon_filled returns self' );
 	foreach my $color (@colors_t) {
 		my $color = [ 255, 0, 0, 255 ];
 		my $verts = [ [100, 10], [110, 10], [110, 20], [100, 20] ];
-		$surfs[0]->draw_polygon( $verts, $color ); #no fill
+		$surfs[0]->draw_polygon( $verts, $color, 0 ); #no fill
 		$surfs[0]->draw_polygon( $verts, $color, 1 );
 		$surfs[0]->draw_polygon_filled( $verts, $color ); #fill
 		isnt( $surfs[0]->[100][10], 0 );

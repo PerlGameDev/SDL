@@ -6,6 +6,10 @@ BEGIN {
 	use Test::More;
 	use lib 't/lib';
 	use SDL::TestTool;
+	use Config;
+
+	plan( skip_all => 'GNU Hurd <= 0.3 not supported' )
+		if $^O eq 'gnu' && $Config{osvers} <= 0.3;
 
 	plan( skip_all => 'Failed to init cdrom' )
 		unless SDL::TestTool->init(SDL_INIT_CDROM);

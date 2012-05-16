@@ -32,6 +32,8 @@ printf( "got version: %d.%d.%d\n", $v->major, $v->minor, $v->patch );
 
 my @done = qw/
 	MMX_detect
+	MMX_off
+	MMX_on
 	/;
 
 my $display = SDL::Video::set_video_mode( 640, 480, 32, SDL_SWSURFACE );
@@ -99,9 +101,6 @@ SDL::Video::update_rect( $display, 0, 0, 640, 480 );
 #SDL::delay(1000);
 
 my @left = qw/
-	MMX_detect
-	MMX_off
-	MMX_on
 	add
 	mean
 	sub

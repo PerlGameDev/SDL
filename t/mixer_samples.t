@@ -53,7 +53,7 @@ my @left = qw/
 
 my $can_open = SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 );
 
-unless($can_open == 0) 
+unless($can_open == 0)
 {
 	plan( skip_all => 'Cannot open audio :'.SDL::get_error() );
 }my $version = SDL::Mixer::linked_version();
@@ -64,10 +64,7 @@ printf(
 
 SKIP:
 {
-	skip 'Need version 1.2.10', 2
-		unless ( $version->major >= 1
-		&& $version->minor >= 2
-		&& $version->patch >= 10 );
+	skip 'Need version 1.2.10', 2 if $version < 1.2.10;
 
 	is( SDL::Mixer::Samples::get_num_chunk_decoders() >= 0,
 		1, '[get_num_chunk_decoders] passed'

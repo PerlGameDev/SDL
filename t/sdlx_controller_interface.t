@@ -68,13 +68,11 @@ $obj->set_acceleration( sub { $_[1]->x(2); pass '[state] is mutable'; return ( 0
 $obj->acceleration(1);
 my $a   = $obj->current;
 my $a_x = $a->x();
-is( $a_x, 2, '[obj/state] acceleration callback copies staet back to current' );
+is( $a_x, 2, '[obj/state] acceleration callback copies state back to current' );
 
 
-my $dummy = SDLx::App->new( init => SDL_INIT_VIDEO );
-
-my $controller = SDLx::Controller->new( dt => 0.2 );
-
+my $dummy        = SDLx::App->new( init => SDL_INIT_VIDEO );
+my $controller   = SDLx::Controller->new( dt => 1, delay => 200 );
 my $interface    = SDLx::Controller::Interface->new();
 my $event_called = 0;
 
@@ -84,29 +82,36 @@ my $eve = SDL::Event->new();
 
 SDL::Events::push_event($eve);
 my $counts = [ 0, 0, 0 ];
-$controller->add_event_handler( sub { $counts->[0]++; return 0 if $interface->current->x; return 0 } );
+$controller->add_event_handler(
+	sub {
+		$counts->[0]++;
+		return 0;
+	}
+);
 
 $interface->set_acceleration(
-		sub {
-		$controller->stop() if $counts->[1] > 100; 
+	sub {
+		$controller->stop() if $counts->[0] && $counts->[1] && $counts->[2];
 		$counts->[1]++;
 		isa_ok( $_[1], 'SDLx::Controller::State', '[Controller] called acceleration and gave us a state' ),
 		return ( 10, 10, 10 );
-		}
-		);
+	}
+);
 
 $interface->attach(
-		$controller,
-		sub {
+	$controller,
+	sub {
 		$counts->[2]++;
 		isa_ok( $_[0], 'SDLx::Controller::State', '[Controller] called render and gave us a state' );
-		}
-		);
+	}
+);
 
 
 $controller->run();
 
-is_deeply( $counts, [ 1, 104, 26 ] );
+cmp_ok( $counts->[0], '>', 0, '$counts->[0] is >0' );
+cmp_ok( $counts->[1], '>', 0, '$counts->[1] is >0' );
+cmp_ok( $counts->[2], '>', 0, '$counts->[2] is >0' );
 
 $interface->detach();
 
