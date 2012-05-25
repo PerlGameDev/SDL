@@ -83,12 +83,6 @@ SDL::Surface width is defined at construction so this is read-only.
 Returns the height of the surface.
 SDL::Surface height is defined at construction so this is read-only.
 
-=head2 flags
-
- my $flags = $surface->flags;
-
-Returns the flags of the surface (bitwise OR-ed L<SDL::Video constants|SDL::Video/CONSTANTS>).
-
 =head2 format
 
  my $format = $surface->format;

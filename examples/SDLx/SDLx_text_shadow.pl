@@ -7,7 +7,7 @@ use SDL;
 use SDLx::App;
 use SDLx::Text;
 
-my $app = SDLx::App->new();
+my $app = SDLx::App->new( eoq => 1 );
 
 my $normal = SDLx::Text->new;
 my $shadow = SDLx::Text->new( shadow => 1 );

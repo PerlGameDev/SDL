@@ -1031,11 +1031,6 @@ use constant {
 }; # SDL::Events/keymod
 
 use constant {
-	SDL_DEFAULT_REPEAT_DELAY    => 500,
-	SDL_DEFAULT_REPEAT_INTERVAL => 30,
-}; # SDL::Events/repeat
-
-use constant {
 	SMOOTHING_OFF => 0,
 	SMOOTHING_ON  => 1,
 }; # SDL::GFX/smoothing
@@ -1222,6 +1217,8 @@ use constant {
 	FPS_LOWER_LIMIT                                     => 1,
 	FPS_DEFAULT                                         => 30,
 	SDL_ALL_HOTKEYS                                     => 0xFFFFFFFF,
+	SDL_DEFAULT_REPEAT_DELAY                            => 500,
+	SDL_DEFAULT_REPEAT_INTERVAL                         => 30,
 };
 
 use constant {

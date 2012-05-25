@@ -19,6 +19,4 @@ our %EXPORT_TAGS = (
 	smoothing => $SDL::Constants::EXPORT_TAGS{'SDL::GFX/smoothing'}
 );
 
-MMX_on();
-
 1;
