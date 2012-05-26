@@ -2,7 +2,20 @@ Revision history for Perl extension SDL_perl.
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
-* 2.537_03 Apr 12 2012
+* 2.541_01 May 26 2012
+	- SDL::GFX::ImageFilter: turn off MMX [FROGGS]
+	- SDLx::App: removed return from stash lvalue sub [FROGGS]
+	- SDL::Constants: added constants for SDL_DEFAULT_REPEAT_DELAY and SDL_DEFAULT_REPEAT_INTERVAL [FROGGS]
+	- SDL::Mixer::Channels: little change for setting context, still not perfect  [FROGGS]
+	- t/mixer_music.t: using ogg files [FROGGS]
+
+* 2.540 May 26 2012
+	- Removed all non-pod changes introduced in 2.538 [jtpalmer]
+	- Fixed bugtracker link [FROGGS]
+	- Added SDL::Platform pod [pktm]
+
+* 2.538 May 22 2012
+	- Pod updates [mig0]
 	- SDLx::App made the docs a lot better [Blaizer]
 	- SDLx::App changed around shortcut names in the constructor [Blaizer]
 	- SDLx::App added and improved parameters of the constructor, see docs [Blaizer]
@@ -22,8 +35,6 @@ Versioning rule: public releases are even numbers, dev releases are odd. (same l
 	- SDLx::Controller added time and sleep methods to replace get_ticks and delay [Blaizer]
 	- SDLx::Controller added some tests for pausing and events [Blaizer]
 	- SDLx::Controller removed current_time parameter [Blaizer]
-
-* 2.537_02 Feb 13 2012
 	- t/core_cd.t: gnu hurd 0.3 handles devices like cdrom strange (skipping tests) [FROGGS]
 	- t/sdlx_fps.t: seems better to try to get 5 fps (slow vm's) [FROGGS]
 	- SDLx::Controller::Interface: weaken tests [FROGGS]

@@ -101,6 +101,8 @@ sub on_event {
 		$ball->{x_vel} += $ball->{vel} if $key == SDLK_LEFT;
 		$ball->{x_vel} -= $ball->{vel} if $key == SDLK_RIGHT;
 
+	} elsif ( $event->type == SDL_QUIT ) {
+		$_[0]->stop;
 	}
 
 }

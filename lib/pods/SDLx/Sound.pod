@@ -24,15 +24,15 @@ Extension
 
     # more sounds
     my %files = (
-        chanell_01 => "/my_sound1.wav",
-        chanell_02 => "/my_sound2.ogg"
+        channel_01 => "/my_sound1.wav",
+        channel_02 => "/my_sound2.ogg"
     );
 
     # times sounds bangs
     my %times = (
-        chanell_01 => 0,      # start
-        chanell_01 => 1256,   # miliseconds
-        chanell_02 => 2345
+        channel_01 => 0,      # start
+        channel_01 => 1256,   # milliseconds
+        channel_02 => 2345
     );
     
     # Load files in channels for realtime play
@@ -43,17 +43,17 @@ Extension
     $snd->play(%times);                 # play loaded files at times
     $snd->play;                         # play again
 
-    # plays sound channel_01 at 578 miliseconds from now
+    # plays sound channel_01 at 578 milliseconds from now
     $snd->play('channel_01', 578);
 
     # fades sound 
     $snd->fade('channel_02', 2345, 3456, -20);
 
-    # in a single act do the wole Sound
+    # in a single act do the whole Sound
     my $snd = SDLx::Sound->new(
         files => (
-            chanell_01 => "/my_sound1.wav",
-            chanell_02 => "/my_sound2.ogg"
+            channel_01 => "/my_sound1.wav",
+            channel_02 => "/my_sound2.ogg"
  
         ), 
         loud  => (
@@ -61,19 +61,19 @@ Extension
             channel_02 => 75
         ),
         times => (
-            chanell_01 => 0,      # start
-            chanell_01 => 1256,   # miliseconds
-            chanell_02 => 2345
+            channel_01 => 0,      # start
+            channel_01 => 1256,   # milliseconds
+            channel_02 => 2345
         ),
         fade  => (
-            chanell_02 => [2345, 3456, -20]
+            channel_02 => [2345, 3456, -20]
         )
     )->play();
 
 =head1 DESCRIPTION
 
 
-You can think about the SDLx::Sound at 2 aproaches. 
+You can think about the SDLx::Sound at 2 approaches. 
 
 =over 4
 
@@ -83,9 +83,9 @@ You can think about the SDLx::Sound at 2 aproaches.
 
 =back
 
-Your application will say what the best aproach.
+Your application will say what the best approach.
 
-In a taste that resembles to perl and to SDL, our SDLx:Sound hooks at SDL::Audio and SDL::Mixer with a gracefull and simple interface that can offer to monks a modern perlish way to manage sounds.
+In a taste that resembles to perl and to SDL, our SDLx:Sound hooks at SDL::Audio and SDL::Mixer with a graceful and simple interface that can offer to monks a modern perlish way to manage sounds.
 
 An SDLx::Sound object can load sounds from filesystem, play it, adjust this loudness level or stops the sound. 
 

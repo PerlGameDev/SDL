@@ -45,8 +45,7 @@ sub new {
 
 sub data {
     my $self = shift;
-    
-    return $self->{data} if $#_ == -1;
+    return if $#_ < 0;
     return $self->{data}->{ $_[0] } if $#_ == 0;
 
     my %data = @_;
@@ -93,11 +92,7 @@ sub play {
     my %override  = @_;
 
     return unless defined $play_data;
-    
-    if ( ref $play_data eq '') {
-        $play_data = $self->{data}->{$play_data};
-    }
-    
+
     my $volume  = $play_data->{volume}  || $override{volume}  || 50;
     my $fade_in = $play_data->{fade_in} || $override{fade_in} || 0;
     my $loops   = $play_data->{loops}   || $override{loops}   || 1;

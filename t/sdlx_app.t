@@ -19,22 +19,18 @@ use SDLx::App;
 can_ok(
 	'SDLx::App', qw/
 		new
-		set_video_mode
-		stash
-		init
-		screen_size
 		resize
 		title
-		icon
+		delay
+		ticks
 		error
-		warp_cursor
-		show_cursor
+		warp
 		fullscreen
 		iconify
 		grab_input
 		sync
-		gl_attribute
-	/
+		attribute
+		/
 );
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};
