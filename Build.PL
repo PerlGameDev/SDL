@@ -606,7 +606,7 @@ my $build = $package->new(
 	#create_readme => 1, ### make sense only if there is some POD doc in the file specified by dist_version_from
 	meta_merge => {
 		resources => {
-			bugtracker => 'http://sdlperl.ath.cx/projects/SDLPerl',
+			bugtracker => 'http://github.com/PerlGameDev/SDL/issues',
 			repository => 'http://github.com/PerlGameDev/SDL'
 		}
 	},
