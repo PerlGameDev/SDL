@@ -2,6 +2,13 @@ Revision history for Perl extension SDL_perl.
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+* 2.541_01 May 26 2012
+	- SDL::GFX::ImageFilter: turn off MMX [FROGGS]
+	- SDLx::App: removed return from stash lvalue sub [FROGGS]
+	- SDL::Constants: added constants for SDL_DEFAULT_REPEAT_DELAY and SDL_DEFAULT_REPEAT_INTERVAL [FROGGS]
+	- SDL::Mixer::Channels: little change for setting context, still not perfect  [FROGGS]
+	- t/mixer_music.t: using ogg files [FROGGS]
+
 * 2.540 May 26 2012
 	- Removed all non-pod changes introduced in 2.538 [jtpalmer]
 	- Fixed bugtracker link [FROGGS]
