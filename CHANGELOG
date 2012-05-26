@@ -2,6 +2,9 @@ Revision history for Perl extension SDL_perl.
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+*
+	- Removed all non-pod changes introduced in 2.538 [jtpalmer]
+
 * 2.538 May 22 2012
 	- Pod updates [mig0]
 	- SDLx::App made the docs a lot better [Blaizer]
