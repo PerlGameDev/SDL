@@ -342,16 +342,20 @@ sub write_xy {
 
         foreach my $i ( 0 .. $#{$surfaces}) {
             if (my $surface = $surfaces->[$i]) {
+                my $tx ;
                 $y += ($linebreaks * $surface->h);
                 $linebreaks = 0;
 
                 if ($self->{h_align} eq 'center' ) {
                     # $x = ($target->w / 2) - ($surface->w / 2);
-                    $x -= $surface->w / 2;
+                    $tx = $x + ($self->w -$surface->w) / 2;
                 }
                 elsif ($self->{h_align} eq 'right' ) {
                     # $x = $target->w - $surface->w;
-                    $x -= $surface->w;
+                    $tx = $x + $self->w - $surface->w;
+                }
+                else {
+                    $tx = $x ;
                 }
 
                 # blit the shadow
@@ -361,14 +365,14 @@ sub write_xy {
 
                     SDL::Video::blit_surface(
                        $shadow, SDL::Rect->new(0,0,$shadow->w, $shadow->h),
-                       $target, SDL::Rect->new($x + $offset, $y + $offset, 0, 0)
+                       $target, SDL::Rect->new($tx + $offset, $y + $offset, 0, 0)
                     );
                 }
 
                 # blit the text
                 SDL::Video::blit_surface(
                     $surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
-                    $target, SDL::Rect->new($x, $y, 0, 0)
+                    $target, SDL::Rect->new($tx, $y, 0, 0)
                 );
             }
             $linebreaks++;
