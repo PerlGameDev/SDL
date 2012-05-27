@@ -3,6 +3,8 @@ Revision history for Perl extension SDL_perl.
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
 *
+	- inc/My/Builder.pm: strip pods/ subdir from pod files on build [mig0]
+	- SDL::Video: fill_rect now accepts 0 or undef for dest_rect, as well as a rect with h == 0 or w == 0 to mean the whole surface [mig0]
 	- SDLx::Test: fixed centering multi-line text [dod]
 
 * 2.541_01 May 26 2012
