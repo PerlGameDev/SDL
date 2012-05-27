@@ -2,6 +2,9 @@ Revision history for Perl extension SDL_perl.
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+*
+	- SDLx::Test: fixed centering multi-line text [dod]
+
 * 2.541_01 May 26 2012
 	- SDL::GFX::ImageFilter: turn off MMX [FROGGS]
 	- SDLx::App: removed return from stash lvalue sub [FROGGS]
