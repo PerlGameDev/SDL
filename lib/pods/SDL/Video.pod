@@ -649,7 +649,7 @@ rectangle will be drawn into.
 The rectangle pointed to by rect will be clipped to the edges of the surface so that the clip rectangle for a surface can never fall 
 outside the edges of the surface.
 If rect is NULL the clipping rectangle will be set to the full size of the surface. 
-C<SDL::Video::set_clip_rect> doesn't returns anything.
+C<SDL::Video::set_clip_rect> doesn't return anything.
 
 =head2	get_clip_rect
 
@@ -658,7 +658,7 @@ C<SDL::Video::set_clip_rect> doesn't returns anything.
 Gets the clipping rectangle for the given L<SDL::Surface>. When this surface is the destination of a blit, only the area within the clip 
 rectangle is drawn into.
 The rectangle pointed to by rect will be filled with the clipping rectangle of the surface. 
-C<SDL::Video::get_clip_rect> doesn't returns anything;
+C<SDL::Video::get_clip_rect> doesn't return anything;
 
  use SDL;
  use SDL::Video;
@@ -693,7 +693,7 @@ with OpenGL.
 
 The results of blitting operations vary greatly depending on whether C<SDL_SRCALPHA> is set or not. See L<SDL::Video::set_alpha|/set_alpha> 
 for an explanation of how this affects your results. Colorkeying and alpha attributes also interact with surface blitting.
-C<SDL::Video::blit_surface> doesn't returns anything.
+C<SDL::Video::blit_surface> doesn't return anything.
 
 For an example see L<SDL::Video::load_BMP|/load_BMP>.
 
@@ -703,7 +703,7 @@ For an example see L<SDL::Video::load_BMP|/load_BMP>.
 
 Makes sure the given area is updated on the given screen.  
 The rectangle must be confined within the screen boundaries because there's no clipping.
-update_rect doesn't returns any value.
+update_rect doesn't return any value.
 
 B<Note>: This function should not be called while screen is locked by L<SDL::Video::lock_surface|/lock_surface>
 
@@ -717,7 +717,7 @@ For an example see L<SYNOPSIS|/SYNOPSIS>
 
 Makes sure the given list of rectangles is updated on the given screen. 
 The rectangle must be confined within the screen boundaries because there's no clipping.
-C<update_rects> doesn't returns any value.
+C<update_rects> doesn't return any value.
 
 B<Note>: This function should not be called while screen is locked by L<SDL::Video::lock_surface|/lock_surface>.
 
@@ -1189,7 +1189,7 @@ Example:
  SDL::Video::GL_swap_buffers();
 
 Swap the OpenGL buffers, if double-buffering is supported.
-C<SDL::Video::GL_swap_buffers> doesn't returns any value.
+C<SDL::Video::GL_swap_buffers> doesn't return any value.
 
 =head1 Video Overlay Functions
 
