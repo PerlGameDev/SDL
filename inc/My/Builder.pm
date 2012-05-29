@@ -157,7 +157,7 @@ sub process_pod_files {
 
 	my $files = $self->_find_file_by_type($ext, 'lib');
 	while (my ($file, $dest) = each %$files) {
-		$dest =~ s!^lib/\Kpods/!!;
+		$dest =~ s!^(lib/)pods/!$1!;
 		$self->copy_if_modified(from => $file, to => File::Spec->catfile($self->blib, $dest));
 	}
 }
