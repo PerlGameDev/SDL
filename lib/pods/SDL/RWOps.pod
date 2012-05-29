@@ -112,7 +112,7 @@ Note: You must free any memory allocated with SDL::alloc_rw with SDL::free_rw.
 =head2 free_rw(context)
 
 SDL::free_rw frees an SDL::RWOps structure previously allocated by SDL::alloc_rw. Only use it on memory allocated by SDL::alloc_rw. 
-It doesn't returns anything.
+It doesn't return anything.
 
 
 =head2 rw_seek(ctx,offset,whence)
