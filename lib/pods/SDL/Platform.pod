@@ -3,7 +3,7 @@
 
 =head1 NAME
 
-SDL-Platform - Platform Specific Informations about SDL Perl
+SDL::Platform - Platform Specific Informations about SDL Perl
 
 =head1 CATEGORY
 
