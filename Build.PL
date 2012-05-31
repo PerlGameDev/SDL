@@ -568,6 +568,7 @@ my $build = $package->new(
 	license            => 'lgpl',
 	dist_version_from  => 'lib/SDL.pm',
 	configure_requires => {
+		'Module::Build'      => '0',
 		'ExtUtils::CBuilder' => '0.260301',
 		'Alien::SDL'         => '1.426',
 		'File::Find'         => '0',
