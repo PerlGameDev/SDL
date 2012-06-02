@@ -114,7 +114,7 @@ SKIP:
 	my $sample_music_rw = SDL::Mixer::Music::load_MUS_RW( $rw );
 	isa_ok( $sample_music_rw, 'SDL::Mixer::MixMusic', '[load_MUS_RW]' );
 	is( SDL::Mixer::Music::play_music( $sample_music_rw, 0 ),
-		0, "[play_music_rw] plays $wav_test_file"
+		0, "[play_music_rw] plays $ogg_test_file"
 	);
 }
 
