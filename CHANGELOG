@@ -3,6 +3,7 @@ Revision history for Perl extension SDL
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
 *
+	- t/mixer_music.t: fixed ogg test name [jtpalmer]
 	- Added Module::Build to configure requirements [jtpalmer]
 	- Pod updates [mig0]
 	- inc/My/Builder.pm: strip pods/ subdir from pod files on build [mig0]
