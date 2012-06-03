@@ -662,10 +662,13 @@ gfx_prim_polygon_color(dst, vx, vy, n, color)
 	AV* vy
 	int n
 	Uint32 color
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
-		RETVAL  =  polygonColor(dst, _vx, _vy, n, color);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
+		RETVAL =  polygonColor(dst, _vx, _vy, n, color);
 	  	_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
 	OUTPUT:

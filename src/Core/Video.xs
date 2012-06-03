@@ -12,8 +12,8 @@
 
 void _uinta_free(Uint16* av, int len_from_av_len)
 {
-	if( av != NULL)
-	  return;
+	if( av != NULL )
+		return;
 
 	safefree(av);
 }
@@ -24,18 +24,14 @@ Uint16* av_to_uint16 (AV* av)
 	if( len != -1)
 	{
 		int i;
-		Uint16* table = (Uint16 *)safemalloc(sizeof(Uint16)*(len+1));
+		Uint16 *table = (Uint16 *)safemalloc(sizeof(Uint16)*(len+1));
 		for ( i = 0; i < len+1 ; i++ )
 		{
-			SV ** temp = av_fetch(av,i,0);
+			SV **temp = av_fetch(av,i,0);
 			if( temp != NULL )
-			{
 				table[i] = (Uint16) SvIV( *temp );
-			}
 			else
-			{
 				table[i] = 0;
-			}
 		}
 		return table;
 	}
@@ -65,20 +61,17 @@ video_get_video_surface()
 	OUTPUT:
 		RETVAL
 
-
 SDL_VideoInfo*
 video_get_video_info()
 	PREINIT:
 		char* CLASS = "SDL::VideoInfo";
 	CODE:
 		RETVAL = (SDL_VideoInfo *) SDL_GetVideoInfo();
-
 	OUTPUT:
 		RETVAL
 
 SV *
 video_video_driver_name( )
-
 	CODE:
 		char buffer[1024];
 		if ( SDL_VideoDriverName(buffer, 1024) != NULL )
@@ -94,9 +87,9 @@ AV*
 video_list_modes ( format, flags )
 	Uint32 flags
 	SDL_PixelFormat *format
-
-	CODE:
+	PREINIT:
 		SDL_Rect **mode;
+	CODE:
 		RETVAL = newAV();
 		sv_2mortal((SV*)RETVAL);
 		mode = SDL_ListModes(format,flags);
@@ -106,12 +99,11 @@ video_list_modes ( format, flags )
 			av_push(RETVAL,newSVpv("none",0));
 		} else {
 			int i;
-			for (i=0; mode[i]; ++i)
+			for( i = 0; mode[i]; ++i )
 				av_push(RETVAL, cpy2bag( (void *)mode[i], sizeof(SDL_Rect *), sizeof(SDL_Rect), "SDL::Rect" ));
 		}
 	OUTPUT:
 		RETVAL
-
 
 int
 video_video_mode_ok ( width, height, bpp, flags )
@@ -123,7 +115,6 @@ video_video_mode_ok ( width, height, bpp, flags )
 		RETVAL = SDL_VideoModeOK(width,height,bpp,flags);
 	OUTPUT:
 		RETVAL
-
 
 SDL_Surface *
 video_set_video_mode ( width, height, bpp, flags )
@@ -138,7 +129,6 @@ video_set_video_mode ( width, height, bpp, flags )
 	OUTPUT:
 		RETVAL
 
-
 void
 video_update_rect ( surface, x, y, w ,h )
 	SDL_Surface *surface
@@ -152,19 +142,19 @@ video_update_rect ( surface, x, y, w ,h )
 void
 video_update_rects ( surface, ... )
 	SDL_Surface *surface
-	CODE:
+	PREINIT:
 		SDL_Rect* rects;
-		int num_rects,i;
+		int num_rects, i;
+	CODE:
 		if ( items < 2 ) return;
 		num_rects = items - 1;
 		rects = (SDL_Rect *)safemalloc(sizeof(SDL_Rect)*items);
 		for(i=0;i<num_rects;i++) {
-                        void** pointers = (void**)INT2PTR(void *, SvIV((SV *)SvRV( ST(i + 1) )));
+			void** pointers = (void**)INT2PTR(void *, SvIV((SV *)SvRV( ST(i + 1) )));
 			rects[i] = *(SDL_Rect *)(pointers[0]);
 		}
 		SDL_UpdateRects(surface,num_rects,rects);
 		safefree(rects);
-
 
 int
 video_flip ( surface )
@@ -238,11 +228,12 @@ video_get_gamma_ramp( redtable, greentable, bluetable )
 	AV* redtable;
 	AV* greentable;
 	AV* bluetable;
-	CODE:
+	PREINIT:
 		Uint16 red_ramp[256];
 		Uint16 green_ramp[256];
 		Uint16 blue_ramp[256];
 		int i;
+	CODE:
 		RETVAL = SDL_GetGammaRamp(red_ramp, green_ramp, blue_ramp);
 		for ( i=0; i<256; ++i ) {
 			av_push(redtable,newSViv(red_ramp[i]));
@@ -254,22 +245,21 @@ video_get_gamma_ramp( redtable, greentable, bluetable )
 
 int
 video_set_gamma_ramp( rt, gt, bt )
-	AV* rt;
-	AV* gt;
-	AV* bt;
-	CODE:
+	AV *rt;
+	AV *gt;
+	AV *bt;
+	PREINIT:
 		Uint16 *redtable, *greentable, *bluetable;
-		redtable = av_to_uint16(rt);
+	CODE:
+		redtable   = av_to_uint16(rt);
 		greentable = av_to_uint16(gt);
-		bluetable = av_to_uint16(bt);
-		RETVAL =  SDL_SetGammaRamp(redtable, greentable, bluetable);
-		_uinta_free(redtable, av_len(rt) );
-		_uinta_free(greentable, av_len(gt) );
-		_uinta_free(bluetable, av_len(bt) );
+		bluetable  = av_to_uint16(bt);
+		RETVAL     = SDL_SetGammaRamp(redtable, greentable, bluetable);
+		_uinta_free(redtable,   av_len(rt));
+		_uinta_free(greentable, av_len(gt));
+		_uinta_free(bluetable,  av_len(bt));
 	OUTPUT:
 		RETVAL
-
-
 
 Uint32
 video_map_RGB ( pixel_format, r, g, b )
@@ -279,7 +269,7 @@ video_map_RGB ( pixel_format, r, g, b )
 	Uint8 b
 	CODE:
 		RETVAL = SDL_MapRGB(pixel_format, r,g,b);
-       	OUTPUT:
+	OUTPUT:
 		RETVAL
 
 Uint32
@@ -321,7 +311,6 @@ video_convert_surface( src, fmt, flags)
 	OUTPUT:
 		RETVAL
 
-
 SDL_Surface *
 video_display_format ( surface )
 	SDL_Surface *surface
@@ -342,14 +331,14 @@ video_display_format_alpha ( surface )
 	OUTPUT:
 		RETVAL
 
-
 int
 video_set_color_key ( surface, flag, key )
 	SDL_Surface *surface
 	Uint32 flag
 	SV *key
-	CODE:
+	PREINIT:
 		Uint32 pixel;
+	CODE:
 		if(SvOK(key) && SvIOK(key))
 			pixel = (Uint32)SvUV(key);
 		else
@@ -375,8 +364,9 @@ AV *
 video_get_RGB ( pixel_format, pixel )
 	SDL_PixelFormat *pixel_format
 	Uint32 pixel
-	CODE:
+	PREINIT:
 		Uint8 r,g,b;
+	CODE:
 		SDL_GetRGB(pixel,pixel_format,&r,&g,&b);
 		RETVAL = newAV();
 		sv_2mortal((SV*)RETVAL);
@@ -390,8 +380,9 @@ AV *
 video_get_RGBA ( pixel_format, pixel )
 	SDL_PixelFormat *pixel_format
 	Uint32 pixel
-	CODE:
+	PREINIT:
 		Uint8 r,g,b,a;
+	CODE:
 		SDL_GetRGBA(pixel,pixel_format,&r,&g,&b,&a);
 		RETVAL = newAV();
 		sv_2mortal((SV*)RETVAL);
@@ -426,15 +417,14 @@ fill_rect ( dest, dest_rect_bag, pixel )
 	SDL_Surface *dest
 	SV *dest_rect_bag
 	Uint32 pixel
+	PREINIT:
+		SDL_Rect *dest_rect;
 	CODE:
-		SDL_Rect *dest_rect = NULL;
-
+		dest_rect = NULL;
 		if (SvOK(dest_rect_bag))
 			dest_rect = (SDL_Rect *)bag2obj(dest_rect_bag);
-
 		if (dest_rect && (!dest_rect->w || !dest_rect->h))
 			dest_rect = NULL;
-
 		RETVAL = SDL_FillRect(dest,dest_rect,pixel);
 	OUTPUT:
 		RETVAL
@@ -445,16 +435,16 @@ blit_surface ( src, src_rect_bag, dest, dest_rect_bag )
 	SDL_Surface *dest
 	SV *src_rect_bag
 	SV *dest_rect_bag
+	PREINIT:
+		SDL_Rect *src_rect;
+		SDL_Rect *dest_rect;
 	CODE:
-		SDL_Rect *src_rect  = NULL;
-		SDL_Rect *dest_rect = NULL;
-
+		src_rect  = NULL;
+		dest_rect = NULL;
 		if(SvOK(src_rect_bag))
 			src_rect = (SDL_Rect *)bag2obj(src_rect_bag);
-
 		if(SvOK(dest_rect_bag))
 			dest_rect = (SDL_Rect *)bag2obj(dest_rect_bag);
-
 		RETVAL = SDL_BlitSurface(src,src_rect,dest,dest_rect);
 	OUTPUT:
 		RETVAL
@@ -473,8 +463,6 @@ get_clip_rect ( surface, rect )
 	CODE:
 		SDL_GetClipRect(surface, rect);
 
-
-
 int
 video_lock_YUV_overlay ( overlay )
 	SDL_Overlay *overlay
@@ -485,9 +473,9 @@ video_lock_YUV_overlay ( overlay )
 
 void
 video_unlock_YUV_overlay ( overlay )
-        SDL_Overlay *overlay
-        CODE:
-                SDL_UnlockYUVOverlay(overlay);
+	SDL_Overlay *overlay
+	CODE:
+		SDL_UnlockYUVOverlay(overlay);
 
 int
 video_display_YUV_overlay ( overlay, dstrect )
@@ -497,7 +485,6 @@ video_display_YUV_overlay ( overlay, dstrect )
 		RETVAL = SDL_DisplayYUVOverlay ( overlay, dstrect );
 	OUTPUT:
 		RETVAL
-
 
 int
 video_GL_load_library ( path )
@@ -522,19 +509,20 @@ video_GL_set_attribute ( attr,  value )
 	CODE:
 		RETVAL = SDL_GL_SetAttribute(attr, value);
 	OUTPUT:
-	        RETVAL
+		RETVAL
 
 AV *
 video_GL_get_attribute ( attr )
-	int        attr
-	CODE:
+	int attr
+	PREINIT:
 		int value;
+	CODE:
 		RETVAL = newAV();
 		sv_2mortal((SV*)RETVAL);
 		av_push(RETVAL,newSViv(SDL_GL_GetAttribute(attr, &value)));
 		av_push(RETVAL,newSViv(value));
 	OUTPUT:
-	        RETVAL
+		RETVAL
 
 void
 video_GL_swap_buffers ()
@@ -550,8 +538,9 @@ video_wm_set_caption ( title, icon )
 
 AV *
 video_wm_get_caption ()
+	PREINIT:
+		char *title, *icon;
 	CODE:
-		char *title,*icon;
 		SDL_WM_GetCaption(&title,&icon);
 		RETVAL = newAV();
 		sv_2mortal((SV*)RETVAL);

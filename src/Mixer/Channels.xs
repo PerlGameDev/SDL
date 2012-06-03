@@ -29,19 +29,21 @@ void callback(int channel)
 		PERL_SET_CONTEXT(parent_perl);
 	}
 
-	dSP;
-	ENTER;
-	SAVETMPS;
+	{
+		dSP;
+		ENTER;
+		SAVETMPS;
 
-	PUSHMARK(SP);
-	XPUSHs(sv_2mortal(newSViv(channel)));
-	PUTBACK;
+		PUSHMARK(SP);
+		XPUSHs(sv_2mortal(newSViv(channel)));
+		PUTBACK;
 
-	if(cb)
-		call_sv(cb, G_VOID);
+		if(cb)
+			call_sv(cb, G_VOID);
 
-	FREETMPS;
-	LEAVE;
+		FREETMPS;
+		LEAVE;
+	}
 }
 #endif
 
