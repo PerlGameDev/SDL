@@ -254,15 +254,14 @@ SDL_version *
 linked_version ()
 	PREINIT:
 		char * CLASS = "SDL::Version";
-		SDL_version *version;
+		SDL_version *version, *version_dont_free;
 	CODE:
-		version = (SDL_version *) safemalloc ( sizeof(SDL_version) );
-		SDL_version* version_dont_free = (SDL_version *) SDL_Linked_Version();
-
-		version->major = version_dont_free->major;
-		version->minor = version_dont_free->minor;
-		version->patch = version_dont_free->patch;
-		RETVAL = version;
+		version           = (SDL_version *)safemalloc( sizeof(SDL_version) );
+		version_dont_free = (SDL_version *)SDL_Linked_Version();
+		version->major    = version_dont_free->major;
+		version->minor    = version_dont_free->minor;
+		version->patch    = version_dont_free->patch;
+		RETVAL            = version;
 	OUTPUT:
 		RETVAL
 
@@ -276,7 +275,7 @@ getenv (name)
     test = SDL_getenv(name);
 #else
     test = getenv(name);
-#endif	
+#endif
 		RETVAL = test;
 	OUTPUT:
 		RETVAL
@@ -294,7 +293,6 @@ get_ticks ()
 	OUTPUT:
 		RETVAL
 
-
 IV
 get_handle ()
 	CODE:
@@ -306,8 +304,5 @@ get_handle ()
 	OUTPUT:
 		RETVAL
 
-
 MODULE = SDL		PACKAGE = SDL
 PROTOTYPES : DISABLE
-
-

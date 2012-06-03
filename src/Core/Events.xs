@@ -109,19 +109,20 @@ AV *
 events_get_key_state()
 	PREINIT:
 	int value;
-	CODE:
-		Uint8* KeyArray = SDL_GetKeyState(&value);
-		RETVAL = (AV*)sv_2mortal((SV*)newAV());
+	PREINIT:
+		Uint8* KeyArray;
 		int i;
-		for( i = 0; i <value; i++)
+	CODE:
+		KeyArray = SDL_GetKeyState(&value);
+		RETVAL   = (AV*)sv_2mortal((SV*)newAV());
+		for( i = 0; i < value; i++ )
 		{
 			SV* scalar = newSViv( KeyArray[i]  );
 			av_push( RETVAL, scalar);
-		
 		}
 	OUTPUT:
 		RETVAL
-	 
+
 SDLMod
 events_get_mod_state()
 	CODE:

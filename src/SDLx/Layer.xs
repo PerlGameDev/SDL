@@ -218,8 +218,8 @@ layerx_foreground( bag )
         SDLx_Layer        *layer   = (SDLx_Layer *)bag2obj(bag);
         SDLx_LayerManager *manager = layer->manager;
         int index                  = layer->index; /* we cant trust its value */
-        layer->manager->saved = 0;
         int i;
+        layer->manager->saved = 0;
         
         for(i = 0; i <= av_len(manager->layers); i++)
         {
