@@ -80,7 +80,9 @@ sub find_subsystems {
 				$found{$_} = 1 foreach (@$h);
 				$param->{libs}->{$library} = 1;
 				push @{ $param->{defines} }, "-D$libraries->{$library}{define}";
-				push @{ $param->{links} },   "-l$libraries->{$library}{lib}";
+				push @{ $param->{links} },   Alien::SDL::ConfigData->config('build_cc') eq 'cl'
+					? "lib$libraries->{$library}{lib}.lib"
+					: "-l$libraries->{$library}{lib}";
 			} else {
 
 				# I disabled that, so the libs are compiled but the HAVE_* defines are not set
