@@ -26,48 +26,47 @@ char* effect_func_done_cb = NULL;
 void effect_func(int chan, void *stream, int len, void *udata)
 {
 	ENTER_TLS_CONTEXT;
-	Sint16 *buf = (Sint16 *)stream;
-
-	len /= 2;            /* 2 bytes ber sample */
-	
-	dSP;                                       /* initialize stack pointer          */
-	
-	ENTER;                                     /* everything created after here     */
-	SAVETMPS;                                  /* ...is a temporary variable.       */
-
-	PUSHMARK(SP);                              /* remember the stack pointer        */
-	XPUSHs(sv_2mortal(newSViv(chan)));
-	XPUSHs(sv_2mortal(newSViv(len)));
-	XPUSHs(sv_2mortal(newSVsv(udata))); /* push something onto the stack     */
-	int i;
-	for(i = 0; i < len; i++)
-		XPUSHs(sv_2mortal(newSViv(buf[i])));
-	
-	PUTBACK;                                   /* make local stack pointer global   */
-
-	/*if(cb != (SV*)NULL) */
 	{
-        int count = call_pv(effect_func_cb, G_ARRAY); /* call the function                 */
-		SPAGAIN;                               /* refresh stack pointer             */
-		
-		if(count == len + 1)
-			*(SV *)udata = *(newSVsv(POPs));
-		
-		if(count)
+		dSP;                                       /* initialize stack pointer          */
+		int i;
+		Sint16 *buf = (Sint16 *)stream;
+
+		len /= 2;            /* 2 bytes ber sample */
+
+		ENTER;                                     /* everything created after here     */
+		SAVETMPS;                                  /* ...is a temporary variable.       */
+
+		PUSHMARK(SP);                              /* remember the stack pointer        */
+		XPUSHs(sv_2mortal(newSViv(chan)));
+		XPUSHs(sv_2mortal(newSViv(len)));
+		XPUSHs(sv_2mortal(newSVsv(udata))); /* push something onto the stack     */
+		for(i = 0; i < len; i++)
+			XPUSHs(sv_2mortal(newSViv(buf[i])));
+
+		PUTBACK;                                   /* make local stack pointer global   */
+
+		/*if(cb != (SV*)NULL) */
 		{
-			memset(buf, 0, len * 2); /* clear the buffer */
-			
-			for(i = len - 1; i >= 0; i--)
+			int count = call_pv(effect_func_cb, G_ARRAY); /* call the function                 */
+			SPAGAIN;                               /* refresh stack pointer             */
+
+			if(count == len + 1)
+				*(SV *)udata = *(newSVsv(POPs));
+
+			if(count)
 			{
-				buf[i] = POPi;
+				memset(buf, 0, len * 2); /* clear the buffer */
+
+				for(i = len - 1; i >= 0; i--)
+					buf[i] = POPi;
 			}
+
+			PUTBACK;
 		}
 
-		PUTBACK;
+		FREETMPS;                                  /* free that return value            */
+		LEAVE;                                     /* ...and the XPUSHed "mortal" args. */
 	}
-
-	FREETMPS;                                  /* free that return value            */
-	LEAVE;                                     /* ...and the XPUSHed "mortal" args. */
 	LEAVE_TLS_CONTEXT;
 }
 
@@ -79,15 +78,11 @@ void effect_pm_func(void *udata, Uint8 *stream, int len)
 void effect_done(int chan, void *udata)
 {
 	ENTER_TLS_CONTEXT;
-
-	dSP;     /* initialize stack pointer          */
-	PUSHMARK(SP);                              /* remember the stack pointer        */
-
-	/*if(fcb != (SV*)NULL) */
-	/*warn ( "Called %s", effect_func_done_cb ); */
-	
-        call_pv(effect_func_done_cb, G_DISCARD|G_VOID);   /* call the function                 */
-        
+	{
+		dSP;     /* initialize stack pointer          */
+		PUSHMARK(SP);                              /* remember the stack pointer        */
+		call_pv(effect_func_done_cb, G_DISCARD|G_VOID);   /* call the function                 */
+	}
 	LEAVE_TLS_CONTEXT;
 }
 
@@ -107,26 +102,21 @@ mixeff_register(channel, func, done, arg)
 	SV *arg
 	CODE:
 		if(effects == NULL)
-		{
 			effects = safemalloc(MAX_EFFECTS* sizeof(void*));
-		}
 		if(effects_done == NULL)
-		{
 			effects_done = safemalloc(MAX_EFFECTS* sizeof(void*));
-		}
 
 		GET_TLS_CONTEXT;
 
-		effect_func_cb = func;
+		effect_func_cb      = func;
 		effect_func_done_cb = done;
 		if(registered_effects <= MAX_EFFECTS )
 		{
-			effects[registered_effects] = (void*)&effect_func;
-			effects_done[registered_effects] = (void*)&effect_done;
+			effects[registered_effects]      = (void *)&effect_func;
+			effects_done[registered_effects] = (void *)&effect_done;
 			if(0 != Mix_RegisterEffect(channel, effects[registered_effects], effects_done[registered_effects], arg))
 			{
 				/*warn( "Registered %d %p %p", registered_effects, effects[registered_effects], effects_done[registered_effects]); */
-				
 				RETVAL = registered_effects;
 				registered_effects++;
 			}
@@ -137,9 +127,7 @@ mixeff_register(channel, func, done, arg)
 			}
 		}
 		else
-		{
 			RETVAL = -1;
-		}
 	OUTPUT:
 		RETVAL
 
@@ -163,25 +151,21 @@ int
 mixeff_unregister( channel, func )
 	int channel
 	int func
-	CODE:
-		
-
+	PREINIT:
 		int check;
+	CODE:
 		if( func <= registered_effects)
 		{
-			check = Mix_UnregisterEffect(channel, effects[func]);			
-			if (check == 0 )	
-			{
-			  warn ("Error unregistering: %s", Mix_GetError() );
-			}
+			check = Mix_UnregisterEffect(channel, effects[func]);
+			if( check == 0 )
+				warn ("Error unregistering: %s", Mix_GetError() );
 		}
 		else
 		{
 			warn (" Invalid effect id %d, currently %d effects registered", func, registered_effects);
 			check = 0;
 		}
-		
-		RETVAL = check;		
+		RETVAL = check;
 	OUTPUT:
 		RETVAL
 
@@ -239,11 +223,8 @@ mixeff_set_post_mix(func = NULL, arg = NULL)
 	SV *arg
 	CODE:
 		GET_TLS_CONTEXT;
-
 		if(func != (SV *)NULL)
-		{
 			Mix_SetPostMix(&effect_pm_func, arg);
-		}
 		else
 			Mix_SetPostMix(NULL, NULL);
 
