@@ -91,10 +91,10 @@ mixsam_load_WAV_RW ( src, freesrc)
 	int freesrc
 	PREINIT:
 		char * CLASS = "SDL::Mixer::MixChunk";
+		Mix_Chunk *mixchunk;
 	CODE:
-		Mix_Chunk * mixchunk;
 		mixchunk = Mix_LoadWAV_RW(src, freesrc);
-		RETVAL = mixchunk;
+		RETVAL   = mixchunk;
 	OUTPUT:
 		RETVAL
 

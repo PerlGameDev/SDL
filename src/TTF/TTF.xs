@@ -59,39 +59,33 @@ static Uint16 *UTF8_to_UNICODE(Uint16 *unicode, const char *utf8, int len)
 static Uint16 *utf16_to_UNICODE(SV *sv)
 {
 	STRLEN len;
-	char *text      = SvPV(sv, len);
-	len            /= 2;                                      /* 1-Byte chars to 2-Byte Uint16 */
-	Uint16 *unicode = safemalloc((len + 2) * sizeof(Uint16)); /* length = BOM + characters + NULL */
 	int i;
+	Uint16 *unicode;
+	char *text = SvPV(sv, len);
+	len       /= 2;                                      /* 1-Byte chars to 2-Byte Uint16 */
+	unicode    = safemalloc((len + 2) * sizeof(Uint16)); /* length = BOM + characters + NULL */
 
 	/* UTF-16 Big Endian with BOM */
 	if((Uint8)text[0] == 0xFE && (Uint8)text[1] == 0xFF)
 	{
 		for( i = 0; i < len; i++ )
-		{
 			unicode[i] = ((Uint8)text[i * 2] << 8) | (Uint8)text[i * 2 + 1];
-		}
 		unicode[i] = 0;
 	}
-	
-	else
+
 	/* UTF-16 Little Endian with BOM */
-	if((Uint8)text[0] == 0xFF && (Uint8)text[1] == 0xFE)
+	else if((Uint8)text[0] == 0xFF && (Uint8)text[1] == 0xFE)
 	{
 		for( i = 0; i < len; i++ )
-		{
 			unicode[i] = ((Uint8)text[i * 2 + 1] << 8) | (Uint8)text[i * 2];
-		}
 		unicode[i] = 0;
 	}
-	
+
 	else /* everything without BOM is treated as UTF-16 Big Endian */
 	{
 		unicode[0] = 0xFEFF; /* we have to pass it as UTF-16 Big Endian */
 		for( i = 0; i <= len; i++ )
-		{
 			unicode[i + 1] = (text[i * 2] << 8) | text[i * 2 + 1];
-		}
 		unicode[i] = 0;
 	}
 
@@ -108,15 +102,14 @@ const SDL_version *
 ttf_linked_version()
 	PREINIT:
 		char* CLASS = "SDL::Version";
-		SDL_version *version;
+		SDL_version *version, *version_dont_free;
 	CODE:
-		version = (SDL_version *) safemalloc ( sizeof(SDL_version) );
-		SDL_version* version_dont_free = (SDL_version *)TTF_Linked_Version();
-
-		version->major = version_dont_free->major;
-		version->minor = version_dont_free->minor;
-		version->patch = version_dont_free->patch;
-		RETVAL = version;
+		version           = (SDL_version *)safemalloc( sizeof(SDL_version) );
+		version_dont_free = (SDL_version *)TTF_Linked_Version();
+		version->major    = version_dont_free->major;
+		version->minor    = version_dont_free->minor;
+		version->patch    = version_dont_free->patch;
+		RETVAL            = version;
 	OUTPUT:
 		RETVAL
 
@@ -124,8 +117,9 @@ const SDL_version *
 ttf_compile_time_version()
 	PREINIT:
 		char* CLASS = "SDL::Version";
+		SDL_version *compile_time_version;
 	CODE:
-		SDL_version *compile_time_version = safemalloc(sizeof(SDL_version));
+		compile_time_version = safemalloc(sizeof(SDL_version));
 		SDL_TTF_VERSION(compile_time_version);
 		RETVAL = compile_time_version;
 	OUTPUT:
@@ -275,9 +269,9 @@ AV *
 ttf_glyph_metrics(font, ch)
 	TTF_Font *font
 	SV *ch
-	CODE:
+	PREINIT:
 		int minx, maxx, miny, maxy, advance;
-		
+	CODE:
 		if(TTF_GlyphMetrics(font, *(utf16_to_UNICODE(ch)+1), &minx, &maxx, &miny, &maxy, &advance) == 0)
 		{
 			RETVAL = newAV();
@@ -297,8 +291,9 @@ AV *
 ttf_size_text(font, text)
 	TTF_Font *font
 	const char *text
-	CODE:
+	PREINIT:
 		int w, h;
+	CODE:
 		if(0 == TTF_SizeText(font, text, &w, &h))
 		{
 			RETVAL = newAV();
@@ -315,8 +310,9 @@ AV *
 ttf_size_utf8(font, text)
 	TTF_Font *font
 	const char *text
-	CODE:
+	PREINIT:
 		int w, h;
+	CODE:
 		if(0 == TTF_SizeUTF8(font, text, &w, &h))
 		{
 			RETVAL = newAV();
@@ -333,8 +329,9 @@ AV *
 ttf_size_unicode(font, text)
 	TTF_Font *font
 	SV *text
-	CODE:
+	PREINIT:
 		int w, h;
+	CODE:
 		if(0 == TTF_SizeUNICODE(font, utf16_to_UNICODE(text), &w, &h))
 		{
 			RETVAL = newAV();
@@ -366,16 +363,16 @@ ttf_render_utf8_solid(font, text, fg)
 	SDL_Color *fg
 	PREINIT:
 		char* CLASS = "SDL::Surface";
+		STRLEN len;
+		unsigned char *utf8_text;
+		Uint16 *unicode;
 	CODE:
 		/* this is buggy, see: http://bugzilla.libsdl.org/show_bug.cgi?id=970 */
 		/*RETVAL = TTF_RenderUTF8_Solid(font, text, *fg); */
-		
-		STRLEN len;
-		unsigned char*utf8_text = SvPV(text, len);
-		Uint16 *unicode         = safemalloc((sv_len_utf8(text) + 2) * sizeof(Uint16));
-		*unicode                = 0xFEFF;
+		utf8_text = SvPV(text, len);
+		unicode   = safemalloc((sv_len_utf8(text) + 2) * sizeof(Uint16));
+		*unicode  = 0xFEFF;
 		UTF8_to_UNICODE(unicode+1, utf8_text, len);
-
 		RETVAL = TTF_RenderUNICODE_Solid(font, unicode, *fg);
 	OUTPUT:
 		RETVAL
