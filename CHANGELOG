@@ -2,7 +2,8 @@ Revision history for Perl extension SDL
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
-*
+* 2.541_02 Jun 09 2012
+	- Added changes that were removed in 2.540 [Blaizer]
 	- t/mixer_music.t: fixed ogg test name [jtpalmer]
 	- Added Module::Build to configure requirements [jtpalmer]
 	- Pod updates [mig0]
