@@ -2,7 +2,7 @@ Revision history for Perl extension SDL_perl.
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
-*
+* 2.540 May 26 2012
 	- Removed all non-pod changes introduced in 2.538 [jtpalmer]
 	- Fixed bugtracker link [FROGGS]
 	- Added SDL::Platform pod [pktm]
