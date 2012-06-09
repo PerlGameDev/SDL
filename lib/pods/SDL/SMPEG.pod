@@ -18,7 +18,7 @@ TODO
 
 C<SDL::SMPEG> adds support for MPEG video to your
 SDL Perl application.  SMPEGs are objects bound to
-surfaces, whose playback is controled through the
+surfaces, whose playback is controlled through the
 object's interface.
 
 =head2 METHODS 

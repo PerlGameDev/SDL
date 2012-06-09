@@ -58,7 +58,7 @@ C<min_t> will limit apps to a framerate of 60 by default.
 
 =item SDLx::App
 
-C<SDLx::App::loop()> is depreceated.
+C<SDLx::App::loop()> is deprecated.
 
 =back
 
@@ -86,7 +86,7 @@ Has drastically changed, and is still volatile.
 
 =item SDL::App 
 
-SDL::App has migrated to SDLx::App namespace. The reason for this is because it is an extenstion and not a 1:1 XS/Constant Module to the c library.
+SDL::App has migrated to SDLx::App namespace. The reason for this is because it is an extension and not a 1:1 XS/Constant Module to the c library.
 
 =item SDL::Game::Rect 
 

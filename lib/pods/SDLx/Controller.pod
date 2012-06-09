@@ -1,4 +1,3 @@
-
 =head1 NAME
 
 SDLx::Controller - Handles the loops for events, movement and rendering
