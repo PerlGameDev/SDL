@@ -44,7 +44,8 @@ sub new {
 	$_event_handlers{ $ref }     = $args{event_handlers} || [];
 	$_move_handlers{ $ref }      = $args{move_handlers}  || [];
 	$_show_handlers{ $ref }      = $args{show_handlers}  || [];
-	$_delay{ $ref }          = defined $args{delay} && $args{delay} >= 1 ? $args{delay} / 1000 : $args{delay} || 0; # accepts seconds or ticks
+	# delay accepts seconds or ticks
+	$_delay{ $ref }          = defined $args{delay} ? ($args{delay} >= 1 ? $args{delay} / 1000 : $args{delay}) : 0.001;
 #	$_paused{ $ref }             = undef;
 	$_time{ $ref }               = $args{time} || 0;
 	$_stop_handler{ $ref }       = exists $args{stop_handler} ? $args{stop_handler} : \&default_stop_handler;
@@ -73,8 +74,11 @@ sub DESTROY {
 sub run {
 	my ($self)       = @_;
 	my $ref          = refaddr $self;
+
+	# to keep the old value until the end of the cycle
 	my $dt           = $_dt{ $ref };
 	my $delay  = $_delay{ $ref };
+	my $min_t = $_min_t{ $ref };
 
 	# these should never change
 	my $event_handlers = $_event_handlers{ $ref };
@@ -91,10 +95,6 @@ sub run {
 	while ( !$_stop{ $ref } ) {
 		my $new_time   = Time::HiRes::time;
 		my $delta_time = $new_time - $current_time;
-		if( $delta_time < $_min_t{ $ref } ) {
-			Time::HiRes::sleep(0.001); # sleep at least a millisecond
-			redo;
-		}
 		$current_time = $new_time;
 		$delta_time = $_max_t{ $ref } if $delta_time > $_max_t{ $ref };
 		my $delta_copy = $delta_time;
@@ -115,9 +115,13 @@ sub run {
 
 		Time::HiRes::sleep( $delay ) if $delay;
 
+		my $min_t_delay = $min_t - (Time::HiRes::time - $new_time);
+		Time::HiRes::sleep($min_t_delay) if $min_t_delay > 0;
+
 		# these can change during the cycle
 		$dt    = $_dt{ $ref};
 		$delay          = $_delay{ $ref };
+		$min_t = $_min_t{ $ref };
 	}
 
 	# pause works by stopping the app and running it again
@@ -135,9 +139,12 @@ sub run {
 }
 
 sub stop {
-	my $ref = refaddr $_[0];
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
 
-	$_stop{ $ref } = 1;
+	# if we have an arg make stop that; otherwise make stop = 1
+	# this lets people use stopped == 1 to exit and stopped != 1 to do whatever
+	$_stop{ $ref } = @_ > 1 ? $arg : 1;
 
 	# if we're going to stop we don't want to pause
 	delete $_paused{ $ref };
