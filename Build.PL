@@ -229,6 +229,7 @@ my %subsystems = (
 			to   => 'lib/SDLx/Layer.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
+		load_libs => [qw( png jpeg tiff )],
 	},
 	AudioSpec => {
 		file => {
@@ -249,7 +250,8 @@ my %subsystems = (
 			from => 'src/Mixer/Mixer.xs',
 			to   => 'lib/SDL/Mixer.xs',
 		},
-		libraries => [qw( SDL SDL_mixer )],
+		libraries => [qw( SDL SDL_mixer )], 
+		load_libs => [qw( vorbisfile flac mikmod smpeg )], 
 	},
 	MixerSamples => {
 		file => {
@@ -257,6 +259,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/Samples.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixerChannels => {
 		file => {
@@ -264,6 +267,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/Channels.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixerGroups => {
 		file => {
@@ -271,6 +275,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/Groups.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixerMusic => {
 		file => {
@@ -278,6 +283,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/Music.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixerEffects => {
 		file => {
@@ -285,6 +291,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/Effects.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixChunk => {
 		file => {
@@ -292,6 +299,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/MixChunk.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixMusic => {
 		file => {
@@ -299,6 +307,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/MixMusic.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	Palette => {
 		file => {
@@ -383,6 +392,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Image.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
+		load_libs => [qw( png jpeg tiff )],
 	},
 	SFont => {
 		file => {
@@ -390,6 +400,7 @@ my %subsystems = (
 			to   => 'lib/SDLx/SFont.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
+		load_libs => [qw( png jpeg tiff )],
 	},
 
 #	SMPEG => {
@@ -535,7 +546,15 @@ my %libraries = (
 		header => 'tiff.h',
 		lib    => 'tiff',
 	},
-
+	vorbisfile => {
+		lib    => 'vorbisfile',
+	},
+	flac => {
+		lib    => 'FLAC',
+	},
+	mikmod => {
+		lib    => 'mikmod',
+	},
 	smpeg => {
 		define => 'HAVE_SMPEG',
 		header => 'smpeg/smpeg.h',
