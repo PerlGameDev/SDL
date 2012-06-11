@@ -1,8 +1,15 @@
-Revision history for Perl extension SDL_perl.
+Revision history for Perl extension SDL
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
 *
+	- Updated Alien::SDL's version to 1.434 [jtpalmer]
+
+* 2.541_02 Jun 09 2012
+	- Added changes that were removed in 2.540 [Blaizer]
+	- t/mixer_music.t: fixed ogg test name [jtpalmer]
+	- Added Module::Build to configure requirements [jtpalmer]
+	- Pod updates [mig0]
 	- inc/My/Builder.pm: strip pods/ subdir from pod files on build [mig0]
 	- SDL::Video: fill_rect now accepts 0 or undef for dest_rect, as well as a rect with h == 0 or w == 0 to mean the whole surface [mig0]
 	- SDLx::Test: fixed centering multi-line text [dod]

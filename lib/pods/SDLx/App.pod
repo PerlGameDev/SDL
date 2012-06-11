@@ -1,9 +1,8 @@
-
 =pod
 
 =head1 NAME
 
-SDLx::App - a SDL perl extension
+SDLx::App - The root window of an SDL application
 
 =head1 CATEGORY
 
@@ -11,169 +10,430 @@ Extension
 
 =head1 SYNOPSIS
 
-    use SDL;
-    use SDLx::App; 
-    use SDL::Event;
-    use SDL::Events; 
-    
-    my $app = SDLx::App->new( 
-        title  => 'Application Title',
-        width  => 640,
-        height => 480,
-        depth  => 32
-    ); 
+ use SDL;
+ use SDLx::App;
+ use SDL::Event;
+ use SDL::Events;
 
-This is the manual way of doing things
+ # this is all the code we need to have a working app!
+ my $app = SDLx::App->new;
 
-    my $event = SDL::Event->new; # create a new event 
-    
-    SDL::Events::pump_events();
-       
-    while ( SDL::Events::poll_event($event) ) { 
-        my $type = $event->type(); # get event type 
-        print $type; 
-        exit if $type == SDL_QUIT; 
-    }
+ # we can also specify many useful things in the constructor
+ my $app = SDLx::App->new(
+     title      => 'My Great Game',
+     width      => 1024,
+     height     => 600,
+     dt         => 0.05,
+     centered   => 1,
+     no_frame   => 1,
+     async_blit => 1,
+ );
 
-An alternative to the manual Event processing is through the L<SDLx::Controller> module. L<SDLx::App> is a Controller so see the CALLBACKS section below.
+ # our app also comes with an SDLx::Controller
+
+ # add a handler handle events such as keypresses
+ $app->add_event_handler(
+     sub {
+          my ($event) = @_;
+          # handle the event here
+     }
+ );
+
+ # add a handler to move our objects in response to time
+ $app->add_move_handler(
+     sub {
+         # handle moving objects here
+     }
+ );
+
+ # add a handler to show our objects on the screen
+ $app->add_show_handler(
+     sub {
+         # handle drawing objects here
+     }
+ );
+
+ # finally, start the app run loop with the added handlers
+ $app->run();
+
+For a full explanation of the L<run|SDLx::Controller/run> loop and other Controller related methods,
+please see L<SDLx::Controller>.
 
 =head1 DESCRIPTION
 
-L<SDLx::App> controls the root window of the of your SDL based application.
-It extends the L<SDL::Surface> class, and provides an interface to the window
-manager oriented functions.
+The C<SDLx::App> provides methods for the root window of your SDL application,
+as well as many related convenience methods.
+It is a subclass of both L<SDLx::Surface> and L<SDLx::Controller>,
+providing all the methods they both provide.
 
 =head1 METHODS
 
 =head2 new
 
-C<SDLx::App::new> initializes the SDL, creates a new screen,
-and initializes some of the window manager properties.
-C<SDLx::App::new> takes a series of named parameters:
+ my $app = SDLx::App->new(
+     width  => 640,
+     height => 480,
+     depth  => 32,
 
-=over 4
+     title          => "Application Title",
+     icon_title     => "App Title",
+     icon           => "icon.bmp",
+     icon_color_key => [255, 255, 0],
 
-=item * title
-the window title. Defaults to the file name. Shorter alias: 't'
+     # two ways to do init. init video is assumed regardless
+     init => SDL_INIT_AUDIO | SDL_INIT_JOYSTICK,
+     init => [ 'audio', 'joystick' ],
 
-=item * icon_title
-the icon title. Defaults to file name. Shortcut: 'it'
+     # normal libsdl access to flags
+     flags => SDL_SWSURFACE | SDL_ANYFORMAT,
+     # or parameter access to flags
+     sw_surface => 1,
+     hw_surface => 1,
+     async_blit => 1,
+     any_format => 1,
+     hw_palette => 1,
+     double_buf => 1,
+     fullscreen => 1,
+     open_gl    => 1,
+     resizable  => 1,
+     no_frame   => 1,
 
-=item * icon
-the icon itself. Defaults to none. Shortcut: 'i'
+     # window position
+     centered => 1,
+     position => [ 150, 100 ],
 
-=item * width
-Window width, in pixels. Defaults to 800. Shortcut: 'w'
+     hide_cursor  => 1,
+     grab_input => 1,
 
-=item * height
-Window height, in pixels. Defaults to 600. Shortcut: 'h'
+     # don't initialize an SDLx::Controller for the app
+     no_controller => 1,
 
-=item * depth
-Screen depth. Defaults to 16. Shortcut: 'd'.
+     # store your goodies in the app if you like
+     stash => {},
 
-=item * flags
-Any flags you want to pass to L<SDL::Video> upon initialization. Defaults to SDL_ANYFORMAT. Flags should be I<or'ed> together if you're passing more than one (flags => FOO|BAR). Shortcut: 'f'.
+     # and everything from SDLx::Controller
+     dt             => 0.1,
+     min_t          => 1 / 60,
+     delay          => 0,
+     stop_handler   => \&SDLx::Controller::default_stop_handler,
+     event          => SDL::Event->new(),
+     event_handlers => [],
+     move_handlers  => [],
+     show_handlers  => [],
+     time           => 0,
+ );
 
-=item * resizeable
-Set this to a true value to make the window resizeable by the user. Default is off.
+Initializes SDL with L<SDLx::App::init|/init>,
+creates the root window with L<SDL::Video::set_video_mode|SDL::Video/set_video_mode>,
+initializes an L<SDLx::Controller> belonging to the app,
+and performs many other app management tasks all as specified by named parameters.
+Returns an L<SDLx::Surface> of the new app.
 
-=item * exit_on_quit
-Set this to a true value to make the app exit if a SDL_QUIT event is triggered. Shortcut: 'eoq'.
+The complete set of parameters are shown in the code above and explained in detail below.
+When constructing the app's L<SDLx::Controller> all parameters specified are also given to
+L<< SDLx::Controller->new|SDLx::Controller/new >>, so should be specified here. See
+L<SDLx::Controller>.
+
+=over
+
+=item width
+
+The window width, in pixels. Defaults to 640. Alias: C<w>.
+
+=item height
+
+The window height, in pixels. Defaults to 480. Alias: C<h>.
+
+=item depth
+
+The surface's color depth, in bits per pixel. Should be 8, 16, 24 or 32.
+If not defined, defaults to 32 and specifies the
+L<SDL_ANYFORMAT|SDL::Video/CONSTANTS> flag. Alias: C<d>.
+
+=item title
+
+The window's title, as a string. Defaults to the L</icon_title> if defined, or the file name.
+
+=item icon_title
+
+The application's icon title, as a string. Defaults to the L</title> if defined, or the file name.
+This will only have an effect under certain operating systems.
+
+=item icon
+
+The application's icon. Set with the L</icon> method.
+
+=item icon_color_key
+
+You can optionally use this when specifying the C<icon> parameter to set its color key (transparent pixel).
+
+=item init
+
+The SDL subsystems to initialize, as a product of the L<SDL init constants|SDL/CONSTANTS> or an array ref.
+The video subsystem is initialized no matter what, and does not need to be specified.
+The specified value is passed to L<SDLx::App::init|/init>, so see that for more details.
+Defaults to L<SDL_INIT_EVERYTHING|SDL/CONSTANTS>. Alias: C<initialize>.
+
+=item flags
+
+L<SDL::Video flags|SDL::Video/CONSTANTS> to specify when calling
+L<SDL::Video::set_video_mode|SDL::Video/set_video_mode>.
+Flags should be bitwise I<or'ed> together when passing more than one (C<flags => FOO|BAR>).
+All flags have a corresponding named parameter which can be used instead of specifying them here,
+and are explained below.
+Defaults to no flags, or to L<SDL_ANYFORMAT|SDL::Video/CONSTANTS> if the C<depth> parameter was undefined.
+Alias: C<f>.
+
+=item sw_surface
+
+The L<SDL_SWSURFACE|SDL::Video/CONSTANTS> flag, as a boolean. If true, creates the surface in
+system memory. This is best used when you plan to do per-pixel manipulations,
+or blit surfaces with alpha channels. Aliases: C<software_surface>, C<sw>.
+
+=item hw_surface
+
+The L<SDL_HWSURFACE|SDL::Video/CONSTANTS> flag, as a boolean. If true, creates the surface in
+video memory. This is best used when the surfaces you'll be blitting are also hardware surfaces.
+SDL copies the surfaces from video memory to system memory when you L<lock|SDL::Video/lock_surface> them,
+and back when you L<unlock|SDL::Video/unlock_surface> them, which can cause a major performance hit.
+If the video driver does not support hardware surfaces, a software surface will be returned instead.
+Many platforms can only provide hardware surfaces when using L<SDL_FULLSCREEN|SDL::Video/CONSTANTS>.
+Aliases: C<hardware_surface>, C<hw>.
+
+=item async_blit
+
+The L<SDL_ASYNCBLIT|SDL::Video/CONSTANTS> flag, as a boolean. If true, enables the use of asynchronous updates
+of the display surface. This will usually slow down blitting on single-CPU machines, but can speed up blitting
+on multi-CPU machines. Alias: C<asynchronous_blit>.
+
+=item any_format
+
+The L<SDL_ANYFORMAT|SDL::Video/CONSTANTS> flag, as a boolean. If a video surface of the requested
+bits-per-pixel (bpp) is not available SDL will normally emulate one with a shadow surface.
+Passing a true value prevents this and causes SDL to use the video surface, regardless of its pixel depth.
+This flag is specified automatically when the L</depth> parameter is undefined.
+
+=item hw_palette
+
+The L<SDL_HWPALETTE|SDL::Video/CONSTANTS> flag, as a boolean. If true, gives SDL exclusive palette access.
+Without this flag you may not always get the exact colors you request with
+L<SDL::Video::set_colors|SDL::Video/set_colors> or L<SDL::Video::set_palette|SDL::Video/set_palette>.
+Alias: C<hardware_palette>.
+
+=item double_buf
+
+The L<SDL_DOUBLEBUF|SDL::Video/CONSTANTS> flag, as a boolean. If true, enables hardware double buffering;
+faster, but only valid with a hardware surface. L<flip|SDLx::Surface/flip> should be used to flip the buffers
+and update the screen. All drawing will take place on the surface that is not being displayed.
+If double buffering could not be enabled then L<flip|SDLx::Surface/flip> will just perform an
+L<update_rect|SDLx::Surface/update_rect> on the entire screen. Aliases: C<double_buffer>, C<dbl_buf>.
+
+=item fullscreen
+
+The L<SDL_FULLSCREEN|SDL::Video/CONSTANTS> flag, as a boolean. If true, SDL will attempt to use a fullscreen mode,
+changing the hardware resolution to the resolution of the display surface.
+If, for whatever reason, this change is not possible the next higher resolution will be used
+and the display surface centered on a black background. Aliases: C<full_screen>, C<full>.
+
+=item open_gl
+
+The L<SDL_OPENGL|SDL::Video/CONSTANTS> flag, as a boolean. If true, creates an OpenGL rendering context.
+This uses any C<gl> attributes specified and any others set with L</gl_attribute>. Aliases: C<opengl>, C<gl>.
+
+=item resizable
+
+The L<SDL_RESIZABLE|SDL::Video/CONSTANTS> flag, as a boolean. If true, creates a resizable window.
+When the window is resized by the user a L<SDL_VIDEORESIZE|SDL::Events/CONSTANTS> event
+is generated and L</resize> should be called with the new size.
+
+=item no_frame
+
+The L<SDL_NOFRAME|SDL::Video/CONSTANTS> flag, as a boolean. If true, SDL attempts to create a window
+with no title bar or frame decoration. Fullscreen modes automatically have this flag set.
+
+=item centered
+
+A boolean value. If true, creates the window centered on the screen.
+SDL does this with the C<SDL_VIDEO_CENTERED> environment variable which is set using C<$ENV{SDL_VIDEO_CENTERED}>.
+Alias: C<center>.
+
+=item position
+
+The position of the window on the screen, as an array ref. The array ref should be two elements long,
+specifying C<x> and C<y> values, in pixels, used to position the window on the screen.
+Implemented using C<$ENV{SDL_VIDEO_WINDOW_POS}>. Alias: C<pos>.
+
+=item hide_cursor
+
+A boolean value. If true, hides the cursor on the video surface using L</show_cursor>.
+A surface can then instead be blitted to the display at the location of the cursor.
+Alias: C<no_cursor>.
+
+=item grab_input
+
+A boolean value. If true, SDL attempts to confine the cursor to the window using L</grab_input>.
+Also, nearly all keyboard input will be passed directly to the application,
+and not interpreted by any window manager present.
+
+=item no_controller
+
+A boolean value. If true, does not initialize an L<SDLx::Controller> for the app.
+Care should then be taken to not use any of L<SDLx::Controller>s methods.
+
+=item stash
+
+A place to store any information you need the app to hold. This can then be returned and set with
+L</stash>. If not specified, defaults to an empty hash ref.
 
 =back
 
-=head1 METHODS
+=head2 init
 
-=head2 title()
+ SDLx::App->init( SDL::SDL_INIT_TIMER | SDL::SDL_INIT_AUDIO | ... );
+ SDLx::App->init( [ 'timer', 'audio', 'video', 'cd_rom', 'cdrom', 'joystick',
+                    'everything', 'all', 'no_parachute', 'event_thread' ]  );
 
-=head2 title( $new_title )
+This is used internally by L</new> to init SDL with
+L<SDL::init|SDL/init>. If any subsystems are already initialized, it will use
+L<SDL::init_sub_system|SDL/init_sub_system> instead. You should use this whenever you need to
+init anything outside calls to L</new>, as it will always do what you want.
 
-=head2 title( $window_title, $icon_title )
+If a number is specified, it will initialize SDL in the same way as L<SDL::init|SDL/init> describes.
+If an array ref is specified, each element should be a string corresponding to a flag to specify.
+The strings and their corresponding flags are shown in the table below. See L<SDL::init|SDL/init> for
+descriptions of what each flag does.
 
-C<SDLx::App::title> takes 0, 1, or 2 arguments. If no parameter is given,
-it returns the current application window title. If one parameter is
-passed, both the window title and icon title will be set to its value.
-If two parameters are passed the window title will be set to the first,
-and the icon title to the second.
+ flag                    string          alias
+ ====================    ============    ======
+ SDL_INIT_TIMER          timer
+ SDL_INIT_AUDIO          audio
+ SDL_INIT_VIDEO          video
+ SDL_INIT_CDROM          cd_rom          cdrom
+ SDL_INIT_JOYSTICK       joystick
+ SDL_INIT_EVERYTHING     everything      all
+ SDL_INIT_NOPARACHUTE    no_parachute
+ SDL_INIT_EVENTTHREAD    event_thread
 
-=head2 delay( $ms )
+=head2 screen_size
 
-C<SDLx::App::delay> takes 1 argument, and will sleep the application for
-that many ms.
+ my ($screen_w, $screen_h, $screen_d) = SDLx::App->screen_size();
 
-=head2 ticks
+Returns the width, height and depth of the user's screen using
+L<SDL::Video::get_video_info|SDL::Video/get_video_info>.
+This can be called before or after calling L</new>.
+Initializing the video subsystem will be handled correctly no matter what thanks to
+L<SDLx::App::init|/init>.
 
-C<SDLx::App::ticks> returns the number of ms since the application began.
+=head2 set_video_mode
 
-=head2 error
+ my $app = SDLx::App->set_video_mode( $w, $h, $d, $f );
+ $app->set_video_mode( $w, $h, $d, $f );
 
-C<SDLx::App::error> returns the last error message set by the SDL.
+The first form is used internally by L</new> to create the new SDL display surface.
+The second form can be used to change the video mode of an existing app.
+See L<SDL::Video::set_video_mode|SDL::Video/set_video_mode> for a description on what the
+four arguments do.
 
-=head2 resize( $width, $height )
+=head2 resize
 
-C<SDLx::App::resize> takes a new width and height of the application. Only
-works if the application was originally created with the resizable option.
+ $app->resize( $w, $h );
+
+Resizes the app to the specified width and height. The surface's depth and flags will remain the same.
 
 =head2 fullscreen
 
-C<SDLx::App::fullscreen> toggles the application in and out of fullscreen mode.
+ $app->fullscreen();
+
+Toggles the app in and out of fullscreen mode in a cross-platform-friendly way.
+Returns false if the app fails to go fullscreen for some reason. Otherwise, returns true.
 
 =head2 iconify
 
-C<SDLx::App::iconify> iconifies the application window.
+ $app->iconify();
 
-=head2 grab_input( $CONSTANT )
+Attempts to minimize the window with L<SDL::Video::wm_iconify_window|SDL::Video/wm_iconify_window>.
+The exact behavior depends on the operating system.
 
-C<SDLx::App::grab_input> can be used to change the input focus behavior of
-the application. It takes one argument, which should be one of the following:
+=head2 title
 
-=over 4
+ my ( $title, $icon_title ) = $app->title();
+ $app->title( $title, $icon_title );
 
-=item * SDL_GRAB_QUERY
+If no arguments are specified, returns a list of the title and the icon title.
+If arguments are specified, the titles will be set instead. Specify undef to keep the title or
+icon title the same, or a string to modify them.
 
-=item * SDL_GRAB_ON
+=head2 icon
 
-=item * SDL_GRAB_OFF
+ SDLx::App->icon( $filename, $color );
+ SDLx::App->icon( $surface, $color );
 
-=back
+Sets the window's icon.
+This must be called before creating the display surface, so SDL::Image can not be used.
+If a filename is specified, it is loaded with L<SDL::Video::load_BMP|SDL::Video/load_BMP>.
+Otherwise, the first argument should be a surface. Win32 icons must be 32x32.
+The C<$color> argument is optional and, if specified, is used to set the icon's color key (transparent pixel).
+It should be an RGB color as either a number or array ref.
+
+=head2 error
+
+ my $error = $app->error();
+ $app->error( @error );
+ $app->error( undef );
+
+With no arguments, returns the current SDL error using L<SDL::get_error|SDL/get_error>.
+With one or more arguments, sets the SDL error to the C<sprintf> formatted string.
+With C<undef> as the one and only argument, clears the SDL error. This can be used
+when you are done with the error.
+
+=head2 warp_cursor
+
+ $app->warp_cursor( $x, $y );
+
+Moves the cursor to the specified coordinates on the application window. If an argument
+is not specified, it will default to 0.
+
+=head2 show_cursor
+
+ my $is_cursor_shown = $app->show_cursor();
+ $app->show_cursor( $show );
+
+With no arguments, returns a value that will be true if the cursor
+is currently being shown or false otherwise. With an argument, the cursor will be
+shown if it is true or hidden otherwise.
+
+=head2 grab_input
+
+ my $is_grabbing_input = $app->grab_input();
+ $app->grab_input( $grab );
+
+Grab input attempts to confine the cursor to the window.
+Also, nearly all keyboard input will be passed directly to the application,
+and not interpreted by any window manager present.
+If no arguments are specified, returns a boolean that will be true if
+grab input is on or false if it is off. If an argument is specified, grab input will be turned on
+if it is true or off otherwise.
 
 =head2 sync
 
-C<SDLx::App::sync> encapsulates the various methods of syncronizing the screen with the
-current video buffer. C<SDLx::App::sync> will do a fullscreen update, using the double buffer
-or OpenGL buffer if applicable. This is prefered to calling flip on the application window.
+ $app->sync();
 
-=head2 attribute( $attr )
+Swaps the OpenGL buffers and does a full update of the screen with
+L<SDL::Video::GL_swap_buffers|SDL::Video/GL_swap_buffers> if OpenGL is being used.
+This is preferable to swapping the SDL buffers.
+Otherwise, just swaps the SDL buffers using L<SDL::Video::flip|SDL::Video/flip>.
 
-=head2 attribute( $attr, $value )
+=head2 gl_attribute
 
-C<SDLx::App::attribute> allows one to get and set GL attributes. By passing a value
-in addition to the attribute selector, the value will be set. C<SDL:::App::attribute>
-always returns the current value of the given attribute, or Carp::confesss on failure.
+ my $value = $app->( $attribute );
+ $app->gl_attribute( $attribute, $value );
 
-=head1 CALLBACKS
-
-C<SDLx::App> is a C<SDLx::Controller>. Use the event, show and handlers to run the app.
-
-  use SDL;
-  use SDLx::App;
- 
-  use SDL::Event; #Where ever the event call back is processed
-
-  my $app = SDLx::App->new( width => 200, height => 200);
-
-  $app->add_event_handler( sub{ return 0 if $_[0]->type == SDL_QUIT; return 1});
-
-  $app->add_show_handler( sub{ $app->update() } );
-
-  $app->add_move_handler( 
-  sub{ 
-  #calc your physics here 
-  } );
-
-  $app->run();
-
-see L<SDLx::Controller> for more details.
+With one argument, returns the value of the specified attribute using
+L<SDL::Video::GL_get_attribute|SDL::Video/GL_get_attribute>.
+With a value argument, sets the specified attribute
+to the specified value using L<SDL::Video::GL_set_attribute|SDL::Video/GL_set_attribute>.
+The attribute argument should be one of the L<SDL::Video::SDL_GL_* constants|SDL::Video/CONSTANTS>.
+See L<SDL::Video::GL_set_attribute|SDL::Video/GL_set_attribute> for more details.
 
 =head1 AUTHORS
 
@@ -181,6 +441,6 @@ See L<SDL/AUTHORS>.
 
 =head1 SEE ALSO
 
-L<perl> L<SDL::Surface> L<SDL::Event>  L<SDL::OpenGL>
+L<SDLx::Controller>, L<SDLx::Surface>, L<SDL::Video>, L<SDL::Event>, L<SDL::Mouse>
 
 =cut
