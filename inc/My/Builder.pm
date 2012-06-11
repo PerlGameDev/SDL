@@ -108,7 +108,7 @@ sub translate_table {
 		$p =~ s|^lib/(.*)\.xs|$1|;
 		$p =~ s|/|::|g;
 		my @list =
-			map ( $libraries->{$_}->{lib}, @{ $subsystems->{$m}->{libraries} } );
+			map ( $libraries->{$_}->{lib}, @{ $subsystems->{$m}->{libraries} }, @{ $subsystems->{$m}->{load_libs} } );
 		$ret{$p} = \@list;
 	}
 	return \%ret;
