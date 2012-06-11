@@ -176,7 +176,7 @@ SKIP:
 	SKIP:
 	{
 		skip( 'JPEG support not compiled', 1 ) unless SDL::Config->has('jpeg');
-		is( SDL::Image::init(IMG_INIT_JPG), IMG_INIT_JPG,
+		cmp_ok( SDL::Image::init(IMG_INIT_JPG), '&', IMG_INIT_JPG,
 			'[init] Inited JPEG'
 		);
 	}
@@ -184,7 +184,7 @@ SKIP:
 	SKIP:
 	{
 		skip( 'TIFF support not compiled', 1 ) unless SDL::Config->has('tiff');
-		is( SDL::Image::init(IMG_INIT_TIF), IMG_INIT_TIF,
+		cmp_ok( SDL::Image::init(IMG_INIT_TIF), '&', IMG_INIT_TIF,
 			'[init] Inited TIFF'
 		);
 	}
@@ -192,7 +192,7 @@ SKIP:
 	SKIP:
 	{
 		skip( 'PNG support not compiled', 1 ) unless SDL::Config->has('png');
-		is( SDL::Image::init(IMG_INIT_PNG), IMG_INIT_PNG, '[init] Inited PNG' );
+		cmp_ok( SDL::Image::init(IMG_INIT_PNG), '&', IMG_INIT_PNG, '[init] Inited PNG' );
 	}
 
 	can_ok(
