@@ -39,3 +39,4 @@ Build.bat
 *.def
 *.exp
 *.lds
+*.obj
