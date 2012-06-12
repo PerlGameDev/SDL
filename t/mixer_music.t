@@ -109,17 +109,17 @@ SKIP:
 {
 	skip( 'Version 1.2.7 needed', 3 ) if $v < 1.2.7;
 
-	my $rw = SDL::RWOps->new_file( $ogg_test_file, "rb" );
+	my $rw = SDL::RWOps->new_file( $wav_test_file, "rb" );
 	isa_ok( $rw, 'SDL::RWOps', '[SDL::RWOps->new_file]' );
 	my $sample_music_rw = SDL::Mixer::Music::load_MUS_RW( $rw );
 	isa_ok( $sample_music_rw, 'SDL::Mixer::MixMusic', '[load_MUS_RW]' );
 	is( SDL::Mixer::Music::play_music( $sample_music_rw, 0 ),
-		0, "[play_music_rw] plays $ogg_test_file"
+		0, "[play_music_rw] plays $wav_test_file"
 	);
 }
 
 my $wav_music = SDL::Mixer::Music::load_MUS($wav_test_file);
-my $ogg_music = SDL::Mixer::Music::load_MUS($ogg_test_file);
+#my $ogg_music = SDL::Mixer::Music::load_MUS($ogg_test_file);
 isa_ok( $wav_music, 'SDL::Mixer::MixMusic', '[load_MUS]' );
 is( SDL::Mixer::Music::play_music( $wav_music, 0 ),
 	0, "[play_music] plays $wav_test_file"
@@ -192,8 +192,8 @@ is( SDL::Mixer::Music::halt_music(), 0, '[halt_music]' );
 SKIP:
 {
 	skip( 'We need an MOD/OGG/MP3 for positioning', 2 )
-		unless $ogg_test_file =~ /\.(ogg|mod|mp3)$/;
-	is( SDL::Mixer::Music::fade_in_music_pos( $ogg_music, 0, 2000, 2.5 ),
+		unless $wav_test_file =~ /\.(ogg|mod|mp3)$/;
+	is( SDL::Mixer::Music::fade_in_music_pos( $wav_music, 0, 2000, 2.5 ),
 		0, "[fade_in_music_pos] $delay ms, beginning at 2.5 ms"
 	);
 	is( SDL::Mixer::Music::set_music_position(2.5),
