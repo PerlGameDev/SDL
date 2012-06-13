@@ -45,7 +45,7 @@ sub new {
 	$_move_handlers{ $ref }      = $args{move_handlers}  || [];
 	$_show_handlers{ $ref }      = $args{show_handlers}  || [];
 	# delay accepts seconds or ticks
-	$_delay{ $ref }          = defined $args{delay} ? ($args{delay} >= 1 ? $args{delay} / 1000 : $args{delay}) : 0.001;
+	$_delay{ $ref }          = defined $args{delay} ? ($args{delay} >= 1 ? $args{delay} / 1000 : $args{delay}) : 0;
 #	$_paused{ $ref }             = undef;
 	$_time{ $ref }               = $args{time} || 0;
 	$_stop_handler{ $ref }       = exists $args{stop_handler} ? $args{stop_handler} : \&default_stop_handler;
@@ -76,9 +76,7 @@ sub run {
 	my $ref          = refaddr $self;
 
 	# to keep the old value until the end of the cycle
-	my $dt           = $_dt{ $ref };
-	my $delay  = $_delay{ $ref };
-	my $min_t = $_min_t{ $ref };
+	my ($dt, $delay, $min_t);
 
 	# these should never change
 	my $event_handlers = $_event_handlers{ $ref };
@@ -89,15 +87,21 @@ sub run {
 	delete $_stop{ $ref };
 	delete $_paused{ $ref };
 
-	my $current_time = Time::HiRes::time;
-	Time::HiRes::sleep( $delay ) if $delay;
+	my $current_time = Time::HiRes::time();
+	Time::HiRes::sleep( 0.001 ); # sleep at least a millisecond
 
 	while ( !$_stop{ $ref } ) {
-		my $new_time   = Time::HiRes::time;
-		my $delta_time = $new_time - $current_time;
+		my $new_time   = Time::HiRes::time();
+		my $delta_time = my $delta_copy = $new_time - $current_time;
 		$current_time = $new_time;
 		$delta_time = $_max_t{ $ref } if $delta_time > $_max_t{ $ref };
-		my $delta_copy = $delta_time;
+
+		# these can change during the cycle
+		$dt    = $_dt{ $ref };
+		$delay = $_delay{ $ref };
+		$min_t = $_min_t{ $ref };
+
+		# we keep this completely up-to-date
 		my $time_ref = \$_time{ $ref};
 
 		$self->_event( $ref, $event_handlers );
@@ -113,15 +117,13 @@ sub run {
 
 		$self->_show( $show_handlers, $delta_time );
 
-		Time::HiRes::sleep( $delay ) if $delay;
+		# one or the other of delay or min_t is good
+		Time::HiRes::sleep( $delay ) if $delay > 0;
 
-		my $min_t_delay = $min_t - (Time::HiRes::time - $new_time);
-		Time::HiRes::sleep($min_t_delay) if $min_t_delay > 0;
-
-		# these can change during the cycle
-		$dt    = $_dt{ $ref};
-		$delay          = $_delay{ $ref };
-		$min_t = $_min_t{ $ref };
+		if($min_t > 0) {
+			my $min_t_delay = $min_t - (Time::HiRes::time - $new_time);
+			Time::HiRes::sleep($min_t_delay) if $min_t_delay > 0;
+		}
 	}
 
 	# pause works by stopping the app and running it again
