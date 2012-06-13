@@ -25,6 +25,11 @@ my %_paused;
 my %_time;
 my %_stop_handler;
 
+use constant {
+	STOP  => '1',
+	PAUSE => '0', # pause is defined but false
+};
+
 sub new {
 	my ($self, %args) = @_;
 
@@ -39,7 +44,7 @@ sub new {
 	$_dt{ $ref }                 = defined $args{dt}    ? $args{dt}    : 0.1;
 	$_min_t{ $ref }              = defined $args{min_t} ? $args{min_t} : 1 / 60;
 	$_max_t{ $ref }          = defined $args{max_t} ? $args{max_t} : 0.1;
-	$_stop{ $ref }               = 1;
+	$_stop{ $ref }           = STOP;
 	$_event{ $ref }              = $args{event} || SDL::Event->new();
 	$_event_handlers{ $ref }     = $args{event_handlers} || [];
 	$_move_handlers{ $ref }      = $args{move_handlers}  || [];
@@ -90,7 +95,7 @@ sub run {
 	my $current_time = Time::HiRes::time();
 	Time::HiRes::sleep( 0.001 ); # sleep at least a millisecond
 
-	while ( !$_stop{ $ref } ) {
+	until ( defined $_stop{ $ref } ) {
 		my $new_time   = Time::HiRes::time();
 		my $delta_time = my $delta_copy = $new_time - $current_time;
 		$current_time = $new_time;
@@ -128,11 +133,7 @@ sub run {
 
 	# pause works by stopping the app and running it again
 	if( $_paused{ $ref } ) {
-		delete $_stop{ $ref};
-
 		$self->_pause($ref);
-
-		delete $_paused{ $ref };
 
 		# exit out of this sub before going back in so we don't recurse deeper and deeper
 			goto $self->can('run')
@@ -144,12 +145,10 @@ sub stop {
 	my ($self, $arg) = @_;
 	my $ref = refaddr $self;
 
-	# if we have an arg make stop that; otherwise make stop = 1
-	# this lets people use stopped == 1 to exit and stopped != 1 to do whatever
-	$_stop{ $ref } = @_ > 1 ? $arg : 1;
+	$_stop{ $ref } = @_ > 1 ? $arg : STOP;
 
 	# if we're going to stop we don't want to pause
-	delete $_paused{ $ref };
+	delete $_paused{ $ref } if defined $_stop{ $ref } and $_stop{ $ref } eq STOP;
 }
 sub stopped {
 	# returns true if the app is stopped or about to stop
@@ -161,6 +160,7 @@ sub _pause {
 	my $event = $_event{ $ref};
 	my $stop_handler = $_stop_handler{ $ref};
 	my $callback = $_paused{ $ref};
+	my $stop = delete $_stop{ $ref };
 
 	do {
 		SDL::Events::pump_events(); # don't know if we need this
@@ -169,18 +169,27 @@ sub _pause {
 	}
 	until
 		$_stop{ $ref } # stop set by stop_handler
-		or !$callback or $callback->( $event, $self )
+		or $callback->( $event, $self )
 		or $_stop{ $ref } # stop set by callback
 	;
+
+	$_stop{ $ref } ||= $stop if $stop;
+	delete $_paused{ $ref };
 }
 sub pause {
 	my ($self, $callback) = @_;
 	my $ref = refaddr $self;
+	my $stop = $_stop{ $ref };
+
+	unless( $callback ) {
+		delete $_paused{ $ref };
+		return;
+	}
 
 	# if we're going to stop we don't want to pause
-	return if !$_paused{ $ref} and $_stop{ $ref};
+	return if !$_paused{ $ref } and defined $stop and $stop eq STOP;
 
-	$_stop{ $ref } = 1;
+	$_stop{ $ref } = PAUSE unless $stop;
 	$_paused{ $ref} = $callback;
 }
 sub paused {
