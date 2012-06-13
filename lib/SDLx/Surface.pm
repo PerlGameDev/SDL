@@ -16,7 +16,6 @@ use SDL::PixelFormat;
 
 use SDL::GFX::Primitives;
 
-use Tie::Simple;
 use SDLx::Validate;
 use SDLx::Surface::TiedMatrix;
 
