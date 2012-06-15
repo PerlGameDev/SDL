@@ -2,6 +2,9 @@ Revision history for Perl extension SDL
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+* 2.541_04 Jun 15 2012
+	- Updated Alien::SDL's version to 1.435_3 [FROGGS]
+
 * 2.541_03 Jun 12 2012
 	- Updated Alien::SDL's version to 1.435_1 [FROGGS]
 	- Changed XS to fit MSVC (C89), so declarations are right after beginning block and before code [FROGGS]
