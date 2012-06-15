@@ -80,7 +80,7 @@ sub new {
 			push @$init, "video";
 		}
 		else {
-			$init |= SDL::SDL_INIT_VIDEO
+			$init |= SDL::SDL_INIT_VIDEO;
 		}
 		SDLx::App->init( $init );
 	}
@@ -246,7 +246,10 @@ sub resize {
 }
 
 sub title {
-	my ( undef, $title, $icon_title ) = @_;
+	my ( $self, $title, $icon_title ) = @_;
+	my $video_info = SDL::Video::get_video_info();
+	return if $video_info && !$video_info->wm_available();
+
 	if ( @_ > 1 ) {
 		my ($t, $it) = SDL::Video::wm_get_caption;
 		$title      = $t  unless defined $title;
