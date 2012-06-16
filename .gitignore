@@ -23,7 +23,7 @@ SDLPerl.app
 SDL_perl.c
 SDL_perl.xs
 stage
-MANIFEST
+!MANIFEST
 !MANIFEST.skip
 *META.yml
 *META.json
