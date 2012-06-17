@@ -69,7 +69,7 @@ Export tag: ':video'
  SDL_SRCCOLORKEY     Use colorkey blitting
  SDL_RLEACCELOK      Private flag
  SDL_RLEACCEL        Accelerated colorkey blitting with RLE
- SDL_SRCALPHA        Use alpha blending blit
+ SDL_SRCALPHA        Use alpha blending blit (per-surface alpha)
  SDL_PREALLOC        Use preallocated memory
 
 Export tag ':overlay'
@@ -84,7 +84,7 @@ Export tag ':palette'
 
  SDL_LOGPAL          Logical palette, which controls how blits are mapped to/from the surface
  SDL_PHYSPAL         Physical palette, which controls how pixels look on the screen
- 
+
 Export tag ':grab'
 
  SDL_GRAB_QUERY
@@ -337,19 +337,19 @@ each call to L<SDL::Video::set_video_mode|/set_video_mode>, for example for a mu
 
 Creates a new SDL::surface of the specified L<SDL::PixelFormat>, and then copies and maps the given surface to it. 
 It is also useful for making a copy of a surface.
- 
+
 The flags parameter is passed to L<SDL::Surface>C<-E<gt>new> and has those semantics.
 This function is used internally by L<SDL::Video::display_format|/display_format>.
 This function can only be called after C<SDL::init>. 
- 
+
 it returns a L<SDL::Surface> on success or C<undef> on error.
- 
+
 =head2	display_format
 
  $new_surface = SDL::Video::display_format( $surface );
 
 This function takes a surface and copies it to a new surface of the pixel format and colors of the video framebuffer, suitable for fast 
-blitting onto the display surface. It calls L<SDL::Video::convert_surface|/conver_surface>.
+blitting onto the display surface. It calls L<SDL::Video::convert_surface|/convert_surface>.
 
 If you want to take advantage of hardware colorkey or alpha blit acceleration, you should set the colorkey and alpha value before calling 
 this function.
@@ -438,7 +438,7 @@ C<SDL::Video::set_color_key> returns C<0> on success or C<-1> on error.
 
 =head2	set_alpha
 
- $set_alpha = SDL::Video::set_alpha( $surface, $flag, $key );
+ $set_alpha = SDL::Video::set_alpha( $surface, $flag, $alpha );
 
 C<set_alpha> is used for setting the per-surface alpha value and/or enabling and disabling alpha blending.
 
@@ -626,7 +626,7 @@ a matching unlock.
 
  SDL::Video::unlock_surface( $surface );
 
-Surfaces that were previously locked using L<SDL::Video::lock_surface|/lock_sruface> must be unlocked with C<SDL::Video::unlock_surface>. 
+Surfaces that were previously locked using L<SDL::Video::lock_surface|/lock_surface> must be unlocked with C<SDL::Video::unlock_surface>. 
 Surfaces should be unlocked as soon as possible.
 C<SDL::Video::unlock_surface> doesn't return anything.
 
@@ -692,8 +692,27 @@ but this is not the case with C<SDL::Video::blit_surface>. Like most surface man
 with OpenGL.
 
 The results of blitting operations vary greatly depending on whether C<SDL_SRCALPHA> is set or not. See L<SDL::Video::set_alpha|/set_alpha> 
-for an explanation of how this affects your results. Colorkeying and alpha attributes also interact with surface blitting.
-C<SDL::Video::blit_surface> doesn't return anything.
+for an explanation of how this affects your results. Colorkeying and alpha attributes also interact with surface blitting, as the following pseudo-code should hopefully explain.
+
+ if (source surface has SDL_SRCALPHA set) {
+    if (source surface has alpha channel (that is, surface->format->Amask != 0))
+        blit using per-pixel alpha, ignoring any colour key
+    else {
+        if (source surface has SDL_SRCCOLORKEY set)
+            blit using the colour key AND the per-surface alpha value
+        else
+            blit using the per-surface alpha value
+    }
+ } else {
+    if (source surface has SDL_SRCCOLORKEY set)
+        blit using the colour key
+    else
+        ordinary opaque rectangular blit
+ }
+
+See L<SDL::PixelFormat/"[RGBA]mask"> for details on C<< surface->format->Amask >>.
+
+C<SDL::Video::blit_surface> doesn't returns anything.
 
 For an example see L<SDL::Video::load_BMP|/load_BMP>.
 
@@ -826,7 +845,7 @@ Sets a portion of the palette for the given 8-bit surface.
 
 Palettized (8-bit) screen surfaces with the C<SDL_HWPALETTE> flag have two palettes, a logical palette that is used for mapping blits to/from 
 the surface and a physical palette (that determines how the hardware will map the colors to the display). 
-Non screen surfaces have a logical palette only. L<SDL::Video::blit|/blit> always uses the logical palette when blitting surfaces (if it has to 
+Non screen surfaces have a logical palette only. L<SDL::Video::blit_surface|/blit_surface> always uses the logical palette when blitting surfaces (if it has to 
 convert between surface pixel formats). Because of this, it is often useful to modify only one or the other palette to achieve various 
 special color effects (e.g., screen fading, color flashes, screen dimming).
 
@@ -1206,7 +1225,7 @@ It returns C<0> on success or C<-1> on error.
 
  SDL::Video::unlock_YUV_overlay( $overlay );
 
-The opposite to L<SDL::Video::lock_YUV_overlay|/sock_YUV_overlay>. Unlocks a previously locked overlay. An overlay must be unlocked before it 
+The opposite to L<SDL::Video::lock_YUV_overlay|/lock_YUV_overlay>. Unlocks a previously locked overlay. An overlay must be unlocked before it 
 can be displayed. C<unlock_YUV_overlay> does not return anything.
 
 =head2	display_YUV_overlay
