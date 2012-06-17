@@ -241,6 +241,10 @@ is( $surf_dup->format->BitsPerPixel,
 	'Duplicate surf has same bpp'
 );
 
+$surf_dup->clip_rect( SDL::Rect->new ( 10, 10, 40, 50 )) ;
+my $r = $surf_dup->clip_rect ;
+is_deeply( [ map { $r->$_ } qw/x y w h/ ], [ 10, 10, 40 ,50 ], "set and get clip_rect work") ;
+
 if ($videodriver) {
 	$ENV{SDL_VIDEODRIVER} = $videodriver;
 } else {
