@@ -152,9 +152,11 @@ sub height { $_[0]->h }
 #WRAPPING
 
 sub clip_rect {
-
-	SDL::Video::set_clip_rect( $_[1] ) if $_[1] && $_[1]->isa('SDL::Rect');
-	SDL::Video::get_clip_rect( $_[0] );
+        
+	SDL::Video::set_clip_rect( @_[0,1] ) if $_[1] && $_[1]->isa('SDL::Rect');
+	my $r = $_[1] || SDL::Rect->new (0,0,0,0) ;
+	SDL::Video::get_clip_rect( $_[0], $r );
+	return $r ;
 
 }
 
