@@ -2,6 +2,11 @@ Revision history for Perl extension SDL
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+* 2.541_08 Jun 18 2012
+	- Lots of coumentation fixes [dod]
+	- Fix and test for SDLx::Surface->clip_rect [dod]
+	- Updated Alien::SDL's version to 1.435_7 [FROGGS]
+
 * 2.541_06 Jun 16 2012
 	- Added missing .ogg test files [FROGGS]
 
