@@ -74,7 +74,7 @@ providing all the methods they both provide.
      title          => "Application Title",
      icon_title     => "App Title",
      icon           => "icon.bmp",
-     icon_color_key => [255, 255, 0],
+     icon_alpha_key => [255, 255, 0],
 
      # two ways to do init. init video is assumed regardless
      init => SDL_INIT_AUDIO | SDL_INIT_JOYSTICK,
@@ -159,9 +159,10 @@ This will only have an effect under certain operating systems.
 
 The application's icon. Set with the L</icon> method.
 
-=item icon_color_key
+=item icon_alpha_key
 
 You can optionally use this when specifying the C<icon> parameter to set its color key (transparent pixel).
+Alias: C<icon_color_key>.
 
 =item init
 
