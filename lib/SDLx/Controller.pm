@@ -24,6 +24,8 @@ my %_delay;
 my %_paused;
 my %_time;
 my %_stop_handler;
+my %_before_pause;
+my %_after_pause;
 
 use constant {
 	STOP  => '1',
@@ -54,6 +56,8 @@ sub new {
 #	$_paused{ $ref }             = undef;
 	$_time{ $ref }               = $args{time} || 0;
 	$_stop_handler{ $ref }       = exists $args{stop_handler} ? $args{stop_handler} : \&default_stop_handler;
+	$_before_pause{ $ref }   = $args{before_pause};
+	$_after_pause{ $ref }    = $args{after_pause};
 
 	return $self;
 }
@@ -74,6 +78,8 @@ sub DESTROY {
 	delete $_paused{ $ref};
 	delete $_time{ $ref};
 	delete $_stop_handler{ $ref};
+	delete $_before_pause{ $ref };
+	delete $_after_pause{ $ref };
 }
 
 sub run {
@@ -133,7 +139,9 @@ sub run {
 
 	# pause works by stopping the app and running it again
 	if( $_paused{ $ref } ) {
+		$_before_pause{ $ref }->($self) if $_before_pause{ $ref };
 		$self->_pause($ref);
+		$_after_pause{ $ref }->($self) if $_after_pause{ $ref };
 
 		# exit out of this sub before going back in so we don't recurse deeper and deeper
 			goto $self->can('run')
@@ -342,6 +350,22 @@ sub stop_handler {
 	$_stop_handler{ $ref} = $arg if @_ > 1;
 
 	$_stop_handler{ $ref};
+}
+
+sub before_pause {
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
+	$_before_pause{ $ref } = $arg if @_ > 1;
+
+	$_before_pause{ $ref };
+}
+
+sub after_pause {
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
+	$_after_pause{ $ref } = $arg if @_ > 1;
+
+	$_after_pause{ $ref };
 }
 
 sub default_stop_handler {
