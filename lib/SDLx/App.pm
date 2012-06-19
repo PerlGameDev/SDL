@@ -43,11 +43,11 @@ sub new {
 	my $ico =                          $o{icon};
 
 	# undef is a valid input
-	my $t    =                         $o{title};
-	my $it   =                         $o{icon_title};
-	my $init = exists $o{initialize} ? $o{initialize}                             : $o{init};
-	my $s    = exists $o{stash}      ? $o{stash}                                  : {};
-	my $icc  =                         $o{icon_color_key};
+	my $t    =                             $o{title};
+	my $it   =                             $o{icon_title};
+	my $init = exists $o{initialize}     ? $o{initialize}                             : $o{init};
+	my $s    = exists $o{stash}          ? $o{stash}                                  : {};
+	my $icc  = exists $o{icon_alpha_key} ? $o{icon_alpha_key} : $o{icon_color_key};
 
 	# boolean
 	my $sw    = $o{software_surface}  || $o{sw_surface}  || $o{sw};
