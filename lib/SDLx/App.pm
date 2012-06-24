@@ -264,7 +264,7 @@ sub icon {
 	SDLx::App->init( SDL::SDL_INIT_VIDEO );
 	unless( UNIVERSAL::isa( $icon, "SDL::Surface" ) ) {
 		$icon = SDL::Video::load_BMP( $icon );
-		$icon or Carp::confess( "Could not load_BMP icon '$icon': ", SDL::get_error() );
+		$icon or Carp::confess( "Could not load_BMP icon: ", SDL::get_error() );
 	}
 	if( defined $color ) {
 		$color = SDLx::Validate::map_rgb( $color, $icon->format );
