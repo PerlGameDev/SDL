@@ -26,6 +26,9 @@ my %_time;
 my %_stop_handler;
 my %_before_pause;
 my %_after_pause;
+my %_event_handler;
+my %_move_handler;
+my %_show_handler;
 
 use constant {
 	STOP  => '1',
@@ -58,6 +61,9 @@ sub new {
 	$_stop_handler{ $ref }       = exists $args{stop_handler} ? $args{stop_handler} : \&default_stop_handler;
 	$_before_pause{ $ref }   = $args{before_pause};
 	$_after_pause{ $ref }    = $args{after_pause};
+	$_event_handler{ $ref }  = $args{event_handler} || \&default_event_handler;
+	$_move_handler{ $ref }   = $args{move_handler}  || \&default_move_handler;
+	$_show_handler{ $ref }   = $args{show_handler}  || \&default_show_handler;
 
 	return $self;
 }
@@ -80,19 +86,23 @@ sub DESTROY {
 	delete $_stop_handler{ $ref};
 	delete $_before_pause{ $ref };
 	delete $_after_pause{ $ref };
+	delete $_event_handler{ $ref };
+	delete $_move_handler{ $ref };
+	delete $_show_handler{ $ref };
 }
 
 sub run {
 	my ($self)       = @_;
 	my $ref          = refaddr $self;
 
-	# to keep the old value until the end of the cycle
+	# these keep their old value until the end of the cycle
 	my ($dt, $delay, $min_t);
 
-	# these should never change
-	my $event_handlers = $_event_handlers{ $ref };
-	my $move_handlers  = $_move_handlers{ $ref };
-	my $show_handlers  = $_show_handlers{ $ref };
+	# you have to stop and rerun the app to update these
+	my $event_handler = $_event_handler{ $ref };
+	my $move_handler  = $_move_handler{ $ref };
+	my $show_handler  = $_show_handler{ $ref };
+	my $stop_handler  = $_stop_handler{ $ref };
 
 	# alows us to do stop and run
 	delete $_stop{ $ref };
@@ -115,18 +125,23 @@ sub run {
 		# we keep this completely up-to-date
 		my $time_ref = \$_time{ $ref};
 
-		$self->_event( $ref, $event_handlers );
+		my $event = $_event{ $ref };
+		SDL::Events::pump_events();
+		while ( SDL::Events::poll_event( $event ) ) {
+			$stop_handler ->( $event, $self ) if $stop_handler;
+			$event_handler->( $event, $self );
+		}
 
 		while ( $delta_copy > $dt ) {
-			$self->_move( $move_handlers, 1, $$time_ref ); # a full move
+			$move_handler->( 1, $self, $$time_ref ); # a full move
 			$delta_copy -= $dt;
 			$$time_ref += $dt;
 		}
 		my $step = $delta_copy / $dt;
-		$self->_move( $move_handlers, $step, $$time_ref ); # a partial move
+		$move_handler->( $step, $self, $$time_ref ); # a partial move
 		$$time_ref += $dt * $step;
 
-		$self->_show( $show_handlers, $delta_time );
+		$show_handler->( $delta_time, $self );
 
 		# one or the other of delay or min_t is good
 		Time::HiRes::sleep( $delay ) if $delay > 0;
@@ -143,9 +158,10 @@ sub run {
 		$self->_pause($ref);
 		$_after_pause{ $ref }->($self) if $_after_pause{ $ref };
 
+		return if $_stop{ $ref };
+
 		# exit out of this sub before going back in so we don't recurse deeper and deeper
-			goto $self->can('run')
-		unless $_stop{ $ref};
+		goto $self->can('run');
 	}
 }
 
@@ -205,34 +221,24 @@ sub paused {
 	$_paused{ refaddr $_[0]};
 }
 
-sub _event {
-	my ($self, $ref, $event_handlers) = @_;
-	my $stop_handler = $_stop_handler{ $ref };
-	my $event = $_event{ $ref };
-
-	SDL::Events::pump_events();
-	while ( SDL::Events::poll_event( $event ) ) {
-		$stop_handler->( $event, $self ) if $stop_handler;
-		foreach my $event_handler ( @$event_handlers ) {
-			next unless $event_handler;
-			$event_handler->( $event, $self );
-		}
+sub default_event_handler {
+	my ($event, $self) = @_;
+	foreach my $event_handler ( @{$_event_handlers{ refaddr $self }} ) {
+		$event_handler->( $event, $self ) if $event_handler;
 	}
 }
 
-sub _move {
-	my ($self, $move_handlers, $move_portion, $t) = @_;
-	foreach my $move_handler ( @$move_handlers ) {
-		next unless $move_handler;
-		$move_handler->( $move_portion, $self, $t );
+sub default_move_handler {
+	my ($move_portion, $self, $t) = @_;
+	foreach my $move_handler ( @{$_move_handlers{ refaddr $self }} ) {
+		$move_handler->( $move_portion, $self, $t ) if $move_handler;
 	}
 }
 
-sub _show {
-	my ($self, $show_handlers, $delta_ticks) = @_;
-	foreach my $show_handler ( @$show_handlers ) {
-		next unless $show_handler;
-		$show_handler->( $delta_ticks, $self );
+sub default_show_handler {
+	my ($delta_time, $self) = @_;
+	foreach my $show_handler ( @{$_show_handlers{ refaddr $self }} ) {
+		$show_handler->( $delta_time, $self ) if $show_handler;
 	}
 }
 
@@ -342,6 +348,30 @@ sub delay {
 	$_delay{ $ref} = $arg if defined $arg;
 
 	$_delay{ $ref};
+}
+
+sub event_handler {
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
+	$_event_handler{ $ref } = $arg if @_ > 1;
+
+	$_event_handler{ $ref };
+}
+
+sub move_handler {
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
+	$_move_handler{ $ref } = $arg if @_ > 1;
+
+	$_move_handler{ $ref };
+}
+
+sub show_handler {
+	my ($self, $arg) = @_;
+	my $ref = refaddr $self;
+	$_show_handler{ $ref } = $arg if @_ > 1;
+
+	$_show_handler{ $ref };
 }
 
 sub stop_handler {
