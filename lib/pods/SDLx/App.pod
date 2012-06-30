@@ -98,8 +98,9 @@ providing all the methods they both provide.
      centered => 1,
      position => [ 150, 100 ],
 
-     hide_cursor  => 1,
-     grab_input => 1,
+     # mouse stuff
+     hide_cursor => 1,
+     grab_input  => 1,
 
      # don't initialize an SDLx::Controller for the app
      no_controller => 1,
@@ -110,12 +111,15 @@ providing all the methods they both provide.
      # and everything from SDLx::Controller
      dt             => 0.1,
      min_t          => 1 / 60,
+     max_t          => 0.1,
      delay          => 0,
      stop_handler   => \&SDLx::Controller::default_stop_handler,
      event          => SDL::Event->new(),
      event_handlers => [],
      move_handlers  => [],
      show_handlers  => [],
+     before_pause   => sub {},
+     after_pause    => sub {},
      time           => 0,
  );
 
@@ -149,6 +153,7 @@ L<SDL_ANYFORMAT|SDL::Video/CONSTANTS> flag. Alias: C<d>.
 =item title
 
 The window's title, as a string. Defaults to the L</icon_title> if defined, or the file name.
+Alias: C<t>.
 
 =item icon_title
 

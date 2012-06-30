@@ -43,7 +43,7 @@ sub new {
 	my $ico =                          $o{icon};
 
 	# undef is a valid input
-	my $t    =                             $o{title};
+	my $t    = exists $o{title}          ? $o{title}                                  : $o{t};
 	my $it   =                             $o{icon_title};
 	my $init = exists $o{initialize}     ? $o{initialize}                             : $o{init};
 	my $s    = exists $o{stash}          ? $o{stash}                                  : {};
