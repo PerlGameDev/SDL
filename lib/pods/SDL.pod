@@ -263,8 +263,9 @@ And request access to the github repository. Or drop us a line on #sdl over at i
 
 Copyright 2002-2010 SDL Authors as listed above, all rights reserved.
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This is free software, licensed under:
+
+  The GNU Library General Public License, Version 2.0, June 1991
 
 =head1 DISCLAIMER OF WARRANTY
 

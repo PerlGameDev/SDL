@@ -2,6 +2,9 @@ Revision history for Perl extension SDL
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+* 2.541_09
+	- Fixed license in SDL.pod [jtpalmer]
+
 * 2.541_08 Jun 18 2012
 	- Lots of coumentation fixes [dod]
 	- Fix and test for SDLx::Surface->clip_rect [dod]
