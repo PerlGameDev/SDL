@@ -46,13 +46,14 @@ SDL::RWOps is an "undocumented" feature of SDL, allowing you to use pointers to 
 
 An example usage would be to put a bunch of resources in a zip file and use Zziplib to access them easily.
 
+B<Important>: All methods except C<new_file> and C<new_const_mem> are still TODO.
 
 =head1 METHODS
 
 
-=head2 rw_from_file(file,mode) 
+=head2 new_file(file,mode) 
 
-rw_from_file creates a new SDL::RWOps structure for reading from and/or writing to a named file. 
+C<new_file> creates a new SDL::RWOps structure for reading from and/or writing to a named file. 
 The mode string is treated the same as in a call to the C library's fopen().
 SDL::rw_from_file() returns a SDL::RWOps structure on success or undef on failure. 
 
@@ -78,7 +79,7 @@ This additional "b" character can either be appended at the end of the string (t
 
 
 
-=head2 rw_from_fp(fp,autoclose)
+=head2 new_FP(fp,autoclose)
 
 SDL::rw_from_fp creates a new SDL::RWOps structure from a file pointer, opened with stdio. If autoclose is nonzero, the file will be automatically closed when the SDL::RWOps structure is closed.
 It returns a SDL::RWOps on success or undef on error.
@@ -86,7 +87,7 @@ It returns a SDL::RWOps on success or undef on error.
 Note: This is not available under Win32, since files opened in an application on that platform cannot be used by a dynamically linked library. 
 
 
-=head2 rw_from_mem(mem,size)
+=head2 new_mem(mem,size)
 
 SDL::rw_from_mem sets up a SDL::RWOps struct based on a chunk of memory of a certain size.
 It returns a SDL::RWOps on success or undef on error. 
@@ -94,28 +95,28 @@ It returns a SDL::RWOps on success or undef on error.
 Note: If the memory is not writable, use SDL::rw_from_const_mem instead. 
 
 
-=head2 from_const_mem
+=head2 new_const_mem
 
-  my $rw = SDL::RWOps->from_const_mem( $image_data );
-  my $rw = SDL::RWOps->from_const_mem( $image_data, $size );
+  my $rw = SDL::RWOps->new_const_mem( $image_data );
+  my $rw = SDL::RWOps->new_const_mem( $image_data, $size );
 
-C<from_const_mem> sets up a SDL::RWOps object based on a memory area of a certain size. The C<$size> parameter is optional.
+C<new_const_mem> sets up a SDL::RWOps object based on a memory area of a certain size. The C<$size> parameter is optional.
 It assumes the memory area is not writable. It returns a SDL::RWOps on success or undef on error.
 
-=head2 alloc_rw()
+=head2 alloc()
 
 alloc_rw allocates an empty, unpopulated SDL::RWOps structure. You must fill out the fields yourself. 
 It returns a SDL::RWOps structure on success or undef on error. 
 
 Note: You must free any memory allocated with SDL::alloc_rw with SDL::free_rw.
 
-=head2 free_rw(context)
+=head2 free(context)
 
 SDL::free_rw frees an SDL::RWOps structure previously allocated by SDL::alloc_rw. Only use it on memory allocated by SDL::alloc_rw. 
 It doesn't return anything.
 
 
-=head2 rw_seek(ctx,offset,whence)
+=head2 seek(ctx,offset,whence)
 
 SDL::rw_seek calls the seek function pointer in an SDL::RWOps structure. It takes the same 3 parameters as the function pointer:
 
@@ -125,12 +126,12 @@ SDL::rw_seek calls the seek function pointer in an SDL::RWOps structure. It take
 
 SDL::rw_seek returns the final offset in the data source.
 
-=head2 rw_tell(ctx)
+=head2 tell(ctx)
 
 SDL::rw_tell performs a do-nothing seek to get the current offset in an SDL::RWOps stream ctx. It takes one parameter, a pointer to an SDL::RWOps structure.
 It returns the offset in the stream. 
 
-=head2 rw_read(ctx,ptr,size,n)
+=head2 read(ctx,ptr,size,n)
 
 SDL_RWread calls the function pointed to by an SDL::RWOps structure's read member. It takes the same 4 parameters as the function pointer:
 
@@ -142,7 +143,7 @@ SDL_RWread calls the function pointed to by an SDL::RWOps structure's read membe
 It returns the number of memory blocks read, or -1 if the read failed. 
 
 
-=head2 rw_write(ctx,ptr,size,n)
+=head2 write(ctx,ptr,size,n)
 
 SDL_RWwrite calls the write function in an SDL::RWOps structure. It takes the same parameters as the write function given in the SDL::RWOps structure:
 
@@ -155,7 +156,7 @@ SDL_RWwrite calls the write function in an SDL::RWOps structure. It takes the sa
 If it couldn't write that exact number of blocks, or the write didn't work at all, it returns -1.
 
 
-=head2 rw_close(ctx)
+=head2 close(ctx)
 
 SDL::rw_close calls the close function in an SDL::RWOps structure. It only takes one parameter, an  SDL::RWOps structure. 
 Returns 0 on success, -1 on error. 
