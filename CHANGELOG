@@ -4,6 +4,7 @@ Versioning rule: public releases are even numbers, dev releases are odd. (same l
 
 * 2.541_09
 	- Fixed license in SDL.pod [jtpalmer]
+	- SDL::RWops docs: fixed method names so that they match implementation [FROGGS]
 
 * 2.541_08 Jun 18 2012
 	- Lots of coumentation fixes [dod]
