@@ -2,6 +2,7 @@
 
 # basic testing of SDLx::App
 use strict;
+use warnings;
 use SDL;
 use SDL::Config;
 use SDL::Rect;
