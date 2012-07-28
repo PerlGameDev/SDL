@@ -1,6 +1,10 @@
 package SDLx::Music::Default;
 use strict;
 use warnings;
+use vars qw($VERSION);
+
+our $VERSION = '2.541_08';
+$VERSION = eval $VERSION;
 
 sub ext  
 {

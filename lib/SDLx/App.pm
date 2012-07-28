@@ -2,6 +2,10 @@ package SDLx::App;
 
 use strict;
 use warnings;
+use vars qw($VERSION);
+
+our $VERSION = '2.541_08';
+$VERSION = eval $VERSION;
 
 # SDL modules actually used here
 use SDL ();
