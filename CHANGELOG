@@ -3,6 +3,7 @@ Revision history for Perl extension SDL
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
 * 2.541_09
+	- SDL::Constants, SDLx::Music::Data,  SDL_perl: Added strict and warnings [jtpalmer]
 	- Fixed license in SDL.pod [jtpalmer]
 	- SDL::RWops docs: fixed method names so that they match implementation [FROGGS]
 
