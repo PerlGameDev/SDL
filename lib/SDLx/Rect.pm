@@ -299,7 +299,7 @@ sub inflate {
 
 	return $self->new(
 		$self->left - ( $x / 2 ),
-		$self->top - ( $y / 2 ),
+		$self->top -  ( $y / 2 ),
 		$self->width + $x,
 		$self->height + $y,
 	);

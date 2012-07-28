@@ -7,7 +7,7 @@ use Scalar::Util 'refaddr';
 
 our @ISA = qw(Exporter DynaLoader);
 
-our $VERSION = '2.541_08';
+our $VERSION    = '2.541_08';
 our $XS_VERSION = $VERSION;
 $VERSION = eval $VERSION;
 
@@ -36,8 +36,8 @@ sub attach {
 
 	Carp::confess "An SDLx::Controller is needed" unless $controller && $controller->isa('SDLx::Controller');
 
-        $_controller{ refaddr $self } = [ $controller ];
-	my $move = sub { $self->update( $_[2], $_[1]->dt )};
+	$_controller{ refaddr $self } = [$controller];
+	my $move = sub { $self->update( $_[2], $_[1]->dt ) };
 	$_controller{ refaddr $self }->[1] = $controller->add_move_handler($move);
 
 	if ($render) {
@@ -50,11 +50,11 @@ sub attach {
 }
 
 sub detach {
-	my ( $self) = @_;
-        my $controller = $_controller{ refaddr $self }; 
+	my ($self) = @_;
+	my $controller = $_controller{ refaddr $self };
 	return unless $controller;
-	$controller->[0]->remove_move_handler($controller->[1]);
-	$controller->[0]->remove_show_handler($controller->[2]);
+	$controller->[0]->remove_move_handler( $controller->[1] );
+	$controller->[0]->remove_show_handler( $controller->[2] );
 }
 
 internal_load_dlls(__PACKAGE__);

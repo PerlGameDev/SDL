@@ -77,17 +77,14 @@ BEGIN {
 
 	my $load_test_strict = 0;
 
-	if( $ENV{RELEASE_TESTING})
-	{
+	if ( $ENV{RELEASE_TESTING} ) {
 
 		eval 'require Test::Strict';
 		$load_test_strict = 1 unless $@;
 	}
-	foreach( @modules )
-	{
+	foreach (@modules) {
 		use_ok $_ ;
-		if( $load_test_strict )
-		{
+		if ($load_test_strict) {
 
 
 			my $file = $_;
@@ -96,10 +93,10 @@ BEGIN {
 
 			$file = File::Spec->catfile( 'lib', @files );
 
-			$file = $file.'.pm';
+			$file = $file . '.pm';
 
 			eval 'Test::Strict::syntax_ok $file';
-			pass unless $@;	
+			pass unless $@;
 			eval 'Test::Stict::strict_ok $file';
 			pass unless $@;
 			eval 'Test::Strict::warnings_ok $file';

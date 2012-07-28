@@ -11,7 +11,7 @@ use Scalar::Util 'refaddr';
 use Data::Dumper;
 our @ISA = qw(Exporter DynaLoader);
 
-our $VERSION = '2.541_08';
+our $VERSION    = '2.541_08';
 our $XS_VERSION = $VERSION;
 $VERSION = eval $VERSION;
 
@@ -40,8 +40,8 @@ sub new {
 }
 
 sub DESTROY {
-	FreeSMPEG(  $_[0] );
-	}
+	FreeSMPEG( $_[0] );
+}
 
 sub error {
 	SMPEGError( $_[0] );
@@ -56,24 +56,24 @@ sub video {
 }
 
 sub volume {
-	SMPEGSetVolume(  $_[0] , $_[1] );
+	SMPEGSetVolume( $_[0], $_[1] );
 }
 
 sub display {
 	Carp::confess "Display requires a SDL::Surface\n"
 		unless $_[1]->isa('SDL::Surface');
-	SMPEGSetDisplay( $_[0],  $_[1] , 0 );
+	SMPEGSetDisplay( $_[0], $_[1], 0 );
 }
 
 sub scale {
 	return SMPEGScaleXY( $_[0], $_[1], $_[2] ) if ( @_ == 3 );
-	return SMPEGScaleXY(  $_[0], $_[1]->width(), $_[1]->height() )
+	return SMPEGScaleXY( $_[0], $_[1]->width(), $_[1]->height() )
 		if $_[1]->isa('SDL::Surface');
-	SMPEGScale( $_[0] , $_[1] );
+	SMPEGScale( $_[0], $_[1] );
 }
 
 sub play {
-	SMPEGPlay( $_[0]);
+	SMPEGPlay( $_[0] );
 }
 
 sub pause {
@@ -97,7 +97,7 @@ sub skip {
 }
 
 sub loop {
-	SMPEGLoop(  $_[0], $_[1] );
+	SMPEGLoop( $_[0], $_[1] );
 }
 
 sub region {
@@ -107,11 +107,12 @@ sub region {
 }
 
 sub frame {
-	SMPEGRenderFrame(  $_[0],  $_[1] );
+	SMPEGRenderFrame( $_[0], $_[1] );
 }
 
 sub info {
-#	SDL::SMPEG::Info->new( -from => $_[0] );
+
+	#	SDL::SMPEG::Info->new( -from => $_[0] );
 	$_info{ refaddr $_[0] };
 }
 

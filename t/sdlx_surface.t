@@ -68,9 +68,9 @@ foreach my $a (@surfs) {
 is( $surfs[0]->[1][2], 0, 'Checking source pixel is 0' );
 is( $surfs[1]->[1][2], 0, 'Checking dest pixel is 0' );
 
-$surfs[0]->[4][4] = [255,255,0,255];
+$surfs[0]->[4][4] = [ 255, 255, 0, 255 ];
 
-is( $surfs[0]->[4][4] , 0xFFFF00FF, "Surface can set pixel with other color values");
+is( $surfs[0]->[4][4], 0xFFFF00FF, "Surface can set pixel with other color values" );
 
 $surfs[0]->[1][2] = 0x00FF00FF;
 
@@ -112,7 +112,8 @@ $surfs[0]->update( [ SDL::Rect->new( 0, 1, 2, 3 ), SDL::Rect->new( 2, 4, 5, 6 ) 
 pass 'SDL::Rect array update';
 
 my @colors = (
-    # opaque
+
+	# opaque
 	[ 0xFF, 0xFF, 0xFF, 0xFF ],
 	[ 0xFF, 0xFF, 0x00, 0xFF ],
 	[ 0xFF, 0x00, 0xFF, 0xFF ],
@@ -125,7 +126,7 @@ my @colors = (
 	[ 0x80, 0x20, 0x40, 0xFF ],
 	[ 0x40, 0x80, 0x20, 0xFF ],
 
-    # translucent
+	# translucent
 	[ 0xFF, 0xFF, 0xFF, 0xCC ],
 	[ 0xFF, 0xFF, 0x00, 0xCC ],
 	[ 0xFF, 0x00, 0xFF, 0xCC ],
@@ -138,7 +139,7 @@ my @colors = (
 	[ 0x80, 0x20, 0x40, 0xCC ],
 	[ 0x40, 0x80, 0x20, 0xCC ],
 
-    # transparent
+	# transparent
 	[ 0xFF, 0xFF, 0xFF, 0x00 ],
 	[ 0xFF, 0xFF, 0x00, 0x00 ],
 	[ 0xFF, 0x00, 0xFF, 0x00 ],
@@ -192,23 +193,25 @@ SKIP:
 	pass 'draw_gfx_text works';
 	my @colors_t = ( [ 255, 0, 0, 255 ], 0xFF0000FF, 0xFF00FF, [ 255, 0, 255 ] );
 
-	is( $surfs[0]->draw_circle( [ 100, 10 ], 20, [ 0, 0, 0, 0] ), $surfs[0], 'draw_circle returns self' );
+	is( $surfs[0]->draw_circle( [ 100, 10 ], 20, [ 0, 0, 0, 0 ] ), $surfs[0], 'draw_circle returns self' );
 	foreach my $cir_color (@colors_t) {
 		my $cir_color = [ 255, 0, 0, 255 ];
-		$surfs[0]->draw_circle( [ 100, 10 ], 20, $cir_color ); #no fill
-		$surfs[0]->draw_circle( [ 102, 12 ], 22, $cir_color , 1 );
+		$surfs[0]->draw_circle( [ 100, 10 ], 20, $cir_color );   #no fill
+		$surfs[0]->draw_circle( [ 102, 12 ], 22, $cir_color, 1 );
 		$surfs[0]->draw_circle_filled( [ 100, 10 ], 20, $cir_color ); #fill
 		isnt( $surfs[0]->[100][10], 0 );
 		pass 'draw_circle works';
 		pass 'draw_circle_filled works';
 	}
 
-	is( $surfs[0]->draw_trigon( [ [100, 10], [110, 10], [110, 20] ], [ 255, 0, 0, 255 ] ), $surfs[0], 'draw_trigon returns self' );
-	is( $surfs[0]->draw_trigon_filled( [ [100, 10], [110, 10], [110, 20] ], [ 255, 0, 0, 255 ] ), $surfs[0], 'draw_trigon_filled returns self' );
+	is( $surfs[0]->draw_trigon( [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ] ], [ 255, 0, 0, 255 ] ), $surfs[0],
+		'draw_trigon returns self' );
+	is( $surfs[0]->draw_trigon_filled( [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ] ], [ 255, 0, 0, 255 ] ), $surfs[0],
+		'draw_trigon_filled returns self' );
 	foreach my $color (@colors_t) {
 		my $color = [ 255, 0, 0, 255 ];
-		my $verts = [ [100, 10], [110, 10], [110, 20] ];
-		$surfs[0]->draw_trigon( $verts, $color ); #no fill
+		my $verts = [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ] ];
+		$surfs[0]->draw_trigon( $verts, $color );   #no fill
 		$surfs[0]->draw_trigon( $verts, $color, 1 );
 		$surfs[0]->draw_trigon_filled( $verts, $color ); #fill
 		isnt( $surfs[0]->[100][10], 0 );
@@ -216,12 +219,14 @@ SKIP:
 		pass 'draw_trigon_filled works';
 	}
 
-	is( $surfs[0]->draw_polygon( [ [100, 10], [110, 10], [110, 20] ], [ 255, 0, 0, 255 ] ), $surfs[0], 'draw_polygon returns self' );
-	is( $surfs[0]->draw_polygon_filled( [ [100, 10], [110, 10], [110, 20] ], [ 255, 0, 0, 255 ] ), $surfs[0], 'draw_polygon_filled returns self' );
+	is( $surfs[0]->draw_polygon( [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ] ], [ 255, 0, 0, 255 ] ), $surfs[0],
+		'draw_polygon returns self' );
+	is( $surfs[0]->draw_polygon_filled( [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ] ], [ 255, 0, 0, 255 ] ), $surfs[0],
+		'draw_polygon_filled returns self' );
 	foreach my $color (@colors_t) {
 		my $color = [ 255, 0, 0, 255 ];
-		my $verts = [ [100, 10], [110, 10], [110, 20], [100, 20] ];
-		$surfs[0]->draw_polygon( $verts, $color ); #no fill
+		my $verts = [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ], [ 100, 20 ] ];
+		$surfs[0]->draw_polygon( $verts, $color );   #no fill
 		$surfs[0]->draw_polygon( $verts, $color, 1 );
 		$surfs[0]->draw_polygon_filled( $verts, $color ); #fill
 		isnt( $surfs[0]->[100][10], 0 );
@@ -241,9 +246,9 @@ is( $surf_dup->format->BitsPerPixel,
 	'Duplicate surf has same bpp'
 );
 
-$surf_dup->clip_rect( SDL::Rect->new ( 10, 10, 40, 50 )) ;
-my $r = $surf_dup->clip_rect ;
-is_deeply( [ map { $r->$_ } qw/x y w h/ ], [ 10, 10, 40 ,50 ], "set and get clip_rect work") ;
+$surf_dup->clip_rect( SDL::Rect->new( 10, 10, 40, 50 ) );
+my $r = $surf_dup->clip_rect;
+is_deeply( [ map { $r->$_ } qw/x y w h/ ], [ 10, 10, 40, 50 ], "set and get clip_rect work" );
 
 if ($videodriver) {
 	$ENV{SDL_VIDEODRIVER} = $videodriver;

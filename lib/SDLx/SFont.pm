@@ -8,7 +8,7 @@ require DynaLoader;
 use SDL::Constants ':SDL::TTF';
 our @ISA = qw(Exporter DynaLoader SDL::Surface);
 
-our $VERSION = '2.541_08';
+our $VERSION    = '2.541_08';
 our $XS_VERSION = $VERSION;
 $VERSION = eval $VERSION;
 

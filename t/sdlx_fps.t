@@ -22,12 +22,12 @@ can_ok( 'SDLx::FPS', qw( new set get delay framecount rateticks lastticks rate )
 my $_fps = 5;
 
 my $ticks_start = SDL::get_ticks();
-my $fps = SDLx::FPS->new( fps => $_fps );
-my $ticks_init = SDL::get_ticks();
+my $fps         = SDLx::FPS->new( fps => $_fps );
+my $ticks_init  = SDL::get_ticks();
 
 isa_ok( $fps, 'SDLx::FPS' );
 
-is( $fps->get, $_fps, 'fps->get' );
+is( $fps->get,  $_fps, 'fps->get' );
 is( $fps->rate, $_fps, 'fps->rate' );
 
 cmp_ok( $fps->lastticks, '>=', $ticks_start, 'fps->lastticks' );

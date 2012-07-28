@@ -250,8 +250,8 @@ my %subsystems = (
 			from => 'src/Mixer/Mixer.xs',
 			to   => 'lib/SDL/Mixer.xs',
 		},
-		libraries => [qw( SDL SDL_mixer )], 
-		load_libs => [qw( vorbisfile flac mikmod smpeg )], 
+		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixerSamples => {
 		file => {
@@ -403,20 +403,20 @@ my %subsystems = (
 		load_libs => [qw( png jpeg tiff )],
 	},
 
-#	SMPEG => {
-#			file	=> {
-#				from => 'src/SMPEG.xs',
-#				to   =>	'lib/SDL/SMPEG.xs',
-#			},
-#			libraries => [qw( SDL smpeg)],
-#		},
-#	MPEG => {
-#			file	=> {
-#				from => 'src/SMPEG/Info.xs',
-#				to   =>	'lib/SDL/SMPEG/Info.xs',
-#			},
-#			libraries => [qw( SDL smpeg)],
-#		},
+	#	SMPEG => {
+	#			file	=> {
+	#				from => 'src/SMPEG.xs',
+	#				to   =>	'lib/SDL/SMPEG.xs',
+	#			},
+	#			libraries => [qw( SDL smpeg)],
+	#		},
+	#	MPEG => {
+	#			file	=> {
+	#				from => 'src/SMPEG/Info.xs',
+	#				to   =>	'lib/SDL/SMPEG/Info.xs',
+	#			},
+	#			libraries => [qw( SDL smpeg)],
+	#		},
 	Pango => {
 		file => {
 			from => 'src/Pango/Pango.xs',
@@ -547,13 +547,13 @@ my %libraries = (
 		lib    => 'tiff',
 	},
 	vorbisfile => {
-		lib    => 'vorbisfile',
+		lib => 'vorbisfile',
 	},
 	flac => {
-		lib    => 'FLAC',
+		lib => 'FLAC',
 	},
 	mikmod => {
-		lib    => 'mikmod',
+		lib => 'mikmod',
 	},
 	smpeg => {
 		define => 'HAVE_SMPEG',
@@ -580,7 +580,7 @@ my %xs =
 	keys %subsystems;
 
 ### Standard Module::Build stuff
-$My::Builder::config = $My::Builder::config;       # Prevent a warning
+$My::Builder::config = $My::Builder::config;                         # Prevent a warning
 my $build = $package->new(
 	module_name        => 'SDL',
 	dist_name          => 'SDL',
@@ -596,14 +596,14 @@ my $build = $package->new(
 		'Capture::Tiny'      => '0',
 	},
 	build_requires => {
-		'Test::Simple'      => '0.88',
-   		'Capture::Tiny'     => '0',
-		'Test::Most'        => '0.21',
-		'Alien::SDL'        => '1.435_7',
-		'File::Find'        => '0',
-		'File::ShareDir'    => '1.0',
-		'Tie::Simple'       => '0',
-		'Scalar::Util'      => '0',
+		'Test::Simple'   => '0.88',
+		'Capture::Tiny'  => '0',
+		'Test::Most'     => '0.21',
+		'Alien::SDL'     => '1.435_7',
+		'File::Find'     => '0',
+		'File::ShareDir' => '1.0',
+		'Tie::Simple'    => '0',
+		'Scalar::Util'   => '0',
 	},
 	requires => {
 		'Scalar::Util'   => '0',
@@ -617,10 +617,10 @@ my $build = $package->new(
 	build_recommends => {
 		'Pod::ToDemo' => '0.20',
 	},
-	config   => $My::Builder::config,
-	c_source => 'src',
-	xs_files => \%xs,
-	meta_add => {},
+	config        => $My::Builder::config,
+	c_source      => 'src',
+	xs_files      => \%xs,
+	meta_add      => {},
 	typemap_files => { 'typemap' => 'lib/SDL/typemap' },
 
 	#create_readme => 1, ### make sense only if there is some POD doc in the file specified by dist_version_from

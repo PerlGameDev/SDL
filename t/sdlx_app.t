@@ -35,7 +35,7 @@ can_ok(
 		grab_input
 		sync
 		gl_attribute
-	/
+		/
 );
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};

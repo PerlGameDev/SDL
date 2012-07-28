@@ -178,7 +178,8 @@ SKIP:
 	SKIP:
 	{
 		skip( 'JPEG support not compiled', 1 ) unless Alien::SDL->config('ld_shlib_map')->{'jpeg'};
-		cmp_ok( SDL::Image::init(IMG_INIT_JPG), '&', IMG_INIT_JPG,
+		cmp_ok(
+			SDL::Image::init(IMG_INIT_JPG), '&', IMG_INIT_JPG,
 			'[init] Inited JPEG'
 		);
 	}
@@ -186,7 +187,8 @@ SKIP:
 	SKIP:
 	{
 		skip( 'TIFF support not compiled', 1 ) unless Alien::SDL->config('ld_shlib_map')->{'tiff'};
-		cmp_ok( SDL::Image::init(IMG_INIT_TIF), '&', IMG_INIT_TIF,
+		cmp_ok(
+			SDL::Image::init(IMG_INIT_TIF), '&', IMG_INIT_TIF,
 			'[init] Inited TIFF'
 		);
 	}

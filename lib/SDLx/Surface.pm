@@ -27,7 +27,7 @@ use overload (
 use SDL::Constants ':SDL::Video';
 our @ISA = qw(Exporter DynaLoader SDL::Surface);
 
-our $VERSION = '2.541_08';
+our $VERSION    = '2.541_08';
 our $XS_VERSION = $VERSION;
 $VERSION = eval $VERSION;
 
@@ -150,17 +150,17 @@ sub _array {
 
 sub surface { $_[0] }
 
-sub width { $_[0]->w }
+sub width  { $_[0]->w }
 sub height { $_[0]->h }
 
 #WRAPPING
 
 sub clip_rect {
-        
-	SDL::Video::set_clip_rect( @_[0,1] ) if $_[1] && $_[1]->isa('SDL::Rect');
-	my $r = $_[1] || SDL::Rect->new (0,0,0,0) ;
+
+	SDL::Video::set_clip_rect( @_[ 0, 1 ] ) if $_[1] && $_[1]->isa('SDL::Rect');
+	my $r = $_[1] || SDL::Rect->new( 0, 0, 0, 0 );
 	SDL::Video::get_clip_rect( $_[0], $r );
-	return $r ;
+	return $r;
 
 }
 
@@ -197,10 +197,10 @@ sub load {
 	}
 
 	my $formated_surface = $surface;
-	if( SDL::Video::get_video_surface )
-	{
+	if (SDL::Video::get_video_surface) {
+
 		#Reduces memory usage for loaded images
-		$formated_surface = SDL::Video::display_format_alpha($surface);	
+		$formated_surface = SDL::Video::display_format_alpha($surface);
 	}
 	return SDLx::Surface->new( surface => $formated_surface );
 }
@@ -224,13 +224,13 @@ sub update {
 	my ( $surface, $rects ) = @_;
 
 	if ( !defined($rects) || ( ref($rects) eq 'ARRAY' && !ref( $rects->[0] ) ) ) {
-			my @rect;
-		 @rect = @{$rects} if $rects;
+		my @rect;
+		@rect = @{$rects} if $rects;
 		$rect[0] ||= 0;
 		$rect[1] ||= 0;
 		$rect[2] ||= $surface->w;
 		$rect[3] ||= $surface->h;
- 	
+
 		SDL::Video::update_rect( $surface, @rect );
 	} else {
 		SDL::Video::update_rects( $surface, map { SDLx::Validate::rect($_) } @{$rects} );
@@ -277,19 +277,16 @@ sub draw_circle {
 	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
 	$color = SDLx::Validate::num_rgba($color);
 
-	unless( $antialias )
-	{
+	unless ($antialias) {
 		SDL::GFX::Primitives::circle_color( $self, @{$center}, $radius, $color );
-	}
-	else
-	{
+	} else {
 		SDL::GFX::Primitives::aacircle_color( $self, @{$center}, $radius, $color );
 	}
 	return $self;
 }
 
 sub draw_circle_filled {
-	my ( $self, $center, $radius, $color) = @_;
+	my ( $self, $center, $radius, $color ) = @_;
 
 	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
 		Carp::cluck("SDL_gfx_primitives support has not been compiled");
@@ -310,11 +307,11 @@ sub draw_trigon {
 	$color = SDLx::Validate::num_rgba($color);
 
 	if ($antialias) {
-		SDL::GFX::Primitives::aatrigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0], $vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
-	}
-	else
-	{
-		SDL::GFX::Primitives::trigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0], $vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
+		SDL::GFX::Primitives::aatrigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0],
+			$vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
+	} else {
+		SDL::GFX::Primitives::trigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0],
+			$vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
 	}
 
 	return $self;
@@ -325,7 +322,8 @@ sub draw_trigon_filled {
 
 	$color = SDLx::Validate::num_rgba($color);
 
-	SDL::GFX::Primitives::filled_trigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0], $vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
+	SDL::GFX::Primitives::filled_trigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0],
+		$vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
 
 	return $self;
 }
@@ -359,12 +357,9 @@ sub draw_ellipse {
 	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
 	$color = SDLx::Validate::num_rgba($color);
 
-	if ($antialias)
-	{
+	if ($antialias) {
 		SDL::GFX::Primitives::aaellipse_color( $self, @$center, $rx, $ry, $color );
-	}
-	else
-	{
+	} else {
 		SDL::GFX::Primitives::ellipse_color( $self, @$center, $rx, $ry, $color );
 	}
 

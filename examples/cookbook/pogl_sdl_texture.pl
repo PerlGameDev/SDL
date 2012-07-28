@@ -116,9 +116,9 @@ sub LoadTexture {
 	my $texture_format;
 	my $texture = 0;
 	my $img = $ARGV[0] || 'test/data/picture.bmp';
-	  
-	$surface = SDL::Image::load( $img );
-	die "Couldn't load image: ".SDL::get_error() unless $surface;
+
+	$surface = SDL::Image::load($img);
+	die "Couldn't load image: " . SDL::get_error() unless $surface;
 	SDL::Video::lock_surface($surface);
 
 	#get the number of channels in the SDL surface

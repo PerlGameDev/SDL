@@ -6,15 +6,13 @@ use vars qw($VERSION);
 our $VERSION = '2.541_08';
 $VERSION = eval $VERSION;
 
-sub ext  
-{
+sub ext {
 
 	$_[0]->{ext} = $_[1] if $_[1];
 	return $_[0]->{ext};
 }
 
-sub dir
-{
+sub dir {
 	$_[0]->{dir} = $_[1] if $_[1];
 	return $_[0]->{dir};
 }

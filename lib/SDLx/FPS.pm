@@ -17,7 +17,7 @@ sub new {
 		Carp::cluck("Unrecognized constructor hash key: $_");
 	}
 	my $fps = $class->SDL::GFX::FPSManager::new( 0, 0, 0, 0 );
-	SDL::GFX::Framerate::init( $fps );
+	SDL::GFX::Framerate::init($fps);
 	$fps->set( $args{fps} ) if defined $args{fps};
 	$fps;
 }
