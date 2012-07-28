@@ -1,5 +1,6 @@
 use Test::More tests => 87;
 use strict;
+use warnings;
 use SDL;
 
 use_ok('SDLx::Rect');

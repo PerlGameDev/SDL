@@ -1,4 +1,5 @@
 use strict;
+use warnings;
 use SDL;
 use SDL::Rect;
 use SDL::Color;
