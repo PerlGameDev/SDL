@@ -1,10 +1,15 @@
 package SDLx::Controller::Interface;
 use strict;
 use warnings;
+use vars qw($VERSION $XS_VERSION @ISA);
 use Carp qw/confess/;
 use Scalar::Util 'refaddr';
 
 our @ISA = qw(Exporter DynaLoader);
+
+our $VERSION = '2.541_08';
+our $XS_VERSION = $VERSION;
+$VERSION = eval $VERSION;
 
 use SDL::Internal::Loader;
 

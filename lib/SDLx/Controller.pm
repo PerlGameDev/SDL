@@ -1,6 +1,7 @@
 package SDLx::Controller;
 use strict;
 use warnings;
+use vars qw($VERSION);
 use Carp ();
 use Time::HiRes ();
 use SDL ();
@@ -10,6 +11,9 @@ use SDL::Video ();
 use SDLx::Controller::Interface;
 use SDLx::Controller::State;
 use Scalar::Util 'refaddr';
+
+our $VERSION = '2.541_08';
+$VERSION = eval $VERSION;
 
 # inside out, so this can work as the superclass of another class
 my %_dt;

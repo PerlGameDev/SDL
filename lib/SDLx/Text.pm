@@ -1,6 +1,7 @@
 package SDLx::Text;
 use strict;
 use warnings;
+use vars qw($VERSION);
 use SDL;
 use SDL::Video;
 use SDL::Config;
@@ -10,6 +11,9 @@ use SDLx::Validate;
 use List::Util qw(max sum);
 
 use Carp ();
+
+our $VERSION = '2.541_08';
+$VERSION = eval $VERSION;
 
 sub new {
 	my ($class, %options) = @_;

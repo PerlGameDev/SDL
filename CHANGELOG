@@ -3,6 +3,7 @@ Revision history for Perl extension SDL
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
 * 2.541_09
+	- Added $VERSION to all modules [jtpalmer]
 	- Added pod syntax tests [jtpalmer]
 	- t/*: Added strict and warnings where it was missing [jtpalmer]
 	- SDL::Constants, SDLx::Music::Data,  SDL_perl: Added strict and warnings [jtpalmer]
