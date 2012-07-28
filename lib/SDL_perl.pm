@@ -30,7 +30,10 @@
 
 package SDL_perl;
 
-@ISA = qw/ DynaLoader /;
+use strict;
+use warnings;
+use vars qw(@ISA);
+our @ISA = qw/ DynaLoader /;
 require DynaLoader;
 
 use SDL::Internal::Loader;

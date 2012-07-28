@@ -1,5 +1,8 @@
 package SDLx::Music::Data;
 
+use strict;
+use warnings;
+
 sub volume
 {
 	$_[0]->{volume} = $_[1] if $_[1];
