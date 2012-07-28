@@ -1,5 +1,8 @@
 # basic testing of SDLx::Sound
 
+use strict;
+use warnings;
+
 my $audiodriver;
 
 BEGIN {
