@@ -39,7 +39,7 @@ our @ISA = qw(Exporter DynaLoader);
 use SDL::SMPEG;
 use SDL::Internal::Loader;
 
-our $VERSION    = '2.541_08';
+our $VERSION    = '2.541_09';
 our $XS_VERSION = $VERSION;
 $VERSION = eval $VERSION;
 
