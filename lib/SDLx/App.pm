@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use vars qw($VERSION);
 
-our $VERSION = '2.541_08';
+our $VERSION = '2.541_09';
 $VERSION = eval $VERSION;
 
 # SDL modules actually used here

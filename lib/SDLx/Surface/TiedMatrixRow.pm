@@ -4,7 +4,7 @@ use warnings;
 use vars qw($VERSION);
 use base 'Tie::Array';
 
-our $VERSION = '2.541_08';
+our $VERSION = '2.541_09';
 $VERSION = eval $VERSION;
 
 sub new {

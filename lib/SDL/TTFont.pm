@@ -40,7 +40,7 @@ use vars qw/ $VERSION @ISA /;
 
 @ISA = qw(SDL::Surface);
 
-our $VERSION = '2.541_08';
+our $VERSION = '2.541_09';
 $VERSION = eval $VERSION;
 
 sub new {

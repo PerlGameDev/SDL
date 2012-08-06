@@ -2,7 +2,8 @@ Revision history for Perl extension SDL
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
-* 2.541_09
+* 2.541_09 Aug 05 2012
+	- Updated Alien::SDL's version to 1.437_2 [jtpalmer]
 	- Added $VERSION to all modules [jtpalmer]
 	- Added pod syntax tests [jtpalmer]
 	- t/*: Added strict and warnings where it was missing [jtpalmer]

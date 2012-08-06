@@ -7,7 +7,7 @@ our @ISA     = qw(Exporter);
 our @EXPORT  = qw(internal_load_dlls);
 our @LIBREFS = ();
 
-our $VERSION = '2.541_08';
+our $VERSION = '2.541_09';
 $VERSION = eval $VERSION;
 
 use SDL::ConfigData;

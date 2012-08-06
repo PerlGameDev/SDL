@@ -8,7 +8,7 @@ use SDL::Constants ':SDL::Image';
 use SDL::Surface;
 our @ISA = qw(Exporter DynaLoader);
 
-our $VERSION = '2.541_08';
+our $VERSION    = '2.541_09';
 our $XS_VERSION = $VERSION;
 $VERSION = eval $VERSION;
 
