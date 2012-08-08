@@ -9,7 +9,7 @@ my $app = SDLx::App->new();
 
 my $text = SDLx::Text->new;
 
-$app->draw_rect( [0, 0, $app->w, $app->h], 0x00ffff );
+$app->draw_rect( [ 0, 0, $app->w, $app->h ], 0x00ffff );
 
 $text->write_xy( $app, 300, 10, 'Normal Text' );
 
@@ -36,11 +36,11 @@ $text->italic(1);
 $text->write_xy( $app, 300, 250, 'All in one!' );
 
 my $another = SDLx::Text->new(
-        bold          => 1,
-        italic        => 1,
-        underline     => 1,
-        strikethrough => 1,
-        shadow        => 1,
+	bold          => 1,
+	italic        => 1,
+	underline     => 1,
+	strikethrough => 1,
+	shadow        => 1,
 );
 
 $another->write_xy( $app, 50, 300, 'Can even be set with others (like shadow), during startup!' );

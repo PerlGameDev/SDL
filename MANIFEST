@@ -70,6 +70,7 @@ lib/pods/SDL/Palette.pod
 lib/pods/SDL/Pango.pod
 lib/pods/SDL/Pango/Context.pod
 lib/pods/SDL/PixelFormat.pod
+lib/pods/SDL/Platform.pod
 lib/pods/SDL/Rect.pod
 lib/pods/SDL/RWOps.pod
 lib/pods/SDL/SMPEG.pod
@@ -182,6 +183,7 @@ MacOSX/main.c
 MacOSX/Makefile.test
 MacOSX/SDLPerl.icns
 MANIFEST			This list of files
+META.json
 META.yml
 OFL-FAQ.txt
 OFL.txt
@@ -308,6 +310,7 @@ t/mixer_mixmusic.t
 t/mixer_music.t
 t/mixer_samples.t
 t/pango.t
+t/release-pod-syntax.t
 t/sdlgamerect.t
 t/sdlx_app.t
 t/sdlx_controller.t
@@ -357,4 +360,3 @@ test/data/wood_dark.png
 test/data/wood_light.png
 TODO
 typemap
-META.json

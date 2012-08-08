@@ -2,6 +2,7 @@
 
 # basic testing of SDLx::App
 use strict;
+use warnings;
 use SDL;
 use SDL::Config;
 use SDL::Rect;
@@ -34,7 +35,7 @@ can_ok(
 		grab_input
 		sync
 		gl_attribute
-	/
+		/
 );
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};

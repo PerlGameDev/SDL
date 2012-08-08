@@ -38,10 +38,11 @@ my $render = sub {
 $app->add_show_handler( sub { $app->draw_rect( [ 0, 0, $app->w, $app->h ], 0x000000 ) } );
 
 #add the spring
-$spring->attach($app, $render );
+$spring->attach( $app, $render );
 
 #add the constant_velocity
-$constant->attach( $app,
+$constant->attach(
+	$app,
 	sub {
 		my $state = shift;
 		$app->draw_rect( [ $state->x, $state->y, 4, 4 ], 0xFFFFFF );

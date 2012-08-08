@@ -1,7 +1,11 @@
 package SDLx::Surface::TiedMatrixRow;
 use strict;
 use warnings;
+use vars qw($VERSION);
 use base 'Tie::Array';
+
+our $VERSION = '2.541_09';
+$VERSION = eval $VERSION;
 
 sub new {
 	my $class  = shift;

@@ -1,4 +1,10 @@
 package SDL::Tutorial::LunarLander;
+use strict;
+use warnings;
+use vars qw($VERSION);
+
+our $VERSION = '2.541_09';
+$VERSION = eval $VERSION;
 
 sub import {
 	my ( $class, $filename ) = (@_);

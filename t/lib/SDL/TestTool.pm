@@ -36,7 +36,7 @@ sub init {
 		SDL::quit();
 	}
 
-	($stdout, $stderr ) = capture { SDL::init($init) };
+	( $stdout, $stderr ) = capture { SDL::init($init) };
 	if ( $stderr ne '' ) {
 		warn 'Init ' . $inits{$init} . ' failed with SDL error: ' . SDL::get_error() . "\nand stderr $stderr\n";
 	}

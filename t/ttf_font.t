@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
+use warnings;
 use SDL;
 use SDL::Config;
 
@@ -18,9 +19,7 @@ BEGIN {
 use SDL::TTF;
 use SDL::TTF::Font;
 use SDL::Version;
-my $font_filename = File::Spec->catfile(
-        $FindBin::Bin, '..', 'share', 'GenBasR.ttf'
-);
+my $font_filename = File::Spec->catfile( $FindBin::Bin, '..', 'share', 'GenBasR.ttf' );
 
 my $lv = SDL::TTF::linked_version();
 my $cv = SDL::TTF::compile_time_version();

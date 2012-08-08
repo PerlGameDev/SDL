@@ -4,7 +4,8 @@ use warnings;
 use Carp;
 use base 'SDL::Rect';
 
-our $VERSION = '0.01';
+our $VERSION = '2.541_09';
+$VERSION = eval $VERSION;
 
 sub new {
 	my $class = shift;
@@ -299,7 +300,7 @@ sub inflate {
 
 	return $self->new(
 		$self->left - ( $x / 2 ),
-		$self->top - ( $y / 2 ),
+		$self->top -  ( $y / 2 ),
 		$self->width + $x,
 		$self->height + $y,
 	);

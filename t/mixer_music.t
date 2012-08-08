@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
+use warnings;
 
 my $audiodriver;
 
@@ -111,7 +112,7 @@ SKIP:
 
 	my $rw = SDL::RWOps->new_file( $ogg_test_file, "rb" );
 	isa_ok( $rw, 'SDL::RWOps', '[SDL::RWOps->new_file]' );
-	my $sample_music_rw = SDL::Mixer::Music::load_MUS_RW( $rw );
+	my $sample_music_rw = SDL::Mixer::Music::load_MUS_RW($rw);
 	isa_ok( $sample_music_rw, 'SDL::Mixer::MixMusic', '[load_MUS_RW]' );
 	is( SDL::Mixer::Music::play_music( $sample_music_rw, 0 ),
 		0, "[play_music_rw] plays $ogg_test_file"

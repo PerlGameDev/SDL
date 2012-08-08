@@ -32,11 +32,17 @@ package SDL::SMPEG::Info;
 
 use strict;
 use warnings;
+use vars qw($VERSION $XS_VERSION @ISA);
 use Carp;
 use SDL;
 our @ISA = qw(Exporter DynaLoader);
 use SDL::SMPEG;
 use SDL::Internal::Loader;
+
+our $VERSION    = '2.541_09';
+our $XS_VERSION = $VERSION;
+$VERSION = eval $VERSION;
+
 internal_load_dlls(__PACKAGE__);
 
 bootstrap SDL::SMPEG::Info;
@@ -57,47 +63,48 @@ sub new {
 }
 
 sub DESTROY {
-#	FreeSMPEGInfo(  $_[0] );
+
+	#	FreeSMPEGInfo(  $_[0] );
 }
 
 sub has_audio {
-	SMPEGInfoHasAudio(  $_[0] );
+	SMPEGInfoHasAudio( $_[0] );
 }
 
 sub has_video {
-	SMPEGInfoHasVideo(  $_[0] );
+	SMPEGInfoHasVideo( $_[0] );
 }
 
 sub width {
-	SMPEGInfoWidth(  $_[0] );
+	SMPEGInfoWidth( $_[0] );
 }
 
 sub height {
-	SMPEGInfoHeight(  $_[0] );
+	SMPEGInfoHeight( $_[0] );
 }
 
 sub size {
-	SMPEGInfoTotalSize(  $_[0] );
+	SMPEGInfoTotalSize( $_[0] );
 }
 
 sub offset {
-	SMPEGInfoCurrentOffset(  $_[0] );
+	SMPEGInfoCurrentOffset( $_[0] );
 }
 
 sub frame {
-	SMPEGInfoCurrentFrame(  $_[0] );
+	SMPEGInfoCurrentFrame( $_[0] );
 }
 
 sub fps {
-	SMPEGInfoCurrentFPS(  $_[0] );
+	SMPEGInfoCurrentFPS( $_[0] );
 }
 
 sub time {
-	SMPEGInfoCurrentTime(  $_[0] );
+	SMPEGInfoCurrentTime( $_[0] );
 }
 
 sub length {
-	SMPEGInfoTotalTime(  $_[0] );
+	SMPEGInfoTotalTime( $_[0] );
 }
 
 1;

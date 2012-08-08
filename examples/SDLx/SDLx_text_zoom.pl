@@ -11,24 +11,27 @@ my $app = SDLx::App->new( width => 400, height => 100 );
 
 my $text = SDLx::Text->new;
 
-my $size = 1;
+my $size      = 1;
 my $direction = 1;
-$app->add_move_handler( sub {
-    $size += $direction;
-    $text->size( $size );
+$app->add_move_handler(
+	sub {
+		$size += $direction;
+		$text->size($size);
 
-    if ($direction == 1) {
-        $direction = -1 if $size > 60;
-    }
-    else {
-        $direction = 1 if $size < 2;
-    }
-});
+		if ( $direction == 1 ) {
+			$direction = -1 if $size > 60;
+		} else {
+			$direction = 1 if $size < 2;
+		}
+	}
+);
 
-$app->add_show_handler( sub {
-    $app->draw_rect( [0, 0, $app->w, $app->h], 0x00ffff );
-    $text->write_to( $app, 'Hello, World!' );
-    $app->update;
-});
+$app->add_show_handler(
+	sub {
+		$app->draw_rect( [ 0, 0, $app->w, $app->h ], 0x00ffff );
+		$text->write_to( $app, 'Hello, World!' );
+		$app->update;
+	}
+);
 
 $app->run;

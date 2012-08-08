@@ -1,10 +1,14 @@
 package SDLx::FPS;
 use strict;
 use warnings;
+use vars qw($VERSION @ISA);
 use SDL::GFX::Framerate;
 use SDL::GFX::FPSManager;
 use Carp;
 our @ISA = qw(SDL::GFX::FPSManager);
+
+our $VERSION = '2.541_09';
+$VERSION = eval $VERSION;
 
 sub new {
 	my ( $class, %args ) = @_;
@@ -13,7 +17,7 @@ sub new {
 		Carp::cluck("Unrecognized constructor hash key: $_");
 	}
 	my $fps = $class->SDL::GFX::FPSManager::new( 0, 0, 0, 0 );
-	SDL::GFX::Framerate::init( $fps );
+	SDL::GFX::Framerate::init($fps);
 	$fps->set( $args{fps} ) if defined $args{fps};
 	$fps;
 }

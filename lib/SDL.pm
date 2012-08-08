@@ -54,7 +54,7 @@ our %EXPORT_TAGS = (
 	defaults => $SDL::Constants::EXPORT_TAGS{'SDL/defaults'}
 );
 
-our $VERSION = '2.541_08';
+our $VERSION = '2.541_09';
 $VERSION = eval $VERSION;
 
 print "$VERSION" if ( defined( $ARGV[0] ) && ( $ARGV[0] eq '--SDLperl' ) );
@@ -92,30 +92,32 @@ sub set_error {
 
 
 # Hints for Inline.pm
-sub Inline
-{
-    my $language = shift;
-    if ($language ne 'C') {
-	warn "Warning: SDL.pm does not provide Inline hints for the $language language\n";
-	return
-    }
+sub Inline {
+	my $language = shift;
+	if ( $language ne 'C' ) {
+		warn "Warning: SDL.pm does not provide Inline hints for the $language language\n";
+		return;
+	}
 
 	require Alien::SDL;
-    require File::Spec;
+	require File::Spec;
 	my $libs = Alien::SDL->config('libs');
+
 	#This should be added in ldd flags section but it is only doing SDL_main for some reason.
-	$libs .= ' '.File::Spec->catfile(Alien::SDL->config('prefix'),'lib','libSDL.dll.a')	if( $^O =~ /Win32/ig );
+	$libs .= ' ' . File::Spec->catfile( Alien::SDL->config('prefix'), 'lib', 'libSDL.dll.a' ) if ( $^O =~ /Win32/ig );
 	my $cflags = Alien::SDL->config('cflags');
 	my $path;
 	my $sdl_typemap = File::Spec->catfile( 'SDL', 'typemap' );
-	 grep { my $find = File::Spec->catfile( $_, $sdl_typemap );
-			$path = $find if -e $find } @INC;
-    return {
-	LIBS => $libs,
-	CCFLAGS => $cflags,
-	TYPEMAPS => $path,
-	AUTO_INCLUDE => '#include <SDL.h>'
-    };
+	grep {
+		my $find = File::Spec->catfile( $_, $sdl_typemap );
+		$path = $find if -e $find
+	} @INC;
+	return {
+		LIBS         => $libs,
+		CCFLAGS      => $cflags,
+		TYPEMAPS     => $path,
+		AUTO_INCLUDE => '#include <SDL.h>'
+	};
 
 
 

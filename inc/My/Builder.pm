@@ -80,7 +80,8 @@ sub find_subsystems {
 				$found{$_} = 1 foreach (@$h);
 				$param->{libs}->{$library} = 1;
 				push @{ $param->{defines} }, "-D$libraries->{$library}{define}";
-				push @{ $param->{links} },   Alien::SDL::ConfigData->config('build_cc') eq 'cl'
+				push @{ $param->{links} },
+					Alien::SDL::ConfigData->config('build_cc') eq 'cl'
 					? "lib$libraries->{$library}{lib}.lib"
 					: "-l$libraries->{$library}{lib}";
 			} else {
@@ -136,16 +137,16 @@ sub set_file_flags {
 	$arch = '-arch' . $ENV{SDL_ARCH} if $ENV{SDL_ARCH};
 
 	while ( my ( $subsystem, $param ) = each %build_systems ) {
-		my $sub_file = $self->notes('subsystems')->{$subsystem}{file}{to};
+		my $sub_file             = $self->notes('subsystems')->{$subsystem}{file}{to};
 		my $extra_compiler_flags = [
 			( split( ' ', $arch . $debug . $self->notes('sdl_cflags') ) ),
 			@{ $param->{defines} },
 		];
-		push(@{$extra_compiler_flags}, '-DUSE_THREADS') if defined $Config{usethreads};
-		push(@{$extra_compiler_flags}, '-fPIC')         if $^O ne 'MSWin32';
+		push( @{$extra_compiler_flags}, '-DUSE_THREADS' ) if defined $Config{usethreads};
+		push( @{$extra_compiler_flags}, '-fPIC' ) if $^O ne 'MSWin32';
 		$file_flags{$sub_file} = {
 			extra_compiler_flags => $extra_compiler_flags,
-			extra_linker_flags => [
+			extra_linker_flags   => [
 				( split( ' ', $self->notes('sdl_libs') ) ),
 				@{ $param->{links} },
 			],
@@ -155,12 +156,12 @@ sub set_file_flags {
 }
 
 sub process_pod_files {
-	my ($self, $ext) = @_;
+	my ( $self, $ext ) = @_;
 
-	my $files = $self->_find_file_by_type($ext, 'lib');
-	while (my ($file, $dest) = each %$files) {
+	my $files = $self->_find_file_by_type( $ext, 'lib' );
+	while ( my ( $file, $dest ) = each %$files ) {
 		$dest =~ s!^(lib/)pods/!$1!;
-		$self->copy_if_modified(from => $file, to => File::Spec->catfile($self->blib, $dest));
+		$self->copy_if_modified( from => $file, to => File::Spec->catfile( $self->blib, $dest ) );
 	}
 }
 

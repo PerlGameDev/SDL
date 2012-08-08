@@ -1,5 +1,8 @@
 # basic testing of SDLx::Sound
 
+use strict;
+use warnings;
+
 my $audiodriver;
 
 BEGIN {
@@ -25,7 +28,7 @@ BEGIN {
 	} elsif ( !SDL::Config->has('SDL_mixer') ) {
 		plan( skip_all => 'SDL_mixer support not compiled' );
 	}
-} 
+}
 my $fase2 = 0;
 
 # load
@@ -33,7 +36,7 @@ my $fase2 = 0;
 
 # methods
 can_ok(
-		'SDLx::Sound', qw/
+	'SDLx::Sound', qw/
 		new
 		load
 		unload
@@ -42,44 +45,43 @@ can_ok(
 		loud
 		fade
 		/
-      );
+);
 
-ok (my $snd = SDLx::Sound->new(), 'Can be instantiated');
-ok (my $snd2 = SDLx::Sound->new(), 'Can be instantiated again');
+ok( my $snd  = SDLx::Sound->new(), 'Can be instantiated' );
+ok( my $snd2 = SDLx::Sound->new(), 'Can be instantiated again' );
 
-isa_ok( $snd, 'SDLx::Sound', 'snd' );
+isa_ok( $snd,  'SDLx::Sound', 'snd' );
 isa_ok( $snd2, 'SDLx::Sound', 'snd2' );
 
 # load and play a sound
-ok ($snd->play('test/data/sample.wav'), 'Can play a wav');
+ok( $snd->play('test/data/sample.wav'), 'Can play a wav' );
 
 SKIP:
 {
 	skip 'complex tests', 1 unless $fase2;
-# in a single act do the wole Sound
-	ok( my $snd2 = SDLx::Sound->new(
-				files => (
-					chanell_01 => "test/data/sample.wav",
-					chanell_02 => "test/data/tribe_i.wav"
 
-					),
-				loud  => (
-					channel_01 => 80,
-					channel_02 => 75
-					),
-				bangs => (
-					chanell_01 => 0,      # start
-					chanell_01 => 1256,   # miliseconds
-					chanell_02 => 2345
-					),
-				fade  => (
-					chanell_02 => [2345, 3456, -20]
-					)
-				)->play()
-	  );
+	# in a single act do the wole Sound
+	ok( my $snd2 = SDLx::Sound->new(
+			files => (
+				chanell_01 => "test/data/sample.wav",
+				chanell_02 => "test/data/tribe_i.wav"
+
+			),
+			loud => (
+				channel_01 => 80,
+				channel_02 => 75
+			),
+			bangs => (
+				chanell_01 => 0,    # start
+				chanell_01 => 1256, # miliseconds
+				chanell_02 => 2345
+			),
+			fade => ( chanell_02 => [ 2345, 3456, -20 ] )
+			)->play()
+	);
 }
 
-#diag( "Testing SDLx::Sound $SDLx::Sound::VERSION, Perl $], $^X" );           
+#diag( "Testing SDLx::Sound $SDLx::Sound::VERSION, Perl $], $^X" );
 
 
 if ($audiodriver) {

@@ -32,9 +32,13 @@ package SDL::Tutorial;
 
 use strict;
 use warnings;
+use vars qw($VERSION);
 
 use SDL;
 use SDLx::App;
+
+our $VERSION = '2.541_09';
+$VERSION = eval $VERSION;
 
 # change these values as necessary
 my $title = 'My SDL App';

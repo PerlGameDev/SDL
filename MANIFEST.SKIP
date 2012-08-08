@@ -1,4 +1,5 @@
 ~$
 \.o$
+\.obj$
 \.bak$
-^(?!typemap|share|scripts/\w+\.pl|src/[^\.]|test/data/[^\.]|MacOSX/[^\.]|examples/[^\.]+|lib/[\/\w]+\.p(m|od)|inc/|t/[\w\d-]+\.t|t/lib/SDL/TestTool\.pm|Build.PL$|INSTALL$|README$|MANIFEST$|CHANGELOG$|TODO$|CONTRIBUTORS$|COPYING$|OFL-FAQ.txt|OFL.txt|META.yml|$)
+^(?!typemap|share|scripts/\w+\.pl|src/[^\.]|test/data/[^\.]|MacOSX/[^\.]|examples/[^\.]+|lib/[\/\w]+\.p(m|od)|inc/|t/[\w\d-]+\.t|t/lib/SDL/TestTool\.pm|Build.PL$|INSTALL$|README$|MANIFEST$|CHANGELOG$|TODO$|CONTRIBUTORS$|COPYING$|OFL-FAQ.txt|OFL.txt|META.(yml|json)|$)

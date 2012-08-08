@@ -1,9 +1,13 @@
 #!/usr/bin/env perl
 package SDL::Constants;
 
+use strict;
 use warnings;
 use base 'Exporter';
 use Config;
+
+our $VERSION = '2.541_09';
+$VERSION = eval $VERSION;
 
 our @EXPORT_OK   = ();
 our %EXPORT_TAGS = (

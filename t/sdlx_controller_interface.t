@@ -14,14 +14,14 @@ my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy';
 
 can_ok(
-		'SDLx::Controller::Interface',
-		qw( new ) #meh, put the rest in later
-      );
+	'SDLx::Controller::Interface',
+	qw( new ) #meh, put the rest in later
+);
 
 TODO: {
-	      local $TODO = 'methods not implemented yet';
-	      can_ok( 'SDLx::Controller::Interface', qw( foo ) );
-      }
+	local $TODO = 'methods not implemented yet';
+	can_ok( 'SDLx::Controller::Interface', qw( foo ) );
+}
 
 
 my $obj = SDLx::Controller::Interface->new( x => 1, y => 2, v_x => 3, v_y => 4, rot => 5, ang_v => 6 );
@@ -71,7 +71,7 @@ my $a_x = $a->x();
 is( $a_x, 2, '[obj/state] acceleration callback copies state back to current' );
 
 
-my $dummy        = SDLx::App->new( init => SDL_INIT_VIDEO );
+my $dummy = SDLx::App->new( init => SDL_INIT_VIDEO );
 my $controller   = SDLx::Controller->new( dt => 1, delay => 200 );
 my $interface    = SDLx::Controller::Interface->new();
 my $event_called = 0;
@@ -94,7 +94,7 @@ $interface->set_acceleration(
 		$controller->stop() if $counts->[0] && $counts->[1] && $counts->[2];
 		$counts->[1]++;
 		isa_ok( $_[1], 'SDLx::Controller::State', '[Controller] called acceleration and gave us a state' ),
-		return ( 10, 10, 10 );
+			return ( 10, 10, 10 );
 	}
 );
 

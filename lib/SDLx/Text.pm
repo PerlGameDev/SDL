@@ -1,6 +1,7 @@
 package SDLx::Text;
 use strict;
 use warnings;
+use vars qw($VERSION);
 use SDL;
 use SDL::Video;
 use SDL::Config;
@@ -11,28 +12,31 @@ use List::Util qw(max sum);
 
 use Carp ();
 
+our $VERSION = '2.541_09';
+$VERSION = eval $VERSION;
+
 sub new {
-	my ($class, %options) = @_;
+	my ( $class, %options ) = @_;
 	unless ( SDL::Config->has('SDL_ttf') ) {
 		Carp::cluck("SDL_ttf support has not been compiled");
-	}  
+	}
 	my $file = $options{'font'};
-    if (!$file) {
-        require File::ShareDir;
-        $file = File::ShareDir::dist_file('SDL', 'GenBasR.ttf');
-    }
+	if ( !$file ) {
+		require File::ShareDir;
+		$file = File::ShareDir::dist_file( 'SDL', 'GenBasR.ttf' );
+	}
 
-	my $color = defined $options{'color'} ? $options{'color'} : [255, 255, 255];
+	my $color = defined $options{'color'} ? $options{'color'} : [ 255, 255, 255 ];
 
 	my $size = $options{'size'} || 24;
 
 	my $shadow        = $options{'shadow'}        || 0;
 	my $shadow_offset = $options{'shadow_offset'} || 1;
 
-	my $shadow_color  = defined $options{'shadow_color'}
-	                  ? $options{'shadow_color'}
-	                  : [0, 0, 0]
-	                  ;
+	my $shadow_color =
+		defined $options{'shadow_color'}
+		? $options{'shadow_color'}
+		: [ 0, 0, 0 ];
 
 	my $self = bless {}, ref($class) || $class;
 
@@ -40,11 +44,12 @@ sub new {
 	$self->{y} = $options{'y'} || 0;
 
 	$self->{h_align} = $options{'h_align'} || 'left';
-# TODO: validate
-# TODO: v_align
+
+	# TODO: validate
+	# TODO: v_align
 	unless ( SDL::TTF::was_init() ) {
-		Carp::cluck ("Cannot init TTF: " . SDL::get_error() )
-		    unless SDL::TTF::init() == 0;
+		Carp::cluck( "Cannot init TTF: " . SDL::get_error() )
+			unless SDL::TTF::init() == 0;
 	}
 
 	$self->size($size);
@@ -54,13 +59,13 @@ sub new {
 	$self->shadow_color($shadow_color);
 	$self->shadow_offset($shadow_offset);
 
-    $self->bold($options{'bold'}) if exists $options{'bold'};
-    $self->italic($options{'italic'}) if exists $options{'italic'};
-    $self->underline($options{'underline'}) if exists $options{'underline'};
-    $self->strikethrough($options{'strikethrough'}) if exists $options{'strikethrough'};
+	$self->bold( $options{'bold'} )                   if exists $options{'bold'};
+	$self->italic( $options{'italic'} )               if exists $options{'italic'};
+	$self->underline( $options{'underline'} )         if exists $options{'underline'};
+	$self->strikethrough( $options{'strikethrough'} ) if exists $options{'strikethrough'};
 
-    # word wrapping
-    $self->{word_wrap} = $options{'word_wrap'} || 0;
+	# word wrapping
+	$self->{word_wrap} = $options{'word_wrap'} || 0;
 
 	$self->text( $options{'text'} ) if exists $options{'text'};
 
@@ -68,38 +73,38 @@ sub new {
 }
 
 sub font {
-	my ($self, $font_filename) = @_;
+	my ( $self, $font_filename ) = @_;
 
 	if ($font_filename) {
 		my $size = $self->size;
 
-		$self->{_font} = SDL::TTF::open_font($font_filename, $size)
+		$self->{_font} = SDL::TTF::open_font( $font_filename, $size )
 			or Carp::cluck "Error opening font '$font_filename': " . SDL::get_error;
 
-	    $self->{_font_filename} = $font_filename;
-	    $self->{_update_surfaces} = 1;
+		$self->{_font_filename}   = $font_filename;
+		$self->{_update_surfaces} = 1;
 	}
 
 	return $self->{_font};
 }
 
 sub font_filename {
-    return $_[0]->{_font_filename};
+	return $_[0]->{_font_filename};
 }
 
 sub color {
-	my ($self, $color) = @_;
+	my ( $self, $color ) = @_;
 
-	if (defined $color) {
-		$self->{_color} = SDLx::Validate::color($color);
-	    $self->{_update_surfaces} = 1;
+	if ( defined $color ) {
+		$self->{_color}           = SDLx::Validate::color($color);
+		$self->{_update_surfaces} = 1;
 	}
 
 	return $self->{_color};
 }
 
 sub size {
-	my ($self, $size) = @_;
+	my ( $self, $size ) = @_;
 
 	if ($size) {
 		$self->{_size} = $size;
@@ -114,31 +119,31 @@ sub size {
 }
 
 sub _style {
-    my ($self, $flag, $enable) = @_;
+	my ( $self, $flag, $enable ) = @_;
 
-    my $styles = SDL::TTF::get_font_style( $self->font );
+	my $styles = SDL::TTF::get_font_style( $self->font );
 
-    # do we have an enable flag?
-    if (@_ > 2) {
+	# do we have an enable flag?
+	if ( @_ > 2 ) {
 
-        # we do! setup flags if we're enabling or disabling
-        if ($enable) {
-            $styles |= $flag;
-        }
-        else {
-            $styles ^= $flag if $flag & $styles;
-        }
+		# we do! setup flags if we're enabling or disabling
+		if ($enable) {
+			$styles |= $flag;
+		} else {
+			$styles ^= $flag if $flag & $styles;
+		}
 
-        SDL::TTF::set_font_style( $self->font, $styles );
+		SDL::TTF::set_font_style( $self->font, $styles );
 
-        # another run, returning true if value was properly set.
-        return SDL::TTF::get_font_style( $self->font ) & $flag;
-    }
-    # no enable flag present, just return
-    # whether the style is enabled/disabled
-    else {
-        return $styles & $flag;
-    }
+		# another run, returning true if value was properly set.
+		return SDL::TTF::get_font_style( $self->font ) & $flag;
+	}
+
+	# no enable flag present, just return
+	# whether the style is enabled/disabled
+	else {
+		return $styles & $flag;
+	}
 }
 
 sub normal        { my $self = shift; $self->_style( TTF_STYLE_NORMAL,        @_ ) }
@@ -149,10 +154,10 @@ sub strikethrough { my $self = shift; $self->_style( TTF_STYLE_STRIKETHROUGH, @_
 
 
 sub h_align {
-	my ($self, $align) = @_;
+	my ( $self, $align ) = @_;
 
 	if ($align) {
-		$self->{h_align} = $align;
+		$self->{h_align}          = $align;
 		$self->{_update_surfaces} = 1;
 	}
 
@@ -160,22 +165,22 @@ sub h_align {
 }
 
 sub shadow {
-	my ($self, $shadow) = @_;
+	my ( $self, $shadow ) = @_;
 
 	if ($shadow) {
-	    $self->{shadow} = $shadow;
-	    $self->{_update_surfaces} = 1;
+		$self->{shadow}           = $shadow;
+		$self->{_update_surfaces} = 1;
 	}
 
 	return $self->{shadow};
 }
 
 sub shadow_color {
-	my ($self, $shadow_color) = @_;
+	my ( $self, $shadow_color ) = @_;
 
-	if (defined $shadow_color) {
-		$self->{shadow_color} = SDLx::Validate::color($shadow_color);
-	    $self->{_update_surfaces} = 1;
+	if ( defined $shadow_color ) {
+		$self->{shadow_color}     = SDLx::Validate::color($shadow_color);
+		$self->{_update_surfaces} = 1;
 	}
 
 	return $self->{shadow_color};
@@ -183,74 +188,73 @@ sub shadow_color {
 
 
 sub shadow_offset {
-	my ($self, $shadow_offset) = @_;
+	my ( $self, $shadow_offset ) = @_;
 
 	if ($shadow_offset) {
-	    $self->{shadow_offset} = $shadow_offset;
-	    $self->{_update_surfaces} = 1;
+		$self->{shadow_offset}    = $shadow_offset;
+		$self->{_update_surfaces} = 1;
 	}
 
 	return $self->{shadow_offset};
 }
 
 sub w {
-    my $surface = $_[0]->{surface};
-    return $surface->w unless $surface and ref $surface eq 'ARRAY';
+	my $surface = $_[0]->{surface};
+	return $surface->w unless $surface and ref $surface eq 'ARRAY';
 
-    return max map { $_ ? $_->w() : 0 } @$surface;
+	return max map { $_ ? $_->w() : 0 } @$surface;
 }
 
 sub h {
-    my $surface = $_[0]->{surface};
-    return $surface->h unless $surface and ref $surface eq 'ARRAY';
+	my $surface = $_[0]->{surface};
+	return $surface->h unless $surface and ref $surface eq 'ARRAY';
 
-    return sum map { $_ ? $_->h() : 0 } @$surface;
+	return sum map { $_ ? $_->h() : 0 } @$surface;
 }
 
 sub x {
-	my ($self, $x) = @_;
+	my ( $self, $x ) = @_;
 
-	if (defined $x) {
+	if ( defined $x ) {
 		$self->{x} = $x;
 	}
 	return $self->{x};
 }
 
 sub y {
-	my ($self, $y) = @_;
+	my ( $self, $y ) = @_;
 
-	if (defined $y) {
+	if ( defined $y ) {
 		$self->{y} = $y;
 	}
 	return $self->{y};
 }
 
 sub text {
-	my ($self, $text) = @_;
+	my ( $self, $text ) = @_;
 
-    return $self->{text} if scalar @_ == 1;
+	return $self->{text} if scalar @_ == 1;
 
-    if ( defined $text ) {
-        $text = $self->_word_wrap($text) if $self->{word_wrap};
-        my $font = $self->{_font};
-        my $surface = _get_surfaces_for($font, $text, $self->{_color} )
-            or Carp::croak 'TTF rendering error: ' . SDL::get_error;
+	if ( defined $text ) {
+		$text = $self->_word_wrap($text) if $self->{word_wrap};
+		my $font = $self->{_font};
+		my $surface = _get_surfaces_for( $font, $text, $self->{_color} )
+			or Carp::croak 'TTF rendering error: ' . SDL::get_error;
 
-	    if ($self->{shadow}) {
-	        my $shadow_surface = _get_surfaces_for($font, $text, $self->{shadow_color})
-	            or Carp::croak 'TTF shadow rendering error: ' . SDL::get_error;
+		if ( $self->{shadow} ) {
+			my $shadow_surface = _get_surfaces_for( $font, $text, $self->{shadow_color} )
+				or Carp::croak 'TTF shadow rendering error: ' . SDL::get_error;
 
-            $shadow_surface = [ $shadow_surface ] unless ref $shadow_surface eq 'ARRAY';
+			$shadow_surface = [$shadow_surface] unless ref $shadow_surface eq 'ARRAY';
 
-	        $self->{_shadow_surface} = $shadow_surface;
-	    }
+			$self->{_shadow_surface} = $shadow_surface;
+		}
 
-        $self->{surface} = $surface;
-        $self->{text} = $text;
-    }
-    else {
-        $self->{surface} = undef;
-    }
+		$self->{surface} = $surface;
+		$self->{text}    = $text;
+	} else {
+		$self->{surface} = undef;
+	}
 
 
 	return $self;
@@ -260,53 +264,50 @@ sub text {
 # If the text contains linebreaks, we split into
 # several surfaces (since SDL can't render '\n').
 sub _get_surfaces_for {
-    my ($font, $text, $color) = @_;
+	my ( $font, $text, $color ) = @_;
 
-    return SDL::TTF::render_utf8_blended($font, $text, $color)
-        if index($text, "\n") == -1;
+	return SDL::TTF::render_utf8_blended( $font, $text, $color )
+		if index( $text, "\n" ) == -1;
 
-    my @surfaces = ();
-    my @paragraphs = split /\n/ => $text;
-    foreach my $paragraph (@paragraphs) {
-        push @surfaces, SDL::TTF::render_utf8_blended($font, $paragraph, $color);
-    }
-    return \@surfaces;
+	my @surfaces = ();
+	my @paragraphs = split /\n/ => $text;
+	foreach my $paragraph (@paragraphs) {
+		push @surfaces, SDL::TTF::render_utf8_blended( $font, $paragraph, $color );
+	}
+	return \@surfaces;
 }
 
 sub _word_wrap {
-    my ($self, $text) = @_;
+	my ( $self, $text ) = @_;
 
-    my $maxlen = $self->{word_wrap};
-    my $font   = $self->{_font};
+	my $maxlen = $self->{word_wrap};
+	my $font   = $self->{_font};
 
-    # code heavily based on Text::Flow::Wrap
-    my @paragraphs = split /\n/ => $text;
-    my @output;
+	# code heavily based on Text::Flow::Wrap
+	my @paragraphs = split /\n/ => $text;
+	my @output;
 
-    foreach my $paragraph (@paragraphs) {
-        my @paragraph_output = ('');
-        my @words  = split /\s+/ => $paragraph;
+	foreach my $paragraph (@paragraphs) {
+		my @paragraph_output = ('');
+		my @words = split /\s+/ => $paragraph;
 
-        foreach my $word (@words) {
-            my $padded    = $word . q[ ];
-            my $candidate = $paragraph_output[-1] . $padded;
-            my ($w) = @{ SDL::TTF::size_utf8($font, $candidate) };
-            if ($w < $maxlen) {
-                $paragraph_output[-1] = $candidate;
-            }
-            else {
-                push @paragraph_output, $padded;
-            }
-        }
-        chop $paragraph_output[-1] if substr( $paragraph_output[-1], -1, 1 ) eq q[ ];
+		foreach my $word (@words) {
+			my $padded    = $word . q[ ];
+			my $candidate = $paragraph_output[-1] . $padded;
+			my ($w) = @{ SDL::TTF::size_utf8( $font, $candidate ) };
+			if ( $w < $maxlen ) {
+				$paragraph_output[-1] = $candidate;
+			} else {
+				push @paragraph_output, $padded;
+			}
+		}
+		chop $paragraph_output[-1] if substr( $paragraph_output[-1], -1, 1 ) eq q[ ];
 
-        push @output, \@paragraph_output;
+		push @output, \@paragraph_output;
 
-    }
+	}
 
-    return join "\n" => map {
-        join "\n" => @$_
-    } @output;
+	return join "\n" => map { join "\n" => @$_ } @output;
 }
 
 sub surface {
@@ -314,69 +315,68 @@ sub surface {
 }
 
 sub write_to {
-	my ($self, $target, $text) = @_;
+	my ( $self, $target, $text ) = @_;
 
-    if (@_ > 2) {
-        $self->text($text);
-        $self->{_update_surfaces} = 0;
-    }
-    $self->write_xy($target, $self->{x}, $self->{y});
+	if ( @_ > 2 ) {
+		$self->text($text);
+		$self->{_update_surfaces} = 0;
+	}
+	$self->write_xy( $target, $self->{x}, $self->{y} );
 }
 
 sub write_xy {
-	my ($self, $target, $x, $y, $text) = @_;
+	my ( $self, $target, $x, $y, $text ) = @_;
 
-	if (@_ > 4) {
-	    $self->text($text);
-        $self->{_update_surfaces} = 0;
-	}
-	elsif ($self->{_update_surfaces}) {
-	    $self->text( $self->text );
-	    $self->{_update_surfaces} = 0;
+	if ( @_ > 4 ) {
+		$self->text($text);
+		$self->{_update_surfaces} = 0;
+	} elsif ( $self->{_update_surfaces} ) {
+		$self->text( $self->text );
+		$self->{_update_surfaces} = 0;
 	}
 
 	if ( my $surfaces = $self->{surface} ) {
 
-        $surfaces = [ $surfaces ] unless ref $surfaces eq 'ARRAY';
-        my $linebreaks = 0;
+		$surfaces = [$surfaces] unless ref $surfaces eq 'ARRAY';
+		my $linebreaks = 0;
 
-        foreach my $i ( 0 .. $#{$surfaces}) {
-            if (my $surface = $surfaces->[$i]) {
-                my $tx ;
-                $y += ($linebreaks * $surface->h);
-                $linebreaks = 0;
+		foreach my $i ( 0 .. $#{$surfaces} ) {
+			if ( my $surface = $surfaces->[$i] ) {
+				my $tx;
+				$y += ( $linebreaks * $surface->h );
+				$linebreaks = 0;
 
-                if ($self->{h_align} eq 'center' ) {
-                    # $x = ($target->w / 2) - ($surface->w / 2);
-                    $tx = $x + ($self->w -$surface->w) / 2;
-                }
-                elsif ($self->{h_align} eq 'right' ) {
-                    # $x = $target->w - $surface->w;
-                    $tx = $x + $self->w - $surface->w;
-                }
-                else {
-                    $tx = $x ;
-                }
+				if ( $self->{h_align} eq 'center' ) {
 
-                # blit the shadow
-                if ($self->{shadow}) {
-                    my $shadow = $self->{_shadow_surface}->[$i];
-                    my $offset = $self->{shadow_offset};
+					# $x = ($target->w / 2) - ($surface->w / 2);
+					$tx = $x + ( $self->w - $surface->w ) / 2;
+				} elsif ( $self->{h_align} eq 'right' ) {
 
-                    SDL::Video::blit_surface(
-                       $shadow, SDL::Rect->new(0,0,$shadow->w, $shadow->h),
-                       $target, SDL::Rect->new($tx + $offset, $y + $offset, 0, 0)
-                    );
-                }
+					# $x = $target->w - $surface->w;
+					$tx = $x + $self->w - $surface->w;
+				} else {
+					$tx = $x;
+				}
 
-                # blit the text
-                SDL::Video::blit_surface(
-                    $surface, SDL::Rect->new(0,0,$surface->w, $surface->h),
-                    $target, SDL::Rect->new($tx, $y, 0, 0)
-                );
-            }
-            $linebreaks++;
-        }
+				# blit the shadow
+				if ( $self->{shadow} ) {
+					my $shadow = $self->{_shadow_surface}->[$i];
+					my $offset = $self->{shadow_offset};
+
+					SDL::Video::blit_surface(
+						$shadow, SDL::Rect->new( 0,             0,            $shadow->w, $shadow->h ),
+						$target, SDL::Rect->new( $tx + $offset, $y + $offset, 0,          0 )
+					);
+				}
+
+				# blit the text
+				SDL::Video::blit_surface(
+					$surface, SDL::Rect->new( 0,   0,  $surface->w, $surface->h ),
+					$target,  SDL::Rect->new( $tx, $y, 0,           0 )
+				);
+			}
+			$linebreaks++;
+		}
 
 	}
 	return;

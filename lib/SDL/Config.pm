@@ -2,7 +2,11 @@ package SDL::Config;
 
 use strict;
 use warnings;
+use vars qw($VERSION);
 use SDL::ConfigData;
+
+our $VERSION = '2.541_09';
+$VERSION = eval $VERSION;
 
 sub has {
 	my ( $class, $define ) = @_;

@@ -2,11 +2,15 @@ package Module::Build::SDL;
 use strict;
 use warnings;
 use base 'Module::Build';
+use vars qw($VERSION);
 
-__PACKAGE__->add_property(parinput  => '');
-__PACKAGE__->add_property(paroutput => '');
-__PACKAGE__->add_property(parlibs   => [ qw/SDL SDL-1.2 SDLmain/ ]);
-__PACKAGE__->add_property(parmods   => []);
+our $VERSION = '2.541_09';
+$VERSION = eval $VERSION;
+
+__PACKAGE__->add_property( parinput  => '' );
+__PACKAGE__->add_property( paroutput => '' );
+__PACKAGE__->add_property( parlibs   => [qw/SDL SDL-1.2 SDLmain/] );
+__PACKAGE__->add_property( parmods   => [] );
 
 use File::Spec;
 use File::Find qw[finddepth];
@@ -14,212 +18,214 @@ use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use Alien::SDL;
 
 sub new {
-  my $self = shift;
-  my %args = @_;  
-  $args{share_dir} ||= 'data'; #set default sharedir name 'data' instead of 'share'
-  $self->SUPER::new(%args);
+	my $self = shift;
+	my %args = @_;
+	$args{share_dir} ||= 'data'; #set default sharedir name 'data' instead of 'share'
+	$self->SUPER::new(%args);
 }
 
 sub ACTION_par {
-  my ($self) = @_;
-  $self->depends_on('code');
-  $self->depends_on('installdeps');
-  
-  #checking if we have the pp installed
-  die 'Need PAR::Packer' if !( eval ' use PAR::Packer; 1' );
+	my ($self) = @_;
+	$self->depends_on('code');
+	$self->depends_on('installdeps');
 
-  #here comes the code from https://github.com/PerlGameDev/SDL-Par-Packager/blob/master/SDLpp.pl
-  my $output = $self->paroutput || (($^O eq 'MSWin32') ? 'a.exe' : 'a');
-  my $input = $self->parinput;
-  my @sdl_libs = @{$self->parlibs};  
-  my $extra = join ' ', (map {"-M$_"} @{$self->parmods}); # = '-MModname::A -MModname::B ...'
-  my $Include = './lib';
+	#checking if we have the pp installed
+	die 'Need PAR::Packer' if !( eval ' use PAR::Packer; 1' );
 
-  die 'parinput needs to be specified' unless $input;
+	#here comes the code from https://github.com/PerlGameDev/SDL-Par-Packager/blob/master/SDLpp.pl
+	my $output   = $self->paroutput || ( ( $^O eq 'MSWin32' ) ? 'a.exe' : 'a' );
+	my $input    = $self->parinput;
+	my @sdl_libs = @{ $self->parlibs };
+	my $extra    = join ' ', ( map {"-M$_"} @{ $self->parmods } );              # = '-MModname::A -MModname::B ...'
+	my $Include  = './lib';
 
-  print "BUILDING PAR \n";
-  my $exclude_modules = '-X Alien::SDL::ConfigData -X SDL::ConfigData';
-  my $include_modules = '-M ExtUtils::CBuilder::Base -M Data::Dumper -M SDL -M Alien::SDL';
-  $include_modules .= " $extra" if $extra;
+	die 'parinput needs to be specified' unless $input;
 
-  my $out_par = $output . '.par';
-  my $par_cmd = "pp -B $exclude_modules $include_modules";
-  $par_cmd .= " -I $Include" if $Include;
-  $par_cmd .= " -p -o $out_par $input";
-  print "\t $par_cmd \n";
-  `$par_cmd` if !-e $out_par;
+	print "BUILDING PAR \n";
+	my $exclude_modules = '-X Alien::SDL::ConfigData -X SDL::ConfigData';
+	my $include_modules = '-M ExtUtils::CBuilder::Base -M Data::Dumper -M SDL -M Alien::SDL';
+	$include_modules .= " $extra" if $extra;
 
-  print "PAR: $out_par\n" if -e $out_par;
+	my $out_par = $output . '.par';
+	my $par_cmd = "pp -B $exclude_modules $include_modules";
+	$par_cmd .= " -I $Include" if $Include;
+	$par_cmd .= " -p -o $out_par $input";
+	print "\t $par_cmd \n";
+	`$par_cmd` if !-e $out_par;
 
-  print "SEARCHING FOR ConfigData files \n";
-  my $lib;
-  my $AS_path;
-  my $SD_path;
+	print "PAR: $out_par\n" if -e $out_par;
 
-  finddepth( sub {
-               my ($f, $d) = ($File::Find::name, $File::Find::dir);
-  	       if ( $_ =~ /ConfigData/ ) {
-  		  $AS_path = $f if $f =~ 'Alien/SDL/ConfigData.pm';
-  		  $SD_path = $f if $f =~ 'SDL/ConfigData.pm' && $f !~ 'Alien/SDL/ConfigData.pm';
-  		  $lib = $d if ( $AS_path && $SD_path );
-  	       }
-             }, @INC );
+	print "SEARCHING FOR ConfigData files \n";
+	my $lib;
+	my $AS_path;
+	my $SD_path;
 
-  die "Cannot find lib/SDL/ConfigData.pm or lib/Alien/SDL/ConfigData.pm \n" if ( !$AS_path || !$SD_path );
+	finddepth(
+		sub {
+			my ( $f, $d ) = ( $File::Find::name, $File::Find::dir );
+			if ( $_ =~ /ConfigData/ ) {
+				$AS_path = $f if $f =~ 'Alien/SDL/ConfigData.pm';
+				$SD_path = $f if $f =~ 'SDL/ConfigData.pm' && $f !~ 'Alien/SDL/ConfigData.pm';
+				$lib = $d if ( $AS_path && $SD_path );
+			}
+		},
+		@INC
+	);
 
-  print "Found ConfigData files in $lib \n";
+	die "Cannot find lib/SDL/ConfigData.pm or lib/Alien/SDL/ConfigData.pm \n" if ( !$AS_path || !$SD_path );
 
-  print "READING PAR FILE \n";
+	print "Found ConfigData files in $lib \n";
 
-  my $par_file = Archive::Zip->new();
-  unless ( $par_file->read($out_par) == AZ_OK ) {
-    die 'read error on ' . $out_par;
-  }
+	print "READING PAR FILE \n";
 
-  $par_file->addFile( $AS_path, 'lib/Alien/SDL/ConfigData.pm' );
-  $par_file->addFile( $SD_path, 'lib/SDL/ConfigData.pm' );
+	my $par_file = Archive::Zip->new();
+	unless ( $par_file->read($out_par) == AZ_OK ) {
+		die 'read error on ' . $out_par;
+	}
 
-  my $share = Alien::SDL::ConfigData->config('share_subdir');
+	$par_file->addFile( $AS_path, 'lib/Alien/SDL/ConfigData.pm' );
+	$par_file->addFile( $SD_path, 'lib/SDL/ConfigData.pm' );
 
-  my @shares = $par_file->membersMatching($share);
+	my $share = Alien::SDL::ConfigData->config('share_subdir');
 
-  my $alien_sdl_auto = $shares[0]->fileName;
+	my @shares = $par_file->membersMatching($share);
 
-  $alien_sdl_auto =~ s/$share(\S+)// if $alien_sdl_auto;
+	my $alien_sdl_auto = $shares[0]->fileName;
 
-  my @auto_folder = $par_file->membersMatching("$alien_sdl_auto(?!$share)");
+	$alien_sdl_auto =~ s/$share(\S+)// if $alien_sdl_auto;
 
-  my @sdl_not_runtime = $par_file->membersMatching( $share . '/include' ); #TODO remove extra fluff in share_dri
-  push @sdl_not_runtime, @auto_folder;                                     #remove non share dir stuff
-  push @sdl_not_runtime, $par_file->membersMatching( $share . '/etc' );
-  push @sdl_not_runtime, $par_file->membersMatching( $share . '/share' );
-  push @sdl_not_runtime, $par_file->membersMatching( $share . '/lib' ) if $^O eq 'MSWin32';
+	my @auto_folder = $par_file->membersMatching("$alien_sdl_auto(?!$share)");
 
-  my @non              = ();
-  my @sdl_libs_to_keep = ();
+	my @sdl_not_runtime = $par_file->membersMatching( $share . '/include' ); #TODO remove extra fluff in share_dri
+	push @sdl_not_runtime, @auto_folder;                                                     #remove non share dir stuff
+	push @sdl_not_runtime, $par_file->membersMatching( $share . '/etc' );
+	push @sdl_not_runtime, $par_file->membersMatching( $share . '/share' );
+	push @sdl_not_runtime, $par_file->membersMatching( $share . '/lib' ) if $^O eq 'MSWin32';
 
-  foreach (@sdl_libs) {
-    if ( $^O eq 'MSWin32' ) {
-      @non = $par_file->membersMatching( $share . "/bin(\\S+)" );
-      #push @sdl_not_runtime ,$par_file->membersMatching( $share."/bin(\\S+)(?!$_)" )
-    }
-    else {
-      @non = $par_file->membersMatching( $share . "/lib(\\S+)" );
-    }
+	my @non              = ();
+	my @sdl_libs_to_keep = ();
 
-    print "Removing non $_ shared objs \n";
-    my $lib_look = 'lib' . $_;
-    map {
-      my $n = $_->fileName;
-      if ( $n =~ /$lib_look\.(so|a|dll|dylib)/ ) {
-        push( @sdl_libs_to_keep, $_ );
-      }
-    } @non;
-  }
+	foreach (@sdl_libs) {
+		if ( $^O eq 'MSWin32' ) {
+			@non = $par_file->membersMatching( $share . "/bin(\\S+)" );
 
-  print "found $#sdl_libs_to_keep sdl libs to keep \n";
-  my $regex_search = ']';
-  map {
-    print "\t " . $_->fileName . "\n";
-    $regex_search .= ']' . $_->fileName
-  } @sdl_libs_to_keep;
+			#push @sdl_not_runtime ,$par_file->membersMatching( $share."/bin(\\S+)(?!$_)" )
+		} else {
+			@non = $par_file->membersMatching( $share . "/lib(\\S+)" );
+		}
 
-  $regex_search =~ s/\]\]//g;
-  $regex_search =~ s/\]/\|/g;
+		print "Removing non $_ shared objs \n";
+		my $lib_look = 'lib' . $_;
+		map {
+			my $n = $_->fileName;
+			if ( $n =~ /$lib_look\.(so|a|dll|dylib)/ ) {
+				push( @sdl_libs_to_keep, $_ );
+			}
+		} @non;
+	}
 
-  $regex_search = '(' . $regex_search . ')';
+	print "found $#sdl_libs_to_keep sdl libs to keep \n";
+	my $regex_search = ']';
+	map {
+		print "\t " . $_->fileName . "\n";
+		$regex_search .= ']' . $_->fileName
+	} @sdl_libs_to_keep;
 
-  map {
-    my $n    = $_->fileName;
-    my $star = ' ';
+	$regex_search =~ s/\]\]//g;
+	$regex_search =~ s/\]/\|/g;
 
-    if ( $n !~ $regex_search ) {
-      push @sdl_not_runtime, $_;
-    }
-  } @non;
+	$regex_search = '(' . $regex_search . ')';
 
-  push @sdl_not_runtime, $par_file->membersMatching( $share . '/bin' )
-  	unless $^O eq 'MSWin32';
-  print "REMOVING NON RUNTIME $#sdl_not_runtime files from  \n";
-  open( my $FH, '>', 'DeleteRecords.txt' ) or die $!;
-  foreach (@sdl_not_runtime) {
-    if ( $_->fileName eq $alien_sdl_auto . $share ) {
-      print $FH "Not deleting " . $_->fileName . " \n";
-    }
-    else {
-      $par_file->removeMember($_);
-      print $FH $_->fileName . "\n";
-    }
-  }
-  close $FH;
+	map {
+		my $n    = $_->fileName;
+		my $star = ' ';
 
-  my @config_members = $par_file->membersMatching('ConfigData.pm');
+		if ( $n !~ $regex_search ) {
+			push @sdl_not_runtime, $_;
+		}
+	} @non;
 
-  foreach (@config_members) {
-    $_->desiredCompressionLevel(1);
-    $_->unixFileAttributes(0644);
-  }
+	push @sdl_not_runtime, $par_file->membersMatching( $share . '/bin' )
+		unless $^O eq 'MSWin32';
+	print "REMOVING NON RUNTIME $#sdl_not_runtime files from  \n";
+	open( my $FH, '>', 'DeleteRecords.txt' ) or die $!;
+	foreach (@sdl_not_runtime) {
+		if ( $_->fileName eq $alien_sdl_auto . $share ) {
+			print $FH "Not deleting " . $_->fileName . " \n";
+		} else {
+			$par_file->removeMember($_);
+			print $FH $_->fileName . "\n";
+		}
+	}
+	close $FH;
 
-  unlink $out_par . '2';
-  unless ( $par_file->writeToFileNamed( $out_par . '2' ) == AZ_OK ) {
-    die 'write error';
-  }
+	my @config_members = $par_file->membersMatching('ConfigData.pm');
 
-  $par_cmd = "pp -o $output " . $out_par . "2";
+	foreach (@config_members) {
+		$_->desiredCompressionLevel(1);
+		$_->unixFileAttributes(0644);
+	}
 
-  `$par_cmd`;
+	unlink $out_par . '2';
+	unless ( $par_file->writeToFileNamed( $out_par . '2' ) == AZ_OK ) {
+		die 'write error';
+	}
 
-  print "MADE $output \n" if -e $output;
-  unlink $out_par . '2';
-  unlink $out_par; 
+	$par_cmd = "pp -o $output " . $out_par . "2";
+
+	`$par_cmd`;
+
+	print "MADE $output \n" if -e $output;
+	unlink $out_par . '2';
+	unlink $out_par;
 }
 
 sub ACTION_run {
-  my ($self) = @_;
-  $self->depends_on('code');
-  $self->depends_on('installdeps');
-  my $bd = $self->{properties}->{base_dir};
+	my ($self) = @_;
+	$self->depends_on('code');
+	$self->depends_on('installdeps');
+	my $bd = $self->{properties}->{base_dir};
 
-  # prepare INC
-  local @INC = @INC;
-  local @ARGV = @{$self->args->{ARGV}};
-  my $script = shift @ARGV;
-  unshift @INC, (File::Spec->catdir($bd, $self->blib, 'lib'), File::Spec->catdir($bd, $self->blib, 'arch'));
+	# prepare INC
+	local @INC  = @INC;
+	local @ARGV = @{ $self->args->{ARGV} };
+	my $script = shift @ARGV;
+	unshift @INC, ( File::Spec->catdir( $bd, $self->blib, 'lib' ), File::Spec->catdir( $bd, $self->blib, 'arch' ) );
 
-  if ($script) {
-    # scenario: ./Build run bin/scriptname param1 param2
-    do($script);
-  }
-  else {
-    # scenario: ./Build run
-    my ($first_script) = ( glob('bin/*') ); # take the first script in bin subdir
-    print STDERR "No params given to run action - gonna start: '$first_script'\n";
-    do($first_script);
-  }
+	if ($script) {
+
+		# scenario: ./Build run bin/scriptname param1 param2
+		do($script);
+	} else {
+
+		# scenario: ./Build run
+		my ($first_script) = ( glob('bin/*') ); # take the first script in bin subdir
+		print STDERR "No params given to run action - gonna start: '$first_script'\n";
+		do($first_script);
+	}
 }
 
 # TODO: later move app skeleton generation into SDL::Devel (or something like this)
 sub generate_sdl_module {
-  my ($path, $name) = @_;
+	my ( $path, $name ) = @_;
 
-  #Make the path and directory stuff
-  mkdir $path or
-  Carp::croak "Cannot make a SDL based module at $path : $!";
+	#Make the path and directory stuff
+	mkdir $path
+		or Carp::croak "Cannot make a SDL based module at $path : $!";
 
-  mkdir "$path/lib";
-  mkdir "$path/bin";
-  mkdir "$path/data";
+	mkdir "$path/lib";
+	mkdir "$path/bin";
+	mkdir "$path/data";
 
-  open my $FH, ">>$path/bin/sdl_app.pl";
+	open my $FH, ">>$path/bin/sdl_app.pl";
 
-  print $FH "use string;\nuse warnings;\nuse SDL;\n";
+	print $FH "use string;\nuse warnings;\nuse SDL;\n";
 
-  close $FH;
+	close $FH;
 
-  open  $FH, ">>$path/Build.PL";
+	open $FH, ">>$path/Build.PL";
 
-  print $FH 
-  "use strict;\nuse warnings;\nuse Module::Build::SDL;
+	print $FH "use strict;\nuse warnings;\nuse Module::Build::SDL;
   my \$builder = Module::Build::SDL->new(
     module_name => '$name',
     dist_version => '1.01',
