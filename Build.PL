@@ -531,6 +531,11 @@ my %libraries = (
 		header => 'SDL_Pango.h',
 		lib    => 'SDL_Pango',
 	},
+	z => {
+		define => 'HAVE_Z',
+		header => 'zlib.h',
+		lib    => 'z',
+	},
 	png => {
 		define => 'HAVE_PNG',
 		header => 'png.h',
