@@ -229,7 +229,7 @@ my %subsystems = (
 			to   => 'lib/SDLx/Layer.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
-		load_libs => [qw( png jpeg tiff )],
+		load_libs => [qw( z png jpeg tiff )],
 	},
 	AudioSpec => {
 		file => {
@@ -392,7 +392,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Image.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
-		load_libs => [qw( png jpeg tiff )],
+		load_libs => [qw( z png jpeg tiff )],
 	},
 	SFont => {
 		file => {
@@ -400,7 +400,7 @@ my %subsystems = (
 			to   => 'lib/SDLx/SFont.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
-		load_libs => [qw( png jpeg tiff )],
+		load_libs => [qw( z png jpeg tiff )],
 	},
 
 #	SMPEG => {
