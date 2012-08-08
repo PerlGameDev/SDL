@@ -2,6 +2,9 @@ Revision history for Perl extension SDL
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+* TBD
+	- libz is now loaded too if we load libpng [FROGGS]
+
 * 2.541_09
 	- Fixed license in SDL.pod [jtpalmer]
 	- SDL::RWops docs: fixed method names so that they match implementation [FROGGS]
