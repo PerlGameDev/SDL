@@ -278,15 +278,15 @@ sub remove_all_handlers {
 }
 
 sub remove_all_move_handlers {
-	$_move_handlers{ refaddr $_[0] } = [];
+	@{ $_move_handlers{ refaddr $_[0] } } = ();
 }
 
 sub remove_all_event_handlers {
-	$_event_handlers{ refaddr $_[0] } = [];
+	@{ $_event_handlers{ refaddr $_[0] } } = ();
 }
 
 sub remove_all_show_handlers {
-	$_show_handlers{ refaddr $_[0] } = [];
+	@{ $_show_handlers{ refaddr $_[0] } } = ();
 }
 
 sub move_handlers  { $_move_handlers{ refaddr $_[0] } }
