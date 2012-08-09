@@ -165,11 +165,11 @@ sub _pause {
 		SDL::Events::pump_events(); # don't know if we need this
 		SDL::Events::wait_event($event) or Carp::confess("pause failed waiting for an event");
 		$stop_handler->( $event, $self ) if $stop_handler;
-		} until $_stop{$ref}        # stop set by stop_handler
-			or !$callback
-			or $callback->( $event, $self )
-			or $_stop{$ref}         # stop set by callback
-	;
+		} until $_stop{$ref} # stop set by stop_handler
+		or !$callback
+		or $callback->( $event, $self )
+		or $_stop{$ref}      # stop set by callback
+		;
 }
 
 sub pause {

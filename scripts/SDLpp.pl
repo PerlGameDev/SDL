@@ -112,7 +112,7 @@ sub wanted {
 			if $File::Find::name =~ 'Alien/SDL/ConfigData.pm';
 		$SD_path = $File::Find::name
 			if $File::Find::name =~ 'SDL/ConfigData.pm'
-				&& $File::Find::name !~ 'Alien/SDL/ConfigData.pm';
+			&& $File::Find::name !~ 'Alien/SDL/ConfigData.pm';
 
 		$lib = $File::Find::dir if ( $AS_path && $SD_path );
 	}

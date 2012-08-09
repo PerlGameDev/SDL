@@ -77,7 +77,7 @@ SKIP:
 				chanell_02 => 2345
 			),
 			fade => ( chanell_02 => [ 2345, 3456, -20 ] )
-			)->play()
+		)->play()
 	);
 }
 
