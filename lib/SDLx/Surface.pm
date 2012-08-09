@@ -307,11 +307,15 @@ sub draw_trigon {
 	$color = SDLx::Validate::num_rgba($color);
 
 	if ($antialias) {
-		SDL::GFX::Primitives::aatrigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0],
-			$vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
+		SDL::GFX::Primitives::aatrigon_color(
+			$self,             $vertices->[0][0], $vertices->[0][1], $vertices->[1][0],
+			$vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color
+		);
 	} else {
-		SDL::GFX::Primitives::trigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0],
-			$vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
+		SDL::GFX::Primitives::trigon_color(
+			$self,             $vertices->[0][0], $vertices->[0][1], $vertices->[1][0],
+			$vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color
+		);
 	}
 
 	return $self;
@@ -322,8 +326,10 @@ sub draw_trigon_filled {
 
 	$color = SDLx::Validate::num_rgba($color);
 
-	SDL::GFX::Primitives::filled_trigon_color( $self, $vertices->[0][0], $vertices->[0][1], $vertices->[1][0],
-		$vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color );
+	SDL::GFX::Primitives::filled_trigon_color(
+		$self,             $vertices->[0][0], $vertices->[0][1], $vertices->[1][0],
+		$vertices->[1][1], $vertices->[2][0], $vertices->[2][1], $color
+	);
 
 	return $self;
 }

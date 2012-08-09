@@ -205,9 +205,11 @@ SKIP:
 	}
 
 	is( $surfs[0]->draw_trigon( [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ] ], [ 255, 0, 0, 255 ] ), $surfs[0],
-		'draw_trigon returns self' );
+		'draw_trigon returns self'
+	);
 	is( $surfs[0]->draw_trigon_filled( [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ] ], [ 255, 0, 0, 255 ] ), $surfs[0],
-		'draw_trigon_filled returns self' );
+		'draw_trigon_filled returns self'
+	);
 	foreach my $color (@colors_t) {
 		my $color = [ 255, 0, 0, 255 ];
 		my $verts = [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ] ];
@@ -220,9 +222,11 @@ SKIP:
 	}
 
 	is( $surfs[0]->draw_polygon( [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ] ], [ 255, 0, 0, 255 ] ), $surfs[0],
-		'draw_polygon returns self' );
+		'draw_polygon returns self'
+	);
 	is( $surfs[0]->draw_polygon_filled( [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ] ], [ 255, 0, 0, 255 ] ), $surfs[0],
-		'draw_polygon_filled returns self' );
+		'draw_polygon_filled returns self'
+	);
 	foreach my $color (@colors_t) {
 		my $color = [ 255, 0, 0, 255 ];
 		my $verts = [ [ 100, 10 ], [ 110, 10 ], [ 110, 20 ], [ 100, 20 ] ];
