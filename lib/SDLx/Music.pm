@@ -15,7 +15,7 @@ use Data::Dumper;
 use SDLx::Music::Default;
 use SDLx::Music::Data;
 
-our $VERSION = '2.541_09';
+our $VERSION = '2.541_10';
 $VERSION = eval $VERSION;
 
 our $def = bless( {}, "SDLx::Music::Default" );

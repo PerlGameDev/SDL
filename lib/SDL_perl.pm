@@ -36,7 +36,7 @@ use vars qw($VERSION $XS_VERSION @ISA);
 
 our @ISA = qw/ DynaLoader /;
 
-our $VERSION    = '2.541_09';
+our $VERSION    = '2.541_10';
 our $XS_VERSION = $VERSION;
 $VERSION = eval $VERSION;
 

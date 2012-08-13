@@ -6,7 +6,7 @@ use warnings;
 use base 'Exporter';
 use Config;
 
-our $VERSION = '2.541_09';
+our $VERSION = '2.541_10';
 $VERSION = eval $VERSION;
 
 our @EXPORT_OK   = ();
