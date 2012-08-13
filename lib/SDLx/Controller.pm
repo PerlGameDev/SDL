@@ -12,7 +12,7 @@ use SDLx::Controller::Interface;
 use SDLx::Controller::State;
 use Scalar::Util 'refaddr';
 
-our $VERSION = '2.541_09';
+our $VERSION = '2.541_10';
 $VERSION = eval $VERSION;
 
 # inside out, so this can work as the superclass of another class

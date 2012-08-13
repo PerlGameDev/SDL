@@ -7,7 +7,7 @@ use SDL::GFX::FPSManager;
 use Carp;
 our @ISA = qw(SDL::GFX::FPSManager);
 
-our $VERSION = '2.541_09';
+our $VERSION = '2.541_10';
 $VERSION = eval $VERSION;
 
 sub new {

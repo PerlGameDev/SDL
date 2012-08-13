@@ -4,7 +4,7 @@ use warnings;
 use base 'Module::Build';
 use vars qw($VERSION);
 
-our $VERSION = '2.541_09';
+our $VERSION = '2.541_10';
 $VERSION = eval $VERSION;
 
 __PACKAGE__->add_property( parinput  => '' );

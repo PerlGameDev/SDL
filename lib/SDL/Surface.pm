@@ -8,7 +8,7 @@ use SDL::Constants ':SDL::Video';
 use SDL::PixelFormat;
 our @ISA = qw(Exporter DynaLoader);
 
-our $VERSION    = '2.541_09';
+our $VERSION    = '2.541_10';
 our $XS_VERSION = $VERSION;
 $VERSION = eval $VERSION;
 

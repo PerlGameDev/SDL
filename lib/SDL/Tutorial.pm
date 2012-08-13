@@ -37,7 +37,7 @@ use vars qw($VERSION);
 use SDL;
 use SDLx::App;
 
-our $VERSION = '2.541_09';
+our $VERSION = '2.541_10';
 $VERSION = eval $VERSION;
 
 # change these values as necessary

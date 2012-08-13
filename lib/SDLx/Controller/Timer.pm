@@ -7,7 +7,7 @@ use warnings;
 use vars qw($VERSION @ISA);
 use SDL;
 
-our $VERSION = '2.541_09';
+our $VERSION = '2.541_10';
 $VERSION = eval $VERSION;
 
 sub new {

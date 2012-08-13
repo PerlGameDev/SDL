@@ -5,7 +5,7 @@ use vars qw($VERSION);
 use SDLx::Surface::TiedMatrixRow;
 use base 'Tie::Array';
 
-our $VERSION = '2.541_09';
+our $VERSION = '2.541_10';
 $VERSION = eval $VERSION;
 
 sub new {

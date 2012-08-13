@@ -12,7 +12,7 @@ use SDLx::Validate;
 
 use base 'SDLx::Sprite';
 
-our $VERSION = '2.541_09';
+our $VERSION = '2.541_10';
 $VERSION = eval $VERSION;
 
 # inside out

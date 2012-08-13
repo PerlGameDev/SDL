@@ -13,7 +13,7 @@ use SDLx::Validate;
 
 use Carp ();
 
-our $VERSION = '2.541_09';
+our $VERSION = '2.541_10';
 $VERSION = eval $VERSION;
 
 sub new {
