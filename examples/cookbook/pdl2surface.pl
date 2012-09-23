@@ -15,7 +15,7 @@ my $app = SDLx::App->new(
 );
 
 sub make_surface_piddle {
-	my $piddle = rpic('SDL/test/data/picture.jpg');
+	my $piddle = rpic('test/data/picture.jpg');
 	my ($bytes_per_pixel,$width,$height) = $piddle->dims;
 
 	my $surface = SDLx::Surface->new( width => $width, height => $height, depth => 32 );
