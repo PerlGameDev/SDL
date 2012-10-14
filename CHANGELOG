@@ -2,6 +2,9 @@ Revision history for Perl extension SDL
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+*
+	- Fixed SDLx::Surface->draw_ellipse docs [jtpalmer]
+
 * 2.541_10 Aug 12 2012
 	- Updated Alien::SDL's version to 1.438 [jtpalmer]
 	- libz is now loaded too if we load libpng [FROGGS]
