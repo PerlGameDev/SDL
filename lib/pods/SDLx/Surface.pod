@@ -236,7 +236,6 @@ Returns $self
 
 Draws an unfilled ellipse centered at C<($x,$y)> with horizontal radius $rx,
 vertical radius $ry and $color.
-Antialias is turned on if $antialias is true.
 
 Returns $self
 
