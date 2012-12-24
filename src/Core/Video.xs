@@ -9,6 +9,7 @@
 #endif
 
 #include <SDL.h>
+#include <memory.h>
 
 void _uinta_free(Uint16* av, int len_from_av_len)
 {
@@ -553,7 +554,21 @@ void
 video_wm_set_icon ( icon )
 	SDL_Surface *icon
 	CODE:
-		SDL_WM_SetIcon(icon,NULL);
+		if (icon && icon->format->BytesPerPixel == 3) {
+			SDL_PixelFormat* format = SDL_malloc(sizeof(SDL_PixelFormat));
+			memcpy(format, icon->format, sizeof(SDL_PixelFormat));
+			format->BitsPerPixel = 32;
+			format->BytesPerPixel = 4;
+			format->palette = NULL;
+
+			SDL_Surface* new_icon = SDL_ConvertSurface(icon, format, icon->flags);
+			if (new_icon) {
+				SDL_WM_SetIcon(new_icon, NULL);
+				SDL_FreeSurface(new_icon);
+			}
+		}
+		else
+			SDL_WM_SetIcon(icon, NULL);
 
 Uint32
 video_wm_grab_input ( mode )
