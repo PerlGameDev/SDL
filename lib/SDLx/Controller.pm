@@ -129,19 +129,19 @@ sub run {
 		SDL::Events::pump_events();
 		while ( SDL::Events::poll_event( $event ) ) {
 			$stop_handler ->( $event, $self ) if $stop_handler;
-			$event_handler->( $event, $self );
+			$event_handler->( $event, $self ) if $event_handler;
 		}
 
 		while ( $delta_copy > $dt ) {
-			$move_handler->( 1, $self, $$time_ref ); # a full move
+			$move_handler->( 1, $self, $$time_ref ) if $move_handler; # a full move
 			$delta_copy -= $dt;
 			$$time_ref += $dt;
 		}
 		my $step = $delta_copy / $dt;
-		$move_handler->( $step, $self, $$time_ref ); # a partial move
+		$move_handler->( $step, $self, $$time_ref ) if $move_handler; # a partial move
 		$$time_ref += $dt * $step;
 
-		$show_handler->( $delta_time, $self );
+		$show_handler->( $delta_time, $self ) if $show_handler;
 
 		# one or the other of delay or min_t is good
 		Time::HiRes::sleep( $delay ) if $delay > 0;
