@@ -53,9 +53,3 @@ palette_color_index ( palette, index )
 		RETVAL = cpy2bag( (SDL_Color *)(palette->colors + index), sizeof(SDL_Color *), sizeof(SDL_Color), "SDL::Color" );
 	OUTPUT:
 		RETVAL
-
-void
-palette_DESTROY ( bag )
-	SV *bag
-	CODE:
-		objDESTROY(bag, safefree);
