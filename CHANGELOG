@@ -3,6 +3,7 @@ Revision history for Perl extension SDL
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
 *
+	- Fixed rel2abs being not found in My/Builder/Darwin [Blaizer]
 	- Fixed SDLx::Surface->draw_ellipse docs [jtpalmer]
 
 * 2.541_10 Aug 12 2012
