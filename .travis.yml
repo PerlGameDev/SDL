@@ -1,0 +1,31 @@
+language: perl
+perl:
+  - "5.8"
+  - "5.10"
+  - "5.12"
+  - "5.14"
+  - "5.16"
+  - "5.18"
+
+before_install:
+# install Alien:SDL
+  - sudo apt-get install automake
+  - git clone https://github.com/PerlGameDev/Alien-SDL
+  - cd Alien-SDL
+  - cat ./cpan-deps | cpanm --sudo --notest
+  - perl ./Build.PL --travis
+  - sudo ./Build install
+  - prove -v
+  - cd ..
+# success!!
+
+# install SDL_Perl
+install:
+  - cpanm --sudo --notest Test::Most Tie::Simple
+  - perl ./Build.PL
+  - sudo ./Build install
+
+script: prove -v
+
+notifications:
+  irc: irc.perl.org#sdl
