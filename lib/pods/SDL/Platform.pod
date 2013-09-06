@@ -3,12 +3,11 @@
 
 =head1 NAME
 
-SDL-Platform - Platform Specific Informations about SDL Perl
+SDL::Platform - Platform Specific Informations about SDL Perl
 
 =head1 CATEGORY
 
 Documentation
-
 
 =head1 DESCRIPTION
 
@@ -23,10 +22,8 @@ On Windows, L<Alien::SDL> will get you zip-files containing prebuilt libs.
 On Unixes you can choose between compiling libs or use libs provided by the dist.
 The different options on Unixes are availale when requirements are met. Like having specific libs installed.
 
-There is some additional documentation in the L<Github-Wiki|https://github.com/PerlGameDev/SDL/wiki/Testing>. 
+There is some additional documentation in the L<Github-Wiki|https://github.com/PerlGameDev/SDL/wiki/Testing>.
 You definitively want to look there, if you want to know how to install L<SDL> from the latest sources (e.g. in an unfinished, unreleased state).
-
-
 
 =head1 Windows
 
@@ -37,8 +34,6 @@ We recommend Strawberry Perl. You can get it L<here|http://strawberryperl.com/>.
 Once you installed Strawberry Perl, you can access the cpan shell via the start menu.
 
 Open up the cpan shell and type C<install Alien::SDL SDL>. Please follow the dialog and answer the questions to the best of your knowledge.
-
-
 
 =head1 Mac OS X
 
@@ -56,7 +51,7 @@ When you install L<SDL>, a program named C<SDLPerl> is installed. It should be i
 Using Mac OS X, your SDL Perl script have to look like this:
 
   #!SDLPerl
-  
+
   use strict;
   use warnings;
   use SDL;

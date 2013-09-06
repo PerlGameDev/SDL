@@ -261,19 +261,19 @@ sub LoadGLTextures {
 	#glTexImage2D(GL_TEXTURE_2D, 0, 3, image1->w, image1->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image1->pixels);
 
 	glTexImage2D( GL_TEXTURE_2D,
-		0,                                                              #level (0 normal, heighr is form mip-mapping)
-		3,                                                              #internal format (3=GL_RGB)
+		0, #level (0 normal, heighr is form mip-mapping)
+		3, #internal format (3=GL_RGB)
 		$width, $height,
-		0,                                                              # border
-		GL_RGB,                                                         #format RGB color data
-		GL_UNSIGNED_BYTE,                                               #unsigned bye data
+		0,                # border
+		GL_RGB,           #format RGB color data
+		GL_UNSIGNED_BYTE, #unsigned bye data
 		$pixels
-	);                                                                  #ptr to texture data
+	);                    #ptr to texture data
 
 	# texture 2 (linear scaling)
-	glBindTexture( GL_TEXTURE_2D, 2 );                                  # 2d texture (x and y size)
-	glTexParameter( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );  # scale linearly when image bigger than texture
-	glTexParameter( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );  # scale linearly when image smalled than texture
+	glBindTexture( GL_TEXTURE_2D, 2 ); # 2d texture (x and y size)
+	glTexParameter( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR ); # scale linearly when image bigger than texture
+	glTexParameter( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR ); # scale linearly when image smalled than texture
 	   #glTexImage2D(GL_TEXTURE_2D, 0, 3, image1->w, image1->h, 0, GL_RGB, GL_UNSIGNED_BYTE, image1->pixels);
 
 	glTexImage2D( GL_TEXTURE_2D,

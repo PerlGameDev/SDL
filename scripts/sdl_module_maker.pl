@@ -3,5 +3,5 @@ use warnings;
 use lib 'lib';
 use Module::Build::SDL;
 
-Module::Build::SDL::generate_sdl_module( @ARGV );
+Module::Build::SDL::generate_sdl_module(@ARGV);
 

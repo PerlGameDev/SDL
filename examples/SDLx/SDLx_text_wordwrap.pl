@@ -5,11 +5,11 @@ use SDL;
 use SDLx::App;
 use SDLx::Text;
 
-my $app = SDLx::App->new( eoq => 1 );
+my $app = SDLx::App->new();
 
 my $text = SDLx::Text->new( word_wrap => 450 );
 
-$app->draw_rect( [0, 0, $app->w, $app->h], 0x00ffff );
+$app->draw_rect( [ 0, 0, $app->w, $app->h ], 0x00ffff );
 
 my $message = <<'EOT';
 All lines come from a single string.

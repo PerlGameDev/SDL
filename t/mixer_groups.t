@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
+use warnings;
 use SDL;
 use SDL::Config;
 
@@ -32,12 +33,11 @@ use SDL::Mixer::Groups;
 use SDL::Mixer::Samples;
 my $can_open = SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 );
 
-unless($can_open == 0) 
-{
-	plan( skip_all => 'Cannot open audio :'.SDL::get_error() );
+unless ( $can_open == 0 ) {
+	plan( skip_all => 'Cannot open audio :' . SDL::get_error() );
 }
 
-is( $can_open ,
+is( $can_open,
 	0, '[open_audio] ran'
 );
 is( SDL::Mixer::Channels::allocate_channels(8),

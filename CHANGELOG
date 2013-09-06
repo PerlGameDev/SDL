@@ -1,6 +1,61 @@
-Revision history for Perl extension SDL_perl.
+Revision history for Perl extension SDL
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
+
+*
+	- Fixed rel2abs being not found in My/Builder/Darwin [Blaizer]
+	- Fixed SDLx::Surface->draw_ellipse docs [jtpalmer]
+
+* 2.541_10 Aug 12 2012
+	- Updated Alien::SDL's version to 1.438 [jtpalmer]
+	- libz is now loaded too if we load libpng [FROGGS]
+
+* 2.541_09 Aug 05 2012
+	- Updated Alien::SDL's version to 1.437_2 [jtpalmer]
+	- Added $VERSION to all modules [jtpalmer]
+	- Added pod syntax tests [jtpalmer]
+	- t/*: Added strict and warnings where it was missing [jtpalmer]
+	- SDL::Constants, SDLx::Music::Data,  SDL_perl: Added strict and warnings [jtpalmer]
+	- Fixed license in SDL.pod [jtpalmer]
+	- SDL::RWops docs: fixed method names so that they match implementation [FROGGS]
+
+* 2.541_08 Jun 18 2012
+	- Lots of coumentation fixes [dod]
+	- Fix and test for SDLx::Surface->clip_rect [dod]
+	- Updated Alien::SDL's version to 1.435_7 [FROGGS]
+
+* 2.541_06 Jun 16 2012
+	- Added missing .ogg test files [FROGGS]
+
+* 2.541_05 Jun 16 2012
+	- Fix: SDLx::App->init tried to set window title even if there was no window manager [FROGGS]
+	- Updated Alien::SDL's version to 1.435_5 [FROGGS]
+
+* 2.541_04 Jun 15 2012
+	- Updated Alien::SDL's version to 1.435_3 [FROGGS]
+
+* 2.541_03 Jun 12 2012
+	- Updated Alien::SDL's version to 1.435_1 [FROGGS]
+	- Changed XS to fit MSVC (C89), so declarations are right after beginning block and before code [FROGGS]
+	- Added a switch so that MSVC gets a filename as import libname, other get -l... [FROGGS]
+	- Added load_libs for SDL_mixer and SDL_image; their deps are now loaded by Dynaloader [FROGGS]
+	- Fixed t/image.t's test logic; init() returns a bitmask and not a single flag [FROGGS]
+
+* 2.541_02 Jun 09 2012
+	- Added changes that were removed in 2.540 [Blaizer]
+	- t/mixer_music.t: fixed ogg test name [jtpalmer]
+	- Added Module::Build to configure requirements [jtpalmer]
+	- Pod updates [mig0]
+	- inc/My/Builder.pm: strip pods/ subdir from pod files on build [mig0]
+	- SDL::Video: fill_rect now accepts 0 or undef for dest_rect, as well as a rect with h == 0 or w == 0 to mean the whole surface [mig0]
+	- SDLx::Test: fixed centering multi-line text [dod]
+
+* 2.541_01 May 26 2012
+	- SDL::GFX::ImageFilter: turn off MMX [FROGGS]
+	- SDLx::App: removed return from stash lvalue sub [FROGGS]
+	- SDL::Constants: added constants for SDL_DEFAULT_REPEAT_DELAY and SDL_DEFAULT_REPEAT_INTERVAL [FROGGS]
+	- SDL::Mixer::Channels: little change for setting context, still not perfect  [FROGGS]
+	- t/mixer_music.t: using ogg files [FROGGS]
 
 * 2.540 May 26 2012
 	- Removed all non-pod changes introduced in 2.538 [jtpalmer]

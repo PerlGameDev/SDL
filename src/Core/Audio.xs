@@ -13,7 +13,7 @@
 MODULE = SDL::Audio     PACKAGE = SDL::Audio    PREFIX = audio_
 
 int
-audio_open ( desired, obtained )
+audio_open( desired, obtained )
 	SDL_AudioSpec *desired
 	SDL_AudioSpec *obtained
 	CODE:
@@ -22,20 +22,20 @@ audio_open ( desired, obtained )
 		RETVAL
 
 void
-audio_pause ( pause_on )
+audio_pause( pause_on )
 	int pause_on
 	CODE:
 		SDL_PauseAudio(pause_on);
 
 Uint32
-audio_get_status ()
+audio_get_status()
 	CODE:
 		RETVAL = SDL_GetAudioStatus ();
 	OUTPUT:
 		RETVAL
 
 void
-audio_lock ()
+audio_lock()
 	CODE:
 		SDL_LockAudio();
 
@@ -45,20 +45,19 @@ audio_unlock ()
 		SDL_UnlockAudio();
 
 AV *
-audio_load_wav ( filename, spec )
+audio_load_wav( filename, spec )
 	char *filename
 	SDL_AudioSpec *spec
-	CODE:
-		SDL_AudioSpec *temp = safemalloc(sizeof(SDL_AudioSpec));
+	PREINIT:
+		SDL_AudioSpec *temp;
 		Uint8 *buf;
 		Uint32 len;
-
+	CODE:
+		temp = safemalloc(sizeof(SDL_AudioSpec));
 		memcpy( temp, spec, sizeof(SDL_AudioSpec) );
 		temp = SDL_LoadWAV(filename,temp,&buf,&len);
-		if ( temp == NULL ) 
-		{
+		if( temp == NULL ) 
 			croak("Error in SDL_LoadWAV: %s", SDL_GetError()); 
-		}
 		else
 		{
 			RETVAL = (AV*)sv_2mortal((SV*)newAV());
@@ -70,7 +69,7 @@ audio_load_wav ( filename, spec )
 		RETVAL
 
 void
-audio_free_wav ( audio_buf )
+audio_free_wav( audio_buf )
 	Uint8 *audio_buf
 	CODE:
 		SDL_FreeWAV(audio_buf);
@@ -85,27 +84,22 @@ audio_convert( cvt, data, len )
 		cvt->len = len;
 		memcpy(cvt->buf, data, cvt->len);
 		RETVAL = SDL_ConvertAudio(cvt);
-		
-		
 	OUTPUT:
 		RETVAL
 
 SV *
-audio_audio_driver_name ( ... )
-	CODE:
+audio_audio_driver_name( ... )
+	PREINIT:
 		char buffer[1024];
-		if ( SDL_AudioDriverName(buffer, 1024) != NULL ) 
-		{ 
-			RETVAL =  newSVpv(buffer, 0);
-		} 
-		else 
-			 XSRETURN_UNDEF;  	
+	CODE:
+		if( SDL_AudioDriverName(buffer, 1024) != NULL ) 
+			RETVAL = newSVpv(buffer, 0);
+		else
+			XSRETURN_UNDEF;
 	OUTPUT:
 		RETVAL
 
-
 void
-audio_close ()
+audio_close()
 	CODE:
 		SDL_CloseAudio();
-

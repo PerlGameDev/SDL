@@ -45,12 +45,12 @@ sub event_loop {
 
 		$handler->{on_quit}->()
 			if defined $handler->{on_quit}
-				&& ( $event->type == SDL_QUIT || ( $event->type == SDL_KEYDOWN && $event->key_sym == SDLK_ESCAPE ) );
+			&& ( $event->type == SDL_QUIT || ( $event->type == SDL_KEYDOWN && $event->key_sym == SDLK_ESCAPE ) );
 		$handler->{on_drop}->() if defined $handler->{on_drop} && $event->type == SDL_MOUSEBUTTONUP;
 		$handler->{on_click}->()
 			if defined $handler->{on_click}
-				&& $event->type == SDL_MOUSEBUTTONDOWN
-				&& Time::HiRes::time- $last_click >= 0.3;
+			&& $event->type == SDL_MOUSEBUTTONDOWN
+			&& Time::HiRes::time- $last_click >= 0.3;
 
 		$last_click = Time::HiRes::time if $event->type == SDL_MOUSEBUTTONDOWN;
 	}

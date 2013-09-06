@@ -26,32 +26,28 @@ cursor_new(CLASS, data, mask, w, h, x ,y )
 	int h
 	int x
 	int y
-	CODE:
-		int len = av_len(data);
-		Uint8 *_data = (Uint8 *)safemalloc(sizeof(Uint8)*(len));
-		Uint8 *_mask = (Uint8 *)safemalloc(sizeof(Uint8)*(len));
+	PREINIT:
+		int len;
+		Uint8 *_data;
+		Uint8 *_mask;
 		int i;
+	CODE:
+		len = av_len(data);
+		_data = (Uint8 *)safemalloc(sizeof(Uint8)*(len));
+		_mask = (Uint8 *)safemalloc(sizeof(Uint8)*(len));
 		for ( i = 0; i < len + 1; i++ )
 		{
 			SV ** temp1 = av_fetch(data,i,0);
 			SV ** temp2 = av_fetch(mask,i,0);
 			if( temp1 != NULL)
-			{
 				_data[i] = (Uint8)SvIV( *temp1 );
-			}
 			else
-			{
 				_data[i] = 0;
-			}
 
 			if( temp2 != NULL)
-			{
 				_mask[i] = (Uint8)SvIV( *temp2 );
-			}
 			else
-			{
 				_mask[i] = 0;
-			}
 		}
 
 		RETVAL = SDL_CreateCursor(_data, _mask, w, h, x, y);

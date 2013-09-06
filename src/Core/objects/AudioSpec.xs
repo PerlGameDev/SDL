@@ -21,34 +21,38 @@ void
 audio_callback ( void* data, Uint8 *stream, int len )
 {
 	ENTER_TLS_CONTEXT;
-	dSP;
+	{
+		dSP;
+		char *string;
+		SV   *sv;
+		void *old;
+		string = (char*)stream;
 
-        char* string = (char*)stream;
+		sv = newSVpv("a",1);
+		SvCUR_set(sv,len * sizeof(Uint8));
+		SvLEN_set(sv,len * sizeof(Uint8));
+		old = SvPVX(sv);
+		SvPV_set(sv,string);
 
-	SV* sv = newSVpv("a",1);
-        SvCUR_set(sv,len * sizeof(Uint8));
-	SvLEN_set(sv,len * sizeof(Uint8));
-        void* old = SvPVX(sv);
-        SvPV_set(sv,string);
-
-	ENTER;
-	SAVETMPS;
-	PUSHMARK(SP);
+		ENTER;
+		SAVETMPS;
+		PUSHMARK(SP);
  
-	XPUSHs(sv_2mortal(newSViv(sizeof(Uint8))));
-	XPUSHs(sv_2mortal(newSViv(len)));
-	XPUSHs(sv_2mortal(newRV_inc(sv)));
+		XPUSHs(sv_2mortal(newSViv(sizeof(Uint8))));
+		XPUSHs(sv_2mortal(newSViv(len)));
+		XPUSHs(sv_2mortal(newRV_inc(sv)));
  
-	PUTBACK;
- 	call_pv(data,G_VOID|G_DISCARD);
+		PUTBACK;
+		call_pv(data,G_VOID|G_DISCARD);
 
-        SvPV_set(sv,old);
-        SvCUR_set(sv,1);
-	SvLEN_set(sv,1);
-        sv_2mortal(sv);
+		SvPV_set(sv,old);
+		SvCUR_set(sv,1);
+		SvLEN_set(sv,1);
+		sv_2mortal(sv);
 
-	FREETMPS;
-	LEAVE;
+		FREETMPS;
+		LEAVE;
+	}
 	LEAVE_TLS_CONTEXT;
 }
 

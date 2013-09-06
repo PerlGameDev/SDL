@@ -11,6 +11,36 @@ Core
 
 =head1 RELEASES
 
+=head2 2.xxx
+
+SDLx::App had a full rewrite and SDLx::Controller was updated.
+
+=over
+
+=item SDLx::App
+
+Shortcut aliases in the constructor have been changed and removed. The main ones people use are still there like
+C<w>, C<h> and C<d>. These lesser used ones no longer work: C<t>, C<it>, C<i>, C<s>, C<ab>, C<db>, C<bs>, C<st>, C<asyncblit>.
+
+C<warp> was renamed to C<warp_cursor>, but this method wasn't documented before anyway.
+
+All OpenGL parameters for the constructor now have a C<gl_> prefix. These were never documented,
+so they're not listed here.
+
+The OpenGL method C<attribute> is now called C<gl_attribute>.
+
+C<delay> has been removed and replaced with SDLx::Controller's C<sleep>. C<ticks> has been deprecated, but left in
+for backcompat.
+
+=item SDLx::Controller
+
+The C<eoq> parameter and method have been removed. The exit on quit (stop on quit) action is now enabled by default.
+The C<stop_handler> parameter and method are now used to change and disable the quit action of the app.
+
+C<max_t> will now slow the application down if it runs at less than 10 FPS, by default.
+
+=back
+
 =head2 2.517
 
 Major changes to C<SDLx::Controller>.

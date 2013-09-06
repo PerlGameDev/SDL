@@ -229,6 +229,7 @@ my %subsystems = (
 			to   => 'lib/SDLx/Layer.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
+		load_libs => [qw( z png jpeg tiff )],
 	},
 	AudioSpec => {
 		file => {
@@ -250,6 +251,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixerSamples => {
 		file => {
@@ -257,6 +259,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/Samples.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixerChannels => {
 		file => {
@@ -264,6 +267,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/Channels.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixerGroups => {
 		file => {
@@ -271,6 +275,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/Groups.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixerMusic => {
 		file => {
@@ -278,6 +283,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/Music.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixerEffects => {
 		file => {
@@ -285,6 +291,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/Effects.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixChunk => {
 		file => {
@@ -292,6 +299,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/MixChunk.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	MixMusic => {
 		file => {
@@ -299,6 +307,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Mixer/MixMusic.xs',
 		},
 		libraries => [qw( SDL SDL_mixer )],
+		load_libs => [qw( vorbisfile flac mikmod smpeg )],
 	},
 	Palette => {
 		file => {
@@ -383,6 +392,7 @@ my %subsystems = (
 			to   => 'lib/SDL/Image.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
+		load_libs => [qw( z png jpeg tiff )],
 	},
 	SFont => {
 		file => {
@@ -390,22 +400,23 @@ my %subsystems = (
 			to   => 'lib/SDLx/SFont.xs',
 		},
 		libraries => [qw( SDL SDL_image )],
+		load_libs => [qw( z png jpeg tiff )],
 	},
 
-#	SMPEG => {
-#			file	=> {
-#				from => 'src/SMPEG.xs',
-#				to   =>	'lib/SDL/SMPEG.xs',
-#			},
-#			libraries => [qw( SDL smpeg)],
-#		},
-#	MPEG => {
-#			file	=> {
-#				from => 'src/SMPEG/Info.xs',
-#				to   =>	'lib/SDL/SMPEG/Info.xs',
-#			},
-#			libraries => [qw( SDL smpeg)],
-#		},
+	#	SMPEG => {
+	#			file	=> {
+	#				from => 'src/SMPEG.xs',
+	#				to   =>	'lib/SDL/SMPEG.xs',
+	#			},
+	#			libraries => [qw( SDL smpeg)],
+	#		},
+	#	MPEG => {
+	#			file	=> {
+	#				from => 'src/SMPEG/Info.xs',
+	#				to   =>	'lib/SDL/SMPEG/Info.xs',
+	#			},
+	#			libraries => [qw( SDL smpeg)],
+	#		},
 	Pango => {
 		file => {
 			from => 'src/Pango/Pango.xs',
@@ -520,6 +531,11 @@ my %libraries = (
 		header => 'SDL_Pango.h',
 		lib    => 'SDL_Pango',
 	},
+	z => {
+		define => 'HAVE_Z',
+		header => 'zlib.h',
+		lib    => 'z',
+	},
 	png => {
 		define => 'HAVE_PNG',
 		header => 'png.h',
@@ -535,7 +551,15 @@ my %libraries = (
 		header => 'tiff.h',
 		lib    => 'tiff',
 	},
-
+	vorbisfile => {
+		lib => 'vorbisfile',
+	},
+	flac => {
+		lib => 'FLAC',
+	},
+	mikmod => {
+		lib => 'mikmod',
+	},
 	smpeg => {
 		define => 'HAVE_SMPEG',
 		header => 'smpeg/smpeg.h',
@@ -561,29 +585,30 @@ my %xs =
 	keys %subsystems;
 
 ### Standard Module::Build stuff
-$My::Builder::config = $My::Builder::config;       # Prevent a warning
+$My::Builder::config = $My::Builder::config;                         # Prevent a warning
 my $build = $package->new(
 	module_name        => 'SDL',
 	dist_name          => 'SDL',
 	license            => 'lgpl',
 	dist_version_from  => 'lib/SDL.pm',
 	configure_requires => {
+		'Module::Build'      => '0',
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL'         => '1.426',
+		'Alien::SDL'         => '1.438',
 		'File::Find'         => '0',
 		'File::ShareDir'     => '1.0',
 		'Tie::Simple'        => '0',
 		'Capture::Tiny'      => '0',
 	},
 	build_requires => {
-		'Test::Simple'      => '0.88',
-   		'Capture::Tiny'     => '0',
-		'Test::Most'        => '0.21',
-		'Alien::SDL'        => '1.426',
-		'File::Find'        => '0',
-		'File::ShareDir'    => '1.0',
-		'Tie::Simple'       => '0',
-		'Scalar::Util'      => '0',
+		'Test::Simple'   => '0.88',
+		'Capture::Tiny'  => '0',
+		'Test::Most'     => '0.21',
+		'Alien::SDL'     => '1.438',
+		'File::Find'     => '0',
+		'File::ShareDir' => '1.0',
+		'Tie::Simple'    => '0',
+		'Scalar::Util'   => '0',
 	},
 	requires => {
 		'Scalar::Util'   => '0',
@@ -597,10 +622,10 @@ my $build = $package->new(
 	build_recommends => {
 		'Pod::ToDemo' => '0.20',
 	},
-	config   => $My::Builder::config,
-	c_source => 'src',
-	xs_files => \%xs,
-	meta_add => {},
+	config        => $My::Builder::config,
+	c_source      => 'src',
+	xs_files      => \%xs,
+	meta_add      => {},
 	typemap_files => { 'typemap' => 'lib/SDL/typemap' },
 
 	#create_readme => 1, ### make sense only if there is some POD doc in the file specified by dist_version_from

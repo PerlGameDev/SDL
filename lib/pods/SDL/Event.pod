@@ -56,7 +56,7 @@ and it is then up to the application to process the information stored with them
 
 =head2	new
 
-C<new> creates an empty event-object, which can be used store information. 
+C<new> creates an empty event-object, which can be used to store information. 
 Either by calling C<poll_event($event)> that transfers one event from the queue into our object 
 or by setting all the needed data manually in order to push the event to the queue.
 
@@ -329,7 +329,7 @@ If the high 9 bits of the character are 0, then this maps to the equivalent ASCI
      print("An International Character.\n");
  }
 
-UNICODE translation does create a slight overhead so don't enable it unless its needed.
+UNICODE translation does create a slight overhead, so don't enable it unless it's needed.
 
 NOTE: Key release events (SDL_KEYUP) won't necessarily (ever?) contain unicode information. 
 See L<http://lists.libsdl.org/pipermail/sdl-libsdl.org/2005-January/048355.html>

@@ -6,10 +6,6 @@
 #include "defines.h"
 #include "helper.h"
 
-#ifndef aTHX_
-#define aTHX_
-#endif
-
 #include <SDL.h>
 
 #ifdef HAVE_SDL_MIXER
@@ -28,20 +24,26 @@ static SV * cb = (SV*)NULL;
 
 void callback(int channel)
 {
-	PERL_SET_CONTEXT(parent_perl);
-	dSP;
-	ENTER;
-	SAVETMPS;
+	dTHX;
+	if(!aTHX) {
+		PERL_SET_CONTEXT(parent_perl);
+	}
 
-	PUSHMARK(SP);
-	XPUSHs(sv_2mortal(newSViv(channel)));
-	PUTBACK;
+	{
+		dSP;
+		ENTER;
+		SAVETMPS;
 
-	if(cb)
-		call_sv(cb, G_VOID);
+		PUSHMARK(SP);
+		XPUSHs(sv_2mortal(newSViv(channel)));
+		PUTBACK;
 
-	FREETMPS;
-	LEAVE;
+		if(cb)
+			call_sv(cb, G_VOID);
+
+		FREETMPS;
+		LEAVE;
+	}
 }
 #endif
 

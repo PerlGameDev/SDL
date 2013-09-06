@@ -7,6 +7,7 @@ BEGIN { # http://wiki.cpantesters.org/wiki/CPANAuthorNotes
 	}
 }
 use strict;
+use warnings;
 use threads;
 use threads::shared;
 use SDL;

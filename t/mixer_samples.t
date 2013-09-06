@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
+use warnings;
 use SDL;
 use SDL::Config;
 
@@ -53,10 +54,10 @@ my @left = qw/
 
 my $can_open = SDL::Mixer::open_audio( 44100, SDL::Audio::AUDIO_S16SYS, 2, 4096 );
 
-unless($can_open == 0)
-{
-	plan( skip_all => 'Cannot open audio :'.SDL::get_error() );
-}my $version = SDL::Mixer::linked_version();
+unless ( $can_open == 0 ) {
+	plan( skip_all => 'Cannot open audio :' . SDL::get_error() );
+}
+my $version = SDL::Mixer::linked_version();
 printf(
 	"got version: %d.%d.%d\n",
 	$version->major, $version->minor, $version->patch

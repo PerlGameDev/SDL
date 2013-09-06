@@ -662,10 +662,13 @@ gfx_prim_polygon_color(dst, vx, vy, n, color)
 	AV* vy
 	int n
 	Uint32 color
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
-		RETVAL  =  polygonColor(dst, _vx, _vy, n, color);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
+		RETVAL =  polygonColor(dst, _vx, _vy, n, color);
 	  	_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
 	OUTPUT:
@@ -681,9 +684,12 @@ gfx_prim_polygon_RGBA(dst, vx, vy, n, r, g, b, a)
 	Uint8 g
 	Uint8 b
 	Uint8 a
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
 		RETVAL = polygonRGBA(dst, _vx, _vy, n, r, g, b, a);
 		_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
@@ -698,9 +704,12 @@ gfx_prim_aapolygon_color(dst, vx, vy, n, color)
 	AV* vy
 	int n
 	Uint32 color
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
 		RETVAL = aapolygonColor(dst, _vx, _vy, n, color);
 		_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
@@ -718,9 +727,12 @@ gfx_prim_aapolygon_RGBA(dst, vx, vy, n, r, g, b, a)
 	Uint8 g
 	Uint8 b
 	Uint8 a
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
 		RETVAL = aapolygonRGBA(dst, _vx, _vy, n, r, g, b, a);
 		_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
@@ -735,9 +747,12 @@ gfx_prim_filled_polygon_color(dst, vx, vy, n, color)
 	AV* vy
 	int n
 	Uint32 color
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
 		RETVAL = filledPolygonColor(dst, _vx, _vy, n, color);
 		_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
@@ -755,9 +770,12 @@ gfx_prim_filled_polygon_RGBA(dst, vx, vy, n, r, g, b, a)
 	Uint8 g
 	Uint8 b
 	Uint8 a
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
 		RETVAL = filledPolygonRGBA(dst, _vx, _vy, n, r, g, b, a);
 		_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
@@ -776,9 +794,12 @@ gfx_prim_textured_polygon(dst, vx, vy, n, texture, texture_dx, texture_dy)
 	SDL_Surface * texture
 	int texture_dx
 	int texture_dy
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
 		RETVAL = texturedPolygon(dst, _vx, _vy, n, texture, texture_dx, texture_dy);
 		_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
@@ -816,9 +837,12 @@ gfx_prim_filled_polygon_color_MT(dst, vx, vy, n, color, polyInts, polyAllocated)
 	Uint32 color
 	int **polyInts
 	int *polyAllocated
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
 		RETVAL = filledPolygonColorMT(dst, _vx, _vy, n, color, polyInts, polyAllocated);
 		_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
@@ -838,9 +862,12 @@ gfx_prim_filled_polygon_RGBA_MT(dst, vx, vy, n, r, g, b, a, polyInts, polyAlloca
 	Uint8 a
 	int **polyInts
 	int *polyAllocated
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
 		RETVAL = filledPolygonRGBAMT(dst, _vx, _vy, n, r, g, b, a, polyInts, polyAllocated);
 		_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
@@ -859,9 +886,12 @@ gfx_prim_textured_polygon_MT(dst, vx, vy, n, texture, texture_dx, texture_dy, po
 	int texture_dy
 	int **polyInts
 	int *polyAllocated
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
 		RETVAL = texturedPolygonMT(dst, _vx, _vy, n, texture, texture_dx, texture_dy, polyInts, polyAllocated);
 		_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
@@ -931,9 +961,12 @@ gfx_prim_bezier_color(dst, vx, vy, n, s, color)
 	int n
 	int s
 	Uint32 color
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
 		RETVAL = bezierColor(dst, _vx, _vy, n, s, color);
 		_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );
@@ -952,9 +985,12 @@ gfx_prim_bezier_RGBA(dst, vx, vy, n, s, r, g, b, a)
 	Uint8 g
 	Uint8 b
 	Uint8 a
+	PREINIT:
+		Sint16 *_vx;
+		Sint16 *_vy;
 	CODE:
-		Sint16 * _vx = av_to_sint16(vx);
-		Sint16 * _vy = av_to_sint16(vy);
+		_vx    = av_to_sint16(vx);
+		_vy    = av_to_sint16(vy);
 		RETVAL = bezierRGBA(dst, _vx, _vy, n, s, r, g, b, a);
 		_svinta_free( _vx, av_len(vx) );
 		_svinta_free( _vy, av_len(vy) );

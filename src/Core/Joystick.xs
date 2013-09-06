@@ -101,7 +101,7 @@ joystick_get_axis ( joystick, axis )
 Uint8
 joystick_get_hat ( joystick, hat )
 	SDL_Joystick *joystick
-	int hat 
+	int hat
 	CODE:
 		RETVAL = SDL_JoystickGetHat(joystick,hat);
 	OUTPUT:
@@ -110,7 +110,7 @@ joystick_get_hat ( joystick, hat )
 Uint8
 joystick_get_button ( joystick, button)
 	SDL_Joystick *joystick
-	int button 
+	int button
 	CODE:
 		RETVAL = SDL_JoystickGetButton(joystick,button);
 	OUTPUT:
@@ -119,16 +119,17 @@ joystick_get_button ( joystick, button)
 AV *
 joystick_get_ball ( joystick, ball )
 	SDL_Joystick *joystick
-	int ball 
+	int ball
+	PREINIT:
+		int success, dx, dy;
 	CODE:
-		int success,dx,dy;
-		success = SDL_JoystickGetBall(joystick,ball,&dx,&dy);
-		RETVAL = (AV*)sv_2mortal((SV*)newAV());
-		av_push(RETVAL,newSViv(success));
-		av_push(RETVAL,newSViv(dx));
-		av_push(RETVAL,newSViv(dy));
+		success = SDL_JoystickGetBall(joystick, ball, &dx, &dy);
+		RETVAL  = (AV *)sv_2mortal( (SV *)newAV() );
+		av_push(RETVAL, newSViv(success));
+		av_push(RETVAL, newSViv(dx));
+		av_push(RETVAL, newSViv(dy));
 	OUTPUT:
-		RETVAL	
+		RETVAL
 
 void
 joystick_DESTROY ( joystick )

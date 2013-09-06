@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
+use warnings;
 use Config;
 
 use SDL;
@@ -92,7 +93,7 @@ SKIP:
 {
 	skip 'perl compiled with -DPERL_USE_SAFE_PUTENV', 2
 		if defined $Config{'config_args'}
-			&& $Config{'config_args'} =~ /PERL_USE_SAFE_PUTENV/;
+		&& $Config{'config_args'} =~ /PERL_USE_SAFE_PUTENV/;
 	is( SDL::putenv('PERLSDL_TEST=hello'), 0,       '[putenv] returns 0' );
 	is( SDL::getenv('PERLSDL_TEST'),       'hello', '[getenv] returns hello' );
 }

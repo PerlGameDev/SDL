@@ -18,15 +18,18 @@
 
 SV * get_pixel32 (SDL_Surface *surface, int x, int y)
 {
+    Uint32 *pixels;
+    void* s;
+    SV* sv;
     /* Convert the pixels to 32 bit  */
-    Uint32 *pixels = (Uint32 *)surface->pixels; 
+    pixels = (Uint32 *)surface->pixels; 
     /* Get the requested pixel  */
 
-    void* s =  pixels + _calc_offset(surface, x, y); 
+    s =  pixels + _calc_offset(surface, x, y); 
 
     /* printf( " Pixel = %d, Ptr = %p \n", *((int*) s), s ); */
 
-    SV* sv = newSV_type(SVt_PV);
+    sv = newSV_type(SVt_PV);
     SvPV_set(sv, s);
     SvPOK_on(sv);
     SvLEN_set(sv, 0);
@@ -37,13 +40,15 @@ SV * get_pixel32 (SDL_Surface *surface, int x, int y)
 SV * construct_p_matrix ( SDL_Surface *surface )
 {
     /* return  get_pixel32( surface, 0, 0); */
-    AV * matrix = newAV();
+    AV * matrix;
     int i, j;
-    i = 0;
-    for( i =0 ; i < surface->w; i++ )
+    i      = 0;
+    matrix = newAV();
+    for( i = 0; i < surface->w; i++ )
     {
-        AV * matrix_row = newAV();
-        for( j =0 ; j < surface->h; j++ )
+        AV * matrix_row;
+        matrix_row = newAV();
+        for( j = 0; j < surface->h; j++ )
             av_push( matrix_row, get_pixel32(surface, i,j) );
 
         av_push( matrix, newRV_noinc((SV *)matrix_row) );
@@ -106,10 +111,11 @@ surfacex_get_pixel_xs ( surface, x, y )
     SDL_Surface *surface
     int x
     int y
+    PREINIT:
+        int offset;
     CODE:
         _int_range( &x, 0, surface->w );
         _int_range( &y, 0, surface->h );
-        int offset;
         offset = _calc_offset( surface, x, y);
         RETVAL = _get_pixel( surface, offset );
     OUTPUT:
@@ -122,10 +128,11 @@ surfacex_set_pixel_xs ( surface, x, y, value )
     int x
     int y
     unsigned int value
+    PREINIT:
+        int offset;
     CODE:
         _int_range( &x, 0, surface->w );
         _int_range( &y, 0, surface->h );
-        int offset;
         offset = _calc_offset( surface, x, y);
         if(SDL_MUSTLOCK(surface) && SDL_LockSurface(surface) < 0)
             croak( "Locking surface in set_pixels failed: %s", SDL_GetError() );
@@ -150,9 +157,11 @@ surfacex_draw_rect ( surface, rt, color )
     SDL_Surface *surface
     SV* rt
     SV* color
-    CODE:
-        Uint32 m_color = __map_rgba( color, surface->format );
+    PREINIT:
+        Uint32 m_color;
         SDL_Rect r_rect;
+    CODE:
+        m_color = __map_rgba( color, surface->format );
 
         if( SvOK(rt) )
             r_rect = *(SDL_Rect*)bag2obj( create_mortal_rect( rt ) );
@@ -169,11 +178,15 @@ surfacex_draw_polygon ( surface, vectors, color, ... )
     SV* surface
     AV* vectors
     Uint32 color
+    PREINIT:
+        SDL_Surface *_surface;
+        AV *vx, *vy, *vertex;
+        int n;
+        Sint16 *_vx, *_vy;
     CODE:
-        SDL_Surface * _surface = (SDL_Surface *)bag2obj(surface);
-        AV* vx                 = newAV();
-        AV* vy                 = newAV();
-        AV* vertex;
+        _surface = (SDL_Surface *)bag2obj(surface);
+        vx       = newAV();
+        vy       = newAV();
         while(av_len(vectors) >= 0)
         {
             vertex = (AV*)SvRV(av_shift(vectors));
@@ -181,9 +194,9 @@ surfacex_draw_polygon ( surface, vectors, color, ... )
             av_push(vy, av_shift(vertex));
         }
         
-        int n          = av_len(vx) + 1;
-        Sint16 * _vx   = av_to_sint16(vx);
-        Sint16 * _vy   = av_to_sint16(vy);
+        n   = av_len(vx) + 1;
+        _vx = av_to_sint16(vx);
+        _vy = av_to_sint16(vy);
         if ( items > 3 && SvTRUE( ST(3) ) )
             aapolygonColor( _surface, _vx, _vy, n, color );
         else
@@ -200,15 +213,15 @@ void
 surfacex_blit( src, dest, ... )
     SV *src
     SV *dest
+    PREINIT:
+        SDL_Surface *_src, *_dest;
+        SDL_Rect _src_rect, _dest_rect;
     CODE:
         assert_surface(src);
         assert_surface(dest);
         /* just return the pointer stored in the bag */
-        SDL_Surface *_src  = (SDL_Surface *)bag2obj(src);
-        SDL_Surface *_dest = (SDL_Surface *)bag2obj(dest);
-
-        SDL_Rect _src_rect;
-        SDL_Rect _dest_rect;
+        _src  = (SDL_Surface *)bag2obj(src);
+        _dest = (SDL_Surface *)bag2obj(dest);
 
         if( items > 2 && SvOK(ST(2)) )
             _src_rect = *(SDL_Rect *)bag2obj( create_mortal_rect( ST(2) ) );

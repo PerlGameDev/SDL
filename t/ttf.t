@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
+use warnings;
 use SDL;
 use SDL::Config;
 use SDL::Color;
@@ -27,9 +28,7 @@ use SDL::Version;
 use Encode;
 
 use File::Spec;
-my $font_filename = File::Spec->catfile(
-        $FindBin::Bin, '..', 'share', 'GenBasR.ttf'
-);
+my $font_filename = File::Spec->catfile( $FindBin::Bin, '..', 'share', 'GenBasR.ttf' );
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy' unless $ENV{SDL_RELEASE_TESTING};
@@ -102,32 +101,28 @@ isa_ok(
 
 my $style = SDL::TTF::get_font_style($font);
 
-is( $style, TTF_STYLE_NORMAL,  "[get_font_style] returns TTF_STYLE_NORMAL"
-);
+is( $style, TTF_STYLE_NORMAL, "[get_font_style] returns TTF_STYLE_NORMAL" );
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_BOLD ),
 	undef, "[set_font_style] to TTF_STYLE_BOLD"
 );
 
 $style = SDL::TTF::get_font_style($font);
 
-ok( $style & TTF_STYLE_BOLD , "[get_font_style] returns TTF_STYLE_BOLD"
-);
+ok( $style & TTF_STYLE_BOLD, "[get_font_style] returns TTF_STYLE_BOLD" );
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_ITALIC ),
 	undef, "[set_font_style] to TTF_STYLE_ITALIC"
 );
 
-$style =  SDL::TTF::get_font_style($font);
-ok( $style & TTF_STYLE_ITALIC, "[get_font_style] returns TTF_STYLE_ITALIC"
-);
+$style = SDL::TTF::get_font_style($font);
+ok( $style & TTF_STYLE_ITALIC, "[get_font_style] returns TTF_STYLE_ITALIC" );
 
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_UNDERLINE ),
 	undef, "[set_font_style] to TTF_STYLE_UNDERLINE"
 );
 
-$style =  SDL::TTF::get_font_style($font);
+$style = SDL::TTF::get_font_style($font);
 
-ok( TTF_STYLE_UNDERLINE, "[get_font_style] returns TTF_STYLE_UNDERLINE"
-);
+ok( TTF_STYLE_UNDERLINE, "[get_font_style] returns TTF_STYLE_UNDERLINE" );
 is( SDL::TTF::set_font_style( $font, TTF_STYLE_NORMAL ),
 	undef, "[set_font_style] to TTF_STYLE_NORMAL"
 );
@@ -252,7 +247,7 @@ SKIP:
 
 	my $font = SDL::TTF::open_font( $font_filename, 24 );
 	my $render_text_solid = SDL::TTF::render_text_solid( $font, 'render_text_solid', $text_fg );
-	isa_ok( $render_text_solid, 'SDL::Surface', "[render_text_solid] ".SDL::get_error() );
+	isa_ok( $render_text_solid, 'SDL::Surface', "[render_text_solid] " . SDL::get_error() );
 	SDL::Video::blit_surface(
 		$render_text_solid, SDL::Rect->new( 0, 0, 640, 480 ),
 		$display, SDL::Rect->new( 5, $y += 27, 640, 480 )

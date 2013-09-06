@@ -34,22 +34,15 @@ my $render = sub {
 	$app->draw_rect( [ 100 - $state->x, $state->y, 2, 2 ], 0xFF0FFF );
 };
 
-#an event handler to exit
-my $event = sub {
-	$_[1]->stop if $_[0]->type == SDL_QUIT;
-};
-
-
-$app->add_event_handler($event);
-
 #clear the screen
 $app->add_show_handler( sub { $app->draw_rect( [ 0, 0, $app->w, $app->h ], 0x000000 ) } );
 
 #add the spring
-$spring->attach($app, $render );
+$spring->attach( $app, $render );
 
 #add the constant_velocity
-$constant->attach( $app,
+$constant->attach(
+	$app,
 	sub {
 		my $state = shift;
 		$app->draw_rect( [ $state->x, $state->y, 4, 4 ], 0xFFFFFF );

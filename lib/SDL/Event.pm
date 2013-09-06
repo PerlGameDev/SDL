@@ -1,11 +1,15 @@
 package SDL::Event;
 use strict;
 use warnings;
-use vars qw(@ISA @EXPORT @EXPORT_OK);
+use vars qw($VERSION $XS_VERSION @ISA @EXPORT @EXPORT_OK);
 require Exporter;
 require DynaLoader;
 use SDL::Constants ':SDL::Events';
 our @ISA = qw(Exporter DynaLoader);
+
+our $VERSION    = '2.541_10';
+our $XS_VERSION = $VERSION;
+$VERSION = eval $VERSION;
 
 use SDL::Internal::Loader;
 internal_load_dlls(__PACKAGE__);
@@ -24,7 +28,8 @@ our %EXPORT_TAGS = (
 	app    => $SDL::Constants::EXPORT_TAGS{'SDL::Events/app'},
 	button => $SDL::Constants::EXPORT_TAGS{'SDL::Events/button'},
 	keysym => $SDL::Constants::EXPORT_TAGS{'SDL::Events/keysym'},
-	keymod => $SDL::Constants::EXPORT_TAGS{'SDL::Events/keymod'}
+	keymod => $SDL::Constants::EXPORT_TAGS{'SDL::Events/keymod'},
+	repeat => $SDL::Constants::EXPORT_TAGS{'SDL::Events/repeat'}
 );
 
 1;
