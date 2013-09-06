@@ -3,6 +3,7 @@ use warnings;
 use Test::More;
 use SDL;
 use SDLx::App;
+use SDL::Events;
 use SDLx::Controller;
 use SDLx::Controller::State;
 use SDLx::Controller::Interface;
@@ -79,6 +80,7 @@ my $event_called = 0;
 require SDL::Event;
 require SDL::Events;
 my $eve = SDL::Event->new();
+   $eve->type(SDL_USEREVENT);
 
 SDL::Events::push_event($eve);
 my $counts = [ 0, 0, 0 ];
