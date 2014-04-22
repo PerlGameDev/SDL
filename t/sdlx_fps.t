@@ -31,7 +31,9 @@ is( $fps->get, $_fps, 'fps->get' );
 is( $fps->rate, $_fps, 'fps->rate' );
 
 cmp_ok( $fps->lastticks, '>=', $ticks_start, 'fps->lastticks' );
-cmp_ok( $fps->lastticks, '<=', $ticks_init,  'fps->lastticks' );
+# Since SDL_gfx version 2.0.24 the ticks we get are always non-zero,
+# but SDL can still report 0 as $ticks_init, and then the test had failed.
+cmp_ok( $fps->lastticks, '<=', ($ticks_init || 1),  'fps->lastticks' );
 
 # rateticks is Uint32, so precision differs
 ok( $fps->rateticks - 1000 / $_fps < 0.000001, 'fps->rateticks' );
@@ -51,7 +53,7 @@ $fps->delay;
 my $ticks_post_delay = SDL::get_ticks();
 
 cmp_ok( $fps->lastticks, '>=', $ticks_pre_delay,  'fps->lastticks after fps->delay' );
-cmp_ok( $fps->lastticks, '<=', $ticks_post_delay, 'fps->lastticks after fps->delay' );
+cmp_ok( $fps->lastticks, '<=', ($ticks_post_delay || 1), 'fps->lastticks after fps->delay' );
 
 $fps = SDLx::FPS->new();
 is( $fps->get, 30, 'fps->get default value' );
