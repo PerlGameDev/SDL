@@ -2,6 +2,9 @@ Revision history for Perl extension SDL_perl.
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+* 2.542 Apr 22 2014
+	- Adjusting test for SDL_gfx >= 2.0.24, bumping Alien::SDL [FROGGS]
+
 * 2.540 May 26 2012
 	- Removed all non-pod changes introduced in 2.538 [jtpalmer]
 	- Fixed bugtracker link [FROGGS]
