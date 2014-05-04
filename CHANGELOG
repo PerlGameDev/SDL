@@ -2,6 +2,9 @@ Revision history for Perl extension SDL_perl.
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+* 2.543_1 May 04 2014
+	- Fix segfault in cleanup of MixChunks on windows [FROGGS]
+
 * 2.542 Apr 22 2014
 	- Adjusting test for SDL_gfx >= 2.0.24, bumping Alien::SDL [FROGGS]
 
