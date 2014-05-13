@@ -2,7 +2,7 @@ Revision history for Perl extension SDL_perl.
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
-* 2.543_3 May 12 2014
+* 2.543_4 May 13 2014
 	- Updated Alien::SDL's version we depend on to get an OpenBSD/pthread fix [FROGGS]
 
 * 2.543_1 May 04 2014
