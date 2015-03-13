@@ -162,13 +162,19 @@ C<SDLx::App> is a C<SDLx::Controller>. Use the event, show and handlers to run t
 
   my $app = SDLx::App->new( width => 200, height => 200);
 
-  $app->add_event_handler( sub{ return 0 if $_[0]->type == SDL_QUIT; return 1});
+  $app->add_event_handler( sub{
+      my ($event, $app) = @_;
+      return $_[0]->type == SDL_QUIT ? 0 : 1;
+  });
 
-  $app->add_show_handler( sub{ $app->update() } );
+  $app->add_show_handler( sub{
+      my ($delta, $app) = @_;
+      $app->update;
+  } );
 
-  $app->add_move_handler( 
-  sub{ 
-  #calc your physics here 
+  $app->add_move_handler( sub{ 
+      my ($step, $app, $t) = @_;
+      #calc your physics here 
   } );
 
   $app->run();
