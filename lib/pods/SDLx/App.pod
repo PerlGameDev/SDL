@@ -32,26 +32,22 @@ Extension
  # our app also comes with an SDLx::Controller
 
  # add a handler handle events such as keypresses
- $app->add_event_handler(
-     sub {
-          my ($event) = @_;
-          # handle the event here
-     }
- );
+  $app->add_event_handler( sub{
+      my ($event, $app) = @_;
+      return $_[0]->type == SDL_QUIT ? 0 : 1;
+  });
 
  # add a handler to move our objects in response to time
- $app->add_move_handler(
-     sub {
-         # handle moving objects here
-     }
- );
+  $app->add_move_handler( sub{ 
+      my ($step, $app, $t) = @_;
+      #calc your physics here 
+  } );
 
  # add a handler to show our objects on the screen
- $app->add_show_handler(
-     sub {
-         # handle drawing objects here
-     }
- );
+  $app->add_show_handler( sub{
+      my ($delta, $app) = @_;
+      $app->update;
+  } );
 
  # finally, start the app run loop with the added handlers
  $app->run();
