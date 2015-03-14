@@ -1,4 +1,3 @@
-
 =head1 NAME
 
 SDLx::Controller - Handles the loops for events, movement and rendering
@@ -157,9 +156,6 @@ Defaults to 0. You'll seldom have to set this param.
 
 =back
 
-Please refer to each handler below for information on received arguments.
-Note that the second argument every callback receives is the C<SDLx::Controller> object.
-
 =head2 run
 
  $app->run;
@@ -170,11 +166,6 @@ This loop will run until L</stop> is called.
 All added handlers will be called during the run loop, in this order:
 
 =over
-
-Takes 1 argument which is a callback. The application waits for the next event with C<wait_event>.
-When one is received, it is passed to the callback as the first argument, along with the C<SDLx::Controller> object as the second argument.
-If the callback then returns a true value, C<pause> will return.
-If the callback returns a false value, C<pause> will repeat the process.
 
 =item 1. Events
 

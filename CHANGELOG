@@ -3,7 +3,7 @@ Revision history for Perl extension SDL_perl.
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
 * 2.538 May 22 2012
-    - Pod updates [mig0]
+	- Pod updates [mig0]
 	- SDLx::App made the docs a lot better [Blaizer]
 	- SDLx::App changed around shortcut names in the constructor [Blaizer]
 	- SDLx::App added and improved parameters of the constructor, see docs [Blaizer]
