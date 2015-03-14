@@ -2,14 +2,10 @@
 package SDLx::Validate;
 use strict;
 use warnings;
-use vars qw($VERSION $XS_VERSION @ISA @EXPORT @EXPORT_OK);
+use vars qw(@ISA @EXPORT @EXPORT_OK);
 require Exporter;
 require DynaLoader;
 our @ISA = qw(Exporter DynaLoader);
-
-our $VERSION    = '2.541_10';
-our $XS_VERSION = $VERSION;
-$VERSION = eval $VERSION;
 
 $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /Use of uninitialized value in subroutine entry/};
 

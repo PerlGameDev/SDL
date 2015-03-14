@@ -1,15 +1,11 @@
 package SDL::GFX;
 use strict;
 use warnings;
-use vars qw($VERSION $XS_VERSION @ISA @EXPORT @EXPORT_OK);
+use vars qw(@ISA @EXPORT @EXPORT_OK);
 require Exporter;
 require DynaLoader;
 use SDL::Constants ':SDL::GFX';
 our @ISA = qw(Exporter DynaLoader);
-
-our $VERSION    = '2.541_10';
-our $XS_VERSION = $VERSION;
-$VERSION = eval $VERSION;
 
 use SDL::Internal::Loader;
 internal_load_dlls(__PACKAGE__);

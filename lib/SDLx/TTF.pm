@@ -1,15 +1,12 @@
 package SDLx::TTF;
 use strict;
 use warnings;
-use vars qw($VERSION);
 use Carp;
 
 use SDL;
 use SDL::TTF;
 use SDL::TTF::Font;
 
-our $VERSION = '2.541_10';
-$VERSION = eval $VERSION;
 
 sub new
 {

@@ -32,16 +32,12 @@ package SDL::Tutorial::Animation;
 
 use strict;
 use warnings;
-use vars qw($VERSION);
 
 use SDL;
 use SDLx::App;
 use SDL::Rect;
 use SDL::Color;
 use SDL::Video;
-
-our $VERSION = '2.541_10';
-$VERSION = eval $VERSION;
 
 # change these values as necessary
 my $title = 'My SDL Animation';

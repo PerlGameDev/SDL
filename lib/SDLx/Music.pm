@@ -1,7 +1,6 @@
 package SDLx::Music;
 use strict;
 use warnings;
-use vars qw($VERSION);
 use Carp ();
 use SDL;
 use SDL::Audio;
@@ -14,9 +13,6 @@ use SDL::Mixer::MixChunk;
 use Data::Dumper;
 use SDLx::Music::Default;
 use SDLx::Music::Data;
-
-our $VERSION = '2.541_10';
-$VERSION = eval $VERSION;
 
 our $def = bless( {}, "SDLx::Music::Default" );
 

@@ -1,7 +1,6 @@
 package SDLx::Sprite;
 use strict;
 use warnings;
-use vars qw($VERSION);
 
 use SDL;
 use SDL::Video;
@@ -12,9 +11,6 @@ use SDLx::Surface;
 use SDLx::Validate;
 
 use Carp ();
-
-our $VERSION = '2.541_10';
-$VERSION = eval $VERSION;
 
 sub new {
 	my ( $class, %options ) = @_;

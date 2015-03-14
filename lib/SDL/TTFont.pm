@@ -36,12 +36,9 @@ use Carp;
 use SDL;
 use SDL::Surface;
 
-use vars qw/ $VERSION @ISA /;
+use vars qw/ @ISA /;
 
 @ISA = qw(SDL::Surface);
-
-our $VERSION = '2.541_10';
-$VERSION = eval $VERSION;
 
 sub new {
 	my $proto = shift;

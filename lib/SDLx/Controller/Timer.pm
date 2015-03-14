@@ -4,11 +4,7 @@ package SDLx::Controller::Timer;
 #
 use strict;
 use warnings;
-use vars qw($VERSION @ISA);
 use SDL;
-
-our $VERSION = '2.541_10';
-$VERSION = eval $VERSION;
 
 sub new {
 	my $class = shift;

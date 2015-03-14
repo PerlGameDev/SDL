@@ -32,17 +32,11 @@ package SDL::SMPEG::Info;
 
 use strict;
 use warnings;
-use vars qw($VERSION $XS_VERSION @ISA);
 use Carp;
 use SDL;
 our @ISA = qw(Exporter DynaLoader);
 use SDL::SMPEG;
 use SDL::Internal::Loader;
-
-our $VERSION    = '2.541_10';
-our $XS_VERSION = $VERSION;
-$VERSION = eval $VERSION;
-
 internal_load_dlls(__PACKAGE__);
 
 bootstrap SDL::SMPEG::Info;

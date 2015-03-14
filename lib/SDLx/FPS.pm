@@ -1,14 +1,10 @@
 package SDLx::FPS;
 use strict;
 use warnings;
-use vars qw($VERSION @ISA);
 use SDL::GFX::Framerate;
 use SDL::GFX::FPSManager;
 use Carp;
 our @ISA = qw(SDL::GFX::FPSManager);
-
-our $VERSION = '2.541_10';
-$VERSION = eval $VERSION;
 
 sub new {
 	my ( $class, %args ) = @_;

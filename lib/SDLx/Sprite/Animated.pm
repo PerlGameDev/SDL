@@ -1,7 +1,6 @@
 package SDLx::Sprite::Animated;
 use strict;
 use warnings;
-use vars qw($VERSION);
 
 use Scalar::Util 'refaddr';
 use SDL;
@@ -11,9 +10,6 @@ use SDLx::Sprite;
 use SDLx::Validate;
 
 use base 'SDLx::Sprite';
-
-our $VERSION = '2.541_10';
-$VERSION = eval $VERSION;
 
 # inside out
 my %_ticks;

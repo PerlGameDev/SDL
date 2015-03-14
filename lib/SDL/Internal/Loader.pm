@@ -1,14 +1,10 @@
 package SDL::Internal::Loader;
 use strict;
 use warnings;
-use vars qw($VERSION @ISA @EXPORT @LIBREFS);
 require Exporter;
 our @ISA     = qw(Exporter);
 our @EXPORT  = qw(internal_load_dlls);
 our @LIBREFS = ();
-
-our $VERSION = '2.541_10';
-$VERSION = eval $VERSION;
 
 use SDL::ConfigData;
 use Alien::SDL;
