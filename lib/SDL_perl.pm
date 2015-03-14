@@ -32,7 +32,7 @@ package SDL_perl;
 
 use strict;
 use warnings;
-use vars qw(@ISA);
+
 our @ISA = qw/ DynaLoader /;
 require DynaLoader;
 
