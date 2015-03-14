@@ -5,6 +5,7 @@ use SDL;
 use SDL::Config;
 use SDL::Video;
 use SDL::Color;
+use SDL::Event;
 use SDLx::Controller;
 use Scalar::Util 'refaddr';
 use lib 't/lib';
@@ -13,11 +14,13 @@ use SDL::TestTool;
 can_ok(
 	'SDLx::Controller',
 	qw(
-		new run stop pause dt min_t current_time
+		new run stop pause paused
+		dt min_t current_time delay time eoq exit_on_quit event
 		add_move_handler add_event_handler add_show_handler
 		remove_move_handler remove_event_handler remove_show_handler
 		remove_all_move_handlers remove_all_event_handlers remove_all_show_handlers
-		move_handlers event_handlers show_handlers eoq exit_on_quit
+		move_handlers event_handlers show_handlers exit_on_quit_handler eoq_handler
+		time sleep
 	)
 );
 
@@ -26,38 +29,88 @@ TODO: {
 	can_ok( 'SDLx::Controller', qw( ) );
 }
 
+# defaults
 my $app = SDLx::Controller->new;
 isa_ok( $app, 'SDLx::Controller', 'default controller can be spawned' );
-is($app->dt, 0.1, 'default dt set to 0.1');
-is($app->min_t, 1 / 60, 'default min_t set to 1/60' );
-is($app->eoq, 0, 'no eoq by default');
-is($app->exit_on_quit, 0, 'no exit_on_quit by default');
+is($app->dt, 0.1, 'default dt set to 0.1' );
+is($app->min_t, 1/60, 'default min_t set to 1/60' );
+is($app->delay, 0, 'default delay set to 0' );
 is( scalar @{ $app->move_handlers }, 0, 'no motion handlers by default' );
 is( scalar @{ $app->show_handlers }, 0, 'no show handlers by default' );
 is( scalar @{ $app->event_handlers }, 0, 'no event handlers by default' );
+isa_ok($app->event, 'SDL::Event', 'SDL::Event for controller created' );
+is($app->time, 0, 'time started at 0' );
+ok( !$app->exit_on_quit, 'exit_on_quit is not set by default' );
+ok( !$app->eoq, 'eoq() is a method alias to exit_on_quit()' );
+is(ref $app->exit_on_quit_handler, 'CODE', 'default eoq handler set' );
+is($app->eoq_handler, \&SDLx::Controller::_default_exit_on_quit_handler, 'eoq_handler is an alias' );
+is($app->current_time, undef, 'current_time has not been set yet' );
 
-is( $app->exit_on_quit, 0, 'exit_on_quit is not set by default' );
-is( $app->eoq, 0, 'eoq() is a method alias to exit_on_quit()' );
+# modifying with param methods
 $app->exit_on_quit(1);
 is( scalar @{ $app->event_handlers }, 0, 'exit_on_quit does not trigger event handlers' );
-is( $app->exit_on_quit, 1, 'exit_on_quit can be set dynamically' );
-is( $app->eoq, 1, 'eoq() follows exit_on_quit()' );
+ok( $app->exit_on_quit, 'exit_on_quit can be set dynamically' );
+ok( $app->eoq, 'eoq() follows exit_on_quit()' );
 $app->remove_all_event_handlers;
-is( $app->exit_on_quit, 1, 'exit_on_quit is not an event handler' );
-is( $app->eoq, 1, 'eoq() still follows exit_on_quit()' );
+ok( $app->exit_on_quit, 'exit_on_quit is not an event handler' );
+ok( $app->eoq, 'eoq() still follows exit_on_quit()' );
 $app->eoq(0);
-is( $app->eoq, 0, 'eoq can be set dynamically' );
-is( $app->exit_on_quit, 0, 'exit_on_quit() follows eoq()' );
+ok( !$app->eoq, 'eoq can be set dynamically' );
+ok( !$app->exit_on_quit, 'exit_on_quit() follows eoq()' );
 
+$app->dt(1337);
+is( $app->dt, 1337, 'dt can be changed with method' );
+$app->min_t(123);
+is( $app->min_t, 123, 'min_t can be changed with method' );
+$app->delay(555);
+is( $app->delay, 555, 'delay can be changed with method' );
+my $event = SDL::Event->new;
+$app->event($event);
+is( $app->event, $event, 'event can be changed with method' );
+$app->time(20.3);
+is( $app->time, 20.3, 'time can be changed with method' );
+$app->exit_on_quit_handler(\&dummy_sub);
+is( $app->exit_on_quit_handler, \&dummy_sub, 'exit_on_quit_handler can be changed with method' );
+is( $app->eoq_handler, \&dummy_sub, 'eoq_handler is an alias' );
+$app->eoq_handler(\&dummy_sub2);
+is( $app->exit_on_quit_handler, \&dummy_sub2, 'eoq_handler can be changed with method' );
+is( $app->eoq_handler, \&dummy_sub2, 'and it is an alias again' );
+$app->current_time(9.95);
+is( $app->current_time, 9.95, 'current_time can be changed with method' );
+
+my ($dummy_ref1, $dummy_ref2, $dummy_ref3) = ([], [sub {}, \&dummy_sub], [\&dummy_sub2, sub {}, sub {}]);
+
+# constructor set params
 $app = SDLx::Controller->new(
-	dt     => 0.1,
-	min_t => 0.5,
+	dt              => 0.1255,
+	min_t           => 0.467,
+	event           => $event,
+	event_handlers  => $dummy_ref1,
+	move_handlers   => $dummy_ref2,
+	show_handlers   => $dummy_ref3,
+	delay           => 0.262,
+	eoq             => 1,
+	time            => 99,
+	eoq_handler     => \&dummy_sub2,
 );
 
 isa_ok( $app, 'SDLx::Controller' );
-is($app->dt, 0.1, 'new dt set to 0.1');
-is($app->min_t, 0.5, 'new min_t set to 0.5' );
+is($app->dt, 0.1255, 'dt set in constructor');
+is($app->min_t, 0.467, 'min_t set in constructor' );
+is($app->event, $event, 'event set in constructor' );
+is($app->event_handlers, $dummy_ref1, 'event_handlers set in constructor' );
+is($app->move_handlers, $dummy_ref2, 'move_handlers set in constructor' );
+is($app->show_handlers, $dummy_ref3, 'show_handlers set in constructor' );
+is($app->delay, 0.262, 'delay set in constructor' );
+ok($app->eoq, 'eoq set in constructor' );
+is($app->time, 99, 'time set in constructor' );
+is($app->eoq_handler, \&dummy_sub2, 'eoq_handler set in constructor' );
 
+# and now the app for the next part of testing
+$app = SDLx::Controller->new(
+	dt    => 0.1,
+	min_t => 0.5,
+);
 
 sub dummy_sub  {1}
 sub dummy_sub2 {1}
@@ -150,5 +203,12 @@ $app->run();
 
 cmp_ok($move_inc, '>=', 30, 'called our motion handlers at least 30 times');
 is($show_inc, 30, 'called our show handlers exactly 30 times');
+
+#TODO testing:
+#pause and paused
+#current_time
+#delay
+#time
+#sleep
 
 done_testing;
