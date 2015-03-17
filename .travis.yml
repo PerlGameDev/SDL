@@ -28,4 +28,8 @@ install:
 script: prove -v
 
 notifications:
-  irc: irc.perl.org#sdl
+  irc:
+    channels:
+      - "irc.perl.org#sdl"
+    on_success: change
+    on_failure: always
