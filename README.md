@@ -1,3 +1,5 @@
+# SDL [![Build Status](https://travis-ci.org/PerlGameDev/SDL.svg?branch=master)](https://travis-ci.org/PerlGameDev/SDL)
+
 NAME
     SDL Perl - Simple DirectMedia Layer for Perl
 
@@ -12,3 +14,5 @@ DESCRIPTION
 
 The SDL Perl Development Team
     Please see: HTTPS://GitHub.Com/PerlGameDev/SDL/contributors
+
+
