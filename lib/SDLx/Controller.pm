@@ -147,7 +147,6 @@ sub pause {
 
 sub _event {
 	my ($self, $ref) = @_;
-	SDL::Events::pump_events();
 	while ( SDL::Events::poll_event( $_event{ $ref} ) ) {
 		$self->_exit_on_quit( $_event{ $ref}  ) if $_eoq{$ref};
 		foreach my $event_handler ( @{ $_event_handlers{ $ref} } ) {
