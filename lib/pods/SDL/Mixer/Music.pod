@@ -33,7 +33,7 @@ Example for loading music from a variable:
  [...]
  
  my $rwops = SDL::RWOps->new_const_mem( $scalar_holding_music );
- my $music = SDL::Mixer::Music::load_MUS( $rwops );
+ my $music = SDL::Mixer::Music::load_MUS_RW( $rwops );
 
 B<Note:> You need at least libSDL_mixer 1.2.7 for this feature.
 
