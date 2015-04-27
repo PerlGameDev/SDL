@@ -2,6 +2,11 @@ Revision history for Perl extension SDL
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+* 2.546 Apr 27 2015
+	- Updated documentation for SDL::Mixer::Music and SDLx::App [Mithaldu]
+	- Internal code cleanups [jtpalmer]
+	- Remove redundant pump_events call in SDLx::Controller [Mithaldu]
+
 * 2.544 May 14 2014
 	- Updated Alien::SDL's version we depend on to get an OpenBSD/pthread fix [FROGGS]
 	- Fix segfault in cleanup of MixChunks on windows [FROGGS]
