@@ -99,8 +99,11 @@ sub load {
 sub _init_default_sequence {
 	my $self = shift;
 
-	my $max_x = int( ( $self->surface->w - $_offset_x{ refaddr $self} ) / $self->step_x );
-	my $max_y = int( ( $self->surface->h - $_offset_y{ refaddr $self} ) / $self->step_y );
+
+	my $max_x = int( ( $self->surface->w - $_offset_x{ refaddr $self} ) );
+	my $max_y = int( ( $self->surface->h - $_offset_y{ refaddr $self} ) );
+    $max_x /= $self->step_x if $self->step_x;
+    $max_y /= $self->step_y if $self->step_y;
 
 	my @sequence;
 	foreach my $y ( 0 .. $max_y - 1 ) {
@@ -133,7 +136,7 @@ sub _restore_geometry {
 sub step_y {
 	my ( $self, $step_y ) = @_;
 
-	if ($step_y) {
+	if (defined $step_y) {
 		$_step_y{ refaddr $self} = $step_y;
 	}
 
@@ -143,7 +146,7 @@ sub step_y {
 sub step_x {
 	my ( $self, $step_x ) = @_;
 
-	if ($step_x) {
+	if (defined $step_x) {
 		$_step_x{ refaddr $self} = $step_x;
 	}
 
