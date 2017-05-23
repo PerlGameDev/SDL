@@ -1,4 +1,5 @@
 package SDLx::Sound;
+
 use strict;
 use warnings;
 use Carp;
@@ -16,19 +17,19 @@ use SDL::Mixer::Music;
 my $audioInited = undef;
 
 sub new {
-  my $class = shift;
-  my $self = {@_};
-  bless ($self, $class);
-   _initAudio() unless $audioInited;
-  $self->{supported} = _initMixer();
-  return $self;
+	my $class = shift;
+	my $self = {@_};
+	bless ($self, $class);
+	_initAudio() unless $audioInited; # only once per module load
+	$self->{supported} = _initMixer();
+	return $self;
 }
 
 sub _initAudio {
     SDL::Mixer::open_audio( 44100, AUDIO_S16SYS, 2, 4096 );
     my ($status, $freq, $format, $channels) = @{ SDL::Mixer::query_spec() };
     $audioInited = 1 if $status == 1;
-    return ($status, $freq, $format, $channels); #TODO: Save this information in $self;
+    return ($status, $freq, $format, $channels); # being passed back to $self
 }
 
 sub _initMixer {
@@ -48,8 +49,33 @@ sub _initMixer {
 }
 
 sub load {
-    my $self = shift;
-     $self->{files} = {@_};
+	my $self = shift;
+	$self->{files} = { @_ }; # user passes key/value pairs
+
+	for my $name (keys %{ $self->{files} }){
+		my $obj = {};
+		# allow user to pass hash-refs
+		unless( ref($self->{files}->{$name}) ){
+			# print "load: preparing sound object: $name \n";
+			$obj = {
+				file	=> $self->{files}->{$name},
+				volume	=> 100,
+				loops	=> 1,
+			};
+			$self->{files}->{$name} = $obj;
+
+
+		}
+
+		if (-e $obj->{file}){
+			$obj->{load_ref} = SDL::Mixer::Music::load_MUS($obj->{file}) or Carp::croak "Sound file $obj->{file} not found: " . SDL::get_error();
+			$obj->{is_loaded} = 1;
+		}else{
+			carp("Sound file ".$obj->{file}." not found\n");
+			next;
+		}
+	}
+
 }
 
 sub unload {
@@ -58,49 +84,72 @@ sub unload {
 }
 
 sub play {
-    my $self = shift;
-    $self->{files} = {@_} if $#_ > 0 &&  @_;
-    my $play = 1;
-    if (-e $_[0]) {
-       my $music = SDL::Mixer::Music::load_MUS($_[0])
-           or Carp::croak 'Sound file not found: ' . SDL::get_error();
-       SDL::Mixer::Music::volume_music(85);
-       if (SDL::Mixer::Music::play_music($music, -1)<0) {
-           print("Can't play!\n". SDL::get_error()."\n");
-           $play = 0;
-       }
-    } else {
-       carp("No newline ".$self->{files}."\n".$_[0]."\n");
-       $play = 0;
-    }
-    return $play;
+	my $self = shift;
+#	$self->{files} = {@_} if $#_ > 0 &&  @_;
+
+	my ($name, %override) = @_;
+
+	my $obj;
+	if($name){
+		unless( exists($self->{files}->{$name}) && $self->{files}->{$name}->{is_loaded} ){
+			carp("Sound file with name $name not loaded, autoload with name = path (which is $name) \n");
+
+			$self->load( $name => $name );
+		}
+		$obj = $self->{files}->{$name};
+	}else{
+		# if user calls play() do something
+		($name, $obj) = each %{ $self->{files} };
+
+		unless( $name ){
+			carp("No sound file loaded, either call load() first or pass a file-path to play()\n");
+			return 0;
+		}
+	}
+
+	## execute play
+	SDL::Mixer::Music::volume_music( (defined($override{volume}) ? $override{volume} : $obj->{volume}) );
+
+	if(	SDL::Mixer::Music::play_music(
+			$obj->{load_ref},
+			( defined($override{loops}) ? $override{loops} : $obj->{loops} )
+		) < 0
+	){
+		carp("Error calling play_music: ". SDL::get_error()."\n");
+		return 0;
+	}
+
+	return 1;
+}
+
+sub playing {
+	return SDL::Mixer::Music::playing_music();
+}
+sub is_playing {
+	return SDL::Mixer::Music::playing_music();
+}
+
+sub pause {
+	my $self = shift;
+	SDL::Mixer::Music::pause_music();
+}
+
+sub resume {
+	my $self = shift;
+	SDL::Mixer::Music::resume_music();
+}
+
+
+sub stop {
+	my $self = shift;
+	SDL::Mixer::Music::halt_music();
+	#SDL::Mixer::quit();
 }
 
 sub loud {
 }
 
-sub pause {
-    my $self = shift;
-    SDL::Mixer::Music::pause_music();
- 
-}
-
-sub resume {
-    my $self = shift;
-    SDL::Mixer::Music::resume_music();
- 
-}
-
-
-sub stop {
-    my $self = shift;
-    SDL::Mixer::Music::halt_music();
-    #SDL::Mixer::quit();
-}
-
 sub fade {
 }
-
-
 
 1; # End of SDLx::Sound
