@@ -7,6 +7,7 @@ use SDL;
 use SDL::TTF;
 use SDL::TTF::Font;
 
+our $VERSION = 2.548;
 
 sub new
 {

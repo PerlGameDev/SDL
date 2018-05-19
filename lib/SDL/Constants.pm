@@ -6,6 +6,8 @@ use warnings;
 use base 'Exporter';
 use Config;
 
+our $VERSION = 2.548;
+
 our @EXPORT_OK   = ();
 our %EXPORT_TAGS = (
 	'SDL/defaults' => [

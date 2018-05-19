@@ -13,6 +13,8 @@ use File::Find qw[finddepth];
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use Alien::SDL;
 
+our $VERSION = 2.548;
+
 sub new {
   my $self = shift;
   my %args = @_;  

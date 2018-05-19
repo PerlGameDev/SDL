@@ -22,6 +22,8 @@ use Data::Dumper;
 use Scalar::Util 'refaddr';
 use base qw/SDLx::Surface SDLx::Controller/;
 
+our $VERSION = 2.548;
+
 my $screen_w;
 my $screen_h;
 my $screen_d;

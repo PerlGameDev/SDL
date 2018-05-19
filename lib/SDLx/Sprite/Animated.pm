@@ -11,6 +11,8 @@ use SDLx::Validate;
 
 use base 'SDLx::Sprite';
 
+our $VERSION = 2.548;
+
 # inside out
 my %_ticks;
 my %_width;

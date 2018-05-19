@@ -2,6 +2,9 @@ Revision history for Perl extension SDL
 
 Versioning rule: public releases are even numbers, dev releases are odd. (same like perl dist)
 
+* 2.548 May 19 2018
+	- Add version number to all modules [FROGGS]
+
 * 2.546 Apr 27 2015
 	- Updated documentation for SDL::Mixer::Music and SDLx::App [Mithaldu]
 	- Internal code cleanups [jtpalmer]

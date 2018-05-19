@@ -11,6 +11,8 @@ internal_load_dlls(__PACKAGE__);
 use overload '<=>' => \&my_cmp,
              '""'  => \&stringify;
 
+our $VERSION = 2.548;
+
 bootstrap SDL::Version;
 
 sub stringify {

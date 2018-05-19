@@ -11,6 +11,8 @@ our @ISA = qw(Exporter DynaLoader SDL::Surface);
 use base 'Exporter';
 our @EXPORT = ('SDL_TEXTWIDTH');
 
+our $VERSION = 2.548;
+
 sub SDL_TEXTWIDTH {
 	return SDLx::SFont::TextWidth( join( '', @_ ) );
 }

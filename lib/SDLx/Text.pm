@@ -11,6 +11,8 @@ use List::Util qw(max sum);
 
 use Carp ();
 
+our $VERSION = 2.548;
+
 sub new {
 	my ($class, %options) = @_;
 	unless ( SDL::Config->has('SDL_ttf') ) {

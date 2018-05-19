@@ -20,6 +20,8 @@ use Tie::Simple;
 use SDLx::Validate;
 use SDLx::Surface::TiedMatrix;
 
+our $VERSION = 2.548;
+
 use overload (
 	'@{}'    => '_array',
 	fallback => 1,

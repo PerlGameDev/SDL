@@ -39,6 +39,8 @@ require DynaLoader;
 use SDL::Internal::Loader;
 internal_load_dlls(__PACKAGE__);
 
+our $VERSION = 2.548;
+
 bootstrap SDL_perl;
 
 1;

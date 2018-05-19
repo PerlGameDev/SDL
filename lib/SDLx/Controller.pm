@@ -11,6 +11,8 @@ use SDLx::Controller::Interface;
 use SDLx::Controller::State;
 use Scalar::Util 'refaddr';
 
+our $VERSION = 2.548;
+
 # inside out, so this can work as the superclass of another
 # SDL::Surface subclass
 my %_dt;

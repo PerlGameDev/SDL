@@ -12,6 +12,8 @@ use SDL::Mixer::Music;
 #use SDL::Mixer::Samples;
 #use SDL::Mixer::MixChunk;
 
+our $VERSION = 2.548;
+
 # SDL::Mixer must be inited only one time
 my $audioInited = undef;
 

@@ -6,6 +6,8 @@ use SDL::GFX::FPSManager;
 use Carp;
 our @ISA = qw(SDL::GFX::FPSManager);
 
+our $VERSION = 2.548;
+
 sub new {
 	my ( $class, %args ) = @_;
 

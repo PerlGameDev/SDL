@@ -2,6 +2,8 @@ package SDLx::Music::Default;
 use strict;
 use warnings;
 
+our $VERSION = 2.548;
+
 sub ext  
 {
 
