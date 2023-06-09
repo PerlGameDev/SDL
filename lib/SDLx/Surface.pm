@@ -5,6 +5,7 @@ use vars qw(@ISA @EXPORT @EXPORT_OK);
 require Exporter;
 require DynaLoader;
 use Carp ();
+use Scalar::Util ();
 use SDL;
 use SDL::Rect;
 use SDL::Video;
@@ -219,9 +220,9 @@ sub flip {
 sub update {
 	my ( $surface, $rects ) = @_;
 
-	if ( !defined($rects) || ( ref($rects) eq 'ARRAY' && !ref( $rects->[0] ) ) ) {
-			my @rect;
-		 @rect = @{$rects} if $rects;
+	if ( !defined($rects) || ( Scalar::Util::reftype $rects eq 'ARRAY' && !ref( $rects->[0] ) ) ) {
+		my @rect;
+		@rect = @{$rects} if $rects;
 		$rect[0] ||= 0;
 		$rect[1] ||= 0;
 		$rect[2] ||= $surface->w;
@@ -239,9 +240,10 @@ sub draw_line {
 	my ( $self, $start, $end, $color, $antialias ) = @_;
 
 	Carp::confess "Error start needs an array ref [x,y]"
-		unless ref($start) eq 'ARRAY';
+		unless Scalar::Util::reftype $start eq 'ARRAY';
+
 	Carp::confess "Error end needs an array ref [x,y]"
-		unless ref($end) eq 'ARRAY';
+		unless Scalar::Util::reftype $end eq 'ARRAY';
 
 	unless ( SDL::Config->has('SDL_gfx_primitives') ) {
 		Carp::cluck("SDL_gfx_primitives support has not been compiled");
@@ -270,7 +272,9 @@ sub draw_circle {
 		return;
 	}
 
-	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	Carp::cluck "Center needs to be an array of format [x,y]"
+		unless Scalar::Util::reftype $center eq 'ARRAY' && scalar @$center == 2;
+
 	$color = SDLx::Validate::num_rgba($color);
 
 	unless( $antialias )
@@ -292,7 +296,9 @@ sub draw_circle_filled {
 		return;
 	}
 
-	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	Carp::cluck "Center needs to be an array of format [x,y]"
+		unless Scalar::Util::reftype $center eq 'ARRAY' && scalar @$center == 2;
+
 	$color = SDLx::Validate::num_rgba($color);
 
 	SDL::GFX::Primitives::filled_circle_color( $self, @{$center}, $radius, $color );
@@ -341,7 +347,9 @@ sub draw_polygon_filled {
 sub draw_arc {
 	my ( $self, $center, $radius, $start, $end, $color ) = @_;
 
-	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	Carp::cluck "Center needs to be an array of format [x,y]"
+		unless Scalar::Util::reftype $center eq 'ARRAY' && scalar @$center == 2;
+
 	$color = SDLx::Validate::num_rgba($color);
 
 	SDL::GFX::Primitives::arc_color( $self, @$center, $radius, $start, $end, $color );
@@ -352,7 +360,9 @@ sub draw_arc {
 sub draw_ellipse {
 	my ( $self, $center, $rx, $ry, $color, $antialias ) = @_;
 
-	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	Carp::cluck "Center needs to be an array of format [x,y]"
+		unless Scalar::Util::reftype $center eq 'ARRAY' && scalar @$center == 2;
+
 	$color = SDLx::Validate::num_rgba($color);
 
 	if ($antialias)
@@ -370,7 +380,9 @@ sub draw_ellipse {
 sub draw_ellipse_filled {
 	my ( $self, $center, $rx, $ry, $color ) = @_;
 
-	Carp::cluck "Center needs to be an array of format [x,y]" unless ( ref $center eq 'ARRAY' && scalar @$center == 2 );
+	Carp::cluck "Center needs to be an array of format [x,y]"
+		unless Scalar::Util::reftype $center eq 'ARRAY' && scalar @$center == 2;
+
 	$color = SDLx::Validate::num_rgba($color);
 
 	SDL::GFX::Primitives::filled_ellipse_color( $self, @$center, $rx, $ry, $color );
