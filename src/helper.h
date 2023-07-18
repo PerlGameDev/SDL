@@ -58,12 +58,13 @@ void objDESTROY(SV *bag, void (* callback)(void *object))
         Uint32 *threadid = (Uint32*)(pointers[2]);
         
         if(PERL_GET_CONTEXT == pointers[1]
-        && *threadid == SDL_ThreadID())
+        && (threadid == NULL || *threadid == SDL_ThreadID()))
         {
             pointers[0] = NULL;
-            if(object)
+            if(object && threadid != NULL)
                 callback(object);
-            safefree(threadid);
+            if (threadid != NULL)
+                safefree(threadid);
             safefree(pointers);
         }
     }

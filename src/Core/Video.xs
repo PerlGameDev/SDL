@@ -10,6 +10,8 @@
 
 #include <SDL.h>
 
+typedef SDL_Surface SDL_Surface_borrowed;
+
 void _uinta_free(Uint16* av, int len_from_av_len)
 {
 	if( av != NULL)
@@ -56,7 +58,7 @@ See: L<http:/*www.libsdl.org/cgi/docwiki.cgi/SDL_API#head-813f033ec44914f267f321
 
 =cut
 
-SDL_Surface *
+SDL_Surface_borrowed *
 video_get_video_surface()
 	PREINIT:
 		char* CLASS = "SDL::Surface";
@@ -125,7 +127,7 @@ video_video_mode_ok ( width, height, bpp, flags )
 		RETVAL
 
 
-SDL_Surface *
+SDL_Surface_borrowed *
 video_set_video_mode ( width, height, bpp, flags )
 	int width
 	int height
