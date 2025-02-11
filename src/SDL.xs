@@ -144,7 +144,7 @@ sdl_perl_atexit (void)
 	SDL_Quit();
 }
 
-void boot_SDL();
+XS(boot_SDL);
 void boot_SDL__OpenGL();
 
 XS(boot_SDL_perl)
@@ -155,7 +155,7 @@ XS(boot_SDL_perl)
 #endif
 	PL_perl_destruct_level = 2;
 	GET_TLS_CONTEXT
-	boot_SDL();
+	boot_SDL(aTHX_ cv);
 
 #if defined WINDOWS || defined WIN32
   SDL_RegisterApp ("SDLPerl App", 0, GetModuleHandle (NULL));
