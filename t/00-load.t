@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Test::Most 'bail';
-use File::Spec 'catfile';
+use File::Spec;
 
 BEGIN {
 	my @modules = qw /
