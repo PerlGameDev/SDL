@@ -28,9 +28,10 @@ BEGIN {
     elsif ( !SDL::Config->has('SDL_mixer') ) {
         plan( skip_all => 'SDL_mixer support not compiled' );
     }
+
+    use_ok( 'SDLx::Music' );
 }
 
-use_ok( 'SDLx::Music', "Can load SDLx::Music" );
 
 # Object Creation
 
