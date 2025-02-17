@@ -3,7 +3,7 @@
 
 =head1 NAME
 
-SDL-Platform - Platform Specific Informations about SDL Perl
+SDL-Platform - Platform Specific Information about SDL Perl
 
 =head1 CATEGORY
 
@@ -12,7 +12,7 @@ Documentation
 
 =head1 DESCRIPTION
 
-This document describes OS specific informations regading the installation and use of L<SDL>.
+This document describes OS specific information regarding the installation and use of L<SDL>.
 
 =head2 General (all OS)
 
@@ -21,7 +21,7 @@ You need to install L<Alien::SDL> to acquire all prerequisites of L<SDL>.
 On Windows, L<Alien::SDL> will get you zip-files containing prebuilt libs.
 
 On Unixes you can choose between compiling libs or use libs provided by the dist.
-The different options on Unixes are availale when requirements are met. Like having specific libs installed.
+The different options on Unixes are available when requirements are met. Like having specific libs installed.
 
 There is some additional documentation in the L<Github-Wiki|https://github.com/PerlGameDev/SDL/wiki/Testing>. 
 You definitively want to look there, if you want to know how to install L<SDL> from the latest sources (e.g. in an unfinished, unreleased state).

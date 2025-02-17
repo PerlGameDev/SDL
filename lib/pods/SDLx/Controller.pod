@@ -97,7 +97,7 @@ All hooked functions will be called during the main loop, in this order:
 =back
 
 Please refer to each handler below for information on received arguments.
-Note that the second argument every callback receives is the C<SDLx::Controller> object.
+Note that the second argument received by every callback is the C<SDLx::Controller> object.
 
 =head2 stop
 
