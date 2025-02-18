@@ -101,7 +101,7 @@ sub find_subsystems {
 sub translate_table {
 	my ( $self, $subsystems, $libraries ) = @_;
 	my %ret;
-	foreach my $m ( keys %$subsystems ) {
+	foreach my $m ( sort keys %$subsystems ) {
 		my $p = $subsystems->{$m}->{file}->{to};
 		$p =~ s|^lib/(.*)\.xs|$1|;
 		$p =~ s|/|::|g;
