@@ -77,7 +77,7 @@ sub new {
 	$f |= SDL::Video::SDL_OPENGL if ( $options{gl} || $options{opengl} );
 	$f |= SDL::Video::SDL_FULLSCREEN
 		if ( $options{fullscreen} || $options{full} );
-	$f |= SDL::Video::SDL_RESIZABLE if ( $options{resizeable} );
+	$f |= SDL::Video::SDL_RESIZABLE if ( $options{resizable} || $options{resizeable} );
 	$f |= SDL::Video::SDL_DOUBLEBUF if ($db);
 	$f |= SDL::Video::SDL_ASYNCBLIT if ($async);
 
