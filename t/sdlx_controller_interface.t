@@ -9,6 +9,7 @@ use SDLx::Controller::Interface;
 use lib 't/lib';
 use SDL::TestTool;
 use Data::Dumper;
+use SDL::Events;
 
 my $videodriver = $ENV{SDL_VIDEODRIVER};
 $ENV{SDL_VIDEODRIVER} = 'dummy';
@@ -79,6 +80,7 @@ my $event_called = 0;
 require SDL::Event;
 require SDL::Events;
 my $eve = SDL::Event->new();
+$eve->type(SDL_USEREVENT);
 
 SDL::Events::push_event($eve);
 my $counts = [ 0, 0, 0 ];
