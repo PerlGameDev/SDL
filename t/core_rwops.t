@@ -11,11 +11,7 @@ my @done = qw/
 	/;
 can_ok( 'SDL::RWOps', @done );
 
-open FH, '>', '.rwops';
-print FH 'rwops';
-close FH;
-
-my $file = SDL::RWOps->new_file( '.rwops', 'rw' );
+my $file = SDL::RWOps->new_file( 'test/data/rwops', 'r' );
 isa_ok( $file, 'SDL::RWOps', '[from_file] returns RWOps' );
 
 #0        SEEK_SET
@@ -35,7 +31,6 @@ SKIP:
 	is( $blocks, 5, '[read] got ' . $char );
 }
 $file->close();
-unlink '.rwops';
 my @left = qw/
 	from_fp
 	from_mem
