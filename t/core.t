@@ -62,7 +62,7 @@ is( SDL_INIT_EVENTTHREAD(), 16777216,
 	'SDL_INIT_EVENTTHREAD() should also be available'
 );
 
-my $display = SDL::Video::set_video_mode( 640, 480, 232, SDL_ANYFORMAT );
+my $display = SDL::Video::set_video_mode( -1, 480, 232, SDL_ANYFORMAT );
 
 isnt( SDL::get_error(), '', '[get_error] got error ' . SDL::get_error() );
 TODO:
