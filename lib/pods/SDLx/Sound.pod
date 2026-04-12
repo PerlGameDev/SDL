@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-SDLx::Sound
+SDLx::Sound - Simple audio interface
 
 =head1 CATEGORY
 
@@ -10,108 +10,78 @@ Extension
 =head1 SYNOPSIS
 
     use SDLx::Sound;
-
     my $snd = SDLx::Sound->new();
-    
-    # loads and plays a single sound now
-    $snd->play('myfile.wav');
 
-    # load a single file
-    $snd->load('theSound.aif');
-
-    # plays it or all loaded files
-    $snd->play();
-
-    # more sounds
-    my %files = (
-        channel_01 => "/my_sound1.wav",
-        channel_02 => "/my_sound2.ogg"
+    $snd->load(
+	arbitrary_name =>  'some_sound.wav',
     );
 
-    # times sounds bangs
-    my %times = (
-        channel_01 => 0,      # start
-        channel_01 => 1256,   # milliseconds
-        channel_02 => 2345
-    );
-    
-    # Load files in channels for realtime play
-    $snd->load(%files);
+    $snd->play('arbitrary_name');
 
-    # sets sound channel_01 loudness
-    $snd->loud('channel_01', 80);       # loud at 80%
-    $snd->play(%times);                 # play loaded files at times
-    $snd->play;                         # play again
+    $snd->play('arbitrary_name', loops => -1);			# loop .wav infinitely (default is play once, 1)
 
-    # plays sound channel_01 at 578 milliseconds from now
-    $snd->play('channel_01', 578);
+    $snd->play('arbitrary_name', loops => 3, volume => 50);	# play 3x with volume lowered to 50%
 
-    # fades sound 
-    $snd->fade('channel_02', 2345, 3456, -20);
-
-    # in a single act do the whole Sound
-    my $snd = SDLx::Sound->new(
-        files => (
-            channel_01 => "/my_sound1.wav",
-            channel_02 => "/my_sound2.ogg"
- 
-        ), 
-        loud  => (
-            channel_01 => 80,
-            channel_02 => 75
-        ),
-        times => (
-            channel_01 => 0,      # start
-            channel_01 => 1256,   # milliseconds
-            channel_02 => 2345
-        ),
-        fade  => (
-            channel_02 => [2345, 3456, -20]
-        )
-    )->play();
+    $snd->stop();
 
 =head1 DESCRIPTION
 
+You may use this module to emit audio / sound / music from your SDL / SDLx application or game.
 
-You can think about the SDLx::Sound at 2 approaches. 
+It's a thin interface to L<SDL::Mixer::Music>, which it wraps/ uses internally, merely rounding off the edges of init,
+pre-loading and playback.
 
-=over 4
-
-=item * A simple sound or 
-
-=item * The sound of your game or app. 
-
-=back
-
-Your application will say what the best approach.
-
-In a taste that resembles to perl and to SDL, our SDLx:Sound hooks at SDL::Audio and SDL::Mixer with a graceful and simple interface that can offer to monks a modern perlish way to manage sounds.
-
-An SDLx::Sound object can load sounds from filesystem, play it, adjust this loudness level or stops the sound. 
-
-Each sound will play in the next available channel, so it can be handled isolately.
+Calls to play() are not blocking, each sound will play in the next available channel. That's how SDL::Mixer::Music works.
 
 =head1 METHODS
 
 =head2 new
 
-Returns a new instance of SDLx::Sound
+Returns a new instance of SDLx::Sound, initiating sound with C<SDL::Mixer::open_audio( 44100, AUDIO_S16SYS, 2, 4096 )>
 
 =head2 load
 
+Processes the passed sound files, checks for existence, and pre-loads the files via SDL::Mixer::Music::load_MUS,
+throwing errors if anything fails. In contrast to earlier versions of SDLx::Sound, this version here actually does a
+pre-load and keeps files in memory, while play() will rely on this memory structure being prepared and ready to play.
+
+Each sound file will be prepared with I<volume> = 100 and I<loops> = 1, one-shot play. That's how this sound will be played
+when you call it with -E<gt>play('some_sound').
 
 =head2 play
 
- $sdlx_sound->play('file.wav');
+Doing something like C<$audio-E<gt>play('sound_name');> will fetch the prepared sound from the internal C<-E<gt>{files}> hash
+and play it via C<SDL::Mixer::Music::play_music>. As previous versions of SDLx::Sound were able to autoload via play(), this
+updated version here does something similar: passing it a file_path will trigger the internal load() routine and the given
+file will be loaded with the name representing it being the path you passed in to play/load a sound.
 
-Play a file
+You may pass additional key/value pairs to override settings from -E<gt>load(), see SYNOPSIS.
 
 =head2 pause
 
+SDL::Mixer::Music::pause_music()
+
 =head2 resume
+
+SDL::Mixer::Music::resume_music()
 
 =head2 stop
 
+SDL::Mixer::Music::halt_music()
+
+=head2 playing() and is_playing()
+
+Both call SDL::Mixer::Music::playing_music(), returning a true value if the mixer is playing any sound.
+
+=head1 SEE ALSO
+
+This here is a simple interface to L<SDL::Mixer::Music>, which you may also call directly for additional
+bells and whistles.
+
+And then there's L<SDLx::Music>. While the bundled example C<examples/SDLx/music.pl> is able to
+play something with it, the POD is out of sync with the actual internals. L<SDLx::Music> behaves like this module here
+as it prepares defaults for every file, which you may then overrride upon calling play() - nice inspiration. But then
+it has a somewhat IMHO convoluted way of loading/managing loaded files and has a less convenient play() method.
 
 =head1 AUTHORS
 
