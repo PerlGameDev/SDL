@@ -40,7 +40,7 @@ Core
 
 =head2 add_timer
 
- my $id = SDL::Timer::add_timer( $ms_interval, $callback );
+ my $id = SDL::Time::add_timer( $ms_interval, $callback );
 
 This runs in a separate thread and a cloned Perl thread.
 C<threads> and C<threads::shared> must be used to share any variables the timer uses.
@@ -59,7 +59,7 @@ B<Note:> You must initialize (C<SDL::init>) the timer subsystem to use this func
 
 =head2 remove_timer
 
- SDL::Timer::remove_timer( $id );
+ SDL::Time::remove_timer( $id );
 
 The other way to cancel a timer is to use C<SDL::Time::remove_timer> on the C<$id> of a timer.
 This ID is the return value of the C<SDL::Time::add_timer> function.
