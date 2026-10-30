@@ -74,6 +74,17 @@ isa_ok( $music->data('sample'), "SDLx::Music::Data");
 is_deeply( $silence, $music->{data}->{silence}, "Silence is retreived correctly");
 is_deeply( $music->data('sample'), $music->{data}->{sample}, "Sample is retreived correctly");
 
+is( $music->data, $music->{data}, 'data without arguments returns the data hash reference' );
+is_deeply( [ sort keys %{ $music->data } ], [ qw(sample silence) ],
+    'data without arguments exposes all registered names' );
+
+{
+    no warnings 'redefine';
+    local *SDL::Mixer::Music::volume_music = sub { die 'Unexpected mixer call' };
+    ok( !defined $music->play('unknown'), 'Unknown music name returns undef before calling the mixer' );
+    ok( !exists $music->data->{unknown}, 'Unknown music name is not registered' );
+}
+
 # Chained changes
 
 can_ok( 'SDLx::Music', 'playing');
@@ -98,7 +109,7 @@ $music->load;
 
 isa_ok( $music->{data}->{sample}->{_content}, "SDL::Mixer::MixMusic" );
 
-$music->play( $music->data('sample') );
+ok( $music->play('sample'), 'Music can be played by name' );
 
 $played = 0;
 while( $music->playing )
@@ -120,6 +131,12 @@ ok( $music->clear );
 ## Check if we are actually clear
 
 is( $music->{data}, undef, "Is clear" );
+
+{
+    no warnings 'redefine';
+    local *SDL::Mixer::Music::volume_music = sub { die 'Unexpected mixer call' };
+    ok( !defined $music->play('sample'), 'Cleared music name returns undef before calling the mixer' );
+}
 
 # Check default call
 
