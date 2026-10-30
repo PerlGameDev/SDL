@@ -43,7 +43,7 @@ Extension
 
   # just like a regular Sprite, we fetch our source rect from ->clip,
   # updating it on each call to ->next (or ->previous, or ->reset).
-  # If source rects for your animation are further appart (or less)
+  # If source rects for your animation are further apart (or less)
   # than the rect's width and height, you can adjust the animation
   # x/y offsets:
   $animation->step_x(15);

@@ -168,8 +168,7 @@ is( SDL::GFX::Primitives::filled_polygon_RGBA(
 ); # magenta
 SKIP:
 {
-	skip( 'Version 2.0.14 needed', 1 )
-		unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 14 );
+	skip( 'Version 2.0.14 needed', 1 ) if $v < 2.0.14;
 	isnt(
 		SDL::GFX::Primitives::textured_polygon(
 			$display,
@@ -183,8 +182,7 @@ SKIP:
 }
 SKIP:
 {
-	skip( 'Version 2.0.17 needed', 3 )
-		unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 17 );
+	skip( 'Version 2.0.17 needed', 3 ) if $v < 2.0.17;
 	is( SDL::GFX::Primitives::filled_polygon_color_MT(
 			$display,
 			[ 304, 308, 306, 308, 304 ],

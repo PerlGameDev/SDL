@@ -218,12 +218,12 @@ Checks the event queue for messages and optionally returns them.
 
 	my $num_peep_events = SDL::Events::peep_events($event, 127, SDL_PEEKEVENT, SDL_ALLEVENTS);
 
-If action is SDL_ADDEVENT, up to numevents events will be added to the back of the event queue.
+If action is SDL_ADDEVENT, up to num_events events will be added to the back of the event queue.
 
-If action is SDL_PEEKEVENT, up to numevents events at the front of the event queue, matching mask, will be returned and will not be removed from 
+If action is SDL_PEEKEVENT, up to num_events events at the front of the event queue, matching mask, will be returned and will not be removed from 
 the queue.
 
-If action is SDL_GETEVENT, up to numevents events at the front of the event queue, matching mask, will be returned and will be removed from the 
+If action is SDL_GETEVENT, up to num_events events at the front of the event queue, matching mask, will be returned and will be removed from the 
 queue.
 
 The mask parameter is a bitwise OR of SDL::Events::SDL_EVENTMASK(event_type), for all event types you are interested in
@@ -310,7 +310,7 @@ set_event_filter takes a coderef that it checks all events again. The callback g
 
 to filter the event return a 0, to pass the filter return a 1. 
 
-One B<Caveat> is if you are filtering SDL_QUIT the event will be filtered if it is non-intterupt call ( Window closes normally ). If it is a 
+One B<Caveat> is if you are filtering SDL_QUIT the event will be filtered if it is non-interrupt call ( Window closes normally ). If it is a 
 interrupt SDL_QUIT it will be process on the next event poll. 
 
 Events pushed onto to the queue with L<SDL::Events::push_events|SDL::Events/"push_events"> or L<SDL::Events::peep_events|SDL::Events/"peep_events"> 
@@ -462,11 +462,11 @@ Enable/Disable UNICODE translation
      $previous_translation_mode = SDL::Events::enable_unicode( 0 ); #disables
 
 To obtain the character codes corresponding to received keyboard events, Unicode translation must first be turned on using this function. The 
-translation incurs a slight overhead for each keyboard event and is therefore disabled by default. For each subsequently recieved key down event, 
+translation incurs a slight overhead for each keyboard event and is therefore disabled by default. For each subsequently received key down event, 
 the unicode member of the L<SDL::Event::key_sym|SDL::Event/"key_sym"> provided structure will be then contain the corresponding character code, or 
 otherwise zero.
 
-A value of 1 for enabling, 0 for disabling and -1 for unchanged. -1 is usefull for querying the current translation mode.
+A value of 1 for enabling, 0 for disabling and -1 for unchanged. -1 is useful for querying the current translation mode.
 
 Only key press events will be translated not release events.
 
@@ -478,7 +478,7 @@ Sets keyboard repeat rate
 
  my $success = SDL::Events::enable_key_repeat( $delay, $interval );
 
-Enables or disables the keyboard repeat rate. $delay specifies how long the key must be pressed before it begins repeating, it then repleats at the 
+Enables or disables the keyboard repeat rate. $delay specifies how long the key must be pressed before it begins repeating, it then repeats at the 
 speed specified by $interval. Both $delay and $interval are expressed in milliseconds.
 
 Setting $delay to 0 disables key repeating completely. Good default values are SDL_DEFAULT_REPEAT_DELAY and SDL_DEFAULT_REPEAT_INTERVAL.
@@ -487,7 +487,7 @@ Return 0 on success and -1 on fail.
 
 =head2 get_mouse_state 
 
-Retrives the current state of the mouse
+Retrieves the current state of the mouse
 
   my ($mask,$x,$y) = @{ SDL::Events::get_mouse_state( ) };
 
@@ -503,7 +503,7 @@ The current button state is returned as a button $bitmask, which can be tested u
 
 =head2 get_relative_mouse_state 
 
-Retrives the current relative state of the mouse
+Retrieves the current relative state of the mouse
 
   my ($mask,$x,$y) = @{ SDL::Events::get_mouse_state( ) };
 
@@ -513,7 +513,7 @@ Retrives the current relative state of the mouse
 
   print 'Button Middle pressed' if ($mask & SDL_BUTTON_MMASK);  
 
-  print $x.','.$y; # this is relative to the last postion of the mouse
+  print $x.','.$y; # this is relative to the last position of the mouse
 
 The current button state is returned as a button $bitmask, which can be tested using the the above constants 
 

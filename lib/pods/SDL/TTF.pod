@@ -107,7 +107,7 @@ Returns: C<0> on success, C<-1> on any error.
 
  my $was_init = SDL::TTF::was_init();
 
-Query the initilization status of the truetype font API.
+Query the initialization status of the truetype font API.
 You may, of course, use this before L<SDL::TTF::init|SDL::TTF/"init"> to avoid initializing twice in a row. Or use this to determine if you need to 
 call L<SDL::TTF::quit|SDL::TTF/"quit">.
 
@@ -456,7 +456,7 @@ Note that the first example uses the same text as in the LATIN1 example, that is
 
 Examples:
 
- ($width, $height) = @{ SDL::TTF::size_utf8($font, 'Hallo World!') }; # plain text, if your script is in utf8 or ansi-format
+ ($width, $height) = @{ SDL::TTF::size_utf8($font, 'Hello World!') }; # plain text, if your script is in utf8 or ansi-format
  
  # or
  
@@ -465,7 +465,7 @@ Examples:
  # or
  
  use Unicode::String;
- my $unicode       = utf8($data_from_somwhere);
+ my $unicode       = utf8($data_from_somewhere);
  ($width, $height) = @{ SDL::TTF::size_utf8($font, $unicode->utf8) }; # utf8 via Unicode::String
 
 =head4 size_unicode
@@ -481,15 +481,15 @@ C<$text> has to be:
 
 =item UTF16BE without BOM
 
-"hallo" will look like "\0h\0a\0l\0l\0o"
+"hello" will look like "\0h\0e\0l\0l\0o"
 
 =item UTF16BE with BOM
 
-"hallo" will look like "\xFE\xFF\0h\0a\0l\0l\0o"
+"hello" will look like "\xFE\xFF\0h\0e\0l\0l\0o"
 
 =item UTF16LE with BOM
 
-"hallo" will look like "\xFF\xFEh\0a\0l\0l\0o\0"
+"hello" will look like "\xFF\xFEh\0e\0l\0l\0o\0"
 
 =back
 
@@ -532,7 +532,7 @@ Example:
  my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
  my $font    = SDL::TTF::open_font('somefont.ttf', '24');
  die 'Coudnt make font '. SDL::get_error if !$font;
- my $surface = SDL::TTF::render_text_solid($font, 'Hallo!', SDL::Color->new(0xFF,0xFF,0xFF));
+ my $surface = SDL::TTF::render_text_solid($font, 'Hello!', SDL::Color->new(0xFF,0xFF,0xFF));
  SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(10, 10, 640, 480));
  SDL::Video::update_rect($display, 0, 0, 0, 0);
  SDL::delay(5000);
@@ -591,7 +591,7 @@ Example:
  my $font    = SDL::TTF::open_font('arial.ttf', '24');
  my $white   = SDL::Color->new(0xFF, 0xFF, 0xFF);
  my $black   = SDL::Color->new(0x00, 0x00, 0x00);
- my $surface = SDL::TTF::render_text_solid($font, 'Hallo!', $white, $black);
+ my $surface = SDL::TTF::render_text_solid($font, 'Hello!', $white, $black);
  
  SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(10, 10, 640, 480));
  SDL::Video::update_rect($display, 0, 0, 0, 0);
@@ -644,7 +644,7 @@ Example:
  
  my $display = SDL::Video::set_video_mode(640, 480, 32, SDL_SWSURFACE);
  my $font    = SDL::TTF::open_font('arial.ttf', '24');
- my $surface = SDL::TTF::render_text_blended($font, 'Hallo!', SDL::Color->new(0xFF,0xFF,0xFF));
+ my $surface = SDL::TTF::render_text_blended($font, 'Hello!', SDL::Color->new(0xFF,0xFF,0xFF));
  
  SDL::Video::blit_surface($surface, SDL::Rect->new(0, 0, 640, 480), $display, SDL::Rect->new(10, 10, 640, 480));
  SDL::Video::update_rect($display, 0, 0, 0, 0);

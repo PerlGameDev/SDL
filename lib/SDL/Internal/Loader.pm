@@ -9,6 +9,8 @@ our @LIBREFS = ();
 use SDL::ConfigData;
 use Alien::SDL;
 
+our $VERSION = 2.548;
+
 # SDL::Internal::Loader is a king of "Dynaloader kung-fu" that is
 # necessary in situations when you install Allien::SDL from sources
 # or from prebuilt binaries as in these scenarios the SDL stuff is

@@ -29,7 +29,7 @@ All C<< SDLx::Rect >> methods that change either position or size of a Rect retu
 
 =head2 ATTRIBUTES
 
-All Rect attributes are acessors, meaning you can get them by name, and set them by passing a value:
+All Rect attributes are accessors, meaning you can get them by name, and set them by passing a value:
 
    $rect->left(15);
    $rect->left;       # 15
@@ -113,7 +113,7 @@ Same as C<<move>> above, but moves the current Rect in place and returns nothing
 
 =head3 inflate(x, y)
 
-Grows or shrinks the rectangle. Returns a new Rect with the size changed by the given offset. The rectangle remains centered around its current center. Negative values will return a shrinked rectangle instead.
+Grows or shrinks the rectangle. Returns a new Rect with the size changed by the given offset. The rectangle remains centered around its current center. Negative values will return a shrunken rectangle instead.
 
 =head3 inflate_ip(x, y)
 

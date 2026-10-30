@@ -16,6 +16,14 @@
 #include <SDL_gfxPrimitives.h>
 #endif
 
+int _calc_offset ( SDL_Surface* surface, int x, int y )
+{
+    int offset;
+    offset  = (surface->pitch * y) / surface->format->BytesPerPixel;
+    offset += x;
+    return offset;
+}
+
 SV * get_pixel32 (SDL_Surface *surface, int x, int y)
 {
     /* Convert the pixels to 32 bit  */
@@ -50,14 +58,6 @@ SV * construct_p_matrix ( SDL_Surface *surface )
     }
 
     return newRV_noinc((SV *)matrix);
-}
-
-int _calc_offset ( SDL_Surface* surface, int x, int y )
-{
-    int offset;
-    offset  = (surface->pitch * y) / surface->format->BytesPerPixel;
-    offset += x;
-    return offset;
 }
 
 unsigned int _get_pixel(SDL_Surface * surface, int offset)

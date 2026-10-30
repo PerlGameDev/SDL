@@ -38,7 +38,7 @@ Create a normal $piddle with zeros, byte format and the Bpp x width x height dim
 
    my $pointer = $piddle->get_dataref();
 
-Here is where we get the acutal data the piddle is pointing to. We will have SDL create a new surface from this function.
+Here is where we get the actual data the piddle is pointing to. We will have SDL create a new surface from this function.
 
    my $surface = SDL::Surface->new_from( $pointer, $width, $height, 32,
         $width * $bytes_per_pixel );
@@ -48,7 +48,7 @@ Using the same dimensions we create the surface using new_form. The width *  Bpp
    warn "Made surface of $width, $height and ". $surface->format->BytesPerPixel;
    return ( $piddle, $surface );
 
-Finally make sure that the surface acutally has the correct dimensions we gave.
+Finally make sure that the surface actually has the correct dimensions we gave.
 
 B<NOTE:> $surface->format->BytesPerPixel must return 1,2,3,4. !!
 
@@ -79,7 +79,7 @@ When blitting the new surface check for the return value to see if there has bee
 
     die "Could not blit: " . SDL::get_error() if ( $b == -1 );
 
-If the error message is 'Blit combination not supported' that means that the BPP is incorrect or incosistent with the dimensions.
+If the error message is 'Blit combination not supported' that means that the BPP is incorrect or inconsistent with the dimensions.
 After that a simple update_rect will so your new surface on the screen.
 
 =head1 AUTHORS

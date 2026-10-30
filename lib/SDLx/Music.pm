@@ -14,6 +14,8 @@ use Data::Dumper;
 use SDLx::Music::Default;
 use SDLx::Music::Data;
 
+our $VERSION = 2.548;
+
 our $def = bless( {}, "SDLx::Music::Default" );
 
 sub new {

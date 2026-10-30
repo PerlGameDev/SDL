@@ -36,6 +36,8 @@ use warnings;
 use SDL;
 use SDLx::App;
 
+our $VERSION = 2.548;
+
 # change these values as necessary
 my $title = 'My SDL App';
 my ( $width, $height, $depth ) = ( 640, 480, 16 );

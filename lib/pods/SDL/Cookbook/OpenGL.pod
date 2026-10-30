@@ -11,9 +11,9 @@ Cookbook
 
 =head1 DESCRIPTION
 
-As of release 2.5 SDL no longer maintains it's own bindings of openGL. Support for openGL has been moved over to a more mature implementation. 
+As of release 2.5 SDL no longer maintains it's own bindings of OpenGL. Support for OpenGL has been moved over to a more mature implementation. 
 
-This implementation is the POGL project. L<OpenGL> is faster and more complete; and works with SDL seemlessly.
+This implementation is the POGL project. L<OpenGL> is faster and more complete; and works with SDL seamlessly.
 
 =head2 EXAMPLE
 
@@ -37,7 +37,7 @@ You can use OpenGL as needed here.
 	$| = 1;
 	$WIDTH = 1024;
 	$HEIGHT = 768;
-	$SDLAPP = SDLx::App->new(title => "Opengl App", width => $WIDTH, height => $HEIGHT, gl => 1);
+	$SDLAPP = SDLx::App->new(title => "OpenGL App", width => $WIDTH, height => $HEIGHT, gl => 1);
 	$SDLEVENT = SDL::Event->new;
 
 SDLx::App can start an OpenGL application with the parameter gl => 1.
@@ -48,7 +48,7 @@ SDLx::App can start an OpenGL application with the parameter gl => 1.
 	gluPerspective(60, $WIDTH / $HEIGHT, 1, 1000);
 	glTranslatef(0, 0, -20);
 
-Above we enable GL and set the correct prespective
+Above we enable GL and set the correct perspective
 
 	while (1) {
 	  &handlepolls;

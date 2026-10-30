@@ -15,7 +15,7 @@ TODO
 
 =head1 DESCRIPTION
 
-C<SDL::MPEG> provides an interface to quering the status
+C<SDL::MPEG> provides an interface to querying the status
 of a SMPEG stream.  
 
 =head2 METHODS 
@@ -48,7 +48,7 @@ C<SDL::MPEG::offset> returns the offset into the clip in bytes
 
 =item *
 
-C<SDL::MPEG::frame> returns the offset into the clip in fames 
+C<SDL::MPEG::frame> returns the offset into the clip in frames 
 
 =item *
 

@@ -1,4 +1,6 @@
 package MyRect;
+use strict;
+use warnings;
 use base 'SDL::Rect';
 
 sub new {

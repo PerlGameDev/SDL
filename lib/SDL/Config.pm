@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use SDL::ConfigData;
 
+our $VERSION = 2.548;
+
 sub has {
 	my ( $class, $define ) = @_;
 	my $sdl_config = SDL::ConfigData->config('SDL_cfg');

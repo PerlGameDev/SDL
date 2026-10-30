@@ -6,6 +6,8 @@ use strict;
 use warnings;
 use SDL;
 
+our $VERSION = 2.548;
+
 sub new {
 	my $class = shift;
 	my $self = bless {@_}, $class;

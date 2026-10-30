@@ -11,6 +11,8 @@ use SDLx::Controller::Interface;
 use SDLx::Controller::State;
 use Scalar::Util 'refaddr';
 
+our $VERSION = 2.548;
+
 # inside out, so this can work as the superclass of another
 # SDL::Surface subclass
 my %_dt;
@@ -147,7 +149,6 @@ sub pause {
 
 sub _event {
 	my ($self, $ref) = @_;
-	SDL::Events::pump_events();
 	while ( SDL::Events::poll_event( $_event{ $ref} ) ) {
 		$self->_exit_on_quit( $_event{ $ref}  ) if $_eoq{$ref};
 		foreach my $event_handler ( @{ $_event_handlers{ $ref} } ) {

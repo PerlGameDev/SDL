@@ -101,7 +101,7 @@ sub find_subsystems {
 sub translate_table {
 	my ( $self, $subsystems, $libraries ) = @_;
 	my %ret;
-	foreach my $m ( keys %$subsystems ) {
+	foreach my $m ( sort keys %$subsystems ) {
 		my $p = $subsystems->{$m}->{file}->{to};
 		$p =~ s|^lib/(.*)\.xs|$1|;
 		$p =~ s|/|::|g;
@@ -139,7 +139,6 @@ sub set_file_flags {
 			( split( ' ', $arch . $debug . $self->notes('sdl_cflags') ) ),
 			@{ $param->{defines} },
 		];
-		push(@{$extra_compiler_flags}, '-DUSE_THREADS') if defined $Config{usethreads};
 		push(@{$extra_compiler_flags}, '-fPIC')         if $^O ne 'MSWin32';
 		$file_flags{$sub_file} = {
 			extra_compiler_flags => $extra_compiler_flags,

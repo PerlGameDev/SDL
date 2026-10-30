@@ -8,6 +8,8 @@ our @ISA = qw(Exporter DynaLoader);
 
 use SDL::Internal::Loader;
 
+our $VERSION = 2.548;
+
 my %_controller;
 
 sub new {

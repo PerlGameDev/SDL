@@ -326,8 +326,7 @@ is( SDL::GFX::Primitives::filled_circle_RGBA( $surface, 555, 5, 2, 0xFF, 0xFF, 0
 ); # yellow
 SKIP:
 {
-	skip( 'Version 2.0.17 needed', 2 )
-		unless ( $v->major >= 2 && $v->minor >= 0 && $v->patch >= 17 );
+	skip( 'Version 2.0.17 needed', 2 ) if $v < 2.0.17;
 	is( SDL::GFX::Primitives::arc_color( $surface, 562, 5, 2, 5, 175, 0x00FF00FF ),
 		0,
 		'arc_color'

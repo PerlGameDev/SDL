@@ -189,7 +189,7 @@ Converts audio data to a desired audio format.
 
 C<convert> takes as first parameter C<cvt>, which was previously initialized. Initializing a C<SDL::AudioCVT> is a two step process. 
 First of all, the structure must be created via C<SDL::AudioCVT-E<gt>build> along with source and destination format parameters. Secondly, 
-the C<data> and C<len> fields must be setup. C<data> should point to the audio data buffer beeing source and destination at 
+the C<data> and C<len> fields must be setup. C<data> should point to the audio data buffer being source and destination at 
 once and C<len> should be set to the buffer length in bytes. Remember, the length of the buffer pointed to by buf should be 
 C<len*len_mult> bytes in length.
 
@@ -256,7 +256,7 @@ Example:
  # And now we're ready to convert
  SDL::Audio::convert($wav_cvt, $wav_buf, $wav_len);
  
- # We can freeto original WAV data now
+ # We can free original WAV data now
  SDL::Audio::free_wav($wav_buf);
  
 B<TODO>: What to do with it? How to use callback? See http://www.libsdl.org/cgi/docwiki.cgi/SDL_ConvertAudio

@@ -146,7 +146,7 @@ So the middle section of the program will become:
 
         if ( $up{$t} ) {
             my $a = $up{$t};
-            print "(accellerating $a m/s^2)\n";
+            print "(accelerating $a m/s^2)\n";
             $velocity = $velocity - $a;
         }
 

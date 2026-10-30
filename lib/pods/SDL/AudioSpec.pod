@@ -29,7 +29,7 @@ Core, Audio, Structure
      # do something here
  }
 
-=head1 DESCIPTION
+=head1 DESCRIPTION
 
 The C<SDL::AudioSpec> structure is used to describe the format of some audio data. This structure is used by C<SDL::Audio::open_audio> 
 and C<SDL::Audio::load_wav>. 

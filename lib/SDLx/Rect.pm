@@ -4,7 +4,7 @@ use warnings;
 use Carp;
 use base 'SDL::Rect';
 
-our $VERSION = '0.01';
+our $VERSION = 2.548;
 
 sub new {
 	my $class = shift;

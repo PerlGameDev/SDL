@@ -1,5 +1,7 @@
 package SDL::Tutorial::LunarLander;
 
+our $VERSION = 2.548;
+
 sub import {
 	my ( $class, $filename ) = (@_);
 	return unless defined $filename;

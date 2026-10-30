@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
+use warnings;
 use SDL;
 use SDL::Config;
 use SDL::Color;

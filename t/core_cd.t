@@ -1,11 +1,13 @@
 #!/usr/bin/perl -w
 use strict;
+use warnings;
 use SDL;
 
 BEGIN {
 	use Test::More;
 	use lib 't/lib';
 	use SDL::TestTool;
+	use Config;
 
 	plan( skip_all => 'Failed to init cdrom' )
 		unless SDL::TestTool->init(SDL_INIT_CDROM);

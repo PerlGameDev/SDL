@@ -40,6 +40,8 @@ use vars qw/ @ISA /;
 
 @ISA = qw(SDL::Surface);
 
+our $VERSION = 2.548;
+
 sub new {
 	my $proto = shift;
 	my $class = ref($proto) || $proto;

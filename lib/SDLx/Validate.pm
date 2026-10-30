@@ -15,6 +15,8 @@ use Scalar::Util ();
 use SDL::Internal::Loader;
 internal_load_dlls(__PACKAGE__);
 
+our $VERSION = 2.548;
+
 sub surfacex {
 	my ($arg) = @_;
 	if ( Scalar::Util::blessed($arg)) {

@@ -105,7 +105,7 @@ Available options are:
 
 =item * image => $filename
 
-Uses $filename as source image for the Sprite's surface. See suported
+Uses $filename as source image for the Sprite's surface. See supported
 formats in L<< SDL::Image >>. This option B<cannot> be used together
 with the 'surface' option (see below).
 

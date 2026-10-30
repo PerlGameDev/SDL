@@ -9,6 +9,7 @@ use Data::Dumper;
 use Cwd;
 use Config;
 use File::Copy;
+use File::Spec;
 use base 'My::Builder';
 
 sub special_build_settings {
@@ -112,7 +113,7 @@ sub _find_file {
         no warnings;
         find(
             {
-                wanted => sub { push @files, rel2abs($_) if /$re/ },
+                wanted => sub { push @files, File::Spec->rel2abs($_) if /$re/ },
                 follow => 1,
                 no_chdir    => 1,
                 follow_skip => 2

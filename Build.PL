@@ -569,17 +569,18 @@ my $build = $package->new(
 	dist_version_from  => 'lib/SDL.pm',
 	configure_requires => {
 		'ExtUtils::CBuilder' => '0.260301',
-		'Alien::SDL'         => '1.426',
+		'Alien::SDL'         => '1.446',
 		'File::Find'         => '0',
 		'File::ShareDir'     => '1.0',
 		'Tie::Simple'        => '0',
+		"Module::Build"      => '0.40',
 		'Capture::Tiny'      => '0',
 	},
 	build_requires => {
 		'Test::Simple'      => '0.88',
    		'Capture::Tiny'     => '0',
 		'Test::Most'        => '0.21',
-		'Alien::SDL'        => '1.426',
+		'Alien::SDL'        => '1.446',
 		'File::Find'        => '0',
 		'File::ShareDir'    => '1.0',
 		'Tie::Simple'       => '0',
@@ -606,7 +607,7 @@ my $build = $package->new(
 	#create_readme => 1, ### make sense only if there is some POD doc in the file specified by dist_version_from
 	meta_merge => {
 		resources => {
-			bugtracker => 'http://sdlperl.ath.cx/projects/SDLPerl',
+			bugtracker => 'http://github.com/PerlGameDev/SDL/issues',
 			repository => 'http://github.com/PerlGameDev/SDL'
 		}
 	},

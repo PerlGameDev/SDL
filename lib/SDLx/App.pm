@@ -16,15 +16,31 @@ use SDL::Event;
 use SDL::Events;
 use SDL::Surface;
 use SDL::PixelFormat;
+use SDL::VideoInfo;
 use SDLx::Surface;
 use Data::Dumper;
 use Scalar::Util 'refaddr';
 use base qw/SDLx::Surface SDLx::Controller/;
 
+our $VERSION = 2.548;
+
+my $screen_w;
+my $screen_h;
+my $screen_d;
+
 sub new {
 	my $proto   = shift;
 	my $class   = ref($proto) || $proto;
 	my %options = @_;
+
+	unless($screen_w && $screen_h && $screen_d) {
+		my $video_info = SDL::Video::get_video_info();
+		if($video_info) {
+			$screen_w = $video_info->current_w;
+			$screen_h = $video_info->current_h;
+			$screen_d = $video_info->vfmt->BitsPerPixel;
+		}
+	}
 
 	# SDL_INIT_VIDEO() is 0, so check defined instead of truth.
 	unless ( exists( $options{noinit} ) ) # we shouldn't do init always
@@ -61,7 +77,7 @@ sub new {
 	$f |= SDL::Video::SDL_OPENGL if ( $options{gl} || $options{opengl} );
 	$f |= SDL::Video::SDL_FULLSCREEN
 		if ( $options{fullscreen} || $options{full} );
-	$f |= SDL::Video::SDL_RESIZABLE if ( $options{resizeable} );
+	$f |= SDL::Video::SDL_RESIZABLE if ( $options{resizable} || $options{resizeable} );
 	$f |= SDL::Video::SDL_DOUBLEBUF if ($db);
 	$f |= SDL::Video::SDL_ASYNCBLIT if ($async);
 
@@ -121,7 +137,6 @@ sub new {
 	$self = $self->SDLx::Controller::new(%options);
 	bless $self, $class;
 
-	
 	return $self;
 }
 
@@ -206,11 +221,16 @@ sub attribute {
 
 
 my %_stash;
-sub stash :lvalue{	
-    my $ref = refaddr($_[0]);
+sub stash :lvalue{
+	my $ref = refaddr($_[0]);
 	$_stash{ $ref } = {} unless $_stash{ $ref };
-	return $_stash{ $ref } 
+	return $_stash{ $ref }
+}
+
+sub DESTROY {
+	if($screen_w && $screen_h && $screen_d) {
+		SDL::Video::set_video_mode( $screen_w, $screen_h, $screen_d, SDL_ANYFORMAT );
+	}
 }
 
 1;
-

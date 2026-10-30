@@ -12,6 +12,8 @@ use SDLx::Validate;
 
 use Carp ();
 
+our $VERSION = 2.548;
+
 sub new {
 	my ( $class, %options ) = @_;
 

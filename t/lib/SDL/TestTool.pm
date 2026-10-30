@@ -20,6 +20,7 @@ sub init {
 	my ( $self, $init ) = @_;
 	my $stdout = '';
 	my $stderr = '';
+	my $result = 0;
 
 	if ( $init == SDL_INIT_VIDEO ) {
 		if ( $^O !~ /win/i && !$ENV{DISPLAY} && !$ENV{SDL_VIDEODRIVER} ) {
@@ -36,12 +37,12 @@ sub init {
 		SDL::quit();
 	}
 
-	($stdout, $stderr ) = capture { SDL::init($init) };
-	if ( $stderr ne '' ) {
+	($stdout, $stderr, $result ) = capture { SDL::init($init) };
+	if ( $result != 0 ) {
 		warn 'Init ' . $inits{$init} . ' failed with SDL error: ' . SDL::get_error() . "\nand stderr $stderr\n";
 	}
 
-	return !( $stderr ne '' );
+	return $result == 0;
 }
 
 sub test_audio_open {

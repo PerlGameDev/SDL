@@ -1,5 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
+use warnings;
 use SDL;
 use SDL::Config;
 use SDL::Version;
@@ -172,8 +173,7 @@ is( IMG_INIT_TIF, 0x00000004, '[IMG_INIT_TIF] constant loaded properly' );
 
 SKIP:
 {
-	skip( 'This is only for version >= 1.2.10', 2 )
-		unless ( $lver->major >= 1 && $lver->minor >= 2 && $lver->patch >= 10 );
+	skip( 'This is only for version >= 1.2.10', 2 ) if $lver < 1.2.10;
 	SKIP:
 	{
 		skip( 'JPEG support not compiled', 1 ) unless SDL::Config->has('jpeg');

@@ -66,7 +66,7 @@ The method C<layers> returns all layers that were added before.
 
   my $layer = $layermanager->layer( $index );
 
-To obtain only one layer at index C<$index> use this function. C<$index> ranges from C<0> to C<lenght - 1>.
+To obtain only one layer at index C<$index> use this function. C<$index> ranges from C<0> to C<length - 1>.
 
 =head2 length
 
@@ -121,21 +121,21 @@ B<Note>: The z-index is not changed for the given layers.
 
   $layermanager->detach_xy( $x, $y );
 
-C<detach_xy> detaches the prevously attached layers to the given coords. The upper left corner of the backmost layer will be at C<$x> and C<$y>.
+C<detach_xy> detaches the previously attached layers to the given coords. The upper left corner of the backmost layer will be at C<$x> and C<$y>.
 The other layers are positioned relative to the backmost layer just like before.
 
 =head2 detach_back
 
   $layermanager->detach_back( );
 
-C<detach_back> detaches the prevously attached layers back to the position where they were attached.
+C<detach_back> detaches the previously attached layers back to the position where they were attached.
 
 =head2 foreground
 
   $layermanager->foreground( $layer );
   $layermanager->foreground( @layers );
 
-This method moves the given layer(s) to the foreground so that they are blittet on top of the other layers.
+This method moves the given layer(s) to the foreground so that they are blitted on top of the other layers.
 
 =head1 BUGS
 

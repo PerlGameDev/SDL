@@ -74,8 +74,9 @@ Screen depth. Defaults to 16. Shortcut: 'd'.
 =item * flags
 Any flags you want to pass to L<SDL::Video> upon initialization. Defaults to SDL_ANYFORMAT. Flags should be I<or'ed> together if you're passing more than one (flags => FOO|BAR). Shortcut: 'f'.
 
-=item * resizeable
-Set this to a true value to make the window resizeable by the user. Default is off.
+=item * resizable
+Set this to a true value to make the window resizable by the user. Default is off.
+For backward compatibility, C<resizeable> option is also accepted.
 
 =item * exit_on_quit
 Set this to a true value to make the app exit if a SDL_QUIT event is triggered. Shortcut: 'eoq'.
@@ -139,9 +140,9 @@ the application. It takes one argument, which should be one of the following:
 
 =head2 sync
 
-C<SDLx::App::sync> encapsulates the various methods of syncronizing the screen with the
+C<SDLx::App::sync> encapsulates the various methods of synchronizing the screen with the
 current video buffer. C<SDLx::App::sync> will do a fullscreen update, using the double buffer
-or OpenGL buffer if applicable. This is prefered to calling flip on the application window.
+or OpenGL buffer if applicable. This is preferred to calling flip on the application window.
 
 =head2 attribute( $attr )
 
@@ -149,7 +150,7 @@ or OpenGL buffer if applicable. This is prefered to calling flip on the applicat
 
 C<SDLx::App::attribute> allows one to get and set GL attributes. By passing a value
 in addition to the attribute selector, the value will be set. C<SDL:::App::attribute>
-always returns the current value of the given attribute, or Carp::confesss on failure.
+always returns the current value of the given attribute, or Carp::confess on failure.
 
 =head1 CALLBACKS
 
@@ -162,13 +163,19 @@ C<SDLx::App> is a C<SDLx::Controller>. Use the event, show and handlers to run t
 
   my $app = SDLx::App->new( width => 200, height => 200);
 
-  $app->add_event_handler( sub{ return 0 if $_[0]->type == SDL_QUIT; return 1});
+  $app->add_event_handler( sub{
+      my ($event, $app) = @_;
+      return $_[0]->type == SDL_QUIT ? 0 : 1;
+  });
 
-  $app->add_show_handler( sub{ $app->update() } );
+  $app->add_show_handler( sub{
+      my ($delta, $app) = @_;
+      $app->update;
+  } );
 
-  $app->add_move_handler( 
-  sub{ 
-  #calc your physics here 
+  $app->add_move_handler( sub{ 
+      my ($step, $app, $t) = @_;
+      #calc your physics here 
   } );
 
   $app->run();

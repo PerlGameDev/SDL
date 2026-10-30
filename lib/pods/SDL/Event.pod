@@ -57,7 +57,7 @@ and it is then up to the application to process the information stored with them
 =head2	new
 
 C<new> creates an empty event-object, which can be used store information. 
-Either by calling C<poll_event($event)> that transferes one event from the queue into our object 
+Either by calling C<poll_event($event)> that transfers one event from the queue into our object 
 or by setting all the needed data manually in order to push the event to the queue.
 
  use SDL::Event;
@@ -105,7 +105,7 @@ L<SDL_JOYAXISMOTION|/Joystick_axis_events> - Joystick axis motion event structur
 
 =item *
 
-L<SDL_JOYBALLMOTION|/Joystrick_trackball_events> - Joystick trackball motion event structure 
+L<SDL_JOYBALLMOTION|/Joystick_trackball_events> - Joystick trackball motion event structure 
 
 =item *
 
@@ -361,7 +361,7 @@ This is currently only implemented on Windows and Linux/Unix-alikes.
 
 When a mouse button press or release is detected, the number of the button pressed (from 1 to 255, 
 with 1 usually being the left button and 2 the right) is placed into C<button_button>. The position of the mouse 
-when this event occured is stored in the C<button_x> and the C<button_y> fields. Like a keyboard event,
+when this event occurred is stored in the C<button_x> and the C<button_y> fields. Like a keyboard event,
 information on whether the event was a press or a release event is stored in both the C<button_type> 
 and C<button_state> fields, but this should be obvious.
 
@@ -395,7 +395,7 @@ The field C<jaxis_which> is the index of the joystick that reported the event.
 
 =head3 jaxis_axis
 
-The C<jaxis_axis> is the index of the axis (for a more detailed explaination see the Joystick section).
+The C<jaxis_axis> is the index of the axis (for a more detailed explanation see the Joystick section).
 
 =head3 jaxis_value
 
@@ -482,7 +482,7 @@ C<SDL_HAT_LEFTDOWN>
 
 =back
 
-=head2 Joystrick trackball events
+=head2 Joystick trackball events
 
 A C<SDL_JOYBALLMOTION> event occurs when a user moves a trackball on the joystick.
 

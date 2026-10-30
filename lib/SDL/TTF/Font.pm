@@ -10,6 +10,8 @@ our @ISA = qw(Exporter DynaLoader);
 use SDL::Internal::Loader;
 internal_load_dlls(__PACKAGE__);
 
+our $VERSION = 2.548;
+
 bootstrap SDL::TTF::Font;
 
 use base 'Exporter';

@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use base 'Tie::Array';
 
+our $VERSION = 2.548;
+
 sub new {
 	my $class  = shift;
 	my $matrix = shift;

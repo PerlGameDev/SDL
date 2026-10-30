@@ -32,6 +32,19 @@
 #ifndef SDL_PERL_DEFINES_H
 #define SDL_PERL_DEFINES_H
 
+#ifdef _WIN32
+#include <windows.h>
+typedef void* (*malloc_t)(int size);
+malloc_t _msvcrt_malloc = NULL;
+extern malloc_t _msvcrt_malloc;
+
+void *msvcrt_malloc(int size) {
+	if (!_msvcrt_malloc)
+		_msvcrt_malloc = (malloc_t)GetProcAddress(GetModuleHandle("msvcrt"), "malloc");
+    return _msvcrt_malloc(size);
+}
+#endif
+
 #ifdef USE_THREADS
 PerlInterpreter *parent_perl = NULL;
 extern PerlInterpreter *parent_perl;

@@ -39,6 +39,8 @@ use SDL::Rect;
 use SDL::Color;
 use SDL::Video;
 
+our $VERSION = 2.548;
+
 # change these values as necessary
 my $title = 'My SDL Animation';
 my ( $width,      $height,      $depth )  = ( 640,  480,  16 );

@@ -130,7 +130,7 @@ B<Please note:> do not mix use of this class with L<SDL::Mixer::Music> if you wa
 
 	
 
-Creates the new music object. Inits audio with a call to L<SDLx::Mixer::init|SDLx::Mixer/init>, if it isn't already (if you want more precise control over what is initialized, make sure you call L<SDLx::Mixer::init|SDLx::Mixer/init> before you call thiihs method). Creates an empty default data object for object-wide defaults. If arguments are supplied, calls L</data> with them to set up any initial data objects. Returns the new music object.
+Creates the new music object. Inits audio with a call to L<SDLx::Mixer::init|SDLx::Mixer/init>, if it isn't already (if you want more precise control over what is initialized, make sure you call L<SDLx::Mixer::init|SDLx::Mixer/init> before you call this method). Creates an empty default data object for object-wide defaults. If arguments are supplied, calls L</data> with them to set up any initial data objects. Returns the new music object.
 
 =head2 data
 
@@ -149,7 +149,7 @@ With a hash of arguments: for each pair, and returns a  L<SDLx::Music::Data>. Re
 
 	$music->data_for( @names_or_data_objects );
 
-Calls L</data> repeatedly, passing it one element of the list at a time, to initialise mulitiple empty names and/or add data objects. Returns C<$music>.
+Calls L</data> repeatedly, passing it one element of the list at a time, to initialise multiple empty names and/or add data objects. Returns C<$music>.
 
 =head2 has_data
 
