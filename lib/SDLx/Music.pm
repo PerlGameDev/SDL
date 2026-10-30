@@ -98,6 +98,7 @@ sub play {
     
     if ( ref $play_data eq '') {
         $play_data = $self->{data}->{$play_data};
+        return unless defined $play_data;
     }
     
     my $volume  = $play_data->{volume}  || $override{volume}  || 50;

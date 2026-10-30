@@ -219,7 +219,7 @@ With arguments: does the same, but only clears out the names or data objects in 
 
 Without arguments: resumes any paused music. Returns the object or class.
 
-With arguments: plays the sound found in C<$music>'s C<$name>, or in C<$data> (depending on which is specified). L</load>s it if it needs to be loaded (which in turn creates the name if it needs to be created). The C<%params> are all optional and, if defined, are used instead of the values returned by the data object's parameter methods. The accepted parameters here are:
+With arguments: plays the sound found in C<$music>'s C<$name>, or in C<$data> (depending on which is specified). Loads it if it needs to be loaded. If the name is not registered, returns C<undef> without starting playback. The C<%params> are all optional and, if defined, are used instead of the values returned by the data object's parameter methods. The accepted parameters here are:
 
 =over
 
